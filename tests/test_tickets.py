@@ -2,8 +2,15 @@ from datetime import date, datetime, timezone
 
 import pytest
 
-from flightiran.interfaces.telegram.tickets import render_offer
-from flightiran.modules.tickets.domain import TicketOffer, TicketQuery
+from flightiran.infrastructure.http.errors import ProviderInvalidResponse
+from flightiran.interfaces.telegram.tickets import render_cheap_route, render_offer
+from flightiran.modules.tickets.domain import (
+    CheapTicketDestination,
+    CheapTicketRoute,
+    TicketOffer,
+    TicketQuery,
+)
+from flightiran.modules.tickets.mz724 import parse_routes
 from flightiran.modules.tickets.service import TicketFilters, TicketService
 
 
@@ -51,3 +58,31 @@ def test_query_and_render_include_fees_and_refund_policy():
     assert keyboard.inline_keyboard[0][0].url.startswith("https://")
     with pytest.raises(ValueError):
         TicketQuery("IKA", "FRA", date(2026, 1, 2), date(2026, 1, 1))
+
+
+def test_mz724_parser_normalizes_each_origin_row_and_destination_price():
+    html = """
+    <div class="sr_table">
+      <div class="t_table"> تهران </div>
+      <a class="line"><span class="city"> استانبول </span><span class="price">12,500,000 </span></a>
+      <a class="line"><span class="city">دبی</span><span class="price">9,800,000</span></a>
+    </div>
+    <div class="sr_table"><div class="t_table">مشهد</div>
+      <a class="line"><span class="city">تهران</span><span class="price">4,000,000</span></a>
+    </div>
+    """
+    routes = parse_routes(html)
+    assert [route.origin for route in routes] == ["تهران", "مشهد"]
+    assert routes[0].destinations[1].price_toman == "9,800,000"
+    assert routes[0].source_url == "https://mz724.ir/"
+
+
+def test_mz724_parser_rejects_missing_routes_and_renderer_escapes_values():
+    with pytest.raises(ProviderInvalidResponse):
+        parse_routes("<html><body>no tables</body></html>")
+    route = CheapTicketRoute(
+        "تهران <x>", (CheapTicketDestination("دبی", "1,000 تومان"),), "https://mz724.ir/"
+    )
+    rendered = render_cheap_route(route)
+    assert "&lt;x&gt;" in rendered
+    assert "1,000 تومان" in rendered
