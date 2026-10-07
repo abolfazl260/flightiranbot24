@@ -100,3 +100,34 @@ class FlightAlertEvent(TimestampedModel):
     delivery_status: Mapped[str] = mapped_column(String(16), default="pending", nullable=False)
     delivered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     error_message: Mapped[str | None] = mapped_column(Text)
+
+
+class SavedRoute(TimestampedModel):
+    __tablename__ = "saved_routes"
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    origin: Mapped[str] = mapped_column(String(8), nullable=False)
+    destination: Mapped[str] = mapped_column(String(8), nullable=False)
+    passengers: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
+
+
+class PriceAlert(TimestampedModel):
+    __tablename__ = "price_alerts"
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    route_id: Mapped[int] = mapped_column(
+        ForeignKey("saved_routes.id", ondelete="CASCADE"), index=True
+    )
+    target_price: Mapped[float] = mapped_column(nullable=False)
+    currency: Mapped[str] = mapped_column(String(8), nullable=False)
+    status: Mapped[str] = mapped_column(String(16), default="active", nullable=False, index=True)
+    last_snapshot_hash: Mapped[str | None] = mapped_column(String(64))
+
+
+class PriceSnapshot(TimestampedModel):
+    __tablename__ = "price_snapshots"
+    alert_id: Mapped[int] = mapped_column(
+        ForeignKey("price_alerts.id", ondelete="CASCADE"), index=True
+    )
+    price: Mapped[float] = mapped_column(nullable=False)
+    snapshot_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    notified: Mapped[bool] = mapped_column(default=False, nullable=False)
+    __table_args__ = (UniqueConstraint("alert_id", "snapshot_hash"),)
