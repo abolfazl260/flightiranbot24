@@ -17,6 +17,7 @@ dependencies = [
   "APScheduler>=3.10,<4",
   "fastapi>=0.115,<1",
   "uvicorn[standard]>=0.32,<1",
+  "beautifulsoup4>=4.12,<5",
 ]
 
 [project.optional-dependencies]
