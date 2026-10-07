@@ -58,6 +58,7 @@ class AlertService:
         digest = hashlib.sha256(
             json.dumps(snapshot, sort_keys=True, separators=(",", ":")).encode()
         ).hexdigest()
+        event_type = snapshot.get("event_type", "schedule_change")
         async with self.database.session() as session:
             alert = await session.get(FlightAlert, alert_id)
             if alert is None or alert.status != "active" or alert.last_snapshot_hash == digest:
@@ -65,15 +66,27 @@ class AlertService:
             if alert.last_snapshot_hash is None:
                 alert.last_snapshot_hash = digest
                 return False
-            event = FlightAlertEvent(
-                alert_id=alert.id,
-                event_type=snapshot.get("event_type", "schedule_change"),
-                snapshot_hash=digest,
-                delivery_status="pending",
+            event = await session.scalar(
+                select(FlightAlertEvent).where(
+                    FlightAlertEvent.alert_id == alert_id,
+                    FlightAlertEvent.snapshot_hash == digest,
+                    FlightAlertEvent.event_type == event_type,
+                )
             )
-            session.add(event)
-            alert.last_snapshot_hash = digest
-            await session.flush()
+            if event is not None:
+                if event.delivery_status == "delivered":
+                    return False
+                event.delivery_status = "pending"
+                event.error_message = None
+            else:
+                event = FlightAlertEvent(
+                    alert_id=alert.id,
+                    event_type=event_type,
+                    snapshot_hash=digest,
+                    delivery_status="pending",
+                )
+                session.add(event)
+                await session.flush()
         try:
             await notify(alert, event)
         except Exception as exc:
@@ -85,7 +98,10 @@ class AlertService:
             return False
         async with self.database.session() as session:
             stored = await session.get(FlightAlertEvent, event.id)
+            current_alert = await session.get(FlightAlert, alert_id)
             if stored:
                 stored.delivery_status = "delivered"
                 stored.delivered_at = datetime.now(timezone.utc)
+            if current_alert:
+                current_alert.last_snapshot_hash = digest
         return True
