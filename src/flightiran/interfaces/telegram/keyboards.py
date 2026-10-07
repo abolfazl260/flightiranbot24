@@ -1,11 +1,11 @@
 """Reusable Telegram keyboard definitions."""
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 
 from .localization import safe_text
 
 
-def main_menu(language: str) -> InlineKeyboardMarkup:
+def main_menu(language: str, web_app_url: str | None = None) -> InlineKeyboardMarkup:
     rows = [
         [("flights", "menu:flights"), ("airports", "menu:airports")],
         [("tickets", "menu:tickets"), ("currency", "menu:currency")],
@@ -13,6 +13,8 @@ def main_menu(language: str) -> InlineKeyboardMarkup:
         [("cargo", "menu:cargo"), ("useful", "menu:useful")],
         [("support", "menu:support"), ("settings", "menu:settings")],
     ]
+    if web_app_url:
+        rows.append([InlineKeyboardButton("Web App", web_app=WebAppInfo(web_app_url))])
     return InlineKeyboardMarkup(
         [
             [

@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Flight Iran Bot 24</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { margin: 0; padding: 1rem; background: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #111); }
+    .card { padding: 1rem; margin: .75rem 0; border-radius:  .75rem; background: var(--tg-theme-secondary-bg-color, #eee); }
+  </style>
+</head>
+<body>
+  <h1>Flight Iran Bot 24</h1>
+  <p id="status">در حال دریافت اطلاعات…</p>
+  <div id="features"></div>
+  <script>
+    const app = window.Telegram?.WebApp;
+    app?.ready(); app?.expand();
+    const headers = {'X-Telegram-Init-Data': app?.initData || ''};
+    fetch('/api/dashboard', {headers}).then(async response => {
+      if (!response.ok) throw new Error('unauthorized');
+      return response.json();
+    }).then(data => {
+      document.querySelector('#status').textContent = `کاربر ${data.user_id}`;
+      document.querySelector('#features').innerHTML = data.features.map(item => `<div class="card">${item}</div>`).join('');
+    }).catch(() => { document.querySelector('#status').textContent = 'این صفحه فقط از داخل Telegram قابل استفاده است.'; });
+  </script>
+</body>
+</html>

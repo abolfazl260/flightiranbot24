@@ -30,6 +30,7 @@ class Settings(BaseSettings):
     currency_proxy_url: str | None = None
     app_env: str = "development"
     web_app_enabled: bool = False
+    web_app_url: str | None = None
 
     def validate_for_production(self) -> None:
         if (
@@ -37,6 +38,8 @@ class Settings(BaseSettings):
             and len(self.telegram_bot_token.get_secret_value()) < 20
         ):
             raise ValueError("TELEGRAM_BOT_TOKEN is too short for production")
+        if self.web_app_enabled and not self.web_app_url:
+            raise ValueError("WEB_APP_URL is required when WEB_APP_ENABLED=true")
 
 
 @lru_cache(maxsize=1)
