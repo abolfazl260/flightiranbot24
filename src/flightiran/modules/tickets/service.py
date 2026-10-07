@@ -5,8 +5,8 @@ from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 
-from .domain import TicketOffer, TicketQuery
-from .provider import TicketProvider
+from .domain import CheapTicketRoute, TicketOffer, TicketQuery
+from .provider import CheapTicketProvider, TicketProvider
 
 
 @dataclass(frozen=True)
@@ -47,3 +47,13 @@ class TicketService:
         return sorted(
             offers, key=lambda offer: (offer.total_price, offer.duration_minutes or 10**9)
         )
+
+
+class CheapTicketService:
+    """Application use case for the menu's cheap-ticket feed."""
+
+    def __init__(self, provider: CheapTicketProvider) -> None:
+        self.provider = provider
+
+    async def routes(self) -> list[CheapTicketRoute]:
+        return await self.provider.routes()

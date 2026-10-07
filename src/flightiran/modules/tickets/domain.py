@@ -37,3 +37,20 @@ class TicketOffer:
     @property
     def total_price(self) -> float:
         return self.price + (self.fees or 0)
+
+
+@dataclass(frozen=True)
+class CheapTicketDestination:
+    """A destination and its advertised price from the cheap-ticket source."""
+
+    name: str
+    price_toman: str
+
+
+@dataclass(frozen=True)
+class CheapTicketRoute:
+    """One origin row and all destinations exposed by the provider."""
+
+    origin: str
+    destinations: tuple[CheapTicketDestination, ...]
+    source_url: str

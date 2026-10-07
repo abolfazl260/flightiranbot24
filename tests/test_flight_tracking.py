@@ -82,3 +82,67 @@ async def test_http_provider_maps_payload_without_leaking_provider_shape():
     assert flight.airline == "KLM"
     assert flight.position.latitude == 35.0
     assert flight.scheduled_departure.tzinfo == timezone.utc
+
+
+@pytest.mark.asyncio
+async def test_http_provider_maps_flightradar24_search_and_detail_payload():
+    class Client:
+        def __init__(self):
+            self.payloads = [
+                {"results": [{"id": "abc123", "detail": {"lat": 35.7, "lon": 51.4}}]},
+                {
+                    "identification": {"callsign": "KLM561"},
+                    "airline": {"name": "KLM"},
+                    "aircraft": {
+                        "model": {"text": "Boeing 737"},
+                        "age": 8,
+                        "images": {"large": [{"src": "https://img.test/plane.jpg"}]},
+                    },
+                    "airport": {
+                        "origin": {
+                            "name": "Amsterdam Schiphol",
+                            "position": {
+                                "region": {"city": "Amsterdam"},
+                                "country": {"name": "Netherlands"},
+                            },
+                            "info": {"terminal": "1"},
+                            "timezone": {"offset": 3600},
+                        },
+                        "destination": {
+                            "name": "Imam Khomeini",
+                            "position": {
+                                "region": {"city": "Tehran"},
+                                "country": {"name": "Iran"},
+                            },
+                            "info": {"terminal": "A"},
+                            "timezone": {"offset": 12600},
+                        },
+                    },
+                    "time": {
+                        "scheduled": {"departure": 1767355200, "arrival": 1767376800},
+                        "real": {"departure": 1767355500},
+                        "estimated": {"arrival": 1767377400},
+                    },
+                },
+            ]
+            self.calls = []
+
+        async def get_json(self, url, **kwargs):
+            self.calls.append((url, kwargs))
+            return self.payloads.pop(0)
+
+    client = Client()
+    flight = await HttpFlightProvider(client, "https://fr24.test/search").search("KLM561")
+    assert flight is not None
+    assert flight.airline == "KLM"
+    assert flight.origin_country == "Netherlands"
+    assert flight.destination_city == "Tehran"
+    assert flight.origin_terminal == "1"
+    assert flight.aircraft_age == 8
+    assert flight.aircraft_image == "https://img.test/plane.jpg"
+    assert flight.position.latitude == 35.7
+    assert flight.scheduled_departure.utcoffset().total_seconds() == 3600
+    assert flight.scheduled_arrival.utcoffset().total_seconds() == 12600
+    assert flight.map_url.endswith("/abc123")
+    assert flight.history_url.endswith("/KLM561")
+    assert client.calls[1][1]["params"] == {"version": "1.5", "flight": "abc123"}
