@@ -22,4 +22,3 @@ def test_missing_token_has_safe_configuration_error(monkeypatch) -> None:
         raise AssertionError("missing token should fail startup validation")
     finally:
         load_settings.cache_clear()
-

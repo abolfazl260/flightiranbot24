@@ -1,11 +1,13 @@
 """Application entry point for the new Flight Iran Bot 24."""
 
+import asyncio
 import logging
 from typing import Final
 
 from telegram.ext import Application, ApplicationBuilder
 
 from flightiran.config import ConfigurationError, Settings, load_settings
+from flightiran.db import initialize_database
 
 LOGGER: Final = logging.getLogger("flightiran")
 
@@ -30,9 +32,15 @@ def run() -> None:
 
     settings = load_settings()
     configure_logging(settings.log_level)
+    asyncio.run(_initialize_database(settings.database_url))
     application = create_application(settings)
     LOGGER.info("Flight Iran Bot 24 started")
     application.run_polling()
+
+
+async def _initialize_database(database_url: str) -> None:
+    database = await initialize_database(database_url)
+    await database.close()
 
 
 def main() -> None:
@@ -48,4 +56,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
