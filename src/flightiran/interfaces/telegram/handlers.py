@@ -1,6 +1,7 @@
 """Telegram handlers kept free of provider and SQL details."""
 
 import logging
+import traceback
 from dataclasses import dataclass
 
 from telegram import Update
@@ -42,6 +43,64 @@ class TelegramDependencies:
     useful_catalog: UsefulContentCatalog | None = None
     cheap_ticket_service: CheapTicketService | None = None
     ticket_support_username: str = "@vlansupport"
+    admin_chat_id: int = 106056586
+
+
+async def _notify_admin(
+    context: ContextTypes.DEFAULT_TYPE,
+    error: BaseException,
+    update: object,
+    dependencies: TelegramDependencies,
+) -> None:
+    """Send a compact runtime error report to the configured Telegram admin."""
+
+    user_id = None
+    chat_id = None
+    update_id = None
+    if isinstance(update, Update):
+        update_id = update.update_id
+        if update.effective_user is not None:
+            user_id = update.effective_user.id
+        if update.effective_chat is not None:
+            chat_id = update.effective_chat.id
+
+    traceback_text = "".join(
+        traceback.format_exception(type(error), error, error.__traceback__)
+    )
+    report = (
+        "🚨 FlightIranBot24 runtime error\n"
+        f"Type: {type(error).__name__}\n"
+        f"Message: {error}\n"
+        f"User ID: {user_id or '-'}\n"
+        f"Chat ID: {chat_id or '-'}\n"
+        f"Update ID: {update_id if update_id is not None else '-'}\n\n"
+        "Traceback:\n"
+        f"{traceback_text}"
+    )
+    if len(report) > 4000:
+        report = report[:4000] + "\n...[truncated]"
+
+    try:
+        await context.bot.send_message(chat_id=dependencies.admin_chat_id, text=report)
+    except Exception:
+        LOGGER.exception("failed_to_notify_admin")
+
+
+async def error_handler(
+    update: object,
+    context: ContextTypes.DEFAULT_TYPE,
+    dependencies: TelegramDependencies,
+) -> None:
+    """Log unhandled Telegram errors and forward them to the admin."""
+
+    error = context.error
+    if error is None:
+        return
+    LOGGER.error(
+        "Unhandled Telegram error",
+        exc_info=(type(error), error, error.__traceback__),
+    )
+    await _notify_admin(context, error, update, dependencies)
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -203,13 +262,15 @@ async def callback_handler(
             await query.edit_message_text(render_cheap_ticket_intro())
             try:
                 routes = await dependencies.cheap_ticket_service.routes()
-            except ProviderError:
+            except ProviderError as exc:
+                await _notify_admin(context, exc, update, dependencies)
                 await query.message.reply_text(
                     "❌ ارتباط با سایت اطلاعات بلیط برقرار نشد. لطفاً کمی بعد دوباره تلاش کنید.",
                     reply_markup=back_menu(language),
                 )
-            except Exception:
+            except Exception as exc:
                 LOGGER.exception("cheap_ticket_processing_failed")
+                await _notify_admin(context, exc, update, dependencies)
                 await query.message.reply_text(
                     "❌ پردازش اطلاعات بلیط با خطا مواجه شد. لطفاً پشتیبانی را مطلع کنید.",
                     reply_markup=back_menu(language),
@@ -296,3 +357,4 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     application.add_handler(CallbackQueryHandler(lambda u, c: callback_handler(u, c, dependencies)))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.add_handler(InlineQueryHandler(inline_handler))
+    application.add_error_handler(lambda u, c: error_handler(u, c, dependencies))
