@@ -8,6 +8,7 @@ from flightiran.interfaces.telegram.handlers import (
     language_handler,
     start_handler,
 )
+from flightiran.modules.airport.catalog import AirportCatalog
 
 
 class MemoryUsers:
@@ -52,8 +53,8 @@ class Query(Message):
         self.calls.append((args, kwargs))
 
 
-def dependencies():
-    return TelegramDependencies(MemoryUsers(), MemoryAudit())
+def dependencies(**kwargs):
+    return TelegramDependencies(MemoryUsers(), MemoryAudit(), **kwargs)
 
 
 def update(message=None, query=None):
@@ -86,3 +87,21 @@ async def test_unknown_callback_has_safe_fallback():
     query.data = "unexpected"
     await callback_handler(update(query=query), None, deps)
     assert "unavailable" in query.calls[0][0][0]
+
+
+@pytest.mark.asyncio
+async def test_airport_menu_routes_to_catalog_and_selection():
+    catalog = AirportCatalog.from_json(
+        __import__("pathlib").Path("src/flightiran/modules/airport/data/airports.json")
+    )
+    deps = dependencies(airport_catalog=catalog)
+    query = Query()
+    query.data = "menu:airports"
+    await callback_handler(update(query=query), None, deps)
+    assert "فرودگاه" in query.calls[0][0][0]
+    assert query.calls[0][1]["reply_markup"].inline_keyboard
+
+    selected = Query()
+    selected.data = "airport:IKA"
+    await callback_handler(update(query=selected), None, deps)
+    assert "IKA" in selected.calls[0][0][0]
