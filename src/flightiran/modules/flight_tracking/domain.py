@@ -25,8 +25,16 @@ class FlightDetails:
     callsign: str | None = None
     airline: str | None = None
     aircraft: str | None = None
+    aircraft_age: str | int | float | None = None
+    aircraft_image: str | None = None
     origin: str | None = None
     destination: str | None = None
+    origin_country: str | None = None
+    destination_country: str | None = None
+    origin_city: str | None = None
+    destination_city: str | None = None
+    origin_airport: str | None = None
+    destination_airport: str | None = None
     origin_terminal: str | None = None
     destination_terminal: str | None = None
     scheduled_departure: datetime | None = None
@@ -35,6 +43,8 @@ class FlightDetails:
     estimated_arrival: datetime | None = None
     actual_arrival: datetime | None = None
     position: FlightPosition | None = None
+    map_url: str | None = None
+    history_url: str | None = None
 
 
 @dataclass(frozen=True)

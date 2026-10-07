@@ -85,6 +85,30 @@ class ProviderHttpClient:
             self._cache.set(cache_key, payload)
         return payload
 
+    async def get_text(
+        self,
+        url: str,
+        *,
+        provider: str,
+        params: dict[str, Any] | None = None,
+        headers: dict[str, str] | None = None,
+        cache_key: str | None = None,
+    ) -> str:
+        """Fetch a text document through the same timeout/retry policies as JSON."""
+        if cache_key and self._cache:
+            cached = self._cache.get(cache_key)
+            if cached is not None and isinstance(cached.get("text"), str):
+                return cached["text"]
+        response = await self._request(
+            "GET", url, provider=provider, params=params, headers=headers
+        )
+        content = response.text
+        if not content.strip():
+            raise ProviderInvalidResponse(f"Provider {provider} returned an empty response")
+        if cache_key and self._cache:
+            self._cache.set(cache_key, {"text": content})
+        return content
+
     async def _request(
         self, method: str, url: str, *, provider: str, **kwargs: Any
     ) -> httpx.Response:

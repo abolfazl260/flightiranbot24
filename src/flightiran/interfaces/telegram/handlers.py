@@ -1,5 +1,6 @@
 """Telegram handlers kept free of provider and SQL details."""
 
+import logging
 from dataclasses import dataclass
 
 from telegram import Update
@@ -14,14 +15,20 @@ from telegram.ext import (
 )
 
 from flightiran.db.repositories import AuditRepository, UserRepository
+from flightiran.infrastructure.http.errors import ProviderError
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
+from flightiran.modules.tickets.service import CheapTicketService
+from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
 from .keyboards import back_menu, language_menu, main_menu
 from .localization import normalize_language, safe_text, text
 from .renderers import render_language_prompt, render_main_menu
+from .useful_content import render_useful_category, useful_category_menu, useful_menu
+
+LOGGER = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -32,6 +39,9 @@ class TelegramDependencies:
     currency_service: CurrencyService | None = None
     web_app_url: str | None = None
     airport_catalog: AirportCatalog | None = None
+    useful_catalog: UsefulContentCatalog | None = None
+    cheap_ticket_service: CheapTicketService | None = None
+    ticket_support_username: str = "@vlansupport"
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -149,11 +159,69 @@ async def callback_handler(
             "سرویس نرخ ارز هنوز پیکربندی نشده است. مقدار CURRENCY_PROVIDER_URL را تنظیم کنید.",
             reply_markup=back_menu(language),
         )
-    elif data == "menu:tickets":
-        await query.edit_message_text(
-            "برای جستجوی بلیط، ابتدا مسیر و تاریخ را آماده کنید.\nمثال: IKA → FRA",
-            reply_markup=back_menu(language),
+    elif data == "menu:useful":
+        catalog = dependencies.useful_catalog or default_catalog()
+        await dependencies.audit.record(
+            "menu.callback", user_id=user_id, payload={"action": "useful"}
         )
+        await query.edit_message_text(
+            "<b>اطلاعات کاربردی سفر</b>\nیک موضوع را انتخاب کنید:",
+            parse_mode="HTML",
+            reply_markup=useful_menu(language, catalog),
+        )
+    elif data.startswith("useful:"):
+        category = data.partition(":")[2]
+        catalog = dependencies.useful_catalog or default_catalog()
+        if category not in {"flight-rules", "travel-sites"}:
+            await query.edit_message_text(
+                safe_text(language, "unknown_action"),
+                parse_mode="HTML",
+                reply_markup=back_menu(language),
+            )
+        else:
+            await dependencies.audit.record(
+                "useful.category.viewed", user_id=user_id, payload={"category": category}
+            )
+            await query.edit_message_text(
+                render_useful_category(category),
+                parse_mode="HTML",
+                reply_markup=useful_category_menu(language, catalog, category),
+            )
+    elif data == "menu:tickets":
+        from .tickets import (
+            render_cheap_route,
+            render_cheap_ticket_booking_hint,
+            render_cheap_ticket_intro,
+        )
+
+        if dependencies.cheap_ticket_service is None:
+            await query.edit_message_text(
+                "سرویس جستجوی بلیط در حال حاضر پیکربندی نشده است.",
+                reply_markup=back_menu(language),
+            )
+        else:
+            await query.edit_message_text(render_cheap_ticket_intro())
+            try:
+                routes = await dependencies.cheap_ticket_service.routes()
+            except ProviderError:
+                await query.message.reply_text(
+                    "❌ ارتباط با سایت اطلاعات بلیط برقرار نشد. لطفاً کمی بعد دوباره تلاش کنید.",
+                    reply_markup=back_menu(language),
+                )
+            except Exception:
+                LOGGER.exception("cheap_ticket_processing_failed")
+                await query.message.reply_text(
+                    "❌ پردازش اطلاعات بلیط با خطا مواجه شد. لطفاً پشتیبانی را مطلع کنید.",
+                    reply_markup=back_menu(language),
+                )
+            else:
+                for route in routes:
+                    await query.message.reply_text(render_cheap_route(route), parse_mode="HTML")
+                await query.message.reply_text(
+                    render_cheap_ticket_booking_hint(dependencies.ticket_support_username),
+                    parse_mode="HTML",
+                    reply_markup=back_menu(language),
+                )
     elif data in {"menu:visa", "menu:rules"}:
         await query.edit_message_text(
             "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
@@ -191,6 +259,7 @@ async def inline_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 async def flight_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
+    _user_id, language = await _user_language(update, dependencies)
     query = " ".join(context.args or []) if context else None
     result = (
         await dependencies.flight_service.search(query)
@@ -199,7 +268,7 @@ async def flight_handler(
     )
     from .flight import render_flight_result
 
-    message, keyboard = render_flight_result(result)
+    message, keyboard = render_flight_result(result, language)
     if update.message:
         await update.message.reply_text(message, parse_mode="HTML", reply_markup=keyboard)
 
