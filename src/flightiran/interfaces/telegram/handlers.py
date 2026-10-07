@@ -29,6 +29,7 @@ class TelegramDependencies:
     audit: AuditRepository
     flight_service: FlightService | None = None
     currency_service: CurrencyService | None = None
+    web_app_url: str | None = None
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -52,7 +53,9 @@ async def start_handler(
     await dependencies.audit.record("user.start", user_id=user_id)
     if update.message:
         await update.message.reply_text(
-            render_main_menu(language), parse_mode="HTML", reply_markup=main_menu(language)
+            render_main_menu(language),
+            parse_mode="HTML",
+            reply_markup=main_menu(language, dependencies.web_app_url),
         )
 
 
@@ -83,12 +86,15 @@ async def callback_handler(
         )
         language = selected
         await query.edit_message_text(
-            text(selected, "language_changed"), reply_markup=main_menu(selected)
+            text(selected, "language_changed"),
+            reply_markup=main_menu(selected, dependencies.web_app_url),
         )
     elif data == "back":
         await dependencies.audit.record("menu.back", user_id=user_id)
         await query.edit_message_text(
-            render_main_menu(language), parse_mode="HTML", reply_markup=main_menu(language)
+            render_main_menu(language),
+            parse_mode="HTML",
+            reply_markup=main_menu(language, dependencies.web_app_url),
         )
     elif data.startswith("menu:"):
         await dependencies.audit.record(

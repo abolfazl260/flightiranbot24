@@ -42,6 +42,7 @@ def run() -> None:
         TelegramDependencies(
             users=SQLiteUserRepository(database),
             audit=SQLiteAuditRepository(database),
+            web_app_url=settings.web_app_url if settings.web_app_enabled else None,
         ),
     )
     LOGGER.info("Flight Iran Bot 24 started")
