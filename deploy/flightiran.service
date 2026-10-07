@@ -1,0 +1,16 @@
+[Unit]
+Description=Flight Iran Bot 24
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/flightiranbot24
+EnvironmentFile=/etc/flightiranbot24/flightiran.env
+ExecStart=/opt/flightiranbot24/.venv/bin/flightiran
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target
+

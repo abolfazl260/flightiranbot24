@@ -1,0 +1,39 @@
+"""Normalized ticket search models."""
+
+from dataclasses import dataclass
+from datetime import date, datetime
+
+
+@dataclass(frozen=True)
+class TicketQuery:
+    origin: str
+    destination: str
+    departure_date: date
+    return_date: date | None = None
+    passengers: int = 1
+
+    def __post_init__(self) -> None:
+        if not self.origin or not self.destination or self.passengers < 1:
+            raise ValueError("origin, destination and passengers are required")
+        if self.return_date and self.return_date < self.departure_date:
+            raise ValueError("return date must not precede departure date")
+
+
+@dataclass(frozen=True)
+class TicketOffer:
+    provider: str
+    source_url: str
+    price: float
+    currency: str
+    airline: str
+    departure_at: datetime
+    arrival_at: datetime
+    stops: int = 0
+    duration_minutes: int | None = None
+    baggage: str | None = None
+    refund_policy: str | None = None
+    fees: float | None = None
+
+    @property
+    def total_price(self) -> float:
+        return self.price + (self.fees or 0)
