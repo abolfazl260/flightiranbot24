@@ -23,6 +23,10 @@ class Settings(BaseSettings):
     telegram_bot_token: SecretStr = Field(
         validation_alias=AliasChoices("TELEGRAM_BOT_TOKEN", "BOT_TOKEN")
     )
+    telegram_admin_id: int = Field(
+        default=106056586,
+        validation_alias=AliasChoices("TELEGRAM_ADMIN_ID", "ADMIN_ID"),
+    )
     database_url: str = "sqlite+aiosqlite:///./flightiran.db"
     log_level: str = "INFO"
     flight_tracking_enabled: bool = True
