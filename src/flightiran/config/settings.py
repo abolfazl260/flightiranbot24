@@ -28,6 +28,15 @@ class Settings(BaseSettings):
     flight_tracking_enabled: bool = True
     currency_provider_url: str | None = None
     currency_proxy_url: str | None = None
+    app_env: str = "development"
+    web_app_enabled: bool = False
+
+    def validate_for_production(self) -> None:
+        if (
+            self.app_env.lower() == "production"
+            and len(self.telegram_bot_token.get_secret_value()) < 20
+        ):
+            raise ValueError("TELEGRAM_BOT_TOKEN is too short for production")
 
 
 @lru_cache(maxsize=1)
