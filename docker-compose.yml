@@ -1,0 +1,29 @@
+services:
+  bot:
+    build: .
+    image: flightiranbot24:latest
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/flightiran.db
+    volumes:
+      - flightiran-data:/data
+    restart: unless-stopped
+    command: ["flightiran"]
+
+  web:
+    image: flightiranbot24:latest
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/flightiran.db
+      WEB_APP_ENABLED: "true"
+    volumes:
+      - flightiran-data:/data
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    command: ["flightiran-web"]
+
+volumes:
+  flightiran-data:
