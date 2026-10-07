@@ -5,7 +5,7 @@ from __future__ import annotations
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
-from sqlalchemy import event
+from sqlalchemy import event, inspect
 from sqlalchemy.ext.asyncio import (
     AsyncEngine,
     AsyncSession,
@@ -59,8 +59,17 @@ def create_database(database_url: str) -> Database:
 
 
 async def initialize_database(database_url: str) -> Database:
-    """Create missing tables for first startup; migrations remain available via Alembic."""
+    """Prepare the database without racing Alembic migrations.
+
+    Production startup runs ``alembic upgrade head`` before the bot. The
+    metadata fallback remains for isolated library/test databases that do not
+    have an Alembic version table yet.
+    """
     database = create_database(database_url)
     async with database.engine.begin() as connection:
-        await connection.run_sync(Base.metadata.create_all)
+        has_alembic_version = await connection.run_sync(
+            lambda sync_connection: inspect(sync_connection).has_table("alembic_version")
+        )
+        if not has_alembic_version:
+            await connection.run_sync(Base.metadata.create_all)
     return database
