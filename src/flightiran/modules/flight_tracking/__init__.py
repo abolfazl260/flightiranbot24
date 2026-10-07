@@ -1,5 +1,6 @@
 """Typed flight search and tracking module."""
 
+from .alerts import AlertService
 from .domain import FlightDetails, FlightPosition, FlightSearchResult, FlightSearchStatus
 from .service import FlightService, normalize_flight_number, timestamp_in_timezone
 
@@ -11,4 +12,5 @@ __all__ = [
     "FlightService",
     "normalize_flight_number",
     "timestamp_in_timezone",
+    "AlertService",
 ]

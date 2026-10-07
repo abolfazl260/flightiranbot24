@@ -4,7 +4,17 @@ from __future__ import annotations
 
 from datetime import datetime
 
-from sqlalchemy import JSON, BigInteger, DateTime, ForeignKey, Integer, String, Text, func
+from sqlalchemy import (
+    JSON,
+    BigInteger,
+    DateTime,
+    ForeignKey,
+    Integer,
+    String,
+    Text,
+    UniqueConstraint,
+    func,
+)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
@@ -67,4 +77,26 @@ class JobRun(TimestampedModel):
     job_name: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     status: Mapped[str] = mapped_column(String(32), nullable=False)
     finished_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    error_message: Mapped[str | None] = mapped_column(Text)
+
+
+class FlightAlert(TimestampedModel):
+    __tablename__ = "flight_alerts"
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    flight_number: Mapped[str] = mapped_column(String(16), nullable=False, index=True)
+    event_types: Mapped[list] = mapped_column(JSON, default=list, nullable=False)
+    status: Mapped[str] = mapped_column(String(16), default="active", nullable=False, index=True)
+    last_snapshot_hash: Mapped[str | None] = mapped_column(String(64))
+
+
+class FlightAlertEvent(TimestampedModel):
+    __tablename__ = "flight_alert_events"
+    __table_args__ = (UniqueConstraint("alert_id", "snapshot_hash", "event_type"),)
+    alert_id: Mapped[int] = mapped_column(
+        ForeignKey("flight_alerts.id", ondelete="CASCADE"), index=True
+    )
+    event_type: Mapped[str] = mapped_column(String(32), nullable=False)
+    snapshot_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    delivery_status: Mapped[str] = mapped_column(String(16), default="pending", nullable=False)
+    delivered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     error_message: Mapped[str | None] = mapped_column(Text)
