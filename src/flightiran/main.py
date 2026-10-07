@@ -7,7 +7,10 @@ from typing import Final
 from telegram.ext import Application, ApplicationBuilder
 
 from flightiran.config import ConfigurationError, Settings, load_settings
-from flightiran.db import initialize_database
+from flightiran.db import create_database, initialize_database
+from flightiran.db.engine import Database
+from flightiran.db.repositories import SQLiteAuditRepository, SQLiteUserRepository
+from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
 
 LOGGER: Final = logging.getLogger("flightiran")
 
@@ -32,15 +35,23 @@ def run() -> None:
 
     settings = load_settings()
     configure_logging(settings.log_level)
-    asyncio.run(_initialize_database(settings.database_url))
+    database = asyncio.run(_initialize_database(settings.database_url))
     application = create_application(settings)
+    register_handlers(
+        application,
+        TelegramDependencies(
+            users=SQLiteUserRepository(database),
+            audit=SQLiteAuditRepository(database),
+        ),
+    )
     LOGGER.info("Flight Iran Bot 24 started")
     application.run_polling()
 
 
-async def _initialize_database(database_url: str) -> None:
-    database = await initialize_database(database_url)
-    await database.close()
+async def _initialize_database(database_url: str) -> Database:
+    initialized = await initialize_database(database_url)
+    await initialized.close()
+    return create_database(database_url)
 
 
 def main() -> None:
