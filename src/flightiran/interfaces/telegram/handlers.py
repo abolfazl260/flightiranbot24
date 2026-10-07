@@ -14,6 +14,7 @@ from telegram.ext import (
 )
 
 from flightiran.db.repositories import AuditRepository, UserRepository
+from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
 
@@ -27,6 +28,7 @@ class TelegramDependencies:
     users: UserRepository
     audit: AuditRepository
     flight_service: FlightService | None = None
+    currency_service: CurrencyService | None = None
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -129,6 +131,16 @@ async def flight_handler(
         await update.message.reply_text(message, parse_mode="HTML", reply_markup=keyboard)
 
 
+async def price_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    from .currency import render_quotes
+
+    quotes = await dependencies.currency_service.quotes() if dependencies.currency_service else []
+    if update.message:
+        await update.message.reply_text(render_quotes(quotes), parse_mode="HTML")
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
@@ -138,6 +150,7 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     application.add_handler(
         CommandHandler("flight", lambda u, c: flight_handler(u, c, dependencies))
     )
+    application.add_handler(CommandHandler("price", lambda u, c: price_handler(u, c, dependencies)))
     application.add_handler(CallbackQueryHandler(lambda u, c: callback_handler(u, c, dependencies)))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
     application.add_handler(InlineQueryHandler(inline_handler))
