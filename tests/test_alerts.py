@@ -56,3 +56,35 @@ async def test_failed_notification_is_recorded_without_disabling_alert(tmp_path)
     await service.process_snapshot(alert.id, {"s": 2}, fail)
     assert (await service.list(user_id))[0].status == "active"
     await db.close()
+
+@pytest.mark.asyncio
+async def test_failed_flight_notification_retries_same_snapshot_without_duplicate_event(tmp_path):
+    db = await initialize_database(f"sqlite+aiosqlite:///{tmp_path / 'retry.db'}")
+    async with db.session() as session:
+        user = User(telegram_id=99)
+        session.add(user)
+        await session.flush()
+        user_id = user.id
+    service = AlertService(db)
+    alert = await service.create(user_id, "IR123", ["delay"])
+    async def fail(alert, event):
+        raise RuntimeError("temporary failure")
+    sent = []
+    async def succeed(alert, event):
+        sent.append(event.id)
+
+    assert not await service.process_snapshot(alert.id, {"status": "normal"}, succeed)
+    changed = {"status": "delayed", "event_type": "delay"}
+    assert not await service.process_snapshot(alert.id, changed, fail)
+    async with db.session() as session:
+        event = await session.scalar(select(FlightAlertEvent))
+        assert event.delivery_status == "failed"
+        assert (await session.get(type(alert), alert.id)).last_snapshot_hash is not None
+    assert await service.process_snapshot(alert.id, changed, succeed)
+    assert not await service.process_snapshot(alert.id, changed, succeed)
+    assert sent == [event.id]
+    async with db.session() as session:
+        events = (await session.scalars(select(FlightAlertEvent))).all()
+        assert len(events) == 1
+        assert events[0].delivery_status == "delivered"
+    await db.close()
