@@ -2,6 +2,7 @@
 
 import asyncio
 import logging
+from pathlib import Path
 from typing import Final
 
 from telegram.ext import Application, ApplicationBuilder
@@ -10,7 +11,11 @@ from flightiran.config import ConfigurationError, Settings, load_settings
 from flightiran.db import create_database, initialize_database
 from flightiran.db.engine import Database
 from flightiran.db.repositories import SQLiteAuditRepository, SQLiteUserRepository
+from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
+from flightiran.modules.airport.catalog import AirportCatalog
+from flightiran.modules.currency.provider import HttpCurrencyProvider
+from flightiran.modules.currency.service import CurrencyService
 
 LOGGER: Final = logging.getLogger("flightiran")
 
@@ -37,12 +42,24 @@ def run() -> None:
     configure_logging(settings.log_level)
     database = asyncio.run(_initialize_database(settings.database_url))
     application = create_application(settings)
+    currency_service = None
+    if settings.currency_provider_url:
+        currency_service = CurrencyService(
+            HttpCurrencyProvider(
+                ProviderHttpClient(ProviderHttpConfig(cache_ttl_seconds=30)),
+                settings.currency_provider_url,
+            )
+        )
     register_handlers(
         application,
         TelegramDependencies(
             users=SQLiteUserRepository(database),
             audit=SQLiteAuditRepository(database),
             web_app_url=settings.web_app_url if settings.web_app_enabled else None,
+            airport_catalog=AirportCatalog.from_json(
+                Path(__file__).parent / "modules" / "airport" / "data" / "airports.json"
+            ),
+            currency_service=currency_service,
         ),
     )
     LOGGER.info("Flight Iran Bot 24 started")

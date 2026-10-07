@@ -14,6 +14,7 @@ from telegram.ext import (
 )
 
 from flightiran.db.repositories import AuditRepository, UserRepository
+from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
@@ -30,6 +31,7 @@ class TelegramDependencies:
     flight_service: FlightService | None = None
     currency_service: CurrencyService | None = None
     web_app_url: str | None = None
+    airport_catalog: AirportCatalog | None = None
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -95,6 +97,71 @@ async def callback_handler(
             render_main_menu(language),
             parse_mode="HTML",
             reply_markup=main_menu(language, dependencies.web_app_url),
+        )
+    elif data == "menu:airports" and dependencies.airport_catalog:
+        from .airport import airport_keyboard
+
+        await dependencies.audit.record(
+            "menu.callback", user_id=user_id, payload={"action": "airports"}
+        )
+        await query.edit_message_text(
+            "<b>فرودگاه را انتخاب کنید</b>",
+            parse_mode="HTML",
+            reply_markup=airport_keyboard(dependencies.airport_catalog.all()),
+        )
+    elif data.startswith("airports:page:") and dependencies.airport_catalog:
+        from .airport import airport_keyboard
+
+        page = int(data.rsplit(":", 1)[1])
+        await query.edit_message_text(
+            "<b>فرودگاه را انتخاب کنید</b>",
+            parse_mode="HTML",
+            reply_markup=airport_keyboard(dependencies.airport_catalog.all(), page=page),
+        )
+    elif data.startswith("airport:") and dependencies.airport_catalog:
+        airport = dependencies.airport_catalog.get(data.partition(":")[2])
+        if airport is None:
+            await query.edit_message_text("فرودگاه پیدا نشد.", reply_markup=back_menu(language))
+        else:
+            await query.edit_message_text(
+                f"<b>{airport.display_name(language)}</b>\n"
+                f"کد: {airport.code}\nکشور: {airport.country}\n"
+                f"منطقه زمانی: {airport.timezone}",
+                parse_mode="HTML",
+                reply_markup=back_menu(language),
+            )
+    elif data == "menu:flights":
+        await query.edit_message_text(
+            "برای جستجوی پرواز، شماره را ارسال کنید:\n<code>/flight KLM561</code>",
+            parse_mode="HTML",
+            reply_markup=back_menu(language),
+        )
+    elif data == "menu:currency" and dependencies.currency_service:
+        from .currency import render_quotes
+
+        await query.edit_message_text(
+            render_quotes(await dependencies.currency_service.quotes()),
+            parse_mode="HTML",
+            reply_markup=back_menu(language),
+        )
+    elif data == "menu:currency":
+        await query.edit_message_text(
+            "سرویس نرخ ارز هنوز پیکربندی نشده است. مقدار CURRENCY_PROVIDER_URL را تنظیم کنید.",
+            reply_markup=back_menu(language),
+        )
+    elif data == "menu:tickets":
+        await query.edit_message_text(
+            "برای جستجوی بلیط، ابتدا مسیر و تاریخ را آماده کنید.\nمثال: IKA → FRA",
+            reply_markup=back_menu(language),
+        )
+    elif data in {"menu:visa", "menu:rules"}:
+        await query.edit_message_text(
+            "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
+            reply_markup=back_menu(language),
+        )
+    elif data == "menu:settings":
+        await query.edit_message_text(
+            render_language_prompt(language), parse_mode="HTML", reply_markup=language_menu()
         )
     elif data.startswith("menu:"):
         await dependencies.audit.record(
