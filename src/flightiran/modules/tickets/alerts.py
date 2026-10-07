@@ -80,21 +80,34 @@ class PriceAlertService:
             alert = await session.get(PriceAlert, alert_id)
             if alert is None or alert.status != "active" or alert.last_snapshot_hash == digest:
                 return False
-            snapshot = PriceSnapshot(
-                alert_id=alert_id, price=price, snapshot_hash=digest, notified=False
+            snapshot = await session.scalar(
+                select(PriceSnapshot).where(
+                    PriceSnapshot.alert_id == alert_id,
+                    PriceSnapshot.snapshot_hash == digest,
+                )
             )
-            session.add(snapshot)
-            alert.last_snapshot_hash = digest
-            await session.flush()
+            if snapshot is not None:
+                if snapshot.notified:
+                    return False
+            else:
+                snapshot = PriceSnapshot(
+                    alert_id=alert_id, price=price, snapshot_hash=digest, notified=False
+                )
+                session.add(snapshot)
+                await session.flush()
             should_notify = price <= alert.target_price
-        if not should_notify:
-            return False
+            if not should_notify:
+                alert.last_snapshot_hash = digest
+                return False
         try:
             await notify(alert, snapshot)
         except Exception:
             return False
         async with self.database.session() as session:
             stored = await session.get(PriceSnapshot, snapshot.id)
+            current_alert = await session.get(PriceAlert, alert_id)
             if stored:
                 stored.notified = True
+            if current_alert:
+                current_alert.last_snapshot_hash = digest
         return True
