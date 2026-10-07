@@ -1,10 +1,8 @@
 import pytest
 from sqlalchemy import select
 
-from flightiran.db.models import PriceAlert, PriceSnapshot
-
 from flightiran.db import initialize_database
-from flightiran.db.models import User
+from flightiran.db.models import PriceAlert, PriceSnapshot, User
 from flightiran.modules.tickets.alerts import PriceAlertService
 
 
