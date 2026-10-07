@@ -93,6 +93,7 @@ def run() -> None:
             flight_service=flight_service,
             cheap_ticket_service=cheap_ticket_service,
             ticket_support_username=settings.ticket_support_username,
+            admin_chat_id=settings.telegram_admin_id,
             useful_catalog=default_catalog(),
         ),
     )
