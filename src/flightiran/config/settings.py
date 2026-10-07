@@ -25,6 +25,7 @@ class Settings(BaseSettings):
     )
     database_url: str = "sqlite+aiosqlite:///./flightiran.db"
     log_level: str = "INFO"
+    flight_tracking_enabled: bool = True
 
 
 @lru_cache(maxsize=1)

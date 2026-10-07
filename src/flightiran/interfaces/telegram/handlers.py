@@ -14,6 +14,8 @@ from telegram.ext import (
 )
 
 from flightiran.db.repositories import AuditRepository, UserRepository
+from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
+from flightiran.modules.flight_tracking.service import FlightService
 
 from .keyboards import back_menu, language_menu, main_menu
 from .localization import normalize_language, safe_text, text
@@ -24,6 +26,7 @@ from .renderers import render_language_prompt, render_main_menu
 class TelegramDependencies:
     users: UserRepository
     audit: AuditRepository
+    flight_service: FlightService | None = None
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -110,11 +113,30 @@ async def inline_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.inline_query.answer([])
 
 
+async def flight_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    query = " ".join(context.args or []) if context else None
+    result = (
+        await dependencies.flight_service.search(query)
+        if dependencies.flight_service
+        else FlightSearchResult(FlightSearchStatus.DISABLED, message="disabled")
+    )
+    from .flight import render_flight_result
+
+    message, keyboard = render_flight_result(result)
+    if update.message:
+        await update.message.reply_text(message, parse_mode="HTML", reply_markup=keyboard)
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
+    )
+    application.add_handler(
+        CommandHandler("flight", lambda u, c: flight_handler(u, c, dependencies))
     )
     application.add_handler(CallbackQueryHandler(lambda u, c: callback_handler(u, c, dependencies)))
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
