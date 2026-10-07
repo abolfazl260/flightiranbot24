@@ -1,17 +1,24 @@
 # Useful travel content
 
-The `useful_content` module owns the travel-information catalogue. Telegram
-handlers only render the catalogue and never contain provider URLs.
+The Telegram landing page is a six-category inline keyboard. Selecting a
+category displays its curated links and a back button to the landing page.
 
-## Categories
+- `documents`: passport, travel restrictions and student exemptions.
+- `flights`: flight compensation and airline comparison. Also links to country rules.
+- `baggage`: prohibited items and country-specific flight/baggage rules.
+- `international`: country-specific travel resource directory.
+- `payments`: exit fees and travel insurance.
+- `tips`: travel tips and preparation checklist.
 
-- `general`: compensation, airline ratings, exit restrictions, prohibited
-  items, exit fees, insurance, travel tips, passport and academic exemption.
-- `flight-rules`: country and region guidance for flight and baggage rules.
-- `travel-sites`: country and region directories of related travel websites.
+Legacy country submenus remain `flight-rules` and `travel-sites`.
+Their Back buttons navigate to `baggage` and `international` respectively.
+Stable link IDs, link URLs, content ordering and audit events are preserved.
 
-Each entry has a stable ID, label, absolute HTTP(S) URL, optional description,
-review date and active flag. To replace a legacy Telegram post with an
-official source, update `default_catalog()` or replace the catalog dependency
-with a repository-backed implementation; the Telegram handler does not need to
-change.
+Content is curated and should be verified periodically. Some source URLs point
+to legacy Telegram posts, not official government guidance. New legal or
+financial guidance must not be fabricated or published without authoritative
+sources. Topics such as visa eligibility, airport check-in deadlines, currency
+allowances, pet travel and medication restrictions are candidates for separately
+verified articles rather than placeholder buttons.
+
+Run `pytest tests/test_useful_content.py` after changes.
