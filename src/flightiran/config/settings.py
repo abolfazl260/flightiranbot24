@@ -2,8 +2,11 @@
 
 from functools import lru_cache
 
-from pydantic import AliasChoices, Field, SecretStr, ValidationError
+from pydantic import AliasChoices, Field, SecretStr, ValidationError, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+
+DEFAULT_SUPPORT_USERNAME = "@advertio_bot"
 
 
 class ConfigurationError(RuntimeError):
@@ -35,12 +38,24 @@ class Settings(BaseSettings):
     currency_provider_url: str | None = None
     currency_proxy_url: str | None = None
     ticket_provider_url: str = "https://mz724.ir/"
-    ticket_support_username: str = "@vlansupport"
+    ticket_support_username: str = Field(
+        default=DEFAULT_SUPPORT_USERNAME,
+        validation_alias=AliasChoices("SUPPORT_USERNAME", "TICKET_SUPPORT_USERNAME"),
+    )
     ticket_history_interval_minutes: int = 60
     ticket_history_retention_days: int = 21
     app_env: str = "development"
     web_app_enabled: bool = False
     web_app_url: str | None = None
+
+    @field_validator("ticket_support_username")
+    @classmethod
+    def normalize_legacy_support_username(cls, username: str) -> str:
+        """Move deployments using the previous contact to the unified support bot."""
+
+        if username.strip().lower().lstrip("@") == "vlansupport":
+            return DEFAULT_SUPPORT_USERNAME
+        return username
 
     def validate_for_production(self) -> None:
         if (
