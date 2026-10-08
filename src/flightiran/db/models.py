@@ -146,7 +146,9 @@ class Mz724PriceSnapshot(TimestampedModel):
     origin: Mapped[str] = mapped_column(String(128), nullable=False)
     destination: Mapped[str] = mapped_column(String(128), nullable=False)
     price_toman: Mapped[int] = mapped_column(BigInteger, nullable=False)
-    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+    captured_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), nullable=False, index=True
+    )
 
 
 class Mz724RouteAverage(TimestampedModel):
