@@ -6,6 +6,10 @@ SUPPORTED_LANGUAGES = ("fa", "en", "ar")
 
 MESSAGES = {
     "en": {
+        "ticket_choose_origin": "Choose your departure city to view its fares:",
+        "ticket_selected_origin": "Flights from {origin}: select another city or view the results below.",
+        "ticket_expired": "This flight list has expired. Open Tickets again to refresh the cities.",
+
         "welcome": "Welcome to Flight Iran Bot 24",
         "menu": "Choose a travel service:",
         "language_changed": "Language changed.",
@@ -25,6 +29,10 @@ MESSAGES = {
         "settings": "Settings",
     },
     "fa": {
+        "ticket_choose_origin": "✈️ شهر مبدأ را انتخاب کنید تا فقط قیمت‌های همان شهر نمایش داده شود:",
+        "ticket_selected_origin": "✈️ قیمت‌های پرواز از {origin} در ادامه نمایش داده می‌شود.",
+        "ticket_expired": "فهرست مبدأها منقضی شده است. برای دریافت فهرست جدید دوباره بلیط را انتخاب کنید.",
+
         "welcome": "به ربات پرواز ایران ۲۴ خوش آمدید",
         "menu": "یک خدمت سفر را انتخاب کنید:",
         "language_changed": "زبان تغییر کرد.",
@@ -44,6 +52,10 @@ MESSAGES = {
         "settings": "تنظیمات",
     },
     "ar": {
+        "ticket_choose_origin": "✈️ اختر مدينة المغادرة لعرض أسعار رحلاتها فقط:",
+        "ticket_selected_origin": "✈️ أسعار الرحلات من {origin} معروضة أدناه.",
+        "ticket_expired": "انتهت صلاحية قائمة المدن. افتح قسم التذاكر مرة أخرى.",
+
         "welcome": "مرحباً بكم في روبوت طيران إيران 24",
         "menu": "اختر خدمة سفر:",
         "language_changed": "تم تغيير اللغة.",
