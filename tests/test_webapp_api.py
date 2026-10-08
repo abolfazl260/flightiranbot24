@@ -1,10 +1,9 @@
 import hashlib
 import hmac
 import time
-
-import pytest
 from urllib.parse import urlencode
 
+import pytest
 from fastapi.testclient import TestClient
 
 from flightiran.config import Settings
