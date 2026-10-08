@@ -33,9 +33,9 @@ _TABLE_HEADERS = {
 }
 
 _TABLE_LEGENDS = {
-    "fa": "قیمت‌ها به تومان؛ تغییر نسبت به میانگین ۲۱روزه: 🟢 کاهش | 🔴 افزایش | ⚪ برابر",
-    "en": "Prices in toman; vs 21-day average: 🟢 lower | 🔴 higher | ⚪ equal",
-    "ar": "الأسعار بالتومان؛ مقارنة بمتوسط ٢١ يوماً: 🟢 أقل | 🔴 أعلى | ⚪ مساوي",
+    "fa": "قیمت‌ها به تومان؛ تغییر نسبت به میانگین ۲۱روزه: کاهش | افزایش | برابر",
+    "en": "Prices in toman; vs 21-day average: lower | higher | equal",
+    "ar": "الأسعار بالتومان؛ مقارنة بمتوسط ٢١ يوماً: أقل | أعلى | مساوي",
 }
 
 _TABLE_TITLES = {
@@ -65,12 +65,12 @@ def _average_change_text(current: int | None, average: float | None) -> str:
 
     difference = current - average
     if round(difference) == 0:
-        return "⚪ ➖ 0.0"
+        return "= 0.0"
 
     percentage = abs(difference / average * 100)
     if difference < 0:
-        return f"🟢 ↓ {percentage:.1f}"
-    return f"🔴 ↑ {percentage:.1f}"
+        return f"↓ {percentage:.1f}"
+    return f"↑ {percentage:.1f}"
 
 
 def _row(destination: CheapTicketDestination) -> str:
@@ -259,7 +259,7 @@ def _drop_table_row(drop: PriceDrop) -> str:
         f"{drop.average_toman:,.0f}",
     )
     amount_button = _price_difference_button(-round(drop.decrease_toman))
-    change_text = f"🟢 ↓ {drop.decrease_percent:.2f}"
+    change_text = f"↓ {drop.decrease_percent:.2f}"
     return (
         "<tr>"
         + "".join(f"<td>{escape(cell)}</td>" for cell in cells)
@@ -271,7 +271,7 @@ def _drop_table_row(drop: PriceDrop) -> str:
 def _drop_report_html(rows: list[str], total: int, *, continued: bool = False) -> str:
     continuation = " (ادامه)" if continued else ""
     return (
-        f"<h3>🟢 ↓ گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
+        f"<h3>↓ گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
         f"<p>{total} مسیر | ارقام به تومان | بیشترین کاهش نسبت به میانگین ۲۱روزه</p>"
         "<table bordered striped compact>"
         + _DROP_TABLE_HEADER
@@ -326,7 +326,7 @@ def render_rich_price_drop_report(
     if not drops:
         return [{
             "html": (
-                "<h3>🟢 ↓ گزارش کاهش قیمت بیش از ۲۰٪</h3>"
+                "<h3>↓ گزارش کاهش قیمت بیش از ۲۰٪</h3>"
                 "<p>در بررسی فعلی، مسیری با کاهش بیش از ۲۰٪ نسبت به "
                 "میانگین ۲۱روزه پیدا نشد.</p>"
             ),
@@ -353,7 +353,7 @@ def render_price_drop_fallback_chunks(
         raise ValueError("max_length must be positive")
 
     drops = find_price_drops(routes)
-    title = "🟢 ↓ <b>گزارش کاهش قیمت بیش از ۲۰٪</b>"
+    title = "↓ <b>گزارش کاهش قیمت بیش از ۲۰٪</b>"
     if not drops:
         return [title + "\nدر بررسی فعلی موردی پیدا نشد."]
 
@@ -364,7 +364,7 @@ def render_price_drop_fallback_chunks(
             f"✈️ {escape(drop.origin)} ← {escape(drop.destination)} | "
             f"{drop.current_toman:,} تومان | "
             f"کاهش {drop.decrease_toman:,.0f} تومان | "
-            f"🟢 ↓ {drop.decrease_percent:.2f}٪"
+            f"↓ {drop.decrease_percent:.2f}٪"
         )
         candidate = current + "\n" + line
         if len(candidate) > max_length:
@@ -386,13 +386,13 @@ _DISABLED_BADGE_PATTERN = re.compile(
 
 
 def replace_disabled_buttons_with_indicators(rich_message: dict) -> dict:
-    """Keep red, green and neutral Diff markers when buttons are unsupported."""
+    """Keep Diff direction clear without dots if Telegram rejects disabled buttons."""
 
-    color_markers = {"success": "🟢", "danger": "🔴", None: "⚪"}
+    direction_prefix = {"success": "−", "danger": "+", None: ""}
 
     def render(match: re.Match[str]) -> str:
         style, content = match.groups()
-        return f"{color_markers[style]} {content}"
+        return f"{direction_prefix[style]}{content}"
 
     return {
         **rich_message,
