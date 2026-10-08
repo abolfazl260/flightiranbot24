@@ -24,6 +24,7 @@ LANG = {
             "مقررات نهاد رسمی مقصد و شرکت هواپیمایی را بررسی کنید."
         ),
         "residence": "اقامت انتخاب‌شده", "purpose": "هدف سفر",
+        "residence_button": "تعیین کشور اقامت", "clear_residence": "حذف اقامت",
         "unmodeled": "این منبع اثر اقامت یا هدف خاص سفر را به‌طور کامل محاسبه نمی‌کند.",
         "intro": "اطلاعات ۱۹۹ مقصد، براساس پاسپورت و منابع استنادی. "
         "برای شروع پاسپورت را انتخاب کنید یا دستور /visa AF TR را بفرستید.",
@@ -68,6 +69,7 @@ LANG = {
             "official destination and airline requirements before booking."
         ),
         "residence": "Declared residence", "purpose": "Travel purpose",
+        "residence_button": "Specify residence", "clear_residence": "Clear residence",
         "unmodeled": "This dataset does not fully calculate residence or special-purpose eligibility.",
         "intro": "Information for 199 destinations, grouped by passport and sources. "
         "Choose a passport or try /visa AF TR.",
@@ -111,6 +113,7 @@ LANG = {
             "والوثائق والغرض من السفر والعبور. تحقق من السلطات الرسمية وشركة الطيران."
         ),
         "residence": "بلد الإقامة المعلن", "purpose": "الغرض من السفر",
+        "residence_button": "تحديد بلد الإقامة", "clear_residence": "حذف الإقامة",
         "unmodeled": "لا يحسب هذا المصدر جميع استثناءات الإقامة وأغراض السفر.",
         "intro": "بيانات ١٩٩ وجهة حسب جواز السفر والمصادر. اختر الجواز أو أرسل /visa AF TR.",
         "empty": "لم تُستورد بيانات التأشيرات بعد. يمكن للمشرف تشغيل /visa_sync.",
@@ -551,6 +554,11 @@ def detail_keyboard(language: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(tr(language, "tips"), callback_data="visa:section:tips"),
          InlineKeyboardButton(tr(language, "faq"), callback_data="visa:section:faq")],
         [InlineKeyboardButton(tr(language, "sources"), callback_data="visa:section:sources")],
+        [InlineKeyboardButton(tr(language, "residence_button"), callback_data="visa:pick:r:0"),
+         InlineKeyboardButton(tr(language, "clear_residence"), callback_data="visa:r:clear")],
+        [InlineKeyboardButton(tr(language, "purpose_tourism"), callback_data="visa:pur:tourism"),
+         InlineKeyboardButton(tr(language, "purpose_business"), callback_data="visa:pur:business"),
+         InlineKeyboardButton(tr(language, "purpose_transit"), callback_data="visa:pur:transit")],
         [InlineKeyboardButton(tr(language, "another"), callback_data="visa:pick:d:0")],
         [InlineKeyboardButton(tr(language, "list"), callback_data="visa:groups")],
         [InlineKeyboardButton(tr(language, "passports"), callback_data="visa:pick:p:0")],
