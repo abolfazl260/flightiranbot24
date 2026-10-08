@@ -15,6 +15,7 @@ class MemoryUsers:
     def __init__(self):
         self.users = {}
         self.languages = {}
+        self.passports = {}
 
     async def get_or_create(self, telegram_id, **fields):
         self.users.setdefault(telegram_id, SimpleNamespace(id=telegram_id, **fields))
@@ -25,6 +26,12 @@ class MemoryUsers:
 
     async def set_language(self, user_id, language):
         self.languages[user_id] = language
+
+    async def get_visa_passport(self, user_id):
+        return self.passports.get(user_id, "IR")
+
+    async def set_visa_passport(self, user_id, passport):
+        self.passports[user_id] = passport
 
 
 class MemoryAudit:
@@ -331,3 +338,85 @@ def test_ticket_origin_keyboard_pagination_and_safe_callback_data():
     assert all(len(button.callback_data.encode()) <= 64
                for row in last.inline_keyboard for button in row
                if button.callback_data)
+
+
+class MemoryVisaCatalog:
+    async def ready(self):
+        return True
+
+    async def countries(self):
+        from flightiran.modules.visa.catalog import Country
+        return [
+            Country("IR", "Iran"), Country("AF", "Afghanistan"), Country("TR", "Turkey")
+        ]
+
+    async def detail(self, passport, destination):
+        return None
+
+    async def distribution(self, passport):
+        return {"visa-free": 1}
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("language, expected", [
+    ("fa", "ایران"), ("en", "Iran"), ("ar", "إيران")
+])
+async def test_visa_menu_defaults_to_iran_and_allows_changing_passport(language, expected):
+    from flightiran.interfaces.telegram.handlers import visa_handler, visa_list_handler
+    deps = dependencies(visa_catalog=MemoryVisaCatalog())
+    deps.users.languages[42] = language
+    context = SimpleNamespace(user_data={}, args=[])
+    entry = Query()
+    entry.data = "menu:visa"
+    await callback_handler(update(query=entry), context, deps)
+    assert context.user_data["visa_passport"] == "IR"
+    assert expected in entry.calls[0][0][0]
+    buttons = [button.callback_data for row in entry.calls[0][1]["reply_markup"].inline_keyboard
+               for button in row]
+    assert "visa:pick:d:0" in buttons
+    assert "visa:pick:p:0" in buttons
+
+    chosen = Query()
+    chosen.data = "visa:p:AF"
+    await callback_handler(update(query=chosen), context, deps)
+    assert deps.users.passports[42] == "AF"
+
+    # Simulate a bot restart: Telegram user_data no longer exists.
+    restored = SimpleNamespace(user_data={}, args=[])
+    reopened = Query()
+    reopened.data = "menu:visa"
+    await callback_handler(update(query=reopened), restored, deps)
+    assert restored.user_data["visa_passport"] == "AF"
+    assert "AF" in reopened.calls[0][0][0]
+    assert "IR" not in reopened.calls[0][0][0]
+
+    list_message = Message()
+    await visa_list_handler(update(message=list_message), restored, deps)
+    assert "<code>AF</code>" in list_message.calls[0][0][0]
+
+    # /visa without arguments must preserve an explicitly changed passport.
+    visa_message = Message()
+    await visa_handler(update(message=visa_message), restored, deps)
+    assert "AF" in visa_message.calls[0][0][0]
+
+
+@pytest.mark.asyncio
+async def test_visa_list_defaults_to_iran_and_explicit_commands_are_saved():
+    from flightiran.interfaces.telegram.handlers import visa_handler, visa_list_handler
+    deps = dependencies(visa_catalog=MemoryVisaCatalog())
+    context = SimpleNamespace(user_data={}, args=[])
+    message = Message()
+    await visa_list_handler(update(message=message), context, deps)
+    assert "<code>IR</code>" in message.calls[0][0][0]
+    assert deps.users.passports == {}
+
+    context.args = ["AF", "TR"]
+    await visa_handler(update(message=Message()), context, deps)
+    assert deps.users.passports[42] == "AF"
+    assert context.user_data["visa_destination"] == "TR"
+
+    context.args = []
+    reopened = Query()
+    reopened.data = "menu:visa"
+    await callback_handler(update(query=reopened), context, deps)
+    assert context.user_data["visa_passport"] == "AF"
