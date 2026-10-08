@@ -248,7 +248,7 @@ async def callback_handler(
             )
     elif data == "menu:tickets":
         from .tickets import (
-            render_cheap_route,
+            render_cheap_route_chunks,
             render_cheap_ticket_booking_hint,
             render_cheap_ticket_intro,
         )
@@ -277,7 +277,8 @@ async def callback_handler(
                 )
             else:
                 for route in routes:
-                    await query.message.reply_text(render_cheap_route(route), parse_mode="HTML")
+                    for message in render_cheap_route_chunks(route):
+                        await query.message.reply_text(message, parse_mode="HTML")
                 await query.message.reply_text(
                     render_cheap_ticket_booking_hint(dependencies.ticket_support_username),
                     parse_mode="HTML",
