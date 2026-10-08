@@ -29,6 +29,7 @@ from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import default_catalog
+from flightiran.modules.visa.sync import VisaSyncService
 
 LOGGER: Final = logging.getLogger("flightiran")
 
@@ -47,11 +48,12 @@ def create_application(
     cheap_ticket_service: CheapTicketService | None = None,
     *,
     report_database: Database | None = None,
+    visa_sync_service: VisaSyncService | None = None,
 ) -> Application:
     """Build the Telegram application without starting network polling."""
 
     builder = ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value())
-    if cheap_ticket_service is not None:
+    if cheap_ticket_service is not None or visa_sync_service is not None:
 
         async def post_init(application: Application) -> None:
             scheduler = AsyncIOScheduler(timezone="UTC")
@@ -91,16 +93,56 @@ def create_application(
                     except Exception:
                         LOGGER.exception("failed_to_notify_admin_about_price_capture")
 
-            scheduler.add_job(
-                capture_prices,
-                "interval",
-                minutes=settings.ticket_history_interval_minutes,
-                next_run_time=datetime.now(timezone.utc),
-                max_instances=1,
-                coalesce=True,
-                id="mz724-hourly-price-history",
-                replace_existing=True,
-            )
+            if cheap_ticket_service is not None:
+                scheduler.add_job(
+                    capture_prices,
+                    "interval",
+                    minutes=settings.ticket_history_interval_minutes,
+                    next_run_time=datetime.now(timezone.utc),
+                    max_instances=1,
+                    coalesce=True,
+                    id="mz724-hourly-price-history",
+                    replace_existing=True,
+                )
+
+            if visa_sync_service is not None and settings.visa_sync_enabled:
+                async def sync_visas() -> None:
+                    try:
+                        result = await visa_sync_service.sync()
+                        if result.status == "updated":
+                            await application.bot.send_message(
+                                chat_id=settings.telegram_admin_id,
+                                text=result.render(manual=False),
+                                disable_web_page_preview=True,
+                            )
+                        LOGGER.info(
+                            "visa_sync status=%s downloads=%s changes=%s",
+                            result.status, result.downloaded, len(result.changed),
+                        )
+                    except Exception as exc:
+                        LOGGER.exception("scheduled_visa_sync_failed")
+                        try:
+                            await application.bot.send_message(
+                                chat_id=settings.telegram_admin_id,
+                                text=(
+                                    "خطا در همگام‌سازی خودکار ویزا؛ آخرین داده سالم حفظ شد.\n"
+                                    f"{type(exc).__name__}: {str(exc)[:250]}\n"
+                                    "منبع: https://travelrequirements.info/data/index.json"
+                                ),
+                                disable_web_page_preview=True,
+                            )
+                        except Exception:
+                            LOGGER.exception("failed_to_notify_admin_about_visa_sync")
+                scheduler.add_job(
+                    sync_visas,
+                    "interval",
+                    hours=settings.visa_sync_interval_hours,
+                    next_run_time=datetime.now(timezone.utc),
+                    max_instances=1,
+                    coalesce=True,
+                    id="travelrequirements-visa-sync",
+                    replace_existing=True,
+                )
             scheduler.start()
             application.bot_data["price_history_scheduler"] = scheduler
 
@@ -154,8 +196,12 @@ def run() -> None:
         SQLiteMz724PriceHistoryRepository(database),
         retention_days=settings.ticket_history_retention_days,
     )
+    visa_sync_service = VisaSyncService(database) if settings.visa_sync_enabled else None
     application = create_application(
-        settings, cheap_ticket_service, report_database=database
+        settings,
+        cheap_ticket_service,
+        report_database=database,
+        visa_sync_service=visa_sync_service,
     )
     register_handlers(
         application,
@@ -172,6 +218,7 @@ def run() -> None:
             ticket_support_username=settings.ticket_support_username,
             admin_chat_id=settings.telegram_admin_id,
             admin_reports=BotReportRepository(database),
+            visa_sync_service=visa_sync_service,
             useful_catalog=default_catalog(),
         ),
     )
