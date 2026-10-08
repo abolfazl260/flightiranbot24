@@ -3,7 +3,12 @@ from datetime import date, datetime, timezone
 import pytest
 
 from flightiran.infrastructure.http.errors import ProviderInvalidResponse
-from flightiran.interfaces.telegram.rich_tickets import render_rich_price_tables
+from flightiran.interfaces.telegram.rich_tickets import (
+    find_price_drops,
+    render_price_drop_fallback_chunks,
+    render_rich_price_drop_report,
+    render_rich_price_tables,
+)
 from flightiran.interfaces.telegram.tickets import (
     render_cheap_route,
     render_cheap_route_chunks,
@@ -217,3 +222,105 @@ def test_rich_table_escapes_source_city_names():
     html = render_rich_price_tables(route)[0]["html"]
     assert "تهران &amp; &lt;x&gt;" in html
     assert "دبی &lt;script&gt;" in html
+
+
+def _price_drop_routes() -> list[CheapTicketRoute]:
+    return [
+        CheapTicketRoute(
+            "تهران",
+            (
+                CheapTicketDestination("مشهد", "7,000,000", 7_000_000, 10_000_000, 14),
+                CheapTicketDestination("دبی", "8,000,000", 8_000_000, 10_000_000, 14),
+                CheapTicketDestination("شیراز", "9,000,000", 9_000_000, 10_000_000, 14),
+                CheapTicketDestination("اصفهان", "7,000,000", 7_000_000),
+            ),
+            "https://mz724.ir/",
+        ),
+        CheapTicketRoute(
+            "شیراز",
+            (
+                CheapTicketDestination("استانبول", "14,000,000", 14_000_000, 20_000_000, 14),
+                CheapTicketDestination("کیش", "7,999,000", 7_999_000, 10_000_000, 14),
+                CheapTicketDestination("کرمان", "نامشخص", None, 10_000_000, 14),
+            ),
+            "https://mz724.ir/",
+        ),
+    ]
+
+
+def test_discount_report_selects_strictly_more_than_20_percent_and_sorts():
+    routes = _price_drop_routes()
+    drops = find_price_drops(routes)
+    assert [(drop.origin, drop.destination) for drop in drops] == [
+        ("شیراز", "استانبول"),
+        ("تهران", "مشهد"),
+        ("شیراز", "کیش"),
+    ]
+    assert drops[0].decrease_toman == 6_000_000
+    assert drops[0].decrease_percent == 30.0
+    assert "دبی" not in [drop.destination for drop in drops]
+
+
+def test_discount_report_is_one_cross_origin_rich_table():
+    messages = render_rich_price_drop_report(_price_drop_routes())
+    assert len(messages) == 1
+    html = messages[0]["html"]
+    assert messages[0]["is_rtl"] is True
+    assert "گزارش کاهش قیمت بیش از ۲۰٪" in html
+    assert html.count("<table bordered striped compact>") == 1
+    assert html.count("<tr>") == 4
+    assert html.count("<td>") == 18
+    assert "<th>مبدأ</th><th>مقصد</th>" in html
+    assert "6,000,000" in html
+    assert "🟢 30.00٪" in html
+    assert html.index("استانبول") < html.index("مشهد") < html.index("کیش")
+
+
+def test_discount_report_empty_states_and_unavailable_averages():
+    route = CheapTicketRoute(
+        "تهران",
+        (
+            CheapTicketDestination("مشهد", "8,000,000", 8_000_000, 10_000_000),
+            CheapTicketDestination("شیراز", "2,000,000", 2_000_000),
+        ),
+        "https://mz724.ir/",
+    )
+    assert find_price_drops([route]) == []
+    message = render_rich_price_drop_report([route])[0]["html"]
+    assert "مسیری با کاهش بیش از ۲۰٪" in message
+    assert "<table" not in message
+    assert "موردی پیدا نشد" in render_price_drop_fallback_chunks([route])[0]
+
+
+def test_discount_report_splits_only_at_actual_rich_limits_and_escapes_html():
+    destinations = tuple(
+        CheapTicketDestination(f"مقصد <{i}>", "7,000,000", 7_000_000, 10_000_000)
+        for i in range(45)
+    )
+    route = CheapTicketRoute("تهران & البرز", destinations, "https://mz724.ir/")
+    messages = render_rich_price_drop_report([route], max_text_chars=700)
+    assert len(messages) > 1
+    assert sum(item["html"].count("<td>") for item in messages) == 45 * 6
+    assert all(item["html"].count("</table>") == 1 for item in messages)
+    assert all("<table bordered striped compact>" in item["html"] for item in messages)
+    assert all("<h3>" in item["html"] for item in messages)
+    assert "تهران &amp; البرز" in messages[0]["html"]
+    assert "مقصد &lt;0&gt;" in messages[0]["html"]
+
+
+def test_discount_fallback_messages_are_html_safe_and_length_bounded():
+    route = CheapTicketRoute(
+        "تهران & البرز",
+        tuple(
+            CheapTicketDestination(f"مقصد <{i}>", "7,000,000", 7_000_000, 10_000_000)
+            for i in range(45)
+        ),
+        "https://mz724.ir/",
+    )
+    messages = render_price_drop_fallback_chunks([route], max_length=280)
+    assert len(messages) > 1
+    assert all(len(message) <= 280 for message in messages)
+    assert all("<b>" in message and "</b>" in message for message in messages)
+    assert all("تهران &amp; البرز" in message for message in messages)
+    assert sum(message.count("مقصد &lt;") for message in messages) == 45
+    assert all("\\n" not in message for message in messages)
