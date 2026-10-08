@@ -142,7 +142,7 @@ def test_render_cheap_route_chunks_stay_below_telegram_limit():
     assert all(chunk.count("<pre>") == chunk.count("</pre>") for chunk in chunks)
 
 
-def test_real_telegram_rich_tables_have_columns_and_bounded_rows():
+def test_rich_table_keeps_all_destinations_of_one_origin_in_one_message():
     destinations = tuple(
         CheapTicketDestination(
             f"مقصد {index}",
@@ -150,14 +150,70 @@ def test_real_telegram_rich_tables_have_columns_and_bounded_rows():
             price_value_toman=6_000_000,
             average_price_toman=7_500_000,
         )
-        for index in range(25)
+        for index in range(85)
     )
     route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
-    messages = render_rich_price_tables(route, rows_per_message=10)
-    assert len(messages) == 3
-    assert all("<table bordered striped compact>" in message["html"] for message in messages)
-    assert all("<th>اختلاف (تومان)</th>" in message["html"] for message in messages)
-    assert all("<th>اختلاف ٪</th>" in message["html"] for message in messages)
-    assert "-1,500,000" in messages[0]["html"]
-    assert "-20.0٪" in messages[0]["html"]
-    assert [message["html"].count("<tr>") for message in messages] == [11, 11, 6]
+    messages = render_rich_price_tables(route)
+
+    assert len(messages) == 1
+    assert messages[0]["html"].count("<tr>") == 86
+    assert messages[0]["html"].count("<td>") == 85 * 5
+    assert "<table bordered striped compact>" in messages[0]["html"]
+    assert "<th>اختلاف (تومان)</th>" in messages[0]["html"]
+    assert "<th>اختلاف ٪</th>" in messages[0]["html"]
+    assert "🟢 -20.0٪" in messages[0]["html"]
+    assert messages[0]["is_rtl"] is True
+
+
+def test_rich_table_colors_percentage_red_green_and_white():
+    destinations = (
+        CheapTicketDestination(
+            "مشهد", "6,000,000", 6_000_000, 7_500_000,
+        ),
+        CheapTicketDestination(
+            "استانبول", "12,000,000", 12_000_000, 10_000_000,
+        ),
+        CheapTicketDestination(
+            "شیراز", "6,000,000", 6_000_000, 6_000_000,
+        ),
+        CheapTicketDestination(
+            "دبی", "6,000,000", 6_000_000,
+        ),
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    html = render_rich_price_tables(route)[0]["html"]
+
+    assert "🟢 -20.0٪" in html
+    assert "🔴 +20.0٪" in html
+    assert "⚪ 0.0٪" in html
+    assert "⚪ —" in html
+    assert "-1,500,000" in html
+    assert "+2,000,000" in html
+
+
+def test_rich_table_only_splits_at_actual_configured_safety_limit():
+    destinations = tuple(
+        CheapTicketDestination(
+            f"مقصد {index}", "6,000,000", 6_000_000, 7_500_000,
+        )
+        for index in range(26)
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    messages = render_rich_price_tables(route, max_text_chars=500)
+
+    assert len(messages) > 1
+    assert sum(item["html"].count("<td>") for item in messages) == 26 * 5
+    assert all(item["html"].count("<tr>") <= 491 for item in messages)
+    assert all(item["html"].count("<table>") == 0 for item in messages)
+    assert all(item["html"].count("</table>") == 1 for item in messages)
+
+
+def test_rich_table_escapes_source_city_names():
+    route = CheapTicketRoute(
+        'تهران & <x>',
+        (CheapTicketDestination("دبی <script>", "8,000,000", 8_000_000),),
+        "https://mz724.ir/",
+    )
+    html = render_rich_price_tables(route)[0]["html"]
+    assert "تهران &amp; &lt;x&gt;" in html
+    assert "دبی &lt;script&gt;" in html
