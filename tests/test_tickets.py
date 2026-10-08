@@ -112,10 +112,12 @@ def test_render_cheap_route_includes_average_difference():
         "https://mz724.ir/",
     )
     rendered = render_cheap_route(route)
-    assert "7,500,000 تومان" in rendered
-    assert "1,500,000 تومان ارزان‌تر" in rendered
-    assert "20.0٪ کمتر" in rendered
-    assert "24 نمونه" in rendered
+    assert "<pre>" in rendered
+    assert "میانگین     7,500,000 تومان" in rendered
+    assert "اختلاف      -1,500,000 تومان" in rendered
+    assert "درصد        -20.0٪" in rendered
+    assert "نمونه       24" in rendered
+    assert "20.0٪ ارزان‌تر از میانگین" in rendered
 
 
 def test_render_cheap_route_chunks_stay_below_telegram_limit():
@@ -136,3 +138,4 @@ def test_render_cheap_route_chunks_stay_below_telegram_limit():
     assert all(len(chunk) <= 500 for chunk in chunks)
     assert all(chunk.count("<b>") == chunk.count("</b>") for chunk in chunks)
     assert all(chunk.count("<i>") == chunk.count("</i>") for chunk in chunks)
+    assert all(chunk.count("<pre>") == chunk.count("</pre>") for chunk in chunks)
