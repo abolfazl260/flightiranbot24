@@ -658,7 +658,11 @@ async def visa_sync_handler(
             "منبع: https://travelrequirements.info/data/index.json"
         )
         return
-    await progress.edit_text(result.render(manual=True))
+    await progress.edit_text(
+        result.render(manual=True, html=True),
+        parse_mode="HTML",
+        disable_web_page_preview=True,
+    )
 
 
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
