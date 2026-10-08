@@ -116,7 +116,7 @@ async def test_welcome_localized_and_html_escaped(language, greeting):
     assert greeting in rendered
     assert "&lt;Test&gt;" in rendered
     assert "<b>" in rendered
-    assert "✈️" in rendered
+    assert "🎫" in rendered
     assert "💱" in rendered
 
 
@@ -129,11 +129,37 @@ async def test_help_handler_for_supported_languages(language):
     message = Message()
     await help_handler(update(message=message), None, deps)
     rendered = message.calls[0][0][0]
-    commands = ("/start", "/help", "/language", "/flight", "/price")
+    commands = ("/start", "/help", "/language", "/price", "/visa")
     assert all(command in rendered for command in commands)
     assert message.calls[0][1]["parse_mode"] == "HTML"
     assert deps.audit.events[-1][0] == "user.help"
 
+
+@pytest.mark.parametrize("language", ["fa", "en", "ar"])
+def test_flight_tracking_is_not_advertised(language):
+    from flightiran.interfaces.telegram.keyboards import main_menu
+    from flightiran.interfaces.telegram.renderers import render_help, render_main_menu
+
+    callbacks = [
+        button.callback_data
+        for row in main_menu(language).inline_keyboard
+        for button in row
+    ]
+    assert "menu:flights" not in callbacks
+    assert "/flight" not in render_help(language)
+    welcome = render_main_menu(language)
+    assert "Flight alerts and notifications" not in welcome
+    assert "اطلاعات پرواز و وضعیت پروازها" not in welcome
+    assert "معلومات الرحلات وحالتها" not in welcome
+
+
+@pytest.mark.asyncio
+async def test_old_flight_menu_callback_no_longer_opens_flight_tracking():
+    deps = dependencies()
+    query = Query()
+    query.data = "menu:flights"
+    await callback_handler(update(query=query), None, deps)
+    assert "/flight" not in query.calls[0][0][0]
 
 
 @pytest.mark.parametrize("language", ["fa", "en", "ar"])

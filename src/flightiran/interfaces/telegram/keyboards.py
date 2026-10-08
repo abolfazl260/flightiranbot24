@@ -15,11 +15,11 @@ def main_menu(
     is_admin: bool = False,
 ) -> InlineKeyboardMarkup:
     rows = [
-        [("flights", "menu:flights"), ("airports", "menu:airports")],
-        [("tickets", "menu:tickets"), ("currency", "menu:currency")],
-        [("visa", "menu:visa"), ("rules", "menu:rules")],
-        [("cargo", "menu:cargo"), ("useful", "menu:useful")],
-        [("support", "menu:support"), ("settings", "menu:settings")],
+        [("airports", "menu:airports"), ("tickets", "menu:tickets")],
+        [("currency", "menu:currency"), ("visa", "menu:visa")],
+        [("rules", "menu:rules"), ("cargo", "menu:cargo")],
+        [("useful", "menu:useful"), ("support", "menu:support")],
+        [("settings", "menu:settings")],
     ]
     if is_admin:
         rows.append([("admin_reports", "menu:admin_reports")])
