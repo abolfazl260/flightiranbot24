@@ -280,12 +280,14 @@ async def callback_handler(
                 reply_markup=back_menu(language),
             )
     elif data == "menu:flights":
+        await dependencies.audit.record("flight.menu.opened", user_id=user_id)
         await query.edit_message_text(
             "برای جستجوی پرواز، شماره را ارسال کنید:\n<code>/flight KLM561</code>",
             parse_mode="HTML",
             reply_markup=back_menu(language),
         )
     elif data == "menu:currency" and dependencies.currency_service:
+        await dependencies.audit.record("currency.menu.opened", user_id=user_id)
         from .currency import render_quotes
 
         await query.edit_message_text(
@@ -294,6 +296,7 @@ async def callback_handler(
             reply_markup=back_menu(language),
         )
     elif data == "menu:currency":
+        await dependencies.audit.record("currency.menu.opened", user_id=user_id)
         await query.edit_message_text(
             "سرویس نرخ ارز هنوز پیکربندی نشده است. مقدار CURRENCY_PROVIDER_URL را تنظیم کنید.",
             reply_markup=back_menu(language),
@@ -328,6 +331,7 @@ async def callback_handler(
                 reply_markup=useful_category_menu(language, catalog, category),
             )
     elif data == "menu:tickets":
+        await dependencies.audit.record("ticket.menu.opened", user_id=user_id)
         if dependencies.cheap_ticket_service is None:
             await query.edit_message_text(
                 "سرویس جستجوی بلیط در حال حاضر پیکربندی نشده است.",
@@ -516,7 +520,8 @@ async def inline_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
 async def flight_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
-    _user_id, language = await _user_language(update, dependencies)
+    user_id, language = await _user_language(update, dependencies)
+    await dependencies.audit.record("flight.search.requested", user_id=user_id)
     query = " ".join(context.args or []) if context else None
     result = (
         await dependencies.flight_service.search(query)
@@ -535,6 +540,8 @@ async def price_handler(
 ) -> None:
     from .currency import render_quotes
 
+    user_id, _language = await _user_language(update, dependencies)
+    await dependencies.audit.record("currency.quote.requested", user_id=user_id)
     quotes = await dependencies.currency_service.quotes() if dependencies.currency_service else []
     if update.message:
         await update.message.reply_text(render_quotes(quotes), parse_mode="HTML")
