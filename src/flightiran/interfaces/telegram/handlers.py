@@ -18,6 +18,8 @@ from telegram.ext import (
 from flightiran.db.repositories import AuditRepository, UserRepository
 from flightiran.infrastructure.http.errors import ProviderError
 from flightiran.interfaces.telegram.rich_tickets import (
+    render_price_drop_fallback_chunks,
+    render_rich_price_drop_report,
     render_rich_price_tables,
     send_rich_price_table,
 )
@@ -301,6 +303,18 @@ async def callback_handler(
                                     message, parse_mode="HTML"
                                 )
                             break
+                try:
+                    for report in render_rich_price_drop_report(routes):
+                        await send_rich_price_table(
+                            context.bot,
+                            query.message.chat_id,
+                            report,
+                        )
+                except Exception:
+                    LOGGER.exception("rich_ticket_price_drop_report_failed")
+                    for message in render_price_drop_fallback_chunks(routes):
+                        await query.message.reply_text(message, parse_mode="HTML")
+
                 await query.message.reply_text(
                     render_cheap_ticket_booking_hint(dependencies.ticket_support_username),
                     parse_mode="HTML",
