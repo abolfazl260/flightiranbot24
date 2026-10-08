@@ -66,7 +66,9 @@ class Settings(BaseSettings):
             raise ValueError("TELEGRAM_BOT_TOKEN is too short for production")
         if self.web_app_enabled and not self.web_app_url:
             raise ValueError("WEB_APP_URL is required when WEB_APP_ENABLED=true")
-        if self.visa_sync_interval_hours < 1:\n            raise ValueError("VISA_SYNC_INTERVAL_HOURS must be positive")\n        if self.ticket_history_interval_minutes < 1:
+        if self.visa_sync_interval_hours < 1:
+            raise ValueError("VISA_SYNC_INTERVAL_HOURS must be positive")
+        if self.ticket_history_interval_minutes < 1:
             raise ValueError("TICKET_HISTORY_INTERVAL_MINUTES must be positive")
         if self.ticket_history_retention_days < 1:
             raise ValueError("TICKET_HISTORY_RETENTION_DAYS must be positive")
