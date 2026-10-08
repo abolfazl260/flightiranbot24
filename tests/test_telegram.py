@@ -38,6 +38,7 @@ class MemoryAudit:
 class Message:
     def __init__(self):
         self.calls = []
+        self.chat_id = 12345
 
     async def reply_text(self, *args, **kwargs):
         self.calls.append((args, kwargs))
