@@ -259,7 +259,7 @@ async def callback_handler(
                 reply_markup=back_menu(language),
             )
         else:
-            await query.edit_message_text(render_cheap_ticket_intro())
+            await query.edit_message_text(render_cheap_ticket_intro(), parse_mode="HTML")
             try:
                 routes = await dependencies.cheap_ticket_service.routes()
             except ProviderError as exc:
