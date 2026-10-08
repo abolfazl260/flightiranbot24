@@ -229,7 +229,8 @@ async def callback_handler(
             "menu.callback", user_id=user_id, payload={"action": "useful"}
         )
         await query.edit_message_text(
-            "<b>📚 راهنمای سفر</b>\nاطلاعات موردنیاز قبل، حین و بعد از سفر را از بخش‌های زیر انتخاب کنید:",
+            "<b>📚 راهنمای سفر</b>\n"
+            "اطلاعات موردنیاز قبل، حین و بعد از سفر را از بخش‌های زیر انتخاب کنید:",
             parse_mode="HTML",
             reply_markup=useful_menu(language, catalog),
         )
