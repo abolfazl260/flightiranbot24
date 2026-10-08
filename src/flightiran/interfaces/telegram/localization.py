@@ -62,6 +62,92 @@ MESSAGES = {
 }
 
 
+# Expanded welcome and command help in all supported languages.
+MESSAGES["fa"].update({
+    "welcome_greeting": "سلام {name}",
+    "welcome_title": "Flight Iran Bot 24 | دستیار هوشمند سفر",
+    "welcome_intro": "به دستیار خدمات پرواز و سفر خوش آمدید!",
+    "welcome_description": "از جست‌وجوی اطلاعات پرواز تا برنامه‌ریزی سفر، خدمات موردنیازتان را در یک مکان پیدا کنید.",
+    "welcome_services": "خدمات پرواز و سفر",
+    "welcome_items": [
+        "✈️ اطلاعات پرواز و وضعیت پروازها",
+        "🎫 جست‌وجوی بلیط هواپیما",
+        "🛂 اطلاعات ویزا و شرایط سفر",
+        "🛬 اطلاعات فرودگاه‌ها و مسیرهای پروازی",
+        "🔔 هشدارها و اطلاع‌رسانی پرواز",
+        "💱 نرخ ارز و اطلاعات کاربردی سفر"
+    ],
+    "welcome_choose": "برای شروع، یکی از گزینه‌های زیر را انتخاب کنید.",
+    "help_title": "راهنمای Flight Iran Bot 24",
+    "help_intro": "از منوی زیر سرویس موردنظر را انتخاب کنید یا از دستورات زیر استفاده کنید.",
+    "help_commands": "دستورات ربات",
+    "help_start": "نمایش صفحه اصلی و خدمات سفر",
+    "help_help": "نمایش همین راهنما",
+    "help_language": "انتخاب زبان فارسی، انگلیسی یا عربی",
+    "help_flight": "جست‌وجوی وضعیت پرواز با شماره پرواز (مثال: /flight TK874)",
+    "help_price": "نمایش نرخ ارز؛ در صورت پیکربندی منبع اطلاعات",
+    "help_menu": "بخش‌های منوی اصلی",
+    "help_menu_body": "✈️ پروازها: راهنمای جست‌وجوی پرواز با شماره\n🛬 فرودگاه‌ها: فهرست و مشخصات فرودگاه‌ها\n🎫 بلیط: مشاهده مسیرها و قیمت‌های موجود، در صورت فعال بودن سرویس\n💱 نرخ ارز: مشاهده نرخ‌ها در صورت اتصال منبع\n📚 اطلاعات کاربردی: راهنماهای سفر\n⚙️ تنظیمات: تغییر زبان\n🛂 ویزا و قوانین مسافر: بخش‌های نیازمند منبع رسمی\n📦 حمل بار و پشتیبانی: گزینه‌های منو؛ ممکن است هنوز فعال نباشند",
+    "help_note": "برخی خدمات به فعال بودن سرویس‌دهنده وابسته‌اند. اطلاعات پرواز، نرخ ارز و شرایط سفر را پیش از تصمیم نهایی با منبع رسمی بررسی کنید.",
+    "help_back": "برای بازگشت به خدمات از /start استفاده کنید."
+})
+MESSAGES["en"].update({
+    "welcome_greeting": "Hello {name}",
+    "welcome_title": "Flight Iran Bot 24 | Your Smart Travel Assistant",
+    "welcome_intro": "Welcome to your flight and travel assistant!",
+    "welcome_description": "From flight information to travel planning, find your travel essentials in one place.",
+    "welcome_services": "Flight & Travel Services",
+    "welcome_items": [
+        "✈️ Flight information and status",
+        "🎫 Search airline tickets",
+        "🛂 Visa and travel requirements",
+        "🛬 Airports and flight routes",
+        "🔔 Flight alerts and notifications",
+        "💱 Exchange rates and useful travel information"
+    ],
+    "welcome_choose": "Choose a service below to get started.",
+    "help_title": "Flight Iran Bot 24 Help",
+    "help_intro": "Select a service from the menu or use these commands.",
+    "help_commands": "Bot commands",
+    "help_start": "Show the main menu and travel services",
+    "help_help": "Show this help guide",
+    "help_language": "Choose Persian, English or Arabic",
+    "help_flight": "Search flight status by flight number (example: /flight TK874)",
+    "help_price": "Show exchange rates when a data provider is configured",
+    "help_menu": "Main menu sections",
+    "help_menu_body": "✈️ Flights: how to search by flight number\n🛬 Airports: browse airports and details\n🎫 Tickets: available routes and fares when the service is enabled\n💱 Currency: rates when a provider is connected\n📚 Useful information: travel guides\n⚙️ Settings: change language\n🛂 Visa and traveler rules: require official sources\n📦 Cargo and support: menu options that may not yet be active",
+    "help_note": "Some features require an active provider. Verify flight, currency and travel requirements with official sources before making decisions.",
+    "help_back": "Use /start to return to the main menu."
+})
+MESSAGES["ar"].update({
+    "welcome_greeting": "مرحباً {name}",
+    "welcome_title": "Flight Iran Bot 24 | مساعد السفر الذكي",
+    "welcome_intro": "مرحباً بك في مساعد خدمات الطيران والسفر!",
+    "welcome_description": "من معلومات الرحلات إلى التخطيط للسفر، اعثر على خدمات سفرك في مكان واحد.",
+    "welcome_services": "خدمات الطيران والسفر",
+    "welcome_items": [
+        "✈️ معلومات الرحلات وحالتها",
+        "🎫 البحث عن تذاكر الطيران",
+        "🛂 التأشيرات ومتطلبات السفر",
+        "🛬 المطارات ومسارات الرحلات",
+        "🔔 تنبيهات الرحلات والإشعارات",
+        "💱 أسعار الصرف ومعلومات السفر المفيدة"
+    ],
+    "welcome_choose": "اختر إحدى الخدمات أدناه للبدء.",
+    "help_title": "دليل Flight Iran Bot 24",
+    "help_intro": "اختر خدمة من القائمة أو استخدم الأوامر التالية.",
+    "help_commands": "أوامر البوت",
+    "help_start": "عرض القائمة الرئيسية وخدمات السفر",
+    "help_help": "عرض دليل المساعدة",
+    "help_language": "اختيار العربية أو الفارسية أو الإنجليزية",
+    "help_flight": "البحث عن حالة الرحلة برقمها (مثال: /flight TK874)",
+    "help_price": "عرض أسعار الصرف عند تهيئة مزود البيانات",
+    "help_menu": "أقسام القائمة الرئيسية",
+    "help_menu_body": "✈️ الرحلات: كيفية البحث برقم الرحلة\n🛬 المطارات: تصفح المطارات وتفاصيلها\n🎫 التذاكر: المسارات والأسعار المتاحة عند تفعيل الخدمة\n💱 العملات: أسعار الصرف عند ربط المزود\n📚 معلومات مفيدة: أدلة السفر\n⚙️ الإعدادات: تغيير اللغة\n🛂 التأشيرات وقواعد المسافرين: تتطلب مصادر رسمية\n📦 الشحن والدعم: خيارات قد لا تكون مفعّلة بعد",
+    "help_note": "تتطلب بعض الميزات مزود خدمة نشطاً. تحقق من معلومات الرحلات وأسعار الصرف ومتطلبات السفر من المصادر الرسمية.",
+    "help_back": "استخدم /start للعودة إلى القائمة الرئيسية."
+})
+
 def normalize_language(language: str | None) -> str:
     return language if language in SUPPORTED_LANGUAGES else "en"
 
