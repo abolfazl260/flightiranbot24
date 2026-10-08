@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+from datetime import date
 from html import escape, unescape
 from urllib.parse import urlparse
 
@@ -271,6 +272,21 @@ def render_overview(
     ])
     if source:
         lines.append(source)
+    if rule.verified_on:
+        try:
+            age_days = (date.today() - date.fromisoformat(rule.verified_on[:10])).days
+        except ValueError:
+            age_days = 0
+        if age_days > 30:
+            lines.append(
+                "⚠️ " + escape(
+                    "Source verification is more than 30 days old"
+                    if language == "en"
+                    else "آخرین بررسی منبع بیش از ۳۰ روز قبل بوده است"
+                    if language == "fa"
+                    else "آخر تحقق من المصدر كان قبل أكثر من ٣٠ يوماً"
+                )
+            )
     lines.extend([
         "",
         f"⚠️ {escape(tr(language, 'caution'))}",
@@ -405,6 +421,10 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
             else:
                 lines.append(escape(_value_text(val)))
     elif section == "facts":
+        summary = doc.get("summary")
+        if summary:
+            lines.append(escape(str(summary)[:650]))
+            lines.append("")
         display = (
             ("currency", "Currency"), ("languages", "Languages"),
             ("timezone", "Timezone"), ("payments", "Payments"),
