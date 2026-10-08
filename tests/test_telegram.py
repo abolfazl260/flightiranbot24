@@ -128,6 +128,7 @@ async def test_help_handler_for_supported_languages(language):
     message = Message()
     await help_handler(update(message=message), None, deps)
     rendered = message.calls[0][0][0]
-    assert all(command in rendered for command in ("/start", "/help", "/language", "/flight", "/price"))
+    commands = ("/start", "/help", "/language", "/flight", "/price")
+    assert all(command in rendered for command in commands)
     assert message.calls[0][1]["parse_mode"] == "HTML"
     assert deps.audit.events[-1][0] == "user.help"
