@@ -173,8 +173,12 @@ def render_rich_price_tables(
                     f"One mz724 destination exceeds Telegram rich message limits: {item.name}"
                 )
             messages.append(
-                {"html": _table_html(route.origin, rows, continued=bool(messages), language=language),
-                 "is_rtl": True}
+                {
+                    "html": _table_html(
+                        route.origin, rows, continued=bool(messages), language=language
+                    ),
+                    "is_rtl": True,
+                }
             )
             rows = [row]
             if _plain_text_length(
