@@ -146,7 +146,7 @@ class SQLiteMz724PriceHistoryRepository:
                 ]
             )
 
-    asyn    async def get_averages(
+    async def get_averages(
         self, route_keys: list[tuple[str, str]]
     ) -> dict[tuple[str, str], tuple[float, int]]:
         if not route_keys:
