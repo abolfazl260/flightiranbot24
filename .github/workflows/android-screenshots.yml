@@ -45,6 +45,16 @@ jobs:
             adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.ChecklistActivity
             sleep 2
             adb exec-out screencap -p > android/screenshots/03-checklist.png
+      - name: Generate Google Play graphics
+        run: |
+          python -m pip install --disable-pip-version-check "Pillow==11.3.0"
+          python scripts/generate_android_store_graphics.py --out android/dist/store
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-play-graphics
+          path: android/dist/store/*.png
+          if-no-files-found: error
+          retention-days: 30
       - uses: actions/upload-artifact@v4
         with:
           name: android-real-screenshots

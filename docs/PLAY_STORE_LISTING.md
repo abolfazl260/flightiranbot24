@@ -47,10 +47,9 @@ Offline features work without Telegram. Online features open externally in Teleg
 
 ## Authentic Play media to supply
 
-- 512x512 PNG app icon that matches actual native branding.
-- 1024x500 feature graphic.
+- A 512x512 PNG icon and 1024x500 feature graphic are generated in CI by scripts/generate_android_store_graphics.py; download the android-play-graphics artifact and review against the app's branding.
 - At least two real Android screenshots; suggested home screen, airport search, checklist.
-- Use the manual screenshot Actions workflow to capture genuine screens and review on device.
+- Use the manual Android Store Screenshots workflow to capture genuine emulator screens. Verify screenshots on a physical device before publication.
 - Do not advertise in-app flight booking or an independent visa API.
 
 ## Review in Play Console
