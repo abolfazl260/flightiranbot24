@@ -343,6 +343,7 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
                 ("stayDays", tr(language, "stay")),
                 ("validityDays", tr(language, "validity")),
                 ("entries", tr(language, "entries")),
+                ("whenToApply", "When to apply"),
             ):
                 if visa.get(key) is not None:
                     lines.append(f"• {escape(label)}: {escape(_value_text(visa[key]))}")
@@ -353,7 +354,18 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
             if isinstance(docs, dict):
                 if docs.get("items"):
                     lines.append(f"<b>{tr(language, 'docs')}</b>")
-                    lines.extend(_lines_for_list(docs["items"], max_items=12))
+                    for item in docs["items"][:18]:
+                        if not isinstance(item, dict):
+                            lines.append("• " + escape(str(item)[:250]))
+                            continue
+                        name = str(item.get("name") or item.get("id") or "Document")
+                        specification = str(item.get("details") or "")
+                        requirement = item.get("required")
+                        marker = " (optional)" if requirement is False else ""
+                        lines.append(
+                            "• " + escape(name + marker)
+                            + (": " + escape(specification[:400]) if specification else "")
+                        )
                 src = _source_line(docs, language)
                 if src:
                     lines.append(src)
@@ -459,14 +471,17 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
         lines.append(escape(tr(language, "not_known")))
     lines.append("")
     lines.append(external_link(MAIN_SOURCE, tr(language, "license")))
-    # Bound user-visible plain HTML to Telegram message limits.
-    result = "\n".join(lines)
-    if len(result) > 3850:
-        result = "\n".join(lines[:max(3, len(lines) // 2)])
-        if len(result) > 3700:
-            result = result[:3700]
-        result += "\n…\n" + external_link(MAIN_SOURCE, tr(language, "license"))
-    return result
+    # Build only complete lines; never cut an HTML tag or entity mid-way.
+    selected: list[str] = []
+    used = 0
+    for line in lines:
+        if used + len(line) + 1 > 3800:
+            selected.append("…")
+            selected.append(external_link(MAIN_SOURCE, tr(language, "license")))
+            break
+        selected.append(line)
+        used += len(line) + 1
+    return "\n".join(selected)
 
 
 def render_rich_report(detail: VisaDetail, language: str) -> dict:
