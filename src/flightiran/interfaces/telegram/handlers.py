@@ -218,7 +218,9 @@ async def start_handler(
             try:
                 await context.bot.send_message(
                     chat_id=dependencies.admin_chat_id,
-                    text=render_new_user_alert(telegram_user, getattr(registered, "created_at", None)),
+                    text=render_new_user_alert(
+                        telegram_user, getattr(registered, "created_at", None)
+                    ),
                     parse_mode="HTML",
                     disable_web_page_preview=True,
                 )
