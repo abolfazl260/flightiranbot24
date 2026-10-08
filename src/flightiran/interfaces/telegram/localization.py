@@ -21,6 +21,7 @@ MESSAGES = {
         "cargo": "Cargo marketplace",
         "useful": "Useful information",
         "support": "Support",
+        "support_open_chat": "Chat with support",
         "settings": "Settings",
     },
     "fa": {
@@ -39,6 +40,7 @@ MESSAGES = {
         "cargo": "بازار حمل بار",
         "useful": "اطلاعات کاربردی",
         "support": "پشتیبانی",
+        "support_open_chat": "گفتگو با پشتیبانی",
         "settings": "تنظیمات",
     },
     "ar": {
@@ -57,6 +59,7 @@ MESSAGES = {
         "cargo": "سوق الشحن",
         "useful": "معلومات مفيدة",
         "support": "الدعم",
+        "support_open_chat": "التواصل مع الدعم",
         "settings": "الإعدادات",
     },
 }
@@ -99,8 +102,8 @@ MESSAGES["fa"].update({
         "📚 اطلاعات کاربردی: راهنماهای سفر\n"
         "⚙️ تنظیمات: تغییر زبان\n"
         "🛂 ویزا و قوانین مسافر: بخش‌های نیازمند منبع رسمی\n"
-        "📦 حمل بار و پشتیبانی: گزینه‌های منو؛ ممکن است هنوز فعال نب"
-        "اشند"
+        "📦 حمل بار: خدمات و اطلاعات مرتبط\n"
+        "📩 پشتیبانی: پرسش درباره رزرو، قیمت‌ها و استفاده از ربات"
     ),
     "help_note": (
         "برخی خدمات به فعال بودن سرویس‌دهنده وابسته‌اند. اطلاعات پر"
@@ -145,8 +148,8 @@ MESSAGES["en"].update({
         "📚 Useful information: travel guides\n"
         "⚙️ Settings: change language\n"
         "🛂 Visa and traveler rules: require official sources\n"
-        "📦 Cargo and support: menu options that may not yet be acti"
-        "ve"
+        "📦 Cargo: related information and services\n"
+        "📩 Support: questions about bookings, prices and using the bot"
     ),
     "help_note": (
         "Some features require an active provider. Verify flight, c"
@@ -190,7 +193,8 @@ MESSAGES["ar"].update({
         "📚 معلومات مفيدة: أدلة السفر\n"
         "⚙️ الإعدادات: تغيير اللغة\n"
         "🛂 التأشيرات وقواعد المسافرين: تتطلب مصادر رسمية\n"
-        "📦 الشحن والدعم: خيارات قد لا تكون مفعّلة بعد"
+        "📦 الشحن: معلومات وخدمات ذات صلة\n"
+        "📩 الدعم: أسئلة عن الحجز والأسعار واستخدام البوت"
     ),
     "help_note": (
         "تتطلب بعض الميزات مزود خدمة نشطاً. تحقق من معلومات الرحلات"
