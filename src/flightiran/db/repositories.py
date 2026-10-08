@@ -5,7 +5,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta
 from typing import Protocol
 
-from sqlalchemy import delete, func, select, tuple_
+from sqlalchemy import delete, func, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from .engine import Database
@@ -146,53 +146,7 @@ class SQLiteMz724PriceHistoryRepository:
                 ]
             )
 
-    async def get_latest_prices(
-        self,
-        route_keys: list[tuple[str, str]],
-        *,
-        before: datetime,
-        retention_days: int,
-    ) -> dict[tuple[str, str], int]:
-        """Get the latest positive saved price strictly before this fetch.
-
-        Called before recording the fetched prices, so a route is never
-        accidentally compared with its own newly saved snapshot.
-        """
-
-        if not route_keys:
-            return {}
-
-        snapshots = Mz724PriceSnapshot
-        ranking = func.row_number().over(
-            partition_by=(snapshots.origin, snapshots.destination),
-            order_by=(snapshots.captured_at.desc(), snapshots.id.desc()),
-        ).label("ranking")
-        ranked = (
-            select(
-                snapshots.origin,
-                snapshots.destination,
-                snapshots.price_toman,
-                ranking,
-            )
-            .where(
-                snapshots.price_toman > 0,
-                snapshots.captured_at < before,
-                snapshots.captured_at >= before - timedelta(days=retention_days),
-                tuple_(snapshots.origin, snapshots.destination).in_(set(route_keys)),
-            )
-            .subquery()
-        )
-        async with self.database.session() as session:
-            rows = await session.execute(
-                select(ranked.c.origin, ranked.c.destination, ranked.c.price_toman)
-                .where(ranked.c.ranking == 1)
-            )
-            return {
-                (origin, destination): int(price)
-                for origin, destination, price in rows.all()
-            }
-
-    async def get_averages(
+    asyn    async def get_averages(
         self, route_keys: list[tuple[str, str]]
     ) -> dict[tuple[str, str], tuple[float, int]]:
         if not route_keys:
