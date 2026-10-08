@@ -543,8 +543,11 @@ def test_ticket_rich_table_has_short_average_header_no_legend_and_linked_footer(
     assert html.endswith(render_ticket_footer(language))
     assert booking_label in html
     assert '<a href="https://t.me/Flightiranbot">@Flightiranbot</a>' in html
-    assert '<a href="https://t.me/advertio_bot">@advertio_bot</a>' in html
+    assert '<a href="https://t.me/Advertio_support">@Advertio_support</a>' in html
     assert html.index("</table>") < html.index("@Flightiranbot")
+    assert "@advertio_bot" not in html
+    assert "t.me/advertio_bot" not in html
+
     assert html.count("<th>") == 5
 
 
@@ -580,3 +583,14 @@ def test_ticket_fallback_footer_is_localized_and_within_limit(language):
         message.endswith(render_ticket_footer(language, rich=False))
         for message in messages
     )
+
+
+@pytest.mark.parametrize("language", ["fa", "en", "ar"])
+def test_ticket_footer_uses_correct_support_in_rich_and_plain_formats(language):
+    for rich in (True, False):
+        footer = render_ticket_footer(language, rich=rich)
+        assert '<a href="https://t.me/Advertio_support">@Advertio_support</a>' in footer
+        assert '<a href="https://t.me/Flightiranbot">@Flightiranbot</a>' in footer
+        assert "@advertio_bot" not in footer
+        assert "t.me/advertio_bot" not in footer
+
