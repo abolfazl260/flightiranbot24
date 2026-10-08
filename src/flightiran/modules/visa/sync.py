@@ -98,14 +98,19 @@ class VisaSyncService:
         async with self._lock:
             async with httpx.AsyncClient(
                 timeout=httpx.Timeout(30.0), follow_redirects=False,
-                headers={"User-Agent": "FlightIranBot24-VisaSync/1.0", "Accept": "application/json"},
+                headers={
+                    "User-Agent": "FlightIranBot24-VisaSync/1.0",
+                    "Accept": "application/json",
+                },
             ) as client:
                 response = await client.get(MANIFEST_URL)
                 response.raise_for_status()
                 manifest = response.json()
                 entries = manifest.get("destinations")
                 if not isinstance(entries, list) or len(entries) < MIN_DESTINATIONS:
-                    raise ValueError("Visa manifest is incomplete or has an invalid destination list")
+                    raise ValueError(
+                        "Visa manifest is incomplete or has an invalid destination list"
+                    )
                 if manifest.get("license", {}).get("spdx") != "CC-BY-4.0":
                     raise ValueError("Unexpected visa dataset licence")
                 if len({e.get("id") for e in entries if isinstance(e, dict)}) != len(entries):
@@ -134,7 +139,8 @@ class VisaSyncService:
                     previous = current.get(slug)
                     previous_check = (
                         previous.last_fetched_at.replace(tzinfo=timezone.utc)
-                        if previous and previous.last_fetched_at and previous.last_fetched_at.tzinfo is None
+                        if previous and previous.last_fetched_at
+                        and previous.last_fetched_at.tzinfo is None
                         else previous.last_fetched_at if previous else None
                     )
                     if (
@@ -158,7 +164,9 @@ class VisaSyncService:
                             not isinstance(document, dict)
                             or document.get("id") != entry["id"]
                             or document.get("iso2") != entry["iso2"]
-                            or not isinstance(document.get("visaPolicy", {}).get("byPassport"), dict)
+                            or not isinstance(
+                                document.get("visaPolicy", {}).get("byPassport"), dict
+                            )
                             or len(document["visaPolicy"]["byPassport"]) < MIN_DESTINATIONS
                         ):
                             raise ValueError(f"Invalid destination JSON for {entry['id']}")
