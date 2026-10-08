@@ -11,8 +11,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from flightiran.db.engine import Database
 from flightiran.db.models import (
     AuditLog,
-    FlightAlert,
-    FlightAlertEvent,
     JobRun,
     Mz724PriceSnapshot,
     Mz724RouteAverage,
@@ -32,9 +30,7 @@ class BotReport:
     language_counts: tuple[tuple[str, int], ...]
     top_events: tuple[tuple[str, int], ...]
     top_origins: tuple[tuple[str, int], ...]
-    flight_alert_status: tuple[tuple[str, int], ...]
     price_alert_status: tuple[tuple[str, int], ...]
-    flight_delivery_status: tuple[tuple[str, int], ...]
     provider_status: tuple[tuple[str, str, int], ...]
     job_status: tuple[tuple[str, str, int], ...]
     last_price_capture: datetime | None
@@ -84,9 +80,7 @@ class BotReportRepository:
                         select(func.count(distinct(Mz724RouteAverage.origin)))
                     ) or 0
                 ),
-                "flight_alerts": await self._count(session, FlightAlert),
                 "price_alerts": await self._count(session, PriceAlert),
-                "flight_deliveries": await self._count(session, FlightAlertEvent),
                 "price_notifications": await self._count(
                     session, PriceSnapshot, PriceSnapshot.notified.is_(True)
                 ),
@@ -195,14 +189,8 @@ class BotReportRepository:
             last_price_capture = await session.scalar(
                 select(func.max(Mz724PriceSnapshot.captured_at))
             )
-            flight_status = await self._status_counts(
-                session, FlightAlert, FlightAlert.status
-            )
             price_status = await self._status_counts(
                 session, PriceAlert, PriceAlert.status
-            )
-            delivery_status = await self._status_counts(
-                session, FlightAlertEvent, FlightAlertEvent.delivery_status
             )
 
         return BotReport(
@@ -211,9 +199,7 @@ class BotReportRepository:
             language_counts=language_counts,
             top_events=top_events,
             top_origins=top_origins,
-            flight_alert_status=flight_status,
             price_alert_status=price_status,
-            flight_delivery_status=delivery_status,
             provider_status=provider_status,
             job_status=job_status,
             last_price_capture=last_price_capture,

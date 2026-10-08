@@ -28,8 +28,6 @@ from flightiran.interfaces.telegram.rich_tickets import (
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
-from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
-from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
@@ -67,7 +65,6 @@ LOGGER = logging.getLogger(__name__)
 class TelegramDependencies:
     users: UserRepository
     audit: AuditRepository
-    flight_service: FlightService | None = None
     currency_service: CurrencyService | None = None
     web_app_url: str | None = None
     airport_catalog: AirportCatalog | None = None
@@ -296,13 +293,6 @@ async def callback_handler(
                 parse_mode="HTML",
                 reply_markup=back_menu(language),
             )
-    elif data == "menu:flights":
-        await dependencies.audit.record("flight.menu.opened", user_id=user_id)
-        await query.edit_message_text(
-            "برای جستجوی پرواز، شماره را ارسال کنید:\n<code>/flight KLM561</code>",
-            parse_mode="HTML",
-            reply_markup=back_menu(language),
-        )
     elif data == "menu:currency" and dependencies.currency_service:
         await dependencies.audit.record("currency.menu.opened", user_id=user_id)
         from .currency import render_quotes
@@ -545,24 +535,6 @@ async def inline_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.inline_query.answer([])
 
 
-async def flight_handler(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
-) -> None:
-    user_id, language = await _user_language(update, dependencies)
-    await dependencies.audit.record("flight.search.requested", user_id=user_id)
-    query = " ".join(context.args or []) if context else None
-    result = (
-        await dependencies.flight_service.search(query)
-        if dependencies.flight_service
-        else FlightSearchResult(FlightSearchStatus.DISABLED, message="disabled")
-    )
-    from .flight import render_flight_result
-
-    message, keyboard = render_flight_result(result, language)
-    if update.message:
-        await update.message.reply_text(message, parse_mode="HTML", reply_markup=keyboard)
-
-
 async def price_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
@@ -683,9 +655,6 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
-    )
-    application.add_handler(
-        CommandHandler("flight", lambda u, c: flight_handler(u, c, dependencies))
     )
     application.add_handler(CommandHandler("price", lambda u, c: price_handler(u, c, dependencies)))
     application.add_handler(CallbackQueryHandler(lambda u, c: callback_handler(u, c, dependencies)))

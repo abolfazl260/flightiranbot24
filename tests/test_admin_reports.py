@@ -9,8 +9,6 @@ from test_telegram import MemoryAudit, MemoryUsers, Message, Query
 from flightiran.db import initialize_database
 from flightiran.db.models import (
     AuditLog,
-    FlightAlert,
-    FlightAlertEvent,
     JobRun,
     Mz724PriceSnapshot,
     Mz724RouteAverage,
@@ -55,7 +53,6 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
         saved = SavedRoute(user_id=first.id, origin="IKA", destination="MHD")
         session.add(saved)
         await session.flush()
-        session.add(FlightAlert(user_id=first.id, flight_number="TK123", status="active"))
         session.add(
             PriceAlert(
                 user_id=first.id, route_id=saved.id, target_price=5000, currency="IRR"
@@ -79,20 +76,9 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
         session.add(JobRun(job_name="price-capture", status="failed"))
         await session.flush()
 
-        flight_id = (
-            await session.scalar(
-                __import__("sqlalchemy").select(FlightAlert.id).limit(1)
-            )
-        )
         price_id = (
             await session.scalar(
                 __import__("sqlalchemy").select(PriceAlert.id).limit(1)
-            )
-        )
-        session.add(
-            FlightAlertEvent(
-                alert_id=flight_id, event_type="delay", snapshot_hash="abc",
-                delivery_status="delivered",
             )
         )
         session.add(
@@ -109,9 +95,9 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
     assert counts["tracked_routes"] == 1
     assert counts["origins"] == 1
     assert counts["price_snapshots"] == 1
-    assert counts["flight_alerts"] == 1
     assert counts["price_alerts"] == 1
-    assert counts["flight_deliveries"] == 1
+    assert "flight_alerts" not in counts
+    assert "flight_deliveries" not in counts
     assert counts["price_notifications"] == 1
     assert counts["provider_requests"] == 1
     assert counts["job_runs"] == 1
@@ -124,13 +110,13 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
     assert len(messages) == 3
     assert all(0 < len(m) < 4096 for m in messages)
     assert "کاربران" in messages[0]
-    assert "هشدارهای" in messages[1]
+    assert "هشدارهای قیمت" in messages[1]
+    assert "هشدارهای پرواز" not in messages[1]
     assert "سرویس‌دهنده" in messages[2]
     combined = "\n".join(messages)
     assert "sensitive_user_name" not in combined
     assert "do-not-show" not in combined
     assert "700123" not in combined
-    assert "TK123" not in combined
     await database.close()
 
 

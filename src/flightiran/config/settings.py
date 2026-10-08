@@ -31,9 +31,6 @@ class Settings(BaseSettings):
     )
     database_url: str = "sqlite+aiosqlite:///./flightiran.db"
     log_level: str = "INFO"
-    flight_tracking_enabled: bool = True
-    flight_provider_url: str = "https://www.flightradar24.com/v1/search/web/find"
-    flight_provider_details_url: str = "https://data-live.flightradar24.com/clickhandler/"
     currency_provider_url: str | None = None
     currency_proxy_url: str | None = None
     ticket_provider_url: str = "https://mz724.ir/"

@@ -59,7 +59,7 @@ def render_admin_report(report: BotReport) -> tuple[str, ...]:
         "این عدد لزوماً تمام کاربران فعال واقعی نیست."
     )
     fares = (
-        "🎫 <b>گزارش بلیط و هشدارها</b>\n"
+        "🎫 <b>گزارش بلیط و هشدارهای قیمت</b>\n"
         f"زمان: {_timestamp(report.generated_at)}\n\n"
         "<b>پایش قیمت پرواز</b>\n"
         f"• مسیرهای دارای میانگین: <b>{c['tracked_routes']:,}</b>\n"
@@ -70,10 +70,6 @@ def render_admin_report(report: BotReport) -> tuple[str, ...]:
         f"• مسیرهای ذخیره‌شده کاربران: {c['saved_routes']:,}\n\n"
         "<b>شهرهای مبدأ پرتقاضا (انتخاب‌های ۳۰ روز)</b>\n"
         f"{_entries(report.top_origins, limit=7)}\n\n"
-        f"<b>هشدارهای پرواز (مجموع {c['flight_alerts']:,})</b>\n"
-        f"{_entries(report.flight_alert_status)}\n"
-        f"• رویدادهای هشدار: {c['flight_deliveries']:,}\n"
-        f"{_entries(report.flight_delivery_status)}\n\n"
         f"<b>هشدارهای قیمت (مجموع {c['price_alerts']:,})</b>\n"
         f"{_entries(report.price_alert_status)}\n"
         f"• اعلان‌های موفق قیمت: {c['price_notifications']:,}"

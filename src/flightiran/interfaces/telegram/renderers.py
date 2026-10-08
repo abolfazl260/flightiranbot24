@@ -40,7 +40,6 @@ def render_help(
         ("/start", "help_start"),
         ("/help", "help_help"),
         ("/language", "help_language"),
-        ("/flight", "help_flight"),
         ("/price", "help_price"),
         ("/visa", "help_visa"),
         ("/visa_list", "help_visa_list"),

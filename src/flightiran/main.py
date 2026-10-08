@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Final
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from telegram import BotCommand
 from telegram.ext import Application, ApplicationBuilder
 
 from flightiran.config import ConfigurationError, Settings, load_settings
@@ -24,8 +25,6 @@ from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.provider import HttpCurrencyProvider
 from flightiran.modules.currency.service import CurrencyService
-from flightiran.modules.flight_tracking.provider import HttpFlightProvider
-from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import default_catalog
@@ -44,6 +43,51 @@ def configure_logging(level: str) -> None:
     )
 
 
+# Keep Telegram command menus in sync across deployments and languages.
+BOT_COMMAND_DESCRIPTIONS = {
+    "fa": {
+        "start": "نمایش منوی اصلی",
+        "help": "راهنمای استفاده از ربات",
+        "language": "تغییر زبان",
+        "price": "نمایش نرخ ارز",
+        "visa": "اطلاعات ویزا",
+        "visa_list": "کشورها بر اساس پاسپورت",
+        "cancel": "لغو جست‌وجوی ویزا",
+    },
+    "en": {
+        "start": "Open main menu",
+        "help": "Help and commands",
+        "language": "Change language",
+        "price": "Exchange rates",
+        "visa": "Visa requirements",
+        "visa_list": "Countries by passport",
+        "cancel": "Cancel visa search",
+    },
+    "ar": {
+        "start": "عرض القائمة الرئيسية",
+        "help": "دليل الاستخدام",
+        "language": "تغيير اللغة",
+        "price": "أسعار الصرف",
+        "visa": "متطلبات التأشيرة",
+        "visa_list": "الدول حسب جواز السفر",
+        "cancel": "إلغاء البحث عن التأشيرة",
+    },
+}
+
+
+async def _sync_telegram_commands(application: Application) -> None:
+    """Replace legacy Telegram command menus, including localized menus."""
+
+    for language, descriptions in BOT_COMMAND_DESCRIPTIONS.items():
+        commands = [
+            BotCommand(command, description)
+            for command, description in descriptions.items()
+        ]
+        await application.bot.set_my_commands(commands, language_code=language)
+        if language == "en":
+            await application.bot.set_my_commands(commands)
+
+
 def create_application(
     settings: Settings,
     cheap_ticket_service: CheapTicketService | None = None,
@@ -57,6 +101,7 @@ def create_application(
     if cheap_ticket_service is not None or visa_sync_service is not None:
 
         async def post_init(application: Application) -> None:
+            await _sync_telegram_commands(application)
             scheduler = AsyncIOScheduler(timezone="UTC")
 
             async def store_job_status(status: str) -> None:
@@ -154,6 +199,8 @@ def create_application(
                 scheduler.shutdown(wait=False)
 
         builder = builder.post_init(post_init).post_shutdown(post_shutdown)
+    else:
+        builder = builder.post_init(_sync_telegram_commands)
     return builder.build()
 
 
@@ -171,20 +218,6 @@ def run() -> None:
                 settings.currency_provider_url,
             )
         )
-    flight_http_client = ProviderHttpClient(
-        ProviderHttpConfig(
-            cache_ttl_seconds=15,
-            default_headers={"User-Agent": "FlightIranBot24/1.0"},
-        )
-    )
-    flight_service = FlightService(
-        HttpFlightProvider(
-            flight_http_client,
-            settings.flight_provider_url,
-            details_endpoint=settings.flight_provider_details_url,
-        ),
-        enabled=settings.flight_tracking_enabled,
-    )
     ticket_http = ProviderHttpClient(
         ProviderHttpConfig(
             timeout_seconds=12,
@@ -215,7 +248,6 @@ def run() -> None:
                 Path(__file__).parent / "modules" / "airport" / "data" / "airports.json"
             ),
             currency_service=currency_service,
-            flight_service=flight_service,
             cheap_ticket_service=cheap_ticket_service,
             ticket_support_username=settings.ticket_support_username,
             admin_chat_id=settings.telegram_admin_id,
