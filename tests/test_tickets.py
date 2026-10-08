@@ -9,6 +9,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
     render_price_drop_fallback_chunks,
     render_rich_price_drop_report,
     render_rich_price_tables,
+    render_ticket_footer,
     replace_disabled_buttons_with_indicators,
     send_rich_price_table_with_badge_fallback,
 )
@@ -128,6 +129,7 @@ def test_render_cheap_route_includes_average_difference():
     assert "درصد        -20.0٪" in rendered
     assert "نمونه       24" in rendered
     assert "20.0٪ ارزان‌تر از میانگین" in rendered
+    assert rendered.endswith(render_ticket_footer("fa", rich=False))
 
 
 def test_render_cheap_route_chunks_stay_below_telegram_limit():
@@ -149,6 +151,7 @@ def test_render_cheap_route_chunks_stay_below_telegram_limit():
     assert all(chunk.count("<b>") == chunk.count("</b>") for chunk in chunks)
     assert all(chunk.count("<i>") == chunk.count("</i>") for chunk in chunks)
     assert all(chunk.count("<pre>") == chunk.count("</pre>") for chunk in chunks)
+    assert all(chunk.endswith(render_ticket_footer("fa", rich=False)) for chunk in chunks)
 
 
 def test_rich_table_keeps_all_destinations_of_one_origin_in_one_message():
@@ -228,6 +231,9 @@ def test_rich_table_only_splits_at_actual_configured_safety_limit():
     assert all(item["html"].count("<tr>") <= 491 for item in messages)
     assert all(item["html"].count("<table>") == 0 for item in messages)
     assert all(item["html"].count("</table>") == 1 for item in messages)
+    assert all(
+        item["html"].endswith(render_ticket_footer("fa")) for item in messages
+    )
 
 
 @pytest.mark.parametrize("language", ["fa", "en", "ar"])
@@ -335,6 +341,10 @@ def test_discount_report_empty_states_and_unavailable_averages():
     assert "مسیری با کاهش بیش از ۲۰٪" in message
     assert "<table" not in message
     assert "موردی پیدا نشد" in render_price_drop_fallback_chunks([route])[0]
+    assert message.endswith(render_ticket_footer("fa"))
+    assert render_price_drop_fallback_chunks([route])[0].endswith(
+        render_ticket_footer("fa", rich=False)
+    )
 
 
 def test_discount_report_splits_only_at_actual_rich_limits_and_escapes_html():
@@ -366,6 +376,10 @@ def test_discount_fallback_messages_are_html_safe_and_length_bounded():
     messages = render_price_drop_fallback_chunks([route], max_length=280)
     assert len(messages) > 1
     assert all(len(message) <= 280 for message in messages)
+    assert all(
+        message.endswith(render_ticket_footer("fa", rich=False))
+        for message in messages
+    )
     assert all("<b>" in message and "</b>" in message for message in messages)
     assert all("تهران &amp; البرز" in message for message in messages)
     assert sum(message.count("مقصد &lt;") for message in messages) == 45
@@ -499,3 +513,70 @@ def test_discount_report_table_has_five_columns_and_no_repeated_percent_sign():
     assert all("↓" not in badge and "↑" not in badge for badge in badges)
     assert all('style="success"' in badge for badge in badges)
     assert "<td>↓ 30.00</td>" in html
+
+
+@pytest.mark.parametrize(
+    "language, average_header, booking_label",
+    [
+        ("fa", "میانگین", "رزرو بلیط"),
+        ("en", "Average", "Book tickets"),
+        ("ar", "المتوسط", "حجز التذاكر"),
+    ],
+)
+def test_ticket_rich_table_has_short_average_header_no_legend_and_linked_footer(
+    language, average_header, booking_label
+):
+    route = CheapTicketRoute(
+        "تهران",
+        (CheapTicketDestination("مشهد", "8,000", 8_000, 10_000),),
+        "https://mz724.ir/",
+    )
+    html = render_rich_price_tables(route, language=language)[0]["html"]
+    assert f"<th>{average_header}</th>" in html
+    assert "میانگین ۲۱ر</th>" not in html
+    assert "Avg 21d</th>" not in html
+    assert "متوسط ٢١ي</th>" not in html
+    assert "قیمت‌ها به تومان؛ تغییر نسبت به میانگین" not in html
+    assert "Prices in toman; vs 21-day average" not in html
+    assert "الأسعار بالتومان؛ مقارنة بمتوسط" not in html
+    assert "<p>" not in html[:html.index("<table")]
+    assert html.endswith(render_ticket_footer(language))
+    assert booking_label in html
+    assert '<a href="https://t.me/Flightiranbot">@Flightiranbot</a>' in html
+    assert '<a href="https://t.me/advertio_bot">@advertio_bot</a>' in html
+    assert html.index("</table>") < html.index("@Flightiranbot")
+    assert html.count("<th>") == 5
+
+
+def test_discount_report_pagination_keeps_footer_after_each_table():
+    destinations = tuple(
+        CheapTicketDestination(f"City {i}", "7,000", 7_000, 10_000)
+        for i in range(35)
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    results = render_rich_price_drop_report([route], max_text_chars=350)
+    assert len(results) > 1
+    assert all(
+        result["html"].endswith(render_ticket_footer("fa"))
+        for result in results
+    )
+    assert all("<th>میانگین</th>" in result["html"] for result in results)
+
+
+@pytest.mark.parametrize("language", ["fa", "en", "ar"])
+def test_ticket_fallback_footer_is_localized_and_within_limit(language):
+    route = CheapTicketRoute(
+        "تهران",
+        tuple(
+            CheapTicketDestination(f"Destination {i}", "8,000", 8_000, 10_000)
+            for i in range(14)
+        ),
+        "https://mz724.ir/",
+    )
+    messages = render_cheap_route_chunks(route, language=language, max_length=500)
+    assert len(messages) > 1
+    assert all(len(message) <= 500 for message in messages)
+    assert all(
+        message.endswith(render_ticket_footer(language, rich=False))
+        for message in messages
+    )
