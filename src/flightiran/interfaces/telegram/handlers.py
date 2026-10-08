@@ -30,7 +30,7 @@ from flightiran.modules.useful_content import UsefulContentCatalog, default_cata
 
 from .keyboards import back_menu, language_menu, main_menu
 from .localization import normalize_language, safe_text, text
-from .renderers import render_language_prompt, render_main_menu
+from .renderers import render_help, render_language_prompt, render_main_menu
 from .useful_content import (
     USEFUL_CATEGORY_IDS,
     render_useful_category,
@@ -133,9 +133,20 @@ async def start_handler(
     await dependencies.audit.record("user.start", user_id=user_id)
     if update.message:
         await update.message.reply_text(
-            render_main_menu(language),
+            render_main_menu(language, update.effective_user.first_name if update.effective_user else None),
             parse_mode="HTML",
             reply_markup=main_menu(language, dependencies.web_app_url),
+        )
+
+
+async def help_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    user_id, language = await _user_language(update, dependencies)
+    await dependencies.audit.record("user.help", user_id=user_id)
+    if update.message:
+        await update.message.reply_text(
+            render_help(language), parse_mode="HTML", reply_markup=main_menu(language, dependencies.web_app_url)
         )
 
 
@@ -172,7 +183,7 @@ async def callback_handler(
     elif data == "back":
         await dependencies.audit.record("menu.back", user_id=user_id)
         await query.edit_message_text(
-            render_main_menu(language),
+            render_main_menu(language, update.effective_user.first_name if update.effective_user else None),
             parse_mode="HTML",
             reply_markup=main_menu(language, dependencies.web_app_url),
         )
@@ -370,6 +381,7 @@ async def price_handler(
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
+    application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
     )
