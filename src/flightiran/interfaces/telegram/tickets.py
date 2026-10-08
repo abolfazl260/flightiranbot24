@@ -25,39 +25,62 @@ def render_offer(offer: TicketOffer) -> tuple[str, InlineKeyboardMarkup]:
 
 
 def _render_destination(item: CheapTicketDestination) -> str:
+    """Render one destination as a compact Telegram HTML table card."""
+
+    destination = escape(item.name)
     current = item.price_value_toman
     if current is None:
-        return f"🛬 <b>{escape(item.name)}</b>\n💰 قیمت: <b>{escape(item.price_toman)} تومان</b>"
+        price = escape(item.price_toman)
+        return (
+            f"📍 <b>{destination}</b>\n"
+            "<pre>"
+            f"قیمت فعلی   {price} تومان\n"
+            "میانگین     —\n"
+            "اختلاف      —\n"
+            "درصد        —"
+            "</pre>"
+        )
 
-    lines = [
-        f"🛬 <b>{escape(item.name)}</b>",
-        f"💰 قیمت فعلی: <b>{current:,} تومان</b>",
-    ]
     average = item.average_price_toman
     if average is None or average <= 0:
-        lines.append("📊 میانگین ۲۱ روزه: <i>هنوز داده کافی ثبت نشده</i>")
-        return "\n".join(lines)
+        return (
+            f"📍 <b>{destination}</b>\n"
+            "<pre>"
+            f"قیمت فعلی   {current:,} تومان\n"
+            "میانگین     در حال جمع‌آوری داده\n"
+            "اختلاف      —\n"
+            "درصد        —"
+            "</pre>"
+        )
 
     rounded_average = round(average)
     difference = current - average
     percentage = (difference / average) * 100
-    lines.append(
-        f"📊 میانگین ۲۱ روزه: <b>{rounded_average:,} تومان</b> "
-        f"<i>({item.average_sample_count} نمونه)</i>"
-    )
+    difference_toman = round(difference)
+
     if abs(difference) < 0.5:
-        lines.append("⚪️ اختلاف با میانگین: <b>بدون تغییر (۰٪)</b>")
+        status = "⚪️ <b>هم‌سطح میانگین</b>"
+        difference_text = "0 تومان"
+        percentage_text = "0.0٪"
     elif difference < 0:
-        lines.append(
-            f"🟢 اختلاف با میانگین: <b>{round(abs(difference)):,} تومان ارزان‌تر</b> "
-            f"(<b>{abs(percentage):.1f}٪ کمتر</b>)"
-        )
+        status = f"🟢 <b>{abs(percentage):.1f}٪ ارزان‌تر از میانگین</b>"
+        difference_text = f"-{abs(difference_toman):,} تومان"
+        percentage_text = f"-{abs(percentage):.1f}٪"
     else:
-        lines.append(
-            f"🔴 اختلاف با میانگین: <b>{round(difference):,} تومان گران‌تر</b> "
-            f"(<b>{percentage:.1f}٪ بیشتر</b>)"
-        )
-    return "\n".join(lines)
+        status = f"🔴 <b>{percentage:.1f}٪ گران‌تر از میانگین</b>"
+        difference_text = f"+{difference_toman:,} تومان"
+        percentage_text = f"+{percentage:.1f}٪"
+
+    table = (
+        "<pre>"
+        f"قیمت فعلی   {current:,} تومان\n"
+        f"میانگین     {rounded_average:,} تومان\n"
+        f"اختلاف      {difference_text}\n"
+        f"درصد        {percentage_text}\n"
+        f"نمونه       {item.average_sample_count}"
+        "</pre>"
+    )
+    return f"📍 <b>{destination}</b>\n{table}\n{status}"
 
 
 def render_cheap_route(route: CheapTicketRoute) -> str:
