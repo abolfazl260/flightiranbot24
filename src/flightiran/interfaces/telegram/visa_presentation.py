@@ -10,7 +10,7 @@ from urllib.parse import urlparse
 from babel import Locale
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from flightiran.modules.visa.catalog import Country, VisaDetail, VisaRule
+from flightiran.modules.visa.catalog import STATUS_GROUPS, Country, VisaDetail, VisaRule
 
 LANG = {
     "fa": {
@@ -621,11 +621,16 @@ def section_keyboard(language: str) -> InlineKeyboardMarkup:
     ])
 
 
-def groups_keyboard(language: str) -> InlineKeyboardMarkup:
-    rows = [
-        [InlineKeyboardButton(tr(language, group), callback_data=f"visa:list:{group}:0")]
-        for group in ("all", "free", "evisa", "arrival", "required", "other")
-    ]
+def groups_keyboard(
+    language: str, counts: dict[str, int] | None = None
+) -> InlineKeyboardMarkup:
+    counts = counts or {}
+    rows = []
+    for group in ("all", "free", "evisa", "arrival", "required", "other"):
+        statuses = STATUS_GROUPS.get(group, tuple(counts))
+        count = sum(counts.get(item, 0) for item in statuses)
+        label = tr(language, group) + (f" · {count}" if counts else "")
+        rows.append([InlineKeyboardButton(label, callback_data=f"visa:list:{group}:0")])
     rows.append([InlineKeyboardButton(tr(language, "back"), callback_data="visa:pick:d:0")])
     return InlineKeyboardMarkup(rows)
 
