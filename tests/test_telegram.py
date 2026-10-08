@@ -116,7 +116,7 @@ async def test_welcome_localized_and_html_escaped(language, greeting):
     assert greeting in rendered
     assert "&lt;Test&gt;" in rendered
     assert "<b>" in rendered
-    assert "✈️" in rendered
+    assert "🎫" in rendered
     assert "💱" in rendered
 
 
@@ -133,6 +133,7 @@ async def test_help_handler_for_supported_languages(language):
     assert all(command in rendered for command in commands)
     assert message.calls[0][1]["parse_mode"] == "HTML"
     assert deps.audit.events[-1][0] == "user.help"
+
 
 @pytest.mark.parametrize("language", ["fa", "en", "ar"])
 def test_flight_tracking_is_not_advertised(language):
