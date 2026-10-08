@@ -172,11 +172,15 @@ def test_rich_table_keeps_all_destinations_of_one_origin_in_one_message():
     assert "<th>اختلاف</th>" in messages[0]["html"]
     assert "<th>تغییر ٪</th>" in messages[0]["html"]
     assert "<th>نسبت به ثبت قبلی</th>" not in messages[0]["html"]
-    assert '<tg-button type="disabled" style="success">🟢 ↓ 20.0</tg-button>' in messages[0]["html"]
+    assert (
+        '<td align="center"><tg-button type="disabled" style="success">'
+        '1,500,000</tg-button></td>'
+    ) in messages[0]["html"]
+    assert "<td>🟢 ↓ 20.0</td>" in messages[0]["html"]
     assert messages[0]["is_rtl"] is True
 
 
-def test_rich_table_average_badges_are_inert_and_have_no_percent_symbol_in_rows():
+def test_diff_is_inert_colored_button_without_arrows_and_change_is_plain_text():
     destinations = (
         CheapTicketDestination("مشهد", "6,000,000", 6_000_000, 7_500_000),
         CheapTicketDestination("استانبول", "12,000,000", 12_000_000, 10_000_000),
@@ -186,19 +190,26 @@ def test_rich_table_average_badges_are_inert_and_have_no_percent_symbol_in_rows(
     route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
     html = render_rich_price_tables(route)[0]["html"]
 
-    badges = re.findall(r"<tg-button[^>]*>[^<]+</tg-button>", html)
-    assert badges == [
-        '<tg-button type="disabled" style="success">🟢 ↓ 20.0</tg-button>',
-        '<tg-button type="disabled" style="danger">🔴 ↑ 20.0</tg-button>',
-        '<tg-button type="disabled">⚪ ➖ 0.0</tg-button>',
+    buttons = re.findall(r"<tg-button[^>]*>[^<]+</tg-button>", html)
+    assert buttons == [
+        '<tg-button type="disabled" style="success">1,500,000</tg-button>',
+        '<tg-button type="disabled" style="danger">2,000,000</tg-button>',
+        '<tg-button type="disabled">0</tg-button>',
     ]
-    assert all("url=" not in badge and "callback" not in badge for badge in badges)
-    assert all("٪" not in badge and "%" not in badge for badge in badges)
-    assert "↓ 1,500,000" in html
-    assert "↑ 2,000,000" in html
+    assert all("url=" not in button and "callback" not in button for button in buttons)
+    assert all("↑" not in button and "↓" not in button for button in buttons)
+    assert all("٪" not in button and "%" not in button for button in buttons)
+
+    # Each Diff is centered and button-styled; Change contains no buttons.
+    assert html.count('<td align="center"><tg-button') == 3
+    assert "<td>🟢 ↓ 20.0</td>" in html
+    assert "<td>🔴 ↑ 20.0</td>" in html
+    assert "<td>⚪ ➖ 0.0</td>" in html
+    assert "<td>—</td>" in html
     assert "<th>تغییر ٪</th>" in html
     assert html.count('<td align="center">') == 4
     assert '<td align="center">—</td>' in html
+
 
 
 def test_rich_table_only_splits_at_actual_configured_safety_limit():
@@ -377,8 +388,10 @@ def test_compact_rich_table_all_languages_have_five_columns(language, headers):
     assert html.count('<td align="center">') == 2
     assert "vs last saved price" not in html
     assert "نسبت به ثبت قبلی" not in html
-    assert '<tg-button type="disabled" style="success">🟢 ↓ 20.0</tg-button>' in html
-    assert '<tg-button type="disabled">⚪ ➖ 0.0</tg-button>' in html
+    assert '<tg-button type="disabled" style="success">2,000</tg-button>' in html
+    assert '<tg-button type="disabled">0</tg-button>' in html
+    assert "<td>🟢 ↓ 20.0</td>" in html
+    assert "<td>⚪ ➖ 0.0</td>" in html
 
 
 def test_compact_rich_table_without_average_shows_unknown_not_unchanged():
@@ -407,9 +420,12 @@ def test_compact_rich_table_badge_fallback_preserves_data_and_colors():
     assert rich["html"].count("<tg-button") == 3
     assert "<tg-button" not in fallback["html"]
     assert fallback["html"].count("<td") == rich["html"].count("<td")
-    assert "🟢 ↓ 20.0" in fallback["html"]
-    assert "🔴 ↑ 20.0" in fallback["html"]
-    assert "⚪ ➖ 0.0" in fallback["html"]
+    assert '<td align="center">🟢 2,000</td>' in fallback["html"]
+    assert '<td align="center">🔴 2,000</td>' in fallback["html"]
+    assert '<td align="center">⚪ 0</td>' in fallback["html"]
+    assert "<td>🟢 ↓ 20.0</td>" in fallback["html"]
+    assert "<td>🔴 ↑ 20.0</td>" in fallback["html"]
+    assert "<td>⚪ ➖ 0.0</td>" in fallback["html"]
     assert "\\1" not in fallback["html"]
 
 
@@ -439,7 +455,8 @@ async def test_unsupported_average_badges_retry_as_plain_rich_cell_text(monkeypa
     assert len(sent) == 2
     assert "<tg-button" in sent[0]["html"]
     assert "<tg-button" not in sent[1]["html"]
-    assert "🟢 ↓ 20.0" in sent[1]["html"]
+    assert '<td align="center">🟢 2,000</td>' in sent[1]["html"]
+    assert "<td>🟢 ↓ 20.0</td>" in sent[1]["html"]
     assert "<table bordered striped compact>" in sent[1]["html"]
 
 
@@ -450,3 +467,6 @@ def test_discount_report_table_has_five_columns_and_no_repeated_percent_sign():
     badges = re.findall(r"<tg-button[^>]*>[^<]+</tg-button>", html)
     assert len(badges) == 3
     assert all("٪" not in badge and "%" not in badge for badge in badges)
+    assert all("↓" not in badge and "↑" not in badge for badge in badges)
+    assert all('style="success"' in badge for badge in badges)
+    assert "<td>🟢 ↓ 30.00</td>" in html
