@@ -53,7 +53,7 @@ def render_rich_price_tables(
         if start:
             caption += " (ادامه)"
         table = (
-            "<table>"
+            "<table bordered striped compact>"
             "<tr><th>مقصد</th><th>فعلی (تومان)</th>"
             "<th>میانگین ۲۱ روزه</th><th>اختلاف (تومان)</th><th>اختلاف ٪</th></tr>"
             + "".join(_row(item) for item in batch)
