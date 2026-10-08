@@ -12,6 +12,7 @@ from telegram.ext import (
     ContextTypes,
     InlineQueryHandler,
     MessageHandler,
+    TypeHandler,
     filters,
 )
 
@@ -153,6 +154,24 @@ async def error_handler(
     except Exception:
         LOGGER.exception("failed_to_record_runtime_error")
     await _notify_admin(context, error, update, dependencies)
+
+
+async def user_activity_handler(
+    update: Update, _context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    """Observe every Telegram update, including callbacks and inline queries."""
+    user = update.effective_user
+    if user is None or user.is_bot:
+        return
+    try:
+        await dependencies.users.mark_active(
+            user.id,
+            username=user.username,
+            first_name=user.first_name,
+            last_name=user.last_name,
+        )
+    except Exception:
+        LOGGER.exception("telegram_user_activity_tracking_failed")
 
 
 async def _user_language(update: Update, dependencies: TelegramDependencies) -> tuple[int, str]:
@@ -666,6 +685,9 @@ async def visa_sync_handler(
 
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
+    application.add_handler(
+        TypeHandler(Update, lambda u, c: user_activity_handler(u, c, dependencies)), group=-1
+    )
     application.add_handler(
         CommandHandler("visa", lambda u, c: visa_handler(u, c, dependencies))
     )
