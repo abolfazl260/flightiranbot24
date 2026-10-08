@@ -9,9 +9,9 @@ import hashlib
 import json
 import logging
 import re
-from html import escape
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
+from html import escape
 from urllib.parse import urlparse
 
 import httpx
