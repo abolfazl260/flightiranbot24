@@ -9,3 +9,11 @@ __pycache__/
 .ruff_cache/
 *.egg-info/
 
+# Android signing, local SDK and Play credentials
+*.jks
+*.keystore
+*.p12
+*.pem
+*.key
+*service-account*.json
+android/local.properties

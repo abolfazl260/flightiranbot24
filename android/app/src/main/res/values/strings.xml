@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Flight Iran Bot 24</string>
+    <string name="welcome_title">Flight Iran Bot 24</string>
+    <string name="welcome_description">Your travel services companion. Choose a service to continue in Telegram.</string>
+    <string name="notice">Travel information is provided by the existing Telegram bot. This companion does not require account access or collect phone data.</string>
+    <string name="open_bot">Open travel assistant</string>
+    <string name="open_visa">Visa and entry requirements</string>
+    <string name="open_currency">Exchange rates</string>
+    <string name="open_airports">Airport information</string>
+    <string name="open_useful">Useful travel information</string>
+    <string name="open_support">Contact support</string>
+    <string name="open_privacy">Privacy information</string>
+    <string name="command_hint">For visa or exchange rates, the command is copied; paste it into the Telegram chat.</string>
+    <string name="command_copied">Command copied. Paste it into the Telegram chat.</string>
+    <string name="link_unavailable">Unable to open the link on this device.</string>
+</resources>

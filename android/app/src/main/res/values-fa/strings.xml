@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Flight Iran Bot 24</string>
+    <string name="welcome_title">دستیار سفر Flight Iran Bot 24</string>
+    <string name="welcome_description">خدمات کاربردی سفر؛ برای ادامه، بخش موردنظر را در تلگرام باز کنید.</string>
+    <string name="notice">این نسخه همراه، اطلاعات سفر را از طریق ربات تلگرام ارائه می‌کند و به اطلاعات خصوصی گوشی دسترسی نمی‌خواهد.</string>
+    <string name="open_bot">ورود به دستیار سفر</string>
+    <string name="open_visa">راهنمای ویزا و ورود</string>
+    <string name="open_currency">نرخ ارز</string>
+    <string name="open_airports">اطلاعات فرودگاه‌ها</string>
+    <string name="open_useful">اطلاعات کاربردی سفر</string>
+    <string name="open_support">پشتیبانی</string>
+    <string name="open_privacy">حریم خصوصی</string>
+    <string name="command_hint">برای ویزا یا نرخ ارز، دستور مربوطه کپی می‌شود؛ آن را در گفت‌وگوی تلگرام جای‌گذاری کنید.</string>
+    <string name="command_copied">دستور کپی شد؛ آن را در تلگرام جای‌گذاری کنید.</string>
+    <string name="link_unavailable">امکان باز کردن لینک در این دستگاه وجود ندارد.</string>
+</resources>
