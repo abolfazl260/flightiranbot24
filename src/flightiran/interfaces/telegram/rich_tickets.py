@@ -19,24 +19,37 @@ MAX_RICH_TABLE_ROWS = 490
 
 _TABLE_HEADERS = {
     "fa": (
-        "<tr><th>مقصد</th><th>فعلی</th><th>میانگین ۲۱ر</th>"
+        "<tr><th>مقصد</th><th>فعلی</th><th>میانگین</th>"
         "<th>اختلاف</th><th>تغییر ٪</th></tr>"
     ),
     "en": (
-        "<tr><th>To</th><th>Now</th><th>Avg 21d</th>"
+        "<tr><th>To</th><th>Now</th><th>Average</th>"
         "<th>Diff</th><th>Change %</th></tr>"
     ),
     "ar": (
-        "<tr><th>الوجهة</th><th>الحالي</th><th>متوسط ٢١ي</th>"
+        "<tr><th>الوجهة</th><th>الحالي</th><th>المتوسط</th>"
         "<th>الفرق</th><th>التغير ٪</th></tr>"
     ),
 }
 
-_TABLE_LEGENDS = {
-    "fa": "قیمت‌ها به تومان؛ تغییر نسبت به میانگین ۲۱روزه: کاهش | افزایش | برابر",
-    "en": "Prices in toman; vs 21-day average: lower | higher | equal",
-    "ar": "الأسعار بالتومان؛ مقارنة بمتوسط ٢١ يوماً: أقل | أعلى | مساوي",
+_TICKET_BOOKING_LABELS = {
+    "fa": "رزرو بلیط",
+    "en": "Book tickets",
+    "ar": "حجز التذاكر",
 }
+
+
+def render_ticket_footer(language: str = "fa", *, rich: bool = True) -> str:
+    """Compact, linked attribution and booking footer for fare messages."""
+
+    label = _TICKET_BOOKING_LABELS.get(language, _TICKET_BOOKING_LABELS["fa"])
+    content = (
+        '<a href="https://t.me/Flightiranbot">@Flightiranbot</a>'
+        f" | {label} "
+        '<a href="https://t.me/advertio_bot">@advertio_bot</a>'
+    )
+    return f"<p>{content}</p>" if rich else f"\\n{content}"
+
 
 _TABLE_TITLES = {
     "fa": "پروازها از {origin}",
@@ -121,11 +134,11 @@ def _table_html(
         title += _TABLE_CONTINUATION[language]
     return (
         f"<h3>{title}</h3>"
-        f"<p>{_TABLE_LEGENDS[language]}</p>"
         "<table bordered striped compact>"
         + _TABLE_HEADERS[language]
         + "".join(rows)
         + "</table>"
+        + render_ticket_footer(language)
     )
 
 
@@ -247,7 +260,7 @@ def find_price_drops(
 
 
 _DROP_TABLE_HEADER = (
-    "<tr><th>مسیر</th><th>فعلی</th><th>میانگین ۲۱ر</th>"
+    "<tr><th>مسیر</th><th>فعلی</th><th>میانگین</th>"
     "<th>کاهش</th><th>افت ٪</th></tr>"
 )
 
@@ -268,7 +281,13 @@ def _drop_table_row(drop: PriceDrop) -> str:
     )
 
 
-def _drop_report_html(rows: list[str], total: int, *, continued: bool = False) -> str:
+def _drop_report_html(
+    rows: list[str],
+    total: int,
+    *,
+    continued: bool = False,
+    language: str = "fa",
+) -> str:
     continuation = " (ادامه)" if continued else ""
     return (
         f"<h3>↓ گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
@@ -277,6 +296,7 @@ def _drop_report_html(rows: list[str], total: int, *, continued: bool = False) -
         + _DROP_TABLE_HEADER
         + "".join(rows)
         + "</table>"
+        + render_ticket_footer(language)
     )
 
 
@@ -317,6 +337,7 @@ def _paginate_rich_rows(
 def render_rich_price_drop_report(
     routes: Iterable[CheapTicketRoute],
     *,
+    language: str = "fa",
     max_text_chars: int = MAX_RICH_TEXT_CHARS,
     max_rows: int = MAX_RICH_TABLE_ROWS,
 ) -> list[dict]:
@@ -329,6 +350,7 @@ def render_rich_price_drop_report(
                 "<h3>↓ گزارش کاهش قیمت بیش از ۲۰٪</h3>"
                 "<p>در بررسی فعلی، مسیری با کاهش بیش از ۲۰٪ نسبت به "
                 "میانگین ۲۱روزه پیدا نشد.</p>"
+                + render_ticket_footer(language)
             ),
             "is_rtl": True,
         }]
@@ -337,7 +359,7 @@ def render_rich_price_drop_report(
     return _paginate_rich_rows(
         rows,
         lambda batch, continued: _drop_report_html(
-            batch, len(drops), continued=continued
+            batch, len(drops), continued=continued, language=language
         ),
         max_text_chars=max_text_chars,
         max_rows=max_rows,
