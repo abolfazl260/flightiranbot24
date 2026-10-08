@@ -68,6 +68,38 @@ def render_cheap_route(route: CheapTicketRoute) -> str:
     return "\n\n".join(blocks)
 
 
+def render_cheap_route_chunks(
+    route: CheapTicketRoute,
+    *,
+    max_length: int = 3800,
+) -> list[str]:
+    """Split one origin's rich-text output into Telegram-safe messages.
+
+    Destination blocks are kept intact so HTML tags are never split across
+    message boundaries.
+    """
+
+    header = f"✈️ <b>پروازهای ارزان از {escape(route.origin)}</b>"
+    continuation_header = f"✈️ <b>{escape(route.origin)} — ادامه</b>"
+    chunks: list[str] = []
+    current = header
+
+    for item in route.destinations:
+        block = _render_destination(item)
+        candidate = f"{current}\n\n{block}"
+        if len(candidate) <= max_length:
+            current = candidate
+            continue
+
+        chunks.append(current)
+        current = f"{continuation_header}\n\n{block}"
+
+    if current:
+        chunks.append(current)
+
+    return chunks
+
+
 def render_cheap_ticket_intro() -> str:
     return "🔍 <b>در حال دریافت و مقایسه قیمت بلیط‌ها با میانگین ۲۱ روزه...</b>"
 
