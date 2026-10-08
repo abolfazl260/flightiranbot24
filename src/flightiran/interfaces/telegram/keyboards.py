@@ -3,6 +3,7 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 
 from .localization import safe_text
+from .support import support_url
 
 
 def main_menu(language: str, web_app_url: str | None = None) -> InlineKeyboardMarkup:
@@ -41,4 +42,26 @@ def language_menu() -> InlineKeyboardMarkup:
 def back_menu(language: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup(
         [[InlineKeyboardButton(safe_text(language, "back"), callback_data="back")]]
+    )
+
+
+
+def support_menu(language: str, support_username: str) -> InlineKeyboardMarkup:
+    """Provide a direct, user-friendly link to the unified support bot."""
+
+    return InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    safe_text(language, "support_open_chat"),
+                    url=support_url(support_username),
+                )
+            ],
+            [
+                InlineKeyboardButton(
+                    safe_text(language, "back"),
+                    callback_data="back",
+                )
+            ],
+        ]
     )
