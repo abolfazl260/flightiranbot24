@@ -5,7 +5,7 @@ from functools import lru_cache
 from pydantic import AliasChoices, Field, SecretStr, ValidationError, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-DEFAULT_SUPPORT_USERNAME = "@advertio_bot"
+DEFAULT_SUPPORT_USERNAME = "@advertio_support"
 
 
 class ConfigurationError(RuntimeError):
@@ -50,9 +50,9 @@ class Settings(BaseSettings):
     @field_validator("ticket_support_username")
     @classmethod
     def normalize_legacy_support_username(cls, username: str) -> str:
-        """Move deployments using the previous contact to the unified support bot."""
+        """Redirect obsolete support usernames to the current support account."""
 
-        if username.strip().lower().lstrip("@") == "vlansupport":
+        if username.strip().lower().lstrip("@") in {"vlansupport", "advertio_bot"}:
             return DEFAULT_SUPPORT_USERNAME
         return username
 
