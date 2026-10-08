@@ -100,3 +100,32 @@ def test_empty_report_is_still_sent_and_missing_username_is_safe():
     assert "ندارد" in rendered
     assert "123456" in rendered
     assert "Asia/Tehran" in rendered
+
+
+@pytest.mark.asyncio
+async def test_daily_report_cron_registered_even_without_price_or_visa_jobs(
+    tmp_path, monkeypatch
+):
+    from flightiran.config.settings import Settings
+    from flightiran.main import create_application
+
+    async def no_command_sync(_application):
+        return None
+
+    monkeypatch.setattr("flightiran.main._sync_telegram_commands", no_command_sync)
+    db = await initialize_database(f"sqlite+aiosqlite:///{tmp_path / 'scheduled.db'}")
+    settings = Settings(
+        TELEGRAM_BOT_TOKEN="123456:AA-valid-token",
+        ACTIVE_USERS_REPORT_ENABLED=True,
+        ACTIVE_USERS_REPORT_TIME="09:00",
+        ACTIVE_USERS_REPORT_TIMEZONE="Asia/Tehran",
+    )
+    app = create_application(settings, report_database=db)
+    await app.post_init(app)
+    scheduler = app.bot_data["price_history_scheduler"]
+    scheduled = scheduler.get_job("daily-active-users-report")
+    assert scheduled is not None
+    assert scheduled.trigger.timezone.key == "Asia/Tehran"
+    assert len(scheduler.get_jobs()) == 1
+    await app.post_shutdown(app)
+    await db.close()
