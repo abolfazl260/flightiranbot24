@@ -7,7 +7,7 @@ easy to replace with a database-backed repository later.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import date
 from urllib.parse import urlparse
 
@@ -141,4 +141,36 @@ def default_catalog() -> UsefulContentCatalog:
             "travel-sites",
         ),
     )
-    return UsefulContentCatalog(links)
+    # Group existing editorial resources without changing their stable IDs or URLs.
+    category_by_id = {
+        "flight-compensation": "flights",
+        "airline-ratings": "flights",
+        "exit-ban": "documents",
+        "prohibited-items": "baggage",
+        "exit-fees": "payments",
+        "travel-insurance": "payments",
+        "travel-tips": "tips",
+        "get-passport": "documents",
+        "academic-exemption": "documents",
+    }
+    labels_by_id = {
+        "flight-compensation": "✈️ تأخیر، لغو و جبران خسارت پرواز",
+        "airline-ratings": "🛩️ مقایسه و رتبه‌بندی ایرلاین‌ها",
+        "exit-ban": "❌ استعلام ممنوع‌الخروجی",
+        "prohibited-items": "🚫 کالاهای ممنوعه در سفر",
+        "exit-fees": "💳 عوارض خروج از کشور",
+        "travel-insurance": "🛡️ بیمه مسافرتی",
+        "travel-tips": "💡 نکات و چک‌لیست سفر",
+        "get-passport": "🛂 دریافت پاسپورت",
+        "academic-exemption": "🎓 معافیت تحصیلی و خروج دانشجویان",
+    }
+    return UsefulContentCatalog(
+        tuple(
+            replace(
+                link,
+                category=category_by_id.get(link.id, link.category),
+                title=labels_by_id.get(link.id, link.title),
+            )
+            for link in links
+        )
+    )

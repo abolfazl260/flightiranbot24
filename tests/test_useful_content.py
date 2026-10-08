@@ -1,7 +1,7 @@
 import pytest
 
 from flightiran.interfaces.telegram.handlers import TelegramDependencies, callback_handler
-from flightiran.interfaces.telegram.useful_content import useful_menu
+from flightiran.interfaces.telegram.useful_content import useful_category_menu, useful_menu
 from flightiran.modules.useful_content import UsefulContentCatalog, UsefulLink
 
 
@@ -26,7 +26,9 @@ def test_useful_menu_has_general_links_and_categories():
     )
     keyboard = useful_menu("fa", catalog)
     buttons = [button for row in keyboard.inline_keyboard for button in row]
-    assert {button.text for button in buttons} >= {"A", "قوانین پرواز و بار 🌍"}
+    assert any(button.callback_data == "useful:flights" for button in buttons)
+    assert any(button.callback_data == "useful:baggage" for button in buttons)
+    assert not any(button.url for button in buttons)
     assert all(button.url or button.callback_data for button in buttons)
 
 
@@ -81,3 +83,32 @@ async def test_useful_category_callback_renders_and_audits():
     await callback_handler(update, None, deps)
     assert "قوانین پرواز" in query.calls[0][0][0]
     assert audit.events[-1][0][0] == "useful.category.viewed"
+
+
+def test_default_catalog_groups_every_resource():
+    from flightiran.modules.useful_content.catalog import default_catalog
+
+    catalog = default_catalog()
+    expected = {
+        "documents", "flights", "baggage", "payments", "tips",
+        "flight-rules", "travel-sites",
+    }
+    assert {link.category for link in catalog.all()} == expected
+    assert len(catalog.all()) == 21
+    for category in expected:
+        assert catalog.by_category(category)
+
+
+def test_navigation_to_country_resources_and_back():
+    from flightiran.modules.useful_content.catalog import default_catalog
+
+    catalog = default_catalog()
+    baggage = useful_category_menu("fa", catalog, "baggage")
+    assert any(
+        button.callback_data == "useful:flight-rules"
+        for row in baggage.inline_keyboard for button in row
+    )
+    flight_rules = useful_category_menu("fa", catalog, "flight-rules")
+    assert flight_rules.inline_keyboard[-1][0].callback_data == "useful:baggage"
+    countries = useful_category_menu("fa", catalog, "travel-sites")
+    assert countries.inline_keyboard[-1][0].callback_data == "useful:international"

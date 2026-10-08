@@ -31,7 +31,12 @@ from flightiran.modules.useful_content import UsefulContentCatalog, default_cata
 from .keyboards import back_menu, language_menu, main_menu
 from .localization import normalize_language, safe_text, text
 from .renderers import render_language_prompt, render_main_menu
-from .useful_content import render_useful_category, useful_category_menu, useful_menu
+from .useful_content import (
+    USEFUL_CATEGORY_IDS,
+    render_useful_category,
+    useful_category_menu,
+    useful_menu,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -228,14 +233,15 @@ async def callback_handler(
             "menu.callback", user_id=user_id, payload={"action": "useful"}
         )
         await query.edit_message_text(
-            "<b>اطلاعات کاربردی سفر</b>\nیک موضوع را انتخاب کنید:",
+            "<b>📚 راهنمای سفر</b>\n"
+            "اطلاعات موردنیاز قبل، حین و بعد از سفر را از بخش‌های زیر انتخاب کنید:",
             parse_mode="HTML",
             reply_markup=useful_menu(language, catalog),
         )
     elif data.startswith("useful:"):
         category = data.partition(":")[2]
         catalog = dependencies.useful_catalog or default_catalog()
-        if category not in {"flight-rules", "travel-sites"}:
+        if category not in USEFUL_CATEGORY_IDS:
             await query.edit_message_text(
                 safe_text(language, "unknown_action"),
                 parse_mode="HTML",
