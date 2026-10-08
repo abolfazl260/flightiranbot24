@@ -12,6 +12,7 @@ from telegram.ext import Application, ApplicationBuilder
 from flightiran.config import ConfigurationError, Settings, load_settings
 from flightiran.db import create_database, initialize_database
 from flightiran.db.engine import Database
+from flightiran.db.models import JobRun
 from flightiran.db.repositories import (
     SQLiteAuditRepository,
     SQLiteMz724PriceHistoryRepository,
@@ -44,6 +45,8 @@ def configure_logging(level: str) -> None:
 def create_application(
     settings: Settings,
     cheap_ticket_service: CheapTicketService | None = None,
+    *,
+    report_database: Database | None = None,
 ) -> Application:
     """Build the Telegram application without starting network polling."""
 
@@ -53,12 +56,29 @@ def create_application(
         async def post_init(application: Application) -> None:
             scheduler = AsyncIOScheduler(timezone="UTC")
 
+            async def store_job_status(status: str) -> None:
+                if report_database is None:
+                    return
+                async with report_database.session() as session:
+                    session.add(
+                        JobRun(
+                            job_name="mz724-hourly-price-history",
+                            status=status,
+                            finished_at=datetime.now(timezone.utc),
+                        )
+                    )
+
             async def capture_prices() -> None:
                 try:
                     count = await cheap_ticket_service.capture_price_snapshot()
+                    await store_job_status("success")
                     LOGGER.info("mz724 hourly snapshot stored routes=%s", count)
                 except Exception as exc:
                     LOGGER.exception("mz724 hourly snapshot failed")
+                    try:
+                        await store_job_status("failed")
+                    except Exception:
+                        LOGGER.exception("failed_to_store_job_run")
                     try:
                         await application.bot.send_message(
                             chat_id=settings.telegram_admin_id,
@@ -134,7 +154,9 @@ def run() -> None:
         SQLiteMz724PriceHistoryRepository(database),
         retention_days=settings.ticket_history_retention_days,
     )
-    application = create_application(settings, cheap_ticket_service)
+    application = create_application(
+        settings, cheap_ticket_service, report_database=database
+    )
     register_handlers(
         application,
         TelegramDependencies(
