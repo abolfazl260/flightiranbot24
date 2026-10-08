@@ -4,8 +4,8 @@ from __future__ import annotations
 
 import re
 from dataclasses import dataclass
-from typing import Callable, Iterable
 from html import escape, unescape
+from typing import Callable, Iterable
 
 import httpx
 
