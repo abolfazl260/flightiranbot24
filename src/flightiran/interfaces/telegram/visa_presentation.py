@@ -797,8 +797,11 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
 
     if len(lines) <= 3:
         lines.append(escape(tr(language, "not_known")))
-    lines.extend(_section_footer(provenance, language))
-    return _limited_lines(lines)
+    # Reserve room for citations so long tips/FAQs never hide the hyperlinks.
+    footer = _section_footer(provenance, language)
+    footer_text = "\n".join(footer)
+    body = _limited_lines(lines, max_chars=3900 - len(footer_text) - 2)
+    return body + "\n" + footer_text
 
 
 def render_rich_report(detail: VisaDetail, language: str) -> dict:
