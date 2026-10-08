@@ -1,6 +1,7 @@
 """Environment-backed application settings."""
 
 from functools import lru_cache
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from pydantic import AliasChoices, Field, SecretStr, ValidationError, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -43,8 +44,31 @@ class Settings(BaseSettings):
     app_env: str = "development"
     visa_sync_enabled: bool = True
     visa_sync_interval_hours: int = 6
+    active_users_report_enabled: bool = True
+    active_users_report_time: str = "09:00"
+    active_users_report_timezone: str = "Asia/Tehran"
     web_app_enabled: bool = False
     web_app_url: str | None = None
+
+    @field_validator("active_users_report_time")
+    @classmethod
+    def check_daily_report_time(cls, value: str) -> str:
+        try:
+            hour, minute = map(int, value.split(":"))
+        except (ValueError, TypeError) as exc:
+            raise ValueError("ACTIVE_USERS_REPORT_TIME must be HH:MM") from exc
+        if not 0 <= hour <= 23 or not 0 <= minute <= 59 or len(value) != 5:
+            raise ValueError("ACTIVE_USERS_REPORT_TIME must be HH:MM (24-hour)")
+        return value
+
+    @field_validator("active_users_report_timezone")
+    @classmethod
+    def check_report_timezone(cls, value: str) -> str:
+        try:
+            ZoneInfo(value)
+        except (ZoneInfoNotFoundError, ValueError) as exc:
+            raise ValueError("ACTIVE_USERS_REPORT_TIMEZONE must be an IANA zone") from exc
+        return value
 
     @field_validator("ticket_support_username")
     @classmethod
