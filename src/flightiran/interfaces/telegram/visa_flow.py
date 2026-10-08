@@ -90,7 +90,7 @@ async def _show_result(
                 residence=data.get("visa_residence"),
                 purpose=data.get("visa_purpose", "tourism"),
             )
-            keyboard = detail_keyboard(language)
+            keyboard = detail_keyboard(language, detail)
     if edit:
         await update.callback_query.edit_message_text(
             rendered, parse_mode="HTML", reply_markup=keyboard,
@@ -297,7 +297,7 @@ async def handle_visa_callback(
                 await query.edit_message_text(
                     escape(tr(language, "more")) + "\n"
                     + escape(tr(language, "caution")),
-                    reply_markup=detail_keyboard(language),
+                    reply_markup=detail_keyboard(language, detail),
                 )
             except Exception:
                 LOGGER.warning("Visa rich transport unavailable, falling back", exc_info=True)
