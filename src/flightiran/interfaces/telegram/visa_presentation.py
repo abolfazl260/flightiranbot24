@@ -189,7 +189,9 @@ LANG["en"].update({
     "updated_date": "Destination dataset last updated",
     "full_review_date": "Destination last fully reviewed",
     "no_expiry": "The source does not provide a legal expiry date for this requirement.",
-    "date_notice": "Verification and publication dates do not guarantee validity through that date.",
+    "date_notice": (
+        "Verification and publication dates do not guarantee validity through that date."
+    ),
     "source_link": "View entry-regulation source",
     "original_data": "Original destination JSON",
     "publisher": "TravelRequirements.info dataset",
