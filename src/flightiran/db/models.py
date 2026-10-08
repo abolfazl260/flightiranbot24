@@ -187,3 +187,23 @@ class VisaDatasetState(Base):
     manifest_hash: Mapped[str | None] = mapped_column(String(64))
     last_checked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     last_changed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class VisaRuleIndex(Base):
+    """Denormalized lookup index rebuilt from verified destination JSON."""
+
+    __tablename__ = "visa_rule_index"
+    __table_args__ = (
+        Index("ix_visa_rule_passport_status", "passport", "status"),
+        Index("ix_visa_rule_destination", "destination"),
+    )
+
+    passport: Mapped[str] = mapped_column(String(2), primary_key=True)
+    destination: Mapped[str] = mapped_column(String(2), primary_key=True)
+    country_name: Mapped[str] = mapped_column(String(128), nullable=False)
+    status: Mapped[str] = mapped_column(String(40), nullable=False)
+    stay_days: Mapped[int | None] = mapped_column(Integer)
+    notes: Mapped[str | None] = mapped_column(Text)
+    source_url: Mapped[str | None] = mapped_column(String(512))
+    verified_on: Mapped[str | None] = mapped_column(String(32))
+    source_level: Mapped[str] = mapped_column(String(16), nullable=False)
