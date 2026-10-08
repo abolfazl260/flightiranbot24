@@ -31,8 +31,8 @@ from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
-from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
+from flightiran.modules.visa.sync import VisaSyncService
 
 from .admin_report import render_admin_report
 from .keyboards import (
