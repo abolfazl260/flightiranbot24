@@ -250,28 +250,34 @@ def find_price_drops(
 
 
 _DROP_TABLE_HEADER = (
-    "<tr><th>مبدأ</th><th>مقصد</th><th>فعلی (تومان)</th>"
-    "<th>میانگین ۲۱ روزه</th><th>کاهش (تومان)</th><th>کاهش ٪</th></tr>"
+    "<tr><th>مسیر</th><th>فعلی</th><th>میانگین ۲۱ر</th>"
+    "<th>کاهش</th><th>افت ٪</th></tr>"
 )
 
 
 def _drop_table_row(drop: PriceDrop) -> str:
     cells = (
-        drop.origin,
-        drop.destination,
+        f"{drop.origin} ← {drop.destination}",
         f"{drop.current_toman:,}",
         f"{drop.average_toman:,.0f}",
         f"{drop.decrease_toman:,.0f}",
-        f"🟢 ↓ {drop.decrease_percent:.2f}٪",
     )
-    return "<tr>" + "".join(f"<td>{escape(cell)}</td>" for cell in cells) + "</tr>"
+    badge = (
+        '<tg-button type="disabled" style="success">'
+        f"🟢 ↓ {drop.decrease_percent:.2f}</tg-button>"
+    )
+    return (
+        "<tr>"
+        + "".join(f"<td>{escape(cell)}</td>" for cell in cells)
+        + f'<td align="center">{badge}</td></tr>'
+    )
 
 
 def _drop_report_html(rows: list[str], total: int, *, continued: bool = False) -> str:
     continuation = " (ادامه)" if continued else ""
     return (
         f"<h3>🟢 ↓ گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
-        f"<p>{total} مسیر، مرتب‌شده از بیشترین کاهش نسبت به میانگین ۲۱روزه</p>"
+        f"<p>{total} مسیر | ارقام به تومان | بیشترین کاهش نسبت به میانگین ۲۱روزه</p>"
         "<table bordered striped compact>"
         + _DROP_TABLE_HEADER
         + "".join(rows)
