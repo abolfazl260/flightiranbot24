@@ -138,6 +138,13 @@ async def error_handler(
         "Unhandled Telegram error",
         exc_info=(type(error), error, error.__traceback__),
     )
+    try:
+        await dependencies.audit.record(
+            "system.error",
+            payload={"type": type(error).__name__},
+        )
+    except Exception:
+        LOGGER.exception("failed_to_record_runtime_error")
     await _notify_admin(context, error, update, dependencies)
 
 
