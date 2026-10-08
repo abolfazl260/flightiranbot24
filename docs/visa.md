@@ -55,6 +55,40 @@ introduced in 0005 intact.
 Initial import downloads the full coverage and populates ~39,601 indexed passport routes.
 The UI may show "Data not imported yet" until this has completed.
 
+## Date provenance and source-link policy
+
+Visa outputs distinguish **three separate upstream dates**, taken from the original
+destination JSON, rather than from the bot's SQLite update or server clock:
+
+| User-visible field | Exact upstream field | Meaning |
+| --- | --- | --- |
+| Source last verified | Passport-specific `visaPolicy.byPassport[passport].source.lastVerified`, or `visaPolicy.defaultSource.lastVerified` | The publisher's most recent documented check of the cited legal source |
+| Last source-recorded change | The same cited source's `lastChanged` | A source-content change reported by the dataset; **not** automatically a new law or effective date |
+| Destination dataset last updated | `meta.lastUpdated` | Date that the publisher updated the destination data file |
+| Destination last fully reviewed | `meta.lastFullReview` | Most recent comprehensive review claimed for that destination |
+
+Some passport rows cite only the **shared destination policy**, rather than a
+passport-specific source. The UI explicitly labels this lower-granularity citation.
+If the original field is absent or an invalid calendar date, the bot displays
+"Not stated by source" and never replaces it with `VisaDestinationData.last_fetched_at`,
+`VisaDatasetState.last_checked_at`, or Telegram message time.
+
+**Last verified is not a legal expiry date or a guarantee the rule is still valid.**
+The source tab expressly explains that no binding effective-until date has been
+established. It also warns when a verification is older than 30 days or the source
+is marked unverified/unavailable.
+
+Links in Telegram text are HTML anchors (`<a href="https://...">...</a>`) with
+HTTPS-only validation and safe HTML escaping. The main card, detail tabs,
+native `sendRichMessage` report, and the administrator's formatted
+`/visa_sync` result link to the relevant official rule, original destination
+JSON and upstream dataset/CC BY 4.0 attribution. A source URL is not replaced
+with the dataset URL; the user can open both independently.
+
+The admin sync report distinguishes the **local check timestamp** from the
+**newest published destination lastUpdated in the manifest**. This newest date
+does not mean every destination or passport rule was reverified on that date.
+
 ## Telegram commands
 
 - `/visa` — open the interactive passport and destination picker.
