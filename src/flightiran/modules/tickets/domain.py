@@ -48,6 +48,7 @@ class CheapTicketDestination:
     price_value_toman: int | None = None
     average_price_toman: float | None = None
     average_sample_count: int = 0
+    previous_price_toman: int | None = None
 
 
 @dataclass(frozen=True)
