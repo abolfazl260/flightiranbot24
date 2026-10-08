@@ -12,6 +12,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
 from flightiran.interfaces.telegram.tickets import (
     render_cheap_route,
     render_cheap_route_chunks,
+    render_cheap_ticket_booking_hint,
     render_offer,
 )
 from flightiran.modules.tickets.domain import (
@@ -328,3 +329,20 @@ def test_discount_fallback_messages_are_html_safe_and_length_bounded():
     assert all("تهران &amp; البرز" in message for message in messages)
     assert sum(message.count("مقصد &lt;") for message in messages) == 45
     assert all("\\n" not in message for message in messages)
+
+
+
+@pytest.mark.parametrize(
+    "language, snippet",
+    [
+        ("fa", "هنوز سؤال دارید؟"),
+        ("en", "still have questions?"),
+        ("ar", "أم لديك سؤال"),
+    ],
+)
+def test_ticket_booking_hint_invites_questions_and_links_support(language, snippet):
+    rendered = render_cheap_ticket_booking_hint("@advertio_bot", language)
+    assert snippet in rendered
+    assert '<a href="https://t.me/advertio_bot">@advertio_bot</a>' in rendered
+    assert "@vlansupport" not in rendered
+    assert len(rendered) < 4000
