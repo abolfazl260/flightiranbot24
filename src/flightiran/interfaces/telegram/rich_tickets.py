@@ -389,7 +389,7 @@ def replace_disabled_buttons_with_indicators(rich_message: dict) -> dict:
 
     return {
         **rich_message,
-        "html": _DISABLED_BADGE_PATTERN.sub(r"\\1", rich_message["html"]),
+        "html": _DISABLED_BADGE_PATTERN.sub(r"\1", rich_message["html"]),
     }
 
 
