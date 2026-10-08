@@ -62,15 +62,15 @@ def _render_destination(item: CheapTicketDestination) -> str:
     difference_toman = round(difference)
 
     if abs(difference) < 0.5:
-        status = "⚪️ <b>هم‌سطح میانگین</b>"
+        status = "<b>هم‌سطح میانگین</b>"
         difference_text = "0 تومان"
         percentage_text = "0.0٪"
     elif difference < 0:
-        status = f"🟢 <b>{abs(percentage):.1f}٪ ارزان‌تر از میانگین</b>"
+        status = f"<b>{abs(percentage):.1f}٪ ارزان‌تر از میانگین</b>"
         difference_text = f"-{abs(difference_toman):,} تومان"
         percentage_text = f"-{abs(percentage):.1f}٪"
     else:
-        status = f"🔴 <b>{percentage:.1f}٪ گران‌تر از میانگین</b>"
+        status = f"<b>{percentage:.1f}٪ گران‌تر از میانگین</b>"
         difference_text = f"+{difference_toman:,} تومان"
         percentage_text = f"+{percentage:.1f}٪"
 
