@@ -240,11 +240,12 @@ async def handle_visa_callback(
                 reply_markup=home_keyboard(language),
             )
         else:
+            counts = await service.distribution(data["visa_passport"])
             await query.edit_message_text(
                 f"<b>{escape(tr(language, 'list'))}</b>\n"
                 f"<code>{escape(data['visa_passport'])}</code>",
                 parse_mode="HTML",
-                reply_markup=groups_keyboard(language),
+                reply_markup=groups_keyboard(language, counts),
             )
         return
 
