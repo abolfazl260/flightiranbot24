@@ -201,3 +201,106 @@ def test_cargo_marketplace_button_opens_advertio_cargo_channel(language):
         for row in keyboard.inline_keyboard
         for button in row
     )
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("language", ["fa", "en", "ar"])
+async def test_ticket_origin_selection_sends_only_selected_city(monkeypatch, language):
+    from flightiran.interfaces.telegram import handlers
+    from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicketRoute
+
+    class Feed:
+        calls = 0
+
+        async def routes(self):
+            self.calls += 1
+            return [
+                CheapTicketRoute(
+                    "تهران",
+                    (CheapTicketDestination("مشهد", "7,000", 7_000, 10_000),),
+                    "https://mz724.ir/",
+                ),
+                CheapTicketRoute(
+                    "شیراز",
+                    (CheapTicketDestination("کیش", "9,000", 9_000, 10_000),),
+                    "https://mz724.ir/",
+                ),
+            ]
+
+    sent = []
+
+    async def send_rich(_bot, _chat_id, rich):
+        sent.append(rich["html"])
+
+    monkeypatch.setattr(handlers, "send_rich_price_table_with_badge_fallback", send_rich)
+    feed = Feed()
+    deps = dependencies(cheap_ticket_service=feed)
+    deps.users.languages[42] = language
+    state = SimpleNamespace(
+        user_data={}, bot=SimpleNamespace(token="fake"),
+    )
+
+    chooser = Query()
+    chooser.data = "menu:tickets"
+    chooser.message = Message()
+    await callback_handler(update(query=chooser), state, deps)
+    assert feed.calls == 1
+    assert sent == []
+    keyboard = chooser.calls[-1][1]["reply_markup"]
+    assert [button.text for row in keyboard.inline_keyboard
+            for button in row if (button.callback_data or "").startswith("tickets:origin:")] == [
+        "تهران", "شیراز"
+    ]
+
+    selected = Query()
+    selected.data = "tickets:origin:1"
+    selected.message = Message()
+    await callback_handler(update(query=selected), state, deps)
+    assert feed.calls == 1
+    assert len(sent) == 1
+    assert "شیراز" in sent[0]
+    assert "تهران" not in sent[0]
+    assert "مشهد" not in sent[0]
+    assert "کیش" in sent[0]
+    assert selected.message.calls[-1][1]["reply_markup"].inline_keyboard[1][0].callback_data == (
+        "tickets:menu"
+    )
+
+    another = Query()
+    another.data = "tickets:menu"
+    await callback_handler(update(query=another), state, deps)
+    assert feed.calls == 1
+    assert any(
+        button.callback_data == "tickets:origin:0"
+        for row in another.calls[-1][1]["reply_markup"].inline_keyboard
+        for button in row
+    )
+
+
+@pytest.mark.asyncio
+async def test_ticket_origin_invalid_index_and_expired_state_do_not_send():
+    deps = dependencies()
+    context = SimpleNamespace(user_data={}, bot=None)
+    query = Query()
+    query.data = "tickets:origin:999"
+    await callback_handler(update(query=query), context, deps)
+    assert query.calls[0][1]["reply_markup"].inline_keyboard
+    assert "expired" in query.calls[0][0][0].lower()
+
+
+def test_ticket_origin_keyboard_pagination_and_safe_callback_data():
+    from flightiran.interfaces.telegram.keyboards import ticket_origins_menu
+
+    cities = [f"شهر {i}" for i in range(38)]
+    first = ticket_origins_menu("fa", cities)
+    assert first.inline_keyboard[0][0].callback_data == "tickets:origin:0"
+    assert first.inline_keyboard[0][1].callback_data == "tickets:origin:1"
+    assert any(
+        button.callback_data == "tickets:page:1"
+        for row in first.inline_keyboard for button in row
+    )
+    last = ticket_origins_menu("fa", cities, page=2)
+    assert last.inline_keyboard[0][0].callback_data == "tickets:origin:32"
+    assert all(len(button.callback_data.encode()) <= 64
+               for row in last.inline_keyboard for button in row
+               if button.callback_data)
