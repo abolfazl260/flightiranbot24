@@ -8,9 +8,9 @@ from flightiran.interfaces.telegram.rich_tickets import (
     find_price_drops,
     render_price_drop_fallback_chunks,
     render_rich_price_drop_report,
+    render_rich_price_tables,
     replace_disabled_buttons_with_indicators,
     send_rich_price_table_with_badge_fallback,
-    render_rich_price_tables,
 )
 from flightiran.interfaces.telegram.tickets import (
     render_cheap_route,
