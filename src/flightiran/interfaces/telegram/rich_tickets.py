@@ -48,7 +48,7 @@ def render_ticket_footer(language: str = "fa", *, rich: bool = True) -> str:
         f" | {label} "
         '<a href="https://t.me/advertio_bot">@advertio_bot</a>'
     )
-    return f"<p>{content}</p>" if rich else f"\\n{content}"
+    return f"<p>{content}</p>" if rich else f"\n{content}"
 
 
 _TABLE_TITLES = {
@@ -367,7 +367,7 @@ def render_rich_price_drop_report(
 
 
 def render_price_drop_fallback_chunks(
-    routes: Iterable[CheapTicketRoute], *, max_length: int = 3800
+    routes: Iterable[CheapTicketRoute], *, language: str = "fa", max_length: int = 3800
 ) -> list[str]:
     """Safe plain Telegram HTML fallback when sendRichMessage is unavailable."""
 
@@ -376,8 +376,12 @@ def render_price_drop_fallback_chunks(
 
     drops = find_price_drops(routes)
     title = "↓ <b>گزارش کاهش قیمت بیش از ۲۰٪</b>"
+    footer = render_ticket_footer(language, rich=False)
     if not drops:
-        return [title + "\nدر بررسی فعلی موردی پیدا نشد."]
+        message = title + "\nدر بررسی فعلی موردی پیدا نشد." + footer
+        if len(message) > max_length:
+            raise ValueError("Discount report exceeds fallback message limits")
+        return [message]
 
     chunks: list[str] = []
     current = title
@@ -389,16 +393,16 @@ def render_price_drop_fallback_chunks(
             f"↓ {drop.decrease_percent:.2f}٪"
         )
         candidate = current + "\n" + line
-        if len(candidate) > max_length:
+        if len(candidate + footer) > max_length:
             if current == title:
                 raise ValueError("A price drop exceeds fallback message limits")
-            chunks.append(current)
+            chunks.append(current + footer)
             current = title + " (ادامه)\n" + line
-            if len(current) > max_length:
+            if len(current + footer) > max_length:
                 raise ValueError("A price drop exceeds fallback message limits")
         else:
             current = candidate
-    chunks.append(current)
+    chunks.append(current + footer)
     return chunks
 
 
