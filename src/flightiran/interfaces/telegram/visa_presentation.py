@@ -70,7 +70,9 @@ LANG = {
         ),
         "residence": "Declared residence", "purpose": "Travel purpose",
         "residence_button": "Specify residence", "clear_residence": "Clear residence",
-        "unmodeled": "This dataset does not fully calculate residence or special-purpose eligibility.",
+        "unmodeled": (
+            "This dataset does not fully calculate residence or special-purpose eligibility."
+        ),
         "intro": "Information for 199 destinations, grouped by passport and sources. "
         "Choose a passport or try /visa AF TR.",
         "empty": "Visa data not yet imported. An administrator can run /visa_sync.",
@@ -523,7 +525,9 @@ def country_keyboard(
             )
         if navigation:
             rows.append(navigation)
-    rows.append([InlineKeyboardButton(tr(language, "search"), callback_data=f"visa:search:{purpose}")])
+    rows.append([
+        InlineKeyboardButton(tr(language, "search"), callback_data=f"visa:search:{purpose}")
+    ])
     rows.append([InlineKeyboardButton(tr(language, "back"), callback_data="visa:home")])
     return InlineKeyboardMarkup(rows)
 
