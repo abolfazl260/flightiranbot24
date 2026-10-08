@@ -912,7 +912,9 @@ def passport_keyboard(language: str) -> InlineKeyboardMarkup:
     ])
 
 
-def detail_keyboard(language: str) -> InlineKeyboardMarkup:
+def detail_keyboard(
+    language: str, detail: VisaDetail | None = None
+) -> InlineKeyboardMarkup:
     rows = [
         [InlineKeyboardButton(tr(language, "details"), callback_data="visa:rich")],
         [InlineKeyboardButton(tr(language, "types"), callback_data="visa:section:types"),
@@ -931,6 +933,21 @@ def detail_keyboard(language: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(tr(language, "list"), callback_data="visa:groups")],
         [InlineKeyboardButton(tr(language, "passports"), callback_data="visa:pick:p:0")],
     ]
+    if detail is not None:
+        provenance = visa_provenance(detail)
+        source_url = safe_source_url(provenance.source_url)
+        original_url = safe_source_url(provenance.destination_json_url)
+        reference_buttons = []
+        if source_url:
+            reference_buttons.append(
+                InlineKeyboardButton(tr(language, "source_link"), url=source_url)
+            )
+        if original_url:
+            reference_buttons.append(
+                InlineKeyboardButton(tr(language, "original_data"), url=original_url)
+            )
+        if reference_buttons:
+            rows.insert(1, reference_buttons)
     return InlineKeyboardMarkup(rows)
 
 
