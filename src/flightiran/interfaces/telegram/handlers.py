@@ -22,6 +22,10 @@ from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
+from flightiran.interfaces.telegram.rich_tickets import (
+    render_rich_price_tables,
+    send_rich_price_table,
+)
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
 from .keyboards import back_menu, language_menu, main_menu
@@ -277,8 +281,20 @@ async def callback_handler(
                 )
             else:
                 for route in routes:
-                    for message in render_cheap_route_chunks(route):
-                        await query.message.reply_text(message, parse_mode="HTML")
+                    for rich_message in render_rich_price_tables(route):
+                        try:
+                            await send_rich_price_table(
+                                context.bot,
+                                query.message.chat_id,
+                                rich_message,
+                            )
+                        except Exception:
+                            LOGGER.exception("rich_ticket_table_send_failed")
+                            for message in render_cheap_route_chunks(route):
+                                await query.message.reply_text(
+                                    message, parse_mode="HTML"
+                                )
+                            break
                 await query.message.reply_text(
                     render_cheap_ticket_booking_hint(dependencies.ticket_support_username),
                     parse_mode="HTML",
