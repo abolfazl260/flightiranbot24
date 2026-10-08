@@ -15,7 +15,9 @@ def test_migrate_new_and_repeatable(tmp_path, monkeypatch):
     try:
         tables = set(inspect(engine).get_table_names())
         assert {"visa_rule_index", "visa_destination_data", "alembic_version"} <= tables
-        assert "visa_passport" in {column["name"] for column in inspect(engine).get_columns("user_preferences")}
+        assert "visa_passport" in {
+            column["name"] for column in inspect(engine).get_columns("user_preferences")
+        }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
                 "0007_visa_default_passport"
@@ -36,7 +38,9 @@ def test_migrate_existing_metadata_without_version(tmp_path, monkeypatch):
     engine = create_engine(f"sqlite:///{db}")
     try:
         assert "alembic_version" in inspect(engine).get_table_names()
-        assert "visa_passport" in {column["name"] for column in inspect(engine).get_columns("user_preferences")}
+        assert "visa_passport" in {
+            column["name"] for column in inspect(engine).get_columns("user_preferences")
+        }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
                 "0007_visa_default_passport"
