@@ -290,7 +290,8 @@ def test_discount_report_is_one_cross_origin_rich_table():
     assert html.count('<td align="center">') == 3
     assert "<th>مسیر</th>" in html
     assert "6,000,000" in html
-    assert '<tg-button type="disabled" style="success">🟢 ↓ 30.00</tg-button>' in html
+    assert '<tg-button type="disabled" style="success">6,000,000</tg-button>' in html
+    assert "<td>🟢 ↓ 30.00</td>" in html
     assert html.index("استانبول") < html.index("مشهد") < html.index("کیش")
 
 
