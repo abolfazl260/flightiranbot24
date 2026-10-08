@@ -613,7 +613,7 @@ async def visa_list_handler(
     await update.message.reply_text(
         f"<b>{tr(language, 'list')}</b> — <code>{code}</code>",
         parse_mode="HTML",
-        reply_markup=groups_keyboard(language),
+        reply_markup=groups_keyboard(language, await catalog.distribution(code)),
     )
 
 
