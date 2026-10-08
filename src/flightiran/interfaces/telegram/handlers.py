@@ -32,6 +32,7 @@ from flightiran.modules.flight_tracking.domain import FlightSearchResult, Flight
 from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
+from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 
 from .admin_report import render_admin_report
@@ -52,6 +53,12 @@ from .useful_content import (
     useful_category_menu,
     useful_menu,
 )
+from .visa_flow import (
+    handle_visa_callback,
+    open_visa_menu,
+    visa_command,
+    visa_search_text,
+)
 
 LOGGER = logging.getLogger(__name__)
 
@@ -70,6 +77,7 @@ class TelegramDependencies:
     admin_chat_id: int = 106056586
     admin_reports: BotReportRepository | None = None
     visa_sync_service: VisaSyncService | None = None
+    visa_catalog: VisaCatalogService | None = None
 
 
 def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> bool:
@@ -220,6 +228,13 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:visa":
+        await dependencies.audit.record("visa.opened", user_id=user_id)
+        await open_visa_menu(update, context, dependencies.visa_catalog, language)
+        return
+    if data.startswith("visa:"):
+        await handle_visa_callback(update, context, dependencies.visa_catalog, language)
+        return
     if data.startswith("language:"):
         selected = normalize_language(data.partition(":")[2])
         await dependencies.users.set_language(user_id, selected)
@@ -443,7 +458,7 @@ async def callback_handler(
                     language, dependencies.ticket_support_username
                 ),
             )
-    elif data in {"menu:visa", "menu:rules"}:
+    elif data == "menu:rules":
         await query.edit_message_text(
             "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
             reply_markup=back_menu(language),
@@ -509,7 +524,18 @@ async def callback_handler(
         )
 
 
-async def message_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+async def message_handler(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    dependencies: TelegramDependencies | None = None,
+) -> None:
+    if dependencies is not None and update.message is not None:
+        if context.user_data.get("visa_search_mode"):
+            _user_id, language = await _user_language(update, dependencies)
+            if await visa_search_text(
+                update, context, dependencies.visa_catalog, language
+            ):
+                return
     if update.message:
         await update.message.reply_text("OK")
 
@@ -550,6 +576,62 @@ async def price_handler(
 
 
 
+
+async def visa_handler(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    dependencies: TelegramDependencies,
+) -> None:
+    user_id, language = await _user_language(update, dependencies)
+    await dependencies.audit.record("visa.command", user_id=user_id)
+    await visa_command(update, context, dependencies.visa_catalog, language)
+
+
+async def visa_list_handler(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    dependencies: TelegramDependencies,
+) -> None:
+    user_id, language = await _user_language(update, dependencies)
+    await dependencies.audit.record("visa.list.command", user_id=user_id)
+    if update.message is None:
+        return
+    catalog = dependencies.visa_catalog
+    if catalog is None or not await catalog.ready():
+        from .visa_presentation import tr
+        await update.message.reply_text(tr(language, "empty"))
+        return
+    args = context.args or []
+    code = (args[0] if args else context.user_data.get("visa_passport", "")).upper()
+    codes = {country.code for country in await catalog.countries()}
+    if code not in codes:
+        from .visa_presentation import tr
+        await update.message.reply_text(tr(language, "choose_passport"))
+        return
+    context.user_data["visa_passport"] = code
+    from .visa_presentation import groups_keyboard, tr
+    await update.message.reply_text(
+        f"<b>{tr(language, 'list')}</b> — <code>{code}</code>",
+        parse_mode="HTML",
+        reply_markup=groups_keyboard(language, await catalog.distribution(code)),
+    )
+
+
+async def visa_cancel_handler(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    dependencies: TelegramDependencies,
+) -> None:
+    context.user_data.pop("visa_search_mode", None)
+    if update.message:
+        from .visa_presentation import home_keyboard, tr
+        user_id, language = await _user_language(update, dependencies)
+        await dependencies.audit.record("visa.search.cancelled", user_id=user_id)
+        await update.message.reply_text(
+            tr(language, "title"), reply_markup=home_keyboard(language)
+        )
+
+
 async def visa_sync_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
@@ -582,6 +664,15 @@ async def visa_sync_handler(
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
+        CommandHandler("visa", lambda u, c: visa_handler(u, c, dependencies))
+    )
+    application.add_handler(
+        CommandHandler("visa_list", lambda u, c: visa_list_handler(u, c, dependencies))
+    )
+    application.add_handler(
+        CommandHandler("cancel", lambda u, c: visa_cancel_handler(u, c, dependencies))
+    )
+    application.add_handler(
         CommandHandler("visa_sync", lambda u, c: visa_sync_handler(u, c, dependencies))
     )
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
@@ -594,6 +685,11 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     )
     application.add_handler(CommandHandler("price", lambda u, c: price_handler(u, c, dependencies)))
     application.add_handler(CallbackQueryHandler(lambda u, c: callback_handler(u, c, dependencies)))
-    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, message_handler))
+    application.add_handler(
+        MessageHandler(
+            filters.TEXT & ~filters.COMMAND,
+            lambda u, c: message_handler(u, c, dependencies),
+        )
+    )
     application.add_handler(InlineQueryHandler(inline_handler))
     application.add_error_handler(lambda u, c: error_handler(u, c, dependencies))

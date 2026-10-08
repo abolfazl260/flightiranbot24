@@ -125,7 +125,7 @@ MESSAGES["fa"].update({
         "💱 نرخ ارز: مشاهده نرخ‌ها در صورت اتصال منبع\n"
         "📚 اطلاعات کاربردی: راهنماهای سفر\n"
         "⚙️ تنظیمات: تغییر زبان\n"
-        "🛂 ویزا و قوانین مسافر: بخش‌های نیازمند منبع رسمی\n"
+        "🛂 ویزا: استعلام پاسپورت و مقصد با منابع رسمی؛ قوانین مسافر جداگانه\n"
         "📦 حمل بار: ورود مستقیم به کانال @advertio_cargo\n"
         "📩 پشتیبانی: پرسش درباره رزرو، قیمت‌ها و استفاده از ربات"
     ),
@@ -171,7 +171,7 @@ MESSAGES["en"].update({
         "💱 Currency: rates when a provider is connected\n"
         "📚 Useful information: travel guides\n"
         "⚙️ Settings: change language\n"
-        "🛂 Visa and traveler rules: require official sources\n"
+        "🛂 Visa: passport/destination guidance with sources; traveler rules separate\n"
         "📦 Cargo marketplace: open the @advertio_cargo channel\n"
         "📩 Support: questions about bookings, prices and using the bot"
     ),
@@ -216,7 +216,7 @@ MESSAGES["ar"].update({
         "💱 العملات: أسعار الصرف عند ربط المزود\n"
         "📚 معلومات مفيدة: أدلة السفر\n"
         "⚙️ الإعدادات: تغيير اللغة\n"
-        "🛂 التأشيرات وقواعد المسافرين: تتطلب مصادر رسمية\n"
+        "🛂 التأشيرات: شروط الدخول بحسب الجواز والوجهة مع مصادرها\n"
         "📦 سوق الشحن: فتح قناة @advertio_cargo مباشرة\n"
         "📩 الدعم: أسئلة عن الحجز والأسعار واستخدام البوت"
     ),
@@ -225,6 +225,20 @@ MESSAGES["ar"].update({
         " وأسعار الصرف ومتطلبات السفر من المصادر الرسمية."
     ),
     "help_back": "استخدم /start للعودة إلى القائمة الرئيسية.",
+})
+
+
+MESSAGES["fa"].update({
+    "help_visa": "بررسی ویزا (مثال: /visa AF TR یا /visa AF TR IR)",
+    "help_visa_list": "فهرست کشورها براساس پاسپورت (مثال: /visa_list IR)",
+})
+MESSAGES["en"].update({
+    "help_visa": "Check visa information (e.g. /visa AF TR or /visa AF TR IR)",
+    "help_visa_list": "Explore destinations by passport (e.g. /visa_list IR)",
+})
+MESSAGES["ar"].update({
+    "help_visa": "التحقق من التأشيرة (مثل /visa AF TR أو /visa AF TR IR)",
+    "help_visa_list": "عرض الدول حسب الجواز (مثل /visa_list IR)",
 })
 
 

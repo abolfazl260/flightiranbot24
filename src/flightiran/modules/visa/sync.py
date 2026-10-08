@@ -13,10 +13,13 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
 
 import httpx
-from sqlalchemy import select
+from sqlalchemy import func, select
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from flightiran.db.engine import Database
-from flightiran.db.models import VisaDatasetState, VisaDestinationData
+from flightiran.db.models import VisaDatasetState, VisaDestinationData, VisaRuleIndex
+
+from .indexer import index_destination
 
 LOGGER = logging.getLogger(__name__)
 BASE = "https://travelrequirements.info/data/"
@@ -121,6 +124,12 @@ class VisaSyncService:
                         row.slug: row
                         for row in (await session.scalars(select(VisaDestinationData))).all()
                     }
+                    rule_count = int(
+                        await session.scalar(
+                            select(func.count()).select_from(VisaRuleIndex)
+                        ) or 0
+                    )
+                    needs_index_bootstrap = rule_count < MIN_DESTINATIONS * MIN_DESTINATIONS
                 jobs: list[dict] = []
                 for entry in entries:
                     slug = entry.get("id")
@@ -144,7 +153,8 @@ class VisaSyncService:
                         else previous.last_fetched_at if previous else None
                     )
                     if (
-                        previous is None
+                        needs_index_bootstrap
+                        or previous is None
                         or previous.manifest_updated != entry.get("lastUpdated")
                         or not previous_check
                         or now - previous_check >= RECHECK_AFTER
@@ -181,7 +191,9 @@ class VisaSyncService:
                         state = VisaDatasetState(id=1, source_url=MANIFEST_URL)
                         session.add(state)
                     for entry, document, digest in downloaded:
-                        row = current.get(entry["id"])
+                        # Always re-load in this write session: objects from the
+                        # earlier read-only session are detached.
+                        row = await session.get(VisaDestinationData, entry["id"])
                         if row is None:
                             row = VisaDestinationData(slug=entry["id"])
                             session.add(row)
@@ -193,6 +205,27 @@ class VisaSyncService:
                         row.source_url = entry["url"]
                         row.manifest_updated = entry.get("lastUpdated")
                         row.last_fetched_at = now
+
+                        # Upsert the 199 indexed passport rows for this country.
+                        # Small batches remain compatible with SQLite bind limits.
+                        indexed = index_destination(document)
+                        for start in range(0, len(indexed), 40):
+                            values = indexed[start : start + 40]
+                            insert = sqlite_insert(VisaRuleIndex).values(values)
+                            excluded = insert.excluded
+                            statement = insert.on_conflict_do_update(
+                                index_elements=["passport", "destination"],
+                                set_={
+                                    "country_name": excluded.country_name,
+                                    "status": excluded.status,
+                                    "stay_days": excluded.stay_days,
+                                    "notes": excluded.notes,
+                                    "source_url": excluded.source_url,
+                                    "verified_on": excluded.verified_on,
+                                    "source_level": excluded.source_level,
+                                },
+                            )
+                            await session.execute(statement)
                     state.dataset_version = str(manifest.get("version", ""))
                     state.manifest_hash = _canonical_hash(manifest)
                     state.last_checked_at = now

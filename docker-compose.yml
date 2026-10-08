@@ -1,4 +1,16 @@
 services:
+  migrate:
+    build: .
+    image: flightiranbot24:latest
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/flightiran.db
+    volumes:
+      - flightiran-data:/data
+    command: ["python", "-m", "flightiran.db.migrate"]
+    restart: "no"
+
   bot:
     build: .
     image: flightiranbot24:latest
@@ -9,6 +21,9 @@ services:
     volumes:
       - flightiran-data:/data
     restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     command: ["flightiran"]
 
   web:
@@ -23,6 +38,9 @@ services:
     ports:
       - "8000:8000"
     restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
     command: ["flightiran-web"]
 
 volumes:
