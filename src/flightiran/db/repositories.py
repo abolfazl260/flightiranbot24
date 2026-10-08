@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Protocol
 
-from sqlalchemy import delete, func, select
+from sqlalchemy import case, delete, func, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from .engine import Database
@@ -23,6 +23,12 @@ class UserRepository(Protocol):
     async def create(self, telegram_id: int, **fields: str | None) -> User: ...
 
     async def get_or_create(self, telegram_id: int, **fields: str | None) -> User: ...
+
+    async def mark_active(
+        self, telegram_id: int, *, username: str | None = None,
+        first_name: str | None = None, last_name: str | None = None,
+        at: datetime | None = None,
+    ) -> None: ...
 
     async def set_language(self, user_id: int, language: str) -> None: ...
 
@@ -57,6 +63,39 @@ class SQLiteUserRepository:
     async def get_or_create(self, telegram_id: int, **fields: str | None) -> User:
         existing = await self.get_by_telegram_id(telegram_id)
         return existing or await self.create(telegram_id, **fields)
+
+    async def mark_active(
+        self, telegram_id: int, *, username: str | None = None,
+        first_name: str | None = None, last_name: str | None = None,
+        at: datetime | None = None,
+    ) -> None:
+        """Upsert one user and only advance their last active UTC timestamp."""
+        now = at or datetime.now(timezone.utc)
+        if now.tzinfo is None:
+            raise ValueError("Activity time must include a timezone")
+        observed = now.astimezone(timezone.utc).replace(tzinfo=None)
+        values = {
+            "telegram_id": telegram_id, "username": username,
+            "first_name": first_name, "last_name": last_name,
+            "last_active_at": observed,
+        }
+        async with self.database.session() as session:
+            statement = sqlite_insert(User).values(**values)
+            # Older/slow requests must not move activity backward.
+            statement = statement.on_conflict_do_update(
+                index_elements=[User.telegram_id],
+                set_={
+                    "username": username,
+                    "first_name": first_name,
+                    "last_name": last_name,
+                    "last_active_at": case(
+                        (User.last_active_at.is_(None), observed),
+                        (User.last_active_at < observed, observed),
+                        else_=User.last_active_at,
+                    ),
+                },
+            )
+            await session.execute(statement)
 
     async def set_language(self, user_id: int, language: str) -> None:
         async with self.database.session() as session:
