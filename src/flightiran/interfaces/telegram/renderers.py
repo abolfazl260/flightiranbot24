@@ -7,8 +7,8 @@ from .localization import normalize_language, safe_text, text
 
 def render_main_menu(language: str, first_name: str | None = None) -> str:
     language = normalize_language(language)
-    name = escape((first_name or "").strip()[:80])
-    greeting = escape(text(language, "welcome_greeting").format(name=(first_name or "").strip()[:80])).strip()
+    name = (first_name or "").strip()[:80]
+    greeting = escape(text(language, "welcome_greeting").format(name=name)).strip()
     lines = [
         greeting,
         f"<b>{safe_text(language, 'welcome_title')}</b>",
