@@ -47,17 +47,17 @@ from .keyboards import (
 from .localization import normalize_language, safe_text, text
 from .renderers import render_help, render_language_prompt, render_main_menu
 from .support import render_support_message
-from .visa_flow import (
-    handle_visa_callback,
-    open_visa_menu,
-    visa_command,
-    visa_search_text,
-)
 from .useful_content import (
     USEFUL_CATEGORY_IDS,
     render_useful_category,
     useful_category_menu,
     useful_menu,
+)
+from .visa_flow import (
+    handle_visa_callback,
+    open_visa_menu,
+    visa_command,
+    visa_search_text,
 )
 
 LOGGER = logging.getLogger(__name__)
