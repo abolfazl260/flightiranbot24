@@ -563,7 +563,9 @@ async def visa_sync_handler(
     if dependencies.visa_sync_service is None:
         await update.message.reply_text("سرویس به‌روزرسانی ویزا فعال نیست.")
         return
-    progress = await update.message.reply_text("در حال بررسی و دریافت اطلاعات ویزا از TravelRequirements.info ...")
+    progress = await update.message.reply_text(
+        "در حال بررسی و دریافت اطلاعات ویزا از TravelRequirements.info ..."
+    )
     try:
         result = await dependencies.visa_sync_service.sync()
     except Exception as exc:
@@ -579,7 +581,10 @@ async def visa_sync_handler(
 
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
-    application.add_handler(\n        CommandHandler("visa_sync", lambda u, c: visa_sync_handler(u, c, dependencies))\n    )\n    application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
+    application.add_handler(
+        CommandHandler("visa_sync", lambda u, c: visa_sync_handler(u, c, dependencies))
+    )
+    application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
