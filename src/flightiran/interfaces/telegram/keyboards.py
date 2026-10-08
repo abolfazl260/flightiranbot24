@@ -25,24 +25,18 @@ def main_menu(
         rows.append([("admin_reports", "menu:admin_reports")])
     if web_app_url:
         rows.append([InlineKeyboardButton("Web App", web_app=WebAppInfo(web_app_url))])
+    def button_for(item: tuple[str, str] | InlineKeyboardButton) -> InlineKeyboardButton:
+        if isinstance(item, InlineKeyboardButton):
+            return item
+        label, data = item
+        if label == "cargo":
+            return InlineKeyboardButton(
+                safe_text(language, label), url=CARGO_MARKETPLACE_URL
+            )
+        return InlineKeyboardButton(safe_text(language, label), callback_data=data)
+
     return InlineKeyboardMarkup(
-        [
-            [
-                (
-                    InlineKeyboardButton(
-                        safe_text(language, label),
-                        url=CARGO_MARKETPLACE_URL,
-                    )
-                    if label == "cargo"
-                    else InlineKeyboardButton(
-                        safe_text(language, label),
-                        callback_data=data,
-                    )
-                )
-                for label, data in row
-            ]
-            for row in rows
-        ]
+        [[button_for(item) for item in row] for row in rows]
     )
 
 
