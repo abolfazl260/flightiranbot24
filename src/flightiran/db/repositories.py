@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 from typing import Protocol
 
 from sqlalchemy import delete, func, select
+from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from .engine import Database
 from .models import (
@@ -97,24 +98,22 @@ class SQLiteMz724PriceHistoryRepository:
     ) -> None:
         cutoff = captured_at - timedelta(days=retention_days)
         async with self.database.session() as session:
-            existing_result = await session.execute(
-                select(Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination).where(
-                    Mz724PriceSnapshot.captured_at == captured_at
+            if samples:
+                statement = sqlite_insert(Mz724PriceSnapshot).values(
+                    [
+                        {
+                            "origin": origin,
+                            "destination": destination,
+                            "price_toman": price_toman,
+                            "captured_at": captured_at,
+                        }
+                        for origin, destination, price_toman in samples
+                    ]
                 )
-            )
-            existing = set(existing_result.all())
-
-            for origin, destination, price_toman in samples:
-                if (origin, destination) in existing:
-                    continue
-                session.add(
-                    Mz724PriceSnapshot(
-                        origin=origin,
-                        destination=destination,
-                        price_toman=price_toman,
-                        captured_at=captured_at,
-                    )
+                statement = statement.on_conflict_do_nothing(
+                    index_elements=["origin", "destination", "captured_at"]
                 )
+                await session.execute(statement)
 
             await session.execute(
                 delete(Mz724PriceSnapshot).where(Mz724PriceSnapshot.captured_at < cutoff)
