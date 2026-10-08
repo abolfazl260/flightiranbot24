@@ -85,9 +85,9 @@ class SQLiteUserRepository:
             statement = statement.on_conflict_do_update(
                 index_elements=[User.telegram_id],
                 set_={
-                    "username": username,
-                    "first_name": first_name,
-                    "last_name": last_name,
+                    "username": func.coalesce(statement.excluded.username, User.username),
+                    "first_name": func.coalesce(statement.excluded.first_name, User.first_name),
+                    "last_name": func.coalesce(statement.excluded.last_name, User.last_name),
                     "last_active_at": case(
                         (User.last_active_at.is_(None), observed),
                         (User.last_active_at < observed, observed),
