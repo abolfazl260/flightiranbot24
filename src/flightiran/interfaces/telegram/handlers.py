@@ -686,7 +686,7 @@ async def visa_sync_handler(
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
-        TypeHandler(Update, lambda u, c: user_activity_handler(u, c, dependencies)), group=-1
+        TypeHandler(Update, lambda u, c: user_activity_handler(u, c, dependencies)), group=1
     )
     application.add_handler(
         CommandHandler("visa", lambda u, c: visa_handler(u, c, dependencies))
