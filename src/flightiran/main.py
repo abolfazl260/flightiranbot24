@@ -29,6 +29,7 @@ from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import default_catalog
+from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 
 LOGGER: Final = logging.getLogger("flightiran")
@@ -219,6 +220,7 @@ def run() -> None:
             admin_chat_id=settings.telegram_admin_id,
             admin_reports=BotReportRepository(database),
             visa_sync_service=visa_sync_service,
+            visa_catalog=VisaCatalogService(database),
             useful_catalog=default_catalog(),
         ),
     )
