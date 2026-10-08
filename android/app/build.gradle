@@ -50,6 +50,13 @@ android {
         }
     }
 
+    sourceSets {
+        main {
+            // Package the exact airport catalogue already maintained by the Python bot.
+            assets.srcDir('../../src/flightiran/modules/airport/data')
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17

@@ -5,6 +5,8 @@ on:
     paths:
       - "android/**"
       - "docs/ANDROID_*.md"
+      - "docs/PLAY_STORE_LISTING.md"
+      - "scripts/generate_android_store_graphics.py"
       - ".github/workflows/android.yml"
   push:
     branches: [main]
@@ -12,6 +14,8 @@ on:
     paths:
       - "android/**"
       - "docs/ANDROID_*.md"
+      - "docs/PLAY_STORE_LISTING.md"
+      - "scripts/generate_android_store_graphics.py"
       - ".github/workflows/android.yml"
   workflow_dispatch:
 
@@ -41,8 +45,18 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
-      - name: Unit tests, lint, debug APK
-        run: gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
+      - name: Unit tests, lint, debug APK and unsigned release AAB
+        run: gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:bundleRelease
+      - name: Generate Play Store art (deterministic)
+        run: |
+          python -m pip install --disable-pip-version-check "Pillow==11.3.0"
+          python scripts/generate_android_store_graphics.py --out android/dist/store
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-play-graphics
+          path: android/dist/store/*.png
+          if-no-files-found: error
+          retention-days: 30
       - uses: actions/upload-artifact@v4
         with:
           name: android-debug-apk
@@ -60,6 +74,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Verify version and tag match
         shell: bash
         run: |
@@ -67,6 +83,11 @@ jobs:
           app_version="$(sed -n 's/^appVersionName=//p' android/gradle.properties)"
           [[ -n "$app_version" && "$GITHUB_REF_NAME" == "v$app_version" ]] || {
             echo "::error::Tag must equal v<appVersionName> in android/gradle.properties"
+            exit 1
+          }
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor HEAD origin/main || {
+            echo "::error::Release tag must point to an ancestor of the main branch."
             exit 1
           }
       - uses: actions/setup-java@v4
@@ -106,20 +127,30 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: gradle --no-daemon -p android :app:assembleRelease :app:bundleRelease
-      - name: Generate SHA-256 checksums
+      - name: Verify artifact signatures
         shell: bash
         run: |
           set -euo pipefail
-          cd android
-          sha256sum app/build/outputs/apk/release/*.apk app/build/outputs/bundle/release/*.aab > SHA256SUMS.txt
+          apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          test -x "$apksigner"
+          "$apksigner" verify --verbose android/app/build/outputs/apk/release/*.apk
+          jarsigner -verify android/app/build/outputs/bundle/release/*.aab
+      - name: Stage signed artifacts with verifiable SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p android/dist
+          cp android/app/build/outputs/apk/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
+          cp android/app/build/outputs/bundle/release/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
+          (cd android/dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
       - name: Store signed files as workflow artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-release-${{ github.ref_name }}
           path: |
-            android/app/build/outputs/apk/release/*.apk
-            android/app/build/outputs/bundle/release/*.aab
-            android/SHA256SUMS.txt
+            android/dist/*.apk
+            android/dist/*.aab
+            android/dist/SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 90
       - name: Publish assets to GitHub Release
@@ -128,7 +159,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          files=(android/app/build/outputs/apk/release/*.apk android/app/build/outputs/bundle/release/*.aab android/SHA256SUMS.txt)
+          files=(android/dist/*.apk android/dist/*.aab android/dist/SHA256SUMS.txt)
           if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
             gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
           else
