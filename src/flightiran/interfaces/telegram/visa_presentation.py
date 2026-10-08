@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-import re
-from html import escape, unescape
+from html import escape
 
 from babel import Locale
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -448,36 +447,106 @@ def render_overview(
     return _limited_lines(lines)
 
 
-def _value_text(value: object, *, limit: int = 650) -> str:
+_ENTRY_LABELS = {
+    "passportValidity": ("اعتبار گذرنامه", "Passport validity", "صلاحية جواز السفر"),
+    "vaccinations": ("واکسیناسیون", "Vaccinations", "التطعيمات"),
+    "travelInsurance": ("بیمه مسافرتی", "Travel insurance", "تأمين السفر"),
+    "onwardTicket": ("بلیط برگشت / ادامه مسیر", "Return / onward ticket", "تذكرة العودة"),
+    "proofOfFunds": ("تمکن مالی", "Proof of funds", "إثبات الأموال"),
+    "declarations": ("اظهارنامه‌های ورود", "Entry declarations", "إقرارات الدخول"),
+    "customs": ("قوانین گمرکی", "Customs", "الجمارك"),
+}
+_FACT_LABELS = {
+    "currency": ("واحد پول", "Currency", "العملة"),
+    "languages": ("زبان‌ها", "Languages", "اللغات"),
+    "timezone": ("منطقه زمانی", "Time zone", "المنطقة الزمنية"),
+    "payments": ("پرداخت و کارت بانکی", "Payments", "طرق الدفع"),
+    "safety": ("ایمنی و هشدارهای سفر", "Travel safety", "السلامة"),
+    "plugs": ("برق و پریز", "Plugs and electricity", "الكهرباء والمقابس"),
+    "emergency": ("شماره اضطراری", "Emergency numbers", "أرقام الطوارئ"),
+    "drivingSide": ("سمت رانندگی", "Driving side", "جهة القيادة"),
+    "driving": ("رانندگی و گواهینامه", "Driving", "القيادة"),
+    "tapWaterSafe": ("آب آشامیدنی", "Drinking water", "مياه الشرب"),
+    "bestTimeToVisit": ("زمان مناسب سفر", "Best time to visit", "أفضل وقت للزيارة"),
+}
+_METHOD_NAMES = {
+    "evisa": ("ویزای الکترونیکی", "eVisa", "تأشيرة إلكترونية"),
+    "embassy": ("ویزای سفارتی", "Embassy visa", "تأشيرة سفارة"),
+    "on-arrival": ("ویزای هنگام ورود", "On-arrival visa", "تأشيرة عند الوصول"),
+    "visa-free": ("معاف از ویزا", "Visa-free", "بدون تأشيرة"),
+}
+
+
+def _label(labels: dict, key: str, language: str) -> str:
+    names = labels.get(key)
+    return names[LANG_INDEX.get(language, 1)] if names else key
+
+
+def _value_text(value: object, language: str = "en", *, limit: int = 650) -> str:
+    """Format nested source fields intelligibly without dumping machine keys."""
     if value is None:
         return "—"
     if isinstance(value, bool):
-        return "true" if value else "false"
+        return ("بله" if value else "خیر") if language == "fa" else (
+            "نعم" if value else "لا"
+        ) if language == "ar" else ("Yes" if value else "No")
     if isinstance(value, dict):
-        return ", ".join(
-            f"{str(k)}: {_value_text(v, limit=140)}"
-            for k, v in value.items()
-            if k != "source" and v is not None
-        )[:limit]
+        if value.get("text"):
+            return str(value["text"])[:limit]
+        if value.get("amount") is not None:
+            return (
+                f"{value['amount']} {value.get('currency') or ''}"
+            ).strip()[:limit]
+        if value.get("name") and value.get("code"):
+            return f"{value['name']} ({value['code']})"[:limit]
+        if isinstance(value.get("types"), list):
+            types = ", ".join(str(item) for item in value["types"][:8])
+            voltage = value.get("voltage")
+            frequency = value.get("frequencyHz")
+            additional = []
+            if voltage is not None:
+                additional.append(f"{voltage}V")
+            if frequency is not None:
+                additional.append(f"{frequency}Hz")
+            return " · ".join([types, *additional])[:limit]
+        fragments = [
+            f"{key.replace('_', ' ')}: {_value_text(val, language, limit=140)}"
+            for key, val in value.items()
+            if key not in {"source", "sources", "unverifiable"} and val is not None
+        ]
+        return "؛ ".join(fragments)[:limit]
     if isinstance(value, list):
-        return "; ".join(_value_text(x, limit=170) for x in value[:12])[:limit]
+        return "، ".join(_value_text(item, language, limit=140) for item in value[:12])[:limit]
     return str(value)[:limit]
 
 
 def _source_line(item: object, language: str) -> str:
+    """Source link and its own review/change dates; never use bot import dates."""
     if not isinstance(item, dict):
         return ""
-    source = item.get("source") if "source" in item else item
+    source = item.get("source") if isinstance(item.get("source"), dict) else item
     if not isinstance(source, dict):
         return ""
-    link = external_link(source.get("url"), str(source.get("name") or tr(language, "source")))
-    checked = source.get("lastVerified")
-    return ("🔗 " + link if link else "") + (
-        " · " + escape(str(checked)) if checked else ""
-    )
+    name = str(source.get("name") or tr(language, "source_label"))[:95]
+    href = external_link(source.get("url"), name)
+    if not href:
+        return ""
+    parts = ["🔗 " + href]
+    verified = source_date(source.get("lastVerified"))
+    changed = source_date(source.get("lastChanged"))
+    if verified:
+        parts.append(f"{escape(tr(language, 'verified_date'))}: {verified}")
+    if changed:
+        parts.append(f"{escape(tr(language, 'changed_date'))}: {changed}")
+    archive = external_link(source.get("archiveUrl"), tr(language, "archived_copy"))
+    if archive:
+        parts.append(archive)
+    return " · ".join(parts)
 
 
-def _lines_for_list(items: object, *, max_items: int = 15, limit: int = 500) -> list[str]:
+def _lines_for_list(
+    items: object, language: str = "en", *, max_items: int = 15, limit: int = 500
+) -> list[str]:
     if not isinstance(items, list):
         return []
     results: list[str] = []
@@ -486,6 +555,9 @@ def _lines_for_list(items: object, *, max_items: int = 15, limit: int = 500) -> 
             value = item.get("text") or item.get("name") or item.get("question")
             if value:
                 results.append("• " + escape(str(value)[:limit]))
+                source = _source_line(item, language)
+                if source:
+                    results.append(source)
         else:
             results.append("• " + escape(str(item)[:limit]))
     if len(items) > max_items:
@@ -493,197 +565,292 @@ def _lines_for_list(items: object, *, max_items: int = 15, limit: int = 500) -> 
     return results
 
 
+def _processing_text(value: object, language: str) -> str:
+    if not isinstance(value, dict):
+        return _value_text(value, language)
+    minimum = value.get("minDays")
+    maximum = value.get("maxDays")
+    if minimum is None and maximum is None:
+        return tr(language, "not_known")
+    unit = value.get("unit")
+    localized_unit = (
+        tr(language, "processing_unit_minutes")
+        if unit == "minutes" else tr(language, "processing_unit_days")
+    )
+    duration = (
+        str(minimum) if minimum == maximum else
+        f"{minimum or 0}–{maximum}" if maximum is not None else str(minimum)
+    )
+    return f"{duration} {localized_unit}"
+
+
+def _section_header(language: str, section: str) -> list[str]:
+    icons = {
+        "types": "🛂", "entry": "📋", "facts": "🌍",
+        "tips": "⚠️", "faq": "❔", "sources": "🔎", "transit": "🛫",
+    }
+    return [f"<b>{icons.get(section, '•')} {escape(tr(language, section))}</b>",
+            "━━━━━━━━━━━━━━━━", ""]
+
+
+def _section_footer(provenance: VisaProvenance, language: str) -> list[str]:
+    return [
+        "",
+        "──────────",
+        f"🗓 {escape(tr(language, 'updated_date'))}: "
+        f"{escape(provenance.destination_updated_on or tr(language, 'not_known'))}",
+        _provider_links(provenance, language),
+        _attribution(language),
+    ]
+
+
 def render_section(detail: VisaDetail, language: str, section: str) -> str:
-    """Source-aware, bounded HTML suitable for Telegram editMessageText."""
-    doc = detail.destination_data
-    requirements = doc.get("entryRequirements") or {}
-    facts = doc.get("countryFacts") or {}
-    lines = [f"<b>{escape(tr(language, section))}</b>", ""]
+    """Source-linked Telegram detail tabs with coherent dates and readable formatting."""
+    document = detail.destination_data
+    requirements = document.get("entryRequirements") or {}
+    facts = document.get("countryFacts") or {}
+    provenance = visa_provenance(detail)
+    lines = _section_header(language, section)
+
     if section == "types":
         if not detail.visa_types:
             lines.append(escape(tr(language, "not_known")))
         for visa in detail.visa_types[:10]:
-            lines.append("🛂 <b>" + escape(str(visa.get("name") or visa.get("id"))) + "</b>")
-            for key, label in (
-                ("method", "Type"), ("fee", tr(language, "fee")),
-                ("processing", tr(language, "processing")),
-                ("stayDays", tr(language, "stay")),
-                ("validityDays", tr(language, "validity")),
-                ("entries", tr(language, "entries")),
-                ("whenToApply", "When to apply"),
+            title = str(visa.get("name") or visa.get("id") or "Visa")
+            lines.append(f"<b>🛂 {escape(title[:150])}</b>")
+            method = visa.get("method")
+            if method:
+                lines.append(
+                    f"• <b>{escape(tr(language, 'visa_kind'))}:</b> "
+                    f"{escape(_label(_METHOD_NAMES, str(method), language))}"
+                )
+            fee = visa.get("fee")
+            if fee is not None:
+                lines.append(
+                    f"• <b>{escape(tr(language, 'fee'))}:</b> "
+                    f"{escape(_value_text(fee, language, limit=200))}"
+                )
+                if isinstance(fee, dict) and fee.get("notes"):
+                    lines.append(escape(str(fee["notes"])[:520]))
+            processing = visa.get("processing")
+            if processing is not None:
+                lines.append(
+                    f"• <b>{escape(tr(language, 'processing'))}:</b> "
+                    f"{escape(_processing_text(processing, language))}"
+                )
+            for key, title_key in (
+                ("stayDays", "stay"), ("validityDays", "validity"),
+                ("entries", "entries"),
             ):
                 if visa.get(key) is not None:
-                    lines.append(f"• {escape(label)}: {escape(_value_text(visa[key]))}")
-            link = external_link(visa.get("applyUrl"), tr(language, "apply"))
-            if link:
-                lines.append(link)
-            docs = visa.get("documents") or {}
-            if isinstance(docs, dict):
-                if docs.get("items"):
-                    lines.append(f"<b>{tr(language, 'docs')}</b>")
-                    for item in docs["items"][:18]:
-                        if not isinstance(item, dict):
-                            lines.append("• " + escape(str(item)[:250]))
-                            continue
-                        name = str(item.get("name") or item.get("id") or "Document")
-                        specification = str(item.get("details") or "")
-                        requirement = item.get("required")
-                        marker = " (optional)" if requirement is False else ""
-                        lines.append(
-                            "• " + escape(name + marker)
-                            + (": " + escape(specification[:400]) if specification else "")
-                        )
-                src = _source_line(docs, language)
+                    value = _value_text(visa[key], language)
+                    if key in {"stayDays", "validityDays"}:
+                        value += " " + tr(language, "days")
+                    lines.append(f"• <b>{escape(tr(language, title_key))}:</b> {escape(value)}")
+            window = visa.get("applyWindow")
+            if isinstance(window, dict) and window.get("text"):
+                lines.append(escape(str(window["text"])[:520]))
+                src = _source_line(window, language)
                 if src:
                     lines.append(src)
-            src = _source_line(visa, language)
-            if src:
-                lines.append(src)
-            lines.append("")
+            application = external_link(visa.get("applyUrl"), tr(language, "apply"))
+            if application:
+                lines.append("🔗 " + application)
+            docs = visa.get("documents") or {}
+            if isinstance(docs, dict):
+                items = docs.get("items")
+                if isinstance(items, list) and items:
+                    lines.append(f"<b>📑 {escape(tr(language, 'docs'))}</b>")
+                    for item in items[:16]:
+                        if not isinstance(item, dict):
+                            lines.append("• " + escape(str(item)[:200]))
+                            continue
+                        name = str(item.get("name") or item.get("id") or "Document")
+                        optional = " (optional)" if item.get("required") is False else ""
+                        spec = str(item.get("details") or "")
+                        lines.append("• <b>" + escape(name[:120] + optional) + "</b>")
+                        if spec:
+                            lines.append("  " + escape(spec[:350]))
+                doc_source = _source_line(docs, language)
+                if doc_source:
+                    lines.append(doc_source)
+            visa_source = _source_line(visa, language)
+            if visa_source:
+                lines.append(visa_source)
+            lines.append("──────────")
     elif section == "entry":
-        entries = (
-            ("passportValidity", "Passport validity"),
-            ("travelInsurance", "Travel insurance"),
-            ("onwardTicket", "Return/onward ticket"),
-            ("proofOfFunds", "Proof of funds"),
-            ("vaccinations", "Vaccinations"),
-            ("declarations", "Arrival declarations"),
-            ("customs", "Customs and currency"),
-        )
-        for field, label in entries:
-            val = requirements.get(field)
-            if val is None or val == []:
+        for field in _ENTRY_LABELS:
+            value = requirements.get(field)
+            if value is None or value == []:
                 continue
-            lines.append(f"• <b>{escape(label)}</b>")
-            if isinstance(val, dict):
-                # Never interpret 'required: false' as proven exemption.
-                explanation = val.get("text") or val.get("rule") or (
-                    _value_text(val) if "required" not in val else None
-                )
+            lines.append(f"<b>• {escape(_label(_ENTRY_LABELS, field, language))}</b>")
+            if isinstance(value, dict):
+                explanation = value.get("text") or value.get("rule")
                 if explanation:
-                    lines.append(escape(str(explanation)[:550]))
+                    lines.append(escape(str(explanation)[:650]))
                 else:
-                    lines.append(escape(tr(language, "unknown_warning")))
-                source = _source_line(val, language)
+                    lines.append(escape(tr(language, "unverified_field")))
+                source = _source_line(value, language)
                 if source:
                     lines.append(source)
-            elif isinstance(val, list):
-                lines.extend(_lines_for_list(val, max_items=7))
+            elif isinstance(value, list):
+                lines.extend(_lines_for_list(value, language, max_items=8))
             else:
-                lines.append(escape(_value_text(val)))
-    elif section == "facts":
-        summary = doc.get("summary")
-        if summary:
-            lines.append(escape(str(summary)[:650]))
+                lines.append(escape(_value_text(value, language)))
             lines.append("")
-        display = (
-            ("currency", "Currency"), ("languages", "Languages"),
-            ("timezone", "Timezone"), ("payments", "Payments"),
-            ("safety", "Safety"), ("plugs", "Electricity"),
-            ("emergency", "Emergency numbers"),
-            ("drivingSide", "Driving side"), ("driving", "Driving"),
-            ("tapWaterSafe", "Tap water"), ("bestTimeToVisit", "Best time to visit"),
-        )
-        for key, label in display:
+        lines.append("<i>" + escape(tr(language, "unknown_warning")) + "</i>")
+    elif section == "facts":
+        overview = document.get("summary")
+        if overview:
+            lines.extend([escape(str(overview)[:700]), ""])
+        for key in _FACT_LABELS:
             value = facts.get(key)
-            if value is not None:
-                if isinstance(value, dict) and value.get("text"):
-                    value = value["text"]
-                elif key == "tapWaterSafe":
-                    lines.append(
-                        "• " + escape(label) + ": " + escape(
-                            tr(language, "unknown_warning")
-                        ) + " (source-specific)"
-                    )
-                    continue
-                lines.append(f"• <b>{escape(label)}:</b> {escape(_value_text(value))}")
+            if value is None:
+                continue
+            title = _label(_FACT_LABELS, key, language)
+            if key == "tapWaterSafe":
+                # The raw boolean does not support a universal sanitary claim.
+                text = tr(language, "unverified_field")
+            else:
+                text = _value_text(value, language)
+            lines.append(f"<b>• {escape(title)}:</b> {escape(text[:650])}")
+            if isinstance(value, dict):
+                source = _source_line(value, language)
+                if source:
+                    lines.append(source)
     elif section == "tips":
-        for tip in (doc.get("tips") or [])[:16]:
-            if isinstance(tip, dict):
-                lines.append("• " + escape(str(tip.get("text") or "")[:700]))
+        tips = document.get("tips") or []
+        lines.extend(_lines_for_list(tips, language, max_items=16, limit=600))
     elif section == "faq":
-        for question in (doc.get("faq") or [])[:16]:
-            if isinstance(question, dict):
-                lines.append("<b>" + escape(str(question.get("question") or "")) + "</b>")
-                lines.append(escape(str(question.get("answer") or "")[:700]))
-                lines.append("")
-        lines.append("⚠️ " + escape(tr(language, "caution")))
+        for item in (document.get("faq") or [])[:16]:
+            if isinstance(item, dict):
+                question = item.get("question")
+                answer = item.get("answer")
+                if question:
+                    lines.append(f"<b>❓ {escape(str(question)[:250])}</b>")
+                if answer:
+                    lines.extend([escape(str(answer)[:600]), ""])
+        lines.append("⚠️ " + escape(tr(language, "general_faq")))
     elif section == "sources":
-        sources = [detail.record.get("source")]
-        policy = doc.get("visaPolicy") or {}
-        sources.append(policy.get("defaultSource"))
-        sources.extend((doc.get("meta") or {}).get("primarySources") or [])
-        for source in sources:
-            if source:
-                line = _source_line(source, language)
-                if line and line not in lines:
-                    lines.append(line)
+        lines.extend(_source_dates(provenance, language, full=True))
+        lines.append("<i>" + escape(tr(language, "no_expiry")) + "</i>")
+        lines.append("<i>" + escape(tr(language, "date_notice")) + "</i>")
         lines.append(
-            external_link(
-                f"https://travelrequirements.info/data/destinations/{doc.get('id')}.json",
-                "Original JSON",
+            "🔎 " + escape(
+                tr(language, "row") if provenance.source_level == "row"
+                else tr(language, "policy")
             )
         )
-        lines.append(external_link(LICENSE_URL, "CC BY 4.0"))
+        sources = [detail.record.get("source")]
+        policy = document.get("visaPolicy") or {}
+        sources.append(policy.get("defaultSource"))
+        sources.extend((document.get("meta") or {}).get("primarySources") or [])
+        for section_value in (document.get("entryRequirements") or {}).values():
+            if isinstance(section_value, dict):
+                sources.append(section_value.get("source"))
+        for visa in detail.visa_types:
+            sources.append(visa.get("source"))
+            docs = visa.get("documents")
+            if isinstance(docs, dict):
+                sources.append(docs.get("source"))
+        seen_urls: set[str] = set()
+        for source in sources:
+            if not isinstance(source, dict):
+                continue
+            href = safe_source_url(source.get("url"))
+            if not href or href in seen_urls:
+                continue
+            seen_urls.add(href)
+            line = _source_line(source, language)
+            if line:
+                lines.append(line)
+            if len(seen_urls) >= 14:
+                break
     elif section == "transit":
+        supplied = False
         for key in ("transit", "entryModes", "levies"):
-            item = doc.get(key)
-            if item:
-                lines.append(f"<b>{escape(key)}</b>")
-                if isinstance(item, dict):
-                    for k, v in list(item.items())[:12]:
-                        lines.append("• " + escape(str(k)) + ": " + escape(_value_text(v)))
-                else:
-                    lines.append(escape(_value_text(item)))
+            item = document.get(key)
+            if not item:
+                continue
+            supplied = True
+            lines.append("<b>" + escape(str(key)) + "</b>")
+            if isinstance(item, dict):
+                for label, value in list(item.items())[:12]:
+                    if label == "source":
+                        line = _source_line(value, language)
+                        if line:
+                            lines.append(line)
+                    else:
+                        lines.append(
+                            "• " + escape(label.replace("_", " ").capitalize()) + ": "
+                            + escape(_value_text(value, language, limit=450))
+                        )
+            else:
+                lines.append(escape(_value_text(item, language)))
+        if not supplied:
+            lines.append(escape(tr(language, "not_known")))
         lines.append("⚠️ " + escape(tr(language, "caution")))
     else:
         return escape(tr(language, "unknown"))
-    if len(lines) == 2:
+
+    if len(lines) <= 3:
         lines.append(escape(tr(language, "not_known")))
-    lines.append("")
-    lines.append(external_link(MAIN_SOURCE, tr(language, "license")))
-    # Build only complete lines; never cut an HTML tag or entity mid-way.
-    selected: list[str] = []
-    used = 0
-    for line in lines:
-        if used + len(line) + 1 > 3800:
-            selected.append("…")
-            selected.append(external_link(MAIN_SOURCE, tr(language, "license")))
-            break
-        selected.append(line)
-        used += len(line) + 1
-    return "\n".join(selected)
+    lines.extend(_section_footer(provenance, language))
+    return _limited_lines(lines)
 
 
 def render_rich_report(detail: VisaDetail, language: str) -> dict:
-    """Native Telegram rich-message blocks (with standard HTML fallback)."""
+    """Produce valid, balanced native rich blocks with genuine source hyperlinks."""
     rule = detail.rule
+    provenance = visa_provenance(detail)
+    passport = country_label(rule.passport, rule.passport, language)
+    destination = country_label(rule.destination, rule.country_name, language)
+    stay = (
+        f"{rule.stay_days} {tr(language, 'days')}"
+        if rule.stay_days is not None else tr(language, "not_known")
+    )
     head = (
-        f"<h3>{escape(tr(language, 'title'))}: "
-        f"{escape(country_label(rule.destination, rule.country_name, language))}</h3>"
+        f"<h3>{escape(tr(language, 'title'))}</h3>"
+        f"<p>{escape(passport)} ({escape(rule.passport)}) → "
+        f"<b>{escape(destination)}</b> ({escape(rule.destination)})</p>"
     )
     rows = [
-        (tr(language, "passport"), rule.passport),
-        (tr(language, "destination"), rule.destination),
         (tr(language, "status"), status_label(rule.status, language)),
-        (tr(language, "stay"),
-         str(rule.stay_days) if rule.stay_days is not None else tr(language, "not_known")),
-        (tr(language, "checked"), rule.verified_on or tr(language, "not_known")),
+        (tr(language, "stay"), stay),
+        (tr(language, "verified_date"),
+         provenance.source_verified_on or tr(language, "not_known")),
+        (tr(language, "updated_date"),
+         provenance.destination_updated_on or tr(language, "not_known")),
     ]
-    matrix = "<table bordered striped compact>" + "".join(
-        f"<tr><th>{escape(k)}</th><td>{escape(v)}</td></tr>" for k, v in rows
+    if provenance.source_changed_on:
+        rows.append((tr(language, "changed_date"), provenance.source_changed_on))
+    table = "<table bordered striped compact>" + "".join(
+        f"<tr><th>{escape(str(key))}</th><td>{escape(str(value))}</td></tr>"
+        for key, value in rows
     ) + "</table>"
-    sections = []
-    # These sections are individually available if native rich output is truncated.
-    for key in ("types", "entry", "transit", "facts", "tips", "sources"):
-        block = render_section(detail, language, key)
-        block = block.replace("\n", "</p><p>")
-        sections.append(f"<h3>{escape(tr(language, key))}</h3><p>{block}</p>")
-    footer = f"<p>⚠️ {escape(tr(language, 'caution'))}</p>"
-    html = head + matrix + "".join(sections) + footer
-    if len(unescape(re.sub(r"<[^>]*>", "", html))) > 30_000:
-        html = head + matrix + "".join(sections[:3]) + footer
-    return {"html": html, "is_rtl": language in {"fa", "ar"}}
+    intro = "<p>" + _provider_links(provenance, language) + "</p>"
+    intro += "<p><i>" + escape(tr(language, "date_notice")) + "</i></p>"
+    sections: list[str] = []
+    for key in ("types", "entry", "transit", "facts", "tips", "faq", "sources"):
+        content = render_section(detail, language, key)
+        content_lines = content.split("\n")[3:]
+        paragraphs = "".join(
+            f"<p>{line}</p>" for line in content_lines if line.strip()
+        )
+        sections.append(f"<h3>{escape(tr(language, key))}</h3>{paragraphs}")
+    footer = (
+        "<p>⚠️ " + escape(tr(language, "caution")) + "</p>"
+        + "<p>" + _attribution(language) + "</p>"
+    )
+    blocks = [head, table, intro]
+    current_length = len(head + table + intro + footer)
+    for part in sections:
+        if current_length + len(part) > 28_000:
+            break
+        blocks.append(part)
+        current_length += len(part)
+    blocks.append(footer)
+    return {"html": "".join(blocks), "is_rtl": language in {"fa", "ar"}}
 
 
 def country_keyboard(
