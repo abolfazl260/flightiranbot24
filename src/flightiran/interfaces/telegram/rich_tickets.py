@@ -17,14 +17,71 @@ from flightiran.modules.tickets.service import parse_toman_price
 MAX_RICH_TEXT_CHARS = 32_000
 MAX_RICH_TABLE_ROWS = 490
 
-_TABLE_HEADER = (
-    "<tr><th>مقصد</th><th>فعلی (تومان)</th>"
-    "<th>میانگین ۲۱ روزه</th><th>اختلاف (تومان)</th><th>تغییر قیمت ٪</th></tr>"
-)
+_TABLE_HEADERS = {
+    "fa": (
+        "<tr><th>مقصد</th><th>فعلی (تومان)</th><th>میانگین ۲۱ روزه</th>"
+        "<th>اختلاف (تومان)</th><th>تغییر قیمت ٪</th>"
+        "<th>نسبت به ثبت قبلی</th></tr>"
+    ),
+    "en": (
+        "<tr><th>Destination</th><th>Now (toman)</th><th>21-day average</th>"
+        "<th>Difference (toman)</th><th>vs average %</th>"
+        "<th>vs last saved price</th></tr>"
+    ),
+    "ar": (
+        "<tr><th>الوجهة</th><th>السعر الحالي</th><th>متوسط ٢١ يوماً</th>"
+        "<th>الفرق (تومان)</th><th>مقارنة بالمتوسط ٪</th>"
+        "<th>مقارنة بالسعر السابق</th></tr>"
+    ),
+}
+
+_TABLE_LEGENDS = {
+    "fa": (
+        "نسبت به میانگین ۲۱روزه: 🟢 ↓ ارزان‌تر | 🔴 ↑ گران‌تر | ⚪ = برابر. "
+        "آخرین ستون نسبت به ثبت قبلی است: ⬇️ کاهش | ⬆️ افزایش | ➖ بدون تغییر. "
+        "— یعنی سابقه معتبر موجود نیست."
+    ),
+    "en": (
+        "Compared with the 21-day average: 🟢 ↓ cheaper | 🔴 ↑ higher | ⚪ = same. "
+        "The last column compares the previous saved price: "
+        "⬇️ down | ⬆️ up | ➖ unchanged. — means no valid history."
+    ),
+    "ar": (
+        "مقارنة بمتوسط ٢١ يوماً: 🟢 ↓ أقل | 🔴 ↑ أعلى | ⚪ = ثابت. "
+        "العمود الأخير مقارنة بآخر سعر محفوظ: "
+        "⬇️ انخفاض | ⬆️ ارتفاع | ➖ دون تغيير. — تعني عدم توفر سجل صالح."
+    ),
+}
+
+_TABLE_TITLES = {
+    "fa": "پروازها از {origin}",
+    "en": "Flights from {origin}",
+    "ar": "الرحلات من {origin}",
+}
+_TABLE_CONTINUATION = {"fa": " (ادامه)", "en": " (continued)", "ar": " (متابعة)"}
+
+# The button's *entire* content is one emoji. It has no URL or callback.
+_INACTIVE_BADGES = {
+    "up": '<tg-button type="disabled" style="danger">⬆️</tg-button>',
+    "down": '<tg-button type="disabled" style="success">⬇️</tg-button>',
+    "same": '<tg-button type="disabled">➖</tg-button>',
+}
+
+
+def _prior_price_indicator(item: CheapTicketDestination, current: int | None) -> str:
+    previous = item.previous_price_toman
+    if current is None or current <= 0 or previous is None or previous <= 0:
+        return "—"
+    if current == previous:
+        return _INACTIVE_BADGES["same"] + " 0.0٪"
+    percentage = abs((current - previous) / previous * 100)
+    if current < previous:
+        return _INACTIVE_BADGES["down"] + f" {percentage:.1f}٪"
+    return _INACTIVE_BADGES["up"] + f" {percentage:.1f}٪"
 
 
 def _row(destination: CheapTicketDestination) -> str:
-    """Render one priced destination with a colored percentage indicator."""
+    """Render the mean comparison and the previous-price badge separately."""
 
     current = destination.price_value_toman
     if current is None:
@@ -54,7 +111,12 @@ def _row(destination: CheapTicketDestination) -> str:
             percent = f"🔴 ↑ {percentage:.1f}٪"
 
     cells = (destination.name, price, mean, delta, percent)
-    return "<tr>" + "".join(f"<td>{escape(str(value))}</td>" for value in cells) + "</tr>"
+    comparison = _prior_price_indicator(destination, current)
+    return (
+        "<tr>"
+        + "".join(f"<td>{escape(str(value))}</td>" for value in cells)
+        + f'<td align="center">{comparison}</td></tr>'
+    )
 
 
 def _plain_text_length(html: str) -> int:
@@ -63,16 +125,22 @@ def _plain_text_length(html: str) -> int:
     return len(unescape(re.sub(r"<[^>]*>", "", html)))
 
 
-def _table_html(origin: str, rows: list[str], *, continued: bool = False) -> str:
-    title = f"پروازها از {escape(origin)}"
+def _table_html(
+    origin: str,
+    rows: list[str],
+    *,
+    continued: bool = False,
+    language: str = "fa",
+) -> str:
+    language = language if language in _TABLE_HEADERS else "fa"
+    title = _TABLE_TITLES[language].format(origin=escape(origin))
     if continued:
-        title += " (ادامه)"
+        title += _TABLE_CONTINUATION[language]
     return (
         f"<h3>{title}</h3>"
-        "<p>نسبت به میانگین ۲۱روزه: "
-        "🟢 ↓ ارزان‌تر | 🔴 ↑ گران‌تر | ⚪ = برابر | ⚪ ؟ نامشخص</p>"
+        f"<p>{_TABLE_LEGENDS[language]}</p>"
         "<table bordered striped compact>"
-        + _TABLE_HEADER
+        + _TABLE_HEADERS[language]
         + "".join(rows)
         + "</table>"
     )
@@ -81,6 +149,7 @@ def _table_html(origin: str, rows: list[str], *, continued: bool = False) -> str
 def render_rich_price_tables(
     route: CheapTicketRoute,
     *,
+    language: str = "fa",
     max_text_chars: int = MAX_RICH_TEXT_CHARS,
     max_rows: int = MAX_RICH_TABLE_ROWS,
 ) -> list[dict]:
@@ -96,7 +165,7 @@ def render_rich_price_tables(
     for item in route.destinations:
         row = _row(item)
         candidate = rows + [row]
-        html = _table_html(route.origin, candidate, continued=bool(messages))
+        html = _table_html(route.origin, candidate, continued=bool(messages), language=language)
 
         if len(candidate) > max_rows or _plain_text_length(html) > max_text_chars:
             if not rows:
@@ -104,12 +173,12 @@ def render_rich_price_tables(
                     f"One mz724 destination exceeds Telegram rich message limits: {item.name}"
                 )
             messages.append(
-                {"html": _table_html(route.origin, rows, continued=bool(messages)),
+                {"html": _table_html(route.origin, rows, continued=bool(messages), language=language),
                  "is_rtl": True}
             )
             rows = [row]
             if _plain_text_length(
-                _table_html(route.origin, rows, continued=True)
+                _table_html(route.origin, rows, continued=True, language=language)
             ) > max_text_chars:
                 raise ValueError(
                     f"One mz724 destination exceeds Telegram rich message limits: {item.name}"
@@ -119,7 +188,7 @@ def render_rich_price_tables(
 
     if rows:
         messages.append(
-            {"html": _table_html(route.origin, rows, continued=bool(messages)),
+            {"html": _table_html(route.origin, rows, continued=bool(messages), language=language),
              "is_rtl": True}
         )
     return messages
