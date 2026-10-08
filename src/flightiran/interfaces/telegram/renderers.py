@@ -2,7 +2,10 @@
 
 from html import escape
 
+from flightiran.config.settings import DEFAULT_SUPPORT_USERNAME
+
 from .localization import normalize_language, safe_text, text
+from .support import support_link
 
 
 def render_main_menu(language: str, first_name: str | None = None) -> str:
@@ -23,7 +26,9 @@ def render_main_menu(language: str, first_name: str | None = None) -> str:
     return "\n".join(lines)
 
 
-def render_help(language: str) -> str:
+def render_help(
+    language: str, support_username: str = DEFAULT_SUPPORT_USERNAME
+) -> str:
     language = normalize_language(language)
     lines = [
         f"<b>{safe_text(language, 'help_title')}</b>",
@@ -45,6 +50,8 @@ def render_help(language: str) -> str:
         safe_text(language, "help_menu_body"),
         "",
         safe_text(language, "help_note"),
+        "",
+        f"<b>{safe_text(language, 'support')}</b>: {support_link(support_username)}",
         "",
         safe_text(language, "help_back"),
     ])
