@@ -170,3 +170,16 @@ def test_rejects_untrusted_protocol_and_escapes_link_text():
     assert safe_source_url("https://example.com\n/fake") is None
     assert "&lt;source&gt;" in link_html("https://example.com", "<source>")
     assert 'href="https://example.com"' in link_html("https://example.com", "<source>")
+
+
+def test_long_detail_tab_always_keeps_upstream_date_and_citation_links():
+    sample = detail()
+    sample.destination_data["tips"] = [
+        {"text": ("Travel alert: " + "check official sources. " * 30)}
+        for _ in range(20)
+    ]
+    rendered = render_section(sample, "fa", "tips")
+    assert len(rendered) < 3900
+    assert "2026-10-07" in rendered
+    assert '<a href="https://travelrequirements.info/data/destinations/turkey.json">' in rendered
+    assert '<a href="https://creativecommons.org/licenses/by/4.0/">' in rendered
