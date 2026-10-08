@@ -165,8 +165,8 @@ def test_rich_table_keeps_all_destinations_of_one_origin_in_one_message():
     assert messages[0]["html"].count("<td>") == 85 * 5
     assert "<table bordered striped compact>" in messages[0]["html"]
     assert "<th>اختلاف (تومان)</th>" in messages[0]["html"]
-    assert "<th>اختلاف ٪</th>" in messages[0]["html"]
-    assert "🟢 -20.0٪" in messages[0]["html"]
+    assert "<th>تغییر قیمت ٪</th>" in messages[0]["html"]
+    assert "🟢 ↓ 20.0٪" in messages[0]["html"]
     assert messages[0]["is_rtl"] is True
 
 
@@ -188,12 +188,16 @@ def test_rich_table_colors_percentage_red_green_and_white():
     route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
     html = render_rich_price_tables(route)[0]["html"]
 
-    assert "🟢 -20.0٪" in html
-    assert "🔴 +20.0٪" in html
-    assert "⚪ 0.0٪" in html
-    assert "⚪ —" in html
-    assert "-1,500,000" in html
-    assert "+2,000,000" in html
+    assert "🟢 ↓ 20.0٪" in html
+    assert "🔴 ↑ 20.0٪" in html
+    assert "⚪ = 0.0٪" in html
+    assert "⚪ ؟ نامشخص" in html
+    assert "↓ 1,500,000" in html
+    assert "↑ 2,000,000" in html
+    assert "🟢 ↓ ارزان‌تر" in html
+    assert "🔴 ↑ گران‌تر" in html
+    assert "⚪ = برابر" in html
+    assert "⚪ ؟ نامشخص" in html
 
 
 def test_rich_table_only_splits_at_actual_configured_safety_limit():
@@ -272,7 +276,7 @@ def test_discount_report_is_one_cross_origin_rich_table():
     assert html.count("<td>") == 18
     assert "<th>مبدأ</th><th>مقصد</th>" in html
     assert "6,000,000" in html
-    assert "🟢 30.00٪" in html
+    assert "🟢 ↓ 30.00٪" in html
     assert html.index("استانبول") < html.index("مشهد") < html.index("کیش")
 
 
