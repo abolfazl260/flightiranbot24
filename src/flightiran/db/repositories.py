@@ -28,6 +28,10 @@ class UserRepository(Protocol):
 
     async def get_language(self, user_id: int) -> str: ...
 
+    async def get_visa_passport(self, user_id: int) -> str: ...
+
+    async def set_visa_passport(self, user_id: int, passport: str) -> None: ...
+
 
 class AuditRepository(Protocol):
     async def record(
@@ -70,6 +74,26 @@ class SQLiteUserRepository:
                 select(UserPreference.language).where(UserPreference.user_id == user_id)
             )
             return language or "en"
+
+    async def get_visa_passport(self, user_id: int) -> str:
+        async with self.database.session() as session:
+            passport = await session.scalar(
+                select(UserPreference.visa_passport).where(UserPreference.user_id == user_id)
+            )
+            return passport or "IR"
+
+    async def set_visa_passport(self, user_id: int, passport: str) -> None:
+        passport = passport.upper()
+        if len(passport) != 2 or not passport.isascii() or not passport.isalpha():
+            raise ValueError("Passport must be a valid two-letter country code")
+        async with self.database.session() as session:
+            preference = await session.scalar(
+                select(UserPreference).where(UserPreference.user_id == user_id)
+            )
+            if preference is None:
+                session.add(UserPreference(user_id=user_id, visa_passport=passport))
+            else:
+                preference.visa_passport = passport
 
 
 class SQLiteAuditRepository:
