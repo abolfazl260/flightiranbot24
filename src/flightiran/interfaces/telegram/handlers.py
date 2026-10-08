@@ -23,6 +23,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
     render_rich_price_drop_report,
     render_rich_price_tables,
     send_rich_price_table,
+    send_rich_price_table_with_badge_fallback,
 )
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
@@ -310,9 +311,9 @@ async def callback_handler(
                 )
             else:
                 for route in routes:
-                    for rich_message in render_rich_price_tables(route):
+                    for rich_message in render_rich_price_tables(route, language=language):
                         try:
-                            await send_rich_price_table(
+                            await send_rich_price_table_with_badge_fallback(
                                 context.bot,
                                 query.message.chat_id,
                                 rich_message,
