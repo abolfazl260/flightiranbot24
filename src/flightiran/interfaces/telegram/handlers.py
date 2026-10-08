@@ -15,6 +15,7 @@ from telegram.ext import (
     filters,
 )
 
+from flightiran.config.settings import DEFAULT_SUPPORT_USERNAME
 from flightiran.db.repositories import AuditRepository, UserRepository
 from flightiran.infrastructure.http.errors import ProviderError
 from flightiran.interfaces.telegram.rich_tickets import (
@@ -30,9 +31,10 @@ from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
-from .keyboards import back_menu, language_menu, main_menu
+from .keyboards import back_menu, language_menu, main_menu, support_menu
 from .localization import normalize_language, safe_text, text
 from .renderers import render_help, render_language_prompt, render_main_menu
+from .support import render_support_message
 from .useful_content import (
     USEFUL_CATEGORY_IDS,
     render_useful_category,
@@ -53,7 +55,7 @@ class TelegramDependencies:
     airport_catalog: AirportCatalog | None = None
     useful_catalog: UsefulContentCatalog | None = None
     cheap_ticket_service: CheapTicketService | None = None
-    ticket_support_username: str = "@vlansupport"
+    ticket_support_username: str = DEFAULT_SUPPORT_USERNAME
     admin_chat_id: int = 106056586
 
 
@@ -151,7 +153,7 @@ async def help_handler(
     await dependencies.audit.record("user.help", user_id=user_id)
     if update.message:
         await update.message.reply_text(
-            render_help(language),
+            render_help(language, dependencies.ticket_support_username),
             parse_mode="HTML",
             reply_markup=main_menu(language, dependencies.web_app_url),
         )
@@ -335,14 +337,23 @@ async def callback_handler(
                         await query.message.reply_text(message, parse_mode="HTML")
 
                 await query.message.reply_text(
-                    render_cheap_ticket_booking_hint(dependencies.ticket_support_username),
+                    render_cheap_ticket_booking_hint(
+                        dependencies.ticket_support_username, language
+                    ),
                     parse_mode="HTML",
-                    reply_markup=back_menu(language),
+                    reply_markup=support_menu(language, dependencies.ticket_support_username),
                 )
     elif data in {"menu:visa", "menu:rules"}:
         await query.edit_message_text(
             "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
             reply_markup=back_menu(language),
+        )
+    elif data == "menu:support":
+        await dependencies.audit.record("support.opened", user_id=user_id)
+        await query.edit_message_text(
+            render_support_message(language, dependencies.ticket_support_username),
+            parse_mode="HTML",
+            reply_markup=support_menu(language, dependencies.ticket_support_username),
         )
     elif data == "menu:settings":
         await query.edit_message_text(
