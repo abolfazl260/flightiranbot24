@@ -30,6 +30,7 @@ MESSAGES = {
         "support": "Support",
         "support_open_chat": "Chat with support",
         "settings": "Settings",
+        "admin_reports": "📊 Full bot report",
     },
     "fa": {
         "ticket_choose_origin": (
@@ -59,6 +60,7 @@ MESSAGES = {
         "support": "پشتیبانی",
         "support_open_chat": "گفتگو با پشتیبانی",
         "settings": "تنظیمات",
+        "admin_reports": "📊 گزارش کامل ربات",
     },
     "ar": {
         "ticket_choose_origin": "✈️ اختر مدينة المغادرة لعرض أسعار رحلاتها فقط:",
@@ -82,6 +84,7 @@ MESSAGES = {
         "support": "الدعم",
         "support_open_chat": "التواصل مع الدعم",
         "settings": "الإعدادات",
+        "admin_reports": "📊 التقرير الشامل للبوت",
     },
 }
 
