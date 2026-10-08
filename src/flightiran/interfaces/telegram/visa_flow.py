@@ -182,6 +182,11 @@ async def handle_visa_callback(
         )
         return
 
+    if action == "visa:r:clear":
+        data.pop("visa_residence", None)
+        await _show_result(update, context, service, language, edit=True)
+        return
+
     if action.startswith(("visa:p:", "visa:d:", "visa:r:")):
         mode, code = action.split(":")[1:]
         countries = await _country_catalog(service)
@@ -192,6 +197,9 @@ async def handle_visa_callback(
         data.pop("visa_search_mode", None)
         if mode == "p":
             data["visa_passport"] = country.code
+            data.pop("visa_destination", None)
+            data.pop("visa_residence", None)
+            data["visa_purpose"] = "tourism"
             await query.edit_message_text(
                 f"<b>{escape(tr(language, 'passport'))}:</b> "
                 f"{escape(country_label(country.code, country.name, language))}"
