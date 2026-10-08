@@ -26,15 +26,12 @@ public final class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (Build.VERSION.SDK_INT >= 35) {
-            View root = findViewById(R.id.root);
-            root.setOnApplyWindowInsetsListener((view, insets) -> {
-                Insets bars = insets.getInsets(WindowInsets.Type.systemBars());
-                view.setPadding(bars.left, bars.top, bars.right, bars.bottom);
-                return insets;
-            });
-            root.requestApplyInsets();
-        }
+        UiInsets.apply(this, findViewById(R.id.root));
+
+        findViewById(R.id.offlineAirports).setOnClickListener(
+                view -> startActivity(new Intent(this, AirportDirectoryActivity.class)));
+        findViewById(R.id.checklist).setOnClickListener(
+                view -> startActivity(new Intent(this, ChecklistActivity.class)));
 
         findViewById(R.id.openBot).setOnClickListener(view -> openUrl(BotLinks.BOT));
         findViewById(R.id.openVisa).setOnClickListener(view -> openBotCommand("/visa"));

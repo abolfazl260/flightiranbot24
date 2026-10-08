@@ -1,36 +1,56 @@
-# Android companion — privacy notice
+# Flight Iran Bot 24 — Android privacy notice
 
-**App:** Flight Iran Bot 24 (Android companion)
+**Reviewed:** 2026-10-08
+**Contact:** https://t.me/Advertio_support
+**Package:** com.abolfazl260.flightiranbot24
 
-The Android companion displays travel-service shortcuts and opens external
-HTTPS destinations (Telegram and this repository's privacy notice). It does
-not ask for contacts, location, camera, microphone, storage, or notification
-permissions. It does not embed a Telegram bot token or user credentials.
+## English
 
-When a user chooses a travel feature, their device transfers control to
-Telegram or a browser. Telegram's separate app and the Flight Iran Bot 24
-Telegram service may process account identifiers, usernames, messages, and
-usage data as necessary to provide their services. The native companion
-does not itself log these interactions, but this notice is **not** a complete
-description of the Telegram service's server-side processing. The operator
-must review the bot-side collection, retention, contact and deletion procedures
-before publishing this document as a production privacy policy.
+The Android application has two offline features: an airport directory bundled
+with the application and a local travel checklist. The Android application
+requests no internet, contact, location, camera, microphone, storage or
+notification permissions. It does not integrate advertising or analytics SDKs.
 
-**Support:** https://t.me/Advertio_support
+Travel checklist selections are kept only in local Android app preferences on
+the device. You can erase them using the Clear my checklist button, by clearing
+the app's data in Android Settings, or by uninstalling the app. Airport data
+is supplied from the application's packaged dataset and may be outdated.
 
----
+Opening an online service or support link launches an external browser or
+Telegram. This Android application does not transmit Telegram account data.
+The **separate Telegram bot** may process Telegram account IDs, usernames,
+names, messages, language, service preferences and service usage to provide
+features and administrator reporting. Telegram applies its own privacy terms.
 
-# اطلاعیه حریم خصوصی نسخه اندروید
+For questions about server-side bot data or deletion requests, contact the
+support channel above. The operator must verify identity and relevant retention
+requirements; this notice makes no unconditional deletion-time promise.
+There is no account system inside the Android app.
 
-نسخه همراه اندروید Flight Iran Bot 24 فقط میانبر خدمات سفر را نمایش می‌دهد
-و لینک‌های HTTPS تلگرام و اطلاعیه حریم خصوصی را باز می‌کند. این برنامه
-مجوز مخاطبین، موقعیت مکانی، دوربین، میکروفون، فایل‌ها یا اعلان‌ها را درخواست
-نمی‌کند و توکن ربات یا اطلاعات ورود را داخل برنامه قرار نمی‌دهد.
+Travel or visa details must be confirmed using official sources.
 
-با انتخاب خدمات، کاربر به تلگرام یا مرورگر منتقل می‌شود. تلگرام و ربات
-Flight Iran Bot 24 ممکن است برای ارائه خدمات، شناسه کاربر، نام کاربری،
-پیام‌ها و داده‌های استفاده از سرویس را پردازش کنند. این متن هنوز جایگزین
-سیاست کامل پردازش داده در سمت سرور ربات نیست و باید قبل از انتشار عمومی
-از نظر دوره نگهداری داده، درخواست حذف اطلاعات و راه ارتباطی بازبینی شود.
+## فارسی
 
-**پشتیبانی:** https://t.me/Advertio_support
+نسخه اندروید Flight Iran Bot 24 فهرست آفلاین فرودگاه‌ها و چک‌لیست سفر
+را ارائه می‌کند. اپ اندروید درخواست مجوز اینترنت، مخاطبین، موقعیت
+مکانی، دوربین، میکروفون، حافظه یا اعلان‌ها ندارد و از ابزار
+تبلیغات یا تحلیل رفتار استفاده نمی‌کند.
+
+وضعیت چک‌لیست فقط در تنظیمات محلی برنامه روی گوشی ذخیره می‌شود و
+با دکمه پاک‌کردن چک‌لیست، پاک‌کردن داده‌های برنامه یا حذف برنامه
+قابل حذف است. فهرست فرودگاه‌ها همراه اپ ارائه می‌شود و ممکن است قدیمی شود.
+
+با انتخاب خدمات آنلاین، صفحه تلگرام یا مرورگر جداگانه باز می‌شود.
+نسخه اندروید داده‌های حساب تلگرام را برای سرور ارسال نمی‌کند.
+ربات مستقل تلگرام ممکن است شناسه و نام کاربری تلگرام، نام، پیام‌ها،
+زبان، تنظیمات و داده‌های استفاده از خدمات را برای انجام عملیات و
+ارسال گزارش به مدیر پردازش کند. تلگرام نیز شرایط حریم خصوصی خودش را دارد.
+
+برای پرسش درباره اطلاعات سمت سرور ربات یا درخواست حذف اطلاعات،
+از طریق https://t.me/Advertio_support تماس بگیرید. مسئول سرویس
+باید هویت و محدودیت‌های نگهداری اطلاعات را بررسی کند؛
+این اطلاعیه وعده حذف فوری اطلاعات سمت سرور نمی‌دهد.
+
+**Publication gate:** The operator must audit the actual bot retention,
+deletion workflow, support commitments and Play Data safety declarations
+before treating this text as a final approved production privacy policy.

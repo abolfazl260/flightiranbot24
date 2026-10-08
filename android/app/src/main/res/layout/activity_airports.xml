@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="@color/pale">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/offline_airports"
+            android:textColor="@color/navy"
+            android:textStyle="bold"
+            android:textSize="24sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/airports_description"
+            android:textColor="@color/slate"
+            android:textSize="15sp" />
+        <EditText
+            android:id="@+id/airportSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:inputType="text"
+            android:singleLine="true"
+            android:hint="@string/search_airports"
+            android:autofillHints=""
+            android:importantForAutofill="no" />
+        <TextView
+            android:id="@+id/airportCount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:textColor="@color/slate"
+            android:textSize="14sp" />
+        <TextView
+            android:id="@+id/emptyAirports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:visibility="gone"
+            android:text="@string/no_airports"
+            android:textColor="@color/slate"
+            android:textSize="16sp" />
+        <LinearLayout
+            android:id="@+id/airportResults"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical" />
+    </LinearLayout>
+</ScrollView>

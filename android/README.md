@@ -1,33 +1,27 @@
 # Flight Iran Bot 24 — Android
 
-This is a lightweight **native Android companion** to the existing Telegram bot, not
-a WebView of the Telegram Mini App. The Mini App currently requires signed Telegram
-init data and cannot act as a standalone Android login. Visa, currency, airport and
-travel-info actions therefore open the existing Telegram bot. The visa (`/visa`) and
-currency (`/price`) commands are copied to the clipboard before opening the chat.
+Native Android travel companion.
 
-## Build
+Offline functionality:
+- Search the packaged airport catalogue by Persian, Arabic, English, IATA code, country and timezone.
+- Review and clear a travel preparation checklist stored only on the device.
 
-Requirements: **JDK 17**, Android SDK **API 36**, and **Gradle 8.13**.
-The GitHub workflow installs a pinned Gradle distribution without a binary
-wrapper JAR. For local use, install Gradle 8.13 and run:
+Optional online actions open the Telegram bot or the support account.
+Visa and currency commands are copied to clipboard for pasting into Telegram.
+The app does not authenticate directly to the Telegram Mini App.
 
-```bash
-cd android
-gradle :app:testDebugUnitTest :app:lintDebug :app:assembleDebug
-```
+The airport data is packaged directly from:
+src/flightiran/modules/airport/data/airports.json
 
-The debug APK is in `app/build/outputs/apk/debug/` and uses the
-`com.abolfazl260.flightiranbot24.debug` application ID.
+Build requirements: JDK 17, Gradle 8.13 and Android SDK 36.
 
-## Production
+Local build from the repository root:
 
-Read [Android release instructions](../docs/ANDROID_RELEASE.md) before issuing a
-`v1.0.0` tag. Signed release APK and AAB are built only in a trusted tag workflow,
-after four repository signing secrets are configured. Debug jobs receive no secrets.
+    cd android
+    gradle :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:bundleRelease
 
-Current release package ID: `com.abolfazl260.flightiranbot24` (keep it stable after
-first Play publication). Build configuration is in `app/build.gradle`; increment
-`appVersionCode` for every release and update `appVersionName` to the release tag.
+Debug build: android/app/build/outputs/apk/debug/app-debug.apk
+Main app ID: com.abolfazl260.flightiranbot24 (debug suffix: .debug)
 
-No bot token, admin ID, database URL, or signing material should be embedded in the APK.
+See docs/ANDROID_RELEASE.md for signing and release operations.
+See docs/PLAY_STORE_LISTING.md for Google Play listing text and assets.

@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Flight Iran Bot 24</string>
     <string name="welcome_title">Flight Iran Bot 24</string>
-    <string name="welcome_description">Your travel services companion. Choose a service to continue in Telegram.</string>
-    <string name="notice">Travel information is provided by the existing Telegram bot. This companion does not require account access or collect phone data.</string>
+    <string name="welcome_description">Explore airports and your travel checklist offline; access other services through Telegram.</string>
+    <string name="notice">Airport data is indicative. Online features open in Telegram.</string>
     <string name="open_bot">Open travel assistant</string>
     <string name="open_visa">Visa and entry requirements</string>
     <string name="open_currency">Exchange rates</string>
@@ -14,4 +14,20 @@
     <string name="command_hint">For visa or exchange rates, the command is copied; paste it into the Telegram chat.</string>
     <string name="command_copied">Command copied. Paste it into the Telegram chat.</string>
     <string name="link_unavailable">Unable to open the link on this device.</string>
+    <string name="offline_airports">Airport directory · offline</string>
+    <string name="airports_description">Search the bundled airport catalogue by city, country, IATA code or timezone. Data is offline and may not reflect recent changes.</string>
+    <string name="search_airports">Search airport or IATA code</string>
+    <string name="airport_count">%1$d of %2$d airports</string>
+    <string name="airport_item">%1$s · %2$s (%3$s)\nTimezone: %4$s</string>
+    <string name="airports_unavailable">Airport catalogue is unavailable.</string>
+    <string name="no_airports">No matching airport found.</string>
+    <string name="checklist_title">My travel checklist · offline</string>
+    <string name="checklist_note">Tick tasks before your journey. Progress is saved only on this device. Always verify official travel requirements.</string>
+    <string name="check_passport">Check passport validity</string>
+    <string name="check_visa">Verify visa and entry rules</string>
+    <string name="check_tickets">Review booking and boarding details</string>
+    <string name="check_insurance">Check travel insurance coverage</string>
+    <string name="check_money">Prepare payment methods and cash</string>
+    <string name="check_essentials">Pack medication and essentials</string>
+    <string name="checklist_reset">Clear my checklist</string>
 </resources>
