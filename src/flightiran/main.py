@@ -125,10 +125,10 @@ def create_application(
                             await application.bot.send_message(
                                 chat_id=settings.telegram_admin_id,
                                 text=(
-                                    "خطا در همگام‌سازی خودکار ویزا؛ آخرین داده سالم حفظ شد.\\n"
-                                    f"{type(exc).__name__}: {str(exc)[:250]}\\n"
+                                    "خطا در همگام‌سازی خودکار ویزا؛ آخرین داده سالم حفظ شد.\n"
+                                    f"{type(exc).__name__}: {str(exc)[:250]}\n"
                                     "منبع: https://travelrequirements.info/data/index.json"
-                                ).replace("\\\\n", "\\n"),
+                                ),
                                 disable_web_page_preview=True,
                             )
                         except Exception:
