@@ -341,8 +341,8 @@ def test_discount_fallback_messages_are_html_safe_and_length_bounded():
     ],
 )
 def test_ticket_booking_hint_invites_questions_and_links_support(language, snippet):
-    rendered = render_cheap_ticket_booking_hint("@advertio_bot", language)
+    rendered = render_cheap_ticket_booking_hint("@advertio_support", language)
     assert snippet in rendered
-    assert '<a href="https://t.me/advertio_bot">@advertio_bot</a>' in rendered
+    assert '<a href="https://t.me/advertio_support">@advertio_support</a>' in rendered
     assert "@vlansupport" not in rendered
     assert len(rendered) < 4000
