@@ -1,4 +1,5 @@
 from datetime import date, datetime, timezone
+import re
 
 import pytest
 
@@ -7,6 +8,8 @@ from flightiran.interfaces.telegram.rich_tickets import (
     find_price_drops,
     render_price_drop_fallback_chunks,
     render_rich_price_drop_report,
+    replace_disabled_buttons_with_indicators,
+    send_rich_price_table_with_badge_fallback,
     render_rich_price_tables,
 )
 from flightiran.interfaces.telegram.tickets import (
@@ -164,9 +167,11 @@ def test_rich_table_keeps_all_destinations_of_one_origin_in_one_message():
     assert len(messages) == 1
     assert messages[0]["html"].count("<tr>") == 86
     assert messages[0]["html"].count("<td>") == 85 * 5
+    assert messages[0]["html"].count('<td align="center">') == 85
     assert "<table bordered striped compact>" in messages[0]["html"]
     assert "<th>اختلاف (تومان)</th>" in messages[0]["html"]
     assert "<th>تغییر قیمت ٪</th>" in messages[0]["html"]
+    assert "<th>نسبت به ثبت قبلی</th>" in messages[0]["html"]
     assert "🟢 ↓ 20.0٪" in messages[0]["html"]
     assert messages[0]["is_rtl"] is True
 
@@ -213,6 +218,7 @@ def test_rich_table_only_splits_at_actual_configured_safety_limit():
 
     assert len(messages) > 1
     assert sum(item["html"].count("<td>") for item in messages) == 26 * 5
+    assert sum(item["html"].count('<td align="center">') for item in messages) == 26
     assert all(item["html"].count("<tr>") <= 491 for item in messages)
     assert all(item["html"].count("<table>") == 0 for item in messages)
     assert all(item["html"].count("</table>") == 1 for item in messages)
@@ -346,3 +352,111 @@ def test_ticket_booking_hint_invites_questions_and_links_support(language, snipp
     assert '<a href="https://t.me/advertio_support">@advertio_support</a>' in rendered
     assert "@vlansupport" not in rendered
     assert len(rendered) < 4000
+
+
+@pytest.mark.parametrize("language, header", [
+    ("fa", "نسبت به ثبت قبلی"),
+    ("en", "vs last saved price"),
+    ("ar", "مقارنة بالسعر السابق"),
+])
+def test_noninteractive_rich_buttons_follow_previous_price_not_average(language, header):
+    destinations = (
+        CheapTicketDestination(
+            "افزایش", "12,000", price_value_toman=12_000,
+            average_price_toman=15_000, previous_price_toman=10_000,
+        ),
+        CheapTicketDestination(
+            "کاهش", "8,000", price_value_toman=8_000,
+            average_price_toman=6_000, previous_price_toman=10_000,
+        ),
+        CheapTicketDestination(
+            "ثابت", "10,000", price_value_toman=10_000,
+            average_price_toman=11_000, previous_price_toman=10_000,
+        ),
+        CheapTicketDestination(
+            "بدون سابقه", "10,000", price_value_toman=10_000,
+            average_price_toman=9_000,
+        ),
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    messages = render_rich_price_tables(route, language=language)
+    assert len(messages) == 1
+    html = messages[0]["html"]
+    assert header in html
+
+    buttons = re.findall(r"<tg-button[^>]*>.*?</tg-button>", html)
+    assert buttons == [
+        '<tg-button type="disabled" style="danger">⬆️</tg-button>',
+        '<tg-button type="disabled" style="success">⬇️</tg-button>',
+        '<tg-button type="disabled">➖</tg-button>',
+    ]
+    assert all("url=" not in button for button in buttons)
+    assert all("data=" not in button and "callback" not in button for button in buttons)
+    assert html.count('<td align="center">') == 4
+    assert "20.0٪" in html
+    assert "—</td>" in html
+
+
+def test_missing_or_invalid_previous_price_is_not_reported_as_unchanged():
+    route = CheapTicketRoute(
+        "تهران",
+        (
+            CheapTicketDestination("بدون سابقه", "6,000", 6_000, 7_000),
+            CheapTicketDestination("قبلی صفر", "6,000", 6_000, 7_000, 0, 0),
+            CheapTicketDestination("قیمت فعلی نامعتبر", "نامشخص", None, 7_000, 0, 6_000),
+        ),
+        "https://mz724.ir/",
+    )
+    html = render_rich_price_tables(route)[0]["html"]
+    assert "<tg-button" not in html
+    assert html.count('<td align="center">—</td>') == 3
+
+
+def test_rich_button_compatibility_fallback_keeps_table_and_is_inert():
+    route = CheapTicketRoute(
+        "تهران",
+        (
+            CheapTicketDestination("مشهد", "8,000", 8_000, 9_000, 0, 10_000),
+            CheapTicketDestination("دبی", "12,000", 12_000, 10_000, 0, 10_000),
+            CheapTicketDestination("شیراز", "10,000", 10_000, 10_000, 0, 10_000),
+        ),
+        "https://mz724.ir/",
+    )
+    rich = render_rich_price_tables(route)[0]
+    fallback = replace_disabled_buttons_with_indicators(rich)
+    assert rich["html"].count("<tg-button") == 3
+    assert "<tg-button" not in fallback["html"]
+    assert fallback["html"].count("<td") == rich["html"].count("<td")
+    assert "🟢 ⬇️" in fallback["html"]
+    assert "🔴 ⬆️" in fallback["html"]
+    assert "⚪ ➖" in fallback["html"]
+    assert rich["html"].count("<tg-button") == 3
+
+
+@pytest.mark.asyncio
+async def test_rejected_disabled_badges_retry_only_as_inert_rich_symbols(monkeypatch):
+    import httpx
+
+    import flightiran.interfaces.telegram.rich_tickets as rich_tickets
+
+    route = CheapTicketRoute(
+        "تهران",
+        (CheapTicketDestination("مشهد", "8,000", 8_000, 9_000, 0, 10_000),),
+        "https://mz724.ir/",
+    )
+    rich = render_rich_price_tables(route)[0]
+    sent: list[dict] = []
+
+    async def fake_send(_bot, _chat_id, message):
+        sent.append(message)
+        if len(sent) == 1:
+            req = httpx.Request("POST", "https://api.telegram.org/botfake/sendRichMessage")
+            resp = httpx.Response(400, request=req)
+            raise httpx.HTTPStatusError("unsupported", request=req, response=resp)
+
+    monkeypatch.setattr(rich_tickets, "send_rich_price_table", fake_send)
+    await send_rich_price_table_with_badge_fallback(None, 1, rich)
+    assert len(sent) == 2
+    assert "<tg-button" in sent[0]["html"]
+    assert "<tg-button" not in sent[1]["html"]
+    assert "<table bordered striped compact>" in sent[1]["html"]
