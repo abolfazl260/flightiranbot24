@@ -60,16 +60,16 @@ def default_catalog() -> UsefulContentCatalog:
     links = (
         UsefulLink("flight-compensation", "جبران خسارت پرواز ✈️", "https://www.airhelp.com/"),
         UsefulLink("airline-ratings", "رتبه‌بندی ایرلاین‌ها 🛩️", "https://airlineratings.com"),
-        UsefulLink("exit-ban", "ممنوع‌الخروجی ❌", "https://t.me/koolbar_international/527"),
+        UsefulLink("exit-ban", "ممنوع‌الخروجی ❌", "https://t.me/advertio_cargo/527"),
         UsefulLink(
-            "prohibited-items", "کالاهای ممنوعه 🚫", "https://t.me/koolbar_international/637"
+            "prohibited-items", "کالاهای ممنوعه 🚫", "https://t.me/advertio_cargo/637"
         ),
-        UsefulLink("exit-fees", "عوارض خروج از کشور 💳", "https://t.me/koolbar_international/516"),
-        UsefulLink("travel-insurance", "بیمه مسافرتی 🛡️", "https://t.me/koolbar_international/549"),
-        UsefulLink("travel-tips", "نکات سفر 💡", "https://t.me/koolbar_international/1254"),
-        UsefulLink("get-passport", "دریافت پاسپورت 🗂️", "https://t.me/koolbar_international/526"),
+        UsefulLink("exit-fees", "عوارض خروج از کشور 💳", "https://t.me/advertio_cargo/516"),
+        UsefulLink("travel-insurance", "بیمه مسافرتی 🛡️", "https://t.me/advertio_cargo/549"),
+        UsefulLink("travel-tips", "نکات سفر 💡", "https://t.me/advertio_cargo/1254"),
+        UsefulLink("get-passport", "دریافت پاسپورت 🗂️", "https://t.me/advertio_cargo/526"),
         UsefulLink(
-            "academic-exemption", "معافیت تحصیلی 🎓", "https://t.me/koolbar_international/503"
+            "academic-exemption", "معافیت تحصیلی 🎓", "https://t.me/advertio_cargo/503"
         ),
         UsefulLink(
             "flight-rules-iran",
@@ -80,64 +80,64 @@ def default_catalog() -> UsefulContentCatalog:
         UsefulLink(
             "flight-rules-canada",
             "کانادا 🇨🇦",
-            "https://t.me/koolbar_international/81",
+            "https://t.me/advertio_cargo/81",
             "flight-rules",
         ),
         UsefulLink(
             "flight-rules-italy",
             "ایتالیا 🇮🇹",
-            "https://t.me/koolbar_international/508",
+            "https://t.me/advertio_cargo/508",
             "flight-rules",
         ),
         UsefulLink(
             "flight-rules-uk",
             "بریتانیا 🇬🇧",
-            "https://t.me/koolbar_international/540",
+            "https://t.me/advertio_cargo/540",
             "flight-rules",
         ),
         UsefulLink(
             "flight-rules-usa",
             "آمریکا 🇺🇸",
-            "https://t.me/koolbar_international/542",
+            "https://t.me/advertio_cargo/542",
             "flight-rules",
         ),
         UsefulLink(
             "flight-rules-europe",
             "اروپا 🇪🇺",
-            "https://t.me/koolbar_international/636",
+            "https://t.me/advertio_cargo/636",
             "flight-rules",
         ),
         UsefulLink(
             "travel-sites-canada",
             "کانادا 🇨🇦",
-            "https://t.me/koolbar_international/560",
+            "https://t.me/advertio_cargo/560",
             "travel-sites",
         ),
         UsefulLink(
             "travel-sites-italy",
             "ایتالیا 🇮🇹",
-            "https://t.me/koolbar_international/562",
+            "https://t.me/advertio_cargo/562",
             "travel-sites",
         ),
         UsefulLink(
-            "travel-sites-iraq", "عراق 🇮🇶", "https://t.me/koolbar_international/566", "travel-sites"
+            "travel-sites-iraq", "عراق 🇮🇶", "https://t.me/advertio_cargo/566", "travel-sites"
         ),
         UsefulLink(
             "travel-sites-uk",
             "بریتانیا 🇬🇧",
-            "https://t.me/koolbar_international/563",
+            "https://t.me/advertio_cargo/563",
             "travel-sites",
         ),
         UsefulLink(
             "travel-sites-usa",
             "آمریکا 🇺🇸",
-            "https://t.me/koolbar_international/564",
+            "https://t.me/advertio_cargo/564",
             "travel-sites",
         ),
         UsefulLink(
             "travel-sites-europe",
             "اروپا 🇪🇺",
-            "https://t.me/koolbar_international/565",
+            "https://t.me/advertio_cargo/565",
             "travel-sites",
         ),
     )
