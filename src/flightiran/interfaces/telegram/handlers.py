@@ -25,6 +25,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
     render_rich_price_tables,
     send_rich_price_table_with_badge_fallback,
 )
+from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
@@ -32,6 +33,7 @@ from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
+from .admin_report import render_admin_report
 from .keyboards import (
     back_menu,
     language_menu,
@@ -65,6 +67,21 @@ class TelegramDependencies:
     cheap_ticket_service: CheapTicketService | None = None
     ticket_support_username: str = DEFAULT_SUPPORT_USERNAME
     admin_chat_id: int = 106056586
+    admin_reports: BotReportRepository | None = None
+
+
+def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> bool:
+    """Require the configured admin's user ID and their private chat ID."""
+
+    user = update.effective_user
+    chat = update.effective_chat
+    return bool(
+        user is not None
+        and chat is not None
+        and user.id == dependencies.admin_chat_id
+        and chat.id == dependencies.admin_chat_id
+        and chat.type == "private"
+    )
 
 
 async def _notify_admin(
@@ -150,7 +167,11 @@ async def start_handler(
                 update.effective_user.first_name if update.effective_user else None,
             ),
             parse_mode="HTML",
-            reply_markup=main_menu(language, dependencies.web_app_url),
+            reply_markup=main_menu(
+                language,
+                dependencies.web_app_url,
+                is_admin=_is_private_admin(update, dependencies),
+            ),
         )
 
 
@@ -163,7 +184,11 @@ async def help_handler(
         await update.message.reply_text(
             render_help(language, dependencies.ticket_support_username),
             parse_mode="HTML",
-            reply_markup=main_menu(language, dependencies.web_app_url),
+            reply_markup=main_menu(
+                language,
+                dependencies.web_app_url,
+                is_admin=_is_private_admin(update, dependencies),
+            ),
         )
 
 
@@ -195,7 +220,11 @@ async def callback_handler(
         language = selected
         await query.edit_message_text(
             text(selected, "language_changed"),
-            reply_markup=main_menu(selected, dependencies.web_app_url),
+            reply_markup=main_menu(
+                selected,
+                dependencies.web_app_url,
+                is_admin=_is_private_admin(update, dependencies),
+            ),
         )
     elif data == "back":
         await dependencies.audit.record("menu.back", user_id=user_id)
@@ -205,7 +234,11 @@ async def callback_handler(
                 update.effective_user.first_name if update.effective_user else None,
             ),
             parse_mode="HTML",
-            reply_markup=main_menu(language, dependencies.web_app_url),
+            reply_markup=main_menu(
+                language,
+                dependencies.web_app_url,
+                is_admin=_is_private_admin(update, dependencies),
+            ),
         )
     elif data == "menu:airports" and dependencies.airport_catalog:
         from .airport import airport_keyboard
@@ -402,6 +435,41 @@ async def callback_handler(
             "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
             reply_markup=back_menu(language),
         )
+    elif data == "menu:admin_reports":
+        # Never trust a visible/forged callback as proof of authorization.
+        # Reports are sent only in the configured admin's private chat.
+        if not _is_private_admin(update, dependencies):
+            await query.edit_message_text(
+                safe_text(language, "unknown_action"),
+                reply_markup=back_menu(language),
+            )
+            return
+        if dependencies.admin_reports is None:
+            await query.edit_message_text(
+                "گزارش مدیریتی به دیتابیس متصل نیست.",
+                reply_markup=main_menu(
+                    language, dependencies.web_app_url, is_admin=True
+                ),
+            )
+            return
+        await query.edit_message_text(
+            "⏳ در حال تهیه گزارش جامع ربات از داده‌های ثبت‌شده...",
+            reply_markup=main_menu(
+                language, dependencies.web_app_url, is_admin=True
+            ),
+        )
+        try:
+            report = await dependencies.admin_reports.collect()
+            for part in render_admin_report(report):
+                await query.message.reply_text(part, parse_mode="HTML")
+        except Exception as exc:
+            LOGGER.exception("admin_report_generation_failed")
+            await _notify_admin(context, exc, update, dependencies)
+            await query.message.reply_text(
+                "خطا در تهیه گزارش. جزئیات فنی برای مدیر ارسال شد."
+            )
+        else:
+            await dependencies.audit.record("admin.report.viewed", user_id=user_id)
     elif data == "menu:support":
         await dependencies.audit.record("support.opened", user_id=user_id)
         await query.edit_message_text(
