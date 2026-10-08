@@ -102,7 +102,7 @@ MESSAGES["fa"].update({
         "📚 اطلاعات کاربردی: راهنماهای سفر\n"
         "⚙️ تنظیمات: تغییر زبان\n"
         "🛂 ویزا و قوانین مسافر: بخش‌های نیازمند منبع رسمی\n"
-        "📦 حمل بار: خدمات و اطلاعات مرتبط\n"
+        "📦 حمل بار: ورود مستقیم به کانال @advertio_cargo\n"
         "📩 پشتیبانی: پرسش درباره رزرو، قیمت‌ها و استفاده از ربات"
     ),
     "help_note": (
@@ -148,7 +148,7 @@ MESSAGES["en"].update({
         "📚 Useful information: travel guides\n"
         "⚙️ Settings: change language\n"
         "🛂 Visa and traveler rules: require official sources\n"
-        "📦 Cargo: related information and services\n"
+        "📦 Cargo marketplace: open the @advertio_cargo channel\n"
         "📩 Support: questions about bookings, prices and using the bot"
     ),
     "help_note": (
@@ -193,7 +193,7 @@ MESSAGES["ar"].update({
         "📚 معلومات مفيدة: أدلة السفر\n"
         "⚙️ الإعدادات: تغيير اللغة\n"
         "🛂 التأشيرات وقواعد المسافرين: تتطلب مصادر رسمية\n"
-        "📦 الشحن: معلومات وخدمات ذات صلة\n"
+        "📦 سوق الشحن: فتح قناة @advertio_cargo مباشرة\n"
         "📩 الدعم: أسئلة عن الحجز والأسعار واستخدام البوت"
     ),
     "help_note": (
