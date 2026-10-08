@@ -443,6 +443,7 @@ async def test_new_user_start_alert_sent_once_with_profile_fields():
     admin_bot = AdminNotifications()
     context = SimpleNamespace(bot=admin_bot, user_data={})
     incoming = update(message=Message())
+    incoming.effective_user.username = "new_member_42"
     incoming.effective_user.language_code = "fa"
     incoming.effective_user.last_name = "<Admin>"
     incoming.effective_user.is_premium = True
@@ -455,8 +456,8 @@ async def test_new_user_start_alert_sent_once_with_profile_fields():
     assert notification["disable_web_page_preview"] is True
     html = notification["text"]
     assert "🆕 کاربر جدید ربات" in html
-    assert 'href="https://t.me/user"' not in html  # Invalid/short usernames are not linked.
-    assert "@user" in html
+    assert 'href="https://t.me/new_member_42"' in html
+    assert "@new_member_42" in html
     assert "<code>42</code>" in html
     assert "&lt;Admin&gt;" in html
     assert "fa" in html
