@@ -25,20 +25,26 @@ def test_missing_token_has_safe_configuration_error(monkeypatch) -> None:
 
 
 
-def test_support_uses_advertio_default_and_migrates_legacy_username(monkeypatch):
+def test_support_uses_correct_default_and_migrates_obsolete_usernames(monkeypatch):
     monkeypatch.delenv("SUPPORT_USERNAME", raising=False)
     monkeypatch.delenv("TICKET_SUPPORT_USERNAME", raising=False)
     default = Settings(TELEGRAM_BOT_TOKEN="123456:AA-test-token")
-    assert default.ticket_support_username == "@advertio_bot"
+    assert default.ticket_support_username == "@advertio_support"
 
     legacy = Settings(
         TELEGRAM_BOT_TOKEN="123456:AA-test-token",
         TICKET_SUPPORT_USERNAME="@vlansupport",
     )
-    assert legacy.ticket_support_username == "@advertio_bot"
+    assert legacy.ticket_support_username == "@advertio_support"
 
-    unified = Settings(
+    previous = Settings(
         TELEGRAM_BOT_TOKEN="123456:AA-test-token",
         SUPPORT_USERNAME="@advertio_bot",
     )
-    assert unified.ticket_support_username == "@advertio_bot"
+    assert previous.ticket_support_username == "@advertio_support"
+
+    unified = Settings(
+        TELEGRAM_BOT_TOKEN="123456:AA-test-token",
+        SUPPORT_USERNAME="@advertio_support",
+    )
+    assert unified.ticket_support_username == "@advertio_support"
