@@ -27,7 +27,7 @@ should be made standalone before claiming full in-app functionality in a store l
    Google Play App Signing with a separate upload key.
 3. In repository **Settings → Secrets and variables → Actions**, add:
    - `ANDROID_KEYSTORE_BASE64`: base64 of the full JKS file
-     (e.g. `base64 < flightiran-upload.jks | tr -d '\\n'`).
+     (e.g. `base64 < flightiran-upload.jks | tr -d '\n'`).
    - `ANDROID_KEYSTORE_PASSWORD`: keystore password.
    - `ANDROID_KEY_ALIAS`: `flightiran-upload` (or your actual alias).
    - `ANDROID_KEY_PASSWORD`: alias password.
