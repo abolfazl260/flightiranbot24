@@ -21,6 +21,10 @@ class MemoryUsers:
         self.users.setdefault(telegram_id, SimpleNamespace(id=telegram_id, **fields))
         return self.users[telegram_id]
 
+    async def get_or_create_with_status(self, telegram_id, **fields):
+        is_new = telegram_id not in self.users
+        return await self.get_or_create(telegram_id, **fields), is_new
+
     async def get_language(self, user_id):
         return self.languages.get(user_id, "en")
 
@@ -420,3 +424,88 @@ async def test_visa_list_defaults_to_iran_and_explicit_commands_are_saved():
     reopened.data = "menu:visa"
     await callback_handler(update(query=reopened), context, deps)
     assert context.user_data["visa_passport"] == "AF"
+
+
+class AdminNotifications:
+    def __init__(self, *, should_fail=False):
+        self.calls = []
+        self.should_fail = should_fail
+
+    async def send_message(self, **kwargs):
+        if self.should_fail:
+            raise RuntimeError("Telegram admin delivery failed")
+        self.calls.append(kwargs)
+
+
+@pytest.mark.asyncio
+async def test_new_user_start_alert_sent_once_with_profile_fields():
+    deps = dependencies(admin_chat_id=987654)
+    admin_bot = AdminNotifications()
+    context = SimpleNamespace(bot=admin_bot, user_data={})
+    incoming = update(message=Message())
+    incoming.effective_user.language_code = "fa"
+    incoming.effective_user.last_name = "<Admin>"
+    incoming.effective_user.is_premium = True
+
+    await start_handler(incoming, context, deps)
+    assert len(admin_bot.calls) == 1
+    notification = admin_bot.calls[0]
+    assert notification["chat_id"] == 987654
+    assert notification["parse_mode"] == "HTML"
+    assert notification["disable_web_page_preview"] is True
+    html = notification["text"]
+    assert "🆕 کاربر جدید ربات" in html
+    assert 'href="https://t.me/user"' not in html  # Invalid/short usernames are not linked.
+    assert "@user" in html
+    assert "<code>42</code>" in html
+    assert "&lt;Admin&gt;" in html
+    assert "fa" in html
+    assert "UTC" in html
+    assert "تلگرام پریمیوم: بله" in html
+    assert 'href="tg://user?id=42"' in html
+    assert any(event[0] == "user.registered" for event in deps.audit.events)
+
+    await start_handler(update(message=Message()), context, deps)
+    assert len(admin_bot.calls) == 1
+    assert sum(event[0] == "user.registered" for event in deps.audit.events) == 1
+
+
+@pytest.mark.asyncio
+async def test_existing_user_and_no_username_do_not_produce_false_alert():
+    deps = dependencies()
+    existing_user = await deps.users.get_or_create(42, username="previous")
+    assert existing_user.id == 42
+    admin_bot = AdminNotifications()
+    await start_handler(
+        update(message=Message()), SimpleNamespace(bot=admin_bot, user_data={}), deps
+    )
+    assert admin_bot.calls == []
+
+    deps_new = dependencies()
+    admin_bot = AdminNotifications()
+    newcomer = update(message=Message())
+    newcomer.effective_user.username = None
+    newcomer.effective_user.first_name = "<b>Ali & Sara</b>"
+    newcomer.effective_user.language_code = None
+    await start_handler(
+        newcomer, SimpleNamespace(bot=admin_bot, user_data={}), deps_new
+    )
+    assert len(admin_bot.calls) == 1
+    html = admin_bot.calls[0]["text"]
+    assert "یوزرنیم: ندارد" in html
+    assert "&lt;b&gt;Ali &amp; Sara&lt;/b&gt;" in html
+    assert "زبان تلگرام: ثبت نشده" in html
+
+
+@pytest.mark.asyncio
+async def test_new_user_alert_delivery_failure_does_not_break_start():
+    deps = dependencies()
+    user_message = Message()
+    await start_handler(
+        update(message=user_message),
+        SimpleNamespace(bot=AdminNotifications(should_fail=True), user_data={}),
+        deps,
+    )
+    assert len(user_message.calls) == 1
+    assert "Welcome" in user_message.calls[0][0][0]
+    assert 42 in deps.users.users
