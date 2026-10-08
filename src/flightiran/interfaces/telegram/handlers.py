@@ -19,10 +19,10 @@ from flightiran.config.settings import DEFAULT_SUPPORT_USERNAME
 from flightiran.db.repositories import AuditRepository, UserRepository
 from flightiran.infrastructure.http.errors import ProviderError
 from flightiran.interfaces.telegram.rich_tickets import (
+    find_price_drops,
     render_price_drop_fallback_chunks,
     render_rich_price_drop_report,
     render_rich_price_tables,
-    send_rich_price_table,
     send_rich_price_table_with_badge_fallback,
 )
 from flightiran.modules.airport.catalog import AirportCatalog
@@ -32,7 +32,14 @@ from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
-from .keyboards import back_menu, language_menu, main_menu, support_menu
+from .keyboards import (
+    back_menu,
+    language_menu,
+    main_menu,
+    support_menu,
+    ticket_origins_menu,
+    ticket_result_menu,
+)
 from .localization import normalize_language, safe_text, text
 from .renderers import render_help, render_language_prompt, render_main_menu
 from .support import render_support_message
@@ -281,18 +288,14 @@ async def callback_handler(
                 reply_markup=useful_category_menu(language, catalog, category),
             )
     elif data == "menu:tickets":
-        from .tickets import (
-            render_cheap_route_chunks,
-            render_cheap_ticket_booking_hint,
-            render_cheap_ticket_intro,
-        )
-
         if dependencies.cheap_ticket_service is None:
             await query.edit_message_text(
                 "سرویس جستجوی بلیط در حال حاضر پیکربندی نشده است.",
                 reply_markup=back_menu(language),
             )
         else:
+            from .tickets import render_cheap_ticket_intro
+
             await query.edit_message_text(render_cheap_ticket_intro(), parse_mode="HTML")
             try:
                 routes = await dependencies.cheap_ticket_service.routes()
@@ -310,40 +313,90 @@ async def callback_handler(
                     reply_markup=back_menu(language),
                 )
             else:
-                for route in routes:
-                    for rich_message in render_rich_price_tables(route, language=language):
-                        try:
-                            await send_rich_price_table_with_badge_fallback(
-                                context.bot,
-                                query.message.chat_id,
-                                rich_message,
-                            )
-                        except Exception:
-                            LOGGER.exception("rich_ticket_table_send_failed")
-                            for message in render_cheap_route_chunks(route):
-                                await query.message.reply_text(
-                                    message, parse_mode="HTML"
-                                )
-                            break
-                try:
-                    for report in render_rich_price_drop_report(routes):
-                        await send_rich_price_table(
-                            context.bot,
-                            query.message.chat_id,
-                            report,
-                        )
-                except Exception:
-                    LOGGER.exception("rich_ticket_price_drop_report_failed")
-                    for message in render_price_drop_fallback_chunks(routes):
-                        await query.message.reply_text(message, parse_mode="HTML")
-
-                await query.message.reply_text(
-                    render_cheap_ticket_booking_hint(
-                        dependencies.ticket_support_username, language
+                # User-scoped data: the button stores a short index, not a city name.
+                # A selected origin reuses this snapshot, without another site crawl.
+                context.user_data["ticket_routes"] = routes
+                await query.edit_message_text(
+                    text(language, "ticket_choose_origin"),
+                    reply_markup=ticket_origins_menu(
+                        language, [route.origin for route in routes]
                     ),
-                    parse_mode="HTML",
-                    reply_markup=support_menu(language, dependencies.ticket_support_username),
                 )
+    elif data == "tickets:menu" or data.startswith("tickets:page:"):
+        routes = context.user_data.get("ticket_routes", [])
+        if not routes:
+            await query.edit_message_text(
+                text(language, "ticket_expired"),
+                reply_markup=back_menu(language),
+            )
+        else:
+            try:
+                page = int(data.removeprefix("tickets:page:")) if data != "tickets:menu" else 0
+            except ValueError:
+                page = 0
+            await query.edit_message_text(
+                text(language, "ticket_choose_origin"),
+                reply_markup=ticket_origins_menu(
+                    language, [route.origin for route in routes], page=page
+                ),
+            )
+    elif data.startswith("tickets:origin:"):
+        from .tickets import render_cheap_route_chunks, render_cheap_ticket_booking_hint
+
+        routes = context.user_data.get("ticket_routes", [])
+        try:
+            index = int(data.removeprefix("tickets:origin:"))
+        except ValueError:
+            index = -1
+        if index < 0 or index >= len(routes):
+            await query.edit_message_text(
+                text(language, "ticket_expired"),
+                reply_markup=back_menu(language),
+            )
+        else:
+            route = routes[index]
+            await dependencies.audit.record(
+                "ticket.origin.selected",
+                user_id=user_id,
+                payload={"origin": route.origin},
+            )
+            await query.edit_message_text(
+                text(language, "ticket_selected_origin").format(origin=route.origin),
+                reply_markup=ticket_origins_menu(
+                    language, [item.origin for item in routes], page=index // 16
+                ),
+            )
+            for rich_message in render_rich_price_tables(route, language=language):
+                try:
+                    await send_rich_price_table_with_badge_fallback(
+                        context.bot, query.message.chat_id, rich_message
+                    )
+                except Exception:
+                    LOGGER.exception("rich_ticket_table_send_failed")
+                    for message in render_cheap_route_chunks(route):
+                        await query.message.reply_text(message, parse_mode="HTML")
+                    break
+            # The optional discount report is limited to this origin as well.
+            try:
+                if find_price_drops([route]):
+                    for report in render_rich_price_drop_report([route]):
+                        await send_rich_price_table_with_badge_fallback(
+                            context.bot, query.message.chat_id, report
+                        )
+            except Exception:
+                LOGGER.exception("rich_ticket_price_drop_report_failed")
+                for message in render_price_drop_fallback_chunks([route]):
+                    await query.message.reply_text(message, parse_mode="HTML")
+
+            await query.message.reply_text(
+                render_cheap_ticket_booking_hint(
+                    dependencies.ticket_support_username, language
+                ),
+                parse_mode="HTML",
+                reply_markup=ticket_result_menu(
+                    language, dependencies.ticket_support_username
+                ),
+            )
     elif data in {"menu:visa", "menu:rules"}:
         await query.edit_message_text(
             "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
