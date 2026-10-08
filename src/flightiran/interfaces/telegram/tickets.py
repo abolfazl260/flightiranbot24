@@ -6,6 +6,9 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicketRoute, TicketOffer
 
+from .localization import normalize_language
+from .support import support_link
+
 
 def render_offer(offer: TicketOffer) -> tuple[str, InlineKeyboardMarkup]:
     lines = [
@@ -127,8 +130,46 @@ def render_cheap_ticket_intro() -> str:
     return "🔍 <b>در حال دریافت و مقایسه قیمت بلیط‌ها با میانگین ۲۱ روزه...</b>"
 
 
-def render_cheap_ticket_booking_hint(support_username: str) -> str:
+def render_cheap_ticket_booking_hint(
+    support_username: str, language: str = "fa"
+) -> str:
+    """Invite questions or booking requests without overstating fare certainty."""
+
+    contact = support_link(support_username)
+    language = normalize_language(language)
+
+    if language == "en":
+        return (
+            "🎫 <b>Found a route you like, or still have questions?</b>\n\n"
+            "The listed fares help you compare flights. Prices and availability "
+            "can change before booking, so please confirm the final details "
+            "with support.\n\n"
+            "💬 Not sure about your route, travel dates, baggage rules or "
+            "booking steps? Send your departure city, destination, approximate "
+            "travel date and any questions. Your request can then be reviewed.\n\n"
+            f"📩 <b>Support for all services:</b> {contact}\n"
+            "👇 <b>Tap the button below to ask a question or discuss a booking.</b>"
+        )
+    if language == "ar":
+        return (
+            "🎫 <b>هل وجدت رحلة مناسبة أم لديك سؤال قبل الحجز؟</b>\n\n"
+            "الأسعار المعروضة للمقارنة وقد تتغير عند الحجز. يرجى تأكيد "
+            "السعر النهائي والتوافر مع الدعم قبل اتخاذ القرار.\n\n"
+            "💬 هل لديك استفسار عن المسار أو موعد السفر أو الأمتعة أو خطوات "
+            "الحجز؟ أرسل مدينة المغادرة والوجهة والتاريخ التقريبي وسؤالك "
+            "لتتم مراجعة طلبك.\n\n"
+            f"📩 <b>دعم جميع الخدمات:</b> {contact}\n"
+            "👇 <b>اضغط الزر أدناه للسؤال أو الاستفسار عن الحجز.</b>"
+        )
     return (
-        "📥 برای رزرو بلیط، مسیر موردنظر را انتخاب کنید و از طریق پشتیبانی پیام دهید: "
-        f"<b>{escape(support_username)}</b>"
+        "🎫 <b>مسیر دلخواهتان را پیدا کرده‌اید یا هنوز سؤال دارید؟</b>\n\n"
+        "قیمت‌های این فهرست برای مقایسه مسیرها هستند و ممکن است تا زمان رزرو "
+        "تغییر کنند. بهتر است پیش از تصمیم نهایی، قیمت و امکان رزرو را "
+        "با پشتیبانی بررسی کنید.\n\n"
+        "💬 <b>برای انتخاب مسیر یا رزرو نیاز به راهنمایی دارید؟</b>\n"
+        "اگر درباره تاریخ سفر، شرایط بار، قیمت یا مراحل رزرو پرسشی دارید، "
+        "مبدأ، مقصد و تاریخ تقریبی سفرتان را ارسال کنید و سؤال خود را بپرسید "
+        "تا درخواستتان بررسی شود.\n\n"
+        f"📩 <b>پشتیبانی همه خدمات:</b> {contact}\n"
+        "👇 <b>برای پرسیدن سؤال یا درخواست بررسی بلیط، دکمه زیر را بزنید.</b>"
     )
