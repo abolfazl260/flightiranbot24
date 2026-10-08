@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     currency_proxy_url: str | None = None
     ticket_provider_url: str = "https://mz724.ir/"
     ticket_support_username: str = "@vlansupport"
+    ticket_history_interval_minutes: int = 60
+    ticket_history_retention_days: int = 21
     app_env: str = "development"
     web_app_enabled: bool = False
     web_app_url: str | None = None
@@ -48,6 +50,10 @@ class Settings(BaseSettings):
             raise ValueError("TELEGRAM_BOT_TOKEN is too short for production")
         if self.web_app_enabled and not self.web_app_url:
             raise ValueError("WEB_APP_URL is required when WEB_APP_ENABLED=true")
+        if self.ticket_history_interval_minutes < 1:
+            raise ValueError("TICKET_HISTORY_INTERVAL_MINUTES must be positive")
+        if self.ticket_history_retention_days < 1:
+            raise ValueError("TICKET_HISTORY_RETENTION_DAYS must be positive")
 
 
 @lru_cache(maxsize=1)
