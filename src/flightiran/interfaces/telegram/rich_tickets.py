@@ -19,38 +19,23 @@ MAX_RICH_TABLE_ROWS = 490
 
 _TABLE_HEADERS = {
     "fa": (
-        "<tr><th>مقصد</th><th>فعلی (تومان)</th><th>میانگین ۲۱ روزه</th>"
-        "<th>اختلاف (تومان)</th><th>تغییر قیمت ٪</th>"
-        "<th>نسبت به ثبت قبلی</th></tr>"
+        "<tr><th>مقصد</th><th>فعلی</th><th>میانگین ۲۱ر</th>"
+        "<th>اختلاف</th><th>تغییر ٪</th></tr>"
     ),
     "en": (
-        "<tr><th>Destination</th><th>Now (toman)</th><th>21-day average</th>"
-        "<th>Difference (toman)</th><th>vs average %</th>"
-        "<th>vs last saved price</th></tr>"
+        "<tr><th>To</th><th>Now</th><th>Avg 21d</th>"
+        "<th>Diff</th><th>Change %</th></tr>"
     ),
     "ar": (
-        "<tr><th>الوجهة</th><th>السعر الحالي</th><th>متوسط ٢١ يوماً</th>"
-        "<th>الفرق (تومان)</th><th>مقارنة بالمتوسط ٪</th>"
-        "<th>مقارنة بالسعر السابق</th></tr>"
+        "<tr><th>الوجهة</th><th>الحالي</th><th>متوسط ٢١ي</th>"
+        "<th>الفرق</th><th>التغير ٪</th></tr>"
     ),
 }
 
 _TABLE_LEGENDS = {
-    "fa": (
-        "نسبت به میانگین ۲۱روزه: 🟢 ↓ ارزان‌تر | 🔴 ↑ گران‌تر | ⚪ = برابر. "
-        "آخرین ستون نسبت به ثبت قبلی است: ⬇️ کاهش | ⬆️ افزایش | ➖ بدون تغییر. "
-        "— یعنی سابقه معتبر موجود نیست."
-    ),
-    "en": (
-        "Compared with the 21-day average: 🟢 ↓ cheaper | 🔴 ↑ higher | ⚪ = same. "
-        "The last column compares the previous saved price: "
-        "⬇️ down | ⬆️ up | ➖ unchanged. — means no valid history."
-    ),
-    "ar": (
-        "مقارنة بمتوسط ٢١ يوماً: 🟢 ↓ أقل | 🔴 ↑ أعلى | ⚪ = ثابت. "
-        "العمود الأخير مقارنة بآخر سعر محفوظ: "
-        "⬇️ انخفاض | ⬆️ ارتفاع | ➖ دون تغيير. — تعني عدم توفر سجل صالح."
-    ),
+    "fa": "قیمت‌ها به تومان؛ تغییر نسبت به میانگین ۲۱روزه: 🟢 کاهش | 🔴 افزایش | ⚪ برابر",
+    "en": "Prices in toman; vs 21-day average: 🟢 lower | 🔴 higher | ⚪ equal",
+    "ar": "الأسعار بالتومان؛ مقارنة بمتوسط ٢١ يوماً: 🟢 أقل | 🔴 أعلى | ⚪ مساوي",
 }
 
 _TABLE_TITLES = {
@@ -60,28 +45,34 @@ _TABLE_TITLES = {
 }
 _TABLE_CONTINUATION = {"fa": " (ادامه)", "en": " (continued)", "ar": " (متابعة)"}
 
-# The button's *entire* content is one emoji. It has no URL or callback.
-_INACTIVE_BADGES = {
-    "up": '<tg-button type="disabled" style="danger">⬆️</tg-button>',
-    "down": '<tg-button type="disabled" style="success">⬇️</tg-button>',
-    "same": '<tg-button type="disabled">➖</tg-button>',
-}
 
+def _average_change_badge(current: int | None, average: float | None) -> str:
+    """Show the deviation from the rolling average as an inert colored button.
 
-def _prior_price_indicator(item: CheapTicketDestination, current: int | None) -> str:
-    previous = item.previous_price_toman
-    if current is None or current <= 0 or previous is None or previous <= 0:
+    The percent sign appears only in the table heading, never in a data cell.
+    """
+
+    if current is None or average is None or average <= 0:
         return "—"
-    if current == previous:
-        return _INACTIVE_BADGES["same"] + " 0.0٪"
-    percentage = abs((current - previous) / previous * 100)
-    if current < previous:
-        return _INACTIVE_BADGES["down"] + f" {percentage:.1f}٪"
-    return _INACTIVE_BADGES["up"] + f" {percentage:.1f}٪"
+
+    difference = current - average
+    if round(difference) == 0:
+        return '<tg-button type="disabled">⚪ ➖ 0.0</tg-button>'
+
+    percentage = abs(difference / average * 100)
+    if difference < 0:
+        return (
+            '<tg-button type="disabled" style="success">'
+            f"🟢 ↓ {percentage:.1f}</tg-button>"
+        )
+    return (
+        '<tg-button type="disabled" style="danger">'
+        f"🔴 ↑ {percentage:.1f}</tg-button>"
+    )
 
 
 def _row(destination: CheapTicketDestination) -> str:
-    """Render the mean comparison and the previous-price badge separately."""
+    """Render a compact five-column table using only the 21-day average."""
 
     current = destination.price_value_toman
     if current is None:
@@ -93,29 +84,24 @@ def _row(destination: CheapTicketDestination) -> str:
     average = destination.average_price_toman
     price = f"{current:,}" if current is not None else destination.price_toman
 
-    if average is None or average <= 0 or current is None:
-        mean, delta, percent = "—", "—", "⚪ ؟ نامشخص"
+    if current is None or average is None or average <= 0:
+        mean, delta = "—", "—"
     else:
         mean = f"{average:,.0f}"
-        difference = current - average
-        delta_toman = round(difference)
-        percentage = abs(difference / average * 100)
-
-        if delta_toman == 0:
-            delta, percent = "= 0", "⚪ = 0.0٪"
-        elif difference < 0:
-            delta = f"↓ {abs(delta_toman):,}"
-            percent = f"🟢 ↓ {percentage:.1f}٪"
+        difference = round(current - average)
+        if difference < 0:
+            delta = f"↓ {abs(difference):,}"
+        elif difference > 0:
+            delta = f"↑ {difference:,}"
         else:
-            delta = f"↑ {delta_toman:,}"
-            percent = f"🔴 ↑ {percentage:.1f}٪"
+            delta = "= 0"
 
-    cells = (destination.name, price, mean, delta, percent)
-    comparison = _prior_price_indicator(destination, current)
+    cells = (destination.name, price, mean, delta)
+    badge = _average_change_badge(current, average)
     return (
         "<tr>"
         + "".join(f"<td>{escape(str(value))}</td>" for value in cells)
-        + f'<td align="center">{comparison}</td></tr>'
+        + f'<td align="center">{badge}</td></tr>'
     )
 
 
@@ -394,23 +380,16 @@ def render_price_drop_fallback_chunks(
 
 
 _DISABLED_BADGE_PATTERN = re.compile(
-    r'<tg-button type="disabled"(?: style="(success|danger)")?>'
-    r'(⬆️|⬇️|➖)</tg-button>'
+    r'<tg-button type="disabled"(?: style="(?:success|danger)")?>([^<]*)</tg-button>'
 )
 
 
 def replace_disabled_buttons_with_indicators(rich_message: dict) -> dict:
-    """Keep the same Rich Message table, but replace unsupported badges with glyphs."""
-
-    indicators = {"success": "🟢", "danger": "🔴"}
-
-    def render(match: re.Match[str]) -> str:
-        color, arrow = match.groups()
-        return f"{indicators[color]} {arrow}" if color else f"⚪ {arrow}"
+    """Preserve a Rich Message table if inline disabled buttons are unsupported."""
 
     return {
         **rich_message,
-        "html": _DISABLED_BADGE_PATTERN.sub(render, rich_message["html"]),
+        "html": _DISABLED_BADGE_PATTERN.sub(r"\\1", rich_message["html"]),
     }
 
 
