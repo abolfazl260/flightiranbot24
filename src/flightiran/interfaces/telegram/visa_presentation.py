@@ -6,6 +6,7 @@ import re
 from html import escape, unescape
 from urllib.parse import urlparse
 
+from babel import Locale
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from flightiran.modules.visa.catalog import Country, VisaDetail, VisaRule
@@ -194,7 +195,15 @@ def tr(language: str, key: str) -> str:
 
 
 def country_label(code: str, name: str, language: str) -> str:
-    return COUNTRY_LABELS.get(language, {}).get(code.upper(), name)
+    code = code.upper()
+    override = COUNTRY_LABELS.get(language, {}).get(code)
+    if override:
+        return override
+    if language in {"fa", "ar", "en"}:
+        localized = Locale.parse(language).territories.get(code)
+        if localized:
+            return str(localized)
+    return name
 
 
 def status_label(value: str, language: str) -> str:
