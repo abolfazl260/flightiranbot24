@@ -6,6 +6,7 @@ import pytest
 
 from flightiran.db import initialize_database
 from flightiran.db.models import VisaDatasetState, VisaDestinationData, VisaRuleIndex
+from flightiran.db.repositories import SQLiteUserRepository
 from flightiran.interfaces.telegram.visa_flow import (
     handle_visa_callback,
     visa_command,
@@ -209,3 +210,21 @@ async def test_country_search_matches_persian():
     assert await visa_search_text(update, context, FakeCatalog(), "fa")
     buttons = message.calls[0][1]["reply_markup"].inline_keyboard
     assert any(button.callback_data == "visa:d:IR" for row in buttons for button in row)
+
+
+@pytest.mark.asyncio
+async def test_visa_passport_preference_defaults_to_iran_and_survives_new_context(tmp_path):
+    database = await initialize_database(
+        f"sqlite+aiosqlite:///{tmp_path / 'visa-preference.db'}"
+    )
+    users = SQLiteUserRepository(database)
+    user = await users.get_or_create(9955)
+    assert await users.get_visa_passport(user.id) == "IR"
+
+    await users.set_visa_passport(user.id, "af")
+    assert await users.get_visa_passport(user.id) == "AF"
+
+    # A new repository instance restores the preference from SQLite.
+    new_instance = SQLiteUserRepository(database)
+    assert await new_instance.get_visa_passport(user.id) == "AF"
+    await database.close()

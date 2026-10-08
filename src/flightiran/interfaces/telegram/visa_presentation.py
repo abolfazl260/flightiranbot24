@@ -33,10 +33,12 @@ LANG = {
         "residence_button": "تعیین کشور اقامت", "clear_residence": "حذف اقامت",
         "unmodeled": "این منبع اثر اقامت یا هدف خاص سفر را به‌طور کامل محاسبه نمی‌کند.",
         "intro": "اطلاعات ۱۹۹ مقصد، براساس پاسپورت و منابع استنادی. "
-        "برای شروع پاسپورت را انتخاب کنید یا دستور /visa AF TR را بفرستید.",
+        "کشور مقصد را انتخاب کنید یا در صورت نیاز پاسپورت را تغییر دهید. "
+        "مثال: /visa AF TR.",
+        "selected_passport": "پاسپورت مبدأ",
         "empty": "دیتاست هنوز دریافت نشده است. مدیر می‌تواند /visa_sync را اجرا کند.",
         "missing": "برای این ترکیب داده معتبری در دیتابیس موجود نیست.",
-        "another": "تغییر مقصد", "passports": "انتخاب پاسپورت",
+        "another": "تغییر مقصد", "passports": "تغییر پاسپورت",
         "list": "کشورهای قابل سفر براساس نوع ویزا", "all": "همه کشورها",
         "free": "بدون ویزا", "evisa": "ویزای الکترونیکی / ETA",
         "arrival": "ویزای فرودگاهی", "required": "ویزای قبلی / سفارتی",
@@ -80,10 +82,11 @@ LANG = {
             "This dataset does not fully calculate residence or special-purpose eligibility."
         ),
         "intro": "Information for 199 destinations, grouped by passport and sources. "
-        "Choose a passport or try /visa AF TR.",
+        "Choose a destination or change your passport if needed. Example: /visa AF TR.",
+        "selected_passport": "Passport country",
         "empty": "Visa data not yet imported. An administrator can run /visa_sync.",
         "missing": "No validated local data for this passport/destination.",
-        "another": "Other destination", "passports": "Choose passport",
+        "another": "Other destination", "passports": "Change passport",
         "list": "Destinations by visa type", "all": "All destinations",
         "free": "Visa-free", "evisa": "eVisa / ETA",
         "arrival": "Visa on arrival", "required": "Advance / embassy visa",
@@ -123,10 +126,14 @@ LANG = {
         "residence": "بلد الإقامة المعلن", "purpose": "الغرض من السفر",
         "residence_button": "تحديد بلد الإقامة", "clear_residence": "حذف الإقامة",
         "unmodeled": "لا يحسب هذا المصدر جميع استثناءات الإقامة وأغراض السفر.",
-        "intro": "بيانات ١٩٩ وجهة حسب جواز السفر والمصادر. اختر الجواز أو أرسل /visa AF TR.",
+        "intro": (
+            "بيانات ١٩٩ وجهة حسب جواز السفر والمصادر. "
+            "اختر الوجهة أو غيّر جواز السفر عند الحاجة. مثال: /visa AF TR."
+        ),
+        "selected_passport": "بلد جواز السفر",
         "empty": "لم تُستورد بيانات التأشيرات بعد. يمكن للمشرف تشغيل /visa_sync.",
         "missing": "لا توجد بيانات محلية موثوقة لهذا المسار.",
-        "another": "وجهة أخرى", "passports": "اختيار الجواز",
+        "another": "وجهة أخرى", "passports": "تغيير جواز السفر",
         "list": "الدول بحسب نوع التأشيرة", "all": "جميع الوجهات",
         "free": "بدون تأشيرة", "evisa": "تأشيرة إلكترونية / ETA",
         "arrival": "تأشيرة عند الوصول", "required": "تأشيرة مسبقة / سفارة",

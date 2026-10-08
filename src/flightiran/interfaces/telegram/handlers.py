@@ -169,6 +169,23 @@ async def _user_language(update: Update, dependencies: TelegramDependencies) -> 
     return record.id, normalize_language(language)
 
 
+async def _load_visa_passport(
+    context: ContextTypes.DEFAULT_TYPE, user_id: int, dependencies: TelegramDependencies
+) -> None:
+    """Restore a changed passport across bot restarts; first-time users default to IR."""
+    if not context.user_data.get("visa_passport"):
+        context.user_data["visa_passport"] = await dependencies.users.get_visa_passport(user_id)
+
+
+async def _save_visa_passport(
+    context: ContextTypes.DEFAULT_TYPE, user_id: int,
+    dependencies: TelegramDependencies, previous: str
+) -> None:
+    selected = context.user_data.get("visa_passport")
+    if selected and selected != previous:
+        await dependencies.users.set_visa_passport(user_id, selected)
+
+
 async def start_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
@@ -227,10 +244,14 @@ async def callback_handler(
     data = query.data or ""
     if data == "menu:visa":
         await dependencies.audit.record("visa.opened", user_id=user_id)
+        await _load_visa_passport(context, user_id, dependencies)
         await open_visa_menu(update, context, dependencies.visa_catalog, language)
         return
     if data.startswith("visa:"):
+        await _load_visa_passport(context, user_id, dependencies)
+        previous = context.user_data["visa_passport"]
         await handle_visa_callback(update, context, dependencies.visa_catalog, language)
+        await _save_visa_passport(context, user_id, dependencies, previous)
         return
     if data.startswith("language:"):
         selected = normalize_language(data.partition(":")[2])
@@ -556,7 +577,10 @@ async def visa_handler(
 ) -> None:
     user_id, language = await _user_language(update, dependencies)
     await dependencies.audit.record("visa.command", user_id=user_id)
+    await _load_visa_passport(context, user_id, dependencies)
+    previous = context.user_data["visa_passport"]
     await visa_command(update, context, dependencies.visa_catalog, language)
+    await _save_visa_passport(context, user_id, dependencies, previous)
 
 
 async def visa_list_handler(
@@ -573,14 +597,17 @@ async def visa_list_handler(
         from .visa_presentation import tr
         await update.message.reply_text(tr(language, "empty"))
         return
+    await _load_visa_passport(context, user_id, dependencies)
+    previous = context.user_data["visa_passport"]
     args = context.args or []
-    code = (args[0] if args else context.user_data.get("visa_passport", "")).upper()
+    code = (args[0] if args else previous).upper()
     codes = {country.code for country in await catalog.countries()}
     if code not in codes:
         from .visa_presentation import tr
         await update.message.reply_text(tr(language, "choose_passport"))
         return
     context.user_data["visa_passport"] = code
+    await _save_visa_passport(context, user_id, dependencies, previous)
     from .visa_presentation import groups_keyboard, tr
     await update.message.reply_text(
         f"<b>{tr(language, 'list')}</b> — <code>{code}</code>",
@@ -596,11 +623,11 @@ async def visa_cancel_handler(
 ) -> None:
     context.user_data.pop("visa_search_mode", None)
     if update.message:
-        from .visa_presentation import home_keyboard, tr
         user_id, language = await _user_language(update, dependencies)
         await dependencies.audit.record("visa.search.cancelled", user_id=user_id)
-        await update.message.reply_text(
-            tr(language, "title"), reply_markup=home_keyboard(language)
+        await _load_visa_passport(context, user_id, dependencies)
+        await open_visa_menu(
+            update, context, dependencies.visa_catalog, language, edit=False
         )
 
 

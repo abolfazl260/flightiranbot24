@@ -33,8 +33,9 @@ systemctl restart flightiran
 systemctl restart flightiran-web
 ```
 
-The new migration creates `visa_rule_index` and leaves the raw destination JSON table
-introduced in 0005 intact.
+Migration 0006 creates `visa_rule_index` and keeps the raw destination JSON introduced in
+0005 intact. Migration 0007 adds `user_preferences.visa_passport` with default `IR`
+for both new and existing users; it does not touch stored travel-rule data.
 
 ## Refresh strategy
 
@@ -91,17 +92,25 @@ does not mean every destination or passport rule was reverified on that date.
 
 ## Telegram commands
 
-- `/visa` — open the interactive passport and destination picker.
+- `/visa` — open visa guide with **Iran (IR) as the selected passport by default**.
+  The destination picker, visa-type groups and explicit "Change passport" control are
+  available immediately. A user's explicitly selected passport replaces this default
+  and is stored in SQLite, surviving bot restarts.
 - `/visa AF TR` — Afghan passport / Turkey, source-backed details.
 - `/visa AF TR IR` — same journey with declared Iranian residence. Residence
   is **displayed but not automatically used as an eligibility exception**.
 - `/visa IR` — select Iranian passport and browse destinations.
-- `/visa_list IR` — show destinations by entry status, with counts and pagination.
+- `/visa_list` — show destinations by entry status for the user's saved passport;
+  uses Iran for users who have not selected a different passport.
+- `/visa_list IR` — explicitly select Iranian passport and list destinations.
 - `/cancel` — cancel an ongoing free-text country search.
 - `/visa_sync` — admin-only forced check, results and source download URLs.
 
 All pickers support paging through the passport/destination list, searching country
 names in Persian/Arabic/English, and entering the two-letter country code.
+The passport default is the **nationality shown in this visa tool**, not an inferred
+citizenship or residence of the Telegram user. Changing the residence field has no
+effect on the passport default, and no visa eligibility is assumed from the default.
 
 ## Rich output and fallbacks
 

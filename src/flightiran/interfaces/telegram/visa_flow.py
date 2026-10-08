@@ -115,8 +115,22 @@ async def open_visa_menu(
         message = tr(language, "empty")
         keyboard = home_keyboard(language)
     else:
-        message = f"<b>{escape(tr(language, 'title'))}</b>\n\n{escape(tr(language, 'intro'))}"
-        keyboard = home_keyboard(language)
+        data = _context_data(context)
+        countries = await _country_catalog(service)
+        if not data.get("visa_passport") and _find_country(countries, "IR"):
+            data["visa_passport"] = "IR"
+        selected = _find_country(countries, data.get("visa_passport", ""))
+        message = f"<b>{escape(tr(language, 'title'))}</b>"
+        if selected is not None:
+            message += (
+                f"\n\n<b>{escape(tr(language, 'selected_passport'))}:</b> "
+                f"{escape(country_label(selected.code, selected.name, language))} "
+                f"<code>{escape(selected.code)}</code>"
+            )
+            keyboard = passport_keyboard(language)
+        else:
+            keyboard = home_keyboard(language)
+        message += f"\n\n{escape(tr(language, 'intro'))}"
     if edit:
         await update.callback_query.edit_message_text(
             message, parse_mode="HTML", reply_markup=keyboard,
@@ -143,6 +157,8 @@ async def handle_visa_callback(
         )
         return
     data = _context_data(context)
+    if not data.get("visa_passport"):
+        data["visa_passport"] = "IR"
     action = query.data or ""
     countries: list[Country]
     if action == "visa:home":
