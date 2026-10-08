@@ -17,15 +17,15 @@ from telegram.ext import (
 
 from flightiran.db.repositories import AuditRepository, UserRepository
 from flightiran.infrastructure.http.errors import ProviderError
+from flightiran.interfaces.telegram.rich_tickets import (
+    render_rich_price_tables,
+    send_rich_price_table,
+)
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
-from flightiran.interfaces.telegram.rich_tickets import (
-    render_rich_price_tables,
-    send_rich_price_table,
-)
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
 from .keyboards import back_menu, language_menu, main_menu
