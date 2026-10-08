@@ -3,14 +3,19 @@
 from __future__ import annotations
 
 import re
-from datetime import date
 from html import escape, unescape
-from urllib.parse import urlparse
 
 from babel import Locale
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from flightiran.modules.visa.catalog import STATUS_GROUPS, Country, VisaDetail, VisaRule
+from flightiran.modules.visa.provenance import (
+    VisaProvenance,
+    link_html,
+    safe_source_url,
+    source_date,
+    visa_provenance,
+)
 
 LANG = {
     "fa": {
@@ -149,6 +154,91 @@ LANG = {
     },
 }
 
+# Dates are *always* upstream publication and source-verification dates.
+# Local download/synchronization times must not appear as legal verification.
+LANG["fa"].update({
+    "date_title": "تاریخ و اعتبار اطلاعات",
+    "verified_date": "آخرین تأیید منبع مقررات",
+    "changed_date": "آخرین تغییر ثبت‌شده در منبع",
+    "updated_date": "آخرین به‌روزرسانی فایل مقصد",
+    "full_review_date": "آخرین بازبینی کامل اطلاعات مقصد",
+    "no_expiry": "تاریخ پایان اعتبار قانونی در منبع مشخص نشده است.",
+    "date_notice": "این تاریخ‌ها تاریخ بررسی/انتشار اطلاعات هستند، نه تضمین اعتبار قانون تا آن روز.",
+    "source_link": "مشاهده منبع مقررات",
+    "original_data": "فایل اصلی اطلاعات مقصد (JSON)",
+    "publisher": "دیتاست TravelRequirements.info",
+    "license_link": "مجوز CC BY 4.0",
+    "source_unavailable": "منبع در آخرین تلاش بررسی، قابل دسترسی یا تأیید نبوده است.",
+    "conditional_notice": "استثناها ممکن است فقط شامل برخی تابعیت‌ها شوند.",
+    "read_more": "مشاهده تمام جزئیات و منابع از دکمه‌های زیر",
+    "visa_kind": "روش درخواست",
+    "days": "روز",
+    "source_label": "مرجع",
+    "archived_copy": "نسخه آرشیوی",
+    "not_checked": "تاریخ تأیید اعلام نشده",
+    "documents_label": "مدارک درخواست",
+    "unverified_field": "الزام یا معافیت این مورد در منبع تأیید نشده است.",
+    "applicability": "دامنه اعتبار: ",
+    "general_faq": "پرسش‌ها عمومی و ممکن است مربوط به پاسپورت دیگری باشند.",
+    "processing_unit_minutes": "دقیقه",
+    "processing_unit_days": "روز",
+})
+LANG["en"].update({
+    "date_title": "Source dates & validity",
+    "verified_date": "Source last verified",
+    "changed_date": "Last source-recorded change",
+    "updated_date": "Destination dataset last updated",
+    "full_review_date": "Destination last fully reviewed",
+    "no_expiry": "The source does not provide a legal expiry date for this requirement.",
+    "date_notice": "Verification and publication dates do not guarantee validity through that date.",
+    "source_link": "View entry-regulation source",
+    "original_data": "Original destination JSON",
+    "publisher": "TravelRequirements.info dataset",
+    "license_link": "CC BY 4.0 license",
+    "source_unavailable": "The source was inaccessible or unverifiable during its latest check.",
+    "conditional_notice": "These exceptions may apply only to certain nationalities.",
+    "read_more": "Open the detail and source tabs below",
+    "visa_kind": "Application method",
+    "days": "days",
+    "source_label": "Reference",
+    "archived_copy": "Archived source",
+    "not_checked": "Verification date not provided",
+    "documents_label": "Application documents",
+    "unverified_field": "This obligation or exemption was not verified by the source.",
+    "applicability": "Applicability: ",
+    "general_faq": "General FAQs may describe passports other than yours.",
+    "processing_unit_minutes": "minutes",
+    "processing_unit_days": "days",
+})
+LANG["ar"].update({
+    "date_title": "تواريخ المصدر وصلاحية المعلومات",
+    "verified_date": "آخر تحقق من المصدر",
+    "changed_date": "آخر تغيير مسجل في المصدر",
+    "updated_date": "آخر تحديث لبيانات الوجهة",
+    "full_review_date": "آخر مراجعة شاملة للوجهة",
+    "no_expiry": "لم يحدد المصدر تاريخ انتهاء قانونياً لهذه المتطلبات.",
+    "date_notice": "تواريخ المراجعة والنشر ليست ضماناً لاستمرار سريان القانون.",
+    "source_link": "فتح مصدر شروط الدخول",
+    "original_data": "ملف بيانات الوجهة الأصلي (JSON)",
+    "publisher": "بيانات TravelRequirements.info",
+    "license_link": "ترخيص CC BY 4.0",
+    "source_unavailable": "تعذر الوصول إلى المصدر أو التحقق منه عند آخر فحص.",
+    "conditional_notice": "قد تنطبق هذه الاستثناءات على جنسيات محددة فقط.",
+    "read_more": "افتح أقسام التفاصيل والمصادر أدناه",
+    "visa_kind": "طريقة التقديم",
+    "days": "يوم",
+    "source_label": "المصدر",
+    "archived_copy": "نسخة مؤرشفة",
+    "not_checked": "تاريخ التحقق غير متوفر",
+    "documents_label": "وثائق الطلب",
+    "unverified_field": "لم يثبت المصدر وجود هذا الشرط أو الإعفاء منه.",
+    "applicability": "نطاق التطبيق: ",
+    "general_faq": "قد تتعلق الأسئلة العامة بجوازات سفر أخرى.",
+    "processing_unit_minutes": "دقائق",
+    "processing_unit_days": "أيام",
+})
+
+
 COUNTRY_LABELS = {
     "fa": {
         "AF": "افغانستان", "IR": "ایران", "TR": "ترکیه", "AE": "امارات",
@@ -212,19 +302,78 @@ def status_label(value: str, language: str) -> str:
 
 
 def safe_href(url: object) -> str | None:
-    if not isinstance(url, str):
-        return None
-    parsed = urlparse(url.strip())
-    if parsed.scheme != "https" or not parsed.hostname or parsed.username or parsed.password:
-        return None
-    if len(url) > 900:
-        return None
-    return escape(url, quote=True)
+    """HTML-escaped HTTPS URL retained for existing render integrations."""
+    safe = safe_source_url(url)
+    return escape(safe, quote=True) if safe else None
 
 
 def external_link(url: object, label: str) -> str:
-    clean = safe_href(url)
-    return f'<a href="{clean}">{escape(label)}</a>' if clean else ""
+    return link_html(url, label)
+
+
+def _provider_links(provenance: VisaProvenance, language: str) -> str:
+    links = [
+        external_link(provenance.source_url, tr(language, "source_link")),
+        external_link(provenance.destination_json_url, tr(language, "original_data")),
+    ]
+    return " · ".join(item for item in links if item)
+
+
+def _attribution(language: str) -> str:
+    return (
+        external_link(MAIN_SOURCE, tr(language, "publisher"))
+        + " · "
+        + external_link(LICENSE_URL, tr(language, "license_link"))
+    )
+
+
+def _source_dates(
+    provenance: VisaProvenance, language: str, *, full: bool = False
+) -> list[str]:
+    """Clearly distinguish source verification, source changes, and dataset publication."""
+    missing = tr(language, "not_known")
+    lines = [
+        f"• <b>{escape(tr(language, 'verified_date'))}:</b> "
+        f"{escape(provenance.source_verified_on or missing)}",
+    ]
+    if provenance.source_changed_on:
+        lines.append(
+            f"• <b>{escape(tr(language, 'changed_date'))}:</b> "
+            f"{escape(provenance.source_changed_on)}"
+        )
+    lines.append(
+        f"• <b>{escape(tr(language, 'updated_date'))}:</b> "
+        f"{escape(provenance.destination_updated_on or missing)}"
+    )
+    if full and provenance.last_full_review_on:
+        lines.append(
+            f"• <b>{escape(tr(language, 'full_review_date'))}:</b> "
+            f"{escape(provenance.last_full_review_on)}"
+        )
+    if provenance.verified_is_stale:
+        lines.append("⚠️ " + escape(
+            "Source verification is over 30 days old"
+            if language == "en" else
+            "بیش از ۳۰ روز از آخرین بررسی منبع گذشته است"
+            if language == "fa" else
+            "مر أكثر من ٣٠ يوماً على آخر تحقق من المصدر"
+        ))
+    if provenance.source_unverifiable:
+        lines.append("⚠️ " + escape(tr(language, "source_unavailable")))
+    return lines
+
+
+def _limited_lines(lines: list[str], *, max_chars: int = 3900) -> str:
+    """Keep HTML tags intact. Truncate only at complete, already escaped lines."""
+    selected: list[str] = []
+    length = 0
+    for line in lines:
+        if length + len(line) + 1 > max_chars - 50:
+            selected.append("…")
+            break
+        selected.append(line)
+        length += len(line) + 1
+    return "\n".join(selected)
 
 
 def render_overview(
@@ -235,66 +384,68 @@ def render_overview(
     residence: str | None = None,
     purpose: str = "tourism",
 ) -> str:
+    """Compact, professional Telegram HTML with hyperlink citations and upstream dates."""
     rule = detail.rule
+    provenance = visa_provenance(detail)
     name = country_label(rule.destination, rule.country_name, language)
     passenger = country_label(rule.passport, passport_name or rule.passport, language)
-    source = external_link(rule.source_url, tr(language, "source"))
+    icons = {
+        "visa-free": "✅", "freedom-of-movement": "✅",
+        "evisa": "🟡", "e-visa": "🟡", "eta": "🟡",
+        "visa-on-arrival": "🟡", "embassy-visa": "🔴",
+        "visa-required": "🔴", "refused": "⛔",
+    }
+    stay = (
+        f"{rule.stay_days} {tr(language, 'days')}"
+        if rule.stay_days is not None else tr(language, "not_known")
+    )
+    purpose_label = tr(language, "purpose_" + purpose)
     lines = [
-        f"<b>{tr(language, 'title')}</b>",
-        "",
-        f"🛂 <b>{tr(language, 'passport')}:</b> {escape(passenger)} "
-        f"<code>{escape(rule.passport)}</code>",
-        f"🌍 <b>{tr(language, 'destination')}:</b> {escape(name)} "
-        f"<code>{escape(rule.destination)}</code>",
-        f"📌 <b>{tr(language, 'status')}:</b> "
+        f"<b>{escape(tr(language, 'title'))}</b>",
+        f"{escape(passenger)} ({escape(rule.passport)}) → "
+        f"<b>{escape(name)}</b> ({escape(rule.destination)})",
+        "━━━━━━━━━━━━━━━━",
+        f"{icons.get(rule.status, 'ℹ️')} <b>{escape(tr(language, 'status'))}:</b> "
         f"{escape(status_label(rule.status, language))}",
-        f"🕓 <b>{tr(language, 'stay')}:</b> "
-        f"{rule.stay_days if rule.stay_days is not None else tr(language, 'not_known')}"
-        + (" days" if rule.stay_days is not None else ""),
-        f"🎯 <b>{tr(language, 'purpose')}:</b> {tr(language, 'purpose_' + purpose)}",
+        f"⏳ <b>{escape(tr(language, 'stay'))}:</b> {escape(stay)}",
+        f"🎯 <b>{escape(tr(language, 'purpose'))}:</b> {escape(purpose_label)}",
     ]
     if residence:
-        lines.append(f"🏠 <b>{tr(language, 'residence')}:</b> <code>{escape(residence)}</code>")
+        lines.append(
+            f"🏠 <b>{escape(tr(language, 'residence'))}:</b> "
+            f"<code>{escape(residence)}</code>"
+        )
     if rule.notes:
-        lines.extend(["", f"ℹ️ {escape(rule.notes[:1250])}"])
+        lines.extend(["", f"<b>{escape(tr(language, 'more'))}</b>"])
+        lines.append(escape(rule.notes[:1100]))
     waivers = detail.destination_data.get("visaPolicy", {}).get("conditionalWaivers") or []
     if waivers and rule.status not in {"visa-free", "freedom-of-movement"}:
-        lines.extend(["", f"<b>{tr(language, 'condition')}</b>"])
-        for waiver in waivers[:3]:
+        lines.extend(["", f"<b>{escape(tr(language, 'condition'))}</b>"])
+        for waiver in waivers[:2]:
             if isinstance(waiver, dict) and waiver.get("text"):
-                lines.append("• " + escape(str(waiver["text"])[:450]))
+                lines.append("• " + escape(str(waiver["text"])[:350]))
+        lines.append("<i>" + escape(tr(language, "conditional_notice")) + "</i>")
+    lines.extend(["", f"<b>🗓 {escape(tr(language, 'date_title'))}</b>"])
+    lines.extend(_source_dates(provenance, language))
+    lines.append(
+        "🔎 " + escape(
+            tr(language, "row") if provenance.source_level == "row"
+            else tr(language, "policy")
+        )
+    )
+    lines.append(_provider_links(provenance, language))
     lines.extend([
         "",
-        "🔎 " + (tr(language, "row") if rule.source_level == "row"
-                  else tr(language, "policy")),
-        f"🗓 {tr(language, 'checked')}: "
-        f"{escape(rule.verified_on or tr(language, 'not_known'))}",
-    ])
-    if source:
-        lines.append(source)
-    if rule.verified_on:
-        try:
-            age_days = (date.today() - date.fromisoformat(rule.verified_on[:10])).days
-        except ValueError:
-            age_days = 0
-        if age_days > 30:
-            lines.append(
-                "⚠️ " + escape(
-                    "Source verification is more than 30 days old"
-                    if language == "en"
-                    else "آخرین بررسی منبع بیش از ۳۰ روز قبل بوده است"
-                    if language == "fa"
-                    else "آخر تحقق من المصدر كان قبل أكثر من ٣٠ يوماً"
-                )
-            )
-    lines.extend([
-        "",
-        f"⚠️ {escape(tr(language, 'caution'))}",
+        "⚠️ " + escape(tr(language, "caution")),
     ])
     if residence or purpose != "tourism":
-        lines.append(f"⚠️ {escape(tr(language, 'unmodeled'))}")
-    lines.append(external_link(MAIN_SOURCE, tr(language, "license")))
-    return "\n".join(lines)[:3800]
+        lines.append("⚠️ " + escape(tr(language, "unmodeled")))
+    lines.extend([
+        "<i>" + escape(tr(language, "date_notice")) + "</i>",
+        "",
+        _attribution(language),
+    ])
+    return _limited_lines(lines)
 
 
 def _value_text(value: object, *, limit: int = 650) -> str:
