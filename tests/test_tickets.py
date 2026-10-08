@@ -3,7 +3,11 @@ from datetime import date, datetime, timezone
 import pytest
 
 from flightiran.infrastructure.http.errors import ProviderInvalidResponse
-from flightiran.interfaces.telegram.tickets import render_cheap_route, render_offer
+from flightiran.interfaces.telegram.tickets import (
+    render_cheap_route,
+    render_cheap_route_chunks,
+    render_offer,
+)
 from flightiran.modules.tickets.domain import (
     CheapTicketDestination,
     CheapTicketRoute,
@@ -112,3 +116,23 @@ def test_render_cheap_route_includes_average_difference():
     assert "1,500,000 تومان ارزان‌تر" in rendered
     assert "20.0٪ کمتر" in rendered
     assert "24 نمونه" in rendered
+
+
+def test_render_cheap_route_chunks_stay_below_telegram_limit():
+    destinations = tuple(
+        CheapTicketDestination(
+            f"مقصد {index}",
+            "12,500,000",
+            price_value_toman=12_500_000,
+            average_price_toman=10_000_000,
+            average_sample_count=100,
+        )
+        for index in range(80)
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    chunks = render_cheap_route_chunks(route, max_length=500)
+
+    assert len(chunks) > 1
+    assert all(len(chunk) <= 500 for chunk in chunks)
+    assert all(chunk.count("<b>") == chunk.count("</b>") for chunk in chunks)
+    assert all(chunk.count("<i>") == chunk.count("</i>") for chunk in chunks)
