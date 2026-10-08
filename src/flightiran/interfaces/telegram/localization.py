@@ -8,7 +8,7 @@ MESSAGES = {
     "en": {
         "ticket_choose_origin": "Choose your departure city to view its fares:",
         "ticket_selected_origin": (
-            ""Flights from {origin}: select another "
+            "Flights from {origin}: select another "
             "city or view the results below."
         ),
         "ticket_expired": "This flight list has expired. Open Tickets again to refresh the cities.",
@@ -33,12 +33,12 @@ MESSAGES = {
     },
     "fa": {
         "ticket_choose_origin": (
-            ""✈️ شهر مبدأ را انتخاب کنید تا فقط "
+            "✈️ شهر مبدأ را انتخاب کنید تا فقط "
             "قیمت‌های همان شهر نمایش داده شود:"
         ),
         "ticket_selected_origin": "✈️ قیمت‌های پرواز از {origin} در ادامه نمایش داده می‌شود.",
         "ticket_expired": (
-            ""فهرست مبدأها منقضی شده است. برای دریافت "
+            "فهرست مبدأها منقضی شده است. برای دریافت "
             "فهرست جدید دوباره بلیط را انتخاب کنید."
         ),
 
