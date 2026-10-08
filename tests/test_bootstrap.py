@@ -22,3 +22,23 @@ def test_missing_token_has_safe_configuration_error(monkeypatch) -> None:
         raise AssertionError("missing token should fail startup validation")
     finally:
         load_settings.cache_clear()
+
+
+
+def test_support_uses_advertio_default_and_migrates_legacy_username(monkeypatch):
+    monkeypatch.delenv("SUPPORT_USERNAME", raising=False)
+    monkeypatch.delenv("TICKET_SUPPORT_USERNAME", raising=False)
+    default = Settings(TELEGRAM_BOT_TOKEN="123456:AA-test-token")
+    assert default.ticket_support_username == "@advertio_bot"
+
+    legacy = Settings(
+        TELEGRAM_BOT_TOKEN="123456:AA-test-token",
+        TICKET_SUPPORT_USERNAME="@vlansupport",
+    )
+    assert legacy.ticket_support_username == "@advertio_bot"
+
+    unified = Settings(
+        TELEGRAM_BOT_TOKEN="123456:AA-test-token",
+        SUPPORT_USERNAME="@advertio_bot",
+    )
+    assert unified.ticket_support_username == "@advertio_bot"
