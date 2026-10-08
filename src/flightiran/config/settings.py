@@ -5,7 +5,6 @@ from functools import lru_cache
 from pydantic import AliasChoices, Field, SecretStr, ValidationError, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-
 DEFAULT_SUPPORT_USERNAME = "@advertio_bot"
 
 
