@@ -8,6 +8,8 @@ import asyncio
 import hashlib
 import json
 import logging
+import re
+from html import escape
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlparse
@@ -56,8 +58,11 @@ class VisaSyncResult:
     checked_at: datetime
     version: str | None
     message: str = ""
+    latest_source_update: str | None = None
 
-    def render(self, *, manual: bool = False) -> str:
+    def render(self, *, manual: bool = False, html: bool = False) -> str:
+        if html:
+            return self._render_html(manual=manual)
         labels = {"updated": "به‌روزرسانی انجام شد", "unchanged": "تغییری پیدا نشد"}
         heading = labels.get(self.status, "همگام‌سازی انجام نشد")
         lines = [
@@ -84,6 +89,60 @@ class VisaSyncResult:
         lines.append("")
         lines.append("منبع: TravelRequirements.info (CC BY 4.0)")
         return "\n".join(lines)[:3950]
+
+
+
+    def _render_html(self, *, manual: bool) -> str:
+        """Clickable admin report with upstream publication and local check dates separated."""
+        labels = {"updated": "به‌روزرسانی ثبت شد", "unchanged": "بدون تغییر"}
+        result = labels.get(self.status, "همگام‌سازی انجام نشد")
+        lines = [
+            "<b>🛂 گزارش همگام‌سازی اطلاعات ویزا</b>",
+            "━━━━━━━━━━━━━━━━",
+            f"<b>نتیجه:</b> {result}",
+            f"<b>نوع اجرا:</b> {'دستی /visa_sync' if manual else 'خودکار'}",
+            f"<b>نسخه منبع:</b> {escape(self.version or 'نامشخص')}",
+            f"<b>زمان بررسی توسط ربات (UTC):</b> {self.checked_at:%Y-%m-%d %H:%M}",
+            f"<b>تازه‌ترین تاریخ بروزرسانی فایل‌های منبع:</b> "
+            f"{escape(self.latest_source_update or 'اعلام نشده')}",
+            "",
+            f"• کشورهای موجود در منبع: {self.checked}",
+            f"• فایل‌های دریافت‌شده: {self.downloaded}",
+            f"• فایل‌های با محتوای تغییرکرده: {len(self.changed)}",
+            "",
+            "<b>🔗 لینک‌های دریافت اطلاعات</b>",
+            f'<a href="{MANIFEST_URL}">مشاهده فهرست و نسخه داده‌ها (JSON)</a>',
+            f'<a href="{MATRIX_URL}">دریافت ماتریس ویزا (CSV)</a>',
+            f'<a href="{CHANGELOG_URL}">مشاهده تاریخچه تغییرات (JSON)</a>',
+        ]
+        if self.changed:
+            lines.extend(["", "<b>📂 کشورهای تغییرکرده</b>"])
+            for slug in self.changed[:10]:
+                if re.fullmatch(r"[a-z0-9-]{1,100}", slug):
+                    url = f"{BASE}destinations/{slug}.json"
+                    lines.append(
+                        f'• <a href="{url}">{escape(slug)} — دریافت JSON کشور</a>'
+                    )
+            if len(self.changed) > 10:
+                lines.append(f"و {len(self.changed) - 10} کشور دیگر")
+        if self.message:
+            lines.extend(["", escape(self.message[:300])])
+        lines.extend([
+            "",
+            'منبع: <a href="https://travelrequirements.info/data/">'
+            'TravelRequirements.info</a> · '
+            '<a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>',
+        ])
+        # No half-open anchor tags when Telegram message length is exceeded.
+        selected: list[str] = []
+        length = 0
+        for line in lines:
+            if length + len(line) + 1 > 3900:
+                selected.append("…")
+                break
+            selected.append(line)
+            length += len(line) + 1
+        return "\n".join(selected)
 
 
 class VisaSyncService:
@@ -118,6 +177,15 @@ class VisaSyncService:
                     raise ValueError("Unexpected visa dataset licence")
                 if len({e.get("id") for e in entries if isinstance(e, dict)}) != len(entries):
                     raise ValueError("Duplicate destination identifiers")
+
+                source_dates = [
+                    entry["lastUpdated"]
+                    for entry in entries
+                    if isinstance(entry, dict)
+                    and isinstance(entry.get("lastUpdated"), str)
+                    and re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", entry["lastUpdated"])
+                ]
+                latest_source_update = max(source_dates, default=None)
 
                 async with self.database.session() as session:
                     current = {
@@ -238,4 +306,5 @@ class VisaSyncService:
                     tuple(sorted(changed)),
                     now,
                     str(manifest.get("version", "")),
+                    latest_source_update=latest_source_update,
                 )
