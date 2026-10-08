@@ -18,9 +18,12 @@ def test_migrate_new_and_repeatable(tmp_path, monkeypatch):
         assert "visa_passport" in {
             column["name"] for column in inspect(engine).get_columns("user_preferences")
         }
+        assert "last_active_at" in {
+            column["name"] for column in inspect(engine).get_columns("users")
+        }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0007_visa_default_passport"
+                "0008_user_last_active"
             )
     finally:
         engine.dispose()
@@ -41,9 +44,12 @@ def test_migrate_existing_metadata_without_version(tmp_path, monkeypatch):
         assert "visa_passport" in {
             column["name"] for column in inspect(engine).get_columns("user_preferences")
         }
+        assert "last_active_at" in {
+            column["name"] for column in inspect(engine).get_columns("users")
+        }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0007_visa_default_passport"
+                "0008_user_last_active"
             )
     finally:
         engine.dispose()
