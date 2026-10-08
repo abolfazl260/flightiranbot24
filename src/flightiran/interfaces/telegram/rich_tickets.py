@@ -165,7 +165,9 @@ def render_rich_price_tables(
     for item in route.destinations:
         row = _row(item)
         candidate = rows + [row]
-        html = _table_html(route.origin, candidate, continued=bool(messages), language=language)
+        html = _table_html(
+            route.origin, candidate, continued=bool(messages), language=language
+        )
 
         if len(candidate) > max_rows or _plain_text_length(html) > max_text_chars:
             if not rows:
@@ -192,8 +194,12 @@ def render_rich_price_tables(
 
     if rows:
         messages.append(
-            {"html": _table_html(route.origin, rows, continued=bool(messages), language=language),
-             "is_rtl": True}
+            {
+                "html": _table_html(
+                    route.origin, rows, continued=bool(messages), language=language
+                ),
+                "is_rtl": True,
+            }
         )
     return messages
 
