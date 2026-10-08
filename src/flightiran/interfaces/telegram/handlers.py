@@ -373,19 +373,19 @@ async def callback_handler(
                     )
                 except Exception:
                     LOGGER.exception("rich_ticket_table_send_failed")
-                    for message in render_cheap_route_chunks(route):
+                    for message in render_cheap_route_chunks(route, language=language):
                         await query.message.reply_text(message, parse_mode="HTML")
                     break
             # The optional discount report is limited to this origin as well.
             try:
                 if find_price_drops([route]):
-                    for report in render_rich_price_drop_report([route]):
+                    for report in render_rich_price_drop_report([route], language=language):
                         await send_rich_price_table_with_badge_fallback(
                             context.bot, query.message.chat_id, report
                         )
             except Exception:
                 LOGGER.exception("rich_ticket_price_drop_report_failed")
-                for message in render_price_drop_fallback_chunks([route]):
+                for message in render_price_drop_fallback_chunks([route], language=language):
                     await query.message.reply_text(message, parse_mode="HTML")
 
             await query.message.reply_text(
