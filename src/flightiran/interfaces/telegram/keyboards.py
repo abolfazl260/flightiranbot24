@@ -8,7 +8,12 @@ from .support import support_url
 CARGO_MARKETPLACE_URL = "https://t.me/advertio_cargo"
 
 
-def main_menu(language: str, web_app_url: str | None = None) -> InlineKeyboardMarkup:
+def main_menu(
+    language: str,
+    web_app_url: str | None = None,
+    *,
+    is_admin: bool = False,
+) -> InlineKeyboardMarkup:
     rows = [
         [("flights", "menu:flights"), ("airports", "menu:airports")],
         [("tickets", "menu:tickets"), ("currency", "menu:currency")],
@@ -16,6 +21,8 @@ def main_menu(language: str, web_app_url: str | None = None) -> InlineKeyboardMa
         [("cargo", "menu:cargo"), ("useful", "menu:useful")],
         [("support", "menu:support"), ("settings", "menu:settings")],
     ]
+    if is_admin:
+        rows.append([("admin_reports", "menu:admin_reports")])
     if web_app_url:
         rows.append([InlineKeyboardButton("Web App", web_app=WebAppInfo(web_app_url))])
     return InlineKeyboardMarkup(
