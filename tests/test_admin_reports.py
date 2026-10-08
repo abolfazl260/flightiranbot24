@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from types import SimpleNamespace
 
 import pytest
+from test_telegram import MemoryAudit, MemoryUsers, Message, Query
 
 from flightiran.db import initialize_database
 from flightiran.db.models import (
@@ -28,7 +29,6 @@ from flightiran.interfaces.telegram.handlers import (
 )
 from flightiran.interfaces.telegram.keyboards import main_menu
 from flightiran.modules.admin.reports import BotReportRepository
-from test_telegram import MemoryAudit, MemoryUsers, Message, Query
 
 
 @pytest.mark.asyncio
