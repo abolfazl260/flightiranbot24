@@ -52,9 +52,15 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
             )
         )
         session.add(AuditLog(user_id=first.id, event_type="system.error"))
-        session.add(SavedRoute(user_id=first.id, origin="IKA", destination="MHD"))
+        saved = SavedRoute(user_id=first.id, origin="IKA", destination="MHD")
+        session.add(saved)
+        await session.flush()
         session.add(FlightAlert(user_id=first.id, flight_number="TK123", status="active"))
-        session.add(PriceAlert(user_id=first.id, route_id=1, target_price=5000, currency="IRR"))
+        session.add(
+            PriceAlert(
+                user_id=first.id, route_id=saved.id, target_price=5000, currency="IRR"
+            )
+        )
         session.add(
             Mz724PriceSnapshot(
                 origin="تهران",
