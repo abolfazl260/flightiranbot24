@@ -19,7 +19,7 @@ MAX_RICH_TABLE_ROWS = 490
 
 _TABLE_HEADER = (
     "<tr><th>مقصد</th><th>فعلی (تومان)</th>"
-    "<th>میانگین ۲۱ روزه</th><th>اختلاف (تومان)</th><th>اختلاف ٪</th></tr>"
+    "<th>میانگین ۲۱ روزه</th><th>اختلاف (تومان)</th><th>تغییر قیمت ٪</th></tr>"
 )
 
 
@@ -37,20 +37,21 @@ def _row(destination: CheapTicketDestination) -> str:
     price = f"{current:,}" if current is not None else destination.price_toman
 
     if average is None or average <= 0 or current is None:
-        mean, delta, percent = "—", "—", "⚪ —"
+        mean, delta, percent = "—", "—", "⚪ ؟ نامشخص"
     else:
         mean = f"{average:,.0f}"
         difference = current - average
         delta_toman = round(difference)
-        delta = f"{delta_toman:+,}"
-        percentage = difference / average * 100
+        percentage = abs(difference / average * 100)
 
         if delta_toman == 0:
-            percent = "⚪ 0.0٪"
+            delta, percent = "= 0", "⚪ = 0.0٪"
         elif difference < 0:
-            percent = f"🟢 {percentage:.1f}٪"
+            delta = f"↓ {abs(delta_toman):,}"
+            percent = f"🟢 ↓ {percentage:.1f}٪"
         else:
-            percent = f"🔴 +{percentage:.1f}٪"
+            delta = f"↑ {delta_toman:,}"
+            percent = f"🔴 ↑ {percentage:.1f}٪"
 
     cells = (destination.name, price, mean, delta, percent)
     return "<tr>" + "".join(f"<td>{escape(str(value))}</td>" for value in cells) + "</tr>"
@@ -68,6 +69,8 @@ def _table_html(origin: str, rows: list[str], *, continued: bool = False) -> str
         title += " (ادامه)"
     return (
         f"<h3>{title}</h3>"
+        "<p>نسبت به میانگین ۲۱روزه: "
+        "🟢 ↓ ارزان‌تر | 🔴 ↑ گران‌تر | ⚪ = برابر | ⚪ ؟ نامشخص</p>"
         "<table bordered striped compact>"
         + _TABLE_HEADER
         + "".join(rows)
@@ -194,7 +197,7 @@ def _drop_table_row(drop: PriceDrop) -> str:
         f"{drop.current_toman:,}",
         f"{drop.average_toman:,.0f}",
         f"{drop.decrease_toman:,.0f}",
-        f"🟢 {drop.decrease_percent:.2f}٪",
+        f"🟢 ↓ {drop.decrease_percent:.2f}٪",
     )
     return "<tr>" + "".join(f"<td>{escape(cell)}</td>" for cell in cells) + "</tr>"
 
@@ -202,7 +205,7 @@ def _drop_table_row(drop: PriceDrop) -> str:
 def _drop_report_html(rows: list[str], total: int, *, continued: bool = False) -> str:
     continuation = " (ادامه)" if continued else ""
     return (
-        f"<h3>🟢 گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
+        f"<h3>🟢 ↓ گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
         f"<p>{total} مسیر، مرتب‌شده از بیشترین کاهش نسبت به میانگین ۲۱روزه</p>"
         "<table bordered striped compact>"
         + _DROP_TABLE_HEADER
@@ -257,7 +260,7 @@ def render_rich_price_drop_report(
     if not drops:
         return [{
             "html": (
-                "<h3>🟢 گزارش کاهش قیمت بیش از ۲۰٪</h3>"
+                "<h3>🟢 ↓ گزارش کاهش قیمت بیش از ۲۰٪</h3>"
                 "<p>در بررسی فعلی، مسیری با کاهش بیش از ۲۰٪ نسبت به "
                 "میانگین ۲۱روزه پیدا نشد.</p>"
             ),
@@ -284,7 +287,7 @@ def render_price_drop_fallback_chunks(
         raise ValueError("max_length must be positive")
 
     drops = find_price_drops(routes)
-    title = "🟢 <b>گزارش کاهش قیمت بیش از ۲۰٪</b>"
+    title = "🟢 ↓ <b>گزارش کاهش قیمت بیش از ۲۰٪</b>"
     if not drops:
         return [title + "\nدر بررسی فعلی موردی پیدا نشد."]
 
@@ -295,7 +298,7 @@ def render_price_drop_fallback_chunks(
             f"✈️ {escape(drop.origin)} ← {escape(drop.destination)} | "
             f"{drop.current_toman:,} تومان | "
             f"کاهش {drop.decrease_toman:,.0f} تومان | "
-            f"🟢 {drop.decrease_percent:.2f}٪"
+            f"🟢 ↓ {drop.decrease_percent:.2f}٪"
         )
         candidate = current + "\n" + line
         if len(candidate) > max_length:
