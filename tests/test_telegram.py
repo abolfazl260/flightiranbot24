@@ -140,13 +140,13 @@ def test_support_menu_has_correct_link_and_back_button(language):
     from flightiran.interfaces.telegram.keyboards import support_menu
     from flightiran.interfaces.telegram.support import render_support_message, support_url
 
-    assert support_url("@advertio_bot") == "https://t.me/advertio_bot"
-    markup = support_menu(language, "@advertio_bot")
-    assert markup.inline_keyboard[0][0].url == "https://t.me/advertio_bot"
+    assert support_url("@advertio_support") == "https://t.me/advertio_support"
+    markup = support_menu(language, "@advertio_support")
+    assert markup.inline_keyboard[0][0].url == "https://t.me/advertio_support"
     assert markup.inline_keyboard[1][0].callback_data == "back"
 
-    rendered = render_support_message(language, "@advertio_bot")
-    assert '<a href="https://t.me/advertio_bot">@advertio_bot</a>' in rendered
+    rendered = render_support_message(language, "@advertio_support")
+    assert '<a href="https://t.me/advertio_support">@advertio_support</a>' in rendered
     assert "<b>" in rendered
 
 
@@ -161,9 +161,9 @@ async def test_support_callback_opens_advertio_contact(language):
 
     rendered = query.calls[0][0][0]
     markup = query.calls[0][1]["reply_markup"]
-    assert "@advertio_bot" in rendered
-    assert "https://t.me/advertio_bot" in rendered
-    assert markup.inline_keyboard[0][0].url == "https://t.me/advertio_bot"
+    assert "@advertio_support" in rendered
+    assert "https://t.me/advertio_support" in rendered
+    assert markup.inline_keyboard[0][0].url == "https://t.me/advertio_support"
     assert deps.audit.events[-1][0] == "support.opened"
 
 
@@ -179,4 +179,25 @@ def test_help_displays_unified_support_contact(language):
     from flightiran.interfaces.telegram.renderers import render_help
 
     rendered = render_help(language)
-    assert '<a href="https://t.me/advertio_bot">@advertio_bot</a>' in rendered
+    assert '<a href="https://t.me/advertio_support">@advertio_support</a>' in rendered
+
+
+
+@pytest.mark.parametrize("language", ["fa", "en", "ar"])
+def test_cargo_marketplace_button_opens_advertio_cargo_channel(language):
+    from flightiran.interfaces.telegram.keyboards import main_menu
+
+    keyboard = main_menu(language)
+    cargo_buttons = [
+        button
+        for row in keyboard.inline_keyboard
+        for button in row
+        if button.url == "https://t.me/advertio_cargo"
+    ]
+    assert len(cargo_buttons) == 1
+    assert cargo_buttons[0].callback_data is None
+    assert any(
+        button.callback_data == "menu:useful"
+        for row in keyboard.inline_keyboard
+        for button in row
+    )
