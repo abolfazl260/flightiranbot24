@@ -194,7 +194,7 @@ def _drop_table_row(drop: PriceDrop) -> str:
         f"{drop.current_toman:,}",
         f"{drop.average_toman:,.0f}",
         f"{drop.decrease_toman:,.0f}",
-        f"🟢 {drop.decrease_percent:.1f}٪",
+        f"🟢 {drop.decrease_percent:.2f}٪",
     )
     return "<tr>" + "".join(f"<td>{escape(cell)}</td>" for cell in cells) + "</tr>"
 
@@ -286,7 +286,7 @@ def render_price_drop_fallback_chunks(
     drops = find_price_drops(routes)
     title = "🟢 <b>گزارش کاهش قیمت بیش از ۲۰٪</b>"
     if not drops:
-        return [title + "\\nدر بررسی فعلی موردی پیدا نشد."]
+        return [title + "\nدر بررسی فعلی موردی پیدا نشد."]
 
     chunks: list[str] = []
     current = title
@@ -295,14 +295,14 @@ def render_price_drop_fallback_chunks(
             f"✈️ {escape(drop.origin)} ← {escape(drop.destination)} | "
             f"{drop.current_toman:,} تومان | "
             f"کاهش {drop.decrease_toman:,.0f} تومان | "
-            f"🟢 {drop.decrease_percent:.1f}٪"
+            f"🟢 {drop.decrease_percent:.2f}٪"
         )
-        candidate = current + "\\n" + line
+        candidate = current + "\n" + line
         if len(candidate) > max_length:
             if current == title:
                 raise ValueError("A price drop exceeds fallback message limits")
             chunks.append(current)
-            current = title + " (ادامه)\\n" + line
+            current = title + " (ادامه)\n" + line
             if len(current) > max_length:
                 raise ValueError("A price drop exceeds fallback message limits")
         else:
