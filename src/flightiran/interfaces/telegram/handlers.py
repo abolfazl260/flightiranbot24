@@ -74,7 +74,7 @@ def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> boo
     """Require the configured admin's user ID and their private chat ID."""
 
     user = update.effective_user
-    chat = update.effective_chat
+    chat = getattr(update, "effective_chat", None)
     return bool(
         user is not None
         and chat is not None
