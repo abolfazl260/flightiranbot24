@@ -133,7 +133,10 @@ async def start_handler(
     await dependencies.audit.record("user.start", user_id=user_id)
     if update.message:
         await update.message.reply_text(
-            render_main_menu(language, update.effective_user.first_name if update.effective_user else None),
+            render_main_menu(
+                language,
+                update.effective_user.first_name if update.effective_user else None,
+            ),
             parse_mode="HTML",
             reply_markup=main_menu(language, dependencies.web_app_url),
         )
@@ -146,7 +149,9 @@ async def help_handler(
     await dependencies.audit.record("user.help", user_id=user_id)
     if update.message:
         await update.message.reply_text(
-            render_help(language), parse_mode="HTML", reply_markup=main_menu(language, dependencies.web_app_url)
+            render_help(language),
+            parse_mode="HTML",
+            reply_markup=main_menu(language, dependencies.web_app_url),
         )
 
 
@@ -183,7 +188,10 @@ async def callback_handler(
     elif data == "back":
         await dependencies.audit.record("menu.back", user_id=user_id)
         await query.edit_message_text(
-            render_main_menu(language, update.effective_user.first_name if update.effective_user else None),
+            render_main_menu(
+                language,
+                update.effective_user.first_name if update.effective_user else None,
+            ),
             parse_mode="HTML",
             reply_markup=main_menu(language, dependencies.web_app_url),
         )
