@@ -387,6 +387,41 @@ def render_price_drop_fallback_chunks(
     return chunks
 
 
+_DISABLED_BADGE_PATTERN = re.compile(
+    r'<tg-button type="disabled"(?: style="(success|danger)")?>'
+    r'(⬆️|⬇️|➖)</tg-button>'
+)
+
+
+def replace_disabled_buttons_with_indicators(rich_message: dict) -> dict:
+    """Keep the same Rich Message table, but replace unsupported badges with glyphs."""
+
+    indicators = {"success": "🟢", "danger": "🔴"}
+
+    def render(match: re.Match[str]) -> str:
+        color, arrow = match.groups()
+        return f"{indicators[color]} {arrow}" if color else f"⚪ {arrow}"
+
+    return {
+        **rich_message,
+        "html": _DISABLED_BADGE_PATTERN.sub(render, rich_message["html"]),
+    }
+
+
+async def send_rich_price_table_with_badge_fallback(
+    bot, chat_id: int, rich_message: dict
+) -> None:
+    """Retry 400-rejected disabled badges as non-interactive rich-table symbols."""
+
+    try:
+        await send_rich_price_table(bot, chat_id, rich_message)
+    except httpx.HTTPStatusError as exc:
+        if exc.response.status_code != 400 or "<tg-button" not in rich_message["html"]:
+            raise
+        fallback = replace_disabled_buttons_with_indicators(rich_message)
+        await send_rich_price_table(bot, chat_id, fallback)
+
+
 async def send_rich_price_table(bot, chat_id: int, rich_message: dict) -> None:
     """Call sendRichMessage directly until python-telegram-bot exposes the method."""
 
