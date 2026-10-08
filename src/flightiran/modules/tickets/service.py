@@ -25,14 +25,6 @@ class CheapTicketPriceHistory(Protocol):
         self, route_keys: list[tuple[str, str]]
     ) -> dict[tuple[str, str], tuple[float, int]]: ...
 
-    async def get_latest_prices(
-        self,
-        route_keys: list[tuple[str, str]],
-        *,
-        before: datetime,
-        retention_days: int,
-    ) -> dict[tuple[str, str], int]: ...
-
 
 @dataclass(frozen=True)
 class TicketFilters:
@@ -117,21 +109,15 @@ class CheapTicketService:
             return routes
 
         samples = self._samples(routes)
-        keys = [(origin, destination) for origin, destination, _price in samples]
-        observed_at = datetime.now(timezone.utc)
-        previous_prices = await self.price_history.get_latest_prices(
-            keys,
-            before=observed_at,
-            retention_days=self.retention_days,
-        )
         if samples:
-            captured_at = observed_at.replace(minute=0, second=0, microsecond=0)
+            now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
             await self.price_history.record_snapshot(
                 samples,
-                captured_at=captured_at,
+                captured_at=now,
                 retention_days=self.retention_days,
             )
 
+        keys = [(origin, destination) for origin, destination, _price in samples]
         averages = await self.price_history.get_averages(keys)
         enriched: list[CheapTicketRoute] = []
         for route in routes:
@@ -149,7 +135,6 @@ class CheapTicketService:
                         price_value_toman=current,
                         average_price_toman=average[0] if average else None,
                         average_sample_count=average[1] if average else 0,
-                        previous_price_toman=previous_prices.get((route.origin, item.name)),
                     )
                 )
             enriched.append(replace(route, destinations=tuple(destinations)))
