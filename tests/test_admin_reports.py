@@ -148,6 +148,20 @@ def test_report_button_visible_only_with_explicit_admin_flag():
         ) == 1
 
 
+def test_admin_reports_appear_alongside_optional_webapp_button():
+    keyboard = main_menu(
+        "fa", web_app_url="https://flightiran.example.com", is_admin=True
+    )
+    assert any(
+        button.callback_data == "menu:admin_reports"
+        for row in keyboard.inline_keyboard for button in row
+    )
+    assert any(
+        button.web_app is not None
+        for row in keyboard.inline_keyboard for button in row
+    )
+
+
 def _update(user_id: int, chat_id: int, *, chat_type="private", query=None, message=None):
     user = SimpleNamespace(
         id=user_id, username="test", first_name="Admin", last_name=None
