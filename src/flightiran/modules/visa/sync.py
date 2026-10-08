@@ -22,6 +22,7 @@ from flightiran.db.engine import Database
 from flightiran.db.models import VisaDatasetState, VisaDestinationData, VisaRuleIndex
 
 from .indexer import index_destination
+from .provenance import source_date
 
 LOGGER = logging.getLogger(__name__)
 BASE = "https://travelrequirements.info/data/"
@@ -179,11 +180,10 @@ class VisaSyncService:
                     raise ValueError("Duplicate destination identifiers")
 
                 source_dates = [
-                    entry["lastUpdated"]
+                    verified
                     for entry in entries
                     if isinstance(entry, dict)
-                    and isinstance(entry.get("lastUpdated"), str)
-                    and re.fullmatch(r"\\d{4}-\\d{2}-\\d{2}", entry["lastUpdated"])
+                    if (verified := source_date(entry.get("lastUpdated"))) is not None
                 ]
                 latest_source_update = max(source_dates, default=None)
 
