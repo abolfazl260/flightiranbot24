@@ -105,3 +105,29 @@ async def test_airport_menu_routes_to_catalog_and_selection():
     selected.data = "airport:IKA"
     await callback_handler(update(query=selected), None, deps)
     assert "IKA" in selected.calls[0][0][0]
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("language, greeting", [("fa", "سلام"), ("en", "Hello"), ("ar", "مرحباً")])
+async def test_welcome_localized_and_html_escaped(language, greeting):
+    from flightiran.interfaces.telegram.renderers import render_main_menu
+    rendered = render_main_menu(language, "<Test>")
+    assert greeting in rendered
+    assert "&lt;Test&gt;" in rendered
+    assert "<b>" in rendered
+    assert "✈️" in rendered
+    assert "💱" in rendered
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("language", ["fa", "en", "ar"])
+async def test_help_handler_for_supported_languages(language):
+    from flightiran.interfaces.telegram.handlers import help_handler
+    deps = dependencies()
+    deps.users.languages[42] = language
+    message = Message()
+    await help_handler(update(message=message), None, deps)
+    rendered = message.calls[0][0][0]
+    assert all(command in rendered for command in ("/start", "/help", "/language", "/flight", "/price"))
+    assert message.calls[0][1]["parse_mode"] == "HTML"
+    assert deps.audit.events[-1][0] == "user.help"
