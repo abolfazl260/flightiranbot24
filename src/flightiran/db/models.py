@@ -8,7 +8,9 @@ from sqlalchemy import (
     JSON,
     BigInteger,
     DateTime,
+    Float,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -131,3 +133,30 @@ class PriceSnapshot(TimestampedModel):
     snapshot_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     notified: Mapped[bool] = mapped_column(default=False, nullable=False)
     __table_args__ = (UniqueConstraint("alert_id", "snapshot_hash"),)
+
+
+class Mz724PriceSnapshot(TimestampedModel):
+    """Hourly normalized ticket price for one mz724 route."""
+
+    __tablename__ = "mz724_price_snapshots"
+    __table_args__ = (
+        UniqueConstraint("origin", "destination", "captured_at", name="uq_mz724_route_hour"),
+        Index("ix_mz724_route_captured", "origin", "destination", "captured_at"),
+    )
+    origin: Mapped[str] = mapped_column(String(128), nullable=False)
+    destination: Mapped[str] = mapped_column(String(128), nullable=False)
+    price_toman: Mapped[int] = mapped_column(BigInteger, nullable=False)
+    captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+
+
+class Mz724RouteAverage(TimestampedModel):
+    """Materialized 21-day rolling average for one mz724 route."""
+
+    __tablename__ = "mz724_route_averages"
+    __table_args__ = (
+        UniqueConstraint("origin", "destination", name="uq_mz724_route_average"),
+    )
+    origin: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    destination: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
+    average_price_toman: Mapped[float] = mapped_column(Float, nullable=False)
+    sample_count: Mapped[int] = mapped_column(Integer, nullable=False)
