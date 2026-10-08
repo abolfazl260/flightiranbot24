@@ -2,15 +2,21 @@
 
 import asyncio
 import logging
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Final
 
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from telegram.ext import Application, ApplicationBuilder
 
 from flightiran.config import ConfigurationError, Settings, load_settings
 from flightiran.db import create_database, initialize_database
 from flightiran.db.engine import Database
-from flightiran.db.repositories import SQLiteAuditRepository, SQLiteUserRepository
+from flightiran.db.repositories import (
+    SQLiteAuditRepository,
+    SQLiteMz724PriceHistoryRepository,
+    SQLiteUserRepository,
+)
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
 from flightiran.modules.airport.catalog import AirportCatalog
@@ -34,10 +40,56 @@ def configure_logging(level: str) -> None:
     )
 
 
-def create_application(settings: Settings) -> Application:
+def create_application(
+    settings: Settings,
+    cheap_ticket_service: CheapTicketService | None = None,
+) -> Application:
     """Build the Telegram application without starting network polling."""
 
-    return ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value()).build()
+    builder = ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value())
+    if cheap_ticket_service is not None:
+
+        async def post_init(application: Application) -> None:
+            scheduler = AsyncIOScheduler(timezone="UTC")
+
+            async def capture_prices() -> None:
+                try:
+                    count = await cheap_ticket_service.capture_price_snapshot()
+                    LOGGER.info("mz724 hourly snapshot stored routes=%s", count)
+                except Exception as exc:
+                    LOGGER.exception("mz724 hourly snapshot failed")
+                    try:
+                        await application.bot.send_message(
+                            chat_id=settings.telegram_admin_id,
+                            text=(
+                                "FlightIranBot24 scheduled price capture failed\n"
+                                f"Type: {type(exc).__name__}\n"
+                                f"Message: {exc}"
+                            ),
+                        )
+                    except Exception:
+                        LOGGER.exception("failed_to_notify_admin_about_price_capture")
+
+            scheduler.add_job(
+                capture_prices,
+                "interval",
+                minutes=settings.ticket_history_interval_minutes,
+                next_run_time=datetime.now(timezone.utc),
+                max_instances=1,
+                coalesce=True,
+                id="mz724-hourly-price-history",
+                replace_existing=True,
+            )
+            scheduler.start()
+            application.bot_data["price_history_scheduler"] = scheduler
+
+        async def post_shutdown(application: Application) -> None:
+            scheduler = application.bot_data.get("price_history_scheduler")
+            if isinstance(scheduler, AsyncIOScheduler) and scheduler.running:
+                scheduler.shutdown(wait=False)
+
+        builder = builder.post_init(post_init).post_shutdown(post_shutdown)
+    return builder.build()
 
 
 def run() -> None:
@@ -46,7 +98,6 @@ def run() -> None:
     settings = load_settings()
     configure_logging(settings.log_level)
     database = asyncio.run(_initialize_database(settings.database_url))
-    application = create_application(settings)
     currency_service = None
     if settings.currency_provider_url:
         currency_service = CurrencyService(
@@ -78,8 +129,11 @@ def run() -> None:
         )
     )
     cheap_ticket_service = CheapTicketService(
-        Mz724TicketProvider(ticket_http, url=settings.ticket_provider_url)
+        Mz724TicketProvider(ticket_http, url=settings.ticket_provider_url),
+        SQLiteMz724PriceHistoryRepository(database),
+        retention_days=settings.ticket_history_retention_days,
     )
+    application = create_application(settings, cheap_ticket_service)
     register_handlers(
         application,
         TelegramDependencies(
