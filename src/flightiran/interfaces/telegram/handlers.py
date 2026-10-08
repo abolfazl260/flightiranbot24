@@ -31,6 +31,7 @@ from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.flight_tracking.domain import FlightSearchResult, FlightSearchStatus
 from flightiran.modules.flight_tracking.service import FlightService
 from flightiran.modules.tickets.service import CheapTicketService
+from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 
 from .admin_report import render_admin_report
@@ -68,6 +69,7 @@ class TelegramDependencies:
     ticket_support_username: str = DEFAULT_SUPPORT_USERNAME
     admin_chat_id: int = 106056586
     admin_reports: BotReportRepository | None = None
+    visa_sync_service: VisaSyncService | None = None
 
 
 def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> bool:
@@ -547,9 +549,37 @@ async def price_handler(
         await update.message.reply_text(render_quotes(quotes), parse_mode="HTML")
 
 
+
+async def visa_sync_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    """Manual visa refresh; strictly admin-only in the configured private chat."""
+    if not _is_private_admin(update, dependencies):
+        if update.message:
+            await update.message.reply_text("این دستور فقط برای مدیر ربات است.")
+        return
+    if not update.message:
+        return
+    if dependencies.visa_sync_service is None:
+        await update.message.reply_text("سرویس به‌روزرسانی ویزا فعال نیست.")
+        return
+    progress = await update.message.reply_text("در حال بررسی و دریافت اطلاعات ویزا از TravelRequirements.info ...")
+    try:
+        result = await dependencies.visa_sync_service.sync()
+    except Exception as exc:
+        LOGGER.exception("manual_visa_sync_failed")
+        await progress.edit_text(
+            "به‌روزرسانی ناموفق بود؛ داده قبلی حفظ شد.\n"
+            f"علت: {type(exc).__name__}: {str(exc)[:240]}\n"
+            "منبع: https://travelrequirements.info/data/index.json"
+        )
+        return
+    await progress.edit_text(result.render(manual=True))
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
-    application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
+    application.add_handler(\n        CommandHandler("visa_sync", lambda u, c: visa_sync_handler(u, c, dependencies))\n    )\n    application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
