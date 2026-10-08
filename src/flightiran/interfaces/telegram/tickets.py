@@ -7,6 +7,7 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicketRoute, TicketOffer
 
 from .localization import normalize_language
+from .rich_tickets import render_ticket_footer
 from .support import support_link
 
 
@@ -86,42 +87,47 @@ def _render_destination(item: CheapTicketDestination) -> str:
     return f"📍 <b>{destination}</b>\n{table}\n{status}"
 
 
-def render_cheap_route(route: CheapTicketRoute) -> str:
+def render_cheap_route(route: CheapTicketRoute, *, language: str = "fa") -> str:
     """Render one origin and all destinations as Telegram HTML rich text."""
 
     blocks = [f"✈️ <b>پروازهای ارزان از {escape(route.origin)}</b>"]
     blocks.extend(_render_destination(item) for item in route.destinations)
-    return "\n\n".join(blocks)
+    return "\n\n".join(blocks) + render_ticket_footer(language, rich=False)
 
 
 def render_cheap_route_chunks(
     route: CheapTicketRoute,
     *,
+    language: str = "fa",
     max_length: int = 3800,
 ) -> list[str]:
-    """Split one origin's rich-text output into Telegram-safe messages.
-
-    Destination blocks are kept intact so HTML tags are never split across
-    message boundaries.
-    """
+    """Keep each destination and the booking footer inside Telegram's limit."""
 
     header = f"✈️ <b>پروازهای ارزان از {escape(route.origin)}</b>"
     continuation_header = f"✈️ <b>{escape(route.origin)} — ادامه</b>"
+    footer = render_ticket_footer(language, rich=False)
+    if len(header + footer) > max_length:
+        raise ValueError("Ticket route header and footer exceed Telegram limits")
+
     chunks: list[str] = []
     current = header
 
     for item in route.destinations:
         block = _render_destination(item)
         candidate = f"{current}\n\n{block}"
-        if len(candidate) <= max_length:
+        if len(candidate + footer) <= max_length:
             current = candidate
             continue
 
-        chunks.append(current)
+        if current == header:
+            raise ValueError("A destination exceeds Telegram fallback message limits")
+        chunks.append(current + footer)
         current = f"{continuation_header}\n\n{block}"
+        if len(current + footer) > max_length:
+            raise ValueError("A destination exceeds Telegram fallback message limits")
 
     if current:
-        chunks.append(current)
+        chunks.append(current + footer)
 
     return chunks
 
