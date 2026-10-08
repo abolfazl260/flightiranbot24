@@ -46,33 +46,35 @@ _TABLE_TITLES = {
 _TABLE_CONTINUATION = {"fa": " (ادامه)", "en": " (continued)", "ar": " (متابعة)"}
 
 
-def _average_change_badge(current: int | None, average: float | None) -> str:
-    """Show the deviation from the rolling average as an inert colored button.
+def _price_difference_button(difference_toman: int) -> str:
+    """Render a colored, disabled Diff button with no arrows or actions."""
 
-    The percent sign appears only in the table heading, never in a data cell.
-    """
+    amount = f"{abs(difference_toman):,}"
+    if difference_toman < 0:
+        return f'<tg-button type="disabled" style="success">{amount}</tg-button>'
+    if difference_toman > 0:
+        return f'<tg-button type="disabled" style="danger">{amount}</tg-button>'
+    return '<tg-button type="disabled">0</tg-button>'
+
+
+def _average_change_text(current: int | None, average: float | None) -> str:
+    """Render Change as ordinary table text, never as a button."""
 
     if current is None or average is None or average <= 0:
         return "—"
 
     difference = current - average
     if round(difference) == 0:
-        return '<tg-button type="disabled">⚪ ➖ 0.0</tg-button>'
+        return "⚪ ➖ 0.0"
 
     percentage = abs(difference / average * 100)
     if difference < 0:
-        return (
-            '<tg-button type="disabled" style="success">'
-            f"🟢 ↓ {percentage:.1f}</tg-button>"
-        )
-    return (
-        '<tg-button type="disabled" style="danger">'
-        f"🔴 ↑ {percentage:.1f}</tg-button>"
-    )
+        return f"🟢 ↓ {percentage:.1f}"
+    return f"🔴 ↑ {percentage:.1f}"
 
 
 def _row(destination: CheapTicketDestination) -> str:
-    """Render a compact five-column table using only the 21-day average."""
+    """Compact five-column row: colored Diff button and plain Change text."""
 
     current = destination.price_value_toman
     if current is None:
@@ -85,23 +87,18 @@ def _row(destination: CheapTicketDestination) -> str:
     price = f"{current:,}" if current is not None else destination.price_toman
 
     if current is None or average is None or average <= 0:
-        mean, delta = "—", "—"
+        mean, diff_button = "—", "—"
     else:
         mean = f"{average:,.0f}"
-        difference = round(current - average)
-        if difference < 0:
-            delta = f"↓ {abs(difference):,}"
-        elif difference > 0:
-            delta = f"↑ {difference:,}"
-        else:
-            delta = "= 0"
+        diff_button = _price_difference_button(round(current - average))
 
-    cells = (destination.name, price, mean, delta)
-    badge = _average_change_badge(current, average)
+    change = _average_change_text(current, average)
+    cells = (destination.name, price, mean)
     return (
         "<tr>"
         + "".join(f"<td>{escape(str(value))}</td>" for value in cells)
-        + f'<td align="center">{badge}</td></tr>'
+        + f'<td align="center">{diff_button}</td>'
+        + f"<td>{escape(change)}</td></tr>"
     )
 
 
@@ -260,16 +257,14 @@ def _drop_table_row(drop: PriceDrop) -> str:
         f"{drop.origin} ← {drop.destination}",
         f"{drop.current_toman:,}",
         f"{drop.average_toman:,.0f}",
-        f"{drop.decrease_toman:,.0f}",
     )
-    badge = (
-        '<tg-button type="disabled" style="success">'
-        f"🟢 ↓ {drop.decrease_percent:.2f}</tg-button>"
-    )
+    amount_button = _price_difference_button(-round(drop.decrease_toman))
+    change_text = f"🟢 ↓ {drop.decrease_percent:.2f}"
     return (
         "<tr>"
         + "".join(f"<td>{escape(cell)}</td>" for cell in cells)
-        + f'<td align="center">{badge}</td></tr>'
+        + f'<td align="center">{amount_button}</td>'
+        + f"<td>{change_text}</td></tr>"
     )
 
 
@@ -386,16 +381,22 @@ def render_price_drop_fallback_chunks(
 
 
 _DISABLED_BADGE_PATTERN = re.compile(
-    r'<tg-button type="disabled"(?: style="(?:success|danger)")?>([^<]*)</tg-button>'
+    r'<tg-button type="disabled"(?: style="(success|danger)")?>([^<]*)</tg-button>'
 )
 
 
 def replace_disabled_buttons_with_indicators(rich_message: dict) -> dict:
-    """Preserve a Rich Message table if inline disabled buttons are unsupported."""
+    """Keep red, green and neutral Diff markers when buttons are unsupported."""
+
+    color_markers = {"success": "🟢", "danger": "🔴", None: "⚪"}
+
+    def render(match: re.Match[str]) -> str:
+        style, content = match.groups()
+        return f"{color_markers[style]} {content}"
 
     return {
         **rich_message,
-        "html": _DISABLED_BADGE_PATTERN.sub(r"\1", rich_message["html"]),
+        "html": _DISABLED_BADGE_PATTERN.sub(render, rich_message["html"]),
     }
 
 
