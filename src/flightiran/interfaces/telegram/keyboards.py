@@ -5,6 +5,8 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from .localization import safe_text
 from .support import support_url
 
+CARGO_MARKETPLACE_URL = "https://t.me/advertio_cargo"
+
 
 def main_menu(language: str, web_app_url: str | None = None) -> InlineKeyboardMarkup:
     rows = [
@@ -19,7 +21,17 @@ def main_menu(language: str, web_app_url: str | None = None) -> InlineKeyboardMa
     return InlineKeyboardMarkup(
         [
             [
-                InlineKeyboardButton(safe_text(language, label), callback_data=data)
+                (
+                    InlineKeyboardButton(
+                        safe_text(language, label),
+                        url=CARGO_MARKETPLACE_URL,
+                    )
+                    if label == "cargo"
+                    else InlineKeyboardButton(
+                        safe_text(language, label),
+                        callback_data=data,
+                    )
+                )
                 for label, data in row
             ]
             for row in rows
