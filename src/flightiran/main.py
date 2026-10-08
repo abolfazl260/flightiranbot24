@@ -19,6 +19,7 @@ from flightiran.db.repositories import (
 )
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
+from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.provider import HttpCurrencyProvider
 from flightiran.modules.currency.service import CurrencyService
@@ -148,6 +149,7 @@ def run() -> None:
             cheap_ticket_service=cheap_ticket_service,
             ticket_support_username=settings.ticket_support_username,
             admin_chat_id=settings.telegram_admin_id,
+            admin_reports=BotReportRepository(database),
             useful_catalog=default_catalog(),
         ),
     )
