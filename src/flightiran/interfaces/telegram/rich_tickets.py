@@ -46,7 +46,7 @@ def render_ticket_footer(language: str = "fa", *, rich: bool = True) -> str:
     content = (
         '<a href="https://t.me/Flightiranbot">@Flightiranbot</a>'
         f" | {label} "
-        '<a href="https://t.me/advertio_bot">@advertio_bot</a>'
+        '<a href="https://t.me/Advertio_support">@Advertio_support</a>'
     )
     return f"<p>{content}</p>" if rich else f"\n{content}"
 
