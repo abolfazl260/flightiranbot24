@@ -77,3 +77,55 @@ def support_menu(language: str, support_username: str) -> InlineKeyboardMarkup:
             ],
         ]
     )
+
+
+TICKET_ORIGINS_PAGE_SIZE = 16
+
+
+def ticket_origins_menu(language: str, origins: list[str], page: int = 0) -> InlineKeyboardMarkup:
+    """Compact paginated origin chooser (indices avoid oversized callback data)."""
+
+    max_page = max(0, (len(origins) - 1) // TICKET_ORIGINS_PAGE_SIZE)
+    page = max(0, min(page, max_page))
+    start = page * TICKET_ORIGINS_PAGE_SIZE
+    rows = []
+    for idx in range(start, min(start + TICKET_ORIGINS_PAGE_SIZE, len(origins)), 2):
+        rows.append([
+            InlineKeyboardButton(origins[pos], callback_data=f"tickets:origin:{pos}")
+            for pos in range(idx, min(idx + 2, len(origins)))
+        ])
+    navigation = []
+    if page > 0:
+        navigation.append(
+            InlineKeyboardButton("◀", callback_data=f"tickets:page:{page - 1}")
+        )
+    if page < max_page:
+        navigation.append(
+            InlineKeyboardButton("▶", callback_data=f"tickets:page:{page + 1}")
+        )
+    if navigation:
+        rows.append(navigation)
+    rows.append([InlineKeyboardButton(safe_text(language, "back"), callback_data="back")])
+    return InlineKeyboardMarkup(rows)
+
+
+def ticket_result_menu(language: str, support_username: str) -> InlineKeyboardMarkup:
+    """Show another city without sending every origin's results."""
+
+    return InlineKeyboardMarkup(
+        [
+            [InlineKeyboardButton(
+                safe_text(language, "support_open_chat"),
+                url=support_url(support_username),
+            )],
+            [InlineKeyboardButton(
+                {
+                    "fa": "✈️ انتخاب مبدأ دیگر",
+                    "en": "✈️ Choose another origin",
+                    "ar": "✈️ اختيار مدينة مغادرة أخرى",
+                }.get(language, "✈️ Choose another origin"),
+                callback_data="tickets:menu",
+            )],
+            [InlineKeyboardButton(safe_text(language, "back"), callback_data="back")],
+        ]
+    )
