@@ -3,7 +3,11 @@ from datetime import date, datetime, timezone
 import pytest
 
 from flightiran.infrastructure.http.errors import ProviderInvalidResponse
-from flightiran.interfaces.telegram.tickets import render_cheap_route, render_offer
+from flightiran.interfaces.telegram.tickets import (
+    render_cheap_route,
+    render_cheap_route_chunks,
+    render_offer,
+)
 from flightiran.modules.tickets.domain import (
     CheapTicketDestination,
     CheapTicketRoute,
@@ -11,7 +15,7 @@ from flightiran.modules.tickets.domain import (
     TicketQuery,
 )
 from flightiran.modules.tickets.mz724 import parse_routes
-from flightiran.modules.tickets.service import TicketFilters, TicketService
+from flightiran.modules.tickets.service import TicketFilters, TicketService, parse_toman_price
 
 
 def offer(provider, price, stops=0, baggage="20kg"):
@@ -86,3 +90,49 @@ def test_mz724_parser_rejects_missing_routes_and_renderer_escapes_values():
     rendered = render_cheap_route(route)
     assert "&lt;x&gt;" in rendered
     assert "1,000 تومان" in rendered
+
+
+def test_parse_toman_price_supports_latin_and_persian_digits():
+    assert parse_toman_price("12,500,000") == 12_500_000
+    assert parse_toman_price("۱۲٬۵۰۰٬۰۰۰ تومان") == 12_500_000
+
+
+def test_render_cheap_route_includes_average_difference():
+    route = CheapTicketRoute(
+        "تهران",
+        (
+            CheapTicketDestination(
+                "مشهد",
+                "6,000,000",
+                price_value_toman=6_000_000,
+                average_price_toman=7_500_000,
+                average_sample_count=24,
+            ),
+        ),
+        "https://mz724.ir/",
+    )
+    rendered = render_cheap_route(route)
+    assert "7,500,000 تومان" in rendered
+    assert "1,500,000 تومان ارزان‌تر" in rendered
+    assert "20.0٪ کمتر" in rendered
+    assert "24 نمونه" in rendered
+
+
+def test_render_cheap_route_chunks_stay_below_telegram_limit():
+    destinations = tuple(
+        CheapTicketDestination(
+            f"مقصد {index}",
+            "12,500,000",
+            price_value_toman=12_500_000,
+            average_price_toman=10_000_000,
+            average_sample_count=100,
+        )
+        for index in range(80)
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    chunks = render_cheap_route_chunks(route, max_length=500)
+
+    assert len(chunks) > 1
+    assert all(len(chunk) <= 500 for chunk in chunks)
+    assert all(chunk.count("<b>") == chunk.count("</b>") for chunk in chunks)
+    assert all(chunk.count("<i>") == chunk.count("</i>") for chunk in chunks)

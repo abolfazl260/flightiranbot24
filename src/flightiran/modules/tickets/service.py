@@ -3,10 +3,27 @@
 from __future__ import annotations
 
 import asyncio
-from dataclasses import dataclass
+import re
+from dataclasses import dataclass, replace
+from datetime import datetime, timezone
+from typing import Protocol
 
-from .domain import CheapTicketRoute, TicketOffer, TicketQuery
+from .domain import CheapTicketDestination, CheapTicketRoute, TicketOffer, TicketQuery
 from .provider import CheapTicketProvider, TicketProvider
+
+
+class CheapTicketPriceHistory(Protocol):
+    async def record_snapshot(
+        self,
+        samples: list[tuple[str, str, int]],
+        *,
+        captured_at: datetime,
+        retention_days: int,
+    ) -> None: ...
+
+    async def get_averages(
+        self, route_keys: list[tuple[str, str]]
+    ) -> dict[tuple[str, str], tuple[float, int]]: ...
 
 
 @dataclass(frozen=True)
@@ -49,11 +66,88 @@ class TicketService:
         )
 
 
-class CheapTicketService:
-    """Application use case for the menu's cheap-ticket feed."""
+def parse_toman_price(value: str) -> int:
+    """Convert Persian/Arabic/Latin formatted mz724 price text to integer tomans."""
 
-    def __init__(self, provider: CheapTicketProvider) -> None:
+    translation = str.maketrans("۰۱۲۳۴۵۶۷۸۹٠١٢٣٤٥٦٧٨٩", "01234567890123456789")
+    normalized = value.translate(translation)
+    digits = re.sub(r"[^0-9]", "", normalized)
+    if not digits:
+        raise ValueError(f"Invalid mz724 price: {value!r}")
+    return int(digits)
+
+
+class CheapTicketService:
+    """Cheap-ticket feed plus hourly rolling price history."""
+
+    def __init__(
+        self,
+        provider: CheapTicketProvider,
+        price_history: CheapTicketPriceHistory | None = None,
+        *,
+        retention_days: int = 21,
+    ) -> None:
         self.provider = provider
+        self.price_history = price_history
+        self.retention_days = retention_days
+
+    async def capture_price_snapshot(self) -> int:
+        routes = await self.provider.routes()
+        samples = self._samples(routes)
+        if self.price_history is not None and samples:
+            now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
+            await self.price_history.record_snapshot(
+                samples,
+                captured_at=now,
+                retention_days=self.retention_days,
+            )
+        return len(samples)
 
     async def routes(self) -> list[CheapTicketRoute]:
-        return await self.provider.routes()
+        routes = await self.provider.routes()
+        if self.price_history is None:
+            return routes
+
+        samples = self._samples(routes)
+        if samples:
+            now = datetime.now(timezone.utc).replace(minute=0, second=0, microsecond=0)
+            await self.price_history.record_snapshot(
+                samples,
+                captured_at=now,
+                retention_days=self.retention_days,
+            )
+
+        keys = [(origin, destination) for origin, destination, _price in samples]
+        averages = await self.price_history.get_averages(keys)
+        enriched: list[CheapTicketRoute] = []
+        for route in routes:
+            destinations: list[CheapTicketDestination] = []
+            for item in route.destinations:
+                try:
+                    current = parse_toman_price(item.price_toman)
+                except ValueError:
+                    destinations.append(item)
+                    continue
+                average = averages.get((route.origin, item.name))
+                destinations.append(
+                    replace(
+                        item,
+                        price_value_toman=current,
+                        average_price_toman=average[0] if average else None,
+                        average_sample_count=average[1] if average else 0,
+                    )
+                )
+            enriched.append(replace(route, destinations=tuple(destinations)))
+        return enriched
+
+    @staticmethod
+    def _samples(routes: list[CheapTicketRoute]) -> list[tuple[str, str, int]]:
+        samples: list[tuple[str, str, int]] = []
+        for route in routes:
+            for item in route.destinations:
+                try:
+                    price = parse_toman_price(item.price_toman)
+                except ValueError:
+                    continue
+                samples.append((route.origin, item.name, price))
+        return samples
