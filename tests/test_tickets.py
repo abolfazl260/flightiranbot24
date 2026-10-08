@@ -25,7 +25,12 @@ from flightiran.modules.tickets.domain import (
     TicketQuery,
 )
 from flightiran.modules.tickets.mz724 import parse_routes
-from flightiran.modules.tickets.service import TicketFilters, TicketService, parse_toman_price
+from flightiran.modules.tickets.service import (
+    CheapTicketService,
+    TicketFilters,
+    TicketService,
+    parse_toman_price,
+)
 
 
 def offer(provider, price, stops=0, baggage="20kg"):
@@ -460,3 +465,42 @@ async def test_rejected_disabled_badges_retry_only_as_inert_rich_symbols(monkeyp
     assert "<tg-button" in sent[0]["html"]
     assert "<tg-button" not in sent[1]["html"]
     assert "<table bordered striped compact>" in sent[1]["html"]
+
+
+
+@pytest.mark.asyncio
+async def test_ticket_service_reads_previous_price_before_saving_current_sample():
+    events = []
+
+    class Feed:
+        async def routes(self):
+            return [
+                CheapTicketRoute(
+                    "تهران",
+                    (CheapTicketDestination("مشهد", "8,000"),),
+                    "https://mz724.ir/",
+                )
+            ]
+
+    class History:
+        async def get_latest_prices(self, route_keys, *, before, retention_days):
+            events.append("previous")
+            assert route_keys == [("تهران", "مشهد")]
+            assert retention_days == 21
+            return {("تهران", "مشهد"): 10_000}
+
+        async def record_snapshot(self, samples, *, captured_at, retention_days):
+            events.append("record")
+            assert samples == [("تهران", "مشهد", 8_000)]
+
+        async def get_averages(self, route_keys):
+            events.append("averages")
+            return {("تهران", "مشهد"): (9_000.0, 4)}
+
+    service = CheapTicketService(Feed(), History())
+    routes = await service.routes()
+    item = routes[0].destinations[0]
+    assert item.price_value_toman == 8_000
+    assert item.previous_price_toman == 10_000
+    assert item.average_price_toman == 9_000
+    assert events == ["previous", "record", "averages"]
