@@ -113,7 +113,8 @@ def create_application(
                         if result.status == "updated":
                             await application.bot.send_message(
                                 chat_id=settings.telegram_admin_id,
-                                text=result.render(manual=False),
+                                text=result.render(manual=False, html=True),
+                                parse_mode="HTML",
                                 disable_web_page_preview=True,
                             )
                         LOGGER.info(
