@@ -162,3 +162,28 @@ class Mz724RouteAverage(TimestampedModel):
     destination: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     average_price_toman: Mapped[float] = mapped_column(Float, nullable=False)
     sample_count: Mapped[int] = mapped_column(Integer, nullable=False)
+
+
+class VisaDestinationData(Base):
+    """Latest validated raw TravelRequirements destination data."""
+
+    __tablename__ = "visa_destination_data"
+    slug: Mapped[str] = mapped_column(String(128), primary_key=True)
+    iso2: Mapped[str] = mapped_column(String(2), nullable=False, unique=True)
+    source_url: Mapped[str] = mapped_column(String(512), nullable=False)
+    manifest_updated: Mapped[str | None] = mapped_column(String(32))
+    content_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    last_fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+    raw_data: Mapped[dict] = mapped_column(JSON, nullable=False)
+
+
+class VisaDatasetState(Base):
+    """Persist sync metadata across Docker restarts."""
+
+    __tablename__ = "visa_dataset_state"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    source_url: Mapped[str] = mapped_column(String(512), nullable=False)
+    dataset_version: Mapped[str | None] = mapped_column(String(64))
+    manifest_hash: Mapped[str | None] = mapped_column(String(64))
+    last_checked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    last_changed_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
