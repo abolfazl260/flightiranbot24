@@ -51,7 +51,7 @@ LANG = {
         "condition": "شرایط ویژه و استثناها", "unknown_warning": (
             "ثبت نشدن یک الزام به معنی معافیت از آن نیست."
         ),
-        "license": "TravelRequirements.info · CC BY 4.0",
+        "license": "TravelRequirements.info · AXG Sp. z o.o. · CC BY 4.0 · اقتباس و ترجمه",
         "purpose_tourism": "گردشگری", "purpose_business": "تجاری",
         "purpose_transit": "ترانزیت", "filter": "فیلتر",
         "more_results": "صفحه", "no_items": "رکوردی برای این دسته پیدا نشد.",
@@ -98,7 +98,7 @@ LANG = {
         "condition": "Special conditions and waivers", "unknown_warning": (
             "No published requirement is not proof of exemption."
         ),
-        "license": "TravelRequirements.info · CC BY 4.0",
+        "license": "TravelRequirements.info · AXG Sp. z o.o. · CC BY 4.0 · adapted",
         "purpose_tourism": "Tourism", "purpose_business": "Business",
         "purpose_transit": "Transit", "filter": "Filter",
         "more_results": "Page", "no_items": "No entries in this category.",
@@ -140,7 +140,7 @@ LANG = {
         "condition": "الشروط والاستثناءات", "unknown_warning": (
             "غياب شرط في البيانات لا يعني الإعفاء منه."
         ),
-        "license": "TravelRequirements.info · CC BY 4.0",
+        "license": "TravelRequirements.info · AXG Sp. z o.o. · CC BY 4.0 · ترجمة وتهيئة",
         "purpose_tourism": "السياحة", "purpose_business": "الأعمال",
         "purpose_transit": "العبور", "filter": "تصفية",
         "more_results": "الصفحة", "no_items": "لا توجد نتائج لهذه الفئة.",
