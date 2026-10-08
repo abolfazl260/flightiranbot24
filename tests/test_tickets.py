@@ -3,6 +3,7 @@ from datetime import date, datetime, timezone
 import pytest
 
 from flightiran.infrastructure.http.errors import ProviderInvalidResponse
+from flightiran.interfaces.telegram.rich_tickets import render_rich_price_tables
 from flightiran.interfaces.telegram.tickets import (
     render_cheap_route,
     render_cheap_route_chunks,
@@ -139,3 +140,24 @@ def test_render_cheap_route_chunks_stay_below_telegram_limit():
     assert all(chunk.count("<b>") == chunk.count("</b>") for chunk in chunks)
     assert all(chunk.count("<i>") == chunk.count("</i>") for chunk in chunks)
     assert all(chunk.count("<pre>") == chunk.count("</pre>") for chunk in chunks)
+
+
+def test_real_telegram_rich_tables_have_columns_and_bounded_rows():
+    destinations = tuple(
+        CheapTicketDestination(
+            f"مقصد {index}",
+            "6,000,000",
+            price_value_toman=6_000_000,
+            average_price_toman=7_500_000,
+        )
+        for index in range(25)
+    )
+    route = CheapTicketRoute("تهران", destinations, "https://mz724.ir/")
+    messages = render_rich_price_tables(route, rows_per_message=10)
+    assert len(messages) == 3
+    assert all("<table bordered striped compact>" in message["html"] for message in messages)
+    assert all("<th>اختلاف (تومان)</th>" in message["html"] for message in messages)
+    assert all("<th>اختلاف ٪</th>" in message["html"] for message in messages)
+    assert "-1,500,000" in messages[0]["html"]
+    assert "-20.0٪" in messages[0]["html"]
+    assert [message["html"].count("<tr>") for message in messages] == [11, 11, 6]
