@@ -44,6 +44,7 @@ from .keyboards import (
     ticket_result_menu,
 )
 from .localization import normalize_language, safe_text, text
+from .new_user_alert import render_new_user_alert
 from .renderers import render_help, render_language_prompt, render_main_menu
 from .support import render_support_message
 from .useful_content import (
@@ -208,14 +209,21 @@ async def _save_visa_passport(
 async def start_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
-    user_id, language = await _user_language(update, dependencies)
-    await dependencies.audit.record("user.start", user_id=user_id)
+    telegram_user = update.effective_user
+    if telegram_user is None:
+        return
+    # An atomic INSERT guards against duplicate alerts from repeated/concurrent /start.
+    registered, is_new = await dependencies.users.get_or_create_with_status(
+        telegram_user.id,
+        username=telegram_user.username,
+        first_name=telegram_user.first_name,
+        last_name=telegram_user.last_name,
+    )
+    language = normalize_language(await dependencies.users.get_language(registered.id))
+    await dependencies.audit.record("user.start", user_id=registered.id)
     if update.message:
         await update.message.reply_text(
-            render_main_menu(
-                language,
-                update.effective_user.first_name if update.effective_user else None,
-            ),
+            render_main_menu(language, telegram_user.first_name),
             parse_mode="HTML",
             reply_markup=main_menu(
                 language,
@@ -223,6 +231,21 @@ async def start_handler(
                 is_admin=_is_private_admin(update, dependencies),
             ),
         )
+    if is_new:
+        await dependencies.audit.record("user.registered", user_id=registered.id)
+        if context is not None and getattr(context, "bot", None) is not None:
+            try:
+                await context.bot.send_message(
+                    chat_id=dependencies.admin_chat_id,
+                    text=render_new_user_alert(
+                        telegram_user, getattr(registered, "created_at", None)
+                    ),
+                    parse_mode="HTML",
+                    disable_web_page_preview=True,
+                )
+            except Exception:
+                # A blocked/unreachable admin must not prevent users from using the bot.
+                LOGGER.exception("new_user_admin_alert_failed telegram_id=%s", telegram_user.id)
 
 
 async def help_handler(
