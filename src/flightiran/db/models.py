@@ -43,6 +43,7 @@ class User(TimestampedModel):
     username: Mapped[str | None] = mapped_column(String(255))
     first_name: Mapped[str | None] = mapped_column(String(255))
     last_name: Mapped[str | None] = mapped_column(String(255))
+    last_active_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), index=True)
 
 
 class UserPreference(TimestampedModel):

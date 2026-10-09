@@ -5,6 +5,7 @@ import logging
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Final
+from zoneinfo import ZoneInfo
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from telegram import BotCommand
@@ -21,6 +22,10 @@ from flightiran.db.repositories import (
 )
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
+from flightiran.modules.admin.daily_active import (
+    ActiveUsersReportRepository,
+    render_active_users_report,
+)
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.provider import HttpCurrencyProvider
@@ -98,19 +103,22 @@ def create_application(
     """Build the Telegram application without starting network polling."""
 
     builder = ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value())
-    if cheap_ticket_service is not None or visa_sync_service is not None:
+    if (cheap_ticket_service is not None or visa_sync_service is not None
+            or (report_database is not None and settings.active_users_report_enabled)):
 
         async def post_init(application: Application) -> None:
             await _sync_telegram_commands(application)
             scheduler = AsyncIOScheduler(timezone="UTC")
 
-            async def store_job_status(status: str) -> None:
+            async def store_job_status(
+                status: str, job_name: str = "mz724-hourly-price-history"
+            ) -> None:
                 if report_database is None:
                     return
                 async with report_database.session() as session:
                     session.add(
                         JobRun(
-                            job_name="mz724-hourly-price-history",
+                            job_name=job_name,
                             status=status,
                             finished_at=datetime.now(timezone.utc),
                         )
@@ -190,6 +198,43 @@ def create_application(
                     id="travelrequirements-visa-sync",
                     replace_existing=True,
                 )
+            if report_database is not None and settings.active_users_report_enabled:
+                async def send_daily_users_report() -> None:
+                    try:
+                        now = datetime.now(timezone.utc)
+                        users = await ActiveUsersReportRepository(report_database).collect(now)
+                        pages = render_active_users_report(
+                            users, now=now,
+                            report_timezone=settings.active_users_report_timezone,
+                        )
+                        for page in pages:
+                            await application.bot.send_message(
+                                chat_id=settings.telegram_admin_id,
+                                text=page, parse_mode="HTML",
+                                disable_web_page_preview=True,
+                            )
+                        await store_job_status("success", "daily-active-users-report")
+                        LOGGER.info(
+                            "daily active users delivered users=%s messages=%s",
+                            len(users), len(pages),
+                        )
+                    except Exception:
+                        LOGGER.exception("daily_active_users_report_failed")
+                        try:
+                            await store_job_status("failed", "daily-active-users-report")
+                        except Exception:
+                            LOGGER.exception("failed_to_store_daily_active_users_job_status")
+
+                hour, minute = map(int, settings.active_users_report_time.split(":"))
+                scheduler.add_job(
+                    send_daily_users_report,
+                    "cron",
+                    hour=hour, minute=minute,
+                    timezone=ZoneInfo(settings.active_users_report_timezone),
+                    max_instances=1, coalesce=True, misfire_grace_time=3600,
+                    id="daily-active-users-report", replace_existing=True,
+                )
+
             scheduler.start()
             application.bot_data["price_history_scheduler"] = scheduler
 
