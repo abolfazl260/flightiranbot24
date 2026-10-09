@@ -1,0 +1,172 @@
+name: Android Build and Release
+
+on:
+  pull_request:
+    paths:
+      - "android/**"
+      - "docs/ANDROID_*.md"
+      - "docs/PLAY_STORE_LISTING.md"
+      - "scripts/generate_android_store_graphics.py"
+      - ".github/workflows/android.yml"
+  push:
+    branches: [main]
+    tags: ["v*"]
+    paths:
+      - "android/**"
+      - "docs/ANDROID_*.md"
+      - "docs/PLAY_STORE_LISTING.md"
+      - "scripts/generate_android_store_graphics.py"
+      - ".github/workflows/android.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Android checks and debug APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.13"
+      - name: Unit tests, lint, debug APK and unsigned release AAB
+        run: gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:bundleRelease
+      - name: Generate Play Store art (deterministic)
+        run: |
+          python -m pip install --disable-pip-version-check "Pillow==11.3.0"
+          python scripts/generate_android_store_graphics.py --out android/dist/store
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-play-graphics
+          path: android/dist/store/*.png
+          if-no-files-found: error
+          retention-days: 30
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android-debug-apk
+          path: android/app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+  release:
+    name: Signed APK, AAB and GitHub Release
+    needs: verify
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify version and tag match
+        shell: bash
+        run: |
+          set -euo pipefail
+          app_version="$(sed -n 's/^appVersionName=//p' android/gradle.properties)"
+          [[ -n "$app_version" && "$GITHUB_REF_NAME" == "v$app_version" ]] || {
+            echo "::error::Tag must equal v<appVersionName> in android/gradle.properties"
+            exit 1
+          }
+          git fetch --no-tags origin main
+          git merge-base --is-ancestor HEAD origin/main || {
+            echo "::error::Release tag must point to an ancestor of the main branch."
+            exit 1
+          }
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
+      - name: Install Android SDK
+        run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.13"
+      - name: Restore private upload key
+        shell: bash
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          for required in KEYSTORE_BASE64 STORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            [[ -n "${!required}" ]] || {
+              echo "::error::Android signing secrets are required before a tagged release."
+              exit 1
+            }
+          done
+          umask 077
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/flightiran-upload.jks"
+          [[ -s "$RUNNER_TEMP/flightiran-upload.jks" ]]
+      - name: Build signed release APK and AAB
+        env:
+          ANDROID_KEYSTORE_FILE: ${{ runner.temp }}/flightiran-upload.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle --no-daemon -p android :app:assembleRelease :app:bundleRelease
+      - name: Verify artifact signatures
+        shell: bash
+        run: |
+          set -euo pipefail
+          apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          test -x "$apksigner"
+          "$apksigner" verify --verbose android/app/build/outputs/apk/release/*.apk
+          jarsigner -verify android/app/build/outputs/bundle/release/*.aab
+      - name: Stage signed artifacts with verifiable SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p android/dist
+          cp android/app/build/outputs/apk/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
+          cp android/app/build/outputs/bundle/release/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
+          (cd android/dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
+      - name: Store signed files as workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-${{ github.ref_name }}
+          path: |
+            android/dist/*.apk
+            android/dist/*.aab
+            android/dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 90
+      - name: Publish assets to GitHub Release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          files=(android/dist/*.apk android/dist/*.aab android/dist/SHA256SUMS.txt)
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" "${files[@]}" \
+              --title "Flight Iran Bot 24 $GITHUB_REF_NAME" --generate-notes --verify-tag
+          fi
+      - name: Remove signing material
+        if: always()
+        shell: bash
+        run: rm -f "$RUNNER_TEMP/flightiran-upload.jks"

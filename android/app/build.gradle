@@ -1,0 +1,73 @@
+plugins {
+    id 'com.android.application'
+}
+
+def signingEnv = [
+    'ANDROID_KEYSTORE_FILE',
+    'ANDROID_KEYSTORE_PASSWORD',
+    'ANDROID_KEY_ALIAS',
+    'ANDROID_KEY_PASSWORD'
+]
+def signingEnabled = signingEnv.every { System.getenv(it)?.trim() }
+if (signingEnv.any { System.getenv(it)?.trim() } && !signingEnabled) {
+    throw new GradleException('Incomplete Android signing environment (4 variables required).')
+}
+
+android {
+    namespace 'com.abolfazl260.flightiranbot24'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'com.abolfazl260.flightiranbot24'
+        minSdk 24
+        targetSdk 36
+        versionCode Integer.parseInt(project.property('appVersionCode').toString())
+        versionName project.property('appVersionName').toString()
+        testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+    }
+
+    signingConfigs {
+        release {
+            if (signingEnabled) {
+                storeFile file(System.getenv('ANDROID_KEYSTORE_FILE'))
+                storePassword System.getenv('ANDROID_KEYSTORE_PASSWORD')
+                keyAlias System.getenv('ANDROID_KEY_ALIAS')
+                keyPassword System.getenv('ANDROID_KEY_PASSWORD')
+            }
+        }
+    }
+
+    buildTypes {
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+        release {
+            minifyEnabled false
+            if (signingEnabled) {
+                signingConfig signingConfigs.release
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            // Package the exact airport catalogue already maintained by the Python bot.
+            assets.srcDir('../../src/flightiran/modules/airport/data')
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    lint {
+        abortOnError true
+        checkReleaseBuilds true
+    }
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
