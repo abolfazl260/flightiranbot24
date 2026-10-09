@@ -24,6 +24,10 @@ class UserRepository(Protocol):
 
     async def get_or_create(self, telegram_id: int, **fields: str | None) -> User: ...
 
+    async def get_or_create_with_status(
+        self, telegram_id: int, **fields: str | None
+    ) -> tuple[User, bool]: ...
+
     async def set_language(self, user_id: int, language: str) -> None: ...
 
     async def get_language(self, user_id: int) -> str: ...
@@ -57,6 +61,26 @@ class SQLiteUserRepository:
     async def get_or_create(self, telegram_id: int, **fields: str | None) -> User:
         existing = await self.get_by_telegram_id(telegram_id)
         return existing or await self.create(telegram_id, **fields)
+
+    async def get_or_create_with_status(
+        self, telegram_id: int, **fields: str | None
+    ) -> tuple[User, bool]:
+        """Atomically detect a first-ever user, including concurrent /start requests.
+
+        A unique telegram_id and INSERT ... ON CONFLICT DO NOTHING prevent
+        duplicate new-user notifications across bot processes/restarts.
+        """
+        async with self.database.session() as session:
+            statement = (
+                sqlite_insert(User)
+                .values(telegram_id=telegram_id, **fields)
+                .on_conflict_do_nothing(index_elements=[User.telegram_id])
+            )
+            inserted = await session.execute(statement)
+            user = await session.scalar(select(User).where(User.telegram_id == telegram_id))
+            if user is None:
+                raise RuntimeError("User row was not found after registration")
+            return user, inserted.rowcount == 1
 
     async def set_language(self, user_id: int, language: str) -> None:
         async with self.database.session() as session:
