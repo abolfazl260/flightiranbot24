@@ -147,7 +147,7 @@ async def test_percentage_alert_ui_create_manage_and_isolate_users(tmp_path):
     assert len(existing) == 1
     assert (existing[0].threshold_type, existing[0].target_percent) == ("percent", 50)
     listing = await press("alerts:menu", ctx, deps)
-    assert "50% below the 21-day average" in listing.calls[-1][0]
+    assert "50% below the recorded average" in listing.calls[-1][0]
     assert "TOMAN" not in listing.calls[-1][0]
 
     foreign = await press(f"alerts:delete:{existing[0].id}", ctx, deps, user=43)
