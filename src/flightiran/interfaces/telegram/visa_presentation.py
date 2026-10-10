@@ -1025,10 +1025,11 @@ def render_rich_report(
         tr(language, "source"),
         render_authority(provenance, language).replace("\n", " · "),
     ))
-    table = "<table bordered striped compact>" + "".join(
-        f"<tr><th>{escape(str(key))}</th><td>{value if key == tr(language, 'source') else escape(str(value))}</td></tr>"
-        for key, value in rows
-    ) + "</table>"
+    table_rows = []
+    for key, value in rows:
+        cell = value if key == tr(language, "source") else escape(str(value))
+        table_rows.append(f"<tr><th>{escape(str(key))}</th><td>{cell}</td></tr>")
+    table = "<table bordered striped compact>" + "".join(table_rows) + "</table>"
     intro = "<p>" + _provider_links(provenance, language) + "</p>"
     if freshness_notice:
         intro += "<p>" + freshness_notice.replace("\n", " ") + "</p>"
