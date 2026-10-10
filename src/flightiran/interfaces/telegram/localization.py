@@ -21,7 +21,6 @@ MESSAGES = {
         "back": "Back to menu",
         "airports": "Airports",
         "tickets": "Tickets",
-        "currency": "Currency",
         "visa": "Visa / Passport",
         "rules": "Traveler rules",
         "cargo": "Cargo marketplace",
@@ -51,7 +50,6 @@ MESSAGES = {
         "back": "بازگشت به منو",
         "airports": "فرودگاه‌ها",
         "tickets": "بلیط",
-        "currency": "نرخ ارز",
         "visa": "ویزا / پاسپورت",
         "rules": "قوانین مسافر",
         "cargo": "بازار حمل بار",
@@ -75,7 +73,6 @@ MESSAGES = {
         "back": "العودة إلى القائمة",
         "airports": "المطارات",
         "tickets": "التذاكر",
-        "currency": "العملة",
         "visa": "التأشيرة / جواز السفر",
         "rules": "قواعد المسافر",
         "cargo": "سوق الشحن",
@@ -104,7 +101,7 @@ MESSAGES["fa"].update({
         "🛂 اطلاعات ویزا و شرایط سفر",
         "🛬 اطلاعات فرودگاه‌ها و مسیرهای پروازی",
         "📉 پایش قیمت بلیط هواپیما",
-        "💱 نرخ ارز و اطلاعات کاربردی سفر",
+        "📚 اطلاعات کاربردی سفر",
     ],
     "welcome_choose": "برای شروع، یکی از گزینه‌های زیر را انتخاب کنید.",
     "help_title": "راهنمای Flight Iran Bot 24",
@@ -113,13 +110,11 @@ MESSAGES["fa"].update({
     "help_start": "نمایش صفحه اصلی و خدمات سفر",
     "help_help": "نمایش همین راهنما",
     "help_language": "انتخاب زبان فارسی، انگلیسی یا عربی",
-    "help_price": "نمایش نرخ ارز؛ در صورت پیکربندی منبع اطلاعات",
     "help_menu": "بخش‌های منوی اصلی",
     "help_menu_body": (
         "🛬 فرودگاه‌ها: فهرست و مشخصات فرودگاه‌ها\n"
         "🎫 بلیط: مشاهده مسیرها و قیمت‌های موجود، در صورت فعال بودن "
         "سرویس\n"
-        "💱 نرخ ارز: مشاهده نرخ‌ها در صورت اتصال منبع\n"
         "📚 اطلاعات کاربردی: راهنماهای سفر\n"
         "⚙️ تنظیمات: تغییر زبان\n"
         "🛂 ویزا: استعلام پاسپورت و مقصد با منابع رسمی؛ قوانین مسافر جداگانه\n"
@@ -127,8 +122,8 @@ MESSAGES["fa"].update({
         "📩 پشتیبانی: پرسش درباره رزرو، قیمت‌ها و استفاده از ربات"
     ),
     "help_note": (
-        "برخی خدمات به فعال بودن سرویس‌دهنده وابسته‌اند. قیمت بلیط، "
-        "نرخ ارز و شرایط سفر را پیش از تصمیم نهایی با منبع رسمی بررسی کنید."
+        "برخی خدمات به فعال بودن سرویس‌دهنده وابسته‌اند. قیمت بلیط "
+        "و شرایط سفر را پیش از تصمیم نهایی با منابع معتبر بررسی کنید."
     ),
     "help_back": "برای بازگشت به خدمات از /start استفاده کنید.",
 })
@@ -146,7 +141,7 @@ MESSAGES["en"].update({
         "🛂 Visa and travel requirements",
         "🛬 Airports and flight routes",
         "📉 Airfare price monitoring",
-        "💱 Exchange rates and useful travel information",
+        "📚 Useful travel information",
     ],
     "welcome_choose": "Choose a service below to get started.",
     "help_title": "Flight Iran Bot 24 Help",
@@ -155,13 +150,11 @@ MESSAGES["en"].update({
     "help_start": "Show the main menu and travel services",
     "help_help": "Show this help guide",
     "help_language": "Choose Persian, English or Arabic",
-    "help_price": "Show exchange rates when a data provider is configured",
     "help_menu": "Main menu sections",
     "help_menu_body": (
         "🛬 Airports: browse airports and details\n"
         "🎫 Tickets: available routes and fares when the service is "
         "enabled\n"
-        "💱 Currency: rates when a provider is connected\n"
         "📚 Useful information: travel guides\n"
         "⚙️ Settings: change language\n"
         "🛂 Visa: passport/destination guidance with sources; traveler rules separate\n"
@@ -169,8 +162,8 @@ MESSAGES["en"].update({
         "📩 Support: questions about bookings, prices and using the bot"
     ),
     "help_note": (
-        "Some features require an active provider. Verify ticket prices, "
-        "exchange rates and travel requirements before making decisions."
+        "Some features require an active provider. Verify ticket prices "
+        "and travel requirements before making decisions."
     ),
     "help_back": "Use /start to return to the main menu.",
 })
@@ -188,7 +181,7 @@ MESSAGES["ar"].update({
         "🛂 التأشيرات ومتطلبات السفر",
         "🛬 المطارات ومسارات الرحلات",
         "📉 متابعة أسعار التذاكر",
-        "💱 أسعار الصرف ومعلومات السفر المفيدة",
+        "📚 معلومات السفر المفيدة",
     ],
     "welcome_choose": "اختر إحدى الخدمات أدناه للبدء.",
     "help_title": "دليل Flight Iran Bot 24",
@@ -197,12 +190,10 @@ MESSAGES["ar"].update({
     "help_start": "عرض القائمة الرئيسية وخدمات السفر",
     "help_help": "عرض دليل المساعدة",
     "help_language": "اختيار العربية أو الفارسية أو الإنجليزية",
-    "help_price": "عرض أسعار الصرف عند تهيئة مزود البيانات",
     "help_menu": "أقسام القائمة الرئيسية",
     "help_menu_body": (
         "🛬 المطارات: تصفح المطارات وتفاصيلها\n"
         "🎫 التذاكر: المسارات والأسعار المتاحة عند تفعيل الخدمة\n"
-        "💱 العملات: أسعار الصرف عند ربط المزود\n"
         "📚 معلومات مفيدة: أدلة السفر\n"
         "⚙️ الإعدادات: تغيير اللغة\n"
         "🛂 التأشيرات: شروط الدخول بحسب الجواز والوجهة مع مصادرها\n"
@@ -211,7 +202,7 @@ MESSAGES["ar"].update({
     ),
     "help_note": (
         "تتطلب بعض الميزات مزود خدمة نشطاً. تحقق من أسعار التذاكر "
-        "وأسعار الصرف ومتطلبات السفر من المصادر الرسمية."
+        "ومتطلبات السفر من المصادر الرسمية."
     ),
     "help_back": "استخدم /start للعودة إلى القائمة الرئيسية.",
 })

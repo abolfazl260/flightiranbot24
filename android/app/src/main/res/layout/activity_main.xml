@@ -50,8 +50,6 @@
             android:text="@string/checklist_title" />
         <Button android:id="@+id/openVisa" style="@style/ServiceButton"
             android:text="@string/open_visa" />
-        <Button android:id="@+id/openCurrency" style="@style/ServiceButton"
-            android:text="@string/open_currency" />
         <Button android:id="@+id/openAirports" style="@style/ServiceButton"
             android:text="@string/open_airports" />
         <Button android:id="@+id/openUseful" style="@style/ServiceButton"

@@ -30,8 +30,6 @@ from flightiran.modules.admin.daily_active import (
 )
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
-from flightiran.modules.currency.provider import HttpCurrencyProvider
-from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
@@ -58,7 +56,6 @@ BOT_COMMAND_DESCRIPTIONS = {
         "start": "نمایش منوی اصلی",
         "help": "راهنمای استفاده از ربات",
         "language": "تغییر زبان",
-        "price": "نمایش نرخ ارز",
         "alerts": "زنگوله قیمت بلیط",
         "visa": "اطلاعات ویزا",
         "visa_watch": "هشدار تغییرات ویزا",
@@ -69,7 +66,6 @@ BOT_COMMAND_DESCRIPTIONS = {
         "start": "Open main menu",
         "help": "Help and commands",
         "language": "Change language",
-        "price": "Exchange rates",
         "alerts": "Ticket price alerts",
         "visa": "Visa requirements",
         "visa_watch": "Visa change alerts",
@@ -80,7 +76,6 @@ BOT_COMMAND_DESCRIPTIONS = {
         "start": "عرض القائمة الرئيسية",
         "help": "دليل الاستخدام",
         "language": "تغيير اللغة",
-        "price": "أسعار الصرف",
         "alerts": "تنبيهات أسعار التذاكر",
         "visa": "متطلبات التأشيرة",
         "visa_watch": "تنبيهات تغييرات التأشيرات",
@@ -342,14 +337,6 @@ def run() -> None:
     settings = load_settings()
     configure_logging(settings.log_level)
     database = asyncio.run(_initialize_database(settings.database_url))
-    currency_service = None
-    if settings.currency_provider_url:
-        currency_service = CurrencyService(
-            HttpCurrencyProvider(
-                ProviderHttpClient(ProviderHttpConfig(cache_ttl_seconds=30)),
-                settings.currency_provider_url,
-            )
-        )
     ticket_http = ProviderHttpClient(
         ProviderHttpConfig(
             timeout_seconds=12,
@@ -383,7 +370,6 @@ def run() -> None:
             airport_catalog=AirportCatalog.from_json(
                 Path(__file__).parent / "modules" / "airport" / "data" / "airports.json"
             ),
-            currency_service=currency_service,
             cheap_ticket_service=cheap_ticket_service,
             price_alert_service=price_alert_service,
             ticket_support_username=settings.ticket_support_username,

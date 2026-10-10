@@ -3,7 +3,6 @@ import logging
 import json
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ApplicationBuilder, CallbackContext, CommandHandler, ContextTypes, CallbackQueryHandler, MessageHandler, filters, InlineQueryHandler
-from exchange import handle_exchangerate
 from tickets import handle_onlineticket
 from country import handle_country
 from inlinemode import inline_query_handler
@@ -64,7 +63,6 @@ def main_menu(update, context):
          InlineKeyboardButton(buttons["useful"], callback_data="wikibutton")],
         [InlineKeyboardButton(buttons["currency_payment"], callback_data="currency_payment"),
          InlineKeyboardButton(buttons["air_shipping"], url="https://t.me/koolbar_international")],
-        [InlineKeyboardButton(buttons["exchange_rate"], callback_data="exchangerate")],
          [InlineKeyboardButton(buttons["cheap_tickets"], callback_data="onlineticket")],
         [InlineKeyboardButton(buttons["iran_flight_info"], url="https://fids.airport.ir/")],
         [InlineKeyboardButton(buttons["flight_status"], callback_data="flight_position"),
@@ -126,17 +124,10 @@ async def button_controller(update: Update, context: CallbackContext):
     elif data == "wikibutton":
         keyboard = create_wiki_keyboard(update, context)
         await send_message(update, get_message(update, context, "wiki_intro"), keyboard)
-    elif data == "exchangerate":
-        await handle_exchangerate(update, context)
     elif data == "onlineticket":
         await handle_onlineticket(update)
     elif data == "country":
         await handle_country(update, context)
-    elif data == "share_exchangerate":
-        chat_id = "CHAT_ID"
-        await handle_exchangerate(update, context)
-        await update.callback_query.answer(get_message(update, context, "share_exchange_success"), show_alert=True)
-        await context.bot.send_message(chat_id=chat_id, text=get_message(update, context, "share_exchange_message"))
     elif data.startswith("airport_"):
         airport_code = data.split("_")[1]
         await fetch_airport_info(update, airport_code)
@@ -236,7 +227,6 @@ TOKEN = "1984772645:AAGoojVfYCHRJN5sTHo4IKwLjUp1-03SjyY" #test
 application = ApplicationBuilder().token(TOKEN).build()
 application.add_handler(CommandHandler("start", say_hello))
 application.add_handler(CommandHandler("flight", flight_info))
-application.add_handler(CommandHandler("price", handle_exchangerate))
 application.add_handler(CommandHandler("language", change_language))
 application.add_handler(CallbackQueryHandler(button_controller))
 application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_user_message))

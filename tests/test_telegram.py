@@ -128,7 +128,6 @@ async def test_welcome_localized_and_html_escaped(language, greeting):
     assert "&lt;Test&gt;" in rendered
     assert "<b>" in rendered
     assert "🎫" in rendered
-    assert "💱" in rendered
 
 
 @pytest.mark.asyncio
@@ -140,7 +139,7 @@ async def test_help_handler_for_supported_languages(language):
     message = Message()
     await help_handler(update(message=message), None, deps)
     rendered = message.calls[0][0][0]
-    commands = ("/start", "/help", "/language", "/price", "/visa")
+    commands = ("/start", "/help", "/language", "/visa")
     assert all(command in rendered for command in commands)
     assert message.calls[0][1]["parse_mode"] == "HTML"
     assert deps.audit.events[-1][0] == "user.help"

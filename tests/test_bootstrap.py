@@ -67,7 +67,8 @@ def test_flight_command_is_not_registered() -> None:
         for command in handler.commands
     }
     assert "flight" not in registered
-    assert {"start", "help", "price", "visa"}.issubset(registered)
+    assert {"start", "help", "visa"}.issubset(registered)
+    assert "price" not in registered
 
 
 @pytest.mark.asyncio
@@ -86,4 +87,5 @@ async def test_telegram_commands_replace_legacy_command_in_all_languages() -> No
     )))
     assert set(recorded) == {"default", "fa", "en", "ar"}
     assert all("flight" not in commands for commands in recorded.values())
+    assert all("price" not in commands for commands in recorded.values())
     assert all("visa" in commands for commands in recorded.values())

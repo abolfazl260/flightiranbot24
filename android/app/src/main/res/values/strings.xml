@@ -6,12 +6,11 @@
     <string name="notice">Airport data is indicative. Online features open in Telegram.</string>
     <string name="open_bot">Open travel assistant</string>
     <string name="open_visa">Visa and entry requirements</string>
-    <string name="open_currency">Exchange rates</string>
     <string name="open_airports">Airport information</string>
     <string name="open_useful">Useful travel information</string>
     <string name="open_support">Contact support</string>
     <string name="open_privacy">Privacy information</string>
-    <string name="command_hint">For visa or exchange rates, the command is copied; paste it into the Telegram chat.</string>
+    <string name="command_hint">For visa information, the command is copied; paste it into the Telegram chat.</string>
     <string name="command_copied">Command copied. Paste it into the Telegram chat.</string>
     <string name="link_unavailable">Unable to open the link on this device.</string>
     <string name="offline_airports">Airport directory · offline</string>
