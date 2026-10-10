@@ -13,7 +13,7 @@ from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
 
 from .localization import normalize_language
-from .rich_tickets import send_rich_price_table
+from .rich_tickets import MAX_RICH_TEXT_CHARS, send_rich_price_table
 
 LOGGER = logging.getLogger(__name__)
 PAGE_SIZE = 12
@@ -23,7 +23,7 @@ WORDS = {
         "title": "🔔 <b>زنگوله قیمت بلیط</b>",
         "intro": (
             "برای مسیر دلخواه، سقف قیمت به تومان یا درصد کاهش نسبت به میانگین "
-            "۲۱روزه را انتخاب کنید. قیمت‌ها دوره‌ای بررسی می‌شوند و در صورت "
+            "قیمت را انتخاب کنید. قیمت‌ها دوره‌ای بررسی می‌شوند و در صورت "
             "رسیدن به شرط انتخابی، پیام تلگرام دریافت می‌کنید."
         ),
         "choose_mode": "روش هشدار برای مسیر <b>{origin} ← {destination}</b> را انتخاب کنید:",
@@ -31,16 +31,16 @@ WORDS = {
         "mode_percent": "📉 درصد کاهش قیمت",
         "select_percent": (
             "برای مسیر <b>{origin} ← {destination}</b>، حداقل درصد کاهش نسبت به "
-            "میانگین ۲۱روزه را انتخاب کنید (حداکثر ۵۰٪).\n"
+            "میانگین قیمت را انتخاب کنید (حداکثر ۵۰٪).\n"
             "در صورت ناکافی بودن داده‌های قبلی، هشدار درصدی تا جمع‌آوری "
             "حداقل دو نمونه معتبر فعال نمی‌شود."
         ),
         "created_percent": (
             "✅ هشدار درصدی ثبت شد.\n<b>{origin} ← {destination}</b>\n"
-            "کاهش حداقل <b>{percent}٪</b> نسبت به میانگین قیمت ۲۱روزه.\n"
+            "کاهش حداقل <b>{percent}٪</b> نسبت به میانگین قیمت.\n"
             "در صورت وجود داده کافی، قیمت‌ها دوره‌ای بررسی خواهند شد."
         ),
-        "percent_label": "کاهش {percent}٪ نسبت به میانگین ۲۱روزه",
+        "percent_label": "کاهش {percent}٪ نسبت به میانگین قیمت",
         "percent_invalid": "درصد انتخابی نامعتبر است؛ از دکمه‌های ۵ تا ۵۰٪ استفاده کنید.",
         "empty": "هنوز هشدار قیمتی ثبت نکرده‌اید.",
         "new": "➕ ثبت هشدار جدید",
@@ -54,7 +54,7 @@ WORDS = {
         ),
         "amount_heading": "💰 تعیین سقف هشدار قیمت",
         "current_fare": "قیمت فعلی مسیر",
-        "route_average": "میانگین ثبت‌شده ۲۱روزه",
+        "route_average": "میانگین قیمت ثبت‌شده",
         "no_current": "فعلاً موجود نیست",
         "no_average": "هنوز داده تاریخی موجود نیست",
         "sample_note": "میانگین بر اساس {count} ثبت قیمت محاسبه شده است.",
@@ -87,23 +87,23 @@ WORDS = {
         "title": "🔔 <b>Ticket price alerts</b>",
         "intro": (
             "Choose a price ceiling in tomans or a percentage drop from the "
-            "21-day average. The bot checks routes periodically and sends a "
+            "recorded average. The bot checks routes periodically and sends a "
             "Telegram message when your selected condition is met."
         ),
         "choose_mode": "Choose the alert type for <b>{origin} → {destination}</b>:",
         "mode_price": "💰 Price ceiling in tomans",
         "mode_percent": "📉 Percentage price drop",
         "select_percent": (
-            "Choose the minimum drop from the 21-day average for "
+            "Choose the minimum drop from the recorded average for "
             "<b>{origin} → {destination}</b> (up to 50%).\n"
             "At least two valid historical samples are needed to trigger the alert."
         ),
         "created_percent": (
             "✅ Percentage alert saved.\n<b>{origin} → {destination}</b>\n"
-            "Drop: <b>at least {percent}%</b> below the 21-day average.\n"
+            "Drop: <b>at least {percent}%</b> below the recorded average.\n"
             "Scheduled checks will run when enough historical data is available."
         ),
-        "percent_label": "{percent}% below the 21-day average",
+        "percent_label": "{percent}% below the recorded average",
         "percent_invalid": "Select a percentage between 5% and 50% using the buttons.",
         "empty": "No price alerts yet.",
         "new": "➕ New alert",
@@ -117,7 +117,7 @@ WORDS = {
         ),
         "amount_heading": "💰 Set a ticket price ceiling",
         "current_fare": "Current route fare",
-        "route_average": "Recorded 21-day average",
+        "route_average": "Recorded average fare",
         "no_current": "Currently unavailable",
         "no_average": "No recorded history yet",
         "sample_note": "Average based on {count} observed fares.",
@@ -149,23 +149,23 @@ WORDS = {
     "ar": {
         "title": "🔔 <b>تنبيهات أسعار التذاكر</b>",
         "intro": (
-            "اختر سقف سعر بالتومان أو نسبة انخفاض مقارنة بمتوسط آخر ٢١ يوماً. "
+            "اختر سقف سعر بالتومان أو نسبة انخفاض مقارنة بمتوسط الأسعار المسجل. "
             "يتحقق البوت من الأسعار دورياً ويرسل رسالة عند تحقق الشرط."
         ),
         "choose_mode": "اختر نوع التنبيه للمسار <b>{origin} ← {destination}</b>:",
         "mode_price": "💰 سقف السعر بالتومان",
         "mode_percent": "📉 نسبة انخفاض السعر",
         "select_percent": (
-            "اختر الحد الأدنى للانخفاض مقارنة بمتوسط ٢١ يوماً للمسار "
+            "اختر الحد الأدنى للانخفاض مقارنة بمتوسط الأسعار للمسار "
             "<b>{origin} ← {destination}</b> (حتى ٥٠٪).\n"
             "يلزم توفر عينتين تاريخيتين صالحتين على الأقل قبل إرسال التنبيه."
         ),
         "created_percent": (
             "✅ تم حفظ تنبيه النسبة.\n<b>{origin} ← {destination}</b>\n"
-            "انخفاض لا يقل عن <b>{percent}٪</b> مقارنة بمتوسط ٢١ يوماً.\n"
+            "انخفاض لا يقل عن <b>{percent}٪</b> مقارنة بمتوسط الأسعار.\n"
             "سيتم فحص الأسعار دورياً عند توفر بيانات كافية."
         ),
-        "percent_label": "انخفاض {percent}٪ عن متوسط ٢١ يوماً",
+        "percent_label": "انخفاض {percent}٪ عن متوسط الأسعار",
         "percent_invalid": "اختر نسبة بين ٥٪ و٥٠٪ باستخدام الأزرار.",
         "empty": "لا توجد تنبيهات مسجلة.",
         "new": "➕ تنبيه جديد",
@@ -179,7 +179,7 @@ WORDS = {
         ),
         "amount_heading": "💰 تحديد سقف سعر التذكرة",
         "current_fare": "السعر الحالي للمسار",
-        "route_average": "المتوسط المسجل خلال ٢١ يوماً",
+        "route_average": "متوسط الأسعار المسجل",
         "no_current": "غير متاح حالياً",
         "no_average": "لا توجد بيانات تاريخية بعد",
         "sample_note": "حُسب المتوسط من {count} أسعار مسجلة.",
@@ -407,38 +407,158 @@ def _destination_keyboard(route_index: int, items: list[str], language: str, pag
     return InlineKeyboardMarkup(rows)
 
 
-async def show_alerts(query, service: PriceAlertService, user_id: int, language: str) -> None:
-    alerts = await service.list_user_alerts(user_id)
-    lines = [word(language, "title"), "", word(language, "intro"), ""]
-    rows = [[InlineKeyboardButton(word(language, "new"), callback_data="alerts:new")]]
+def _alert_description(item, language: str) -> tuple[str, str]:
+    """Escape provider-independent route details and localized alert criterion."""
+    status = word(language, item.status)
+    if item.threshold_type == "percent" and item.target_percent is not None:
+        criterion = word(language, "percent_label").format(
+            percent=item.target_percent
+        )
+    else:
+        criterion = f"{item.target_price:,} {word(language, 'unit')}"
+    route = f"<b>#{item.id} {escape(item.origin)} → {escape(item.destination)}</b>"
+    return route, escape(criterion) + " — " + escape(status)
+
+
+def _alert_buttons(item, language: str) -> tuple[tuple[str, str], ...]:
+    return (
+        (
+            word(language, "pause" if item.status == "active" else "resume"),
+            f"alerts:toggle:{item.id}",
+        ),
+        (word(language, "delete"), f"alerts:delete:{item.id}"),
+    )
+
+
+def _rich_action_row(actions: tuple[tuple[str, str], ...]) -> str:
+    if len(actions) > 2:
+        raise ValueError("Rich alert action rows allow two buttons at most")
+    return (
+        '<tg-button-row align="center">'
+        + "".join(
+            '<tg-button type="callback_data" data="'
+            + escape(callback, quote=True) + '">'
+            + escape(label) + "</tg-button>"
+            for label, callback in actions
+        )
+        + "</tg-button-row>"
+    )
+
+
+def render_rich_alert_pages(alerts: list, language: str) -> list[dict]:
+    """Keep each alert's two actions directly beneath its details in Rich Text.
+
+    Each page keeps complete alert groups together, including their buttons.
+    Paused alerts may exceed the maximum active count, so paginate safely.
+    """
+    language = normalize_language(language)
+    header = (
+        "<h3>" + word(language, "title") + "</h3>"
+        + "<p>" + escape(word(language, "intro")) + "</p>"
+    )
     if not alerts:
-        lines.append(word(language, "empty"))
+        header += "<p>" + escape(word(language, "empty")) + "</p>"
+
+    footer = (
+        _rich_action_row(((word(language, "new"), "alerts:new"),))
+        + _rich_action_row(((word(language, "back"), "back"),))
+    )
+    sections: list[str] = []
+    pages: list[dict] = []
+
+    def finish() -> None:
+        pages.append({
+            "html": header + "".join(sections) + footer,
+            "is_rtl": language in {"fa", "ar"},
+        })
+
     for item in alerts:
-        status = word(language, item.status)
-        if item.threshold_type == "percent" and item.target_percent is not None:
-            criterion = word(language, "percent_label").format(
-                percent=item.target_percent
+        route, details = _alert_description(item, language)
+        section = (
+            f"<p>{route}</p><p>{details}</p>"
+            + _rich_action_row(_alert_buttons(item, language))
+        )
+        candidate = header + "".join(sections) + section + footer
+        # 60 x 3 blocks stays well below Telegram's 500-block cap.
+        if sections and (len(sections) >= 60 or len(candidate) > MAX_RICH_TEXT_CHARS):
+            finish()
+            sections = []
+        if len(header + section + footer) > MAX_RICH_TEXT_CHARS:
+            raise ValueError("A price alert exceeds Telegram Rich Message limits")
+        sections.append(section)
+
+    finish()
+    return pages
+
+
+def _alert_fallback_pages(alerts: list, language: str) -> list[tuple[str, InlineKeyboardMarkup]]:
+    """Plain Telegram HTML fallback with matching actions when rich API fails."""
+    output = []
+    for start in range(0, max(1, len(alerts)), 20):
+        chunk = alerts[start:start + 20]
+        lines = [word(language, "title"), "", word(language, "intro"), ""]
+        rows = []
+        if not chunk:
+            lines.append(word(language, "empty"))
+        for item in chunk:
+            route, description = _alert_description(item, language)
+            lines.append(f"{route}\n{description}")
+            rows.append([
+                InlineKeyboardButton(label, callback_data=data)
+                for label, data in _alert_buttons(item, language)
+            ])
+        rows.extend([
+            [InlineKeyboardButton(word(language, "new"), callback_data="alerts:new")],
+            [InlineKeyboardButton(word(language, "back"), callback_data="back")],
+        ])
+        output.append(("\n".join(lines), InlineKeyboardMarkup(rows)))
+    return output
+
+
+async def send_rich_alerts(bot, chat_id: int, alerts: list, language: str) -> None:
+    """Send rich alert groups; caller handles fallback and previous-message cleanup."""
+    for page in render_rich_alert_pages(alerts, language):
+        await send_rich_price_table(bot, chat_id, page)
+
+
+async def show_alerts(
+    query, service: PriceAlertService, user_id: int, language: str,
+    *, bot=None,
+) -> None:
+    alerts = await service.list_user_alerts(user_id)
+    chat_id = getattr(getattr(query, "message", None), "chat_id", None)
+    if bot is not None and chat_id is not None:
+        try:
+            await send_rich_alerts(bot, chat_id, alerts, language)
+        except Exception as exc:
+            # HTTP exceptions may include the bot token in the request URL.
+            LOGGER.warning(
+                "price_alert_rich_list_failed error_type=%s",
+                type(exc).__name__,
             )
         else:
-            unit = "tomans" if normalize_language(language) == "en" else "تومان"
-            criterion = f"{item.target_price:,} {unit}"
-        lines.append(
-            f"<b>#{item.id}</b> {escape(item.origin)} → {escape(item.destination)}\n"
-            f"{escape(criterion)} — {escape(status)}"
-        )
-        rows.append([
-            InlineKeyboardButton(
-                word(language, "pause" if item.status == "active" else "resume"),
-                callback_data=f"alerts:toggle:{item.id}",
-            ),
-            InlineKeyboardButton(
-                word(language, "delete"), callback_data=f"alerts:delete:{item.id}"
-            ),
-        ])
-    rows.append([InlineKeyboardButton(word(language, "back"), callback_data="back")])
+            # A rich list is a new Telegram message; remove the stale old
+            # buttons when the Telegram API allows deletion.
+            previous = getattr(query, "message", None)
+            if callable(getattr(previous, "delete", None)):
+                try:
+                    await previous.delete()
+                except Exception as exc:
+                    LOGGER.warning(
+                        "price_alert_old_message_delete_failed error_type=%s",
+                        type(exc).__name__,
+                    )
+            return
+
+    fallback = _alert_fallback_pages(alerts, language)
+    first_text, first_keyboard = fallback[0]
     await query.edit_message_text(
-        "\n".join(lines), parse_mode="HTML", reply_markup=InlineKeyboardMarkup(rows),
+        first_text, parse_mode="HTML", reply_markup=first_keyboard,
     )
+    for page_text, page_keyboard in fallback[1:]:
+        await query.message.reply_text(
+            page_text, parse_mode="HTML", reply_markup=page_keyboard,
+        )
 
 
 async def handle_alert_callback(
@@ -455,12 +575,12 @@ async def handle_alert_callback(
     data = query.data or ""
     if data in ("menu:price_alerts", "alerts:menu"):
         context.user_data.pop("price_alert_pending", None)
-        await show_alerts(query, service, user_id, language)
+        await show_alerts(query, service, user_id, language, bot=getattr(context, 'bot', None))
         return
 
     if data == "alerts:cancel":
         context.user_data.pop("price_alert_pending", None)
-        await show_alerts(query, service, user_id, language)
+        await show_alerts(query, service, user_id, language, bot=getattr(context, 'bot', None))
         return
 
     if data.startswith(("alerts:toggle:", "alerts:delete:")):
@@ -487,7 +607,7 @@ async def handle_alert_callback(
                     )
                     return
             await service.set_user_status(user_id, alert_id, status)
-        await show_alerts(query, service, user_id, language)
+        await show_alerts(query, service, user_id, language, bot=getattr(context, 'bot', None))
         return
 
     if data == "alerts:new":
