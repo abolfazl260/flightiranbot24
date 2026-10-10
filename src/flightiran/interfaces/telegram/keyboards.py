@@ -113,26 +113,32 @@ def ticket_origins_menu(language: str, origins: list[str], page: int = 0) -> Inl
     return InlineKeyboardMarkup(rows)
 
 
-def ticket_result_menu(language: str, support_username: str) -> InlineKeyboardMarkup:
-    """Show another city without sending every origin's results."""
+def ticket_result_menu(
+    language: str, support_username: str, *, origin_index: int | None = None
+) -> InlineKeyboardMarkup:
+    """Four actions for an entire fare list, never one button per destination.
 
-    return InlineKeyboardMarkup(
-        [
-            [InlineKeyboardButton(
-                safe_text(language, "support_open_chat"),
-                url=support_url(support_username),
-            )],
-            [InlineKeyboardButton(
-                {
-                    "fa": "✈️ انتخاب مبدأ دیگر",
-                    "en": "✈️ Choose another origin",
-                    "ar": "✈️ اختيار مدينة مغادرة أخرى",
-                }.get(language, "✈️ Choose another origin"),
-                callback_data="tickets:menu",
-            )],
-            [InlineKeyboardButton(
-                safe_text(language, "price_alerts"), callback_data="menu:price_alerts"
-            )],
-            [InlineKeyboardButton(safe_text(language, "back"), callback_data="back")],
-        ]
+    The price bell can reuse the user's cached route to start at destination
+    selection; without a known origin, it opens the alert manager instead.
+    """
+    labels = {
+        "fa": ("🎫 رزرو بلیط", "🔔 زنگوله قیمت", "↩️ بازگشت", "🏠 منوی اصلی"),
+        "en": ("🎫 Book tickets", "🔔 Price alerts", "↩️ Back", "🏠 Main menu"),
+        "ar": ("🎫 حجز التذاكر", "🔔 تنبيه الأسعار", "↩️ رجوع", "🏠 القائمة الرئيسية"),
+    }
+    booking, bell, back, home = labels.get(language, labels["fa"])
+    bell_action = (
+        f"tickets:alert:{origin_index}"
+        if origin_index is not None and origin_index >= 0
+        else "menu:price_alerts"
     )
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton(booking, url=support_url(support_username)),
+            InlineKeyboardButton(bell, callback_data=bell_action),
+        ],
+        [
+            InlineKeyboardButton(back, callback_data="tickets:menu"),
+            InlineKeyboardButton(home, callback_data="back"),
+        ],
+    ])

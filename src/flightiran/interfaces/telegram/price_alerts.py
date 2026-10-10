@@ -635,7 +635,15 @@ async def handle_alert_callback(
         )
         return
 
-    routes = context.user_data.get("alert_routes", [])
+    if data.startswith("tickets:alert:"):
+        # A bell from a ticket rich table uses the *current* user-scoped
+        # price snapshot. Do not silently reuse alert_routes from an unrelated
+        # alert session, and never fetch fares a second time.
+        routes = context.user_data.get("ticket_routes", [])
+        context.user_data["alert_routes"] = routes
+        context.user_data.pop("price_alert_pending", None)
+    else:
+        routes = context.user_data.get("alert_routes", [])
     if not routes:
         await query.edit_message_text(
             word(language, "expired"), reply_markup=menu_keyboard(language)
@@ -652,7 +660,7 @@ async def handle_alert_callback(
                 ),
             )
             return
-        if data.startswith("alerts:origin:"):
+        if data.startswith(("alerts:origin:", "tickets:alert:")):
             route_index = int(data.rsplit(":", 1)[1])
             page = 0
         elif data.startswith("alerts:destpage:"):
