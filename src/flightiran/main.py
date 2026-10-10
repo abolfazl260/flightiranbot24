@@ -37,6 +37,8 @@ from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
+from flightiran.modules.visa.watch import VisaWatchService
+from flightiran.interfaces.telegram.visa_watches import deliver_watch_notifications
 
 LOGGER: Final = logging.getLogger("flightiran")
 
@@ -59,6 +61,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "price": "نمایش نرخ ارز",
         "alerts": "زنگوله قیمت بلیط",
         "visa": "اطلاعات ویزا",
+        "visa_watch": "هشدار تغییرات ویزا",
         "visa_list": "کشورها بر اساس پاسپورت",
         "cancel": "لغو جست‌وجوی ویزا",
     },
@@ -69,6 +72,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "price": "Exchange rates",
         "alerts": "Ticket price alerts",
         "visa": "Visa requirements",
+        "visa_watch": "Visa change alerts",
         "visa_list": "Countries by passport",
         "cancel": "Cancel visa search",
     },
@@ -79,6 +83,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "price": "أسعار الصرف",
         "alerts": "تنبيهات أسعار التذاكر",
         "visa": "متطلبات التأشيرة",
+        "visa_watch": "تنبيهات تغييرات التأشيرات",
         "visa_list": "الدول حسب جواز السفر",
         "cancel": "إلغاء البحث عن التأشيرة",
     },
@@ -105,12 +110,16 @@ def create_application(
     report_database: Database | None = None,
     visa_sync_service: VisaSyncService | None = None,
     price_alert_service: PriceAlertService | None = None,
+    visa_watch_service: VisaWatchService | None = None,
 ) -> Application:
     """Build the Telegram application without starting network polling."""
 
     builder = ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value())
-    if (cheap_ticket_service is not None or visa_sync_service is not None
-            or (report_database is not None and settings.active_users_report_enabled)):
+    if (
+        cheap_ticket_service is not None or visa_sync_service is not None
+        or visa_watch_service is not None
+        or (report_database is not None and settings.active_users_report_enabled)
+    ):
 
         async def post_init(application: Application) -> None:
             await _sync_telegram_commands(application)
@@ -254,6 +263,28 @@ def create_application(
                     id="travelrequirements-visa-sync",
                     replace_existing=True,
                 )
+            if visa_watch_service is not None:
+                async def send_pending_visa_alerts() -> None:
+                    try:
+                        delivered = await deliver_watch_notifications(
+                            application.bot, visa_watch_service,
+                            SQLiteUserRepository(visa_watch_service.database),
+                        )
+                        if delivered:
+                            LOGGER.info("visa_change_notifications_sent count=%s", delivered)
+                    except Exception:
+                        LOGGER.exception("visa_change_notification_dispatch_failed")
+
+                scheduler.add_job(
+                    send_pending_visa_alerts,
+                    "interval",
+                    minutes=15,
+                    next_run_time=datetime.now(timezone.utc),
+                    max_instances=1,
+                    coalesce=True,
+                    id="visa-change-notification-outbox",
+                    replace_existing=True,
+                )
             if report_database is not None and settings.active_users_report_enabled:
                 async def send_daily_users_report() -> None:
                     try:
@@ -334,12 +365,14 @@ def run() -> None:
     )
     visa_sync_service = VisaSyncService(database) if settings.visa_sync_enabled else None
     price_alert_service = PriceAlertService(database) if settings.price_alerts_enabled else None
+    visa_watch_service = VisaWatchService(database) if settings.visa_watch_enabled else None
     application = create_application(
         settings,
         cheap_ticket_service,
         report_database=database,
         visa_sync_service=visa_sync_service,
         price_alert_service=price_alert_service,
+        visa_watch_service=visa_watch_service,
     )
     register_handlers(
         application,
@@ -357,7 +390,10 @@ def run() -> None:
             admin_chat_id=settings.telegram_admin_id,
             admin_reports=BotReportRepository(database),
             visa_sync_service=visa_sync_service,
-            visa_catalog=VisaCatalogService(database),
+            visa_watch_service=visa_watch_service,
+            visa_catalog=VisaCatalogService(
+                database, stale_after_hours=settings.visa_stale_after_hours
+            ),
             useful_catalog=default_catalog(),
         ),
     )
