@@ -103,7 +103,8 @@ async def test_private_user_can_create_and_manage_alert_through_telegram(tmp_pat
         ("menu:price_alerts", "Ticket price alerts"),
         ("alerts:new", "Select the departure"),
         ("alerts:origin:0", "Select the destination"),
-        ("alerts:select:0:0", "5,000,000"),
+        ("alerts:select:0:0", "Choose the alert type"),
+        ("alerts:mode:price", "5,000,000"),
     ):
         q = FakeQuery(data)
         await callback_handler(update(query=q), context, deps)
