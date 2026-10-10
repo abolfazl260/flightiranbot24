@@ -17,12 +17,15 @@ from flightiran.db.repositories import (
     SQLiteUserRepository,
 )
 from flightiran.interfaces.telegram.handlers import (
-    TelegramDependencies, callback_handler, message_handler,
+    TelegramDependencies,
+    callback_handler,
+    message_handler,
 )
 from flightiran.interfaces.telegram.price_alerts import WORDS, percent_keyboard
 from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
 from flightiran.interfaces.telegram.rich_tickets import (
-    render_rich_price_drop_report, render_rich_price_tables,
+    render_rich_price_drop_report,
+    render_rich_price_tables,
 )
 from flightiran.interfaces.telegram.tickets import render_cheap_route
 from flightiran.modules.tickets.alerts import PriceAlertService
