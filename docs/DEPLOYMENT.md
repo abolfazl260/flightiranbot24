@@ -70,11 +70,12 @@ scheduled report during its downtime. Failed sends are logged and marked in
 ## Ticket price bell and automatic alerts
 
 Users can open **🔔 Ticket price alerts** from the main menu, ticket listings,
-or the **/alerts** command. Select an origin and destination that currently
-appear in the mz724 feed, then send a maximum price in **tomans**. Saved alerts
-persist in SQLite; each user can list, pause, resume and delete only their own
-alerts (maximum 20 active alerts per user). Input accepts English, Persian and
-Arabic digits. Use `/cancel` to abandon price input.
+or the **/alerts** command. Select a route and then choose **price ceiling** or
+**percentage drop**. Price ceilings accept positive values in tomans with
+English, Persian or Arabic numerals. Percentage thresholds use 10 button
+presets: 5%, 10%, ... 50%. Saved alerts persist in SQLite; each user can
+list, pause, resume or delete their own alerts (maximum 20 active alerts).
+Use `/cancel` to abandon price input.
 
 `PRICE_ALERTS_ENABLED=true` enables the menu and scheduler integration.
 The existing `TICKET_HISTORY_INTERVAL_MINUTES=60` scheduled mz724 capture
@@ -91,3 +92,29 @@ which can change before booking. Users must first start a private chat with
 the bot to receive push notifications. SQLite does not enforce VARCHAR length limits, so the existing saved-routes
 schema already stores full Persian city names safely. The ORM declaration
 uses 128 characters without rebuilding a referenced production table.
+
+### Percentage-based ticket price alerts and provider privacy
+
+Discount alerts are evaluated against the route's recorded **21-day rolling
+mean** using `current_price <= average_price * (1 - selected_percent / 100)`.
+At least **two valid historic price samples** are required. Until sufficient
+history has accumulated, no percent-based alert is sent (the subscription
+remains enabled). The capture job updates route averages before comparing
+thresholds; the provider is never queried again just for alerts.
+
+Users choose a discount percentage using buttons from **5% to 50% in 5-point
+steps**; the backend additionally rejects percentages outside 1–50 even if a
+Telegram callback is forged. Delivered percent alerts display the actual fare,
+21-day average, percentage reduction and chosen threshold. Existing absolute
+alerts, pause/resume/delete, delivery retry, per-user access checks, dedup and
+20-alert limit are preserved. A fare that did not meet a percentage criterion
+is not recorded as notified: it can qualify on a later scan if the moving
+average changes. A successfully notified identical fare is not repeatedly
+sent until resumed.
+
+Additive Alembic migration `0010_percentage_ticket_alerts` preserves
+existing saved alert rows and historical snapshots; back up the SQLite volume
+before deploying. The upstream ticket provider's identity and links are
+**internal only**, never shown in ticket or alert messages. The bot's own
+booking and support links remain available. Original source verification
+links in unrelated visa features are unaffected.

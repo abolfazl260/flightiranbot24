@@ -63,5 +63,5 @@ def parse_routes(document: str, *, source_url: str = "https://mz724.ir/") -> lis
         if origin and destinations:
             routes.append(CheapTicketRoute(origin, tuple(destinations), source_url))
     if not routes:
-        raise ProviderInvalidResponse("Provider mz724 returned no ticket routes")
+        raise ProviderInvalidResponse("Ticket route data is unavailable")
     return routes

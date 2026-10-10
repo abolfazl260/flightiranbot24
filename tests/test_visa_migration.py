@@ -26,7 +26,7 @@ def test_migrate_new_and_repeatable(tmp_path, monkeypatch):
         }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0009_visa_watch_notifications"
+                "0010_percentage_ticket_alerts"
             )
     finally:
         engine.dispose()
@@ -54,7 +54,7 @@ def test_migrate_existing_metadata_without_version(tmp_path, monkeypatch):
         }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0009_visa_watch_notifications"
+                "0010_percentage_ticket_alerts"
             )
     finally:
         engine.dispose()

@@ -1,4 +1,4 @@
-"""Telegram UI for per-user mz724 price threshold alerts."""
+"""Telegram UI for user-selected ticket price and percentage alerts."""
 
 from __future__ import annotations
 
@@ -21,10 +21,26 @@ WORDS = {
     "fa": {
         "title": "🔔 <b>زنگوله قیمت بلیط</b>",
         "intro": (
-            "برای مسیر دلخواه سقف قیمت تعیین کنید؛ قیمت‌ها به‌صورت دوره‌ای بررسی می‌شوند "
-            "و پس از رسیدن قیمت به سقف تعیین‌شده، پیام تلگرام دریافت می‌کنید. "
-            "قیمت‌ها به تومان و براساس اطلاعات mz724 هستند."
+            "برای مسیر دلخواه، سقف قیمت به تومان یا درصد کاهش نسبت به میانگین "
+            "۲۱روزه را انتخاب کنید. قیمت‌ها دوره‌ای بررسی می‌شوند و در صورت "
+            "رسیدن به شرط انتخابی، پیام تلگرام دریافت می‌کنید."
         ),
+        "choose_mode": "روش هشدار برای مسیر <b>{origin} ← {destination}</b> را انتخاب کنید:",
+        "mode_price": "💰 سقف قیمت به تومان",
+        "mode_percent": "📉 درصد کاهش قیمت",
+        "select_percent": (
+            "برای مسیر <b>{origin} ← {destination}</b>، حداقل درصد کاهش نسبت به "
+            "میانگین ۲۱روزه را انتخاب کنید (حداکثر ۵۰٪).\n"
+            "در صورت ناکافی بودن داده‌های قبلی، هشدار درصدی تا جمع‌آوری "
+            "حداقل دو نمونه معتبر فعال نمی‌شود."
+        ),
+        "created_percent": (
+            "✅ هشدار درصدی ثبت شد.\n<b>{origin} ← {destination}</b>\n"
+            "کاهش حداقل <b>{percent}٪</b> نسبت به میانگین قیمت ۲۱روزه.\n"
+            "در صورت وجود داده کافی، قیمت‌ها دوره‌ای بررسی خواهند شد."
+        ),
+        "percent_label": "کاهش {percent}٪ نسبت به میانگین ۲۱روزه",
+        "percent_invalid": "درصد انتخابی نامعتبر است؛ از دکمه‌های ۵ تا ۵۰٪ استفاده کنید.",
         "empty": "هنوز هشدار قیمتی ثبت نکرده‌اید.",
         "new": "➕ ثبت هشدار جدید",
         "back": "↩️ منوی اصلی",
@@ -57,9 +73,25 @@ WORDS = {
     "en": {
         "title": "🔔 <b>Ticket price alerts</b>",
         "intro": (
-            "Set a price ceiling for a route. The bot checks mz724 prices periodically "
-            "and messages you when the price reaches your limit. Amounts are in tomans."
+            "Choose a price ceiling in tomans or a percentage drop from the "
+            "21-day average. The bot checks routes periodically and sends a "
+            "Telegram message when your selected condition is met."
         ),
+        "choose_mode": "Choose the alert type for <b>{origin} → {destination}</b>:",
+        "mode_price": "💰 Price ceiling in tomans",
+        "mode_percent": "📉 Percentage price drop",
+        "select_percent": (
+            "Choose the minimum drop from the 21-day average for "
+            "<b>{origin} → {destination}</b> (up to 50%).\n"
+            "At least two valid historical samples are needed to trigger the alert."
+        ),
+        "created_percent": (
+            "✅ Percentage alert saved.\n<b>{origin} → {destination}</b>\n"
+            "Drop: <b>at least {percent}%</b> below the 21-day average.\n"
+            "Scheduled checks will run when enough historical data is available."
+        ),
+        "percent_label": "{percent}% below the 21-day average",
+        "percent_invalid": "Select a percentage between 5% and 50% using the buttons.",
         "empty": "No price alerts yet.",
         "new": "➕ New alert",
         "back": "↩️ Main menu",
@@ -92,9 +124,24 @@ WORDS = {
     "ar": {
         "title": "🔔 <b>تنبيهات أسعار التذاكر</b>",
         "intro": (
-            "حدد سقف السعر لمسار معين. يفحص البوت أسعار mz724 دورياً ويرسل لك إشعاراً "
-            "عند بلوغ السعر المحدد. المبالغ بالتومان."
+            "اختر سقف سعر بالتومان أو نسبة انخفاض مقارنة بمتوسط آخر ٢١ يوماً. "
+            "يتحقق البوت من الأسعار دورياً ويرسل رسالة عند تحقق الشرط."
         ),
+        "choose_mode": "اختر نوع التنبيه للمسار <b>{origin} ← {destination}</b>:",
+        "mode_price": "💰 سقف السعر بالتومان",
+        "mode_percent": "📉 نسبة انخفاض السعر",
+        "select_percent": (
+            "اختر الحد الأدنى للانخفاض مقارنة بمتوسط ٢١ يوماً للمسار "
+            "<b>{origin} ← {destination}</b> (حتى ٥٠٪).\n"
+            "يلزم توفر عينتين تاريخيتين صالحتين على الأقل قبل إرسال التنبيه."
+        ),
+        "created_percent": (
+            "✅ تم حفظ تنبيه النسبة.\n<b>{origin} ← {destination}</b>\n"
+            "انخفاض لا يقل عن <b>{percent}٪</b> مقارنة بمتوسط ٢١ يوماً.\n"
+            "سيتم فحص الأسعار دورياً عند توفر بيانات كافية."
+        ),
+        "percent_label": "انخفاض {percent}٪ عن متوسط ٢١ يوماً",
+        "percent_invalid": "اختر نسبة بين ٥٪ و٥٠٪ باستخدام الأزرار.",
         "empty": "لا توجد تنبيهات مسجلة.",
         "new": "➕ تنبيه جديد",
         "back": "↩️ القائمة الرئيسية",
@@ -136,6 +183,31 @@ def menu_keyboard(language: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(word(language, "new"), callback_data="alerts:new")],
         [InlineKeyboardButton(word(language, "back"), callback_data="back")],
     ])
+
+
+def mode_keyboard(language: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(word(language, "mode_price"), callback_data="alerts:mode:price")],
+        [InlineKeyboardButton(
+            word(language, "mode_percent"), callback_data="alerts:mode:percent"
+        )],
+        [InlineKeyboardButton(word(language, "cancel"), callback_data="alerts:cancel")],
+    ])
+
+
+def percent_keyboard(language: str) -> InlineKeyboardMarkup:
+    options = list(range(5, 51, 5))
+    rows = [
+        [
+            InlineKeyboardButton(f"{pct}٪", callback_data=f"alerts:percent:{pct}")
+            for pct in options[i:i + 2]
+        ]
+        for i in range(0, len(options), 2)
+    ]
+    rows.append([
+        InlineKeyboardButton(word(language, "cancel"), callback_data="alerts:cancel")
+    ])
+    return InlineKeyboardMarkup(rows)
 
 
 def parse_alert_price(value: str) -> int:
@@ -206,9 +278,16 @@ async def show_alerts(query, service: PriceAlertService, user_id: int, language:
         lines.append(word(language, "empty"))
     for item in alerts:
         status = word(language, item.status)
+        if item.threshold_type == "percent" and item.target_percent is not None:
+            criterion = word(language, "percent_label").format(
+                percent=item.target_percent
+            )
+        else:
+            unit = "tomans" if normalize_language(language) == "en" else "تومان"
+            criterion = f"{item.target_price:,} {unit}"
         lines.append(
             f"<b>#{item.id}</b> {escape(item.origin)} → {escape(item.destination)}\n"
-            f"{item.target_price:,} TOMAN — {status}"
+            f"{escape(criterion)} — {escape(status)}"
         )
         rows.append([
             InlineKeyboardButton(
@@ -238,6 +317,7 @@ async def handle_alert_callback(
         return
     data = query.data or ""
     if data in ("menu:price_alerts", "alerts:menu"):
+        context.user_data.pop("price_alert_pending", None)
         await show_alerts(query, service, user_id, language)
         return
 
@@ -274,6 +354,7 @@ async def handle_alert_callback(
         return
 
     if data == "alerts:new":
+        context.user_data.pop("price_alert_pending", None)
         if ticket_service is None:
             await query.edit_message_text(
                 word(language, "unavailable"), reply_markup=menu_keyboard(language)
@@ -293,6 +374,76 @@ async def handle_alert_callback(
             reply_markup=_chooser_keyboard(
                 [route.origin for route in routes], "alerts:origin", language, 0
             ),
+        )
+        return
+
+    if data.startswith(("alerts:mode:", "alerts:percent:")):
+        pending = context.user_data.get("price_alert_pending")
+        chat = getattr(update, "effective_chat", None)
+        if not pending or chat is None or chat.type != "private":
+            await query.edit_message_text(
+                word(language, "expired"), reply_markup=menu_keyboard(language)
+            )
+            return
+        origin = escape(pending["origin"])
+        destination = escape(pending["destination"])
+        if data == "alerts:mode:price" and pending.get("step") == "choose_mode":
+            pending["step"] = "price"
+            await query.edit_message_text(
+                word(language, "amount").format(origin=origin, destination=destination),
+                parse_mode="HTML",
+                reply_markup=InlineKeyboardMarkup([[
+                    InlineKeyboardButton(
+                        word(language, "cancel"), callback_data="alerts:cancel"
+                    )
+                ]]),
+            )
+            return
+        if data == "alerts:mode:percent" and pending.get("step") == "choose_mode":
+            pending["step"] = "percent"
+            await query.edit_message_text(
+                word(language, "select_percent").format(
+                    origin=origin, destination=destination
+                ),
+                parse_mode="HTML",
+                reply_markup=percent_keyboard(language),
+            )
+            return
+        if data.startswith("alerts:percent:") and pending.get("step") == "percent":
+            try:
+                percent = int(data.rsplit(":", 1)[1])
+            except ValueError:
+                percent = 0
+            if percent not in range(5, 51, 5):
+                await query.edit_message_text(
+                    word(language, "percent_invalid"),
+                    reply_markup=percent_keyboard(language),
+                )
+                return
+            try:
+                route = await service.save_route(
+                    user_id, pending["origin"], pending["destination"]
+                )
+                await service.create_percent(user_id, route.id, percent)
+            except ValueError as exc:
+                label = "limit" if "limit" in str(exc) else "expired"
+                await query.edit_message_text(
+                    word(language, label), reply_markup=menu_keyboard(language)
+                )
+                return
+            context.user_data.pop("price_alert_pending", None)
+            await query.edit_message_text(
+                word(language, "created_percent").format(
+                    origin=escape(route.origin),
+                    destination=escape(route.destination),
+                    percent=percent,
+                ),
+                parse_mode="HTML",
+                reply_markup=menu_keyboard(language),
+            )
+            return
+        await query.edit_message_text(
+            word(language, "expired"), reply_markup=menu_keyboard(language)
         )
         return
 
@@ -340,15 +491,14 @@ async def handle_alert_callback(
             destination = route.destinations[dest_index].name
             context.user_data["price_alert_pending"] = {
                 "origin": route.origin, "destination": destination,
+                "step": "choose_mode",
             }
             await query.edit_message_text(
-                word(language, "amount").format(
+                word(language, "choose_mode").format(
                     origin=escape(route.origin), destination=escape(destination)
                 ),
                 parse_mode="HTML",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(word(language, "cancel"), callback_data="alerts:cancel")
-                ]]),
+                reply_markup=mode_keyboard(language),
             )
         else:
             await query.edit_message_text(
@@ -377,6 +527,19 @@ async def handle_alert_text(
     chat = getattr(update, "effective_chat", None)
     if chat is None or chat.type != "private":
         await update.message.reply_text(word(language, "private"))
+        return True
+    if pending.get("step") != "price":
+        await update.message.reply_text(
+            word(language, "choose_mode").format(
+                origin=escape(pending["origin"]),
+                destination=escape(pending["destination"]),
+            ),
+            parse_mode="HTML",
+            reply_markup=(
+                percent_keyboard(language)
+                if pending.get("step") == "percent" else mode_keyboard(language)
+            ),
+        )
         return True
     try:
         amount = parse_alert_price(update.message.text or "")
