@@ -1,6 +1,7 @@
 package com.abolfazl260.flightiranbot24;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -24,6 +25,11 @@ public final class AirportDirectoryActivity extends Activity {
     private LinearLayout results;
     private TextView count;
     private TextView empty;
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(PersianContext.wrap(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
