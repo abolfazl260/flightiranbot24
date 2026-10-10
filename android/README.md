@@ -64,3 +64,52 @@ sync belong to UI/AUTH tasks. Encrypted authenticated token handling is out
 of scope of this deliberately **public-only** transport.
 
 **Next task: AND-004 — separated Development, Staging and Production builds.**
+
+## AND-004: Development/Staging/Production build separation
+
+Three Android **product flavors** now compile with a separate environment
+indicator displayed on the home screen. Development and Staging deliberately
+do **not** show buttons that launch the live Telegram bot or support account;
+their privacy link and native/offline airport and checklist remain available.
+Production keeps the original service buttons.
+
+| Variant | Release application ID | Debug application ID |
+| --- | --- | --- |
+| development | `com.abolfazl260.flightiranbot24.dev` | `...dev.debug` |
+| staging | `com.abolfazl260.flightiranbot24.staging` | `...staging.debug` |
+| production | `com.abolfazl260.flightiranbot24` | `...debug` |
+
+API origins are **optional, public, first-party HTTPS origins** supplied only
+at build time. There are no production/staging/development defaults. Missing
+origin means `publicApi()` returns null; nothing is contacted by the current
+launcher. Set one or more via Gradle properties or environment variables:
+
+```bash
+ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+ANDROID_STAGING_API_ORIGIN=https://staging.example.org/ \
+ANDROID_DEVELOPMENT_API_ORIGIN=https://dev.example.org/ \
+gradle -p android :app:assembleStagingDebug
+```
+
+These example origins are **not deployed endpoints**. Do not use examples for
+actual installations. All configured origins must be distinct **hosts**.
+Setting a non-production origin requires also setting production's origin so
+isolation can be validated. Invalid, HTTP, credential-bearing, path-bearing or
+query-bearing URLs fail the Gradle build. API keys, bot tokens, passwords and
+Google Play credentials must never be supplied here: API origins are visible
+inside APKs. HTTP loopback is allowed only in controlled JVM MockWebServer
+tests, not as an Android build environment.
+
+```bash
+gradle -p android :app:testDevelopmentDebugUnitTest \
+  :app:testStagingDebugUnitTest :app:testProductionDebugUnitTest \
+  :app:lintDevelopmentDebug :app:lintStagingDebug \
+  :app:lintProductionDebug :app:lintProductionRelease \
+  :app:assembleDevelopmentDebug :app:assembleStagingDebug \
+  :app:assembleProductionDebug :app:bundleProductionRelease
+```
+
+Only the `productionRelease` bundle/productionRelease APK can be published.
+The tag-based GitHub release job signs and stages that flavor exclusively.
+The upcoming API-001 task will define real versioned FastAPI endpoints; no
+Android flavor currently logs in or automatically contacts a remote API.

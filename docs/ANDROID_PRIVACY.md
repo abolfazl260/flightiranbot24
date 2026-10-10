@@ -11,7 +11,8 @@ with the application and a local travel checklist. The Android application
 declares only the normal Android INTERNET permission in preparation for a
 future, versioned first-party HTTPS API. It requests no contact, location,
 camera, microphone, external storage or notification permissions. At this
-stage no server API endpoint is configured or contacted at app launch, and no
+stage no server API endpoint is configured by default or contacted at app launch,
+and no
 account credentials are created or transmitted. It does not integrate
 advertising or analytics SDKs.
 
@@ -33,7 +34,10 @@ features and administrator reporting. Telegram applies its own privacy terms.
 For questions about server-side bot data or deletion requests, contact the
 support channel above. The operator must verify identity and relevant retention
 requirements; this notice makes no unconditional deletion-time promise.
-There is no account system inside the Android app.
+There is no account system inside the Android app. Development and staging
+variants have distinct application IDs and visible test labels; their live
+Telegram/support entry points are disabled. Optional HTTPS API origins are
+public build configuration (not secrets), and no account endpoint is invoked.
 
 Travel or visa details must be confirmed using official sources.
 
@@ -42,7 +46,10 @@ Travel or visa details must be confirmed using official sources.
 نسخه اندروید Flight Iran Bot 24 فهرست آفلاین فرودگاه‌ها و چک‌لیست سفر
 را ارائه می‌کند. برنامه تنها مجوز عادی اینترنت اندروید را برای اتصال
 آینده به API امن اختصاصی درخواست می‌کند؛ در این نسخه هیچ نشانی API
-فعال نیست و هنگام شروع برنامه اطلاعاتی به سرور ارسال نمی‌شود.
+پیش‌فرض فعال نیست و هنگام شروع برنامه اطلاعاتی به سرور ارسال نمی‌شود.
+نسخه‌های توسعه و آزمایش شناسه جدا دارند و ورود به ربات و پشتیبانی
+عملیاتی در آن‌ها غیرفعال است؛ تنظیم آدرس عمومی HTTPS به‌تنهایی
+به‌معنای ارتباط خودکار برنامه با سرور نیست.
 برنامه مجوز مخاطبین، موقعیت مکانی، دوربین، میکروفون، حافظه خارجی یا
 اعلان‌ها درخواست نمی‌کند و ابزار تبلیغات یا تحلیل رفتار ندارد.
 
