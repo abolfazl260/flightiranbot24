@@ -231,8 +231,15 @@ async def test_fallback_amount_keyboard_on_rich_transport_failure(monkeypatch, t
     await db.close()
 
 
-@pytest.mark.parametrize("language", ("fa", "en", "ar"))
-def test_price_list_rich_buttons_are_route_specific_and_all_visible(language):
+@pytest.mark.parametrize(
+    "language, notice",
+    (
+        ("fa", "مسیر دلخواهتان را پیدا کرده‌اید"),
+        ("en", "Found a route you like"),
+        ("ar", "هل وجدت رحلة مناسبة"),
+    ),
+)
+def test_rich_fare_list_has_one_booking_button_and_bell_per_page(language, notice):
     route = CheapTicketRoute(
         "تهران",
         tuple(CheapTicketDestination(
@@ -240,32 +247,60 @@ def test_price_list_rich_buttons_are_route_specific_and_all_visible(language):
         ) for i in range(75)),
         "https://mz724.ir/",
     )
-    pages = render_rich_price_tables(route, language=language, booking_route_index=2)
-    assert len(pages) == 2
-    indices = []
+    pages = render_rich_price_tables(
+        route, language=language, booking_route_index=2,
+        support_username="@Advertio_support",
+    )
+    # 75 destinations need only the table and four fixed actions, not 75
+    # separate booking controls or artificially paginated action lists.
+    assert len(pages) == 1
+    html = pages[0]["html"]
+    assert html.count("<tr>") == 76
+    assert notice in html
+    assert "mz724" not in html.lower()
+    assert html.index("</table>") < html.index(notice)
+    valid_xml = html.replace(
+        "<table bordered striped compact>",
+        '<table bordered="true" striped="true" compact="true">',
+    )
+    root = ET.fromstring("<root>" + valid_xml + "</root>")
+    rows = root.findall("tg-button-row")
+    assert [len(row.findall("tg-button")) for row in rows] == [2, 2]
+    buttons = [button for row in rows for button in row.findall("tg-button")]
+    assert len(buttons) == 4
+    assert buttons[0].attrib["url"] == "https://t.me/Advertio_support"
+    assert [button.attrib["data"] for button in buttons[1:]] == [
+        "alerts:origin:2", "tickets:menu", "back",
+    ]
+    assert not any(
+        (button.attrib.get("data") or "").startswith("tickets:book:")
+        for button in buttons
+    )
+    assert pages[0]["is_rtl"] == (language != "en")
+    # Standalone historic table consumers remain supported.
+    assert len(render_rich_price_tables(route, language=language)) == 1
+
+
+def test_large_fare_list_rich_pages_keep_four_actions_each_and_limit_two_per_row():
+    route = CheapTicketRoute(
+        "تهران",
+        tuple(CheapTicketDestination(
+            f"مقصد {i}", "6,000,000", 6_000_000, 7_000_000
+        ) for i in range(75)),
+        "https://mz724.ir/",
+    )
+    pages = render_rich_price_tables(
+        route, max_rows=30, booking_route_index=1
+    )
+    assert len(pages) == 3
+    assert sum(page["html"].count("<tr>") - 1 for page in pages) == 75
     for page in pages:
         html = page["html"]
-        assert html.index("</table>") < html.index("<tg-button-row")
-        assert "mz724" not in html
-        # Telegram accepts shorthand boolean table attributes, while XML
-        # parsers require explicit values. Normalize only for this assertion.
-        valid_xml = html.replace(
-            "<table bordered striped compact>",
-            '<table bordered="true" striped="true" compact="true">',
-        )
-        root = ET.fromstring("<root>" + valid_xml + "</root>")
-        buttons = root.findall(".//tg-button[@type='callback_data']")
-        assert buttons
-        for button in buttons:
-            assert button.text.startswith("🎫 ")
-            assert "مقصد <" in button.text
-            indices.append(int(button.attrib["data"].split(":")[-1]))
-            assert button.attrib["data"].startswith("tickets:book:2:")
-        assert html.count("<tr>") - 1 == len(buttons)
-    assert indices == list(range(75))
-    assert [p["is_rtl"] for p in pages] == [language != "en"] * 2
-    # Legacy price table callers without index are unchanged.
-    assert len(render_rich_price_tables(route, language=language)) == 1
+        assert html.count('data="alerts:origin:1"') == 1
+        assert html.count('data="tickets:menu"') == 1
+        assert html.count('data="back"') == 1
+        assert html.count('<tg-button-row') == 2
+        assert 'tickets:book:' not in html
 
 
 @pytest.mark.asyncio

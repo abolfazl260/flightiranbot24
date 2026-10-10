@@ -45,7 +45,8 @@ def test_booking_rich_message_embeds_all_real_actions(language, intro):
     assert root.find("h3") is not None
     assert root.findall("p")
     rendered_rows = root.findall("tg-button-row")
-    assert len(rendered_rows) == len(keyboard.inline_keyboard) == 4
+    assert len(rendered_rows) == len(keyboard.inline_keyboard) == 2
+    assert all(len(row.findall("tg-button")) <= 2 for row in rendered_rows)
     assert all(row.get("align") == "center" for row in rendered_rows)
 
     for rich_row, fallback_row in zip(
@@ -67,7 +68,7 @@ def test_booking_rich_message_embeds_all_real_actions(language, intro):
                 }
     assert [button.get("data") for button in root.findall(".//tg-button")
             if button.get("type") == "callback_data"] == [
-        "tickets:menu", "menu:price_alerts", "back",
+        "menu:price_alerts", "tickets:menu", "back",
     ]
 
 
@@ -122,9 +123,10 @@ async def test_rich_booking_fails_over_to_existing_html_and_keyboard(monkeypatch
     assert keyboard.inline_keyboard[0][0].url == (
         "https://t.me/Advertio_support"
     )
-    assert [
-        row[0].callback_data for row in keyboard.inline_keyboard[1:]
-    ] == ["tickets:menu", "menu:price_alerts", "back"]
+    assert [button.callback_data for row in keyboard.inline_keyboard
+            for button in row if button.callback_data] == [
+        "menu:price_alerts", "tickets:menu", "back",
+    ]
     assert "private-token-should-not-enter-logs" not in caplog.text
 
 
@@ -197,8 +199,27 @@ async def test_selected_ticket_origin_sends_support_buttons_as_rich_message(
     await callback_handler(update, context, dependency)
     assert len(query.calls) == 1
     assert len(tables) == 1
-    assert len(booking) == 1
-    assert "<tg-button-row" in booking[0]["html"]
-    assert 'data="menu:price_alerts"' in booking[0]["html"]
+    assert booking == []  # The guidance is integrated into the fare table.
+    html = tables[0]["html"]
+    assert "مسیر دلخواهتان را پیدا کرده‌اید" in html
+    assert "برای انتخاب مسیر یا رزرو" in html
+    assert "<table bordered striped compact>" in html
+    assert html.index("</table>") < html.index("مسیر دلخواهتان")
+    assert '<a href="https://t.me/Advertio_support">@Advertio_support</a>' in html
+    from xml.etree import ElementTree as ET
+    xml = html.replace(
+        "<table bordered striped compact>",
+        '<table bordered="true" striped="true" compact="true">',
+    )
+    root = ET.fromstring("<root>" + xml + "</root>")
+    rows = root.findall("tg-button-row")
+    assert [len(row.findall("tg-button")) for row in rows] == [2, 2]
+    buttons = [button for row in rows for button in row.findall("tg-button")]
+    assert buttons[0].attrib["url"] == "https://t.me/Advertio_support"
+    assert [button.attrib["data"] for button in buttons[1:]] == [
+        "alerts:origin:0", "tickets:menu", "back",
+    ]
+    assert not any("tickets:book:" in button.attrib.get("data", "") for button in buttons)
     assert query.message.calls == []
+    assert context.user_data["alert_routes"] == [route]
     await database.close()
