@@ -10,9 +10,10 @@ from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
 from telegram.ext import ContextTypes
 
 from flightiran.modules.tickets.alerts import PriceAlertService
-from flightiran.modules.tickets.service import CheapTicketService
+from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
 
 from .localization import normalize_language
+from .rich_tickets import send_rich_price_table
 
 LOGGER = logging.getLogger(__name__)
 PAGE_SIZE = 12
@@ -51,6 +52,18 @@ WORDS = {
             "سقف قیمت برای مسیر <b>{origin} ← {destination}</b> را به تومان ارسال کنید.\n"
             "مثال: <code>5,000,000</code>\nبرای لغو /cancel را بزنید."
         ),
+        "amount_heading": "💰 تعیین سقف هشدار قیمت",
+        "current_fare": "قیمت فعلی مسیر",
+        "route_average": "میانگین ثبت‌شده ۲۱روزه",
+        "no_current": "فعلاً موجود نیست",
+        "no_average": "هنوز داده تاریخی موجود نیست",
+        "sample_note": "میانگین بر اساس {count} ثبت قیمت محاسبه شده است.",
+        "suggest_title": "یکی از سقف‌های پیشنهادی را انتخاب کنید:",
+        "manual_entry": "یا سقف دلخواه را به تومان در همین گفت‌وگو ارسال کنید.",
+        "no_suggestions": "قیمت معتبری برای پیشنهاد خودکار نداریم؛ مبلغ را دستی وارد کنید.",
+        "suggest_from_average": "مبالغ پیشنهادی بر مبنای میانگین تاریخی محاسبه شده‌اند.",
+        "amount_ready": "👇 گزینه‌های سقف قیمت در پیام جدید نمایش داده شدند.",
+        "unit": "تومان",
         "invalid": "مبلغ معتبر وارد کنید؛ فقط عدد مثبت به تومان (مثلاً 5,000,000).",
         "created": (
             "✅ هشدار ثبت شد.\n<b>{origin} ← {destination}</b>\n"
@@ -102,6 +115,18 @@ WORDS = {
             "Send the price ceiling in tomans for <b>{origin} → {destination}</b>.\n"
             "Example: <code>5,000,000</code>\nSend /cancel to stop."
         ),
+        "amount_heading": "💰 Set a ticket price ceiling",
+        "current_fare": "Current route fare",
+        "route_average": "Recorded 21-day average",
+        "no_current": "Currently unavailable",
+        "no_average": "No recorded history yet",
+        "sample_note": "Average based on {count} observed fares.",
+        "suggest_title": "Select one of these suggested price ceilings:",
+        "manual_entry": "Or send your own ceiling in tomans in this chat.",
+        "no_suggestions": "No current fare to suggest amounts; type your price instead.",
+        "suggest_from_average": "Suggestions are based on the recorded average.",
+        "amount_ready": "👇 Suggested price options appear in the next message.",
+        "unit": "tomans",
         "invalid": "Enter a positive price in tomans, e.g. 5,000,000.",
         "created": (
             "✅ Alert saved.\n<b>{origin} → {destination}</b>\n"
@@ -152,6 +177,18 @@ WORDS = {
             "أرسل الحد الأقصى للسعر بالتومان للمسار <b>{origin} ← {destination}</b>.\n"
             "مثال: <code>5,000,000</code>\nللإلغاء أرسل /cancel."
         ),
+        "amount_heading": "💰 تحديد سقف سعر التذكرة",
+        "current_fare": "السعر الحالي للمسار",
+        "route_average": "المتوسط المسجل خلال ٢١ يوماً",
+        "no_current": "غير متاح حالياً",
+        "no_average": "لا توجد بيانات تاريخية بعد",
+        "sample_note": "حُسب المتوسط من {count} أسعار مسجلة.",
+        "suggest_title": "اختر أحد حدود السعر المقترحة:",
+        "manual_entry": "أو أرسل السقف المطلوب بالتومان في هذه المحادثة.",
+        "no_suggestions": "لا يوجد سعر مناسب للاقتراحات؛ أدخل المبلغ يدوياً.",
+        "suggest_from_average": "المقترحات مستندة إلى المتوسط التاريخي.",
+        "amount_ready": "👇 تظهر خيارات السعر المقترحة في الرسالة التالية.",
+        "unit": "تومان",
         "invalid": "أدخل مبلغاً صحيحاً بالتومان مثل 5,000,000.",
         "created": (
             "✅ تم حفظ التنبيه.\n<b>{origin} ← {destination}</b>\n"
@@ -208,6 +245,106 @@ def percent_keyboard(language: str) -> InlineKeyboardMarkup:
         InlineKeyboardButton(word(language, "cancel"), callback_data="alerts:cancel")
     ])
     return InlineKeyboardMarkup(rows)
+
+
+def suggested_price_ceiling_amounts(
+    current_price: int | None, average: float | None
+) -> tuple[int, ...]:
+    """Conservative, useful fare ceilings; no invented provider prices.
+
+    The current fare takes precedence over the recorded 21-day average.
+    Suggestions are rounded down to practical amounts and stay distinct.
+    """
+    basis = current_price if current_price is not None else average
+    if basis is None or not 1_000 <= basis <= 10**13:
+        return ()
+    step = 10_000 if basis >= 1_000_000 else 1_000
+    amounts = [
+        int(basis * multiplier // step) * step
+        for multiplier in (1.0, 0.95, 0.9, 0.8)
+    ]
+    return tuple(dict.fromkeys(amount for amount in amounts if amount >= 1_000))
+
+
+def amount_keyboard(language: str, amounts: tuple[int, ...]) -> InlineKeyboardMarkup:
+    rows = [
+        [
+            InlineKeyboardButton(
+                f"{amount:,} {word(language, 'unit')}",
+                callback_data=f"alerts:suggest:{index}",
+            )
+            for index, amount in enumerate(amounts[position:position + 2], position)
+        ]
+        for position in range(0, len(amounts), 2)
+    ]
+    rows.append([
+        InlineKeyboardButton(word(language, "cancel"), callback_data="alerts:cancel")
+    ])
+    return InlineKeyboardMarkup(rows)
+
+
+def render_amount_prompt(
+    language: str, pending: dict, *, rich: bool = False
+) -> str:
+    """Show genuine fare history and clickable, user-specific ceiling presets."""
+    current = pending.get("current_price")
+    average = pending.get("average_price")
+    count = pending.get("average_samples", 0)
+    unit = word(language, "unit")
+    body = word(language, "amount").format(
+        origin=escape(pending["origin"]), destination=escape(pending["destination"])
+    )
+    lines = [
+        f"<b>{escape(word(language, 'amount_heading'))}</b>",
+        body,
+        "",
+        f"• <b>{escape(word(language, 'current_fare'))}:</b> "
+        + (f"{current:,} {unit}" if current is not None else
+           escape(word(language, "no_current"))),
+        f"• <b>{escape(word(language, 'route_average'))}:</b> "
+        + (f"{average:,.0f} {unit}" if average is not None else
+           escape(word(language, "no_average"))),
+    ]
+    if average is not None and count:
+        lines.append(
+            escape(word(language, "sample_note").format(count=count))
+        )
+    amounts = pending.get("suggested_prices", ())
+    if amounts:
+        lines.append("")
+        lines.append(escape(word(language, "suggest_title")))
+        if current is None:
+            lines.append(escape(word(language, "suggest_from_average")))
+    else:
+        lines.append(escape(word(language, "no_suggestions")))
+    lines.append(escape(word(language, "manual_entry")))
+    if not rich:
+        return "\n".join(lines)
+
+    blocks = ["<h3>" + escape(word(language, "amount_heading")) + "</h3>"]
+    blocks.extend(
+        f"<p>{line}</p>" for line in lines[1:] if line
+    )
+    buttons = amount_keyboard(language, amounts)
+    for row in buttons.inline_keyboard:
+        markup = "".join(
+            '<tg-button type="callback_data" data="'
+            + escape(button.callback_data, quote=True) + '">'
+            + escape(button.text) + "</tg-button>"
+            for button in row
+        )
+        blocks.append('<tg-button-row align="center">' + markup + "</tg-button-row>")
+    return "\n".join(blocks)
+
+
+async def save_amount_alert(
+    service: PriceAlertService, user_id: int, pending: dict, amount: int
+):
+    route = await service.save_route(
+        user_id, pending["origin"], pending["destination"]
+    )
+    await service.create(user_id, route.id, amount, "TOMAN")
+    return route
 
 
 def parse_alert_price(value: str) -> int:
@@ -377,7 +514,7 @@ async def handle_alert_callback(
         )
         return
 
-    if data.startswith(("alerts:mode:", "alerts:percent:")):
+    if data.startswith(("alerts:mode:", "alerts:percent:", "alerts:suggest:")):
         pending = context.user_data.get("price_alert_pending")
         chat = getattr(update, "effective_chat", None)
         if not pending or chat is None or chat.type != "private":
@@ -389,14 +526,65 @@ async def handle_alert_callback(
         destination = escape(pending["destination"])
         if data == "alerts:mode:price" and pending.get("step") == "choose_mode":
             pending["step"] = "price"
-            await query.edit_message_text(
-                word(language, "amount").format(origin=origin, destination=destination),
-                parse_mode="HTML",
-                reply_markup=InlineKeyboardMarkup([[
-                    InlineKeyboardButton(
-                        word(language, "cancel"), callback_data="alerts:cancel"
+            amount_text = render_amount_prompt(language, pending)
+            amounts = tuple(pending.get("suggested_prices", ()))
+            bot = getattr(context, "bot", None)
+            chat_id = getattr(getattr(query, "message", None), "chat_id", None)
+            if bot is not None and chat_id is not None:
+                try:
+                    await send_rich_price_table(
+                        bot, chat_id,
+                        {
+                            "html": render_amount_prompt(language, pending, rich=True),
+                            "is_rtl": normalize_language(language) != "en",
+                        },
                     )
-                ]]),
+                except Exception as exc:
+                    # Do not expose Telegram bot tokens embedded in HTTP errors.
+                    LOGGER.warning(
+                        "price_alert_rich_ceiling_failed error_type=%s",
+                        type(exc).__name__,
+                    )
+                else:
+                    await query.edit_message_text(
+                        word(language, "amount_ready")
+                    )
+                    return
+            await query.edit_message_text(
+                amount_text,
+                parse_mode="HTML",
+                reply_markup=amount_keyboard(language, amounts),
+            )
+            return
+        if data.startswith("alerts:suggest:") and pending.get("step") == "price":
+            try:
+                index = int(data.rsplit(":", 1)[1])
+            except ValueError:
+                index = -1
+            amounts = pending.get("suggested_prices", ())
+            if index < 0 or index >= len(amounts):
+                await query.message.reply_text(
+                    word(language, "invalid"),
+                    reply_markup=amount_keyboard(language, tuple(amounts)),
+                )
+                return
+            try:
+                amount = parse_alert_price(str(amounts[index]))
+                route = await save_amount_alert(service, user_id, pending, amount)
+            except ValueError:
+                await query.message.reply_text(
+                    word(language, "limit"), reply_markup=menu_keyboard(language)
+                )
+                return
+            context.user_data.pop("price_alert_pending", None)
+            await query.message.reply_text(
+                word(language, "created").format(
+                    origin=escape(route.origin),
+                    destination=escape(route.destination),
+                    price=amount,
+                ),
+                parse_mode="HTML",
+                reply_markup=menu_keyboard(language),
             )
             return
         if data == "alerts:mode:percent" and pending.get("step") == "choose_mode":
@@ -488,10 +676,27 @@ async def handle_alert_callback(
                     word(language, "private"), reply_markup=menu_keyboard(language)
                 )
                 return
-            destination = route.destinations[dest_index].name
+            item = route.destinations[dest_index]
+            destination = item.name
+            current = item.price_value_toman
+            if current is None:
+                try:
+                    current = parse_toman_price(item.price_toman)
+                except ValueError:
+                    current = None
+            average = (
+                float(item.average_price_toman)
+                if item.average_price_toman is not None
+                and item.average_price_toman > 0 else None
+            )
+            count = item.average_sample_count
             context.user_data["price_alert_pending"] = {
                 "origin": route.origin, "destination": destination,
                 "step": "choose_mode",
+                "current_price": current,
+                "average_price": average,
+                "average_samples": count,
+                "suggested_prices": suggested_price_ceiling_amounts(current, average),
             }
             await query.edit_message_text(
                 word(language, "choose_mode").format(
@@ -547,8 +752,7 @@ async def handle_alert_text(
         await update.message.reply_text(word(language, "invalid"))
         return True
     try:
-        route = await service.save_route(user_id, pending["origin"], pending["destination"])
-        await service.create(user_id, route.id, amount, "TOMAN")
+        route = await save_amount_alert(service, user_id, pending, amount)
     except ValueError:
         await update.message.reply_text(
             word(language, "limit"), reply_markup=menu_keyboard(language)

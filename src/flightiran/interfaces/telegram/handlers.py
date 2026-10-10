@@ -464,6 +464,42 @@ async def callback_handler(
                     language, [route.origin for route in routes], page=page
                 ),
             )
+    elif data.startswith("tickets:book:"):
+        from .tickets import send_ticket_reservation_request
+
+        routes = context.user_data.get("ticket_routes", [])
+        try:
+            _, _, raw_route_index, raw_destination_index = data.split(":")
+            booking_origin_index = int(raw_route_index)
+            booking_destination_index = int(raw_destination_index)
+            if not 0 <= booking_origin_index < len(routes):
+                raise IndexError("Invalid booking route")
+            chosen_route = routes[booking_origin_index]
+            if not 0 <= booking_destination_index < len(chosen_route.destinations):
+                raise IndexError("Invalid booking destination")
+        except (ValueError, IndexError):
+            await query.message.reply_text(
+                text(language, "ticket_expired"),
+                reply_markup=back_menu(language),
+            )
+        else:
+            chosen_destination = chosen_route.destinations[booking_destination_index]
+            await dependencies.audit.record(
+                "ticket.booking.requested",
+                user_id=user_id,
+                payload={
+                    "origin": chosen_route.origin,
+                    "destination": chosen_destination.name,
+                },
+            )
+            await send_ticket_reservation_request(
+                context.bot,
+                query.message,
+                chosen_route.origin,
+                chosen_destination,
+                dependencies.ticket_support_username,
+                language,
+            )
     elif data.startswith("tickets:origin:"):
         from .tickets import render_cheap_route_chunks, send_ticket_booking_hint
 
@@ -490,7 +526,9 @@ async def callback_handler(
                     language, [item.origin for item in routes], page=index // 16
                 ),
             )
-            for rich_message in render_rich_price_tables(route, language=language):
+            for rich_message in render_rich_price_tables(
+                route, language=language, booking_route_index=index
+            ):
                 try:
                     await send_rich_price_table_with_badge_fallback(
                         context.bot, query.message.chat_id, rich_message
