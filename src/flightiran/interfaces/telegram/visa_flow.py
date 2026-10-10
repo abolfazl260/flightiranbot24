@@ -11,7 +11,6 @@ from telegram.ext import ContextTypes
 from flightiran.modules.visa.catalog import Country, VisaCatalogService, VisaDetail
 
 from .rich_tickets import send_rich_price_table
-from .visa_quality import render_freshness
 from .visa_presentation import (
     country_keyboard,
     country_label,
@@ -27,6 +26,7 @@ from .visa_presentation import (
     status_label,
     tr,
 )
+from .visa_quality import render_freshness
 
 LOGGER = logging.getLogger(__name__)
 
