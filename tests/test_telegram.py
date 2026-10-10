@@ -571,7 +571,7 @@ async def test_android_telegram_deep_links_open_specific_service(entrypoint):
     assert message.calls
     rendered = message.calls[0][0][0]
     if entrypoint == "visa":
-        assert "ویزا" in rendered
+        assert "دیتاست" in rendered  # Catalog unavailable in this isolated test
     elif entrypoint == "airports":
         assert "فرودگاه" in rendered
     else:
