@@ -35,6 +35,7 @@ WORDS = {
             "شرایط درخواست یا مدارک مربوط به این مسیر در دیتاست تغییر کرده است."
         ),
         "unknown": "نامشخص", "days": "روز",
+        "stay_window_changed": "قوانین شمارش روزهای اقامت یا شرایط ورود مجدد تغییر کرده‌اند.",
         "publication": "تاریخ اعلام‌شده انتشار داده", "source": "مشاهده فایل مرجع مقصد",
         "notice": (
             "این اعلان درباره تغییر اطلاعات منتشرشده است، نه تأیید تغییر قانون. "
@@ -63,6 +64,7 @@ WORDS = {
             "Application or entry-condition details for this route changed in the dataset."
         ),
         "unknown": "Not specified", "days": "days",
+        "stay_window_changed": "Stay-window counting or re-entry rules were updated.",
         "publication": "Published data date", "source": "View source destination record",
         "notice": (
             "This reports a published data change, not a confirmed change in law. "
@@ -90,6 +92,7 @@ WORDS = {
             "تغيرت شروط التقديم أو وثائق الدخول المنشورة لهذا المسار."
         ),
         "unknown": "غير محدد", "days": "يوم",
+        "stay_window_changed": "تغيرت قواعد احتساب أيام الإقامة أو إعادة الدخول.",
         "publication": "تاريخ نشر البيانات", "source": "فتح السجل الأصلي للوجهة",
         "notice": (
             "يشير هذا التنبيه إلى تغير البيانات المنشورة وليس تأكيداً لتغير القانون. "
@@ -251,7 +254,7 @@ def render_change_alert(notification: PendingNotification, language: str) -> str
             # The change was to a stay window or another constraint, not its max days.
             lines[-1] = (
                 f"• <b>{escape(word(language, 'stay'))}:</b> "
-                + escape(word(language, "conditions"))
+                + escape(word(language, "stay_window_changed"))
             )
     if "conditions" in categories:
         lines.append("• " + escape(word(language, "conditions")))
