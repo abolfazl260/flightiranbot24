@@ -26,6 +26,11 @@ android {
         versionCode Integer.parseInt(project.property('appVersionCode').toString())
         versionName project.property('appVersionName').toString()
         testInstrumentationRunner 'android.test.InstrumentationTestRunner'
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
     }
 
     signingConfigs {
@@ -72,6 +77,10 @@ android {
         abortOnError true
         checkReleaseBuilds true
     }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
 }
 
 kotlin {
@@ -88,6 +97,18 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.2'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2'
 
+    // Android data foundation (AND-003). No live API is called at app launch.
+    implementation 'com.squareup.retrofit2:retrofit:2.11.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.12.0'
+    implementation 'androidx.datastore:datastore-preferences:1.1.7'
+    implementation 'androidx.room:room-runtime:2.7.2'
+    implementation 'androidx.room:room-ktx:2.7.2'
+    annotationProcessor 'androidx.room:room-compiler:2.7.2'
+
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.2'
+    testImplementation 'com.squareup.okhttp3:mockwebserver:4.12.0'
+    testImplementation 'org.robolectric:robolectric:4.16.1'
+    testImplementation 'androidx.test:core:1.6.1'
 }
