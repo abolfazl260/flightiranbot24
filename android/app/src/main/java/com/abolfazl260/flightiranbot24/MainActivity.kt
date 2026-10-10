@@ -23,31 +23,47 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.abolfazl260.flightiranbot24.di.AppContainer
+import com.abolfazl260.flightiranbot24.domain.HomeDestination
+import com.abolfazl260.flightiranbot24.presentation.home.HomeUiState
+import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
 
 /**
- * First incremental Kotlin/Compose screen (AND-001). Offline airport and
- * checklist screens remain native Java Activities until their own tasks.
+ * Compose presentation backed by lifecycle-aware ViewModel state (AND-002).
+ * Airports and checklist remain the existing native Java Activities.
  */
 class MainActivity : ComponentActivity() {
+    private val container by lazy { AppContainer() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            val model: HomeViewModel = viewModel(factory = container.homeViewModelFactory)
+            val screenState by model.state.collectAsStateWithLifecycle()
             MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    TravelHomeScreen(onSelect = ::navigateTo)
+                    TravelHomeScreen(
+                        state = screenState,
+                        onSelect = ::navigateTo,
+                        onRetry = model::refresh,
+                    )
                 }
             }
         }
@@ -87,7 +103,11 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-internal fun TravelHomeScreen(onSelect: (HomeDestination) -> Unit) {
+internal fun TravelHomeScreen(
+    state: HomeUiState,
+    onSelect: (HomeDestination) -> Unit,
+    onRetry: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -108,16 +128,30 @@ internal fun TravelHomeScreen(onSelect: (HomeDestination) -> Unit) {
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
         )
-        ShortcutSection(
-            title = stringResource(R.string.home_offline_heading),
-            shortcuts = offlineHomeShortcuts,
-            onSelect = onSelect,
-        )
-        ShortcutSection(
-            title = stringResource(R.string.home_online_heading),
-            shortcuts = onlineHomeShortcuts,
-            onSelect = onSelect,
-        )
+        when (state) {
+            HomeUiState.Loading -> CircularProgressIndicator()
+            HomeUiState.Error -> {
+                Text(
+                    text = stringResource(R.string.home_load_error),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Button(onClick = onRetry) {
+                    Text(stringResource(R.string.home_retry))
+                }
+            }
+            is HomeUiState.Ready -> {
+                ShortcutSection(
+                    title = stringResource(R.string.home_offline_heading),
+                    destinations = state.sections.offline,
+                    onSelect = onSelect,
+                )
+                ShortcutSection(
+                    title = stringResource(R.string.home_online_heading),
+                    destinations = state.sections.online,
+                    onSelect = onSelect,
+                )
+            }
+        }
         Text(
             text = stringResource(R.string.command_hint),
             style = MaterialTheme.typography.bodySmall,
@@ -134,7 +168,7 @@ internal fun TravelHomeScreen(onSelect: (HomeDestination) -> Unit) {
 @Composable
 private fun ShortcutSection(
     title: String,
-    shortcuts: List<HomeShortcut>,
+    destinations: List<HomeDestination>,
     onSelect: (HomeDestination) -> Unit,
 ) {
     Text(
@@ -142,16 +176,28 @@ private fun ShortcutSection(
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
     )
-    shortcuts.forEach { shortcut ->
+    destinations.forEach { destination ->
         Button(
-            onClick = { onSelect(shortcut.destination) },
+            onClick = { onSelect(destination) },
             modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
             contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
         ) {
             Text(
-                text = stringResource(shortcut.labelRes),
+                text = stringResource(destination.labelResource()),
                 textAlign = TextAlign.Center,
             )
         }
     }
+}
+
+/** Presentation-only labels: domain and ViewModel have no Android R dependency. */
+private fun HomeDestination.labelResource(): Int = when (this) {
+    HomeDestination.OFFLINE_AIRPORTS -> R.string.offline_airports
+    HomeDestination.OFFLINE_CHECKLIST -> R.string.checklist_title
+    HomeDestination.TELEGRAM_BOT -> R.string.open_bot
+    HomeDestination.TELEGRAM_VISA -> R.string.open_visa
+    HomeDestination.TELEGRAM_AIRPORTS -> R.string.open_airports
+    HomeDestination.TELEGRAM_USEFUL -> R.string.open_useful
+    HomeDestination.SUPPORT -> R.string.open_support
+    HomeDestination.PRIVACY -> R.string.open_privacy
 }

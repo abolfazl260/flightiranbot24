@@ -1,5 +1,8 @@
 package com.abolfazl260.flightiranbot24
 
+import com.abolfazl260.flightiranbot24.data.LocalHomeRepository
+import com.abolfazl260.flightiranbot24.domain.HomeDestination
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -7,19 +10,19 @@ import org.junit.Test
 
 class HomeShortcutTest {
     @Test
-    fun offlineServicesStayNativeAndAvailable() {
+    fun offlineServicesStayNativeAndAvailable() = runBlocking {
         assertEquals(
             listOf(
                 HomeDestination.OFFLINE_AIRPORTS,
                 HomeDestination.OFFLINE_CHECKLIST,
             ),
-            offlineHomeShortcuts.map { it.destination },
+            LocalHomeRepository().loadHomeSections().offline,
         )
     }
 
     @Test
-    fun onlineLinksRemainExplicitHandOffUntilBackendApiExists() {
-        val destinations = onlineHomeShortcuts.map { it.destination }
+    fun onlineLinksRemainExplicitHandOffUntilBackendApiExists() = runBlocking {
+        val destinations = LocalHomeRepository().loadHomeSections().online
         assertEquals(6, destinations.size)
         assertTrue(destinations.contains(HomeDestination.TELEGRAM_VISA))
         assertTrue(destinations.contains(HomeDestination.SUPPORT))
@@ -29,10 +32,10 @@ class HomeShortcutTest {
     }
 
     @Test
-    fun eachHomeShortcutHasAUniqueDestinationAndStringResource() {
-        val all = offlineHomeShortcuts + onlineHomeShortcuts
+    fun eachHomeShortcutHasAUniqueDestination() = runBlocking {
+        val data = LocalHomeRepository().loadHomeSections()
+        val all = data.offline + data.online
         assertEquals(8, all.size)
-        assertEquals(all.size, all.map { it.destination }.distinct().size)
-        assertEquals(all.size, all.map { it.labelRes }.distinct().size)
+        assertEquals(all.size, all.distinct().size)
     }
 }

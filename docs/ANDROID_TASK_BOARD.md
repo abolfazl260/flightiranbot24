@@ -2,7 +2,7 @@
 
 This board tracks the **64 tasks** planned for Android 1.0. An entry marked
 `Done` requires a reviewed PR merged into `main` plus passing applicable
-CI; `Next` is not implemented. **Completed: 1/64**. The next executable task is AND-002.
+CI; `Next` is not implemented. **Completed: 1/64**. The active task is AND-002. Next planned: AND-003.
 
 Do not mark Telegram-only screens as native features. Backend APIs, authentication,
 push notifications and reservation workflows need their own implementation
@@ -12,8 +12,8 @@ and independent acceptance tests.
 | ID | Task | State | GitHub |
 | --- | --- | --- | --- |
 | AND-001 | Kotlin and Jetpack Compose alongside existing Java / gradual launcher migration | Done | #48, PR #50 |
-| AND-002 | MVVM, Domain/Repository layers and dependency injection | Next | #49 |
-| AND-003 | Retrofit/OkHttp, Coroutines, DataStore and Room | Planned | — |
+| AND-002 | MVVM, Domain/Repository layers and dependency injection | In progress | #49 |
+| AND-003 | Retrofit/OkHttp, Coroutines, DataStore and Room | Next | — |
 | AND-004 | Development/Staging/Production Android build environments | Planned | — |
 | API-001 | Versioned REST API and OpenAPI schemas | Planned | — |
 | API-002 | Ticket price, 21-day average and history endpoints | Planned | — |
