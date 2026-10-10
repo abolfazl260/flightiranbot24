@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -92,7 +93,7 @@ internal fun TravelServiceCard(
 }
 
 @Composable
-internal fun TravelNavigationItem(
+internal fun RowScope.TravelNavigationItem(
     label: String,
     symbol: String,
     selected: Boolean,
