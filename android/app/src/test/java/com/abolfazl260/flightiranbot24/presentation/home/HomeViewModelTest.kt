@@ -1,5 +1,8 @@
 package com.abolfazl260.flightiranbot24.presentation.home
 
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.data.LocalHomeRepository
 import com.abolfazl260.flightiranbot24.domain.HomeRepository
 import com.abolfazl260.flightiranbot24.domain.HomeSections
@@ -68,6 +71,27 @@ class HomeViewModelTest {
             assertTrue(model.state.value is HomeUiState.Ready)
             assertEquals(2, repository.requests)
         } finally {
+            Dispatchers.resetMain()
+        }
+    }
+
+    @Test
+    fun recreatedProviderWithRetainedStoreReturnsSameViewModelAndState() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+        Dispatchers.setMain(dispatcher)
+        val store = ViewModelStore()
+        try {
+            val factory = AppContainer(LocalHomeRepository()).homeViewModelFactory
+            val original = ViewModelProvider(store, factory)[HomeViewModel::class.java]
+            advanceUntilIdle()
+            assertTrue(original.state.value is HomeUiState.Ready)
+            // Simulate a new Activity/Compose ViewModelProvider sharing the same
+            // ViewModelStore after a configuration change.
+            val recreated = ViewModelProvider(store, factory)[HomeViewModel::class.java]
+            assertSame(original, recreated)
+            assertTrue(recreated.state.value is HomeUiState.Ready)
+        } finally {
+            store.clear()
             Dispatchers.resetMain()
         }
     }
