@@ -174,7 +174,6 @@ LANG["fa"].update({
     "no_expiry": "تاریخ پایان اعتبار قانونی در منبع مشخص نشده است.",
     "date_notice": "این تاریخ‌ها تاریخ بررسی/انتشار اطلاعات هستند، نه تضمین اعتبار قانون تا آن روز.",
     "source_link": "مشاهده منبع مقررات",
-    "original_data": "فایل اصلی اطلاعات مقصد (JSON)",
     "publisher": "دیتاست TravelRequirements.info",
     "license_link": "مجوز CC BY 4.0",
     "source_unavailable": "منبع در آخرین تلاش بررسی، قابل دسترسی یا تأیید نبوده است.",
@@ -203,7 +202,6 @@ LANG["en"].update({
         "Verification and publication dates do not guarantee validity through that date."
     ),
     "source_link": "View entry-regulation source",
-    "original_data": "Original destination JSON",
     "publisher": "TravelRequirements.info dataset",
     "license_link": "CC BY 4.0 license",
     "source_unavailable": "The source was inaccessible or unverifiable during its latest check.",
@@ -230,7 +228,6 @@ LANG["ar"].update({
     "no_expiry": "لم يحدد المصدر تاريخ انتهاء قانونياً لهذه المتطلبات.",
     "date_notice": "تواريخ المراجعة والنشر ليست ضماناً لاستمرار سريان القانون.",
     "source_link": "فتح مصدر شروط الدخول",
-    "original_data": "ملف بيانات الوجهة الأصلي (JSON)",
     "publisher": "بيانات TravelRequirements.info",
     "license_link": "ترخيص CC BY 4.0",
     "source_unavailable": "تعذر الوصول إلى المصدر أو التحقق منه عند آخر فحص.",
@@ -423,11 +420,8 @@ def external_link(url: object, label: str) -> str:
 
 
 def _provider_links(provenance: VisaProvenance, language: str) -> str:
-    links = [
-        external_link(provenance.source_url, tr(language, "source_link")),
-        external_link(provenance.destination_json_url, tr(language, "original_data")),
-    ]
-    return " · ".join(item for item in links if item)
+    """Link to the applicable regulation source, not the raw dataset JSON."""
+    return external_link(provenance.source_url, tr(language, "source_link"))
 
 
 def _attribution(language: str) -> str:
@@ -1165,18 +1159,10 @@ def detail_keyboard(
             ])
         provenance = visa_provenance(detail)
         source_url = safe_source_url(provenance.source_url)
-        original_url = safe_source_url(provenance.destination_json_url)
-        reference_buttons = []
         if source_url:
-            reference_buttons.append(
+            rows.insert(1, [
                 InlineKeyboardButton(tr(language, "source_link"), url=source_url)
-            )
-        if original_url:
-            reference_buttons.append(
-                InlineKeyboardButton(tr(language, "original_data"), url=original_url)
-            )
-        if reference_buttons:
-            rows.insert(1, reference_buttons)
+            ])
     return InlineKeyboardMarkup(rows)
 
 
