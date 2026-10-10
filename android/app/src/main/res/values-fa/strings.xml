@@ -34,4 +34,19 @@
     <string name="home_load_error">بارگذاری امکانات سفر ناموفق بود. دوباره تلاش کنید.</string>
     <string name="home_retry">تلاش مجدد</string>
     <string name="test_build_online_disabled">خدمات تلگرام در نسخه آزمایشی غیرفعال‌اند.</string>
+    <string name="navigation_home">خانه</string>
+    <string name="navigation_airports">فرودگاه‌ها</string>
+    <string name="navigation_checklist">چک‌لیست</string>
+    <string name="navigation_services">خدمات</string>
+    <string name="home_offline_hint">بدون نیاز به اینترنت، همراه سفر شما</string>
+    <string name="home_quick_services">خدمات پرکاربرد</string>
+    <string name="online_service_hint">این خدمات در ربات تلگرام باز می‌شوند.</string>
+    <string name="home_local_badge">قابل استفاده در اپ</string>
+    <string name="home_external_badge">ورود به تلگرام یا وب‌سایت</string>
+    <string name="checklist_progress">%1$d مورد از %2$d انجام شده</string>
+    <string name="checklist_reset_confirm_title">پاک‌کردن چک‌لیست</string>
+    <string name="checklist_reset_confirm_message">تمام انتخاب‌های شما پاک شوند؟</string>
+    <string name="checklist_reset_confirm">پاک شود</string>
+    <string name="checklist_reset_cancel">انصراف</string>
+    <string name="checklist_reset_done">چک‌لیست پاک شد.</string>
 </resources>
