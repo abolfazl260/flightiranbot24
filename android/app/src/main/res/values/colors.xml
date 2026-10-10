@@ -2,7 +2,7 @@
 <resources>
     <!-- Single source of color tokens for both Compose and Java/XML. -->
     <color name="navy">#12394F</color>
-    <color name="teal">#007F78</color>
+    <color name="teal">#007C74</color>
     <color name="white">#FFFFFF</color>
     <color name="slate">#445660</color>
     <color name="pale">#F1F5F8</color>
