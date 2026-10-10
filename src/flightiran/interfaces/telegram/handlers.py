@@ -46,12 +46,7 @@ from .keyboards import (
 )
 from .localization import normalize_language, safe_text, text
 from .new_user_alert import render_new_user_alert
-from .price_alerts import (
-    handle_alert_callback,
-    handle_alert_text,
-    menu_keyboard as alert_menu_keyboard,
-    word as alert_word,
-)
+from .price_alerts import handle_alert_callback, handle_alert_text, menu_keyboard, word
 from .renderers import render_help, render_language_prompt, render_main_menu
 from .support import render_support_message
 from .useful_content import (
@@ -297,7 +292,7 @@ async def callback_handler(
     if data == "menu:price_alerts" or data.startswith("alerts:"):
         if dependencies.price_alert_service is None:
             await query.edit_message_text(
-                alert_word(language, "unavailable"), reply_markup=back_menu(language)
+                word(language, "unavailable"), reply_markup=back_menu(language)
             )
             return
         await handle_alert_callback(
@@ -696,8 +691,8 @@ async def visa_cancel_handler(
         if update.message:
             _, language = await _user_language(update, dependencies)
             await update.message.reply_text(
-                alert_word(language, "cancelled"),
-                reply_markup=alert_menu_keyboard(language),
+                word(language, "cancelled"),
+                reply_markup=menu_keyboard(language),
             )
         return
     context.user_data.pop("visa_search_mode", None)
@@ -751,12 +746,12 @@ async def alerts_command_handler(
     user_id, language = await _user_language(update, dependencies)
     await dependencies.audit.record("price_alerts.opened", user_id=user_id)
     if dependencies.price_alert_service is None:
-        await update.message.reply_text(alert_word(language, "unavailable"))
+        await update.message.reply_text(word(language, "unavailable"))
         return
     await update.message.reply_text(
-        alert_word(language, "title") + "\n\n" + alert_word(language, "intro"),
+        word(language, "title") + "\n\n" + word(language, "intro"),
         parse_mode="HTML",
-        reply_markup=alert_menu_keyboard(language),
+        reply_markup=menu_keyboard(language),
     )
 
 
