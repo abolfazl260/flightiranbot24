@@ -1,14 +1,18 @@
 """Compact ticket result cards."""
 
+import logging
 from html import escape
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicketRoute, TicketOffer
 
+from .keyboards import ticket_result_menu
 from .localization import normalize_language
-from .rich_tickets import render_ticket_footer
+from .rich_tickets import render_ticket_footer, send_rich_price_table
 from .support import support_link
+
+LOGGER = logging.getLogger(__name__)
 
 
 def render_offer(offer: TicketOffer) -> tuple[str, InlineKeyboardMarkup]:
@@ -179,3 +183,70 @@ def render_cheap_ticket_booking_hint(
         f"📩 <b>پشتیبانی همه خدمات:</b> {contact}\n"
         "👇 <b>برای پرسیدن سؤال یا درخواست بررسی بلیط، دکمه زیر را بزنید.</b>"
     )
+
+
+
+def render_rich_ticket_booking_hint(
+    support_username: str, language: str = "fa"
+) -> dict:
+    """Place support and navigation buttons *inside* one Rich Message.
+
+    Keep this derived from the regular HTML copy and the existing fallback
+    keyboard, so the two delivery formats have exactly the same content,
+    localized labels and callback actions.
+    """
+    language = normalize_language(language)
+    paragraphs = render_cheap_ticket_booking_hint(
+        support_username, language
+    ).split("\n\n")
+
+    blocks = [f"<h3>{paragraphs[0]}</h3>"]
+    for paragraph in paragraphs[1:]:
+        blocks.extend(
+            f"<p>{line}</p>" for line in paragraph.split("\n") if line
+        )
+
+    for row in ticket_result_menu(language, support_username).inline_keyboard:
+        buttons: list[str] = []
+        for button in row:
+            label = escape(button.text)
+            if button.url is not None:
+                action = f'type="url" style="primary" url="{escape(button.url, quote=True)}"'
+            elif button.callback_data is not None:
+                action = (
+                    'type="callback_data" '
+                    f'data="{escape(button.callback_data, quote=True)}"'
+                )
+            else:
+                raise ValueError("Unsupported ticket action")
+            buttons.append(f"<tg-button {action}>{label}</tg-button>")
+        blocks.append(
+            '<tg-button-row align="center">'
+            + "".join(buttons)
+            + "</tg-button-row>"
+        )
+
+    return {"html": "\n".join(blocks), "is_rtl": language in {"fa", "ar"}}
+
+
+async def send_ticket_booking_hint(
+    bot, message, support_username: str, language: str = "fa"
+) -> None:
+    """Prefer an in-message rich CTA; retain a working HTML+keyboard fallback."""
+    try:
+        await send_rich_price_table(
+            bot,
+            message.chat_id,
+            render_rich_ticket_booking_hint(support_username, language),
+        )
+    except Exception as exc:
+        # HTTP client errors may contain bot-token URLs: never log their text.
+        LOGGER.warning(
+            "rich_ticket_booking_hint_send_failed error_type=%s",
+            type(exc).__name__,
+        )
+        await message.reply_text(
+            render_cheap_ticket_booking_hint(support_username, language),
+            parse_mode="HTML",
+            reply_markup=ticket_result_menu(language, support_username),
+        )

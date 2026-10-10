@@ -67,6 +67,22 @@ scheduled report during its downtime. Failed sends are logged and marked in
 `job_runs`; future days continue on schedule.
 
 
+## Rich booking support actions
+
+After a user selects a ticket origin, the closing booking-help message uses
+Telegram `sendRichMessage` with **in-message URL and callback buttons**. The
+support URL opens the configured `@Advertio_support` contact, and the three
+navigation actions open origin selection (`tickets:menu`), ticket price alerts
+(`menu:price_alerts`) and the main menu (`back`). The buttons appear within
+the same Rich Message immediately after the advisory paragraphs, not in a
+separate `reply_markup` keyboard. Both Persian/Arabic RTL and English LTR
+are supported.
+
+If rich-message delivery fails (for example, a client or Bot API limitation),
+the bot sends the existing HTML help text and the standard inline keyboard
+as a fallback. The fallback is not sent on successful rich delivery; failures
+are logged by exception type without logging Telegram API URLs or bot tokens.
+
 ## Ticket price bell and automatic alerts
 
 Users can open **🔔 Ticket price alerts** from the main menu, ticket listings,
