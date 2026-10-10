@@ -21,10 +21,10 @@ from flightiran.db.repositories import AuditRepository, UserRepository
 from flightiran.infrastructure.http.errors import ProviderError
 from flightiran.interfaces.telegram.rich_tickets import (
     find_price_drops,
-    render_ticket_footer,
     render_price_drop_fallback_chunks,
     render_rich_price_drop_report,
     render_rich_price_tables,
+    render_ticket_footer,
     send_rich_price_table_with_badge_fallback,
 )
 from flightiran.modules.admin.reports import BotReportRepository
