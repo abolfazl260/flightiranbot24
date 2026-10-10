@@ -6,11 +6,12 @@ from html import escape
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicketRoute, TicketOffer
+from flightiran.modules.tickets.service import parse_toman_price
 
 from .keyboards import ticket_result_menu
 from .localization import normalize_language
 from .rich_tickets import render_ticket_footer, send_rich_price_table
-from .support import support_link
+from .support import support_link, support_url
 
 LOGGER = logging.getLogger(__name__)
 
@@ -249,4 +250,153 @@ async def send_ticket_booking_hint(
             render_cheap_ticket_booking_hint(support_username, language),
             parse_mode="HTML",
             reply_markup=ticket_result_menu(language, support_username),
+        )
+
+
+
+_RESERVATION_WORDS = {
+    "fa": {
+        "title": "🎫 درخواست بررسی رزرو بلیط",
+        "origin": "مبدأ",
+        "destination": "مقصد",
+        "price": "قیمت فعلی اعلام‌شده",
+        "average": "میانگین ثبت‌شده ۲۱روزه",
+        "unavailable": "نامشخص",
+        "unit": "تومان",
+        "notice": (
+            "این قیمت صرفاً برای مقایسه است و رزرو یا موجودی صندلی را "
+            "تضمین نمی‌کند. برای بررسی تاریخ سفر، قیمت نهایی و امکان "
+            "رزرو، مسیر و تاریخ تقریبی خود را به پشتیبانی ارسال کنید."
+        ),
+        "support": "💬 ارتباط با پشتیبانی برای درخواست رزرو",
+    },
+    "en": {
+        "title": "🎫 Ticket booking inquiry",
+        "origin": "Origin",
+        "destination": "Destination",
+        "price": "Last listed fare",
+        "average": "Recorded 21-day average",
+        "unavailable": "Unavailable",
+        "unit": "tomans",
+        "notice": (
+            "This fare is for comparison only; no seat availability or booking "
+            "is guaranteed. Contact support with your route and approximate "
+            "travel date to check the final price and booking options."
+        ),
+        "support": "💬 Contact support about booking",
+    },
+    "ar": {
+        "title": "🎫 طلب الاستفسار عن حجز تذكرة",
+        "origin": "مدينة المغادرة",
+        "destination": "الوجهة",
+        "price": "السعر الحالي المعلن",
+        "average": "المتوسط المسجل خلال ٢١ يوماً",
+        "unavailable": "غير متاح",
+        "unit": "تومان",
+        "notice": (
+            "هذا السعر للمقارنة فقط ولا يضمن توفر المقاعد أو الحجز. "
+            "أرسل المسار والتاريخ التقريبي إلى الدعم للتحقق من السعر النهائي والحجز."
+        ),
+        "support": "💬 التواصل مع الدعم لطلب الحجز",
+    },
+}
+
+
+def render_ticket_reservation_request(
+    origin: str,
+    destination: CheapTicketDestination,
+    support_username: str,
+    language: str = "fa",
+    *,
+    rich: bool = True,
+) -> str:
+    """Route-specific request text; directing to support is not a confirmed booking."""
+    language = normalize_language(language)
+    words = _RESERVATION_WORDS[language]
+    price = destination.price_value_toman
+    if price is None:
+        try:
+            price = parse_toman_price(destination.price_toman)
+        except ValueError:
+            price = None
+    average = destination.average_price_toman
+    unit = escape(words["unit"])
+    amount = (
+        f"{price:,} {unit}" if price is not None else escape(words["unavailable"])
+    )
+    mean = (
+        f"{average:,.0f} {unit}"
+        if average is not None and average > 0
+        else escape(words["unavailable"])
+    )
+    title = escape(words["title"])
+    items = [
+        (words["origin"], origin),
+        (words["destination"], destination.name),
+    ]
+    text_lines = [
+        title,
+        *[
+            f"<b>{escape(label)}:</b> {escape(value)}"
+            for label, value in items
+        ],
+        f"<b>{escape(words['price'])}:</b> {amount}",
+        f"<b>{escape(words['average'])}:</b> {mean}",
+        "",
+        escape(words["notice"]),
+    ]
+    if not rich:
+        return "\n".join(text_lines) + "\n" + support_link(support_username)
+
+    button = (
+        '<tg-button-row align="center">'
+        '<tg-button type="url" style="primary" url="'
+        + escape(support_url(support_username), quote=True) + '">'
+        + escape(words["support"]) + "</tg-button></tg-button-row>"
+    )
+    return (
+        f"<h3>{title}</h3>"
+        + "".join(f"<p>{line}</p>" for line in text_lines[1:] if line)
+        + button
+    )
+
+
+async def send_ticket_reservation_request(
+    bot,
+    message,
+    origin: str,
+    destination: CheapTicketDestination,
+    support_username: str,
+    language: str = "fa",
+) -> None:
+    """Send an actionable route-specific Rich Message, or an HTML fallback."""
+    language = normalize_language(language)
+    try:
+        await send_rich_price_table(
+            bot,
+            message.chat_id,
+            {
+                "html": render_ticket_reservation_request(
+                    origin, destination, support_username, language
+                ),
+                "is_rtl": language in {"fa", "ar"},
+            },
+        )
+    except Exception as exc:
+        LOGGER.warning(
+            "rich_ticket_reservation_request_failed error_type=%s",
+            type(exc).__name__,
+        )
+        await message.reply_text(
+            render_ticket_reservation_request(
+                origin, destination, support_username, language, rich=False
+            ),
+            parse_mode="HTML",
+            reply_markup=InlineKeyboardMarkup([[
+                InlineKeyboardButton(
+                    _RESERVATION_WORDS[language]["support"],
+                    url=support_url(support_username),
+                ),
+            ]]),
+            disable_web_page_preview=True,
         )
