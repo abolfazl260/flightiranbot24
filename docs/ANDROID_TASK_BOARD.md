@@ -2,11 +2,36 @@
 
 This board tracks the **64 tasks** planned for Android 1.0. An entry marked
 `Done` requires a reviewed PR merged into `main` plus passing applicable
-CI; `Next` is not implemented. **Completed: 4/64**. Next executable task: API-001 (#56).
+CI; `Next` is not implemented. **Completed: 4/64**. Next backend task: API-001 (#56).
+UX and CI review fixes (#63–#71) can run in parallel when dependencies allow.
 
 Do not mark Telegram-only screens as native features. Backend APIs, authentication,
 push notifications and reservation workflows need their own implementation
 and independent acceptance tests.
+
+## Android product policy — locked
+- **Only Persian (fa-IR) is supported in the Android UI.** All screens use a right-to-left (RTL) layout, including when the phone's system language is English or Arabic. Treat IATA codes/URLs as isolated LTR tokens only.
+- **Do not develop multilingual Android UI, language switching, English or Arabic UI translations, or an LTR app mode.** Any legacy fa/en/ar preference/storage is to be retired safely under #63; unrelated saved preferences must survive the migration.
+- This Android-only decision **does not alter** Telegram bot language support.
+- In user-facing mobile views describe recorded averages without exposing the internal history lookback window.
+
+## Review follow-up issues (created 2026-10-10)
+
+| Priority | Area | Issue | Target |
+| --- | --- | --- | --- |
+| P0 | Persian-only RTL | #63 | All views, device locales, safe preference migration |
+| P0 | Screenshot pipeline | #69 | Correct flavor-specific APK, genuine Persian screenshots |
+| P1 | Advertio design system | #64 | Tokens, reusable components, branding and a11y |
+| P1 | Dashboard & navigation | #65 | Compose home, service categories, explicit handoff |
+| P1 | Telegram handoff | #66 | Direct visa flow without clipboard/paste |
+| P1 | Offline airports | #67 | Compose list, search, Room cache and fallback |
+| P1 | CI reproducibility | #70 | Data-change triggers, Gradle wrapper, production checks |
+| P1 | UI/device quality | #71 | RTL, typography, accessibility, emulator tests |
+| P2 | Offline checklist | #68 | Polish, persistence and reset confirmation |
+
+Related existing work: API contracts #56; owner/Play publication actions #40.
+The review follow-ups correspond to existing roadmap rows where applicable; they
+**do not add completed work** or alter the 4/64 completion count.
 
 ## Milestone A — Android Foundation
 | ID | Task | State | GitHub |
@@ -16,7 +41,7 @@ and independent acceptance tests.
 | AND-003 | Retrofit/OkHttp, Coroutines, DataStore and Room | Done | #52, PR #53 |
 | AND-004 | Development/Staging/Production Android build environments | Done | #54, PR #55 |
 | API-001 | Versioned REST API and OpenAPI schemas | Next | #56 |
-| API-002 | Ticket price, 21-day average and history endpoints | Planned | — |
+| API-002 | Ticket price, recorded historical average and history endpoints | Planned | — |
 | API-003 | User-owned price and visa alert management API | Planned | — |
 | API-004 | Visa rules, provenance and airport search API | Planned | — |
 | API-005 | Profile, devices, settings and booking requests API | Planned | — |
@@ -24,10 +49,10 @@ and independent acceptance tests.
 | AUTH-002 | Token/session rotation and secure revocation | Planned | — |
 | AUTH-003 | Optional Telegram account linking with one-time proof | Planned | — |
 | AUTH-004 | Profile, logout, device management and account deletion | Planned | — |
-| UI-001 | Advertio visual identity and design tokens | Planned | — |
-| UI-002 | Components (cards, inputs, tables, bottom navigation) | Planned | — |
-| UI-003 | Persian, English, Arabic, RTL/LTR | Planned | — |
-| UI-004 | Light/dark themes, typography, accessibility and loading/error states | Planned | — |
+| UI-001 | Advertio visual identity and design tokens | Planned | #64 |
+| UI-002 | Components (cards, inputs, tables, bottom navigation) | Planned | #64 |
+| UI-003 | Persian-only fa-IR and mandatory RTL; no language selector or translations | Planned | #63 |
+| UI-004 | Themes, Persian typography, accessibility and loading/error states | Planned | #64, #71 |
 
 ## Milestone B — Core travel features
 | ID | Task | State |
@@ -37,7 +62,7 @@ and independent acceptance tests.
 | HOME-003 | Connection status and freshness indicators | Planned |
 | TICKET-001 | Origin and destination picker | Planned |
 | TICKET-002 | Current fare list in tomans | Planned |
-| TICKET-003 | 21-day average, price and percent changes | Planned |
+| TICKET-003 | Recorded average, price and percent changes (no window shown in UI) | Planned |
 | TICKET-004 | Price history chart with sample quality | Planned |
 | TICKET-005 | Sort and favorites | Planned |
 | ALERT-001 | Absolute price ceiling | Planned |
