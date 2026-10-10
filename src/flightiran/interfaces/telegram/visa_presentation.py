@@ -597,7 +597,7 @@ def render_overview(
         "",
         "⚠️ " + escape(tr(language, "caution")),
     ])
-     lines.extend([
+    lines.extend([
         "<i>" + escape(tr(language, "date_notice")) + "</i>",
         "",
         _attribution(language),
