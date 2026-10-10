@@ -217,9 +217,141 @@ async def test_selected_ticket_origin_sends_support_buttons_as_rich_message(
     buttons = [button for row in rows for button in row.findall("tg-button")]
     assert buttons[0].attrib["url"] == "https://t.me/Advertio_support"
     assert [button.attrib["data"] for button in buttons[1:]] == [
-        "alerts:origin:0", "tickets:menu", "back",
+        "tickets:alert:0", "tickets:menu", "back",
     ]
     assert not any("tickets:book:" in button.attrib.get("data", "") for button in buttons)
     assert query.message.calls == []
+    await database.close()
+
+
+@pytest.mark.asyncio
+async def test_bell_from_selected_fares_uses_cached_origin_without_new_fetch(
+    monkeypatch, tmp_path,
+):
+    from flightiran.modules.tickets.alerts import PriceAlertService
+
+    database = await initialize_database(
+        f"sqlite+aiosqlite:///{tmp_path / 'rich-bell.db'}"
+    )
+    route = CheapTicketRoute(
+        "تهران",
+        (
+            CheapTicketDestination("مشهد", "10,000,000"),
+            CheapTicketDestination("کیش", "8,000,000"),
+        ),
+        "https://mz724.ir/",
+    )
+    deps = TelegramDependencies(
+        users=SQLiteUserRepository(database),
+        audit=Audit(),
+        price_alert_service=PriceAlertService(database),
+        # No provider is configured: a second fetch would be impossible.
+        cheap_ticket_service=None,
+    )
+    context = SimpleNamespace(
+        bot=SimpleNamespace(token="unused"),
+        user_data={"ticket_routes": [route], "alert_routes": [
+            CheapTicketRoute("مشهد", (), "https://mz724.ir/")
+        ]},
+    )
+
+    bells = []
+    async def send_table(_bot, _chat_id, payload):
+        bells.append(payload)
+
+    monkeypatch.setattr(
+        "flightiran.interfaces.telegram.handlers."
+        "send_rich_price_table_with_badge_fallback",
+        send_table,
+    )
+
+    async def press(data):
+        query = FakeQuery()
+        query.data = data
+        await callback_handler(
+            SimpleNamespace(
+                effective_user=SimpleNamespace(
+                    id=111, username=None, first_name="User", last_name=None
+                ),
+                effective_chat=SimpleNamespace(id=111, type="private"),
+                callback_query=query,
+            ),
+            context,
+            deps,
+        )
+        return query
+
+    await press("tickets:origin:0")
+    assert len(bells) == 1
+    assert 'data="tickets:alert:0"' in bells[0]["html"]
+    query = await press("tickets:alert:0")
     assert context.user_data["alert_routes"] == [route]
+    assert query.calls
+    markup = query.calls[-1][1]["reply_markup"]
+    assert [button.text for row in markup.inline_keyboard
+            for button in row if button.callback_data.startswith("alerts:select:")] == [
+        "مشهد", "کیش",
+    ]
+    assert query.message.calls == []
+    await database.close()
+
+
+@pytest.mark.asyncio
+async def test_rich_ticket_table_failure_sends_one_combined_fallback_with_four_actions(
+    monkeypatch, tmp_path, caplog,
+):
+    database = await initialize_database(
+        f"sqlite+aiosqlite:///{tmp_path / 'fare-fallback.db'}"
+    )
+    route = CheapTicketRoute(
+        "تهران",
+        (CheapTicketDestination("مشهد", "10,000,000"),),
+        "https://mz724.ir/",
+    )
+    deps = TelegramDependencies(
+        users=SQLiteUserRepository(database), audit=Audit(),
+        ticket_support_username="@Advertio_support",
+    )
+    context = SimpleNamespace(
+        bot=SimpleNamespace(token="topsecret"),
+        user_data={"ticket_routes": [route]},
+    )
+    async def fail(*_args):
+        raise RuntimeError("private-bot-token-unprintable")
+
+    monkeypatch.setattr(
+        "flightiran.interfaces.telegram.handlers."
+        "send_rich_price_table_with_badge_fallback",
+        fail,
+    )
+    query = FakeQuery()
+    with caplog.at_level("WARNING"):
+        await callback_handler(
+            SimpleNamespace(
+                effective_user=SimpleNamespace(
+                    id=111, username=None, first_name="User", last_name=None
+                ),
+                effective_chat=SimpleNamespace(id=111, type="private"),
+                callback_query=query,
+            ),
+            context,
+            deps,
+        )
+    # No duplicate explanatory message; the help belongs to the last fare
+    # chunk, with one combined keyboard, at most two actions per row.
+    assert len(query.message.calls) == 1
+    content, kw = query.message.calls[0]
+    assert "مشهد" in content
+    assert "مسیر دلخواهتان را پیدا کرده‌اید" in content
+    assert content.index("مشهد") < content.index("مسیر دلخواهتان")
+    assert len(content) <= 4096
+    assert content.count("@Advertio_support") == 1
+    assert kw["parse_mode"] == "HTML"
+    rows = kw["reply_markup"].inline_keyboard
+    assert [len(row) for row in rows] == [2, 2]
+    assert rows[0][0].url == "https://t.me/Advertio_support"
+    assert rows[0][1].callback_data == "tickets:alert:0"
+    assert rows[1][0].callback_data == "tickets:menu"
+    assert rows[1][1].callback_data == "back"
+    assert "private-bot-token-unprintable" not in caplog.text
     await database.close()

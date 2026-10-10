@@ -270,7 +270,7 @@ def test_rich_fare_list_has_one_booking_button_and_bell_per_page(language, notic
     assert len(buttons) == 4
     assert buttons[0].attrib["url"] == "https://t.me/Advertio_support"
     assert [button.attrib["data"] for button in buttons[1:]] == [
-        "alerts:origin:2", "tickets:menu", "back",
+        "tickets:alert:2", "tickets:menu", "back",
     ]
     assert not any(
         (button.attrib.get("data") or "").startswith("tickets:book:")
@@ -296,7 +296,7 @@ def test_large_fare_list_rich_pages_keep_four_actions_each_and_limit_two_per_row
     assert sum(page["html"].count("<tr>") - 1 for page in pages) == 75
     for page in pages:
         html = page["html"]
-        assert html.count('data="alerts:origin:1"') == 1
+        assert html.count('data="tickets:alert:1"') == 1
         assert html.count('data="tickets:menu"') == 1
         assert html.count('data="back"') == 1
         assert html.count('<tg-button-row') == 2
