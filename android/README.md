@@ -1,13 +1,24 @@
 # Flight Iran Bot 24 — Android
 
-Native Android travel companion, incrementally moving from Java/XML to Kotlin/Jetpack Compose.
+Android travel companion, gradually migrating from Java/XML to Kotlin/Jetpack Compose.
 
-## Current implementation (AND-001)
-- The launcher is a **Kotlin + Jetpack Compose** screen, retaining the original package ID and existing deep links.
-- The **offline airport directory** and **offline travel checklist** remain native Java Activities; no migration of their working data storage is necessary for this task.
-- The Java airport catalogue/parser and native checklist continue to run without network permissions.
-- Other online actions intentionally open the Telegram bot or support account. The visa command is copied to the clipboard; the user pastes it into the Telegram chat.
-- The app does not authenticate directly to the Telegram Mini App: it must not embed a bot token or fabricate Telegram `initData`.
+## Current implementation (AND-001 and AND-002)
+
+- The launcher is a Kotlin/Compose screen, with a lifecycle-aware
+  **HomeViewModel + StateFlow** for Loading/Ready/Error and Retry.
+- A pure Kotlin `domain` model describes launcher actions. The `HomeRepository`
+  interface is implemented by `LocalHomeRepository` in `data`; the
+  `AppContainer` is an explicit dependency-injection composition root.
+  Tests inject fake repositories without Android Activity dependencies.
+- This deliberate, lightweight manual DI design avoids pulling in a large
+  Hilt/KSP graph before any production API or identity client exists. Task
+  AND-003 will add the network/data persistence dependencies.
+- Offline airport and travel-checklist screens remain their original native
+  Java Activities; data remains available without network access.
+- Online actions still hand off to the Telegram bot or support account.
+  The visa command is copied; users paste it in Telegram.
+- The app does **not** authenticate to the Telegram Mini App, store bot
+  credentials, or create fake users/sessions.
 
 The airport data is packaged from
 `src/flightiran/modules/airport/data/airports.json`.
@@ -15,26 +26,19 @@ The airport data is packaged from
 ## Build
 
 JDK 17, Gradle 8.13, Android SDK 36. Android Gradle Plugin 8.13.2,
-Kotlin 2.2.20, and Compose compiler plugin 2.2.20 are pinned in Gradle files.
-
-From the repository root:
+Kotlin 2.2.20 and Compose compiler plugin 2.2.20.
 
 ```bash
 gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:bundleRelease
 ```
 
 Debug APK: `android/app/build/outputs/apk/debug/app-debug.apk`
-Main application ID: `com.abolfazl260.flightiranbot24`
-(debug suffix: `.debug`).
+Main app ID: `com.abolfazl260.flightiranbot24` (debug suffix: `.debug`).
 
-For releases see `docs/ANDROID_RELEASE.md` and
-`docs/PLAY_STORE_LISTING.md`. Signed release builds still require a
-private upload keystore outside the repository. Existing GitHub Actions
-continues to build and validate the Android artifacts.
+See `docs/ANDROID_RELEASE.md` and `docs/PLAY_STORE_LISTING.md`.
+Release signing requires a private upload key outside the Git repository.
 
 ## Next task
-
-**AND-002:** introduce an MVVM + domain/repository boundary with
-dependency injection before connecting Android to backend API endpoints.
-The launcher currently uses static shortcuts intentionally; online
-features must not be advertised as fully native until the API is built.
+**AND-003:** Add Retrofit, OkHttp, Kotlin Coroutines networking conventions,
+DataStore and Room to the structured data layer. Do not invent authenticated
+endpoints; use versioned backend APIs only once they are implemented and tested.

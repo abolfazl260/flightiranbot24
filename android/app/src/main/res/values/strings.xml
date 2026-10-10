@@ -31,4 +31,6 @@
     <string name="check_money">Prepare payment methods and cash</string>
     <string name="check_essentials">Pack medication and essentials</string>
     <string name="checklist_reset">Clear my checklist</string>
+    <string name="home_load_error">Could not load travel shortcuts. Please try again.</string>
+    <string name="home_retry">Retry</string>
 </resources>

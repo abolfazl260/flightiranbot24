@@ -31,4 +31,6 @@
     <string name="check_money">آماده‌کردن پول نقد و روش پرداخت</string>
     <string name="check_essentials">برداشتن دارو و وسایل ضروری</string>
     <string name="checklist_reset">پاک‌کردن چک‌لیست من</string>
+    <string name="home_load_error">بارگذاری امکانات سفر ناموفق بود. دوباره تلاش کنید.</string>
+    <string name="home_retry">تلاش مجدد</string>
 </resources>
