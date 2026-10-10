@@ -3,6 +3,7 @@
 import asyncio
 import logging
 from datetime import datetime, timezone
+from html import escape
 from pathlib import Path
 from typing import Final
 from zoneinfo import ZoneInfo
@@ -30,6 +31,7 @@ from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.provider import HttpCurrencyProvider
 from flightiran.modules.currency.service import CurrencyService
+from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import default_catalog
@@ -55,6 +57,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "help": "راهنمای استفاده از ربات",
         "language": "تغییر زبان",
         "price": "نمایش نرخ ارز",
+        "alerts": "زنگوله قیمت بلیط",
         "visa": "اطلاعات ویزا",
         "visa_list": "کشورها بر اساس پاسپورت",
         "cancel": "لغو جست‌وجوی ویزا",
@@ -64,6 +67,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "help": "Help and commands",
         "language": "Change language",
         "price": "Exchange rates",
+        "alerts": "Ticket price alerts",
         "visa": "Visa requirements",
         "visa_list": "Countries by passport",
         "cancel": "Cancel visa search",
@@ -73,6 +77,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "help": "دليل الاستخدام",
         "language": "تغيير اللغة",
         "price": "أسعار الصرف",
+        "alerts": "تنبيهات أسعار التذاكر",
         "visa": "متطلبات التأشيرة",
         "visa_list": "الدول حسب جواز السفر",
         "cancel": "إلغاء البحث عن التأشيرة",
@@ -99,6 +104,7 @@ def create_application(
     *,
     report_database: Database | None = None,
     visa_sync_service: VisaSyncService | None = None,
+    price_alert_service: PriceAlertService | None = None,
 ) -> Application:
     """Build the Telegram application without starting network polling."""
 
@@ -124,9 +130,54 @@ def create_application(
                         )
                     )
 
+            async def notify_price_alerts(samples: list[tuple[str, str, int]]) -> None:
+                if price_alert_service is None or not samples:
+                    return
+
+                async def send_alert(telegram_id, origin, destination, alert, snapshot):
+                    language = await SQLiteUserRepository(report_database).get_language(alert.user_id)
+                    origin_text, destination_text = escape(origin), escape(destination)
+                    if language == "fa":
+                        body = (
+                            "🔔 <b>هشدار قیمت بلیط</b>\n"
+                            f"مسیر: {origin_text} ← {destination_text}\n"
+                            f"قیمت فعلی: <b>{int(snapshot.price):,} تومان</b>\n"
+                            f"سقف تعیین‌شده: {int(alert.target_price):,} تومان\n"
+                            "قیمت‌ها از فهرست mz724 دریافت شده‌اند و ممکن است هنگام رزرو تغییر کنند."
+                        )
+                    elif language == "ar":
+                        body = (
+                            "🔔 <b>تنبيه سعر التذكرة</b>\n"
+                            f"المسار: {origin_text} ← {destination_text}\n"
+                            f"السعر الحالي: <b>{int(snapshot.price):,} تومان</b>\n"
+                            f"الحد الأقصى: {int(alert.target_price):,} تومان\n"
+                            "السعر حسب mz724 وقد يتغير قبل الحجز."
+                        )
+                    else:
+                        body = (
+                            "🔔 <b>Ticket price alert</b>\n"
+                            f"Route: {origin_text} → {destination_text}\n"
+                            f"Current price: <b>{int(snapshot.price):,} tomans</b>\n"
+                            f"Your price limit: {int(alert.target_price):,} tomans\n"
+                            "This mz724 listing may change before booking."
+                        )
+                    try:
+                        await application.bot.send_message(
+                            chat_id=telegram_id, text=body, parse_mode="HTML"
+                        )
+                    except Exception:
+                        LOGGER.exception("price_alert_telegram_delivery_failed alert_id=%s", alert.id)
+                        raise
+
+                delivered = await price_alert_service.process_feed(samples, send_alert)
+                if delivered:
+                    LOGGER.info("mz724 alerts delivered count=%s", delivered)
+
             async def capture_prices() -> None:
                 try:
-                    count = await cheap_ticket_service.capture_price_snapshot()
+                    count = await cheap_ticket_service.capture_price_snapshot(
+                        on_samples=notify_price_alerts if price_alert_service else None
+                    )
                     await store_job_status("success")
                     LOGGER.info("mz724 hourly snapshot stored routes=%s", count)
                 except Exception as exc:
@@ -277,11 +328,13 @@ def run() -> None:
         retention_days=settings.ticket_history_retention_days,
     )
     visa_sync_service = VisaSyncService(database) if settings.visa_sync_enabled else None
+    price_alert_service = PriceAlertService(database) if settings.price_alerts_enabled else None
     application = create_application(
         settings,
         cheap_ticket_service,
         report_database=database,
         visa_sync_service=visa_sync_service,
+        price_alert_service=price_alert_service,
     )
     register_handlers(
         application,
@@ -294,6 +347,7 @@ def run() -> None:
             ),
             currency_service=currency_service,
             cheap_ticket_service=cheap_ticket_service,
+            price_alert_service=price_alert_service,
             ticket_support_username=settings.ticket_support_username,
             admin_chat_id=settings.telegram_admin_id,
             admin_reports=BotReportRepository(database),
