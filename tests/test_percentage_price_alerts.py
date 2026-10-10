@@ -22,7 +22,10 @@ from flightiran.interfaces.telegram.handlers import (
     message_handler,
 )
 from flightiran.interfaces.telegram.price_alerts import (
-    WORDS, mode_keyboard, percent_keyboard, render_mode_prompt,
+    WORDS,
+    mode_keyboard,
+    percent_keyboard,
+    render_mode_prompt,
 )
 from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
 from flightiran.interfaces.telegram.rich_tickets import (
