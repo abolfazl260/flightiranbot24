@@ -134,3 +134,47 @@ before deploying. The upstream ticket provider's identity and links are
 **internal only**, never shown in ticket or alert messages. The bot's own
 booking and support links remain available. Original source verification
 links in unrelated visa features are unaffected.
+
+
+### Current fare and suggested price ceilings
+
+After selecting a route and choosing **Price ceiling**, the bot uses the same
+cached, user-scoped fare listing to show the actual **current fare** and its
+stored **21-day rolling average**, with explicit amounts in TOMAN and the
+number of historical observations. Missing current or historical values are
+shown as unavailable, never guessed. There is no second upstream request just
+to display the prompt.
+
+Where a real fare exists, four practical suggested ceiling amounts are derived
+from that fare: current price, approximately 5% below, 10% below, and 20%
+below, rounded to 10,000 TOMAN for typical ticket prices. If only the historical
+average is available, that average can serve as the suggestion baseline, clearly
+labeled. Presets are shown inside a Telegram Rich Message as clickable
+`alerts:suggest:{index}` buttons; clicking **persists** the chosen absolute
+TOMAN threshold without requiring the user to type. The backend only accepts
+indices actually generated and stored in that user's private-chat session.
+Users can still type any valid positive ceiling directly.
+
+If Telegram RichMessage delivery fails or is unavailable, the existing HTML
+prompt offers identical choices via InlineKeyboardMarkup. Failed Telegram HTTP
+error text is not logged because it could contain the bot token.
+
+### Per-destination booking assistance below each Rich fare table
+
+The origin's Rich Text fare table includes a **route-specific Request booking**
+button for *each listed destination*, immediately below the corresponding
+table page. Each button carries a small `tickets:book:{route}:{destination}`
+callback referencing the selected user's cached ticket listing, not provider
+URLs. If a route contains many destinations, tables are split at no more than
+60 action buttons per page so that the buttons remain with their associated
+destinations and stay within Telegram RichMessage limits.
+
+A click sends a second short Rich Message with that specific origin,
+destination, current published fare and stored 21-day average, plus a direct
+support button to the configured `@Advertio_support` username. This is a
+**booking inquiry**, not a confirmed reservation, live seat check, or locked
+fare. The user must contact support and supply a travel date to arrange a
+booking. The callback validates the requested route and destination indices
+against the user's saved session; expired links show an explanatory message,
+and no extra fare crawl occurs. RichMessage failure falls back to regular
+Telegram HTML with the same support URL.
