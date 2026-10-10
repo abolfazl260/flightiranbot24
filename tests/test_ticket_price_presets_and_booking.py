@@ -244,7 +244,13 @@ def test_price_list_rich_buttons_are_route_specific_and_all_visible(language):
         html = page["html"]
         assert html.index("</table>") < html.index("<tg-button-row")
         assert "mz724" not in html
-        root = ET.fromstring("<root>" + html + "</root>")
+        # Telegram accepts shorthand boolean table attributes, while XML
+        # parsers require explicit values. Normalize only for this assertion.
+        valid_xml = html.replace(
+            "<table bordered striped compact>",
+            '<table bordered="true" striped="true" compact="true">',
+        )
+        root = ET.fromstring("<root>" + valid_xml + "</root>")
         buttons = root.findall(".//tg-button[@type='callback_data']")
         assert buttons
         for button in buttons:
