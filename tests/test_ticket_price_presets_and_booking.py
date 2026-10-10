@@ -170,10 +170,13 @@ async def test_rich_price_ceiling_buttons_save_selected_amount_and_use_cached_ro
     ):
         await press(action)
     chosen = await press("alerts:mode:price")
-    assert len(rich) == 1
-    assert "10,000,000" in rich[0][1]["html"]
-    assert "12,000,000" in rich[0][1]["html"]
-    assert "suggest:2" in rich[0][1]["html"]
+    # The menu itself is now a RichMessage, followed by the ceiling
+    # presets in their own RichMessage when price mode is selected.
+    assert len(rich) == 2
+    assert 'data="alerts:new"' in rich[0][1]["html"]
+    assert "10,000,000" in rich[-1][1]["html"]
+    assert "12,000,000" in rich[-1][1]["html"]
+    assert "suggest:2" in rich[-1][1]["html"]
     assert chosen.edits[-1][0] == "👇 Suggested price options appear in the next message."
     assert provider.count == 1
     assert context.user_data["price_alert_pending"]["step"] == "price"

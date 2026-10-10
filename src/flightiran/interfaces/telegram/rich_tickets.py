@@ -319,7 +319,7 @@ def _drop_report_html(
     continuation = " (ادامه)" if continued else ""
     return (
         f"<h3>↓ گزارش کاهش قیمت بیش از ۲۰٪{continuation}</h3>"
-        f"<p>{total} مسیر | ارقام به تومان | بیشترین کاهش نسبت به میانگین ۲۱روزه</p>"
+        f"<p>{total} مسیر | ارقام به تومان | بیشترین کاهش نسبت به میانگین قیمت</p>"
         "<table bordered striped compact>"
         + _DROP_TABLE_HEADER
         + "".join(rows)
@@ -377,7 +377,7 @@ def render_rich_price_drop_report(
             "html": (
                 "<h3>↓ گزارش کاهش قیمت بیش از ۲۰٪</h3>"
                 "<p>در بررسی فعلی، مسیری با کاهش بیش از ۲۰٪ نسبت به "
-                "میانگین ۲۱روزه پیدا نشد.</p>"
+                "میانگین قیمت پیدا نشد.</p>"
                 + render_ticket_footer(language)
             ),
             "is_rtl": True,

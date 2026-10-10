@@ -47,7 +47,13 @@ from .keyboards import (
 )
 from .localization import normalize_language, safe_text, text
 from .new_user_alert import render_new_user_alert
-from .price_alerts import handle_alert_callback, handle_alert_text, menu_keyboard, word
+from .price_alerts import (
+    handle_alert_callback,
+    handle_alert_text,
+    menu_keyboard,
+    send_rich_alerts,
+    word,
+)
 from .renderers import render_help, render_language_prompt, render_main_menu
 from .support import render_support_message
 from .useful_content import (
@@ -827,11 +833,26 @@ async def alerts_command_handler(
     if dependencies.price_alert_service is None:
         await update.message.reply_text(word(language, "unavailable"))
         return
-    await update.message.reply_text(
-        word(language, "title") + "\n\n" + word(language, "intro"),
-        parse_mode="HTML",
-        reply_markup=menu_keyboard(language),
-    )
+    alerts = await dependencies.price_alert_service.list_user_alerts(user_id)
+    bot = getattr(context, "bot", None)
+    chat_id = getattr(update.message, "chat_id", None)
+    if bot is not None and chat_id is not None:
+        try:
+            await send_rich_alerts(bot, chat_id, alerts, language)
+        except Exception as exc:
+            # Telegram HTTP exceptions may include the secret bot token.
+            LOGGER.warning(
+                "price_alert_command_rich_failed error_type=%s",
+                type(exc).__name__,
+            )
+        else:
+            return
+    from .price_alerts import _alert_fallback_pages
+
+    for message, keyboard in _alert_fallback_pages(alerts, language):
+        await update.message.reply_text(
+            message, parse_mode="HTML", reply_markup=keyboard,
+        )
 
 
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
