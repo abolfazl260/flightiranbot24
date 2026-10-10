@@ -41,6 +41,7 @@ class Settings(BaseSettings):
     )
     ticket_history_interval_minutes: int = 60
     ticket_history_retention_days: int = 21
+    price_alerts_enabled: bool = True
     app_env: str = "development"
     visa_sync_enabled: bool = True
     visa_sync_interval_hours: int = 6

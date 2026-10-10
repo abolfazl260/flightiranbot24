@@ -65,3 +65,29 @@ only after interacting following deployment. The report is sent automatically at
 next scheduled time, not immediately at startup. A stopped bot cannot send a
 scheduled report during its downtime. Failed sends are logged and marked in
 `job_runs`; future days continue on schedule.
+
+
+## Ticket price bell and automatic alerts
+
+Users can open **🔔 Ticket price alerts** from the main menu, ticket listings,
+or the **/alerts** command. Select an origin and destination that currently
+appear in the mz724 feed, then send a maximum price in **tomans**. Saved alerts
+persist in SQLite; each user can list, pause, resume and delete only their own
+alerts (maximum 20 active alerts per user). Input accepts English, Persian and
+Arabic digits. Use `/cancel` to abandon price input.
+
+`PRICE_ALERTS_ENABLED=true` enables the menu and scheduler integration.
+The existing `TICKET_HISTORY_INTERVAL_MINUTES=60` scheduled mz724 capture
+also matches newly fetched route prices to active user alerts, avoiding a
+second crawl. If the currently listed price is at or below the chosen
+threshold, the bot sends the user a private Telegram message and deduplicates
+identical price notifications. Failed Telegram delivery is retried on a
+subsequent price scan. Pausing suppresses notifications; resuming re-arms
+the threshold even if the price is unchanged.
+
+No departure date, seats, fare availability, or booking confirmation is
+provided by this feed. The alert represents only the published route price,
+which can change before booking. Users must first start a private chat with
+the bot to receive push notifications. SQLite does not enforce VARCHAR length limits, so the existing saved-routes
+schema already stores full Persian city names safely. The ORM declaration
+uses 128 characters without rebuilding a referenced production table.

@@ -17,6 +17,7 @@ def main_menu(
     rows = [
         [("airports", "menu:airports"), ("tickets", "menu:tickets")],
         [("currency", "menu:currency"), ("visa", "menu:visa")],
+        [("price_alerts", "menu:price_alerts")],
         [("rules", "menu:rules"), ("cargo", "menu:cargo")],
         [("useful", "menu:useful"), ("support", "menu:support")],
         [("settings", "menu:settings")],
@@ -106,6 +107,9 @@ def ticket_origins_menu(language: str, origins: list[str], page: int = 0) -> Inl
         )
     if navigation:
         rows.append(navigation)
+    rows.append([InlineKeyboardButton(
+        safe_text(language, "price_alerts"), callback_data="menu:price_alerts"
+    )])
     rows.append([InlineKeyboardButton(safe_text(language, "back"), callback_data="back")])
     return InlineKeyboardMarkup(rows)
 
@@ -126,6 +130,9 @@ def ticket_result_menu(language: str, support_username: str) -> InlineKeyboardMa
                     "ar": "✈️ اختيار مدينة مغادرة أخرى",
                 }.get(language, "✈️ Choose another origin"),
                 callback_data="tickets:menu",
+            )],
+            [InlineKeyboardButton(
+                safe_text(language, "price_alerts"), callback_data="menu:price_alerts"
             )],
             [InlineKeyboardButton(safe_text(language, "back"), callback_data="back")],
         ]
