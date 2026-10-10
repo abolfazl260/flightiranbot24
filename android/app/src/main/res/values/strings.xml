@@ -4,6 +4,8 @@
     <string name="welcome_title">Flight Iran Bot 24</string>
     <string name="welcome_description">Explore airports and your travel checklist offline; access other services through Telegram.</string>
     <string name="notice">Airport data is indicative. Online features open in Telegram.</string>
+    <string name="home_offline_heading">Offline travel tools</string>
+    <string name="home_online_heading">Online travel services</string>
     <string name="open_bot">Open travel assistant</string>
     <string name="open_visa">Visa and entry requirements</string>
     <string name="open_airports">Airport information</string>
