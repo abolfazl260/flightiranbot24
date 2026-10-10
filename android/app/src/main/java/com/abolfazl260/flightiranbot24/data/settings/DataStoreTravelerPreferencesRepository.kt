@@ -14,7 +14,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
-// A single DataStore instance is maintained per file/process by this delegate.
 internal val Context.travelerPreferencesStore: DataStore<Preferences> by preferencesDataStore(
     name = "traveler_preferences"
 )
@@ -23,9 +22,9 @@ internal class DataStoreTravelerPreferencesRepository(
     private val dataStore: DataStore<Preferences>,
 ) : TravelerPreferencesRepository {
     private companion object {
-        val LANGUAGE = stringPreferencesKey("language")
+        // Historical Android versions stored a language selection; it no longer controls UI.
+        val LEGACY_LANGUAGE = stringPreferencesKey("language")
         val PASSPORT = stringPreferencesKey("default_passport_country")
-        val LANGUAGES = setOf("fa", "en", "ar")
         val COUNTRY_CODE = Regex("[A-Z]{2}")
     }
 
@@ -35,19 +34,16 @@ internal class DataStoreTravelerPreferencesRepository(
             else throw failure
         }
         .map { entry ->
-            val language = entry[LANGUAGE]?.takeIf { it in LANGUAGES } ?: "fa"
             val country = entry[PASSPORT]
                 ?.takeIf { COUNTRY_CODE.matches(it) } ?: "IR"
-            TravelerPreferences(language, country)
+            TravelerPreferences(country)
         }
-
-    override suspend fun setLanguage(language: String) {
-        require(language in LANGUAGES) { "Unsupported interface language" }
-        dataStore.edit { it[LANGUAGE] = language }
-    }
 
     override suspend fun setDefaultPassportCountry(countryCode: String) {
         require(COUNTRY_CODE.matches(countryCode)) { "Expected ISO-3166 alpha-2 country" }
-        dataStore.edit { it[PASSPORT] = countryCode }
+        dataStore.edit {
+            it.remove(LEGACY_LANGUAGE)
+            it[PASSPORT] = countryCode
+        }
     }
 }
