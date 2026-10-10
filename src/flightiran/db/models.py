@@ -100,6 +100,12 @@ class PriceAlert(TimestampedModel):
     )
     target_price: Mapped[float] = mapped_column(nullable=False)
     currency: Mapped[str] = mapped_column(String(8), nullable=False)
+    # Existing rows remain amount-based. Percentage alerts keep target_price=0;
+    # their threshold is stored separately as an integer from 5 to 50.
+    threshold_type: Mapped[str] = mapped_column(
+        String(12), default="price", server_default="price", nullable=False
+    )
+    target_percent: Mapped[int | None] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(16), default="active", nullable=False, index=True)
     last_snapshot_hash: Mapped[str | None] = mapped_column(String(64))
 
@@ -110,6 +116,7 @@ class PriceSnapshot(TimestampedModel):
         ForeignKey("price_alerts.id", ondelete="CASCADE"), index=True
     )
     price: Mapped[float] = mapped_column(nullable=False)
+    reference_average_toman: Mapped[float | None] = mapped_column(Float)
     snapshot_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     notified: Mapped[bool] = mapped_column(default=False, nullable=False)
     __table_args__ = (UniqueConstraint("alert_id", "snapshot_hash"),)
