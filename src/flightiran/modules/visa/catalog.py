@@ -14,25 +14,38 @@ from sqlalchemy import func, select
 from flightiran.db.engine import Database
 from flightiran.db.models import VisaDatasetState, VisaDestinationData, VisaRuleIndex
 
-STATUSES = (
+# Match the upstream TravelRequirements.info schema; retain legacy statuses
+# already persisted in older SQLite snapshots for backwards compatibility.
+UPSTREAM_STATUSES = (
     "visa-free",
-    "freedom-of-movement",
     "evisa",
-    "e-visa",
-    "visa-on-arrival",
     "eta",
+    "visa-on-arrival",
     "embassy-visa",
-    "visa-required",
-    "refused",
+    "freedom-of-movement",
+    "banned",
+    "unconfirmed",
+    "travel-permit",
 )
+LEGACY_STATUSES = ("e-visa", "visa-required", "refused", "unknown")
+STATUSES = UPSTREAM_STATUSES + LEGACY_STATUSES
 
+# These groups are mutually exclusive. The "other" SQL filter also catches
+# unknown future upstream statuses, instead of silently dropping destinations.
 STATUS_GROUPS = {
     "free": ("visa-free", "freedom-of-movement"),
     "evisa": ("evisa", "e-visa", "eta"),
     "arrival": ("visa-on-arrival",),
     "required": ("embassy-visa", "visa-required"),
-    "other": ("refused", "unknown"),
+    "permit": ("travel-permit",),
+    "restricted": ("banned", "refused"),
+    "other": ("unconfirmed", "unknown"),
 }
+assert len(STATUSES) == len(set(STATUSES))
+assert set(STATUSES) == {
+    item for group in STATUS_GROUPS.values() for item in group
+}
+
 
 
 @dataclass(frozen=True)
@@ -150,7 +163,15 @@ class VisaCatalogService:
         if page < 0 or page_size < 1 or page_size > 30:
             raise ValueError("Invalid pagination")
         filters = [VisaRuleIndex.passport == passport]
-        if group != "all":
+        if group == "other":
+            explicitly_classified = tuple(
+                status
+                for name, statuses in STATUS_GROUPS.items()
+                if name != "other"
+                for status in statuses
+            )
+            filters.append(~VisaRuleIndex.status.in_(explicitly_classified))
+        elif group != "all":
             filters.append(VisaRuleIndex.status.in_(STATUS_GROUPS[group]))
         async with self.database.session() as session:
             count = int(
