@@ -57,8 +57,7 @@ jobs:
       - name: Verify isolated package IDs, flavors and fail-closed defaults
         run: |
           python scripts/check_android_environments.py \
-            --app-dir android/app/build/outputs \
-            --manifest-dir android/app/build/intermediates/merged_manifest
+            --app-dir android/app/build/outputs
       - name: Verify and display versioned Room v1 schema
         shell: bash
         run: |
@@ -127,8 +126,6 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
-      - name: Verify production release environment is the only published variant
-        run: python scripts/check_android_environments.py --production-release
       - name: Restore private upload key
         shell: bash
         env:
@@ -154,6 +151,8 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: gradle --no-daemon -p android :app:assembleProductionRelease :app:bundleProductionRelease
+      - name: Verify signed production artifacts use the published package ID
+        run: python scripts/check_android_environments.py --production-release --app-dir android/app/build/outputs
       - name: Verify artifact signatures
         shell: bash
         run: |
