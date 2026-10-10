@@ -2,6 +2,19 @@
 
 Native Kotlin/Jetpack Compose travel companion, gradually migrating from Java/XML.
 
+## Android-only language and layout policy
+The Android app is **Persian-only (fa-IR) and RTL**, regardless of the phone's
+system language. Do not implement multilingual UI, user-facing language
+switches, English/Arabic translations or LTR screen variants. Embedded IATA
+codes and links may use locally isolated LTR text without changing the app's
+RTL direction. This policy does not change the Telegram bot's language options.
+
+The current Android implementation is not yet fully compliant: default
+resources are still English, the UI follows the device locale and DataStore
+contains legacy language choices. See [#63](https://github.com/abolfazl260/flightiranbot24/issues/63)
+to enforce this policy without deleting unrelated user preferences. UI/CI
+review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BOARD.md).
+
 ## Completed foundations (AND-001 and AND-002)
 
 - The launcher uses Kotlin Compose and a lifecycle-aware HomeViewModel with
@@ -25,8 +38,11 @@ Native Kotlin/Jetpack Compose travel companion, gradually migrating from Java/XM
   No real production API URL or endpoint name has been invented; the client
   is created lazily only once AND-004 provides configuration and API-001
   implements authenticated/unauthenticated contracts.
-- DataStore Preferences holds **non-sensitive** language (`fa/en/ar`) and
-  default passport country (`IR` by default). Credential storage is forbidden.
+- The existing DataStore Preferences layer currently stores legacy language
+  codes (`fa/en/ar`) alongside the default passport country (`IR`).
+  The legacy Android language option is **not a supported product feature**:
+  #63 must simplify/migrate it to Persian-only UI while retaining the passport
+  setting. Credential storage is forbidden.
 - Room public airport cache has a Java entity/DAO annotated with schema
   version **1**, and a Kotlin repository with atomic snapshot replacement,
   duplicate/IATA validation and explicit refusal of empty snapshots.
