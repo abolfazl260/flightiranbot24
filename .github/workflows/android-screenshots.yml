@@ -1,7 +1,15 @@
 name: Android Store Screenshots
 
 on:
+  pull_request:
+    paths:
+      - "android/**"
+      - ".github/workflows/android-screenshots.yml"
   workflow_dispatch:
+
+concurrency:
+  group: android-emulator-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -33,18 +41,34 @@ jobs:
           profile: pixel_6
           script: |
             set -e
-            gradle --no-daemon -p android :app:assembleDebug
-            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            gradle --no-daemon -p android :app:assembleProductionDebug
+            apk="android/app/build/outputs/apk/production/debug/app-production-debug.apk"
+            test -s "$apk"
+            adb install -r "$apk"
             mkdir -p android/screenshots
-            adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.MainActivity
+            adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.MainActivity | tee /tmp/launch.txt
+            grep -q 'Status: ok' /tmp/launch.txt
             sleep 2
             adb exec-out screencap -p > android/screenshots/01-home.png
-            adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.AirportDirectoryActivity
+            adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.AirportDirectoryActivity | tee /tmp/launch.txt
+            grep -q 'Status: ok' /tmp/launch.txt
             sleep 2
             adb exec-out screencap -p > android/screenshots/02-airports.png
-            adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.ChecklistActivity
+            adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.ChecklistActivity | tee /tmp/launch.txt
+            grep -q 'Status: ok' /tmp/launch.txt
             sleep 2
             adb exec-out screencap -p > android/screenshots/03-checklist.png
+            python3 - <<'PY'
+            import pathlib
+            import struct
+            for file in sorted(pathlib.Path("android/screenshots").glob("*.png")):
+                raw = file.read_bytes()
+                assert raw.startswith(b"\x89PNG\r\n\x1a\n"), file
+                width, height = struct.unpack(">II", raw[16:24])
+                assert width >= 320 and height >= 480, (file, width, height)
+            assert len(list(pathlib.Path("android/screenshots").glob("*.png"))) == 3
+            PY
+            gradle --no-daemon -p android :app:connectedProductionDebugAndroidTest
       - name: Generate Google Play graphics
         run: |
           python -m pip install --disable-pip-version-check "Pillow==11.3.0"

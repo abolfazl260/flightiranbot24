@@ -1,9 +1,10 @@
 package com.abolfazl260.flightiranbot24.data.settings
 
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
 import com.abolfazl260.flightiranbot24.domain.settings.TravelerPreferences
 import java.io.File
-import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -11,6 +12,7 @@ import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertThrows
 import org.junit.Rule
 import org.junit.Test
@@ -20,20 +22,21 @@ class DataStoreTravelerPreferencesRepositoryTest {
     @get:Rule val temp = TemporaryFolder()
 
     @Test
-    fun persistsLanguageAndDefaultPassportAcrossStoreRecreation() = runBlocking {
+    fun legacyLanguageDoesNotChangePersianPolicyOrErasePassport() = runBlocking {
         val file = File(temp.root, "traveler.preferences_pb")
         val firstJob = SupervisorJob()
         val firstStore = PreferenceDataStoreFactory.create(
             scope = CoroutineScope(firstJob + Dispatchers.IO),
             produceFile = { file },
         )
+        firstStore.edit {
+            it[stringPreferencesKey("language")] = "en"
+            it[stringPreferencesKey("default_passport_country")] = "TR"
+        }
         val first = DataStoreTravelerPreferencesRepository(firstStore)
-        assertEquals(TravelerPreferences(), first.preferences.first())
-        first.setLanguage("ar")
-        first.setDefaultPassportCountry("TR")
-        assertEquals(
-            TravelerPreferences("ar", "TR"), first.preferences.first()
-        )
+        assertEquals(TravelerPreferences("TR"), first.preferences.first())
+        first.setDefaultPassportCountry("IR")
+        assertFalse(firstStore.data.first().contains(stringPreferencesKey("language")))
         firstJob.cancelAndJoin()
 
         val secondJob = SupervisorJob()
@@ -43,18 +46,16 @@ class DataStoreTravelerPreferencesRepositoryTest {
                 produceFile = { file },
             )
             val recreated = DataStoreTravelerPreferencesRepository(newStore)
-            assertEquals(
-                TravelerPreferences("ar", "TR"), recreated.preferences.first()
-            )
-            recreated.setLanguage("en")
-            assertEquals("en", recreated.preferences.first().language)
+            assertEquals(TravelerPreferences("IR"), recreated.preferences.first())
+            recreated.setDefaultPassportCountry("AF")
+            assertEquals("AF", recreated.preferences.first().defaultPassportCountry)
         } finally {
             secondJob.cancelAndJoin()
         }
     }
 
     @Test
-    fun invalidInputsCannotCorruptSettings() = runBlocking {
+    fun invalidCountriesCannotCorruptSettings() = runBlocking {
         val job = SupervisorJob()
         val store = PreferenceDataStoreFactory.create(
             scope = CoroutineScope(job + Dispatchers.IO),
@@ -62,9 +63,6 @@ class DataStoreTravelerPreferencesRepositoryTest {
         )
         try {
             val repository = DataStoreTravelerPreferencesRepository(store)
-            assertThrows(IllegalArgumentException::class.java) {
-                runBlocking { repository.setLanguage("de") }
-            }
             assertThrows(IllegalArgumentException::class.java) {
                 runBlocking { repository.setDefaultPassportCountry("UK/../../secret") }
             }

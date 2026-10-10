@@ -80,4 +80,4 @@ def test_android_no_longer_offers_dead_exchange_rate_button():
         strings = (ROOT / f"android/app/src/main/res/{language}/strings.xml").read_text()
         assert "open_currency" not in strings
     # Visa deep-link/copy behavior survives.
-    assert 'openBotCommand("/visa")' in launcher
+    assert 'HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)' in launcher

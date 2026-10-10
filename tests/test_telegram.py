@@ -556,3 +556,34 @@ async def test_new_user_alert_delivery_failure_does_not_break_start():
     assert len(user_message.calls) == 1
     assert "سلام" in user_message.calls[0][0][0]
     assert 42 in deps.users.users
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize("entrypoint", ("visa", "airports", "useful"))
+async def test_android_telegram_deep_links_open_specific_service(entrypoint):
+    catalog = AirportCatalog.from_json(
+        __import__("pathlib").Path("src/flightiran/modules/airport/data/airports.json")
+    )
+    deps = dependencies(airport_catalog=catalog)
+    message = Message()
+    context = SimpleNamespace(user_data={}, args=[entrypoint], bot=None)
+    await start_handler(update(message=message), context, deps)
+    assert message.calls
+    rendered = message.calls[0][0][0]
+    if entrypoint == "visa":
+        assert "دیتاست" in rendered  # Catalog unavailable in this isolated test
+    elif entrypoint == "airports":
+        assert "فرودگاه" in rendered
+    else:
+        assert "راهنمای سفر" in rendered
+    assert message.calls[0][1]["reply_markup"].inline_keyboard
+
+
+@pytest.mark.asyncio
+async def test_unknown_android_deep_link_cannot_bypass_default_menu():
+    deps = dependencies()
+    message = Message()
+    context = SimpleNamespace(user_data={}, args=["admin"], bot=None)
+    await start_handler(update(message=message), context, deps)
+    assert "سلام" in message.calls[0][0][0]
+    assert any(event[0] == "user.start" for event in deps.audit.events)

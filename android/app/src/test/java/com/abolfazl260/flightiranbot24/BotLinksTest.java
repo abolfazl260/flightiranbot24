@@ -12,9 +12,17 @@ public final class BotLinksTest {
         assertEquals("t.me", URI.create(BotLinks.BOT).getHost());
         assertEquals("t.me", URI.create(BotLinks.SUPPORT).getHost());
         assertEquals("github.com", URI.create(BotLinks.PRIVACY).getHost());
-        for (String link : new String[] {BotLinks.BOT, BotLinks.SUPPORT, BotLinks.PRIVACY}) {
+        for (String link : new String[] {BotLinks.BOT, BotLinks.SUPPORT, BotLinks.PRIVACY,
+                BotLinks.VISA, BotLinks.AIRPORTS, BotLinks.USEFUL}) {
             assertEquals("https", URI.create(link).getScheme());
         }
+    }
+
+    @Test
+    public void everyDeepLinkTargetsTheKnownBotWithAllowlistedPayload() {
+        assertEquals("https://t.me/Flightiranbot?start=visa", BotLinks.VISA);
+        assertEquals("https://t.me/Flightiranbot?start=airports", BotLinks.AIRPORTS);
+        assertEquals("https://t.me/Flightiranbot?start=useful", BotLinks.USEFUL);
     }
 
     @Test

@@ -46,7 +46,7 @@ def test_android_app_keeps_production_only_telegram_handoff():
                 "flightiranbot24/MainActivity.kt").read_text()
     assert 'BuildConfig.APP_ENVIRONMENT != "production"' in activity
     assert "state.sections.online.filter" in activity
-    assert 'openBotCommand("/visa")' in activity
+    assert 'HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)' in activity
     build_file = (base / "android/app/build.gradle").read_text()
     assert "applicationIdSuffix '.dev'" in build_file
     assert "applicationIdSuffix '.staging'" in build_file
