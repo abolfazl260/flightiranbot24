@@ -14,7 +14,10 @@ def test_migrate_new_and_repeatable(tmp_path, monkeypatch):
     engine = create_engine(f"sqlite:///{db}")
     try:
         tables = set(inspect(engine).get_table_names())
-        assert {"visa_rule_index", "visa_destination_data", "alembic_version"} <= tables
+        assert {
+            "visa_rule_index", "visa_destination_data", "alembic_version",
+            "visa_watches", "visa_watch_events",
+        } <= tables
         assert "visa_passport" in {
             column["name"] for column in inspect(engine).get_columns("user_preferences")
         }
@@ -23,7 +26,7 @@ def test_migrate_new_and_repeatable(tmp_path, monkeypatch):
         }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0008_user_last_active"
+                "0009_visa_watch_notifications"
             )
     finally:
         engine.dispose()
@@ -40,7 +43,9 @@ def test_migrate_existing_metadata_without_version(tmp_path, monkeypatch):
     main()
     engine = create_engine(f"sqlite:///{db}")
     try:
-        assert "alembic_version" in inspect(engine).get_table_names()
+        assert {
+            "alembic_version", "visa_watches", "visa_watch_events",
+        } <= set(inspect(engine).get_table_names())
         assert "visa_passport" in {
             column["name"] for column in inspect(engine).get_columns("user_preferences")
         }
@@ -49,7 +54,7 @@ def test_migrate_existing_metadata_without_version(tmp_path, monkeypatch):
         }
         with engine.connect() as connection:
             assert connection.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0008_user_last_active"
+                "0009_visa_watch_notifications"
             )
     finally:
         engine.dispose()
