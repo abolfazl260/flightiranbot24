@@ -9,6 +9,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,6 +50,9 @@ import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
  * Airports and checklist remain the existing native Java Activities.
  */
 class MainActivity : ComponentActivity() {
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(PersianContext.wrap(newBase))
+    }
     private val container by lazy { AppContainer(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +60,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             val model: HomeViewModel = viewModel(factory = container.homeViewModelFactory)
             val screenState by model.state.collectAsStateWithLifecycle()
-            MaterialTheme {
+            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+              MaterialTheme {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
@@ -65,6 +72,7 @@ class MainActivity : ComponentActivity() {
                         onRetry = model::refresh,
                     )
                 }
+              }
             }
         }
     }
