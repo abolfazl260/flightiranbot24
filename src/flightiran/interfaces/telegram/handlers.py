@@ -235,16 +235,43 @@ async def start_handler(
     if context is not None:
         context.user_data.pop("price_alert_pending", None)
     await dependencies.audit.record("user.start", user_id=registered.id)
+    # Telegram /start payloads from the mobile app are a fixed allowlist.
+    # Unknown payloads use the ordinary menu and never run privileged actions.
+    args = getattr(context, "args", None) or ()
+    entrypoint = args[0] if args else ""
     if update.message:
-        await update.message.reply_text(
-            render_main_menu(language, telegram_user.first_name),
-            parse_mode="HTML",
-            reply_markup=main_menu(
-                language,
-                dependencies.web_app_url,
-                is_admin=_is_private_admin(update, dependencies),
-            ),
-        )
+        if entrypoint == "visa":
+            await dependencies.audit.record("visa.opened", user_id=registered.id)
+            await _load_visa_passport(context, registered.id, dependencies)
+            await open_visa_menu(
+                update, context, dependencies.visa_catalog, language, edit=False
+            )
+        elif entrypoint == "airports" and dependencies.airport_catalog is not None:
+            from .airport import airport_keyboard
+
+            await update.message.reply_text(
+                "<b>فرودگاه را انتخاب کنید</b>",
+                parse_mode="HTML",
+                reply_markup=airport_keyboard(dependencies.airport_catalog.all()),
+            )
+        elif entrypoint == "useful":
+            catalog = dependencies.useful_catalog or default_catalog()
+            await update.message.reply_text(
+                "<b>📚 راهنمای سفر</b>\n"
+                "اطلاعات موردنیاز قبل، حین و بعد از سفر را از بخش‌های زیر انتخاب کنید:",
+                parse_mode="HTML",
+                reply_markup=useful_menu(language, catalog),
+            )
+        else:
+            await update.message.reply_text(
+                render_main_menu(language, telegram_user.first_name),
+                parse_mode="HTML",
+                reply_markup=main_menu(
+                    language,
+                    dependencies.web_app_url,
+                    is_admin=_is_private_admin(update, dependencies),
+                ),
+            )
     if is_new:
         await dependencies.audit.record("user.registered", user_id=registered.id)
         if context is not None and getattr(context, "bot", None) is not None:
