@@ -73,7 +73,7 @@ def parse_toman_price(value: str) -> int:
     normalized = value.translate(translation)
     digits = re.sub(r"[^0-9]", "", normalized)
     if not digits:
-        raise ValueError(f"Invalid mz724 price: {value!r}")
+        raise ValueError(f"Invalid ticket price: {value!r}")
     return int(digits)
 
 

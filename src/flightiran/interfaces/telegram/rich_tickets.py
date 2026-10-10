@@ -168,7 +168,7 @@ def render_rich_price_tables(
         if len(candidate) > max_rows or _plain_text_length(html) > max_text_chars:
             if not rows:
                 raise ValueError(
-                    f"One mz724 destination exceeds Telegram rich message limits: {item.name}"
+                    f"One ticket destination exceeds Telegram rich message limits: {item.name}"
                 )
             messages.append(
                 {
@@ -183,7 +183,7 @@ def render_rich_price_tables(
                 _table_html(route.origin, rows, continued=True, language=language)
             ) > max_text_chars:
                 raise ValueError(
-                    f"One mz724 destination exceeds Telegram rich message limits: {item.name}"
+                    f"One ticket destination exceeds Telegram rich message limits: {item.name}"
                 )
         else:
             rows.append(row)
