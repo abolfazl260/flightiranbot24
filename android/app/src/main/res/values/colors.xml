@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Single source of color tokens for both Compose and Java/XML. -->
     <color name="navy">#12394F</color>
-    <color name="teal">#007F78</color>
+    <color name="teal">#007C74</color>
     <color name="white">#FFFFFF</color>
     <color name="slate">#445660</color>
     <color name="pale">#F1F5F8</color>
+    <color name="primary_container">#E0F4F0</color>
+    <color name="surface_variant">#E8F0F3</color>
+    <color name="outline">#BBCDD2</color>
+    <color name="error">#B42318</color>
+    <color name="disabled_surface">#E8F0F3</color>
 </resources>

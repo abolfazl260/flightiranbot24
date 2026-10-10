@@ -51,6 +51,11 @@ import com.abolfazl260.flightiranbot24.domain.HomeDestination
 import com.abolfazl260.flightiranbot24.presentation.home.HomeUiState
 import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
+import com.abolfazl260.flightiranbot24.presentation.components.TravelServiceCard
+import com.abolfazl260.flightiranbot24.presentation.components.TravelNavigationItem
+import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelSectionHeading
 
 /** Persian RTL travel launcher. Offline tools remain local and online features open Telegram. */
 class MainActivity : ComponentActivity() {
@@ -119,29 +124,29 @@ internal fun TravelHomeScreen(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
             NavigationBar {
-                NavigationBarItem(
+                TravelNavigationItem(
                     selected = !showServices,
                     onClick = { showServices = false },
-                    icon = { Text("⌂") },
-                    label = { Text(stringResource(R.string.navigation_home)) },
+                    symbol = "⌂",
+                    label = stringResource(R.string.navigation_home),
                 )
-                NavigationBarItem(
+                TravelNavigationItem(
                     selected = false,
                     onClick = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
-                    icon = { Text("✈") },
-                    label = { Text(stringResource(R.string.navigation_airports)) },
+                    symbol = "✈",
+                    label = stringResource(R.string.navigation_airports),
                 )
-                NavigationBarItem(
+                TravelNavigationItem(
                     selected = false,
                     onClick = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
-                    icon = { Text("✓") },
-                    label = { Text(stringResource(R.string.navigation_checklist)) },
+                    symbol = "✓",
+                    label = stringResource(R.string.navigation_checklist),
                 )
-                NavigationBarItem(
+                TravelNavigationItem(
                     selected = showServices,
                     onClick = { showServices = true },
-                    icon = { Text("☰") },
-                    label = { Text(stringResource(R.string.navigation_services)) },
+                    symbol = "☰",
+                    label = stringResource(R.string.navigation_services),
                 )
             }
         },
@@ -186,17 +191,11 @@ internal fun TravelHomeScreen(
             }
 
             when (state) {
-                HomeUiState.Loading -> {
-                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
-                    }
-                }
-                HomeUiState.Error -> {
-                    Text(stringResource(R.string.home_load_error))
-                    TextButton(onClick = onRetry) {
-                        Text(stringResource(R.string.home_retry))
-                    }
-                }
+                HomeUiState.Loading -> TravelLoadingState()
+                HomeUiState.Error -> TravelErrorState(
+                    message = stringResource(R.string.home_load_error),
+                    onRetry = onRetry,
+                )
                 is HomeUiState.Ready -> {
                     if (!showServices) {
                         ShortcutSection(
@@ -252,56 +251,17 @@ private fun ShortcutSection(
 ) {
     if (destinations.isEmpty()) return
     Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.fillMaxWidth(),
-        )
-        Text(
-            text = description,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-        )
+        TravelSectionHeading(title = title, description = description)
         destinations.forEach { destination ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onSelect(destination) },
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(16.dp),
-                ) {
-                    Text(
-                        text = destination.symbol(),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text(
-                            text = stringResource(destination.labelResource()),
-                            fontWeight = FontWeight.SemiBold,
-                            style = MaterialTheme.typography.titleMedium,
-                        )
-                        Text(
-                            text = stringResource(
-                                if (destination.isLocal()) R.string.home_local_badge
-                                else R.string.home_external_badge
-                            ),
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary,
-                        )
-                    }
-                    Text(
-                        text = "‹",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
-                }
-            }
+            TravelServiceCard(
+                title = stringResource(destination.labelResource()),
+                subtitle = stringResource(
+                    if (destination.isLocal()) R.string.home_local_badge
+                    else R.string.home_external_badge
+                ),
+                symbol = destination.symbol(),
+                onClick = { onSelect(destination) },
+            )
         }
     }
 }
