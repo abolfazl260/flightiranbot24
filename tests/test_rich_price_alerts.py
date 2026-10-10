@@ -189,7 +189,10 @@ async def test_alert_menu_toggle_delete_render_rich_and_enforce_ownership(
 
     change = Query(f"alerts:toggle:{a.id}")
     await callback_handler(update(query=change), context, deps)
-    assert (await service.list_user_alerts(owner.id))[0].status == "paused"
+    assert next(
+        item.status for item in await service.list_user_alerts(owner.id)
+        if item.id == a.id
+    ) == "paused"
     assert "▶️ فعال‌سازی" in pages[-1][1]["html"]
     assert change.message.deleted
 
