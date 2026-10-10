@@ -32,8 +32,10 @@ internal class HomeViewModel(
     }
 
     fun refresh() {
+        // Show Loading synchronously, even when the coroutine is scheduled
+        // on a background or test dispatcher; never leave a stale error.
+        mutableState.value = HomeUiState.Loading
         viewModelScope.launch {
-            mutableState.value = HomeUiState.Loading
             try {
                 val sections = withContext(ioDispatcher) {
                     repository.loadHomeSections()
