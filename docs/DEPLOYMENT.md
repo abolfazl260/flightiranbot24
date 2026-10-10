@@ -88,6 +88,6 @@ the threshold even if the price is unchanged.
 No departure date, seats, fare availability, or booking confirmation is
 provided by this feed. The alert represents only the published route price,
 which can change before booking. Users must first start a private chat with
-the bot to receive push notifications. Existing Alembic migration
-`0009_price_alert_route_names` expands stored route name columns so full
-Persian city names can be persisted.
+the bot to receive push notifications. SQLite does not enforce VARCHAR length limits, so the existing saved-routes
+schema already stores full Persian city names safely. The ORM declaration
+uses 128 characters without rebuilding a referenced production table.
