@@ -45,8 +45,40 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
-      - name: Unit tests, lint, debug APK and unsigned release AAB
-        run: gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:bundleRelease
+      - name: Test and build all environments without API configuration
+        run: |
+          gradle --no-daemon -p android \
+            :app:testDevelopmentDebugUnitTest :app:testStagingDebugUnitTest \
+            :app:testProductionDebugUnitTest \
+            :app:lintDevelopmentDebug :app:lintStagingDebug \
+            :app:lintProductionDebug :app:lintProductionRelease \
+            :app:assembleDevelopmentDebug :app:assembleStagingDebug \
+            :app:assembleProductionDebug :app:bundleProductionRelease
+      - name: Confirm unsafe API environment inputs fail Gradle configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          reject_env() {
+            if env "$@" gradle --offline --no-daemon -p android :app:help > "$RUNNER_TEMP/unsafe-api-origin.log" 2>&1; then
+              echo "::error::Unsafe API environment configuration unexpectedly accepted"
+              exit 1
+            fi
+          }
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+            ANDROID_STAGING_API_ORIGIN=https://api.example.org/
+          reject_env ANDROID_STAGING_API_ORIGIN=https://staging.example.org/
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+            ANDROID_STAGING_API_ORIGIN=http://staging.example.org/
+          # Distinct valid HTTPS example origins must be accepted, but are
+          # NEVER installed as defaults or contacted by a production build.
+          env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+            ANDROID_STAGING_API_ORIGIN=https://staging.example.org/ \
+            ANDROID_DEVELOPMENT_API_ORIGIN=https://dev.example.org/ \
+            gradle --offline --no-daemon -p android :app:help
+      - name: Verify isolated package IDs, flavors and fail-closed defaults
+        run: |
+          python scripts/check_android_environments.py \
+            --app-dir android/app/build/outputs
       - name: Verify and display versioned Room v1 schema
         shell: bash
         run: |
@@ -70,7 +102,10 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: android-debug-apk
-          path: android/app/build/outputs/apk/debug/*.apk
+          path: |
+            android/app/build/outputs/apk/development/debug/*.apk
+            android/app/build/outputs/apk/staging/debug/*.apk
+            android/app/build/outputs/apk/production/debug/*.apk
           if-no-files-found: error
           retention-days: 14
 
@@ -136,22 +171,24 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: gradle --no-daemon -p android :app:assembleRelease :app:bundleRelease
+        run: gradle --no-daemon -p android :app:assembleProductionRelease :app:bundleProductionRelease
+      - name: Verify signed production artifacts use the published package ID
+        run: python scripts/check_android_environments.py --production-release --app-dir android/app/build/outputs
       - name: Verify artifact signatures
         shell: bash
         run: |
           set -euo pipefail
           apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
           test -x "$apksigner"
-          "$apksigner" verify --verbose android/app/build/outputs/apk/release/*.apk
-          jarsigner -verify android/app/build/outputs/bundle/release/*.aab
+          "$apksigner" verify --verbose android/app/build/outputs/apk/production/release/*.apk
+          jarsigner -verify android/app/build/outputs/bundle/productionRelease/*.aab
       - name: Stage signed artifacts with verifiable SHA-256
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p android/dist
-          cp android/app/build/outputs/apk/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
-          cp android/app/build/outputs/bundle/release/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
+          cp android/app/build/outputs/apk/production/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
+          cp android/app/build/outputs/bundle/productionRelease/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
           (cd android/dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
       - name: Store signed files as workflow artifacts
         uses: actions/upload-artifact@v4

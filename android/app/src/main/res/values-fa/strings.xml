@@ -33,4 +33,5 @@
     <string name="checklist_reset">پاک‌کردن چک‌لیست من</string>
     <string name="home_load_error">بارگذاری امکانات سفر ناموفق بود. دوباره تلاش کنید.</string>
     <string name="home_retry">تلاش مجدد</string>
+    <string name="test_build_online_disabled">خدمات تلگرام در نسخه آزمایشی غیرفعال‌اند.</string>
 </resources>

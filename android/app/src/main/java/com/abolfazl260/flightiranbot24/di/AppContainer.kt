@@ -7,7 +7,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.abolfazl260.flightiranbot24.data.LocalHomeRepository
 import com.abolfazl260.flightiranbot24.data.airports.RoomAirportCacheRepository
 import com.abolfazl260.flightiranbot24.data.airports.TravelCacheDatabase
-import com.abolfazl260.flightiranbot24.data.network.PublicHttpClientFactory
 import com.abolfazl260.flightiranbot24.data.settings.DataStoreTravelerPreferencesRepository
 import com.abolfazl260.flightiranbot24.data.settings.travelerPreferencesStore
 import com.abolfazl260.flightiranbot24.domain.HomeRepository
@@ -24,6 +23,7 @@ internal class AppContainer(
     val homeRepository: HomeRepository = LocalHomeRepository(),
 ) {
     private val application = context.applicationContext
+    val environment = EnvironmentSettings.fromBuild()
 
     val travelerPreferencesRepository by lazy {
         DataStoreTravelerPreferencesRepository(application.travelerPreferencesStore)
@@ -33,7 +33,8 @@ internal class AppContainer(
         RoomAirportCacheRepository(TravelCacheDatabase.getInstance(application))
     }
 
-    fun publicApi(baseUrl: String) = PublicHttpClientFactory.create(baseUrl)
+    // A caller cannot override environment origin or select production manually.
+    fun publicApi() = environment.publicApi()
 
     val homeViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
         initializer { HomeViewModel(homeRepository) }

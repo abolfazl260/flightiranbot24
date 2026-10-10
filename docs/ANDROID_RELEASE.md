@@ -2,12 +2,12 @@
 
 ## Implemented
 
-Native Java Android app, minimum SDK 24, target SDK 36, JDK 17, Gradle 8.13.
+Kotlin/Jetpack Compose Android app with preserved native Java offline screens, minimum SDK 24, target SDK 36, JDK 17, Gradle 8.13.
 Offline airport directory and offline travel checklist are included.
 Online links explicitly hand off to Telegram. No bot token in the APK.
 
 GitHub Actions tests Java and builds a debug APK for pull requests. Tags
-matching vX.Y.Z can build signed APK and AAB, validate their signatures and
+matching vX.Y.Z can build signed **productionRelease only** APK and AAB, validate their signatures and
 publish SHA256 checksums in GitHub Releases.
 
 ## Owner actions (private signing key)
@@ -62,3 +62,32 @@ must be performed by the owner, never by untrusted CI or in a chat.
 
 Workflows: https://github.com/abolfazl260/flightiranbot24/actions
 Releases: https://github.com/abolfazl260/flightiranbot24/releases
+
+## AND-004 environment isolation
+
+Only `productionRelease` retains the Play Store package ID
+`com.abolfazl260.flightiranbot24`. Development and Staging use suffixes
+`.dev` and `.staging` and visibly identify themselves; neither displays
+live Telegram/support actions, preventing accidental requests by testers.
+Debug variants add `.debug`. The release tag workflow stages only signed
+`app-production-release.apk` and `app-production-release.aab` artifacts,
+never an experimental flavor.
+
+API origins are optional build settings and not authentication secrets.
+Production does not inherit staging or development addresses and vice versa.
+Set `ANDROID_PRODUCTION_API_ORIGIN`, `ANDROID_STAGING_API_ORIGIN`, and
+`ANDROID_DEVELOPMENT_API_ORIGIN` as HTTPS *origins* only; no real endpoints
+are configured by this change. Builds reject equivalent environment hosts
+and attempts to configure nonproduction without a production origin. These
+variables are not required to build the current offline/Telegram companion.
+The native app does not yet call the server's new API; that work requires
+API-001 and authentication design.
+
+For a local verified build without server configuration:
+
+```bash
+gradle --no-daemon -p android :app:bundleProductionRelease
+```
+
+Neither this local AAB nor a CI-built unsigned AAB is a signed, uploaded Play
+publication. Never ship staging/dev builds to the Play production track.

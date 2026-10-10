@@ -70,6 +70,14 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun navigateTo(destination: HomeDestination) {
+        if (BuildConfig.APP_ENVIRONMENT != "production" &&
+            destination != HomeDestination.OFFLINE_AIRPORTS &&
+            destination != HomeDestination.OFFLINE_CHECKLIST &&
+            destination != HomeDestination.PRIVACY
+        ) {
+            Toast.makeText(this, R.string.test_build_online_disabled, Toast.LENGTH_LONG).show()
+            return
+        }
         when (destination) {
             HomeDestination.OFFLINE_AIRPORTS ->
                 startActivity(Intent(this, AirportDirectoryActivity::class.java))
@@ -124,6 +132,12 @@ internal fun TravelHomeScreen(
             textAlign = TextAlign.Center,
         )
         Text(
+            text = stringResource(R.string.deployment_status),
+            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary,
+            textAlign = TextAlign.Center,
+        )
+        Text(
             text = stringResource(R.string.welcome_description),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
@@ -147,7 +161,11 @@ internal fun TravelHomeScreen(
                 )
                 ShortcutSection(
                     title = stringResource(R.string.home_online_heading),
-                    destinations = state.sections.online,
+                    destinations = if (BuildConfig.APP_ENVIRONMENT == "production") {
+                        state.sections.online
+                    } else {
+                        state.sections.online.filter { it == HomeDestination.PRIVACY }
+                    },
                     onSelect = onSelect,
                 )
             }
