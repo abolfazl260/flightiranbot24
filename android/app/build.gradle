@@ -84,7 +84,7 @@ android {
             versionNameSuffix '-dev'
             buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('development')
             buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.development)
-            resValue 'string', 'deployment_status', 'Development — test only; live links disabled'
+            resValue 'string', 'deployment_status', 'نسخه توسعه — خدمات آنلاین غیرفعال هستند'
         }
         staging {
             dimension 'environment'
@@ -92,13 +92,13 @@ android {
             versionNameSuffix '-staging'
             buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('staging')
             buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.staging)
-            resValue 'string', 'deployment_status', 'Staging — test only; live links disabled'
+            resValue 'string', 'deployment_status', 'نسخه آزمایشی — خدمات آنلاین غیرفعال هستند'
         }
         production {
             dimension 'environment'
             buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('production')
             buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.production)
-            resValue 'string', 'deployment_status', 'Production'
+            resValue 'string', 'deployment_status', ''
         }
     }
 
