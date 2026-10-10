@@ -24,6 +24,16 @@
             android:text="@string/checklist_note"
             android:textColor="@color/slate"
             android:textSize="15sp" />
+        <TextView
+            android:id="@+id/checklistProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:padding="14dp"
+            android:background="@drawable/airport_card"
+            android:textColor="@color/teal"
+            android:textSize="16sp"
+            android:accessibilityLiveRegion="polite" />
         <CheckBox android:id="@+id/checkPassport"
             style="@style/ChecklistItem" android:text="@string/check_passport" />
         <CheckBox android:id="@+id/checkVisa"
