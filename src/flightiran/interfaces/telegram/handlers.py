@@ -228,7 +228,8 @@ async def start_handler(
         last_name=telegram_user.last_name,
     )
     language = normalize_language(await dependencies.users.get_language(registered.id))
-    context.user_data.pop("price_alert_pending", None) if context is not None else None
+    if context is not None:
+        context.user_data.pop("price_alert_pending", None)
     await dependencies.audit.record("user.start", user_id=registered.id)
     if update.message:
         await update.message.reply_text(
