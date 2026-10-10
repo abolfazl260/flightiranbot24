@@ -23,6 +23,7 @@ from flightiran.db.repositories import (
 )
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
+from flightiran.interfaces.telegram.visa_watches import deliver_watch_notifications
 from flightiran.modules.admin.daily_active import (
     ActiveUsersReportRepository,
     render_active_users_report,
@@ -38,7 +39,6 @@ from flightiran.modules.useful_content import default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.visa.watch import VisaWatchService
-from flightiran.interfaces.telegram.visa_watches import deliver_watch_notifications
 
 LOGGER: Final = logging.getLogger("flightiran")
 
