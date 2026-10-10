@@ -135,7 +135,9 @@ def create_application(
                     return
 
                 async def send_alert(telegram_id, origin, destination, alert, snapshot):
-                    language = await SQLiteUserRepository(report_database).get_language(alert.user_id)
+                    language = await SQLiteUserRepository(
+                        price_alert_service.database
+                    ).get_language(alert.user_id)
                     origin_text, destination_text = escape(origin), escape(destination)
                     if language == "fa":
                         body = (
@@ -143,7 +145,8 @@ def create_application(
                             f"مسیر: {origin_text} ← {destination_text}\n"
                             f"قیمت فعلی: <b>{int(snapshot.price):,} تومان</b>\n"
                             f"سقف تعیین‌شده: {int(alert.target_price):,} تومان\n"
-                            "قیمت‌ها از فهرست mz724 دریافت شده‌اند و ممکن است هنگام رزرو تغییر کنند."
+                            "قیمت‌ها از فهرست mz724 دریافت شده‌اند و ممکن است "
+                            "هنگام رزرو تغییر کنند."
                         )
                     elif language == "ar":
                         body = (
@@ -166,7 +169,9 @@ def create_application(
                             chat_id=telegram_id, text=body, parse_mode="HTML"
                         )
                     except Exception:
-                        LOGGER.exception("price_alert_telegram_delivery_failed alert_id=%s", alert.id)
+                        LOGGER.exception(
+                            "price_alert_telegram_delivery_failed alert_id=%s", alert.id
+                        )
                         raise
 
                 delivered = await price_alert_service.process_feed(samples, send_alert)
