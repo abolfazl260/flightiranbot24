@@ -56,18 +56,14 @@ from .useful_content import (
     useful_category_menu,
     useful_menu,
 )
-from .visa_watches import (
-    deliver_watch_notifications,
-    handle_watch_callback,
-    show_watches,
-    word as visa_watch_text,
-)
 from .visa_flow import (
     handle_visa_callback,
     open_visa_menu,
     visa_command,
     visa_search_text,
 )
+from .visa_watches import deliver_watch_notifications, handle_watch_callback, show_watches
+from .visa_watches import word as visa_watch_text
 
 LOGGER = logging.getLogger(__name__)
 
