@@ -186,7 +186,7 @@ def test_provenance_and_compact_rich_report_are_visible_and_sourced():
     html = report["html"]
     assert len(html) < 8000
     assert "90 روز در هر بازه شناور 180 روزه" in html
-    assert "گزارش" in html
+    assert "راهنمای ویزا" in html
     assert "مرجع دولتی کشور مقصد" in html
     assert alert in html
     assert "Repeated general travel advice" not in html
@@ -275,7 +275,7 @@ async def test_transactional_outbox_detects_meaningful_changes_and_retries(tmp_p
     changed = deepcopy(old)
     changed["visaPolicy"]["byPassport"]["IR"]["requirement"] = "evisa"
     changed["visaPolicy"]["byPassport"]["IR"]["maxStayDays"] = 30
-    changed["entryRequirements"]["passportValidity"]["text"] = "12 months"
+    changed["visaPolicy"]["byPassport"]["IR"]["notes"] = "Updated official route conditions"
     async with db.session() as session:
         assert await service.enqueue_changes(
             session, old, changed, "TR", source_url=SOURCE_URL
