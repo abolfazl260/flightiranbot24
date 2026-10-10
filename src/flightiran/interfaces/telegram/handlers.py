@@ -29,6 +29,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.currency.service import CurrencyService
+from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
@@ -45,6 +46,12 @@ from .keyboards import (
 )
 from .localization import normalize_language, safe_text, text
 from .new_user_alert import render_new_user_alert
+from .price_alerts import (
+    handle_alert_callback,
+    handle_alert_text,
+    menu_keyboard as alert_menu_keyboard,
+    word as alert_word,
+)
 from .renderers import render_help, render_language_prompt, render_main_menu
 from .support import render_support_message
 from .useful_content import (
@@ -72,6 +79,7 @@ class TelegramDependencies:
     airport_catalog: AirportCatalog | None = None
     useful_catalog: UsefulContentCatalog | None = None
     cheap_ticket_service: CheapTicketService | None = None
+    price_alert_service: PriceAlertService | None = None
     ticket_support_username: str = DEFAULT_SUPPORT_USERNAME
     admin_chat_id: int = 106056586
     admin_reports: BotReportRepository | None = None
@@ -220,6 +228,7 @@ async def start_handler(
         last_name=telegram_user.last_name,
     )
     language = normalize_language(await dependencies.users.get_language(registered.id))
+    context.user_data.pop("price_alert_pending", None) if context is not None else None
     await dependencies.audit.record("user.start", user_id=registered.id)
     if update.message:
         await update.message.reply_text(
@@ -284,6 +293,17 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:price_alerts" or data.startswith("alerts:"):
+        if dependencies.price_alert_service is None:
+            await query.edit_message_text(
+                alert_word(language, "unavailable"), reply_markup=back_menu(language)
+            )
+            return
+        await handle_alert_callback(
+            update, context, dependencies.price_alert_service,
+            dependencies.cheap_ticket_service, user_id, language,
+        )
+        return
     if data == "menu:visa":
         await dependencies.audit.record("visa.opened", user_id=user_id)
         await _load_visa_passport(context, user_id, dependencies)
@@ -311,6 +331,7 @@ async def callback_handler(
             ),
         )
     elif data == "back":
+        context.user_data.pop("price_alert_pending", None)
         await dependencies.audit.record("menu.back", user_id=user_id)
         await query.edit_message_text(
             render_main_menu(
@@ -401,6 +422,7 @@ async def callback_handler(
                 reply_markup=useful_category_menu(language, catalog, category),
             )
     elif data == "menu:tickets":
+        context.user_data.pop("price_alert_pending", None)
         await dependencies.audit.record("ticket.menu.opened", user_id=user_id)
         if dependencies.cheap_ticket_service is None:
             await query.edit_message_text(
@@ -583,6 +605,12 @@ async def message_handler(
     dependencies: TelegramDependencies | None = None,
 ) -> None:
     if dependencies is not None and update.message is not None:
+        if context.user_data.get("price_alert_pending") and dependencies.price_alert_service:
+            user_id, language = await _user_language(update, dependencies)
+            if await handle_alert_text(
+                update, context, dependencies.price_alert_service, user_id, language
+            ):
+                return
         if context.user_data.get("visa_search_mode"):
             _user_id, language = await _user_language(update, dependencies)
             if await visa_search_text(
@@ -663,6 +691,14 @@ async def visa_cancel_handler(
     context: ContextTypes.DEFAULT_TYPE,
     dependencies: TelegramDependencies,
 ) -> None:
+    if context.user_data.pop("price_alert_pending", None) is not None:
+        if update.message:
+            _, language = await _user_language(update, dependencies)
+            await update.message.reply_text(
+                alert_word(language, "cancelled"),
+                reply_markup=alert_menu_keyboard(language),
+            )
+        return
     context.user_data.pop("visa_search_mode", None)
     if update.message:
         user_id, language = await _user_language(update, dependencies)
@@ -706,6 +742,23 @@ async def visa_sync_handler(
     )
 
 
+async def alerts_command_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    if update.message is None:
+        return
+    user_id, language = await _user_language(update, dependencies)
+    await dependencies.audit.record("price_alerts.opened", user_id=user_id)
+    if dependencies.price_alert_service is None:
+        await update.message.reply_text(alert_word(language, "unavailable"))
+        return
+    await update.message.reply_text(
+        alert_word(language, "title") + "\n\n" + alert_word(language, "intro"),
+        parse_mode="HTML",
+        reply_markup=alert_menu_keyboard(language),
+    )
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
@@ -725,6 +778,7 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     )
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
+    application.add_handler(CommandHandler("alerts", lambda u, c: alerts_command_handler(u, c, dependencies)))
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
     )
