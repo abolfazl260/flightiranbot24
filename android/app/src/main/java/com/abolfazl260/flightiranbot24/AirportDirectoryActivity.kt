@@ -35,6 +35,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
+import com.abolfazl260.flightiranbot24.presentation.components.TravelToolbar
+import com.abolfazl260.flightiranbot24.presentation.components.TravelFormField
+import com.abolfazl260.flightiranbot24.presentation.components.TravelListRow
+import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelEmptyState
+import androidx.compose.ui.res.stringResource
 import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -149,34 +156,21 @@ internal fun AirportDirectoryScreen(
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                "فرودگاه‌ها",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-            )
-            TextButton(onClick = onBack) { Text("بازگشت") }
-        }
+        TravelToolbar(title = "فرودگاه‌ها", onBack = onBack)
         Text(
             "جست‌وجوی آفلاین با نام فرودگاه، شهر یا کد IATA",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
         )
-        OutlinedTextField(
+        TravelFormField(
             value = search,
             onValueChange = { search = it },
-            label = { Text("نام فرودگاه یا کد IATA") },
-            singleLine = true,
-            modifier = Modifier.fillMaxWidth(),
+            label = stringResource(R.string.search_airports),
         )
         if (loading) {
-            CircularProgressIndicator()
+            TravelLoadingState()
         } else if (error) {
-            Text("فهرست فرودگاه‌ها در دسترس نیست.")
+            TravelErrorState(stringResource(R.string.airports_unavailable))
         } else {
             Text(
                 "${filtered.size} فرودگاه از ${rows.size} · $source",
@@ -184,7 +178,7 @@ internal fun AirportDirectoryScreen(
                 style = MaterialTheme.typography.bodySmall,
             )
             if (filtered.isEmpty()) {
-                Text("فرودگاهی با این مشخصات پیدا نشد.")
+                TravelEmptyState(stringResource(R.string.no_airports))
             }
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
@@ -192,30 +186,15 @@ internal fun AirportDirectoryScreen(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
             ) {
                 items(filtered, key = { it.code }) { airport ->
-                    Card(
-                        modifier = Modifier.fillMaxWidth().clickable {
+                    TravelListRow(
+                        title = airport.name,
+                        subtitle = "${airport.code} · ${airport.country}",
+                        details = "منطقه زمانی: ${airport.timezone}",
+                        expanded = expandedCode == airport.code,
+                        onClick = {
                             expandedCode = if (expandedCode == airport.code) null else airport.code
                         },
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                airport.name,
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold,
-                            )
-                            Text(
-                                "${airport.code} · ${airport.country}",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.primary,
-                            )
-                            if (expandedCode == airport.code) {
-                                Text(
-                                    "منطقه زمانی: ${airport.timezone}",
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            }
-                        }
-                    }
+                    )
                 }
             }
         }
