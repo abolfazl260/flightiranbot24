@@ -1,39 +1,45 @@
 package com.abolfazl260.flightiranbot24
 
 import android.content.ActivityNotFoundException
-import android.content.ClipData
-import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -44,15 +50,14 @@ import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.domain.HomeDestination
 import com.abolfazl260.flightiranbot24.presentation.home.HomeUiState
 import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
+import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
 
-/**
- * Compose presentation backed by lifecycle-aware ViewModel state (AND-002).
- * Airports and checklist remain the existing native Java Activities.
- */
+/** Persian RTL travel launcher. Offline tools remain local and online features open Telegram. */
 class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(PersianContext.wrap(newBase))
     }
+
     private val container by lazy { AppContainer(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,19 +65,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             val model: HomeViewModel = viewModel(factory = container.homeViewModelFactory)
             val screenState by model.state.collectAsStateWithLifecycle()
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-              MaterialTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background,
-                ) {
-                    TravelHomeScreen(
-                        state = screenState,
-                        onSelect = ::navigateTo,
-                        onRetry = model::refresh,
-                    )
-                }
-              }
+            TravelTheme {
+                TravelHomeScreen(
+                    state = screenState,
+                    onSelect = ::navigateTo,
+                    onRetry = model::refresh,
+                )
             }
         }
     }
@@ -91,22 +89,13 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, AirportDirectoryActivity::class.java))
             HomeDestination.OFFLINE_CHECKLIST ->
                 startActivity(Intent(this, ChecklistActivity::class.java))
-            HomeDestination.TELEGRAM_BOT,
-            HomeDestination.TELEGRAM_AIRPORTS,
-            HomeDestination.TELEGRAM_USEFUL -> openUrl(BotLinks.BOT)
-            HomeDestination.TELEGRAM_VISA -> openBotCommand("/visa")
+            HomeDestination.TELEGRAM_BOT -> openUrl(BotLinks.BOT)
+            HomeDestination.TELEGRAM_AIRPORTS -> openUrl(BotLinks.AIRPORTS)
+            HomeDestination.TELEGRAM_USEFUL -> openUrl(BotLinks.USEFUL)
+            HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)
             HomeDestination.SUPPORT -> openUrl(BotLinks.SUPPORT)
             HomeDestination.PRIVACY -> openUrl(BotLinks.PRIVACY)
         }
-    }
-
-    private fun openBotCommand(command: String) {
-        val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as? ClipboardManager
-        clipboard?.setPrimaryClip(ClipData.newPlainText("Telegram command", command))
-        if (clipboard != null) {
-            Toast.makeText(this, R.string.command_copied, Toast.LENGTH_SHORT).show()
-        }
-        openUrl(BotLinks.BOT)
     }
 
     private fun openUrl(url: String) {
@@ -124,99 +113,213 @@ internal fun TravelHomeScreen(
     onSelect: (HomeDestination) -> Unit,
     onRetry: () -> Unit,
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 24.dp, vertical = 20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Text(
-            text = stringResource(R.string.welcome_title),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = stringResource(R.string.deployment_status),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.primary,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = stringResource(R.string.welcome_description),
-            style = MaterialTheme.typography.bodyLarge,
-            textAlign = TextAlign.Center,
-        )
-        when (state) {
-            HomeUiState.Loading -> CircularProgressIndicator()
-            HomeUiState.Error -> {
-                Text(
-                    text = stringResource(R.string.home_load_error),
-                    style = MaterialTheme.typography.bodyLarge,
+    var showServices by rememberSaveable { mutableStateOf(false) }
+
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = {
+            NavigationBar {
+                NavigationBarItem(
+                    selected = !showServices,
+                    onClick = { showServices = false },
+                    icon = { Text("⌂") },
+                    label = { Text(stringResource(R.string.navigation_home)) },
                 )
-                Button(onClick = onRetry) {
-                    Text(stringResource(R.string.home_retry))
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
+                    icon = { Text("✈") },
+                    label = { Text(stringResource(R.string.navigation_airports)) },
+                )
+                NavigationBarItem(
+                    selected = false,
+                    onClick = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
+                    icon = { Text("✓") },
+                    label = { Text(stringResource(R.string.navigation_checklist)) },
+                )
+                NavigationBarItem(
+                    selected = showServices,
+                    onClick = { showServices = true },
+                    icon = { Text("☰") },
+                    label = { Text(stringResource(R.string.navigation_services)) },
+                )
+            }
+        },
+    ) { screenPadding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(screenPadding)
+                .windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.safeDrawing)
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 20.dp, vertical = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            Card(
+                modifier = Modifier.fillMaxWidth(),
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+            ) {
+                Column(
+                    modifier = Modifier.padding(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Text(
+                        text = stringResource(R.string.welcome_title),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White,
+                    )
+                    Text(
+                        text = stringResource(R.string.welcome_description),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
+                    )
                 }
             }
-            is HomeUiState.Ready -> {
-                ShortcutSection(
-                    title = stringResource(R.string.home_offline_heading),
-                    destinations = state.sections.offline,
-                    onSelect = onSelect,
-                )
-                ShortcutSection(
-                    title = stringResource(R.string.home_online_heading),
-                    destinations = if (BuildConfig.APP_ENVIRONMENT == "production") {
-                        state.sections.online
-                    } else {
-                        state.sections.online.filter { it == HomeDestination.PRIVACY }
-                    },
-                    onSelect = onSelect,
+            val environmentLabel = stringResource(R.string.deployment_status)
+            if (environmentLabel.isNotBlank()) {
+                Text(
+                    text = environmentLabel,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelMedium,
                 )
             }
+
+            when (state) {
+                HomeUiState.Loading -> {
+                    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        CircularProgressIndicator()
+                    }
+                }
+                HomeUiState.Error -> {
+                    Text(stringResource(R.string.home_load_error))
+                    TextButton(onClick = onRetry) {
+                        Text(stringResource(R.string.home_retry))
+                    }
+                }
+                is HomeUiState.Ready -> {
+                    if (!showServices) {
+                        ShortcutSection(
+                            title = stringResource(R.string.home_offline_heading),
+                            description = stringResource(R.string.home_offline_hint),
+                            destinations = state.sections.offline,
+                            onSelect = onSelect,
+                        )
+                        ShortcutSection(
+                            title = stringResource(R.string.home_quick_services),
+                            description = stringResource(R.string.online_service_hint),
+                            destinations = state.sections.online.filter {
+                                it in listOf(
+                                    HomeDestination.TELEGRAM_VISA,
+                                    HomeDestination.TELEGRAM_USEFUL,
+                                    HomeDestination.SUPPORT,
+                                ) && (BuildConfig.APP_ENVIRONMENT == "production")
+                            },
+                            onSelect = onSelect,
+                        )
+                    } else {
+                        ShortcutSection(
+                            title = stringResource(R.string.home_online_heading),
+                            description = stringResource(R.string.online_service_hint),
+                            destinations = if (BuildConfig.APP_ENVIRONMENT == "production") {
+                                state.sections.online
+                            } else {
+                                state.sections.online.filter { it == HomeDestination.PRIVACY }
+                            },
+                            onSelect = onSelect,
+                        )
+                    }
+                }
+            }
+
+            Text(
+                text = stringResource(R.string.notice),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Start,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
-        Text(
-            text = stringResource(R.string.command_hint),
-            style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center,
-        )
-        Text(
-            text = stringResource(R.string.notice),
-            style = MaterialTheme.typography.bodySmall,
-            textAlign = TextAlign.Center,
-        )
     }
 }
 
 @Composable
 private fun ShortcutSection(
     title: String,
+    description: String,
     destinations: List<HomeDestination>,
     onSelect: (HomeDestination) -> Unit,
 ) {
-    Text(
-        text = title,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.fillMaxWidth().padding(top = 12.dp),
-    )
-    destinations.forEach { destination ->
-        Button(
-            onClick = { onSelect(destination) },
-            modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-        ) {
-            Text(
-                text = stringResource(destination.labelResource()),
-                textAlign = TextAlign.Center,
-            )
+    if (destinations.isEmpty()) return
+    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+        destinations.forEach { destination ->
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onSelect(destination) },
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(16.dp),
+                ) {
+                    Text(
+                        text = destination.symbol(),
+                        style = MaterialTheme.typography.headlineSmall,
+                    )
+                    Column(modifier = Modifier.weight(1f)) {
+                        Text(
+                            text = stringResource(destination.labelResource()),
+                            fontWeight = FontWeight.SemiBold,
+                            style = MaterialTheme.typography.titleMedium,
+                        )
+                        Text(
+                            text = stringResource(
+                                if (destination.isLocal()) R.string.home_local_badge
+                                else R.string.home_external_badge
+                            ),
+                            style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.primary,
+                        )
+                    }
+                    Text(
+                        text = "‹",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
+            }
         }
     }
 }
 
-/** Presentation-only labels: domain and ViewModel have no Android R dependency. */
+private fun HomeDestination.isLocal(): Boolean =
+    this == HomeDestination.OFFLINE_AIRPORTS || this == HomeDestination.OFFLINE_CHECKLIST
+
+private fun HomeDestination.symbol(): String = when (this) {
+    HomeDestination.OFFLINE_AIRPORTS -> "✈"
+    HomeDestination.OFFLINE_CHECKLIST -> "☑"
+    HomeDestination.TELEGRAM_BOT -> "✦"
+    HomeDestination.TELEGRAM_VISA -> "▣"
+    HomeDestination.TELEGRAM_AIRPORTS -> "⌖"
+    HomeDestination.TELEGRAM_USEFUL -> "✧"
+    HomeDestination.SUPPORT -> "✉"
+    HomeDestination.PRIVACY -> "◈"
+}
+
 private fun HomeDestination.labelResource(): Int = when (this) {
     HomeDestination.OFFLINE_AIRPORTS -> R.string.offline_airports
     HomeDestination.OFFLINE_CHECKLIST -> R.string.checklist_title
