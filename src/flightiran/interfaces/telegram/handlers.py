@@ -779,7 +779,9 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     )
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
-    application.add_handler(CommandHandler("alerts", lambda u, c: alerts_command_handler(u, c, dependencies)))
+    application.add_handler(
+        CommandHandler("alerts", lambda u, c: alerts_command_handler(u, c, dependencies))
+    )
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
     )
