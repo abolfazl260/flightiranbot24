@@ -2,6 +2,7 @@ package com.abolfazl260.flightiranbot24;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -16,6 +17,11 @@ public final class ChecklistActivity extends Activity {
         R.id.checkPassport, R.id.checkVisa, R.id.checkTickets,
         R.id.checkInsurance, R.id.checkMoney, R.id.checkEssentials
     };
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(PersianContext.wrap(base));
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
