@@ -7,10 +7,12 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 import kotlin.math.pow
 
 /** WCAG 2.2 AA text contrast check for resource-backed Android / Compose colors. */
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [28])
 class AdvertioContrastTest {
     private val context = ApplicationProvider.getApplicationContext<Context>()
 
