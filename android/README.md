@@ -63,7 +63,7 @@ sync and source verification belong to AIR-003; preferences UI and profile
 sync belong to UI/AUTH tasks. Encrypted authenticated token handling is out
 of scope of this deliberately **public-only** transport.
 
-**Next task: AND-004 — separated Development, Staging and Production builds.**
+**AND-004 complete. Next: API-001** — real versioned FastAPI endpoints, OpenAPI contracts and standalone Android authentication boundaries.
 
 ## AND-004: Development/Staging/Production build separation
 

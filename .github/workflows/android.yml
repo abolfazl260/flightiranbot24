@@ -54,6 +54,27 @@ jobs:
             :app:lintProductionDebug :app:lintProductionRelease \
             :app:assembleDevelopmentDebug :app:assembleStagingDebug \
             :app:assembleProductionDebug :app:bundleProductionRelease
+      - name: Confirm unsafe API environment inputs fail Gradle configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          reject_env() {
+            if env "$@" gradle --offline --no-daemon -p android :app:help > "$RUNNER_TEMP/unsafe-api-origin.log" 2>&1; then
+              echo "::error::Unsafe API environment configuration unexpectedly accepted"
+              exit 1
+            fi
+          }
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+            ANDROID_STAGING_API_ORIGIN=https://api.example.org/
+          reject_env ANDROID_STAGING_API_ORIGIN=https://staging.example.org/
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+            ANDROID_STAGING_API_ORIGIN=http://staging.example.org/
+          # Distinct valid HTTPS example origins must be accepted, but are
+          # NEVER installed as defaults or contacted by a production build.
+          env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
+            ANDROID_STAGING_API_ORIGIN=https://staging.example.org/ \
+            ANDROID_DEVELOPMENT_API_ORIGIN=https://dev.example.org/ \
+            gradle --offline --no-daemon -p android :app:help
       - name: Verify isolated package IDs, flavors and fail-closed defaults
         run: |
           python scripts/check_android_environments.py \
