@@ -9,23 +9,26 @@ switches, English/Arabic translations or LTR screen variants. Embedded IATA
 codes and links may use locally isolated LTR text without changing the app's
 RTL direction. This policy does not change the Telegram bot's language options.
 
-The current Android implementation is not yet fully compliant: default
-resources are still English, the UI follows the device locale and DataStore
-contains legacy language choices. See [#63](https://github.com/abolfazl260/flightiranbot24/issues/63)
-to enforce this policy without deleting unrelated user preferences. UI/CI
+The Android UI now forces a Persian resource context and RTL direction on
+the Compose launcher and native screens. Default resources are Persian,
+and Android DataStore no longer exposes a language selector. Existing
+passport-country selections remain intact after upgrades. This change is
+tracked under [#63](https://github.com/abolfazl260/flightiranbot24/issues/63). UI/CI
 review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BOARD.md).
 
 ## Completed foundations (AND-001 and AND-002)
 
-- The launcher uses Kotlin Compose and a lifecycle-aware HomeViewModel with
-  StateFlow Loading/Ready/Error/Retry.
+- The launcher uses Kotlin Compose, a Persian RTL dashboard with navigation
+  and cards, and a lifecycle-aware HomeViewModel with StateFlow states.
 - Pure Kotlin domain interfaces and an explicit, testable AppContainer
   dependency-injection root protect data and presentation boundaries.
-- The Java **offline airport directory** and **offline checklist** remain
-  operational and unchanged. Checklist selections still use their existing
-  SharedPreferences; no user data is migrated or erased.
-- Online service buttons currently hand off to Telegram. No Telegram auth,
-  bot token, fake Mini App session or server-side user account is embedded.
+- The **offline airport directory** is now a Compose LazyColumn that prefers
+  a Room snapshot when populated and falls back to bundled offline records.
+  The **offline checklist** remains a Java screen, with a progress indicator,
+  confirmation before reset, and its existing SharedPreferences preserved.
+- Online service links hand off to the Telegram bot via fixed `/start`
+  entrypoints for visa, airports and travel information. No Telegram auth,
+  bot token, fake Mini App session or server-side account is embedded.
 
 ## AND-003: secure networking and local persistence
 
@@ -38,11 +41,9 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   No real production API URL or endpoint name has been invented; the client
   is created lazily only once AND-004 provides configuration and API-001
   implements authenticated/unauthenticated contracts.
-- The existing DataStore Preferences layer currently stores legacy language
-  codes (`fa/en/ar`) alongside the default passport country (`IR`).
-  The legacy Android language option is **not a supported product feature**:
-  #63 must simplify/migrate it to Persian-only UI while retaining the passport
-  setting. Credential storage is forbidden.
+- DataStore now stores the default passport country (`IR` if unset) without
+  a user-selectable language. Legacy saved language values are ignored and
+  cleaned up on the next passport edit; credential storage is forbidden.
 - Room public airport cache has a Java entity/DAO annotated with schema
   version **1**, and a Kotlin repository with atomic snapshot replacement,
   duplicate/IATA validation and explicit refusal of empty snapshots.
@@ -57,11 +58,11 @@ JDK 17, Gradle 8.13, Android SDK 36, AGP 8.13.2, Kotlin 2.2.20.
 Android CI runs:
 
 ```bash
-gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:lintRelease :app:assembleDebug :app:bundleRelease
+gradle --no-daemon -p android :app:testProductionDebugUnitTest :app:lintProductionDebug :app:assembleProductionDebug :app:bundleProductionRelease
 ```
 
-Debug APK: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Application ID `com.abolfazl260.flightiranbot24` (`.debug` suffix for debug).
+Production debug APK: `android/app/build/outputs/apk/production/debug/app-production-debug.apk`.
+Production application ID: `com.abolfazl260.flightiranbot24`; debug suffix: `.debug`.
 Release upload signing requires private GitHub Actions secrets; no key is
 included in the repository. See `docs/ANDROID_RELEASE.md`.
 
