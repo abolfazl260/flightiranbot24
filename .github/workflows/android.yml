@@ -7,6 +7,8 @@ on:
       - "docs/ANDROID_*.md"
       - "docs/PLAY_STORE_LISTING.md"
       - "scripts/generate_android_store_graphics.py"
+      - "src/flightiran/modules/airport/data/airports.json"
+      - "scripts/check_android_environments.py"
       - ".github/workflows/android.yml"
   push:
     branches: [main]
@@ -16,6 +18,8 @@ on:
       - "docs/ANDROID_*.md"
       - "docs/PLAY_STORE_LISTING.md"
       - "scripts/generate_android_store_graphics.py"
+      - "src/flightiran/modules/airport/data/airports.json"
+      - "scripts/check_android_environments.py"
       - ".github/workflows/android.yml"
   workflow_dispatch:
 
