@@ -6,7 +6,7 @@ import asyncio
 import re
 from dataclasses import dataclass, replace
 from datetime import datetime, timezone
-from typing import Protocol
+from typing import Awaitable, Callable, Protocol
 
 from .domain import CheapTicketDestination, CheapTicketRoute, TicketOffer, TicketQuery
 from .provider import CheapTicketProvider, TicketProvider
@@ -91,7 +91,10 @@ class CheapTicketService:
         self.price_history = price_history
         self.retention_days = retention_days
 
-    async def capture_price_snapshot(self) -> int:
+    async def capture_price_snapshot(
+        self,
+        on_samples: Callable[[list[tuple[str, str, int]]], Awaitable[None]] | None = None,
+    ) -> int:
         routes = await self.provider.routes()
         samples = self._samples(routes)
         if self.price_history is not None and samples:
@@ -101,6 +104,8 @@ class CheapTicketService:
                 captured_at=now,
                 retention_days=self.retention_days,
             )
+        if on_samples is not None:
+            await on_samples(samples)
         return len(samples)
 
     async def routes(self) -> list[CheapTicketRoute]:
