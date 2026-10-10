@@ -12,7 +12,6 @@ from .localization import normalize_language
 from .rich_tickets import render_ticket_footer, send_rich_price_table
 from .support import support_link
 
-
 LOGGER = logging.getLogger(__name__)
 
 
