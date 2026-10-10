@@ -1,5 +1,7 @@
 """Source provenance must remain separate from server refresh timestamps."""
 
+import pytest
+
 from flightiran.interfaces.telegram.visa_presentation import (
     detail_keyboard,
     render_overview,
@@ -119,7 +121,8 @@ def test_card_has_all_named_source_dates_clickable_links_and_no_false_expiration
     assert "آخرین به‌روزرسانی فایل مقصد" in card
     assert "2026-10-07" in card
     assert '<a href="https://www.mfa.gov.tr/' in card
-    assert '<a href="https://travelrequirements.info/data/destinations/turkey.json">' in card
+    assert "travelrequirements.info/data/destinations/turkey.json" not in card
+    assert "فایل اصلی اطلاعات مقصد (JSON)" not in card
     assert "&lt;vary&gt;" in card
     assert "2026-10-08" not in card
 
@@ -155,14 +158,17 @@ def test_rich_report_contains_dates_and_well_formed_anchors():
     assert html.count("<p>") == html.count("</p>")
     assert html.count("<h3>") == html.count("</h3>")
     assert html.count("<a href=") == html.count("</a>")
+    assert "travelrequirements.info/data/destinations/turkey.json" not in html
     assert "<p><h3>" not in html
 
 
-def test_telegram_keyboard_has_direct_citation_and_dataset_urls():
-    keyboard = detail_keyboard("fa", detail())
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+def test_telegram_keyboard_has_direct_citation_without_raw_json(language):
+    keyboard = detail_keyboard(language, detail())
     links = [b.url for row in keyboard.inline_keyboard for b in row if b.url]
-    assert any(link.startswith("https://www.mfa.gov.tr/") for link in links)
-    assert "https://travelrequirements.info/data/destinations/turkey.json" in links
+    assert links == ["https://www.mfa.gov.tr/visa-information-for-foreigners.en.mfa"]
+    assert not any(link.endswith(".json") for link in links)
+    assert all("JSON" not in b.text for row in keyboard.inline_keyboard for b in row)
 
 
 def test_rejects_untrusted_protocol_and_escapes_link_text():
@@ -181,5 +187,28 @@ def test_long_detail_tab_always_keeps_upstream_date_and_citation_links():
     rendered = render_section(sample, "fa", "tips")
     assert len(rendered) < 3900
     assert "2026-10-07" in rendered
-    assert '<a href="https://travelrequirements.info/data/destinations/turkey.json">' in rendered
+    assert "travelrequirements.info/data/destinations/turkey.json" not in rendered
+    assert '<a href="https://www.mfa.gov.tr/' in rendered
     assert '<a href="https://creativecommons.org/licenses/by/4.0/">' in rendered
+
+
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+def test_no_raw_destination_json_link_in_any_visa_user_view(language):
+    sample = detail()
+    raw_url = "travelrequirements.info/data/destinations/turkey.json"
+    views = [
+        render_overview(sample, language),
+        render_rich_report(sample, language)["html"],
+        *(
+            render_section(sample, language, section)
+            for section in ("types", "entry", "transit", "facts", "stay", "tips", "faq", "sources")
+        ),
+    ]
+    for view in views:
+        assert raw_url not in view
+    buttons = [
+        button for row in detail_keyboard(language, sample).inline_keyboard
+        for button in row
+    ]
+    assert not any(raw_url in (button.url or "") for button in buttons)
+    assert any(button.url and "mfa.gov.tr" in button.url for button in buttons)
