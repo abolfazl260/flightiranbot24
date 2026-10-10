@@ -215,7 +215,7 @@ async def test_forged_admin_report_callback_never_queries_or_sends(
     )
     assert store.calls == 0
     assert not query.message.calls
-    assert "unavailable" in query.calls[0][0][0]
+    assert "در دسترس نیست" in query.calls[0][0][0]
 
 
 @pytest.mark.asyncio

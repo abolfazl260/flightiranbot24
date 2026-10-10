@@ -109,6 +109,12 @@ async def test_percentage_alert_ui_create_manage_and_isolate_users(tmp_path):
         users=users, audit=Audit(), price_alert_service=service,
         cheap_ticket_service=TicketProvider(),
     )
+    # This integration suite checks the English UI for a returning user
+    # who explicitly selected English. The default for new users is Persian.
+    returning = await users.create(42)
+    await users.set_language(returning.id, "en")
+    stranger = await users.create(43)
+    await users.set_language(stranger.id, "en")
     ctx = SimpleNamespace(user_data={})
     for data, expected in (
         ("menu:price_alerts", "Ticket price alerts"),
@@ -372,7 +378,7 @@ def test_migration_upgrades_existing_price_alert_rows_without_deleting_data(
             assert row == (5_000_000, "price", None)
             assert snapshot == (4_800_000, None)
             assert conn.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0010_percentage_ticket_alerts"
+                "0011_default_persian_language"
             )
     finally:
         engine.dispose()

@@ -154,6 +154,9 @@ async def test_rich_price_ceiling_buttons_save_selected_amount_and_use_cached_ro
     monkeypatch.setattr(
         "flightiran.interfaces.telegram.price_alerts.send_rich_price_table", send
     )
+    # Verify preset behavior in a stored, explicitly English locale.
+    english_user = await users.create(8101)
+    await users.set_language(english_user.id, "en")
     context = SimpleNamespace(user_data={}, bot=object())
 
     async def press(data):
@@ -302,7 +305,7 @@ async def test_booking_button_resolves_exact_fare_and_support_without_new_fetch(
 
     wrong = Query("tickets:book:0:999")
     await callback_handler(update(wrong), context, deps)
-    assert "expired" in wrong.message.calls[-1][0]
+    assert "منقضی" in wrong.message.calls[-1][0]
     assert len(sent) == 1
     await db.close()
 

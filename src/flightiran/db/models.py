@@ -49,7 +49,9 @@ class User(TimestampedModel):
 class UserPreference(TimestampedModel):
     __tablename__ = "user_preferences"
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
-    language: Mapped[str] = mapped_column(String(8), default="en", nullable=False)
+    language: Mapped[str] = mapped_column(
+        String(8), default="fa", server_default="fa", nullable=False
+    )
     timezone: Mapped[str] = mapped_column(String(64), default="UTC", nullable=False)
     visa_passport: Mapped[str] = mapped_column(String(2), default="IR", nullable=False)
 

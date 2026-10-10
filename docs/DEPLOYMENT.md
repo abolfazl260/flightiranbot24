@@ -178,3 +178,19 @@ booking. The callback validates the requested route and destination indices
 against the user's saved session; expired links show an explanatory message,
 and no extra fare crawl occurs. RichMessage failure falls back to regular
 Telegram HTML with the same support URL.
+
+
+## Persian as default Telegram language (2026-10-10)
+
+A new Telegram user without a saved language preference receives **Persian**
+(`fa`) in `/start`, `/help`, keyboards and other localized bot messages,
+regardless of the Telegram client's language. Users can still select Persian,
+English or Arabic using `/language` or Settings. The selected value is stored
+per user in SQLite and survives subsequent bot restarts, `/start` commands
+and deploys. Existing saved language preferences are **not migrated or reset**.
+
+Migration `0011_default_persian_language` changes only the SQLite
+`user_preferences.language` column's server-side default from `en` to
+`fa`; it does not update existing rows. The repository fallback and
+SQLAlchemy insert default are also Persian. Make the usual SQLite-volume
+backup before running `docker compose up -d --build`.
