@@ -1,6 +1,6 @@
 # Flight Iran Bot 24 — Android privacy notice
 
-**Reviewed:** 2026-10-08
+**Reviewed:** 2026-10-10
 **Contact:** https://t.me/Advertio_support
 **Package:** com.abolfazl260.flightiranbot24
 
@@ -8,13 +8,21 @@
 
 The Android application has two offline features: an airport directory bundled
 with the application and a local travel checklist. The Android application
-requests no internet, contact, location, camera, microphone, storage or
-notification permissions. It does not integrate advertising or analytics SDKs.
+declares only the normal Android INTERNET permission in preparation for a
+future, versioned first-party HTTPS API. It requests no contact, location,
+camera, microphone, external storage or notification permissions. At this
+stage no server API endpoint is configured or contacted at app launch, and no
+account credentials are created or transmitted. It does not integrate
+advertising or analytics SDKs.
 
-Travel checklist selections are kept only in local Android app preferences on
-the device. You can erase them using the Clear my checklist button, by clearing
-the app's data in Android Settings, or by uninstalling the app. Airport data
-is supplied from the application's packaged dataset and may be outdated.
+Travel checklist selections are kept only in the original local Android app
+preferences on the device; the new DataStore is intended for non-sensitive
+language and passport-country defaults, and the new Room database is reserved
+for a separate public airport cache. These new stores are not connected to an
+account or server in this build. You can erase the checklist with the Clear my
+checklist button, by clearing app data, or by uninstalling. Airport data shown
+by the current Java screen still comes from the packaged offline dataset and
+may be outdated.
 
 Opening an online service or support link launches an external browser or
 Telegram. This Android application does not transmit Telegram account data.
@@ -32,13 +40,18 @@ Travel or visa details must be confirmed using official sources.
 ## فارسی
 
 نسخه اندروید Flight Iran Bot 24 فهرست آفلاین فرودگاه‌ها و چک‌لیست سفر
-را ارائه می‌کند. اپ اندروید درخواست مجوز اینترنت، مخاطبین، موقعیت
-مکانی، دوربین، میکروفون، حافظه یا اعلان‌ها ندارد و از ابزار
-تبلیغات یا تحلیل رفتار استفاده نمی‌کند.
+را ارائه می‌کند. برنامه تنها مجوز عادی اینترنت اندروید را برای اتصال
+آینده به API امن اختصاصی درخواست می‌کند؛ در این نسخه هیچ نشانی API
+فعال نیست و هنگام شروع برنامه اطلاعاتی به سرور ارسال نمی‌شود.
+برنامه مجوز مخاطبین، موقعیت مکانی، دوربین، میکروفون، حافظه خارجی یا
+اعلان‌ها درخواست نمی‌کند و ابزار تبلیغات یا تحلیل رفتار ندارد.
 
 وضعیت چک‌لیست فقط در تنظیمات محلی برنامه روی گوشی ذخیره می‌شود و
 با دکمه پاک‌کردن چک‌لیست، پاک‌کردن داده‌های برنامه یا حذف برنامه
-قابل حذف است. فهرست فرودگاه‌ها همراه اپ ارائه می‌شود و ممکن است قدیمی شود.
+قابل حذف است. DataStore جدید صرفاً برای تنظیمات غیرحساس مانند زبان و
+کشور پاسپورت پیش‌فرض و Room برای کش عمومی فرودگاه‌ها طراحی شده‌اند؛
+این دو در نسخه فعلی به حساب یا سرور متصل نیستند. داده فرودگاه‌های قابل
+نمایش همچنان از فایل آفلاین موجود خوانده می‌شود و ممکن است قدیمی باشد.
 
 با انتخاب خدمات آنلاین، صفحه تلگرام یا مرورگر جداگانه باز می‌شود.
 نسخه اندروید داده‌های حساب تلگرام را برای سرور ارسال نمی‌کند.
