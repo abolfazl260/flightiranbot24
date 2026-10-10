@@ -4,6 +4,7 @@ import com.abolfazl260.flightiranbot24.domain.network.NetworkResult
 import com.abolfazl260.flightiranbot24.domain.network.PublicJsonRepository
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
+import com.google.gson.stream.MalformedJsonException
 import java.io.IOException
 import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
@@ -36,6 +37,8 @@ internal class RetrofitPublicJsonRepository(
         } catch (_: InterruptedIOException) {
             NetworkResult.Timeout
         } catch (_: JsonParseException) {
+            NetworkResult.InvalidResponse
+        } catch (_: MalformedJsonException) {
             NetworkResult.InvalidResponse
         } catch (_: IOException) {
             NetworkResult.ConnectionFailure
