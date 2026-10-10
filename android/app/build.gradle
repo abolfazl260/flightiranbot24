@@ -4,6 +4,49 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
+// Public HTTPS API origins; absent means offline-only, never a fallback.
+def apiOrigins = [
+    development: (providers.gradleProperty('developmentApiOrigin').orElse(
+        providers.environmentVariable('ANDROID_DEVELOPMENT_API_ORIGIN')).getOrElse('')).trim(),
+    staging: (providers.gradleProperty('stagingApiOrigin').orElse(
+        providers.environmentVariable('ANDROID_STAGING_API_ORIGIN')).getOrElse('')).trim(),
+    production: (providers.gradleProperty('productionApiOrigin').orElse(
+        providers.environmentVariable('ANDROID_PRODUCTION_API_ORIGIN')).getOrElse('')).trim(),
+]
+apiOrigins.each { environment, origin ->
+    if (origin) {
+        def uri
+        try {
+            uri = new URI(origin)
+        } catch (Exception ignored) {
+            throw new GradleException("Invalid ${environment} API origin")
+        }
+        if (!'https'.equalsIgnoreCase(uri.scheme) || !uri.host ||
+                uri.rawUserInfo != null || uri.rawQuery != null || uri.rawFragment != null ||
+                !(uri.rawPath == null || uri.rawPath == '' || uri.rawPath == '/') ||
+                !origin.endsWith('/')) {
+            throw new GradleException(
+                "${environment} API origin must be HTTPS and contain no credentials, path or query"
+            )
+        }
+    }
+}
+if ((apiOrigins.development || apiOrigins.staging) && !apiOrigins.production) {
+    throw new GradleException(
+        'Production API origin required to validate isolation of non-production origins'
+    )
+}
+def authority = { origin ->
+    def uri = new URI(origin)
+    return "${uri.host.toLowerCase(java.util.Locale.ROOT)}:${uri.port < 0 ? 443 : uri.port}"
+}
+def configured = apiOrigins.findAll { key, origin -> !origin.isEmpty() }
+    .collectEntries { key, origin -> [(key): authority(origin)] }
+if (configured.values().toSet().size() != configured.size()) {
+    throw new GradleException('Each configured API environment requires a distinct host')
+}
+def jsonField = { value -> groovy.json.JsonOutput.toJson(value) }
+
 def signingEnv = [
     'ANDROID_KEYSTORE_FILE',
     'ANDROID_KEYSTORE_PASSWORD',
@@ -30,6 +73,32 @@ android {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
+        }
+    }
+
+    flavorDimensions 'environment'
+    productFlavors {
+        development {
+            dimension 'environment'
+            applicationIdSuffix '.dev'
+            versionNameSuffix '-dev'
+            buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('development')
+            buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.development)
+            resValue 'string', 'deployment_status', 'Development — test only; live links disabled'
+        }
+        staging {
+            dimension 'environment'
+            applicationIdSuffix '.staging'
+            versionNameSuffix '-staging'
+            buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('staging')
+            buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.staging)
+            resValue 'string', 'deployment_status', 'Staging — test only; live links disabled'
+        }
+        production {
+            dimension 'environment'
+            buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('production')
+            buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.production)
+            resValue 'string', 'deployment_status', 'Production'
         }
     }
 
@@ -66,6 +135,7 @@ android {
 
     buildFeatures {
         compose true
+        buildConfig true
     }
 
     compileOptions {
