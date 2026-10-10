@@ -57,48 +57,6 @@ _TABLE_TITLES = {
     "ar": "الرحلات من {origin}",
 }
 _TABLE_CONTINUATION = {"fa": " (ادامه)", "en": " (continued)", "ar": " (متابعة)"}
-_BOOKING_ACTION_LABELS = {
-    "fa": "🎫 درخواست رزرو {destination}",
-    "en": "🎫 Booking request: {destination}",
-    "ar": "🎫 طلب حجز {destination}",
-}
-# Telegram rich content has limits on both text and total blocks. Large route
-# lists are split with their corresponding action buttons kept on the same page.
-MAX_BOOKING_BUTTONS_PER_TABLE = 60
-
-
-def _booking_action_rows(
-    destinations: list[tuple[int, str]],
-    route_index: int,
-    language: str,
-) -> str:
-    if not destinations:
-        return ""
-    labels = _BOOKING_ACTION_LABELS.get(language, _BOOKING_ACTION_LABELS["fa"])
-    rows = [
-        "<p><b>" + escape({
-            "fa": "برای بررسی و درخواست رزرو مقصد موردنظر را انتخاب کنید:",
-            "en": "Select a destination to request booking assistance:",
-            "ar": "اختر وجهتك للاستفسار عن الحجز:",
-        }.get(language, "Select a destination to request booking assistance:")) + "</b></p>"
-    ]
-    for index in range(0, len(destinations), 2):
-        actions = []
-        for destination_index, destination in destinations[index:index + 2]:
-            callback = f"tickets:book:{route_index}:{destination_index}"
-            title = labels.format(destination=destination)
-            actions.append(
-                '<tg-button type="callback_data" data="'
-                + escape(callback, quote=True) + '">'
-                + escape(title) + "</tg-button>"
-            )
-        rows.append(
-            '<tg-button-row align="center">'
-            + "".join(actions) + "</tg-button-row>"
-        )
-    return "".join(rows)
-
-
 
 def _price_difference_button(difference_toman: int) -> str:
     """Render a colored, disabled Diff button with no arrows or actions."""
@@ -168,8 +126,8 @@ def _table_html(
     *,
     continued: bool = False,
     language: str = "fa",
-    booking_destinations: list[tuple[int, str]] | None = None,
     booking_route_index: int | None = None,
+    support_username: str = "@Advertio_support",
 ) -> str:
     language = language if language in _TABLE_HEADERS else "fa"
     title = _TABLE_TITLES[language].format(origin=escape(origin))
@@ -182,12 +140,26 @@ def _table_html(
         + "".join(rows)
         + "</table>"
         + (
-            _booking_action_rows(booking_destinations, booking_route_index, language)
-            if booking_destinations is not None and booking_route_index is not None
-            else ""
+            _fare_list_booking_actions(support_username, language, booking_route_index)
+            if booking_route_index is not None
+            else render_ticket_footer(language)
         )
-        + render_ticket_footer(language)
     )
+
+
+def _fare_list_booking_actions(
+    support_username: str, language: str, origin_index: int
+) -> str:
+    """Include the full booking guidance and exactly four actions in this table.
+
+    Local import avoids coupling the table/data renderer to the ticket
+    transport module during package import.
+    """
+    from .tickets import render_rich_ticket_booking_hint
+
+    return render_rich_ticket_booking_hint(
+        support_username, language, origin_index=origin_index
+    )["html"]
 
 
 def render_rich_price_tables(
@@ -197,78 +169,56 @@ def render_rich_price_tables(
     max_text_chars: int = MAX_RICH_TEXT_CHARS,
     max_rows: int = MAX_RICH_TABLE_ROWS,
     booking_route_index: int | None = None,
+    support_username: str = "@Advertio_support",
 ) -> list[dict]:
-    """Include route-specific booking buttons after each price table page.
+    """List fares and booking help in the *same* rich message.
 
-    The default (without booking_route_index) retains the existing one-table
-    behavior used by other price renderers and integrations.
+    A selected origin receives one set of four actions per rich page, never
+    one per destination. Legacy callers without booking_route_index retain
+    the original compact footer. Pagination considers all inline help text.
     """
-
-    if max_text_chars < 1 or max_rows < 1 or max_rows > MAX_RICH_TABLE_ROWS:
+    if max_text_chars < 1 or not 1 <= max_rows <= MAX_RICH_TABLE_ROWS:
         raise ValueError("Invalid Telegram rich message limits")
     if not route.destinations:
         return []
 
     messages: list[dict] = []
     rows: list[str] = []
-    destinations_on_page: list[tuple[int, str]] = []
 
-    def render_page(
-        chosen_rows: list[str], chosen_destinations: list[tuple[int, str]],
-        *, continued: bool,
-    ) -> str:
+    def render_page(chosen_rows: list[str], *, continued: bool) -> str:
         return _table_html(
             route.origin, chosen_rows,
             continued=continued, language=language,
-            booking_destinations=(
-                chosen_destinations if booking_route_index is not None else None
-            ),
             booking_route_index=booking_route_index,
+            support_username=support_username,
         )
 
-    for index, item in enumerate(route.destinations):
+    for item in route.destinations:
         row = _row(item)
-        candidate_rows = rows + [row]
-        candidate_destinations = destinations_on_page + [(index, item.name)]
-        html = render_page(
-            candidate_rows, candidate_destinations, continued=bool(messages)
-        )
-        over_limit = (
-            len(candidate_rows) > max_rows
-            or (
-                booking_route_index is not None
-                and len(candidate_rows) > MAX_BOOKING_BUTTONS_PER_TABLE
-            )
-            or _plain_text_length(html) > max_text_chars
-        )
-        if over_limit:
+        candidate = rows + [row]
+        rendered = render_page(candidate, continued=bool(messages))
+        if len(candidate) > max_rows or _plain_text_length(rendered) > max_text_chars:
             if not rows:
                 raise ValueError(
                     f"One ticket destination exceeds Telegram rich message limits: {item.name}"
                 )
             messages.append({
-                "html": render_page(
-                    rows, destinations_on_page, continued=bool(messages)
-                ),
+                "html": render_page(rows, continued=bool(messages)),
                 "is_rtl": language in {"fa", "ar"},
             })
             rows = [row]
-            destinations_on_page = [(index, item.name)]
             if _plain_text_length(
-                render_page(rows, destinations_on_page, continued=True)
+                render_page(rows, continued=True)
             ) > max_text_chars:
                 raise ValueError(
                     f"One ticket destination exceeds Telegram rich message limits: {item.name}"
                 )
         else:
-            rows = candidate_rows
-            destinations_on_page = candidate_destinations
+            rows = candidate
 
     if rows:
         messages.append({
-            "html": render_page(
-                rows, destinations_on_page, continued=bool(messages)
-            ),
+            "html": render_page(rows, continued=bool(messages)),
             "is_rtl": language in {"fa", "ar"},
         })
     return messages

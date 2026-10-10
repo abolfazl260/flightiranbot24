@@ -188,7 +188,7 @@ def render_cheap_ticket_booking_hint(
 
 
 def render_rich_ticket_booking_hint(
-    support_username: str, language: str = "fa"
+    support_username: str, language: str = "fa", *, origin_index: int | None = None
 ) -> dict:
     """Place support and navigation buttons *inside* one Rich Message.
 
@@ -207,7 +207,9 @@ def render_rich_ticket_booking_hint(
             f"<p>{line}</p>" for line in paragraph.split("\n") if line
         )
 
-    for row in ticket_result_menu(language, support_username).inline_keyboard:
+    for row in ticket_result_menu(
+        language, support_username, origin_index=origin_index
+    ).inline_keyboard:
         buttons: list[str] = []
         for button in row:
             label = escape(button.text)

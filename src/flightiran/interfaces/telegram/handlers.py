@@ -501,7 +501,10 @@ async def callback_handler(
                 language,
             )
     elif data.startswith("tickets:origin:"):
-        from .tickets import render_cheap_route_chunks, send_ticket_booking_hint
+        from .tickets import (
+            render_cheap_route_chunks,
+            render_cheap_ticket_booking_hint,
+        )
 
         routes = context.user_data.get("ticket_routes", [])
         try:
@@ -526,17 +529,43 @@ async def callback_handler(
                     language, [item.origin for item in routes], page=index // 16
                 ),
             )
-            for rich_message in render_rich_price_tables(
-                route, language=language, booking_route_index=index
-            ):
+            # Bell buttons in the rich fare table use this already-fetched
+            # snapshot and go straight to selecting an alert destination.
+            # No second provider request is needed.
+            context.user_data["alert_routes"] = routes
+            rich_messages = render_rich_price_tables(
+                route, language=language, booking_route_index=index,
+                support_username=dependencies.ticket_support_username,
+            )
+            for rich_message in rich_messages:
                 try:
                     await send_rich_price_table_with_badge_fallback(
                         context.bot, query.message.chat_id, rich_message
                     )
                 except Exception:
                     LOGGER.exception("rich_ticket_table_send_failed")
-                    for message in render_cheap_route_chunks(route, language=language):
-                        await query.message.reply_text(message, parse_mode="HTML")
+                    chunks = render_cheap_route_chunks(
+                        route, language=language, max_length=2700
+                    )
+                    booking_hint = render_cheap_ticket_booking_hint(
+                        dependencies.ticket_support_username, language
+                    )
+                    # Keep the disclaimer and four-button keyboard together
+                    # under the same fallback fare list message.
+                    for i, message in enumerate(chunks):
+                        if i == len(chunks) - 1:
+                            message += "\\n\\n" + booking_hint
+                        await query.message.reply_text(
+                            message,
+                            parse_mode="HTML",
+                            reply_markup=(
+                                ticket_result_menu(
+                                    language, dependencies.ticket_support_username,
+                                    origin_index=index,
+                                )
+                                if i == len(chunks) - 1 else None
+                            ),
+                        )
                     break
             # The optional discount report is limited to this origin as well.
             try:
@@ -550,12 +579,6 @@ async def callback_handler(
                 for message in render_price_drop_fallback_chunks([route], language=language):
                     await query.message.reply_text(message, parse_mode="HTML")
 
-            await send_ticket_booking_hint(
-                context.bot,
-                query.message,
-                dependencies.ticket_support_username,
-                language,
-            )
     elif data == "menu:rules":
         await query.edit_message_text(
             "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
