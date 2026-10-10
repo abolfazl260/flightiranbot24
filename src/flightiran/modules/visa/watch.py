@@ -53,6 +53,25 @@ def _strip_metadata(value: object) -> object:
     return value
 
 
+def _matching_waivers(policy: dict, status: str) -> list[dict]:
+    """Select only waiver rules potentially applicable to this status."""
+    result = []
+    for waiver in policy.get("conditionalWaivers") or []:
+        if not isinstance(waiver, dict):
+            continue
+        applies_to = waiver.get("appliesTo")
+        relevant = (
+            applies_to in (status, "all")
+            or (applies_to == "visa-required" and status in (
+                "embassy-visa", "visa-required"
+            ))
+            or (applies_to == "visa-exempt" and status == "visa-free")
+        )
+        if relevant:
+            result.append(_strip_metadata(waiver))
+    return result
+
+
 def semantic_rule(document: dict, passport: str) -> dict | None:
     policy = document.get("visaPolicy") or {}
     record = (policy.get("byPassport") or {}).get(passport)
@@ -93,6 +112,7 @@ def semantic_rule(document: dict, passport: str) -> dict | None:
         "notes": record.get("notes"),
         "visa_types": visa_types,
         "entry_requirements": entry_rules,
+        "conditional_waivers": _matching_waivers(policy, status),
     }
 
 
@@ -105,7 +125,7 @@ def rule_changes(previous: dict, current: dict) -> tuple[str, ...]:
     )):
         categories.append("stay")
     if any(previous[key] != current[key] for key in (
-        "notes", "visa_types", "entry_requirements"
+        "notes", "visa_types", "entry_requirements", "conditional_waivers"
     )):
         categories.append("conditions")
     return tuple(categories)
@@ -266,6 +286,10 @@ class VisaWatchService:
             if not categories:
                 continue
             change_hash = _digest_change(watch.passport, destination, old, new)
+            policy = current.get("visaPolicy") or {}
+            new_row = (policy.get("byPassport") or {}).get(watch.passport) or {}
+            citation = new_row.get("source") or policy.get("defaultSource") or {}
+            citation_url = citation.get("url") if isinstance(citation, dict) else None
             payload = {
                 "categories": list(categories),
                 "before": {
@@ -275,6 +299,7 @@ class VisaWatchService:
                     "status": new["status"], "stay_days": new["stay_days"]
                 },
                 "source_url": source_url,
+                "official_source_url": citation_url if isinstance(citation_url, str) else None,
                 "published": published if isinstance(published, str) else None,
             }
             statement = sqlite_insert(VisaWatchEvent).values(
