@@ -20,16 +20,27 @@ PAGE_SIZE = 12
 WORDS = {
     "fa": {
         "title": "🔔 <b>زنگوله قیمت بلیط</b>",
-        "intro": "برای مسیر دلخواه سقف قیمت تعیین کنید؛ قیمت‌ها به‌صورت دوره‌ای بررسی می‌شوند و پس از رسیدن قیمت به سقف تعیین‌شده، پیام تلگرام دریافت می‌کنید. قیمت‌ها به تومان و براساس اطلاعات mz724 هستند.",
+        "intro": (
+            "برای مسیر دلخواه سقف قیمت تعیین کنید؛ قیمت‌ها به‌صورت دوره‌ای بررسی می‌شوند "
+            "و پس از رسیدن قیمت به سقف تعیین‌شده، پیام تلگرام دریافت می‌کنید. "
+            "قیمت‌ها به تومان و براساس اطلاعات mz724 هستند."
+        ),
         "empty": "هنوز هشدار قیمتی ثبت نکرده‌اید.",
         "new": "➕ ثبت هشدار جدید",
         "back": "↩️ منوی اصلی",
         "manage": "🔔 هشدارهای من",
         "origin": "شهر مبدأ را انتخاب کنید:",
         "destination": "مقصد را انتخاب کنید:",
-        "amount": "سقف قیمت برای مسیر <b>{origin} ← {destination}</b> را به تومان ارسال کنید.\nمثال: <code>5,000,000</code>\nبرای لغو /cancel را بزنید.",
+        "amount": (
+            "سقف قیمت برای مسیر <b>{origin} ← {destination}</b> را به تومان ارسال کنید.\n"
+            "مثال: <code>5,000,000</code>\nبرای لغو /cancel را بزنید."
+        ),
         "invalid": "مبلغ معتبر وارد کنید؛ فقط عدد مثبت به تومان (مثلاً 5,000,000).",
-        "created": "✅ هشدار ثبت شد.\n<b>{origin} ← {destination}</b>\nسقف قیمت: <b>{price:,} تومان</b>\nقیمت‌ها در بازه‌های پایش ربات بررسی خواهند شد.",
+        "created": (
+            "✅ هشدار ثبت شد.\n<b>{origin} ← {destination}</b>\n"
+            "سقف قیمت: <b>{price:,} تومان</b>\n"
+            "قیمت‌ها در بازه‌های پایش ربات بررسی خواهند شد."
+        ),
         "active": "فعال",
         "paused": "متوقف",
         "pause": "⏸ توقف",
@@ -45,16 +56,26 @@ WORDS = {
     },
     "en": {
         "title": "🔔 <b>Ticket price alerts</b>",
-        "intro": "Set a price ceiling for a route. The bot checks mz724 prices periodically and messages you when the price reaches your limit. Amounts are in tomans.",
+        "intro": (
+            "Set a price ceiling for a route. The bot checks mz724 prices periodically "
+            "and messages you when the price reaches your limit. Amounts are in tomans."
+        ),
         "empty": "No price alerts yet.",
         "new": "➕ New alert",
         "back": "↩️ Main menu",
         "manage": "🔔 My alerts",
         "origin": "Select the departure city:",
         "destination": "Select the destination:",
-        "amount": "Send the price ceiling in tomans for <b>{origin} → {destination}</b>.\nExample: <code>5,000,000</code>\nSend /cancel to stop.",
+        "amount": (
+            "Send the price ceiling in tomans for <b>{origin} → {destination}</b>.\n"
+            "Example: <code>5,000,000</code>\nSend /cancel to stop."
+        ),
         "invalid": "Enter a positive price in tomans, e.g. 5,000,000.",
-        "created": "✅ Alert saved.\n<b>{origin} → {destination}</b>\nLimit: <b>{price:,} tomans</b>\nIt will be checked during the bot's scheduled scans.",
+        "created": (
+            "✅ Alert saved.\n<b>{origin} → {destination}</b>\n"
+            "Limit: <b>{price:,} tomans</b>\n"
+            "It will be checked during the bot's scheduled scans."
+        ),
         "active": "Active",
         "paused": "Paused",
         "pause": "⏸ Pause",
@@ -70,16 +91,25 @@ WORDS = {
     },
     "ar": {
         "title": "🔔 <b>تنبيهات أسعار التذاكر</b>",
-        "intro": "حدد سقف السعر لمسار معين. يفحص البوت أسعار mz724 دورياً ويرسل لك إشعاراً عند بلوغ السعر المحدد. المبالغ بالتومان.",
+        "intro": (
+            "حدد سقف السعر لمسار معين. يفحص البوت أسعار mz724 دورياً ويرسل لك إشعاراً "
+            "عند بلوغ السعر المحدد. المبالغ بالتومان."
+        ),
         "empty": "لا توجد تنبيهات مسجلة.",
         "new": "➕ تنبيه جديد",
         "back": "↩️ القائمة الرئيسية",
         "manage": "🔔 تنبيهاتي",
         "origin": "اختر مدينة المغادرة:",
         "destination": "اختر الوجهة:",
-        "amount": "أرسل الحد الأقصى للسعر بالتومان للمسار <b>{origin} ← {destination}</b>.\nمثال: <code>5,000,000</code>\nللإلغاء أرسل /cancel.",
+        "amount": (
+            "أرسل الحد الأقصى للسعر بالتومان للمسار <b>{origin} ← {destination}</b>.\n"
+            "مثال: <code>5,000,000</code>\nللإلغاء أرسل /cancel."
+        ),
         "invalid": "أدخل مبلغاً صحيحاً بالتومان مثل 5,000,000.",
-        "created": "✅ تم حفظ التنبيه.\n<b>{origin} ← {destination}</b>\nالسقف: <b>{price:,} تومان</b>\nسيتم فحصه دورياً.",
+        "created": (
+            "✅ تم حفظ التنبيه.\n<b>{origin} ← {destination}</b>\n"
+            "السقف: <b>{price:,} تومان</b>\nسيتم فحصه دورياً."
+        ),
         "active": "نشط",
         "paused": "متوقف",
         "pause": "⏸ إيقاف",
@@ -155,9 +185,13 @@ def _destination_keyboard(route_index: int, items: list[str], language: str, pag
     ]
     nav = []
     if page:
-        nav.append(InlineKeyboardButton("◀", callback_data=f"alerts:destpage:{route_index}:{page - 1}"))
+        nav.append(InlineKeyboardButton(
+            "◀", callback_data=f"alerts:destpage:{route_index}:{page - 1}"
+        ))
     if page < max_page:
-        nav.append(InlineKeyboardButton("▶", callback_data=f"alerts:destpage:{route_index}:{page + 1}"))
+        nav.append(InlineKeyboardButton(
+            "▶", callback_data=f"alerts:destpage:{route_index}:{page + 1}"
+        ))
     if nav:
         rows.append(nav)
     rows.append([InlineKeyboardButton(word(language, "new"), callback_data="alerts:new")])
