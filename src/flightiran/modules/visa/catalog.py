@@ -14,6 +14,8 @@ from sqlalchemy import func, select
 from flightiran.db.engine import Database
 from flightiran.db.models import VisaDatasetState, VisaDestinationData, VisaRuleIndex
 
+from .freshness import VisaDataFreshness, assess_freshness
+
 # Match the upstream TravelRequirements.info schema; retain legacy statuses
 # already persisted in older SQLite snapshots for backwards compatibility.
 UPSTREAM_STATUSES = (
@@ -76,8 +78,9 @@ class VisaDetail:
 
 
 class VisaCatalogService:
-    def __init__(self, database: Database) -> None:
+    def __init__(self, database: Database, *, stale_after_hours: int = 24) -> None:
         self.database = database
+        self.stale_after_hours = stale_after_hours
 
     async def countries(self) -> list[Country]:
         """Country choices are fetched from the local indexed dataset."""
@@ -99,6 +102,13 @@ class VisaCatalogService:
     async def dataset_state(self) -> VisaDatasetState | None:
         async with self.database.session() as session:
             return await session.get(VisaDatasetState, 1)
+
+    async def freshness(self) -> VisaDataFreshness:
+        state = await self.dataset_state()
+        return assess_freshness(
+            state.last_checked_at if state is not None else None,
+            stale_after_hours=self.stale_after_hours,
+        )
 
     async def rule(self, passport: str, destination: str) -> VisaRule | None:
         async with self.database.session() as session:

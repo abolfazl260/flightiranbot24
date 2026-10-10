@@ -184,3 +184,76 @@ Changing them does **not** recalculate the passport/destination visa result.
 The same disclaimer and selected values carry into the Rich Message output
 and its HTML fallback. Do not use this UI as a personalized eligibility
 decision without implementing and verifying a purpose/residence rules engine.
+
+
+## Visa dataset health and local freshness
+
+`VISA_STALE_AFTER_HOURS=24` (default) classifies the last **successfully
+committed index/manifest synchronization** in `visa_dataset_state.last_checked_at`.
+The bot shows a warning in visa overview, menus, lists and detail sections when
+that timestamp is missing or the last successful check is older than the
+configured limit. A normal recent check is labeled clearly with its local UTC
+time; it is **not** the upstream last-verified date, not the last download date
+for each individual destination, and not a guarantee of legal validity. This
+check works even after a failed scheduled refresh, because a failed import
+does not update `last_checked_at`. Admins should investigate source
+connectivity or syncing if the warning persists.
+
+## Progressive reading and evidence provenance
+
+The visa landing view shows a concise status, maximum stay, special conditions,
+a small amount of legal context, the most important publisher dates and direct
+links. The Rich Message button produces a **short summary**, rather than one
+very long document; visa types/documents, stay counting, transit, entry rules,
+travel tips, FAQ and full sources are available via separate Telegram buttons.
+If `sendRichMessage` is unavailable, the fallback displays the concise HTML
+summary without sending multiple unrequested long messages.
+
+The source citation now has an explicitly labeled **scope** (passport-specific
+versus destination-policy level) and **authority type**. Government URLs can
+be attributed to the destination or a third country only when the original
+publisher labels them government sources **and** a conservative, explicit
+hostname-to-country mapping matches. Unknown hostnames retain an
+unverified-jurisdiction label. Intergovernmental and airline-database sources
+are distinguished. These labels do not score accuracy or guarantee legal
+authority; the original source citation and type are preserved.
+
+## Visa change bell — private and durable
+
+`VISA_WATCH_ENABLED=true` enables a new **🔔 Follow changes** button on each
+passport/destination result, a **My visa alerts** menu and the command
+`/visa_watch`. Users can watch up to 20 **active** pairs, pause, reactivate or
+delete subscriptions. Stored subscriptions and pending notifications survive
+bot restarts; a database migration `0009_visa_watch_notifications` creates
+`visa_watches` and `visa_watch_events`. Back up the SQLite Docker volume
+before upgrading, as with any production schema migration.
+
+The normal six-hour visa sync compares the previously saved destination JSON
+against the new validated document **within the same successful transaction**.
+For each actively watched passport/destination, the bot enqueues a message
+only for changes to published substantive fields such as:
+- visa requirement category, allowed stay, stay-window counting or validity;
+- passport-specific notes, selected visa type details, fees or documents;
+- published entry-document requirements.
+
+Source check dates, citation URLs, editorial destination facts, tips, FAQs,
+and the publisher's manifest version **alone do not trigger notifications**.
+The first import never produces change alerts. Changes to unrelated passport
+rows do not notify watchers of other passports. The existing admin notification
+for **any changed country JSON** is kept separate from these subscriber alerts.
+
+Notifications state **what changed in the published data**, not that a law has
+definitively changed. They include a destination JSON link and direct the user
+to verify the destination's immigration authority and airline. Users can
+receive notifications only from a private Telegram conversation with the bot.
+Delivery is attempted immediately after an administrator's successful manual
+`/visa_sync` if new events were queued, and through a 15-minute automatic
+outbox dispatch job. Failed Telegram sends are retried no sooner than every
+15 minutes, up to eight times; identical changes are deduplicated per
+subscription. A sent Telegram message can rarely repeat if delivery succeeds
+but the subsequent database write fails, because exactly-once remote delivery
+cannot be guaranteed.
+
+The notification queue is intentionally a **semantic dataset-change
+detector**, not a legal verification engine. Editorial changes to substantive
+text fields may still cause an alert; users should consult the cited source.

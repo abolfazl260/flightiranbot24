@@ -247,3 +247,8 @@ def safe_text(language: str | None, key: str) -> str:
 MESSAGES["fa"]["help_alerts"] = "ثبت و مدیریت هشدار قیمت بلیط"
 MESSAGES["en"]["help_alerts"] = "Create and manage ticket price alerts"
 MESSAGES["ar"]["help_alerts"] = "إنشاء وإدارة تنبيهات أسعار التذاكر"
+
+# User-visible label for the private visa route change-alert command.
+MESSAGES["fa"]["help_visa_watch"] = "مدیریت زنگوله تغییرات ویزا"
+MESSAGES["en"]["help_visa_watch"] = "Manage visa change alerts"
+MESSAGES["ar"]["help_visa_watch"] = "إدارة تنبيهات تغييرات التأشيرات"

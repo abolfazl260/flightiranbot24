@@ -45,6 +45,8 @@ class Settings(BaseSettings):
     app_env: str = "development"
     visa_sync_enabled: bool = True
     visa_sync_interval_hours: int = 6
+    visa_stale_after_hours: int = 24
+    visa_watch_enabled: bool = True
     active_users_report_enabled: bool = True
     active_users_report_time: str = "09:00"
     active_users_report_timezone: str = "Asia/Tehran"
@@ -90,6 +92,8 @@ class Settings(BaseSettings):
             raise ValueError("WEB_APP_URL is required when WEB_APP_ENABLED=true")
         if self.visa_sync_interval_hours < 1:
             raise ValueError("VISA_SYNC_INTERVAL_HOURS must be positive")
+        if self.visa_stale_after_hours < 1:
+            raise ValueError("VISA_STALE_AFTER_HOURS must be positive")
         if self.ticket_history_interval_minutes < 1:
             raise ValueError("TICKET_HISTORY_INTERVAL_MINUTES must be positive")
         if self.ticket_history_retention_days < 1:

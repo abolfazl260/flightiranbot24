@@ -43,6 +43,7 @@ def render_help(
         ("/price", "help_price"),
         ("/alerts", "help_alerts"),
         ("/visa", "help_visa"),
+        ("/visa_watch", "help_visa_watch"),
         ("/visa_list", "help_visa_list"),
     ):
         lines.append(f"<code>{command}</code> — {safe_text(language, key)}")

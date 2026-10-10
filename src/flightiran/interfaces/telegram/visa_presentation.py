@@ -17,6 +17,8 @@ from flightiran.modules.visa.provenance import (
 )
 from flightiran.modules.visa.stay import StayRule, stay_rule_for
 
+from .visa_quality import render_authority
+
 LANG = {
     "fa": {
         "title": "🛂 راهنمای ویزا و ورود", "choose_passport": "پاسپورت خود را انتخاب کنید",
@@ -252,6 +254,10 @@ LANG["ar"].update({
 # residence, passport-class and travel-purpose eligibility can be calculated.
 LANG["fa"].update({
     "permit": "مجوز سفر / ورود", "restricted": "ممنوعیت / محدودیت ورود",
+    "summary_rich": "گزارش خلاصه ویزا",
+    "step_notice": "برای مشاهده مدارک، شرایط ورود، ترانزیت و منابع، بخش‌های زیر را باز کنید.",
+    "watch_add": "🔔 پیگیری تغییرات این مسیر",
+    "watch_menu": "🔔 هشدارهای تغییر ویزا",
     "stay": "حداکثر اقامت اعلام‌شده", "stay_rules": "قوانین محاسبه اقامت",
     "stay_rolling": "{allowance} روز در هر بازه شناور {window} روزه",
     "stay_per_entry": "حداکثر {allowance} روز در هر بار ورود",
@@ -282,6 +288,10 @@ LANG["fa"].update({
 })
 LANG["en"].update({
     "permit": "Travel / entry permit", "restricted": "Banned / restricted entry",
+    "summary_rich": "Concise visa report",
+    "step_notice": "Open the sections below for documents, entry rules, transit and sources.",
+    "watch_add": "🔔 Watch changes for this route",
+    "watch_menu": "🔔 My visa change alerts",
     "stay": "Published maximum stay", "stay_rules": "Stay counting rules",
     "stay_rolling": "{allowance} days in any rolling {window}-day window",
     "stay_per_entry": "Up to {allowance} days per entry",
@@ -307,6 +317,10 @@ LANG["en"].update({
 })
 LANG["ar"].update({
     "permit": "تصريح السفر / الدخول", "restricted": "الدخول المحظور / المقيّد",
+    "summary_rich": "ملخص التأشيرة",
+    "step_notice": "افتح الأقسام أدناه للوثائق وشروط الدخول والعبور والمراجع.",
+    "watch_add": "🔔 متابعة تغييرات هذا المسار",
+    "watch_menu": "🔔 تنبيهات تغيير التأشيرات",
     "stay": "الحد الأقصى المعلن للإقامة", "stay_rules": "قواعد حساب مدة الإقامة",
     "stay_rolling": "{allowance} يوماً في أي فترة متحركة من {window} يوماً",
     "stay_per_entry": "حتى {allowance} يوماً لكل دخول",
@@ -523,6 +537,7 @@ def render_overview(
     passport_name: str = "",
     residence: str | None = None,
     purpose: str = "tourism",
+    freshness_notice: str = "",
 ) -> str:
     """Compact, professional Telegram HTML with hyperlink citations and upstream dates."""
     rule = detail.rule
@@ -576,22 +591,19 @@ def render_overview(
     lines.append("<i>" + escape(tr(language, "extra_notice")) + "</i>")
     if rule.notes:
         lines.extend(["", f"<b>{escape(tr(language, 'more'))}</b>"])
-        lines.append(escape(rule.notes[:1100]))
+        lines.append(escape(rule.notes[:450]))
     waivers = detail.destination_data.get("visaPolicy", {}).get("conditionalWaivers") or []
     if waivers and rule.status not in {"visa-free", "freedom-of-movement"}:
         lines.extend(["", f"<b>{escape(tr(language, 'condition'))}</b>"])
-        for waiver in waivers[:2]:
+        for waiver in waivers[:1]:
             if isinstance(waiver, dict) and waiver.get("text"):
-                lines.append("• " + escape(str(waiver["text"])[:350]))
+                lines.append("• " + escape(str(waiver["text"])[:200]))
         lines.append("<i>" + escape(tr(language, "conditional_notice")) + "</i>")
+    if freshness_notice:
+        lines.extend(["", freshness_notice])
     lines.extend(["", f"<b>🗓 {escape(tr(language, 'date_title'))}</b>"])
     lines.extend(_source_dates(provenance, language))
-    lines.append(
-        "🔎 " + escape(
-            tr(language, "row") if provenance.source_level == "row"
-            else tr(language, "policy")
-        )
-    )
+    lines.append(render_authority(provenance, language))
     lines.append(_provider_links(provenance, language))
     lines.extend([
         "",
@@ -599,6 +611,7 @@ def render_overview(
     ])
     lines.extend([
         "<i>" + escape(tr(language, "date_notice")) + "</i>",
+        "<i>" + escape(tr(language, "step_notice")) + "</i>",
         "",
         _attribution(language),
     ])
@@ -762,7 +775,9 @@ def _section_footer(provenance: VisaProvenance, language: str) -> list[str]:
     ]
 
 
-def render_section(detail: VisaDetail, language: str, section: str) -> str:
+def render_section(
+    detail: VisaDetail, language: str, section: str, *, freshness_notice: str = ""
+) -> str:
     """Source-linked Telegram detail tabs with coherent dates and readable formatting."""
     document = detail.destination_data
     requirements = document.get("entryRequirements") or {}
@@ -902,6 +917,7 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
         lines.append("⚠️ " + escape(tr(language, "general_faq")))
     elif section == "sources":
         lines.extend(_source_dates(provenance, language, full=True))
+        lines.extend(["", render_authority(provenance, language, full=True)])
         lines.append("<i>" + escape(tr(language, "no_expiry")) + "</i>")
         lines.append("<i>" + escape(tr(language, "date_notice")) + "</i>")
         lines.append(
@@ -966,6 +982,8 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
         lines.append(escape(tr(language, "not_known")))
     # Reserve room for citations so long tips/FAQs never hide the hyperlinks.
     footer = _section_footer(provenance, language)
+    if freshness_notice:
+        footer.insert(0, freshness_notice)
     footer_text = "\n".join(footer)
     body = _limited_lines(lines, max_chars=3900 - len(footer_text) - 2)
     return body + "\n" + footer_text
@@ -977,8 +995,9 @@ def render_rich_report(
     *,
     residence: str | None = None,
     purpose: str = "tourism",
+    freshness_notice: str = "",
 ) -> dict:
-    """Produce valid, balanced native rich blocks with genuine source hyperlinks."""
+    """Produce a short rich summary; detailed sections remain interactive."""
     rule = detail.rule
     provenance = visa_provenance(detail)
     passport = country_label(rule.passport, rule.passport, language)
@@ -1002,11 +1021,18 @@ def render_rich_report(
     ]
     if provenance.source_changed_on:
         rows.append((tr(language, "changed_date"), provenance.source_changed_on))
-    table = "<table bordered striped compact>" + "".join(
-        f"<tr><th>{escape(str(key))}</th><td>{escape(str(value))}</td></tr>"
-        for key, value in rows
-    ) + "</table>"
+    rows.append((
+        tr(language, "source"),
+        render_authority(provenance, language).replace("\n", " · "),
+    ))
+    table_rows = []
+    for key, value in rows:
+        cell = value if key == tr(language, "source") else escape(str(value))
+        table_rows.append(f"<tr><th>{escape(str(key))}</th><td>{cell}</td></tr>")
+    table = "<table bordered striped compact>" + "".join(table_rows) + "</table>"
     intro = "<p>" + _provider_links(provenance, language) + "</p>"
+    if freshness_notice:
+        intro += "<p>" + freshness_notice.replace("\n", " ") + "</p>"
     intro += "<p><i>" + escape(tr(language, "date_notice")) + "</i></p>"
     intro += "<p><b>" + escape(tr(language, "extra_title")) + "</b></p>"
     intro += (
@@ -1019,27 +1045,33 @@ def render_rich_report(
             + ": " + escape(residence) + "</p>"
         )
     intro += "<p><i>" + escape(tr(language, "extra_notice")) + "</i></p>"
-    sections: list[str] = []
-    for key in ("stay", "types", "entry", "transit", "facts", "tips", "faq", "sources"):
-        content = render_section(detail, language, key)
-        content_lines = content.split("\n")[3:]
-        paragraphs = "".join(
-            f"<p>{line}</p>" for line in content_lines if line.strip()
+    highlights: list[str] = []
+    stay_window = stay_rule_for(detail)
+    if stay_window:
+        highlights.append("<h3>" + escape(tr(language, "stay_rules")) + "</h3>")
+        highlights.extend(
+            "<p>" + line + "</p>"
+            for line in _stay_rule_lines(stay_window, language)[:5]
         )
-        sections.append(f"<h3>{escape(tr(language, key))}</h3>{paragraphs}")
+    if rule.notes:
+        highlights.append("<p>" + escape(rule.notes[:550]) + "</p>")
+    if detail.visa_types:
+        highlights.append(
+            "<p><b>" + escape(tr(language, "types")) + ":</b> "
+            + escape(", ".join(
+                str(item.get("name") or item.get("id") or "")[:70]
+                for item in detail.visa_types[:3]
+            )) + "</p>"
+        )
+    highlights.append("<p><i>" + escape(tr(language, "step_notice")) + "</i></p>")
     footer = (
         "<p>⚠️ " + escape(tr(language, "caution")) + "</p>"
         + "<p>" + _attribution(language) + "</p>"
     )
-    blocks = [head, table, intro]
-    current_length = len(head + table + intro + footer)
-    for part in sections:
-        if current_length + len(part) > 28_000:
-            break
-        blocks.append(part)
-        current_length += len(part)
-    blocks.append(footer)
-    return {"html": "".join(blocks), "is_rtl": language in {"fa", "ar"}}
+    return {
+        "html": head + table + intro + "".join(highlights) + footer,
+        "is_rtl": language in {"fa", "ar"},
+    }
 
 
 def country_keyboard(
@@ -1086,6 +1118,7 @@ def country_keyboard(
 def home_keyboard(language: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(tr(language, "passports"), callback_data="visa:pick:p:0")],
+        [InlineKeyboardButton(tr(language, "watch_menu"), callback_data="visa:watch:menu")],
         [InlineKeyboardButton(tr(language, "back"), callback_data="back")],
     ])
 
@@ -1094,6 +1127,7 @@ def passport_keyboard(language: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
         [InlineKeyboardButton(tr(language, "choose_destination"), callback_data="visa:pick:d:0")],
         [InlineKeyboardButton(tr(language, "list"), callback_data="visa:groups")],
+        [InlineKeyboardButton(tr(language, "watch_menu"), callback_data="visa:watch:menu")],
         [InlineKeyboardButton(tr(language, "passports"), callback_data="visa:pick:p:0")],
         [InlineKeyboardButton(tr(language, "back"), callback_data="visa:home")],
     ])
@@ -1103,7 +1137,7 @@ def detail_keyboard(
     language: str, detail: VisaDetail | None = None
 ) -> InlineKeyboardMarkup:
     rows = [
-        [InlineKeyboardButton(tr(language, "details"), callback_data="visa:rich")],
+        [InlineKeyboardButton(tr(language, "summary_rich"), callback_data="visa:rich")],
         [InlineKeyboardButton(tr(language, "types"), callback_data="visa:section:types"),
          InlineKeyboardButton(tr(language, "entry"), callback_data="visa:section:entry")],
         [InlineKeyboardButton(tr(language, "transit"), callback_data="visa:section:transit"),
@@ -1111,6 +1145,8 @@ def detail_keyboard(
         [InlineKeyboardButton(tr(language, "tips"), callback_data="visa:section:tips"),
          InlineKeyboardButton(tr(language, "faq"), callback_data="visa:section:faq")],
         [InlineKeyboardButton(tr(language, "sources"), callback_data="visa:section:sources")],
+        [InlineKeyboardButton(tr(language, "watch_add"), callback_data="visa:watch:add")],
+        [InlineKeyboardButton(tr(language, "watch_menu"), callback_data="visa:watch:menu")],
         [InlineKeyboardButton(tr(language, "residence_button"), callback_data="visa:pick:r:0"),
          InlineKeyboardButton(tr(language, "clear_residence"), callback_data="visa:r:clear")],
         [InlineKeyboardButton(tr(language, "purpose_tourism"), callback_data="visa:pur:tourism"),
