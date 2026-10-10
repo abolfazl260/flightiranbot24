@@ -15,6 +15,7 @@ from flightiran.modules.visa.provenance import (
     source_date,
     visa_provenance,
 )
+from flightiran.modules.visa.stay import StayRule, stay_rule_for
 
 LANG = {
     "fa": {
@@ -247,6 +248,86 @@ LANG["ar"].update({
 })
 
 
+# Make optional journey inputs visibly informational until individual
+# residence, passport-class and travel-purpose eligibility can be calculated.
+LANG["fa"].update({
+    "permit": "مجوز سفر / ورود", "restricted": "ممنوعیت / محدودیت ورود",
+    "stay": "حداکثر اقامت اعلام‌شده", "stay_rules": "قوانین محاسبه اقامت",
+    "stay_rolling": "{allowance} روز در هر بازه شناور {window} روزه",
+    "stay_per_entry": "حداکثر {allowance} روز در هر بار ورود",
+    "stay_calendar": "حداکثر {allowance} روز در سال تقویمی",
+    "stay_year": "حداکثر {allowance} روز در دوره ۱۲ماهه از نخستین ورود",
+    "stay_incomplete": "نحوه محاسبه دقیق مدت اقامت در منبع مشخص نشده است.",
+    "stay_no_reset": "خروج و ورود دوباره، دوره شمارش روزها را از ابتدا شروع نمی‌کند.",
+    "stay_gap": "فاصله لازم میان سفرها: {days} روز",
+    "stay_count_unknown": "نحوه شمارش روز ورود و خروج در منبع مشخص نشده است.",
+    "stay_default": "این قانون عمومی مقصد برای سفر بدون ویزاست؛ استثناهای پاسپورت خود را بررسی کنید.",
+    "stay_source_missing": "استناد مستقل قانون اقامت در داده موجود نیست؛ با مرجع رسمی بررسی کنید.",
+    "stay_original": "توضیح منتشرشده در منبع (به زبان اصلی):",
+    "extra_title": "اطلاعات تکمیلی سفر — بدون تأثیر بر نتیجه ویزا",
+    "extra_purpose": "هدف سفر (صرفاً اطلاعات تکمیلی)",
+    "extra_residence": "کشور اقامت (صرفاً اطلاعات تکمیلی)",
+    "extra_notice": (
+        "وضعیت ویزای بالا فقط از پاسپورت و مقصد به دست آمده است؛ "
+        "انتخاب هدف سفر یا اقامت آن را دوباره محاسبه نمی‌کند."
+    ),
+    "unconfirmed_notice": (
+        "این وضعیت در منبع تأیید نشده؛ نمی‌توان آن را معافیت ویزا یا اجازه ورود دانست."
+    ),
+    "banned_notice": "منبع محدودیت ورود گزارش کرده است؛ مقررات رسمی را پیش از سفر بررسی کنید.",
+    "permit_notice": "نوع مجوز و شرایط آن باید جداگانه از منبع رسمی بررسی شود.",
+})
+LANG["en"].update({
+    "permit": "Travel / entry permit", "restricted": "Banned / restricted entry",
+    "stay": "Published maximum stay", "stay_rules": "Stay counting rules",
+    "stay_rolling": "{allowance} days in any rolling {window}-day window",
+    "stay_per_entry": "Up to {allowance} days per entry",
+    "stay_calendar": "Up to {allowance} days per calendar year",
+    "stay_year": "Up to {allowance} days per 12 months from first entry",
+    "stay_incomplete": "The source does not fully specify how stay days are counted.",
+    "stay_no_reset": "Leaving and re-entering does not reset the rolling allowance.",
+    "stay_gap": "Required gap between visits: {days} days",
+    "stay_count_unknown": "The source does not specify arrival/departure day counting.",
+    "stay_default": "This is a general visa-exempt policy; check passport-specific exceptions.",
+    "stay_source_missing": "No independent stay-rule citation was supplied; verify officially.",
+    "stay_original": "Original source description:",
+    "extra_title": "Additional trip details — not used in the visa determination",
+    "extra_purpose": "Purpose (informational only)",
+    "extra_residence": "Residence (informational only)",
+    "extra_notice": (
+        "The visa status above uses passport and destination only. "
+        "Changing purpose or residence does not recalculate eligibility."
+    ),
+    "unconfirmed_notice": "The source has not confirmed this status; it is not a visa waiver.",
+    "banned_notice": "The source reports an entry ban; verify the official restrictions.",
+    "permit_notice": "The permit type and requirements need separate official verification.",
+})
+LANG["ar"].update({
+    "permit": "تصريح السفر / الدخول", "restricted": "الدخول المحظور / المقيّد",
+    "stay": "الحد الأقصى المعلن للإقامة", "stay_rules": "قواعد حساب مدة الإقامة",
+    "stay_rolling": "{allowance} يوماً في أي فترة متحركة من {window} يوماً",
+    "stay_per_entry": "حتى {allowance} يوماً لكل دخول",
+    "stay_calendar": "حتى {allowance} يوماً في السنة التقويمية",
+    "stay_year": "حتى {allowance} يوماً خلال ١٢ شهراً من أول دخول",
+    "stay_incomplete": "لم يحدد المصدر طريقة حساب أيام الإقامة بالكامل.",
+    "stay_no_reset": "الخروج وإعادة الدخول لا يعيدان تعيين مدة الإقامة المتحركة.",
+    "stay_gap": "الفاصل المطلوب بين الزيارات: {days} يوماً",
+    "stay_count_unknown": "لم يوضح المصدر كيفية احتساب يوم الوصول والمغادرة.",
+    "stay_default": "هذه قاعدة عامة للإعفاء من التأشيرة؛ راجع استثناءات جوازك.",
+    "stay_source_missing": "لا يوجد استشهاد مستقل لقاعدة الإقامة؛ تحقق من المرجع الرسمي.",
+    "stay_original": "شرح المصدر الأصلي:",
+    "extra_title": "تفاصيل إضافية للسفر — لا تدخل في تحديد التأشيرة",
+    "extra_purpose": "غرض السفر (للعلم فقط)",
+    "extra_residence": "بلد الإقامة (للعلم فقط)",
+    "extra_notice": (
+        "تعتمد حالة التأشيرة أعلاه على الجواز والوجهة فقط؛ "
+        "تغيير الغرض أو الإقامة لا يعيد حساب الأهلية."
+    ),
+    "unconfirmed_notice": "لم يؤكد المصدر هذه الحالة؛ ولا تعني الإعفاء من التأشيرة.",
+    "banned_notice": "يشير المصدر إلى حظر الدخول؛ تحقق من القيود الرسمية.",
+    "permit_notice": "يجب التحقق رسمياً من نوع التصريح وشروطه.",
+})
+
 COUNTRY_LABELS = {
     "fa": {
         "AF": "افغانستان", "IR": "ایران", "TR": "ترکیه", "AE": "امارات",
@@ -282,6 +363,9 @@ STATUS_NAMES = {
     "embassy-visa": ("ویزای سفارتی", "Embassy visa", "تأشيرة سفارة"),
     "visa-required": ("نیازمند ویزا", "Visa required", "التأشيرة مطلوبة"),
     "refused": ("ورود محدود یا ممنوع", "Admission restricted", "الدخول مقيّد"),
+    "banned": ("ورود ممنوع طبق منبع", "Entry banned per source", "الدخول محظور وفق المصدر"),
+    "unconfirmed": ("وضعیت تأیید نشده", "Status unconfirmed", "الحالة غير مؤكدة"),
+    "travel-permit": ("مجوز سفر / ورود لازم", "Travel/entry permit required", "تصريح سفر/دخول مطلوب"),
     "unknown": ("اطلاعات نامشخص", "Unknown", "غير معروف"),
 }
 LANG_INDEX = {"fa": 0, "en": 1, "ar": 2}
@@ -371,6 +455,49 @@ def _source_dates(
     return lines
 
 
+def _stay_rule_lines(rule: StayRule, language: str, *, full: bool = False) -> list[str]:
+    """Render only numbers supported by the source; cite the exact stay rule."""
+    lines = [f"<b>⏱ {escape(tr(language, 'stay_rules'))}</b>"]
+    if rule.basis == "rolling" and rule.allowance_days and rule.window_days:
+        description = tr(language, "stay_rolling").format(
+            allowance=rule.allowance_days, window=rule.window_days
+        )
+    elif rule.basis == "per-entry" and rule.allowance_days:
+        description = tr(language, "stay_per_entry").format(
+            allowance=rule.allowance_days
+        )
+    elif rule.basis == "calendar-year" and rule.allowance_days:
+        description = tr(language, "stay_calendar").format(
+            allowance=rule.allowance_days
+        )
+    elif rule.basis == "per-12-months-from-first-entry" and rule.allowance_days:
+        description = tr(language, "stay_year").format(allowance=rule.allowance_days)
+    else:
+        description = tr(language, "stay_incomplete")
+    lines.append("• " + escape(description))
+    if rule.basis == "rolling" and rule.resets_on_exit is False:
+        lines.append("• " + escape(tr(language, "stay_no_reset")))
+    if rule.min_gap_days is not None and rule.min_gap_days > 0:
+        lines.append("• " + escape(
+            tr(language, "stay_gap").format(days=rule.min_gap_days)
+        ))
+    if full:
+        if rule.arrival_day_counts is None or rule.departure_day_counts is None:
+            lines.append("• " + escape(tr(language, "stay_count_unknown")))
+        if rule.text:
+            lines.extend([
+                "<b>" + escape(tr(language, "stay_original")) + "</b>",
+                escape(rule.text[:950]),
+            ])
+    if rule.scope == "destination":
+        lines.append("<i>" + escape(tr(language, "stay_default")) + "</i>")
+    citation = _source_line(rule.source, language) if rule.source else ""
+    lines.append(
+        citation or "⚠️ " + escape(tr(language, "stay_source_missing"))
+    )
+    return lines
+
+
 def _limited_lines(lines: list[str], *, max_chars: int = 3900) -> str:
     """Keep HTML tags intact. Truncate only at complete, already escaped lines."""
     selected: list[str] = []
@@ -401,7 +528,8 @@ def render_overview(
         "visa-free": "✅", "freedom-of-movement": "✅",
         "evisa": "🟡", "e-visa": "🟡", "eta": "🟡",
         "visa-on-arrival": "🟡", "embassy-visa": "🔴",
-        "visa-required": "🔴", "refused": "⛔",
+        "visa-required": "🔴", "refused": "⛔", "banned": "⛔",
+        "travel-permit": "⚠️", "unconfirmed": "❔", "unknown": "❔",
     }
     stay = (
         f"{rule.stay_days} {tr(language, 'days')}"
@@ -416,13 +544,31 @@ def render_overview(
         f"{icons.get(rule.status, 'ℹ️')} <b>{escape(tr(language, 'status'))}:</b> "
         f"{escape(status_label(rule.status, language))}",
         f"⏳ <b>{escape(tr(language, 'stay'))}:</b> {escape(stay)}",
-        f"🎯 <b>{escape(tr(language, 'purpose'))}:</b> {escape(purpose_label)}",
     ]
+    status_notice = {
+        "unconfirmed": "unconfirmed_notice",
+        "banned": "banned_notice",
+        "travel-permit": "permit_notice",
+    }.get(rule.status)
+    if status_notice:
+        lines.append("⚠️ " + escape(tr(language, status_notice)))
+    stay_window = stay_rule_for(detail)
+    if stay_window:
+        lines.extend(["", *_stay_rule_lines(stay_window, language)])
+    elif rule.stay_days is not None:
+        lines.append("<i>" + escape(tr(language, "stay_incomplete")) + "</i>")
+    lines.extend([
+        "",
+        f"<b>ℹ️ {escape(tr(language, 'extra_title'))}</b>",
+        f"🎯 <b>{escape(tr(language, 'extra_purpose'))}:</b> "
+        f"{escape(purpose_label)}",
+    ])
     if residence:
         lines.append(
-            f"🏠 <b>{escape(tr(language, 'residence'))}:</b> "
+            f"🏠 <b>{escape(tr(language, 'extra_residence'))}:</b> "
             f"<code>{escape(residence)}</code>"
         )
+    lines.append("<i>" + escape(tr(language, "extra_notice")) + "</i>")
     if rule.notes:
         lines.extend(["", f"<b>{escape(tr(language, 'more'))}</b>"])
         lines.append(escape(rule.notes[:1100]))
@@ -446,9 +592,7 @@ def render_overview(
         "",
         "⚠️ " + escape(tr(language, "caution")),
     ])
-    if residence or purpose != "tourism":
-        lines.append("⚠️ " + escape(tr(language, "unmodeled")))
-    lines.extend([
+     lines.extend([
         "<i>" + escape(tr(language, "date_notice")) + "</i>",
         "",
         _attribution(language),
@@ -595,7 +739,7 @@ def _processing_text(value: object, language: str) -> str:
 
 def _section_header(language: str, section: str) -> list[str]:
     icons = {
-        "types": "🛂", "entry": "📋", "facts": "🌍",
+        "types": "🛂", "entry": "📋", "facts": "🌍", "stay": "⏱",
         "tips": "⚠️", "faq": "❔", "sources": "🔎", "transit": "🛫",
     }
     return [f"<b>{icons.get(section, '•')} {escape(tr(language, section))}</b>",
@@ -687,6 +831,17 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
             if visa_source:
                 lines.append(visa_source)
             lines.append("──────────")
+    elif section == "stay":
+        if detail.rule.stay_days is not None:
+            lines.append(
+                f"• <b>{escape(tr(language, 'stay'))}:</b> "
+                f"{detail.rule.stay_days} {escape(tr(language, 'days'))}"
+            )
+        stay_window = stay_rule_for(detail)
+        if stay_window:
+            lines.extend(_stay_rule_lines(stay_window, language, full=True))
+        else:
+            lines.append("⚠️ " + escape(tr(language, "stay_incomplete")))
     elif section == "entry":
         for field in _ENTRY_LABELS:
             value = requirements.get(field)
@@ -811,7 +966,13 @@ def render_section(detail: VisaDetail, language: str, section: str) -> str:
     return body + "\n" + footer_text
 
 
-def render_rich_report(detail: VisaDetail, language: str) -> dict:
+def render_rich_report(
+    detail: VisaDetail,
+    language: str,
+    *,
+    residence: str | None = None,
+    purpose: str = "tourism",
+) -> dict:
     """Produce valid, balanced native rich blocks with genuine source hyperlinks."""
     rule = detail.rule
     provenance = visa_provenance(detail)
@@ -842,8 +1003,19 @@ def render_rich_report(detail: VisaDetail, language: str) -> dict:
     ) + "</table>"
     intro = "<p>" + _provider_links(provenance, language) + "</p>"
     intro += "<p><i>" + escape(tr(language, "date_notice")) + "</i></p>"
+    intro += "<p><b>" + escape(tr(language, "extra_title")) + "</b></p>"
+    intro += (
+        "<p>" + escape(tr(language, "extra_purpose")) + ": "
+        + escape(tr(language, "purpose_" + purpose)) + "</p>"
+    )
+    if residence:
+        intro += (
+            "<p>" + escape(tr(language, "extra_residence"))
+            + ": " + escape(residence) + "</p>"
+        )
+    intro += "<p><i>" + escape(tr(language, "extra_notice")) + "</i></p>"
     sections: list[str] = []
-    for key in ("types", "entry", "transit", "facts", "tips", "faq", "sources"):
+    for key in ("stay", "types", "entry", "transit", "facts", "tips", "faq", "sources"):
         content = render_section(detail, language, key)
         content_lines = content.split("\n")[3:]
         paragraphs = "".join(
@@ -944,6 +1116,12 @@ def detail_keyboard(
         [InlineKeyboardButton(tr(language, "passports"), callback_data="visa:pick:p:0")],
     ]
     if detail is not None:
+        if stay_rule_for(detail) is not None or detail.rule.stay_days is not None:
+            rows.insert(2, [
+                InlineKeyboardButton(
+                    tr(language, "stay_rules"), callback_data="visa:section:stay"
+                )
+            ])
         provenance = visa_provenance(detail)
         source_url = safe_source_url(provenance.source_url)
         original_url = safe_source_url(provenance.destination_json_url)
@@ -973,9 +1151,18 @@ def groups_keyboard(
 ) -> InlineKeyboardMarkup:
     counts = counts or {}
     rows = []
-    for group in ("all", "free", "evisa", "arrival", "required", "other"):
+    for group in (
+        "all", "free", "evisa", "arrival", "required", "permit", "restricted", "other"
+    ):
         statuses = STATUS_GROUPS.get(group, tuple(counts))
-        count = sum(counts.get(item, 0) for item in statuses)
+        if group == "other":
+            defined = {
+                status for name, items in STATUS_GROUPS.items()
+                if name != "other" for status in items
+            }
+            count = sum(num for key, num in counts.items() if key not in defined)
+        else:
+            count = sum(counts.get(item, 0) for item in statuses)
         label = tr(language, group) + (f" · {count}" if counts else "")
         rows.append([InlineKeyboardButton(label, callback_data=f"visa:list:{group}:0")])
     rows.append([InlineKeyboardButton(tr(language, "back"), callback_data="visa:pick:d:0")])
