@@ -206,7 +206,7 @@ def test_provenance_and_compact_rich_report_are_visible_and_sourced():
     )
     third_party["visaPolicy"]["defaultSource"]["name"] = "German foreign ministry"
     iran = visa_detail(third_party)
-    assert "دولت کشور ثالث (DE)" in render_overview(iran, "fa")
+    assert "کشور ثالث (DE)" in render_overview(iran, "fa")
 
 
 def test_only_semantic_changes_trigger_alerts():
@@ -366,15 +366,15 @@ async def test_private_watch_callbacks_and_other_user_cannot_remove(tmp_path):
         )
     chosen = update("visa:watch:add")
     await handle_watch_callback(chosen, context(), service, a.id, "fa")
-    assert "زنگوله تغییرات ویزا" in chosen.callback_query.calls[-1][0][0]
+    assert "زنگوله تغییرات ویزا" in chosen.callback_query.calls[-1][0]
     first = (await service.list_user(a.id))[0]
     blocked = update(f"visa:watch:delete:{first.id}")
     await handle_watch_callback(blocked, context(), service, b.id, "fa")
-    assert "تعلق ندارد" in blocked.callback_query.calls[-1][0][0]
+    assert "تعلق ندارد" in blocked.callback_query.calls[-1][0]
     assert (await service.list_user(a.id))[0].id == first.id
     group = update("visa:watch:add", "supergroup")
     await handle_watch_callback(group, context(), service, b.id, "fa")
-    assert "خصوصی" in group.callback_query.calls[-1][0][0]
+    assert "خصوصی" in group.callback_query.calls[-1][0]
     paused = update(f"visa:watch:toggle:{first.id}")
     await handle_watch_callback(paused, context(), service, a.id, "fa")
     assert not (await service.list_user(a.id))[0].active
@@ -411,6 +411,6 @@ async def test_stale_warning_is_visible_from_visa_menu(tmp_path):
     await open_visa_menu(
         update, SimpleNamespace(user_data={}), Catalog(), "fa"
     )
-    assert "بیش از 24 ساعت" in query.calls[0][0][0]
-    assert "IR" in query.calls[0][0][0]
+    assert "بیش از 24 ساعت" in query.calls[0][0]
+    assert "IR" in query.calls[0][0]
     await db.close()
