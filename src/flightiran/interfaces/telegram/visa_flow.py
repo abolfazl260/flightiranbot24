@@ -11,6 +11,7 @@ from telegram.ext import ContextTypes
 from flightiran.modules.visa.catalog import Country, VisaCatalogService, VisaDetail
 
 from .rich_tickets import send_rich_price_table
+from .visa_quality import render_freshness
 from .visa_presentation import (
     country_keyboard,
     country_label,
@@ -61,6 +62,16 @@ async def _detail(
     return await service.detail(passport, destination)
 
 
+async def _freshness_notice(
+    service: VisaCatalogService, language: str, *, brief: bool = False
+) -> str:
+    # Existing fake catalogs in tests and integrations may omit freshness().
+    getter = getattr(service, "freshness", None)
+    if getter is None:
+        return ""
+    return render_freshness(await getter(), language, brief=brief)
+
+
 async def _show_result(
     update: Update,
     context: ContextTypes.DEFAULT_TYPE,
@@ -89,6 +100,7 @@ async def _show_result(
                 passport_name=passport_country.name if passport_country else passport,
                 residence=data.get("visa_residence"),
                 purpose=data.get("visa_purpose", "tourism"),
+                freshness_notice=await _freshness_notice(service, language),
             )
             keyboard = detail_keyboard(language, detail)
     if edit:
@@ -131,6 +143,9 @@ async def open_visa_menu(
         else:
             keyboard = home_keyboard(language)
         message += f"\n\n{escape(tr(language, 'intro'))}"
+        notice = await _freshness_notice(service, language)
+        if notice:
+            message += "\n\n" + notice
     if edit:
         await update.callback_query.edit_message_text(
             message, parse_mode="HTML", reply_markup=keyboard,
@@ -257,9 +272,11 @@ async def handle_visa_callback(
             )
         else:
             counts = await service.distribution(data["visa_passport"])
+            notice = await _freshness_notice(service, language, brief=True)
             await query.edit_message_text(
                 f"<b>{escape(tr(language, 'list'))}</b>\n"
-                f"<code>{escape(data['visa_passport'])}</code>",
+                f"<code>{escape(data['visa_passport'])}</code>"
+                + ("\n\n" + notice if notice else ""),
                 parse_mode="HTML",
                 reply_markup=groups_keyboard(language, counts),
             )
@@ -289,6 +306,9 @@ async def handle_visa_callback(
         )
         if not rules:
             lines.append(escape(tr(language, "no_items")))
+        notice = await _freshness_notice(service, language, brief=True)
+        if notice:
+            lines.extend(["", notice])
         await query.edit_message_text(
             "\n".join(lines),
             parse_mode="HTML",
@@ -311,11 +331,12 @@ async def handle_visa_callback(
                 detail, language,
                 residence=data.get("visa_residence"),
                 purpose=data.get("visa_purpose", "tourism"),
+                freshness_notice=await _freshness_notice(service, language),
             )
             try:
                 await send_rich_price_table(context.bot, query.message.chat_id, rich)
                 await query.edit_message_text(
-                    escape(tr(language, "more")) + "\n"
+                    escape(tr(language, "step_notice")) + "\n"
                     + escape(tr(language, "caution")),
                     reply_markup=detail_keyboard(language, detail),
                 )
@@ -326,19 +347,12 @@ async def handle_visa_callback(
                         detail, language,
                         residence=data.get("visa_residence"),
                         purpose=data.get("visa_purpose", "tourism"),
+                        freshness_notice=await _freshness_notice(service, language),
                     ),
                     parse_mode="HTML",
-                    reply_markup=detail_keyboard(language),
+                    reply_markup=detail_keyboard(language, detail),
                 )
-                # Standard HTML fallback, split into individual short sections.
-                for section in (
-                    "stay", "types", "entry", "transit", "facts", "tips", "sources"
-                ):
-                    await query.message.reply_text(
-                        render_section(detail, language, section),
-                        parse_mode="HTML",
-                        disable_web_page_preview=True,
-                    )
+                # Keep the fallback concise; users open details in separate tabs.
             return
         section = action.rsplit(":", 1)[1]
         if section not in {
@@ -346,8 +360,11 @@ async def handle_visa_callback(
         }:
             return
         await query.edit_message_text(
-            render_section(detail, language, section),
-            parse_mode="HTML",
+            render_section(
+                detail, language, section,
+                freshness_notice=await _freshness_notice(service, language, brief=True),
+            ),
+            parse_mode="HTML"
             reply_markup=section_keyboard(language),
             disable_web_page_preview=True,
         )
