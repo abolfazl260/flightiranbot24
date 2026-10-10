@@ -21,7 +21,12 @@ from flightiran.interfaces.telegram.handlers import (
     callback_handler,
     message_handler,
 )
-from flightiran.interfaces.telegram.price_alerts import WORDS, percent_keyboard
+from flightiran.interfaces.telegram.price_alerts import (
+    WORDS,
+    mode_keyboard,
+    percent_keyboard,
+    render_mode_prompt,
+)
 from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
 from flightiran.interfaces.telegram.rich_tickets import (
     render_rich_price_drop_report,
@@ -100,6 +105,36 @@ def test_percent_selection_buttons_cover_five_to_fifty_only(language):
     assert "mz724" not in " ".join(str(value) for value in WORDS[language].values())
 
 
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+def test_alert_selector_shows_cached_current_price_and_percentage_only(language):
+    pending = {
+        "origin": "تهران & <نمونه>",
+        "destination": "مشهد",
+        "current_price": 6_000_000,
+    }
+    prompt = render_mode_prompt(language, pending)
+    assert "6,000,000" in prompt
+    assert "تهران &amp; &lt;نمونه&gt;" in prompt
+    assert WORDS[language]["current_fare"] in prompt
+    assert WORDS[language]["unit"] in prompt
+    assert "alerts:mode:price" not in str(mode_keyboard(language))
+    buttons = [
+        button.callback_data
+        for row in mode_keyboard(language).inline_keyboard
+        for button in row
+    ]
+    assert buttons == ["alerts:mode:percent", "alerts:cancel"]
+
+
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+def test_alert_selector_does_not_invent_missing_current_price(language):
+    prompt = render_mode_prompt(language, {
+        "origin": "تهران", "destination": "مشهد", "current_price": None,
+    })
+    assert WORDS[language]["no_current"] in prompt
+    assert "6,000,000" not in prompt
+
+
 @pytest.mark.asyncio
 async def test_percentage_alert_ui_create_manage_and_isolate_users(tmp_path):
     db = await initialize_database(f"sqlite+aiosqlite:///{tmp_path / 'ui.db'}")
@@ -120,18 +155,25 @@ async def test_percentage_alert_ui_create_manage_and_isolate_users(tmp_path):
         ("menu:price_alerts", "Ticket price alerts"),
         ("alerts:new", "Select the departure"),
         ("alerts:origin:0", "Select the destination"),
-        ("alerts:select:0:0", "Choose the alert type"),
+        ("alerts:select:0:0", "Set a price-drop alert"),
         ("alerts:mode:percent", "up to 50%"),
     ):
         query = await press(data, ctx, deps)
         assert expected in query.calls[-1][0]
+        if data == "alerts:select:0:0":
+            assert "6,000,000" in query.calls[-1][0]
+            assert [btn.callback_data for row in
+                    query.calls[-1][1]["reply_markup"].inline_keyboard for btn in row] == [
+                "alerts:mode:percent", "alerts:cancel",
+            ]
     assert ctx.user_data["price_alert_pending"]["step"] == "percent"
     assert len(query.calls[-1][1]["reply_markup"].inline_keyboard) == 6
 
     # A price text sent during button mode must not create a bogus amount alert.
     response = Message("2000000")
     await message_handler(update(message=response), ctx, deps)
-    assert "Choose the alert type" in response.calls[-1][0]
+    assert "6,000,000" in response.calls[-1][0]
+    assert "up to 50%" in response.calls[-1][0]
     assert await service.list_user_alerts((await users.get_by_telegram_id(42)).id) == []
 
     # Reject forgery that tries to bypass the maximum allowed percentage.
