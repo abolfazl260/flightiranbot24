@@ -22,11 +22,11 @@ WORDS = {
     "fa": {
         "title": "🔔 <b>زنگوله قیمت بلیط</b>",
         "intro": (
-            "برای مسیر دلخواه، سقف قیمت به تومان یا درصد کاهش نسبت به میانگین "
-            "قیمت را انتخاب کنید. قیمت‌ها دوره‌ای بررسی می‌شوند و در صورت "
-            "رسیدن به شرط انتخابی، پیام تلگرام دریافت می‌کنید."
+            "برای مسیر دلخواه، درصد کاهش نسبت به میانگین قیمت را انتخاب کنید. "
+            "قیمت‌ها دوره‌ای بررسی می‌شوند و در صورت رسیدن به درصد "
+            "انتخاب‌شده، پیام تلگرام دریافت می‌کنید."
         ),
-        "choose_mode": "روش هشدار برای مسیر <b>{origin} ← {destination}</b> را انتخاب کنید:",
+        "choose_mode": "هشدار کاهش قیمت برای مسیر <b>{origin} ← {destination}</b>:",
         "mode_price": "💰 سقف قیمت به تومان",
         "mode_percent": "📉 درصد کاهش قیمت",
         "select_percent": (
@@ -86,11 +86,11 @@ WORDS = {
     "en": {
         "title": "🔔 <b>Ticket price alerts</b>",
         "intro": (
-            "Choose a price ceiling in tomans or a percentage drop from the "
-            "recorded average. The bot checks routes periodically and sends a "
-            "Telegram message when your selected condition is met."
+            "Choose a percentage price drop from the recorded average. "
+            "The bot checks routes periodically and sends a Telegram "
+            "message when your selected condition is met."
         ),
-        "choose_mode": "Choose the alert type for <b>{origin} → {destination}</b>:",
+        "choose_mode": "Set a price-drop alert for <b>{origin} → {destination}</b>:",
         "mode_price": "💰 Price ceiling in tomans",
         "mode_percent": "📉 Percentage price drop",
         "select_percent": (
@@ -149,10 +149,10 @@ WORDS = {
     "ar": {
         "title": "🔔 <b>تنبيهات أسعار التذاكر</b>",
         "intro": (
-            "اختر سقف سعر بالتومان أو نسبة انخفاض مقارنة بمتوسط الأسعار المسجل. "
+            "اختر نسبة انخفاض السعر مقارنة بمتوسط الأسعار المسجل. "
             "يتحقق البوت من الأسعار دورياً ويرسل رسالة عند تحقق الشرط."
         ),
-        "choose_mode": "اختر نوع التنبيه للمسار <b>{origin} ← {destination}</b>:",
+        "choose_mode": "إعداد تنبيه انخفاض السعر للمسار <b>{origin} ← {destination}</b>:",
         "mode_price": "💰 سقف السعر بالتومان",
         "mode_percent": "📉 نسبة انخفاض السعر",
         "select_percent": (
@@ -222,9 +222,27 @@ def menu_keyboard(language: str) -> InlineKeyboardMarkup:
     ])
 
 
+def render_current_fare(language: str, pending: dict) -> str:
+    """Show only the actual cached fare, without inventing unavailable prices."""
+    current = pending.get("current_price")
+    if current is None:
+        value = escape(word(language, "no_current"))
+    else:
+        value = f"<b>{current:,} {escape(word(language, 'unit'))}</b>"
+    return f"💵 <b>{escape(word(language, 'current_fare'))}:</b> {value}"
+
+
+def render_mode_prompt(language: str, pending: dict) -> str:
+    """Render route context and its cached current fare in the alert selector."""
+    title = word(language, "choose_mode").format(
+        origin=escape(pending["origin"]),
+        destination=escape(pending["destination"]),
+    )
+    return f"{title}\n\n{render_current_fare(language, pending)}"
+
+
 def mode_keyboard(language: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton(word(language, "mode_price"), callback_data="alerts:mode:price")],
         [InlineKeyboardButton(
             word(language, "mode_percent"), callback_data="alerts:mode:percent"
         )],
@@ -712,7 +730,7 @@ async def handle_alert_callback(
             await query.edit_message_text(
                 word(language, "select_percent").format(
                     origin=origin, destination=destination
-                ),
+                ) + "\n\n" + render_current_fare(language, pending),
                 parse_mode="HTML",
                 reply_markup=percent_keyboard(language),
             )
@@ -827,9 +845,7 @@ async def handle_alert_callback(
                 "suggested_prices": suggested_price_ceiling_amounts(current, average),
             }
             await query.edit_message_text(
-                word(language, "choose_mode").format(
-                    origin=escape(route.origin), destination=escape(destination)
-                ),
+                render_mode_prompt(language, context.user_data["price_alert_pending"]),
                 parse_mode="HTML",
                 reply_markup=mode_keyboard(language),
             )
@@ -862,16 +878,17 @@ async def handle_alert_text(
         await update.message.reply_text(word(language, "private"))
         return True
     if pending.get("step") != "price":
-        await update.message.reply_text(
-            word(language, "choose_mode").format(
+        if pending.get("step") == "percent":
+            prompt = word(language, "select_percent").format(
                 origin=escape(pending["origin"]),
                 destination=escape(pending["destination"]),
-            ),
-            parse_mode="HTML",
-            reply_markup=(
-                percent_keyboard(language)
-                if pending.get("step") == "percent" else mode_keyboard(language)
-            ),
+            ) + "\n\n" + render_current_fare(language, pending)
+            keyboard = percent_keyboard(language)
+        else:
+            prompt = render_mode_prompt(language, pending)
+            keyboard = mode_keyboard(language)
+        await update.message.reply_text(
+            prompt, parse_mode="HTML", reply_markup=keyboard,
         )
         return True
     try:
