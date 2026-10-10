@@ -1,8 +1,9 @@
-"""Small, explicit localization catalog with English fallback."""
+"""Small localization catalog with Persian as the default UI language."""
 
 from html import escape
 
 SUPPORTED_LANGUAGES = ("fa", "en", "ar")
+DEFAULT_LANGUAGE = "fa"
 
 MESSAGES = {
     "en": {
@@ -223,7 +224,7 @@ MESSAGES["ar"].update({
 
 
 def normalize_language(language: str | None) -> str:
-    return language if language in SUPPORTED_LANGUAGES else "en"
+    return language if language in SUPPORTED_LANGUAGES else DEFAULT_LANGUAGE
 
 
 def text(language: str | None, key: str) -> str:

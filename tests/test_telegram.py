@@ -26,7 +26,7 @@ class MemoryUsers:
         return await self.get_or_create(telegram_id, **fields), is_new
 
     async def get_language(self, user_id):
-        return self.languages.get(user_id, "en")
+        return self.languages.get(user_id, "fa")
 
     async def set_language(self, user_id, language):
         self.languages[user_id] = language
@@ -79,12 +79,12 @@ async def test_start_and_language_change_are_persistent():
     deps = dependencies()
     message = Message()
     await start_handler(update(message=message), None, deps)
-    assert "Welcome" in message.calls[0][0][0]
+    assert "سلام" in message.calls[0][0][0]
     assert message.calls[0][1]["parse_mode"] == "HTML"
 
     language_message = Message()
     await language_handler(update(message=language_message), None, deps)
-    assert "Choose your language" in language_message.calls[0][0][0]
+    assert "زبان خود را انتخاب کنید" in language_message.calls[0][0][0]
 
     query = Query()
     await callback_handler(update(query=query), None, deps)
@@ -93,12 +93,56 @@ async def test_start_and_language_change_are_persistent():
 
 
 @pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("choice", "greeting", "prompt"),
+    [
+        ("en", "Hello", "Choose your language"),
+        ("ar", "مرحباً", "اختر لغتك"),
+        ("fa", "سلام", "زبان خود را انتخاب کنید"),
+    ],
+)
+async def test_user_selected_language_survives_start_and_language_menu(
+    choice, greeting, prompt
+):
+    deps = dependencies()
+    query = Query()
+    query.data = f"language:{choice}"
+    await callback_handler(update(query=query), None, deps)
+
+    # Repeat /start as a returning user. It must never overwrite the
+    # user's chosen language or Telegram account locale.
+    incoming = update(message=Message())
+    incoming.effective_user.language_code = "en" if choice != "en" else "fa"
+    await start_handler(incoming, None, deps)
+    assert greeting in incoming.message.calls[0][0][0]
+    assert deps.users.languages[42] == choice
+
+    menu = Message()
+    await language_handler(update(message=menu), None, deps)
+    assert prompt in menu.calls[0][0][0]
+
+
+def test_missing_or_unsupported_language_normalizes_to_persian():
+    from flightiran.interfaces.telegram.localization import (
+        DEFAULT_LANGUAGE,
+        normalize_language,
+    )
+
+    assert DEFAULT_LANGUAGE == "fa"
+    assert normalize_language(None) == "fa"
+    assert normalize_language("") == "fa"
+    assert normalize_language("de") == "fa"
+    assert normalize_language("en") == "en"
+    assert normalize_language("ar") == "ar"
+
+
+@pytest.mark.asyncio
 async def test_unknown_callback_has_safe_fallback():
     deps = dependencies()
     query = Query()
     query.data = "unexpected"
     await callback_handler(update(query=query), None, deps)
-    assert "unavailable" in query.calls[0][0][0]
+    assert "در دسترس نیست" in query.calls[0][0][0]
 
 
 @pytest.mark.asyncio
@@ -322,7 +366,7 @@ async def test_ticket_origin_invalid_index_and_expired_state_do_not_send():
     query.data = "tickets:origin:999"
     await callback_handler(update(query=query), context, deps)
     assert query.calls[0][1]["reply_markup"].inline_keyboard
-    assert "expired" in query.calls[0][0][0].lower()
+    assert "منقضی" in query.calls[0][0][0]
 
 
 def test_ticket_origin_keyboard_pagination_and_safe_callback_data():
@@ -507,5 +551,5 @@ async def test_new_user_alert_delivery_failure_does_not_break_start():
         deps,
     )
     assert len(user_message.calls) == 1
-    assert "Welcome" in user_message.calls[0][0][0]
+    assert "سلام" in user_message.calls[0][0][0]
     assert 42 in deps.users.users

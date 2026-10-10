@@ -372,7 +372,7 @@ def test_migration_upgrades_existing_price_alert_rows_without_deleting_data(
             assert row == (5_000_000, "price", None)
             assert snapshot == (4_800_000, None)
             assert conn.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0010_percentage_ticket_alerts"
+                "0011_default_persian_language"
             )
     finally:
         engine.dispose()

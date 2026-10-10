@@ -136,7 +136,9 @@ class SQLiteUserRepository:
             language = await session.scalar(
                 select(UserPreference.language).where(UserPreference.user_id == user_id)
             )
-            return language or "en"
+            # No preference row means the user has never selected a language.
+            # Existing explicit English/Arabic/Persian choices remain unchanged.
+            return language or "fa"
 
     async def get_visa_passport(self, user_id: int) -> str:
         async with self.database.session() as session:
