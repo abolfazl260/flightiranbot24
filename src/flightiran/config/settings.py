@@ -32,8 +32,6 @@ class Settings(BaseSettings):
     )
     database_url: str = "sqlite+aiosqlite:///./flightiran.db"
     log_level: str = "INFO"
-    currency_provider_url: str | None = None
-    currency_proxy_url: str | None = None
     ticket_provider_url: str = "https://mz724.ir/"
     ticket_support_username: str = Field(
         default=DEFAULT_SUPPORT_USERNAME,

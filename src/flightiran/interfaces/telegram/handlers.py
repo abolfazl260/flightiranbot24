@@ -28,7 +28,6 @@ from flightiran.interfaces.telegram.rich_tickets import (
 )
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
-from flightiran.modules.currency.service import CurrencyService
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
@@ -72,7 +71,6 @@ LOGGER = logging.getLogger(__name__)
 class TelegramDependencies:
     users: UserRepository
     audit: AuditRepository
-    currency_service: CurrencyService | None = None
     web_app_url: str | None = None
     airport_catalog: AirportCatalog | None = None
     useful_catalog: UsefulContentCatalog | None = None
@@ -383,21 +381,6 @@ async def callback_handler(
                 parse_mode="HTML",
                 reply_markup=back_menu(language),
             )
-    elif data == "menu:currency" and dependencies.currency_service:
-        await dependencies.audit.record("currency.menu.opened", user_id=user_id)
-        from .currency import render_quotes
-
-        await query.edit_message_text(
-            render_quotes(await dependencies.currency_service.quotes()),
-            parse_mode="HTML",
-            reply_markup=back_menu(language),
-        )
-    elif data == "menu:currency":
-        await dependencies.audit.record("currency.menu.opened", user_id=user_id)
-        await query.edit_message_text(
-            "سرویس نرخ ارز هنوز پیکربندی نشده است. مقدار CURRENCY_PROVIDER_URL را تنظیم کنید.",
-            reply_markup=back_menu(language),
-        )
     elif data == "menu:useful":
         catalog = dependencies.useful_catalog or default_catalog()
         await dependencies.audit.record(
@@ -632,18 +615,6 @@ async def inline_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
         await update.inline_query.answer([])
 
 
-async def price_handler(
-    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
-) -> None:
-    from .currency import render_quotes
-
-    user_id, _language = await _user_language(update, dependencies)
-    await dependencies.audit.record("currency.quote.requested", user_id=user_id)
-    quotes = await dependencies.currency_service.quotes() if dependencies.currency_service else []
-    if update.message:
-        await update.message.reply_text(render_quotes(quotes), parse_mode="HTML")
-
-
 
 
 async def visa_handler(
@@ -822,7 +793,6 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     application.add_handler(
         CommandHandler("language", lambda u, c: language_handler(u, c, dependencies))
     )
-    application.add_handler(CommandHandler("price", lambda u, c: price_handler(u, c, dependencies)))
     application.add_handler(CallbackQueryHandler(lambda u, c: callback_handler(u, c, dependencies)))
     application.add_handler(
         MessageHandler(
