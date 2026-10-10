@@ -159,7 +159,7 @@ def render_cheap_ticket_booking_hint(
             "booking steps? Send your departure city, destination, approximate "
             "travel date and any questions. Your request can then be reviewed.\n\n"
             f"📩 <b>Support for all services:</b> {contact}\n"
-            "👇 <b>Tap the button below to ask a question or discuss a booking.</b>"
+            "👇 <b>Use the buttons below for booking, price alerts or navigation.</b>"
         )
     if language == "ar":
         return (
@@ -170,7 +170,7 @@ def render_cheap_ticket_booking_hint(
             "الحجز؟ أرسل مدينة المغادرة والوجهة والتاريخ التقريبي وسؤالك "
             "لتتم مراجعة طلبك.\n\n"
             f"📩 <b>دعم جميع الخدمات:</b> {contact}\n"
-            "👇 <b>اضغط الزر أدناه للسؤال أو الاستفسار عن الحجز.</b>"
+            "👇 <b>استخدم الأزرار أدناه للحجز أو تنبيهات الأسعار أو الرجوع.</b>"
         )
     return (
         "🎫 <b>مسیر دلخواهتان را پیدا کرده‌اید یا هنوز سؤال دارید؟</b>\n\n"
@@ -182,7 +182,7 @@ def render_cheap_ticket_booking_hint(
         "مبدأ، مقصد و تاریخ تقریبی سفرتان را ارسال کنید و سؤال خود را بپرسید "
         "تا درخواستتان بررسی شود.\n\n"
         f"📩 <b>پشتیبانی همه خدمات:</b> {contact}\n"
-        "👇 <b>برای پرسیدن سؤال یا درخواست بررسی بلیط، دکمه زیر را بزنید.</b>"
+        "👇 <b>برای رزرو، ثبت زنگوله قیمت یا بازگشت از دکمه‌های زیر استفاده کنید.</b>"
     )
 
 

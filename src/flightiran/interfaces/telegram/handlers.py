@@ -21,6 +21,7 @@ from flightiran.db.repositories import AuditRepository, UserRepository
 from flightiran.infrastructure.http.errors import ProviderError
 from flightiran.interfaces.telegram.rich_tickets import (
     find_price_drops,
+    render_ticket_footer,
     render_price_drop_fallback_chunks,
     render_rich_price_drop_report,
     render_rich_price_tables,
@@ -291,7 +292,10 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
-    if data == "menu:price_alerts" or data.startswith("alerts:"):
+    if (
+        data == "menu:price_alerts"
+        or data.startswith(("alerts:", "tickets:alert:"))
+    ):
         if dependencies.price_alert_service is None:
             await query.edit_message_text(
                 word(language, "unavailable"), reply_markup=back_menu(language)
@@ -530,10 +534,8 @@ async def callback_handler(
                     language, [item.origin for item in routes], page=index // 16
                 ),
             )
-            # Bell buttons in the rich fare table use this already-fetched
-            # snapshot and go straight to selecting an alert destination.
-            # No second provider request is needed.
-            context.user_data["alert_routes"] = routes
+            # The bell callback reads the cached ticket_routes snapshot
+            # when it is clicked, avoiding a second provider request.
             rich_messages = render_rich_price_tables(
                 route, language=language, booking_route_index=index,
                 support_username=dependencies.ticket_support_username,
@@ -543,8 +545,12 @@ async def callback_handler(
                     await send_rich_price_table_with_badge_fallback(
                         context.bot, query.message.chat_id, rich_message
                     )
-                except Exception:
-                    LOGGER.exception("rich_ticket_table_send_failed")
+                except Exception as exc:
+                    # HTTP exceptions can contain the bot token in their URL.
+                    LOGGER.warning(
+                        "rich_ticket_table_send_failed error_type=%s",
+                        type(exc).__name__,
+                    )
                     chunks = render_cheap_route_chunks(
                         route, language=language, max_length=2700
                     )
@@ -555,7 +561,12 @@ async def callback_handler(
                     # under the same fallback fare list message.
                     for i, message in enumerate(chunks):
                         if i == len(chunks) - 1:
-                            message += "\n\n" + booking_hint
+                            message = (
+                                message.removesuffix(render_ticket_footer(
+                                    language, rich=False
+                                ))
+                                + "\n\n" + booking_hint
+                            )
                         await query.message.reply_text(
                             message,
                             parse_mode="HTML",

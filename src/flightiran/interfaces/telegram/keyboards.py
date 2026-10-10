@@ -128,7 +128,7 @@ def ticket_result_menu(
     }
     booking, bell, back, home = labels.get(language, labels["fa"])
     bell_action = (
-        f"alerts:origin:{origin_index}"
+        f"tickets:alert:{origin_index}"
         if origin_index is not None and origin_index >= 0
         else "menu:price_alerts"
     )

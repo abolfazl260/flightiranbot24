@@ -180,8 +180,12 @@ def render_rich_price_tables(
     if max_text_chars < 1 or not 1 <= max_rows <= MAX_RICH_TABLE_ROWS:
         raise ValueError("Invalid Telegram rich message limits")
     if not route.destinations:
+
         return []
 
+    # RichMessage's 500-block limit also includes the explanatory
+    # paragraphs and two action rows below each table.
+    safe_max_rows = min(max_rows, 470) if booking_route_index is not None else max_rows
     messages: list[dict] = []
     rows: list[str] = []
 
@@ -197,7 +201,7 @@ def render_rich_price_tables(
         row = _row(item)
         candidate = rows + [row]
         rendered = render_page(candidate, continued=bool(messages))
-        if len(candidate) > max_rows or _plain_text_length(rendered) > max_text_chars:
+        if len(candidate) > safe_max_rows or _plain_text_length(rendered) > max_text_chars:
             if not rows:
                 raise ValueError(
                     f"One ticket destination exceeds Telegram rich message limits: {item.name}"
