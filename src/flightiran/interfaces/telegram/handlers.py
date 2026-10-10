@@ -34,6 +34,7 @@ from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
+from flightiran.modules.visa.watch import VisaWatchService
 
 from .admin_report import render_admin_report
 from .keyboards import (
@@ -54,6 +55,12 @@ from .useful_content import (
     render_useful_category,
     useful_category_menu,
     useful_menu,
+)
+from .visa_watches import (
+    deliver_watch_notifications,
+    handle_watch_callback,
+    show_watches,
+    word as visa_watch_text,
 )
 from .visa_flow import (
     handle_visa_callback,
@@ -80,6 +87,7 @@ class TelegramDependencies:
     admin_reports: BotReportRepository | None = None
     visa_sync_service: VisaSyncService | None = None
     visa_catalog: VisaCatalogService | None = None
+    visa_watch_service: VisaWatchService | None = None
 
 
 def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> bool:
@@ -298,6 +306,12 @@ async def callback_handler(
         await handle_alert_callback(
             update, context, dependencies.price_alert_service,
             dependencies.cheap_ticket_service, user_id, language,
+        )
+        return
+    if data.startswith("visa:watch:"):
+        await _load_visa_passport(context, user_id, dependencies)
+        await handle_watch_callback(
+            update, context, dependencies.visa_watch_service, user_id, language
         )
         return
     if data == "menu:visa":
@@ -705,6 +719,28 @@ async def visa_cancel_handler(
         )
 
 
+async def visa_watch_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    if update.message is None:
+        return
+    user_id, language = await _user_language(update, dependencies)
+    if (
+        getattr(update, "effective_chat", None) is None
+        or update.effective_chat.type != "private"
+    ):
+        await update.message.reply_text(visa_watch_text(language, "private"))
+        return
+    if dependencies.visa_watch_service is None:
+        await update.message.reply_text(visa_watch_text(language, "unavailable"))
+        return
+    await show_watches(
+        update.message, dependencies.visa_watch_service, user_id, language,
+        edit=False,
+    )
+    await dependencies.audit.record("visa.watch.menu", user_id=user_id)
+
+
 async def visa_sync_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
@@ -736,6 +772,13 @@ async def visa_sync_handler(
         parse_mode="HTML",
         disable_web_page_preview=True,
     )
+    if dependencies.visa_watch_service is not None and result.alerts_queued:
+        try:
+            await deliver_watch_notifications(
+                context.bot, dependencies.visa_watch_service, dependencies.users
+            )
+        except Exception:
+            LOGGER.exception("manual_visa_change_notification_delivery_failed")
 
 
 async def alerts_command_handler(
@@ -771,6 +814,9 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     )
     application.add_handler(
         CommandHandler("visa_sync", lambda u, c: visa_sync_handler(u, c, dependencies))
+    )
+    application.add_handler(
+        CommandHandler("visa_watch", lambda u, c: visa_watch_handler(u, c, dependencies))
     )
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
