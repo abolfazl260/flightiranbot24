@@ -37,6 +37,7 @@ WORDS = {
         "unknown": "نامشخص", "days": "روز",
         "stay_window_changed": "قوانین شمارش روزهای اقامت یا شرایط ورود مجدد تغییر کرده‌اند.",
         "publication": "تاریخ اعلام‌شده انتشار داده", "source": "مشاهده فایل مرجع مقصد",
+        "official_source": "مشاهده منبع رسمی/استنادی مقررات",
         "notice": (
             "این اعلان درباره تغییر اطلاعات منتشرشده است، نه تأیید تغییر قانون. "
             "پیش از رزرو یا سفر، مرجع رسمی کشور مقصد و ایرلاین را بررسی کنید."
@@ -66,6 +67,7 @@ WORDS = {
         "unknown": "Not specified", "days": "days",
         "stay_window_changed": "Stay-window counting or re-entry rules were updated.",
         "publication": "Published data date", "source": "View source destination record",
+        "official_source": "View cited visa regulation",
         "notice": (
             "This reports a published data change, not a confirmed change in law. "
             "Verify with the destination immigration authority and your airline before travel."
@@ -94,6 +96,7 @@ WORDS = {
         "unknown": "غير محدد", "days": "يوم",
         "stay_window_changed": "تغيرت قواعد احتساب أيام الإقامة أو إعادة الدخول.",
         "publication": "تاريخ نشر البيانات", "source": "فتح السجل الأصلي للوجهة",
+        "official_source": "فتح مرجع شروط الدخول",
         "notice": (
             "يشير هذا التنبيه إلى تغير البيانات المنشورة وليس تأكيداً لتغير القانون. "
             "تحقق من الجهة الرسمية وشركة الطيران قبل السفر."
@@ -263,6 +266,11 @@ def render_change_alert(notification: PendingNotification, language: str) -> str
         lines.append(
             f"🗓 {escape(word(language, 'publication'))}: {escape(published)}"
         )
+    citation = link_html(
+        data.get("official_source_url"), word(language, "official_source")
+    )
+    if citation:
+        lines.append(citation)
     source = link_html(data.get("source_url"), word(language, "source"))
     if source:
         lines.append(source)
