@@ -54,9 +54,9 @@ jobs:
           schema="android/app/schemas/com.abolfazl260.flightiranbot24.data.airports.TravelCacheDatabase/1.json"
           test -s "$schema"
           python -m json.tool "$schema" >/dev/null
-          echo 'ROOM_SCHEMA_BEGIN'
-          cat "$schema"
-          echo 'ROOM_SCHEMA_END'
+          # Enforce that schema changes are intentional, reviewed and committed.
+          git ls-files --error-unmatch "$schema" >/dev/null
+          git diff --exit-code -- "$schema"
       - name: Generate Play Store art (deterministic)
         run: |
           python -m pip install --disable-pip-version-check "Pillow==11.3.0"
