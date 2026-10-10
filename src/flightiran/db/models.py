@@ -187,3 +187,37 @@ class VisaRuleIndex(Base):
     source_url: Mapped[str | None] = mapped_column(String(512))
     verified_on: Mapped[str | None] = mapped_column(String(32))
     source_level: Mapped[str] = mapped_column(String(16), nullable=False)
+
+
+class VisaWatch(TimestampedModel):
+    """User-owned subscription to meaningful passport/destination rule changes."""
+
+    __tablename__ = "visa_watches"
+    __table_args__ = (
+        UniqueConstraint("user_id", "passport", "destination", name="uq_visa_watch_route"),
+        Index("ix_visa_watch_destination_active", "destination", "active"),
+    )
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    passport: Mapped[str] = mapped_column(String(2), nullable=False)
+    destination: Mapped[str] = mapped_column(String(2), nullable=False)
+    active: Mapped[bool] = mapped_column(default=True, nullable=False)
+
+
+class VisaWatchEvent(TimestampedModel):
+    """Transactional notification outbox populated only on semantic rule changes."""
+
+    __tablename__ = "visa_watch_events"
+    __table_args__ = (
+        UniqueConstraint("watch_id", "change_hash", name="uq_visa_watch_change"),
+        Index("ix_visa_watch_event_pending", "sent_at", "attempts"),
+    )
+    watch_id: Mapped[int] = mapped_column(
+        ForeignKey("visa_watches.id", ondelete="CASCADE"), nullable=False, index=True
+    )
+    change_hash: Mapped[str] = mapped_column(String(64), nullable=False)
+    payload: Mapped[dict] = mapped_column(JSON, nullable=False)
+    sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    last_attempt_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
