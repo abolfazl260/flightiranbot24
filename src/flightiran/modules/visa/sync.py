@@ -23,6 +23,7 @@ from flightiran.db.models import VisaDatasetState, VisaDestinationData, VisaRule
 
 from .indexer import index_destination
 from .provenance import source_date
+from .watch import VisaWatchService
 
 LOGGER = logging.getLogger(__name__)
 BASE = "https://travelrequirements.info/data/"
@@ -60,6 +61,7 @@ class VisaSyncResult:
     version: str | None
     message: str = ""
     latest_source_update: str | None = None
+    alerts_queued: int = 0
 
     def render(self, *, manual: bool = False, html: bool = False) -> str:
         if html:
@@ -74,6 +76,7 @@ class VisaSyncResult:
             f"کشورهای بررسی‌شده: {self.checked}",
             f"فایل‌های دریافت‌شده: {self.downloaded}",
             f"کشورهای دارای تغییر محتوا: {len(self.changed)}",
+            f"هشدار تغییر شرایط ویزا در صف: {self.alerts_queued}",
             "",
             f"منبع اصلی: {MANIFEST_URL}",
             f"فایل ماتریس: {MATRIX_URL}",
@@ -110,6 +113,7 @@ class VisaSyncResult:
             f"• کشورهای موجود در منبع: {self.checked}",
             f"• فایل‌های دریافت‌شده: {self.downloaded}",
             f"• فایل‌های با محتوای تغییرکرده: {len(self.changed)}",
+            f"• اعلان تغییر شرایط ویزا در صف: {self.alerts_queued}",
             "",
             "<b>🔗 لینک‌های دریافت اطلاعات</b>",
             f'<a href="{MANIFEST_URL}">مشاهده فهرست و نسخه داده‌ها (JSON)</a>',
@@ -253,6 +257,7 @@ class VisaSyncService:
                 # All downloads/validation complete before writing ANY new version.
                 downloaded = await asyncio.gather(*(fetch_one(entry) for entry in jobs))
                 changed: list[str] = []
+                alerts_queued = 0
                 async with self.database.session() as session:
                     state = await session.get(VisaDatasetState, 1)
                     if state is None:
@@ -266,6 +271,11 @@ class VisaSyncService:
                             row = VisaDestinationData(slug=entry["id"])
                             session.add(row)
                         if row.content_hash != digest:
+                            previous = row.raw_data if row.content_hash and row.raw_data else None
+                            alerts_queued += await VisaWatchService.enqueue_changes(
+                                session, previous, document, entry["iso2"],
+                                source_url=entry["url"],
+                            )
                             changed.append(entry["id"])
                             row.raw_data = document
                             row.content_hash = digest
@@ -307,4 +317,5 @@ class VisaSyncService:
                     now,
                     str(manifest.get("version", "")),
                     latest_source_update=latest_source_update,
+                    alerts_queued=alerts_queued,
                 )
