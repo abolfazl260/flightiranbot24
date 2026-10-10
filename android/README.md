@@ -7,7 +7,7 @@ Offline functionality:
 - Review and clear a travel preparation checklist stored only on the device.
 
 Optional online actions open the Telegram bot or the support account.
-Visa and currency commands are copied to clipboard for pasting into Telegram.
+The visa command is copied to the clipboard for pasting into Telegram.
 The app does not authenticate directly to the Telegram Mini App.
 
 The airport data is packaged directly from:

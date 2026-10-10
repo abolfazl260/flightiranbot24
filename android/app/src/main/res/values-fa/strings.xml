@@ -6,12 +6,11 @@
     <string name="notice">اطلاعات فرودگاه‌ها برای راهنمایی عمومی است. خدمات آنلاین از طریق تلگرام باز می‌شوند.</string>
     <string name="open_bot">ورود به دستیار سفر</string>
     <string name="open_visa">راهنمای ویزا و ورود</string>
-    <string name="open_currency">نرخ ارز</string>
     <string name="open_airports">اطلاعات فرودگاه‌ها</string>
     <string name="open_useful">اطلاعات کاربردی سفر</string>
     <string name="open_support">پشتیبانی</string>
     <string name="open_privacy">حریم خصوصی</string>
-    <string name="command_hint">برای ویزا یا نرخ ارز، دستور مربوطه کپی می‌شود؛ آن را در گفت‌وگوی تلگرام جای‌گذاری کنید.</string>
+    <string name="command_hint">برای مشاهده اطلاعات ویزا، دستور مربوطه کپی می‌شود؛ آن را در گفت‌وگوی تلگرام جای‌گذاری کنید.</string>
     <string name="command_copied">دستور کپی شد؛ آن را در تلگرام جای‌گذاری کنید.</string>
     <string name="link_unavailable">امکان باز کردن لینک در این دستگاه وجود ندارد.</string>
     <string name="offline_airports">فهرست فرودگاه‌ها · آفلاین</string>

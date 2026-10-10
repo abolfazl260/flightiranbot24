@@ -21,7 +21,7 @@ Flight Iran Bot 24 یک برنامه همراه برای برنامه‌ریزی
 - جست‌وجوی آفلاین فرودگاه‌های موجود در فهرست برنامه با نام فارسی، انگلیسی، عربی و کد IATA
 - نمایش کد فرودگاه، کشور و منطقه زمانی بدون نیاز به اینترنت
 - چک‌لیست کاربردی پیش از سفر با ذخیره وضعیت انتخاب‌ها فقط روی گوشی
-- دسترسی اختیاری به راهنمای ویزا، نرخ ارز و اطلاعات سفر از طریق ربات تلگرام Flight Iran Bot 24
+- دسترسی اختیاری به راهنمای ویزا و اطلاعات سفر از طریق ربات تلگرام Flight Iran Bot 24
 - لینک پشتیبانی و راهنمای حریم خصوصی
 
 برای استفاده از امکانات آفلاین، حساب تلگرام لازم نیست؛ خدمات آنلاین به برنامه تلگرام منتقل می‌شوند. اطلاعات فرودگاه درون اپ قرار دارد و ممکن است جدیدترین تغییرات را نشان ندهد. شرایط سفر را از منابع رسمی بررسی کنید.
@@ -40,7 +40,7 @@ Plan your trips with Flight Iran Bot 24, a practical travel companion.
 - Search an offline airport directory by name, IATA code, country or timezone
 - See airport codes, country and timezone with no internet connection
 - Save a six-item travel checklist on your device
-- Optionally access visa, exchange rates and additional travel resources through the Telegram bot
+- Optionally access visa and additional travel resources through the Telegram bot
 - Access support and privacy information
 
 Offline features work without Telegram. Online features open externally in Telegram and may need a Telegram account. Airport information is bundled with the application, so it may not reflect recent changes. Verify important travel rules with official authorities.

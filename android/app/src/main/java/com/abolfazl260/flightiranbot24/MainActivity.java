@@ -35,7 +35,6 @@ public final class MainActivity extends Activity {
 
         findViewById(R.id.openBot).setOnClickListener(view -> openUrl(BotLinks.BOT));
         findViewById(R.id.openVisa).setOnClickListener(view -> openBotCommand("/visa"));
-        findViewById(R.id.openCurrency).setOnClickListener(view -> openBotCommand("/price"));
         findViewById(R.id.openAirports).setOnClickListener(view -> openUrl(BotLinks.BOT));
         findViewById(R.id.openUseful).setOnClickListener(view -> openUrl(BotLinks.BOT));
         findViewById(R.id.openSupport).setOnClickListener(view -> openUrl(BotLinks.SUPPORT));
