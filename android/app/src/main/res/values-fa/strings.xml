@@ -4,6 +4,8 @@
     <string name="welcome_title">دستیار سفر Flight Iran Bot 24</string>
     <string name="welcome_description">راهنمای فرودگاه‌ها و چک‌لیست سفر بدون اینترنت؛ سایر خدمات در ربات تلگرام.</string>
     <string name="notice">اطلاعات فرودگاه‌ها برای راهنمایی عمومی است. خدمات آنلاین از طریق تلگرام باز می‌شوند.</string>
+    <string name="home_offline_heading">امکانات آفلاین سفر</string>
+    <string name="home_online_heading">خدمات آنلاین سفر</string>
     <string name="open_bot">ورود به دستیار سفر</string>
     <string name="open_visa">راهنمای ویزا و ورود</string>
     <string name="open_airports">اطلاعات فرودگاه‌ها</string>

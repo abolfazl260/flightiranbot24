@@ -69,13 +69,15 @@ def test_currency_implementation_and_old_scraper_are_removed():
 
 def test_android_no_longer_offers_dead_exchange_rate_button():
     layout = (ROOT / "android/app/src/main/res/layout/activity_main.xml").read_text()
-    java = (ROOT / "android/app/src/main/java/com/abolfazl260/"
-            "flightiranbot24/MainActivity.java").read_text()
-    for text in (layout, java):
-        assert "openCurrency" not in text
-        assert "/price" not in text
+    launcher_dir = ROOT / "android/app/src/main/java/com/abolfazl260/flightiranbot24"
+    launchers = list(launcher_dir.glob("MainActivity.*"))
+    assert len(launchers) == 1
+    launcher = launchers[0].read_text(encoding="utf-8")
+    for content in (layout, launcher):
+        assert "openCurrency" not in content
+        assert "/price" not in content
     for language in ("values", "values-fa"):
         strings = (ROOT / f"android/app/src/main/res/{language}/strings.xml").read_text()
         assert "open_currency" not in strings
     # Visa deep-link/copy behavior survives.
-    assert 'openBotCommand("/visa")' in java
+    assert 'openBotCommand("/visa")' in launcher
