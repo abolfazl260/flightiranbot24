@@ -265,3 +265,19 @@ def render_change_alert(notification: PendingNotification, language: str) -> str
         lines.append(source)
     lines.extend(["", "<i>" + escape(word(language, "notice")) + "</i>"])
     return "\n".join(lines)
+
+
+async def deliver_watch_notifications(bot, service: VisaWatchService, users) -> int:
+    """Shared notification dispatch for the scheduler and manual visa sync."""
+
+    async def send(notification: PendingNotification) -> None:
+        account = await users.get_by_telegram_id(notification.telegram_id)
+        language = await users.get_language(account.id) if account is not None else "fa"
+        await bot.send_message(
+            chat_id=notification.telegram_id,
+            text=render_change_alert(notification, language),
+            parse_mode="HTML",
+            disable_web_page_preview=True,
+        )
+
+    return await service.deliver_pending(send)
