@@ -3,7 +3,6 @@
 import asyncio
 import logging
 from datetime import datetime, timezone
-from html import escape
 from pathlib import Path
 from typing import Final
 from zoneinfo import ZoneInfo
@@ -23,6 +22,7 @@ from flightiran.db.repositories import (
 )
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
+from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
 from flightiran.interfaces.telegram.visa_watches import deliver_watch_notifications
 from flightiran.modules.admin.daily_active import (
     ActiveUsersReportRepository,
@@ -142,32 +142,9 @@ def create_application(
                     language = await SQLiteUserRepository(
                         price_alert_service.database
                     ).get_language(alert.user_id)
-                    origin_text, destination_text = escape(origin), escape(destination)
-                    if language == "fa":
-                        body = (
-                            "🔔 <b>هشدار قیمت بلیط</b>\n"
-                            f"مسیر: {origin_text} ← {destination_text}\n"
-                            f"قیمت فعلی: <b>{int(snapshot.price):,} تومان</b>\n"
-                            f"سقف تعیین‌شده: {int(alert.target_price):,} تومان\n"
-                            "قیمت‌ها از فهرست mz724 دریافت شده‌اند و ممکن است "
-                            "هنگام رزرو تغییر کنند."
-                        )
-                    elif language == "ar":
-                        body = (
-                            "🔔 <b>تنبيه سعر التذكرة</b>\n"
-                            f"المسار: {origin_text} ← {destination_text}\n"
-                            f"السعر الحالي: <b>{int(snapshot.price):,} تومان</b>\n"
-                            f"الحد الأقصى: {int(alert.target_price):,} تومان\n"
-                            "السعر حسب mz724 وقد يتغير قبل الحجز."
-                        )
-                    else:
-                        body = (
-                            "🔔 <b>Ticket price alert</b>\n"
-                            f"Route: {origin_text} → {destination_text}\n"
-                            f"Current price: <b>{int(snapshot.price):,} tomans</b>\n"
-                            f"Your price limit: {int(alert.target_price):,} tomans\n"
-                            "This mz724 listing may change before booking."
-                        )
+                    body = render_ticket_alert(
+                        origin, destination, alert, snapshot, language,
+                    )
                     try:
                         await application.bot.send_message(
                             chat_id=telegram_id, text=body, parse_mode="HTML"
