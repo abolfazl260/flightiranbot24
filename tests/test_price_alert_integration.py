@@ -97,6 +97,10 @@ async def test_private_user_can_create_and_manage_alert_through_telegram(tmp_pat
         users=users, audit=Audit(), price_alert_service=alerts,
         cheap_ticket_service=feed,
     )
+    # Explicitly chosen English must remain available after the
+    # default-language change.
+    owner = await users.create(901)
+    await users.set_language(owner.id, "en")
     context = ctx()
 
     for data, expected in (
@@ -215,7 +219,7 @@ async def test_cancel_price_prompt_does_not_require_provider(tmp_path):
     msg = FakeMessage("/cancel")
     await visa_cancel_handler(update(message=msg), context, deps)
     assert context.user_data.get("price_alert_pending") is None
-    assert "cancelled" in msg.calls[-1][0][0]
+    assert "لغو شد" in msg.calls[-1][0][0]
     await db.close()
 
 

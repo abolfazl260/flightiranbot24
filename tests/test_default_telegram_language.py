@@ -2,9 +2,9 @@
 
 from pathlib import Path
 
-import pytest
 from alembic import command
 from alembic.config import Config
+import pytest
 from sqlalchemy import create_engine, inspect, text
 
 from flightiran.db import initialize_database
