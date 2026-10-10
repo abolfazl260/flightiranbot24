@@ -138,7 +138,7 @@ def render_cheap_route_chunks(
 
 
 def render_cheap_ticket_intro() -> str:
-    return "🔍 <b>در حال دریافت و مقایسه قیمت بلیط‌ها با میانگین ۲۱ روزه...</b>"
+    return "🔍 <b>در حال دریافت و مقایسه قیمت بلیط‌ها...</b>"
 
 
 def render_cheap_ticket_booking_hint(
@@ -262,7 +262,7 @@ _RESERVATION_WORDS = {
         "origin": "مبدأ",
         "destination": "مقصد",
         "price": "قیمت فعلی اعلام‌شده",
-        "average": "میانگین ثبت‌شده ۲۱روزه",
+        "average": "میانگین قیمت ثبت‌شده",
         "unavailable": "نامشخص",
         "unit": "تومان",
         "notice": (
@@ -277,7 +277,7 @@ _RESERVATION_WORDS = {
         "origin": "Origin",
         "destination": "Destination",
         "price": "Last listed fare",
-        "average": "Recorded 21-day average",
+        "average": "Recorded average fare",
         "unavailable": "Unavailable",
         "unit": "tomans",
         "notice": (
@@ -292,7 +292,7 @@ _RESERVATION_WORDS = {
         "origin": "مدينة المغادرة",
         "destination": "الوجهة",
         "price": "السعر الحالي المعلن",
-        "average": "المتوسط المسجل خلال ٢١ يوماً",
+        "average": "متوسط الأسعار المسجل",
         "unavailable": "غير متاح",
         "unit": "تومان",
         "notice": (
