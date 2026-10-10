@@ -29,6 +29,7 @@ MESSAGES = {
         "support": "Support",
         "support_open_chat": "Chat with support",
         "settings": "Settings",
+        "price_alerts": "🔔 Ticket price alerts",
         "admin_reports": "📊 Full bot report",
     },
     "fa": {
@@ -58,6 +59,7 @@ MESSAGES = {
         "support": "پشتیبانی",
         "support_open_chat": "گفتگو با پشتیبانی",
         "settings": "تنظیمات",
+        "price_alerts": "🔔 زنگوله قیمت بلیط",
         "admin_reports": "📊 گزارش کامل ربات",
     },
     "ar": {
@@ -81,6 +83,7 @@ MESSAGES = {
         "support": "الدعم",
         "support_open_chat": "التواصل مع الدعم",
         "settings": "الإعدادات",
+        "price_alerts": "🔔 تنبيهات أسعار التذاكر",
         "admin_reports": "📊 التقرير الشامل للبوت",
     },
 }
@@ -239,3 +242,8 @@ def text(language: str | None, key: str) -> str:
 
 def safe_text(language: str | None, key: str) -> str:
     return escape(text(language, key))
+
+# Price bell command advertised in every supported language.
+MESSAGES["fa"]["help_alerts"] = "ثبت و مدیریت هشدار قیمت بلیط"
+MESSAGES["en"]["help_alerts"] = "Create and manage ticket price alerts"
+MESSAGES["ar"]["help_alerts"] = "إنشاء وإدارة تنبيهات أسعار التذاكر"
