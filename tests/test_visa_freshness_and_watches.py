@@ -27,7 +27,6 @@ from flightiran.modules.visa.catalog import Country, VisaCatalogService, VisaDet
 from flightiran.modules.visa.freshness import assess_freshness
 from flightiran.modules.visa.provenance import source_authority, visa_provenance
 from flightiran.modules.visa.watch import (
-    PendingNotification,
     VisaWatchService,
     rule_changes,
     semantic_rule,
