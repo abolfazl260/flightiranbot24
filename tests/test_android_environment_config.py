@@ -1,15 +1,18 @@
 """Pure-Python checks for the Android environment artifact verifier."""
 
 from pathlib import Path
+from runpy import run_path
 
 import pytest
 
-from scripts.check_android_environments import (
-    DEBUG_IDS,
-    RELEASE_ID,
-    package_name,
-    verify_outputs,
-)
+# scripts/ is an executable directory, not a distributable Python package.
+# Load the standalone verifier by its checked-in path instead.
+ROOT = Path(__file__).resolve().parents[1]
+verifier = run_path(str(ROOT / "scripts/check_android_environments.py"))
+DEBUG_IDS = verifier["DEBUG_IDS"]
+RELEASE_ID = verifier["RELEASE_ID"]
+package_name = verifier["package_name"]
+verify_outputs = verifier["verify_outputs"]
 
 
 def test_android_package_name_parser_uses_actual_aapt_metadata():
