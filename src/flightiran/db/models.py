@@ -87,8 +87,8 @@ class JobRun(TimestampedModel):
 class SavedRoute(TimestampedModel):
     __tablename__ = "saved_routes"
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
-    origin: Mapped[str] = mapped_column(String(8), nullable=False)
-    destination: Mapped[str] = mapped_column(String(8), nullable=False)
+    origin: Mapped[str] = mapped_column(String(128), nullable=False)
+    destination: Mapped[str] = mapped_column(String(128), nullable=False)
     passengers: Mapped[int] = mapped_column(Integer, default=1, nullable=False)
 
 
