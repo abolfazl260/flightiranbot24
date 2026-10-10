@@ -364,7 +364,7 @@ async def handle_visa_callback(
                 detail, language, section,
                 freshness_notice=await _freshness_notice(service, language, brief=True),
             ),
-            parse_mode="HTML"
+            parse_mode="HTML",
             reply_markup=section_keyboard(language),
             disable_web_page_preview=True,
         )
