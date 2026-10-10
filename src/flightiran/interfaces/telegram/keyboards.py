@@ -16,8 +16,7 @@ def main_menu(
 ) -> InlineKeyboardMarkup:
     rows = [
         [("airports", "menu:airports"), ("tickets", "menu:tickets")],
-        [("visa", "menu:visa")],
-        [("price_alerts", "menu:price_alerts")],
+        [("visa", "menu:visa"), ("price_alerts", "menu:price_alerts")],
         [("rules", "menu:rules"), ("cargo", "menu:cargo")],
         [("useful", "menu:useful"), ("support", "menu:support")],
         [("settings", "menu:settings")],

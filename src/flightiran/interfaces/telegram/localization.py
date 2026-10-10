@@ -122,7 +122,7 @@ MESSAGES["fa"].update({
         "📩 پشتیبانی: پرسش درباره رزرو، قیمت‌ها و استفاده از ربات"
     ),
     "help_note": (
-        "برخی خدمات به فعال بودن سرویس‌دهنده وابسته‌اند. قیمت بلیط، "
+        "برخی خدمات به فعال بودن سرویس‌دهنده وابسته‌اند. قیمت بلیط "
         "و شرایط سفر را پیش از تصمیم نهایی با منابع معتبر بررسی کنید."
     ),
     "help_back": "برای بازگشت به خدمات از /start استفاده کنید.",
@@ -162,7 +162,7 @@ MESSAGES["en"].update({
         "📩 Support: questions about bookings, prices and using the bot"
     ),
     "help_note": (
-        "Some features require an active provider. Verify ticket prices, "
+        "Some features require an active provider. Verify ticket prices "
         "and travel requirements before making decisions."
     ),
     "help_back": "Use /start to return to the main menu.",
