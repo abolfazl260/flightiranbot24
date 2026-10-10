@@ -343,9 +343,12 @@ async def test_ticket_origin_selection_sends_only_selected_city(monkeypatch, lan
     assert "تهران" not in sent[0]
     assert "مشهد" not in sent[0]
     assert "کیش" in sent[0]
-    assert selected.message.calls[-1][1]["reply_markup"].inline_keyboard[1][0].callback_data == (
-        "tickets:menu"
-    )
+    # The navigation buttons now live in the same RichMessage as the fare
+    # table; there is no second separate booking-help message.
+    assert selected.message.calls == []
+    assert 'data="tickets:alert:1"' in sent[0]
+    assert 'data="tickets:menu"' in sent[0]
+    assert 'data="back"' in sent[0]
 
     another = Query()
     another.data = "tickets:menu"
