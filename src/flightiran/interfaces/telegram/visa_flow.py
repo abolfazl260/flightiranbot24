@@ -307,7 +307,11 @@ async def handle_visa_callback(
             )
             return
         if action == "visa:rich":
-            rich = render_rich_report(detail, language)
+            rich = render_rich_report(
+                detail, language,
+                residence=data.get("visa_residence"),
+                purpose=data.get("visa_purpose", "tourism"),
+            )
             try:
                 await send_rich_price_table(context.bot, query.message.chat_id, rich)
                 await query.edit_message_text(
@@ -318,12 +322,18 @@ async def handle_visa_callback(
             except Exception:
                 LOGGER.warning("Visa rich transport unavailable, falling back", exc_info=True)
                 await query.edit_message_text(
-                    render_overview(detail, language),
+                    render_overview(
+                        detail, language,
+                        residence=data.get("visa_residence"),
+                        purpose=data.get("visa_purpose", "tourism"),
+                    ),
                     parse_mode="HTML",
                     reply_markup=detail_keyboard(language),
                 )
                 # Standard HTML fallback, split into individual short sections.
-                for section in ("types", "entry", "transit", "facts", "tips", "sources"):
+                for section in (
+                    "stay", "types", "entry", "transit", "facts", "tips", "sources"
+                ):
                     await query.message.reply_text(
                         render_section(detail, language, section),
                         parse_mode="HTML",
@@ -331,7 +341,9 @@ async def handle_visa_callback(
                     )
             return
         section = action.rsplit(":", 1)[1]
-        if section not in {"types", "entry", "transit", "facts", "tips", "faq", "sources"}:
+        if section not in {
+            "stay", "types", "entry", "transit", "facts", "tips", "faq", "sources"
+        }:
             return
         await query.edit_message_text(
             render_section(detail, language, section),

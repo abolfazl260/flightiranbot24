@@ -152,3 +152,35 @@ Tests cover normalization, row-vs-policy citations, safe HTML, localized country
 pagination callback limits, direct commands, SQL query paths and fresh/legacy database
 migration. Check a real `/visa_sync` after the new release to confirm provider reachability
 and compare important journeys against official references.
+
+## Visa status interpretation and stay-period rules
+
+The published TravelRequirements.info schema currently defines nine entry states:
+`visa-free`, `freedom-of-movement`, `evisa`, `eta`,
+`visa-on-arrival`, `embassy-visa`, `travel-permit`, `banned`,
+and `unconfirmed`. Existing legacy statuses remain readable. The Telegram
+groups now distinguish **travel permits**, **entry bans/restrictions**,
+and **unconfirmed/unknown** cases. An unconfirmed requirement never implies a
+visa waiver; a ban is not silently displayed as an unknown requirement.
+Unrecognized future strings fall back into the "Other / unknown" group, so
+none are silently dropped from the categorized lists.
+
+The visa summary, a dedicated "Stay counting rules" button, and the full rich
+report expose passport-specific `stayWindow` when published. For visa-exempt
+passport rows, they may also expose the destination's `defaultStayWindow`
+with an explicit general-policy qualifier. **The visa-exempt default is never
+inherited for embassy visas, eVisas, or other requirements** unless that row
+provides its own rule. Rolling 90/180, per-entry, calendar-year, and
+12-month-from-first-entry allowances are labeled independently of the published
+maximum per visit. Re-entry/reset behavior and minimum gap are shown only if
+specified. The detail tab preserves the original-language source explanation,
+shows uncertainties in arrival/departure-day counting, and links to the rule's
+own published source. Missing numbers, sources, or counting methods are not
+inferred.
+
+The travel purpose and country of residence selectors are explicitly labeled
+**additional trip details (informational only)** in all three languages.
+Changing them does **not** recalculate the passport/destination visa result.
+The same disclaimer and selected values carry into the Rich Message output
+and its HTML fallback. Do not use this UI as a personalized eligibility
+decision without implementing and verifying a purpose/residence rules engine.
