@@ -230,6 +230,21 @@ def test_only_semantic_changes_trigger_alerts():
     assert after["stay_window"] is None  # Visa-free default must not leak into visa holder.
 
 
+def test_conditional_waiver_only_applies_to_relevant_passports():
+    old = document()
+    modified = deepcopy(old)
+    modified["visaPolicy"]["conditionalWaivers"] = [{
+        "appliesTo": "visa-required",
+        "requirement": "evisa",
+        "text": "Supporting visas may grant a conditional electronic visa.",
+        "source": {"url": SOURCE_URL, "lastVerified": "2026-10-10"},
+    }]
+    old_ir, new_ir = semantic_rule(old, "IR"), semantic_rule(modified, "IR")
+    old_af, new_af = semantic_rule(old, "AF"), semantic_rule(modified, "AF")
+    assert not rule_changes(old_ir, new_ir)
+    assert rule_changes(old_af, new_af) == ("conditions",)
+
+
 @pytest.mark.asyncio
 async def test_visa_watches_are_owned_capped_and_persist(tmp_path):
     db, _users, a, b = await database_with_users(tmp_path)
@@ -299,6 +314,8 @@ async def test_transactional_outbox_detects_meaningful_changes_and_retries(tmp_p
     assert len(calls) == 2
     assert calls[0].telegram_id == 10001
     assert calls[0].payload["categories"] == ["status", "stay", "conditions"]
+    assert calls[0].payload["official_source_url"] == SOURCE_URL
+    assert '<a href="' + SOURCE_URL + '">' in render_change_alert(calls[0], "en")
     assert await service.deliver_pending(unreliable, now=now + timedelta(hours=1)) == 0
     async with db.session() as session:
         events = (await session.scalars(
