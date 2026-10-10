@@ -42,7 +42,6 @@ from .keyboards import (
     main_menu,
     support_menu,
     ticket_origins_menu,
-    ticket_result_menu,
 )
 from .localization import normalize_language, safe_text, text
 from .new_user_alert import render_new_user_alert
@@ -466,7 +465,7 @@ async def callback_handler(
                 ),
             )
     elif data.startswith("tickets:origin:"):
-        from .tickets import render_cheap_route_chunks, render_cheap_ticket_booking_hint
+        from .tickets import render_cheap_route_chunks, send_ticket_booking_hint
 
         routes = context.user_data.get("ticket_routes", [])
         try:
@@ -513,14 +512,11 @@ async def callback_handler(
                 for message in render_price_drop_fallback_chunks([route], language=language):
                     await query.message.reply_text(message, parse_mode="HTML")
 
-            await query.message.reply_text(
-                render_cheap_ticket_booking_hint(
-                    dependencies.ticket_support_username, language
-                ),
-                parse_mode="HTML",
-                reply_markup=ticket_result_menu(
-                    language, dependencies.ticket_support_username
-                ),
+            await send_ticket_booking_hint(
+                context.bot,
+                query.message,
+                dependencies.ticket_support_username,
+                language,
             )
     elif data == "menu:rules":
         await query.edit_message_text(
