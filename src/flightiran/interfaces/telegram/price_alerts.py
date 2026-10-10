@@ -102,6 +102,7 @@ def word(language: str, key: str) -> str:
 
 def menu_keyboard(language: str) -> InlineKeyboardMarkup:
     return InlineKeyboardMarkup([
+        [InlineKeyboardButton(word(language, "manage"), callback_data="alerts:menu")],
         [InlineKeyboardButton(word(language, "new"), callback_data="alerts:new")],
         [InlineKeyboardButton(word(language, "back"), callback_data="back")],
     ])
