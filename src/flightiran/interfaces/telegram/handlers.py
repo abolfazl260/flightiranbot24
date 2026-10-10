@@ -42,6 +42,7 @@ from .keyboards import (
     main_menu,
     support_menu,
     ticket_origins_menu,
+    ticket_result_menu,
 )
 from .localization import normalize_language, safe_text, text
 from .new_user_alert import render_new_user_alert
@@ -554,7 +555,7 @@ async def callback_handler(
                     # under the same fallback fare list message.
                     for i, message in enumerate(chunks):
                         if i == len(chunks) - 1:
-                            message += "\\n\\n" + booking_hint
+                            message += "\n\n" + booking_hint
                         await query.message.reply_text(
                             message,
                             parse_mode="HTML",
