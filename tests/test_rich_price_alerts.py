@@ -300,6 +300,9 @@ def test_all_fare_notification_surfaces_hide_averaging_window(language):
         *words.values(),
         render_ticket_alert("تهران", "مشهد", percent_alert, snapshot, language),
         render_cheap_ticket_intro(),
+        render_ticket_reservation_request(
+            "تهران", route.destinations[0], "@Advertio_support", language
+        ),
         *[page["html"] for page in render_rich_price_drop_report([route])],
         *[page["html"] for page in render_rich_alert_pages(
             [alert(1, kind="percent")], language
