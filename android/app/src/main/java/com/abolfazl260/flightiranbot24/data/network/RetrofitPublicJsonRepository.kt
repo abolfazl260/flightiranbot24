@@ -5,6 +5,7 @@ import com.abolfazl260.flightiranbot24.domain.network.PublicJsonRepository
 import com.google.gson.JsonObject
 import com.google.gson.JsonParseException
 import java.io.IOException
+import java.io.InterruptedIOException
 import java.net.SocketTimeoutException
 import kotlinx.coroutines.CancellationException
 
@@ -31,6 +32,8 @@ internal class RetrofitPublicJsonRepository(
         } catch (cancel: CancellationException) {
             throw cancel
         } catch (_: SocketTimeoutException) {
+            NetworkResult.Timeout
+        } catch (_: InterruptedIOException) {
             NetworkResult.Timeout
         } catch (_: JsonParseException) {
             NetworkResult.InvalidResponse
