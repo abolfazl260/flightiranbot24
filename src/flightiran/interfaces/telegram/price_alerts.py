@@ -12,9 +12,8 @@ from telegram.ext import ContextTypes
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
 
-from .rich_tickets import send_rich_price_table
-
 from .localization import normalize_language
+from .rich_tickets import send_rich_price_table
 
 LOGGER = logging.getLogger(__name__)
 PAGE_SIZE = 12
