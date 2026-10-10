@@ -47,7 +47,7 @@ import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
  * Airports and checklist remain the existing native Java Activities.
  */
 class MainActivity : ComponentActivity() {
-    private val container by lazy { AppContainer() }
+    private val container by lazy { AppContainer(applicationContext) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
