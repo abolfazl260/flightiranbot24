@@ -25,6 +25,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
     render_rich_price_drop_report,
     render_rich_price_tables,
     render_ticket_footer,
+    send_rich_price_table,
     send_rich_price_table_with_badge_fallback,
 )
 from flightiran.modules.admin.reports import BotReportRepository
@@ -36,7 +37,7 @@ from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.visa.watch import VisaWatchService
 
-from .admin_report import render_admin_report
+from .admin_report_rich import render_admin_report_fallback, render_rich_admin_report
 from .keyboards import (
     back_menu,
     language_menu,
@@ -246,13 +247,10 @@ async def start_handler(
             await open_visa_menu(
                 update, context, dependencies.visa_catalog, language, edit=False
             )
-        elif entrypoint == "airports" and dependencies.airport_catalog is not None:
-            from .airport import airport_keyboard
-
+        elif entrypoint == "airports":
             await update.message.reply_text(
-                "<b>فرودگاه را انتخاب کنید</b>",
-                parse_mode="HTML",
-                reply_markup=airport_keyboard(dependencies.airport_catalog.all()),
+                text(language, "airports_coming_soon"),
+                reply_markup=back_menu(language),
             )
         elif entrypoint == "useful":
             catalog = dependencies.useful_catalog or default_catalog()
@@ -386,38 +384,15 @@ async def callback_handler(
                 is_admin=_is_private_admin(update, dependencies),
             ),
         )
-    elif data == "menu:airports" and dependencies.airport_catalog:
-        from .airport import airport_keyboard
-
-        await dependencies.audit.record(
-            "menu.callback", user_id=user_id, payload={"action": "airports"}
-        )
-        await query.edit_message_text(
-            "<b>فرودگاه را انتخاب کنید</b>",
-            parse_mode="HTML",
-            reply_markup=airport_keyboard(dependencies.airport_catalog.all()),
-        )
-    elif data.startswith("airports:page:") and dependencies.airport_catalog:
-        from .airport import airport_keyboard
-
-        page = int(data.rsplit(":", 1)[1])
-        await query.edit_message_text(
-            "<b>فرودگاه را انتخاب کنید</b>",
-            parse_mode="HTML",
-            reply_markup=airport_keyboard(dependencies.airport_catalog.all(), page=page),
-        )
-    elif data.startswith("airport:") and dependencies.airport_catalog:
-        airport = dependencies.airport_catalog.get(data.partition(":")[2])
-        if airport is None:
-            await query.edit_message_text("فرودگاه پیدا نشد.", reply_markup=back_menu(language))
-        else:
-            await query.edit_message_text(
-                f"<b>{airport.display_name(language)}</b>\n"
-                f"کد: {airport.code}\nکشور: {airport.country}\n"
-                f"منطقه زمانی: {airport.timezone}",
-                parse_mode="HTML",
-                reply_markup=back_menu(language),
+    elif data == "menu:airports" or data.startswith(("airports:page:", "airport:")):
+        if data == "menu:airports":
+            await dependencies.audit.record(
+                "menu.callback", user_id=user_id, payload={"action": "airports"}
             )
+        await query.edit_message_text(
+            text(language, "airports_coming_soon"),
+            reply_markup=back_menu(language),
+        )
     elif data == "menu:useful":
         catalog = dependencies.useful_catalog or default_catalog()
         await dependencies.audit.record(
@@ -630,8 +605,7 @@ async def callback_handler(
             reply_markup=back_menu(language),
         )
     elif data == "menu:admin_reports":
-        # Never trust a visible/forged callback as proof of authorization.
-        # Reports are sent only in the configured admin's private chat.
+        # Reports contain private business data: authorize before collection or transport.
         if not _is_private_admin(update, dependencies):
             await query.edit_message_text(
                 safe_text(language, "unknown_action"),
@@ -646,24 +620,34 @@ async def callback_handler(
                 ),
             )
             return
-        await query.edit_message_text(
-            "⏳ در حال تهیه گزارش جامع ربات از داده‌های ثبت‌شده...",
-            reply_markup=main_menu(
-                language, dependencies.web_app_url, is_admin=True
-            ),
-        )
         try:
             report = await dependencies.admin_reports.collect()
-            for part in render_admin_report(report):
-                await query.message.reply_text(part, parse_mode="HTML")
         except Exception as exc:
             LOGGER.exception("admin_report_generation_failed")
             await _notify_admin(context, exc, update, dependencies)
             await query.message.reply_text(
                 "خطا در تهیه گزارش. جزئیات فنی برای مدیر ارسال شد."
             )
-        else:
-            await dependencies.audit.record("admin.report.viewed", user_id=user_id)
+            return
+        try:
+            rich = render_rich_admin_report(report)
+            await send_rich_price_table(context.bot, update.effective_chat.id, rich)
+        except Exception as exc:
+            # The native rich endpoint may not be supported. Never expose bot tokens in logs.
+            LOGGER.warning("admin_report_rich_failed error_type=%s", type(exc).__name__)
+            try:
+                for part in render_admin_report_fallback(report):
+                    await query.message.reply_text(
+                        part, parse_mode="HTML", disable_web_page_preview=True
+                    )
+            except Exception as fallback_exc:
+                LOGGER.exception("admin_report_fallback_failed")
+                await _notify_admin(context, fallback_exc, update, dependencies)
+                await query.message.reply_text(
+                    "خطا در ارسال گزارش. جزئیات فنی برای مدیر ارسال شد."
+                )
+                return
+        await dependencies.audit.record("admin.report.viewed", user_id=user_id)
     elif data == "menu:support":
         await dependencies.audit.record("support.opened", user_id=user_id)
         await query.edit_message_text(
