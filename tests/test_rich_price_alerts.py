@@ -18,6 +18,7 @@ from flightiran.interfaces.telegram.handlers import (
 )
 from flightiran.interfaces.telegram.price_alerts import (
     WORDS,
+    _alert_fallback_pages,
     render_rich_alert_pages,
 )
 from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
@@ -114,9 +115,20 @@ def test_rich_alert_controls_immediately_follow_their_respective_alerts(language
     root = ET.fromstring("<root>" + html + "</root>")
     assert root.find("h3") is not None
     rows = root.findall("tg-button-row")
-    assert [len(row.findall("tg-button")) for row in rows] == [2, 2, 2, 1, 1]
-    assert all(row.get("align") == "center" for row in rows)
+    assert [len(row.findall("tg-button")) for row in rows] == [2, 2, 2, 2]
+    assert all(row.get("align") == "center" for row in rows[:3])
+    # Unaligned footer consumes the available horizontal row width.
+    assert rows[-1].get("align") is None
     assert root.findall("p")
+    quotes = root.findall("blockquote")
+    assert len(quotes) == len(items)
+    children = list(root)
+    for item, quote in zip(items, quotes, strict=True):
+        paragraphs = quote.findall("p")
+        assert len(paragraphs) == 2
+        assert f"#{item.id}" in "".join(quote.itertext())
+        # Controls remain attached to this alert, not a global keyboard.
+        assert children[children.index(quote) + 1] is rows[items.index(item)]
     for item, row in zip(items, rows[:3], strict=False):
         buttons = row.findall("tg-button")
         assert [b.get("data") for b in buttons] == [
@@ -133,8 +145,9 @@ def test_rich_alert_controls_immediately_follow_their_respective_alerts(language
             assert html.index(f'data="alerts:delete:{item.id}"') < html.index(
                 f"#{next_item.id}"
             )
-    assert rows[-2].find("tg-button").get("data") == "alerts:new"
-    assert rows[-1].find("tg-button").get("data") == "back"
+    assert [button.get("data") for button in rows[-1].findall("tg-button")] == [
+        "alerts:new", "back",
+    ]
 
 
 def test_rich_alert_pages_keep_long_paused_histories_within_telegram_limits():
@@ -244,6 +257,12 @@ async def test_rich_alert_api_failure_uses_safe_html_keyboard_without_leaking_to
     assert [b.callback_data for b in keyboard[0]] == [
         f"alerts:toggle:{item.id}", f"alerts:delete:{item.id}",
     ]
+    assert message.count("<blockquote>") == 1
+    assert message.count("</blockquote>") == 1
+    assert len(keyboard[-1]) == 2
+    assert [button.callback_data for button in keyboard[-1]] == [
+        "alerts:new", "back",
+    ]
     assert "super-secret-token-not-for-logs" not in caplog.text
     assert not query.message.deleted
     await database.close()
@@ -317,3 +336,48 @@ def test_all_fare_notification_surfaces_hide_averaging_window(language):
     )
     for text in messages:
         assert not forbidden.search(text)
+
+
+
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+def test_alert_footer_uses_one_stretched_two_button_row_when_no_alerts(language):
+    pages = render_rich_alert_pages([], language)
+    assert len(pages) == 1
+    root = ET.fromstring("<root>" + pages[0]["html"] + "</root>")
+    assert not root.findall("blockquote")
+    rows = root.findall("tg-button-row")
+    assert len(rows) == 1
+    assert rows[0].get("align") is None
+    assert [button.get("data") for button in rows[0].findall("tg-button")] == [
+        "alerts:new", "back",
+    ]
+    fallback = _alert_fallback_pages([], language)
+    assert len(fallback) == 1
+    keyboard = fallback[0][1].inline_keyboard
+    assert len(keyboard) == 1
+    assert [button.callback_data for button in keyboard[0]] == [
+        "alerts:new", "back",
+    ]
+
+
+def test_alert_quotes_escape_user_supplied_route_text_in_both_transports():
+    items = [
+        alert(1, origin="تهران <unsafe>", destination="مشهد & شمال"),
+        alert(2, origin="کیش", destination="تهران"),
+    ]
+    rich = render_rich_alert_pages(items, "fa")[0]["html"]
+    root = ET.fromstring("<root>" + rich + "</root>")
+    assert len(root.findall("blockquote")) == 2
+    assert "تهران &lt;unsafe&gt;" in rich
+    assert "مشهد &amp; شمال" in rich
+    assert "<unsafe>" not in rich
+
+    fallback, keyboard = _alert_fallback_pages(items, "fa")[0]
+    assert fallback.count("<blockquote>") == 2
+    assert fallback.count("</blockquote>") == 2
+    assert "تهران &lt;unsafe&gt;" in fallback
+    assert "مشهد &amp; شمال" in fallback
+    assert [len(row) for row in keyboard.inline_keyboard] == [2, 2, 2]
+    assert [button.callback_data for button in keyboard.inline_keyboard[-1]] == [
+        "alerts:new", "back",
+    ]
