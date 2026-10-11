@@ -7,6 +7,7 @@ DEFAULT_LANGUAGE = "fa"
 
 MESSAGES = {
     "en": {
+        "airports_coming_soon": "Airport information will be available soon.",
         "free_text_hint": (
             "This bot does not process free-form messages.\n"
             "Select a service below, or choose Support for help."
@@ -37,6 +38,7 @@ MESSAGES = {
         "admin_reports": "📊 Full bot report",
     },
     "fa": {
+        "airports_coming_soon": "اطلاعات فرودگاه‌ها به‌زودی در دسترس قرار می‌گیرد.",
         "free_text_hint": (
             "این ربات در حال حاضر به پیام‌های آزاد پاسخ نمی‌دهد.\n"
             "برای استفاده از خدمات، یکی از گزینه‌های زیر را انتخاب کنید "
@@ -71,6 +73,7 @@ MESSAGES = {
         "admin_reports": "📊 گزارش کامل ربات",
     },
     "ar": {
+        "airports_coming_soon": "معلومات المطارات ستتوفر قريباً.",
         "free_text_hint": (
             "هذا الروبوت لا يعالج الرسائل النصية الحرة حالياً.\n"
             "اختر إحدى الخدمات أدناه أو تواصل مع الدعم للمساعدة."
