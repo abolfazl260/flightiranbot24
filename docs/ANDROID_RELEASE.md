@@ -8,9 +8,9 @@ Ticket fares display natively through the database-backed HTTPS API; only
 separate services such as support may intentionally hand off to Telegram.
 No bot token is embedded in the APK.
 
-GitHub Actions tests Java and builds a debug APK for pull requests. Tags
-matching vX.Y.Z can build signed **productionRelease only** APK and AAB, validate their signatures and
-publish SHA256 checksums in GitHub Releases.
+GitHub Actions automatically increments the build number, tests the single
+Android app and builds a debug APK and unsigned release AAB on relevant pushes.
+Tags matching vX.Y.Z can build a signed release APK/AAB and publish checksums.
 
 ## Owner actions (private signing key)
 
@@ -38,20 +38,34 @@ publish SHA256 checksums in GitHub Releases.
 7. Enroll with Google Play Console and Play App Signing if Play publication
    is intended. This requires the owner's developer account and verification.
 
-## Each release
+## Automatic builds and versions
 
-1. Increment appVersionCode and set appVersionName in android/gradle.properties.
-2. Merge to main; ensure Android CI and Python CI are green.
-3. Tag a reviewed commit from main (for current version 1.0.0):
+Android now has exactly **one application ID**,
+`com.abolfazl260.flightiranbot24`. The `debug` build has the standard
+`.debug` suffix solely to permit concurrent installation during testing;
+there are no development/staging/production product flavors.
 
-    git checkout main && git pull --ff-only
-    git tag -a v1.0.0 -m "Android 1.0.0"
-    git push origin v1.0.0
+For every Android CI workflow run, `versionCode=GITHUB_RUN_NUMBER` and
+`versionName=1.0.<run number>`. Numbers increase automatically with new
+workflow runs and do not need commits editing Gradle properties. PR/main
+CI uploads a debug APK and an unsigned release AAB.
 
-4. Check Actions -> Android Build and Release; signed APK and AAB should
-   appear in the matching GitHub Release with SHA256SUMS.txt.
-5. Verify the checksum and install the signed APK for direct distribution,
-   or upload the signed AAB to the Google Play testing track.
+For a signed GitHub Release, an authorized maintainer creates a unique
+`vMAJOR.MINOR.PATCH` tag on a reviewed `main` commit. The release workflow
+automatically uses the tag as `versionName` and its increasing workflow
+run number as `versionCode`; **no app version file editing required**.
+For example, use a new unused tag such as `v1.0.123`:
+
+```bash
+git checkout main && git pull --ff-only
+git tag -a v1.0.123 -m "Android v1.0.123"
+git push origin v1.0.123
+```
+
+The tag must not be reused. Do not publish earlier release jobs after a
+newer versionCode has been uploaded. GitHub release still requires private
+signing secrets and a live HTTPS ticket API; publication to Google Play
+remains a separate owner-controlled action.
 
 ## Store publication requirements
 
@@ -71,33 +85,18 @@ must be performed by the owner, never by untrusted CI or in a chat.
 Workflows: https://github.com/abolfazl260/flightiranbot24/actions
 Releases: https://github.com/abolfazl260/flightiranbot24/releases
 
-## AND-004 environment isolation
+## Single application configuration
 
-Only `productionRelease` retains the Play Store package ID
-`com.abolfazl260.flightiranbot24`. Development and Staging use suffixes
-`.dev` and `.staging` and visibly identify themselves; neither displays
-live Telegram/support actions, preventing accidental requests by testers.
-Debug variants add `.debug`. The release tag workflow stages only signed
-`app-production-release.apk` and `app-production-release.aab` artifacts,
-never an experimental flavor.
-
-API origins are optional build settings and not authentication secrets.
-Production does not inherit staging or development addresses and vice versa.
-Set `ANDROID_PRODUCTION_API_ORIGIN`, `ANDROID_STAGING_API_ORIGIN`, and
-`ANDROID_DEVELOPMENT_API_ORIGIN` as HTTPS *origins* only; no real endpoints
-are configured by this change. Builds reject equivalent environment hosts
-and attempts to configure nonproduction without a production origin. These variables are optional for development/debug CI. The **tagged signed
-production release requires** the Actions repository variable
-`ANDROID_PRODUCTION_API_ORIGIN`. The pipeline validates that the deployed
-`GET /api/v1/tickets/prices` returns nonempty, non-stale JSON before
-compiling production artifacts. Release fails instead of publishing an APK
-whose native price screen cannot retrieve real database prices.
-
-For a local verified build without server configuration:
+The only first-party backend setting is `ANDROID_PRODUCTION_API_ORIGIN`,
+or the Gradle property `apiOrigin`. It must be a bare HTTPS origin ending
+in `/`, without username/password/query/path. Release CI validates that
+the deployed `GET /api/v1/tickets/prices` endpoint serves fresh saved fares
+before allowing signed publication.
 
 ```bash
-gradle --no-daemon -p android :app:bundleProductionRelease
+gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug \
+  :app:assembleDebug :app:bundleRelease
 ```
 
-Neither this local AAB nor a CI-built unsigned AAB is a signed, uploaded Play
-publication. Never ship staging/dev builds to the Play production track.
+Android release artifacts: `android/app/build/outputs/apk/release/app-release.apk`
+and `android/app/build/outputs/bundle/release/app-release.aab`.

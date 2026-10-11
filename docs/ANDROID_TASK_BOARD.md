@@ -14,6 +14,7 @@ and independent acceptance tests.
 - **Do not develop multilingual Android UI, language switching, English or Arabic UI translations, or an LTR app mode.** Any legacy fa/en/ar preference/storage is to be retired safely under #63; unrelated saved preferences must survive the migration.
 - This Android-only decision **does not alter** Telegram bot language support.
 - In user-facing mobile views describe recorded averages without exposing the internal history lookback window.
+- **One Android application**; debug/release build types only, CI-generated build numbers and versions.
 
 ## Review follow-up issues (created 2026-10-10)
 
@@ -39,7 +40,7 @@ The review follow-ups correspond to existing roadmap rows where applicable; they
 | AND-001 | Kotlin and Jetpack Compose alongside existing Java / gradual launcher migration | Done | #48, PR #50 |
 | AND-002 | MVVM, Domain/Repository layers and dependency injection | Done | #49, PR #51 |
 | AND-003 | Retrofit/OkHttp, Coroutines, DataStore and Room | Done | #52, PR #53 |
-| AND-004 | Development/Staging/Production Android build environments | Done | #54, PR #55 |
+| AND-004 | Former separate Android environments (superseded by the single app and CI auto-versioning) | Done | #54, PR #55 |
 | API-001 | Versioned REST API and OpenAPI schemas | Next | #56 |
 | API-002 | Ticket price, recorded historical average and history endpoints | Planned | — |
 | API-003 | User-owned price and visa alert management API | Planned | — |
