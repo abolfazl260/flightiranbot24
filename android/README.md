@@ -143,3 +143,17 @@ at build time. This is only an example, not a deployed URL. An unset origin
 displays an honest setup message rather than fabricated prices. Nonproduction
 builds can access isolated configured origins without opening live Telegram.
 User-owned alerts, push, visa data and authentication remain separate tasks.
+
+
+### Database-first fare contract (October 2026)
+The first-party mobile prices API reads exclusively from the **shared bot SQLite
+database** (`mz724_price_snapshots` + `mz724_route_averages`), rather than
+performing a new upstream crawl in response to app requests. Only fares from
+the latest captured hour are returned; the response timestamp is the DB
+capture time, not the current API clock time. The Android screen labels the
+recorded time and warns if quotes exceed the accepted age threshold or a
+refresh fails. If there are no recorded fares, the API returns HTTP 503
+instead of generated prices. The bot's scheduled collector remains
+responsible for updating its history and averages. The web container and bot
+must use the same database volume. An HTTPS `ANDROID_PRODUCTION_API_ORIGIN`
+must still be set for the production APK/AAB.

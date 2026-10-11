@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 from typing import Protocol
 
-from sqlalchemy import case, delete, func, select
+from sqlalchemy import and_, case, delete, func, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from .engine import Database
@@ -172,6 +173,26 @@ class SQLiteAuditRepository:
             session.add(AuditLog(user_id=user_id, event_type=event_type, payload=payload or {}))
 
 
+
+@dataclass(frozen=True)
+class RecordedTicketQuote:
+    """Latest DB price and the persisted aggregate for one travel route."""
+
+    origin: str
+    destination: str
+    price_toman: int
+    average_price_toman: float | None
+    sample_count: int
+
+
+@dataclass(frozen=True)
+class RecordedTicketBatch:
+    """One complete hourly price snapshot from the shared bot database."""
+
+    captured_at: datetime
+    quotes: tuple[RecordedTicketQuote, ...]
+
+
 class SQLiteMz724PriceHistoryRepository:
     """Persist one mz724 sample per route/hour and maintain rolling averages."""
 
@@ -255,3 +276,55 @@ class SQLiteMz724PriceHistoryRepository:
                 for origin, destination, average, sample_count in result.all()
                 if (origin, destination) in requested
             }
+
+    async def get_latest_prices(self) -> RecordedTicketBatch | None:
+        """Read the latest captured cohort and its averages, never the upstream site.
+
+        Only routes belonging to the newest successful capture hour are returned.
+        Mixing older route prices into a newer quote list would mislead users.
+        The timestamp is taken from the DB, not from the API request time.
+        """
+        async with self.database.session() as session:
+            last_capture = await session.scalar(select(func.max(Mz724PriceSnapshot.captured_at)))
+            if last_capture is None:
+                return None
+            statement = (
+                select(
+                    Mz724PriceSnapshot.origin,
+                    Mz724PriceSnapshot.destination,
+                    Mz724PriceSnapshot.price_toman,
+                    Mz724RouteAverage.average_price_toman,
+                    Mz724RouteAverage.sample_count,
+                )
+                .select_from(Mz724PriceSnapshot)
+                .outerjoin(
+                    Mz724RouteAverage,
+                    and_(
+                        Mz724PriceSnapshot.origin == Mz724RouteAverage.origin,
+                        Mz724PriceSnapshot.destination == Mz724RouteAverage.destination,
+                    ),
+                )
+                .where(Mz724PriceSnapshot.captured_at == last_capture)
+                .order_by(Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination)
+                .limit(10000)
+            )
+            rows = (await session.execute(statement)).all()
+
+        # SQLite returns naive UTC datetimes despite timezone=True.
+        if last_capture.tzinfo is None:
+            last_capture = last_capture.replace(tzinfo=timezone.utc)
+        else:
+            last_capture = last_capture.astimezone(timezone.utc)
+        return RecordedTicketBatch(
+            captured_at=last_capture,
+            quotes=tuple(
+                RecordedTicketQuote(
+                    origin=origin,
+                    destination=destination,
+                    price_toman=int(price),
+                    average_price_toman=float(average) if average is not None else None,
+                    sample_count=int(count) if count is not None else 0,
+                )
+                for origin, destination, price, average, count in rows
+            ),
+        )
