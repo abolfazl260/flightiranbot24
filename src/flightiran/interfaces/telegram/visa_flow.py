@@ -6,6 +6,7 @@ import logging
 from html import escape
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram.error import BadRequest
 from telegram.ext import ContextTypes
 
 from flightiran.modules.visa.catalog import Country, VisaCatalogService, VisaDetail
@@ -30,6 +31,15 @@ from .visa_quality import render_freshness
 
 LOGGER = logging.getLogger(__name__)
 
+
+async def _edit_message_text(query, text: str, **kwargs) -> None:
+    """Ignore Telegram's harmless no-op edit; surface all other API errors."""
+    try:
+        await query.edit_message_text(text, **kwargs)
+    except BadRequest as exc:
+        if "message is not modified" not in str(exc).casefold():
+            raise
+        LOGGER.debug("Visa message already up to date (callback=%s)", query.data)
 
 async def _country_catalog(service: VisaCatalogService) -> list[Country]:
     return await service.countries()
@@ -104,7 +114,7 @@ async def _show_result(
             )
             keyboard = detail_keyboard(language, detail)
     if edit:
-        await update.callback_query.edit_message_text(
+        await _edit_message_text(update.callback_query, 
             rendered, parse_mode="HTML", reply_markup=keyboard,
             disable_web_page_preview=True,
         )
@@ -147,7 +157,7 @@ async def open_visa_menu(
         if notice:
             message += "\n\n" + notice
     if edit:
-        await update.callback_query.edit_message_text(
+        await _edit_message_text(update.callback_query, 
             message, parse_mode="HTML", reply_markup=keyboard,
         )
     else:
@@ -167,7 +177,7 @@ async def handle_visa_callback(
     if query is None:
         return
     if service is None or not await service.ready():
-        await query.edit_message_text(
+        await _edit_message_text(query, 
             escape(tr(language, "empty")), reply_markup=home_keyboard(language)
         )
         return
@@ -183,14 +193,14 @@ async def handle_visa_callback(
     if action.startswith("visa:pick:"):
         parts = action.split(":")
         if len(parts) != 4 or parts[2] not in {"p", "d", "r"} or not parts[3].isdigit():
-            await query.edit_message_text(escape(tr(language, "unknown")))
+            await _edit_message_text(query, escape(tr(language, "unknown")))
             return
         mode, page = parts[2], min(int(parts[3]), 500)
         countries = await _country_catalog(service)
         prompt = {
             "p": "choose_passport", "d": "choose_destination", "r": "residence",
         }[mode]
-        await query.edit_message_text(
+        await _edit_message_text(query, 
             f"<b>{escape(tr(language, prompt))}</b>\n"
             f"{escape(tr(language, 'search_hint'))}",
             parse_mode="HTML",
@@ -203,7 +213,7 @@ async def handle_visa_callback(
         if mode not in {"p", "d", "r"}:
             return
         data["visa_search_mode"] = mode
-        await query.edit_message_text(
+        await _edit_message_text(query, 
             f"<b>{escape(tr(language, 'search'))}</b>\n"
             f"{escape(tr(language, 'search_hint'))}",
             parse_mode="HTML",
@@ -223,7 +233,7 @@ async def handle_visa_callback(
         countries = await _country_catalog(service)
         country = _find_country(countries, code)
         if country is None:
-            await query.edit_message_text(escape(tr(language, "missing")))
+            await _edit_message_text(query, escape(tr(language, "missing")))
             return
         data.pop("visa_search_mode", None)
         if mode == "p":
@@ -231,7 +241,7 @@ async def handle_visa_callback(
             data.pop("visa_destination", None)
             data.pop("visa_residence", None)
             data["visa_purpose"] = "tourism"
-            await query.edit_message_text(
+            await _edit_message_text(query, 
                 f"<b>{escape(tr(language, 'passport'))}:</b> "
                 f"{escape(country_label(country.code, country.name, language))}"
                 f" <code>{escape(country.code)}</code>\n"
@@ -241,7 +251,7 @@ async def handle_visa_callback(
             )
         elif mode == "d":
             if "visa_passport" not in data:
-                await query.edit_message_text(
+                await _edit_message_text(query, 
                     escape(tr(language, "choose_passport")),
                     reply_markup=home_keyboard(language),
                 )
@@ -266,14 +276,14 @@ async def handle_visa_callback(
 
     if action == "visa:groups":
         if not data.get("visa_passport"):
-            await query.edit_message_text(
+            await _edit_message_text(query, 
                 escape(tr(language, "choose_passport")),
                 reply_markup=home_keyboard(language),
             )
         else:
             counts = await service.distribution(data["visa_passport"])
             notice = await _freshness_notice(service, language, brief=True)
-            await query.edit_message_text(
+            await _edit_message_text(query, 
                 f"<b>{escape(tr(language, 'list'))}</b>\n"
                 f"<code>{escape(data['visa_passport'])}</code>"
                 + ("\n\n" + notice if notice else ""),
@@ -285,13 +295,13 @@ async def handle_visa_callback(
     if action.startswith("visa:list:"):
         parts = action.split(":")
         if len(parts) != 4 or not parts[3].isdigit() or not data.get("visa_passport"):
-            await query.edit_message_text(escape(tr(language, "missing")))
+            await _edit_message_text(query, escape(tr(language, "missing")))
             return
         group, page = parts[2], min(int(parts[3]), 500)
         try:
             rules, count = await service.listing(data["visa_passport"], group, page=page)
         except ValueError:
-            await query.edit_message_text(escape(tr(language, "missing")))
+            await _edit_message_text(query, escape(tr(language, "missing")))
             return
         lines = [
             f"<b>{escape(tr(language, group))}</b>",
@@ -309,7 +319,7 @@ async def handle_visa_callback(
         notice = await _freshness_notice(service, language, brief=True)
         if notice:
             lines.extend(["", notice])
-        await query.edit_message_text(
+        await _edit_message_text(query, 
             "\n".join(lines),
             parse_mode="HTML",
             reply_markup=listing_keyboard(language, rules, group, page, count),
@@ -321,7 +331,7 @@ async def handle_visa_callback(
         destination = data.get("visa_destination")
         detail = await service.detail(passport, destination) if passport and destination else None
         if detail is None:
-            await query.edit_message_text(
+            await _edit_message_text(query, 
                 escape(tr(language, "missing")),
                 reply_markup=home_keyboard(language),
             )
@@ -335,14 +345,14 @@ async def handle_visa_callback(
             )
             try:
                 await send_rich_price_table(context.bot, query.message.chat_id, rich)
-                await query.edit_message_text(
+                await _edit_message_text(query, 
                     escape(tr(language, "step_notice")) + "\n"
                     + escape(tr(language, "caution")),
                     reply_markup=detail_keyboard(language, detail),
                 )
             except Exception:
                 LOGGER.warning("Visa rich transport unavailable, falling back", exc_info=True)
-                await query.edit_message_text(
+                await _edit_message_text(query, 
                     render_overview(
                         detail, language,
                         residence=data.get("visa_residence"),
@@ -359,7 +369,7 @@ async def handle_visa_callback(
             "stay", "types", "entry", "transit", "facts", "tips", "faq", "sources"
         }:
             return
-        await query.edit_message_text(
+        await _edit_message_text(query, 
             render_section(
                 detail, language, section,
                 freshness_notice=await _freshness_notice(service, language, brief=True),
