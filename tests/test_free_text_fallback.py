@@ -1,5 +1,6 @@
 """Tests for free-form Telegram text handling outside guided flows."""
 
+from dataclasses import replace
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
@@ -72,7 +73,7 @@ async def test_guided_price_alert_text_retains_priority(monkeypatch):
     update, context, dependencies = setup_message(
         context_data={"price_alert_pending": {"step": "price"}}
     )
-    dependencies.price_alert_service = object()
+    dependencies = replace(dependencies, price_alert_service=object())
     alert_handler = AsyncMock(return_value=True)
     monkeypatch.setattr(handlers, "handle_alert_text", alert_handler)
 
@@ -87,7 +88,7 @@ async def test_guided_visa_search_text_retains_priority(monkeypatch):
     update, context, dependencies = setup_message(
         context_data={"visa_search_mode": "d"}
     )
-    dependencies.visa_catalog = object()
+    dependencies = replace(dependencies, visa_catalog=object())
     visa_handler = AsyncMock(return_value=True)
     monkeypatch.setattr(handlers, "visa_search_text", visa_handler)
 
