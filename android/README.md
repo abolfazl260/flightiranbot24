@@ -168,3 +168,12 @@ offer a Telegram fallback. The separate **هماهنگی رزرو با پشتی�
 is only for a deliberate booking/support handoff in production, not viewing
 prices. Without a configured HTTPS API origin, the screen reports the missing
 configuration instead of launching Telegram or showing fake fares.
+
+### Signed-release API validation
+The tagged Android release job uses the GitHub Actions repository variable
+`ANDROID_PRODUCTION_API_ORIGIN` as its `productionRelease` build-time origin.
+Before publishing, it checks that the HTTPS `api/v1/tickets/prices` endpoint
+is reachable and returns nonempty, non-stale stored ticket prices. The release
+fails without a configured origin or working DB-backed API, rather than
+shipping a misleading in-app price screen. CI pull-request debug builds
+continue intentionally without configured public API origins.

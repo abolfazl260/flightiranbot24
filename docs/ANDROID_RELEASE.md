@@ -4,7 +4,9 @@
 
 Kotlin/Jetpack Compose Android app with preserved native Java offline screens, minimum SDK 24, target SDK 36, JDK 17, Gradle 8.13.
 Offline airport directory and offline travel checklist are included.
-Online links explicitly hand off to Telegram. No bot token in the APK.
+Ticket fares display natively through the database-backed HTTPS API; only
+separate services such as support may intentionally hand off to Telegram.
+No bot token is embedded in the APK.
 
 GitHub Actions tests Java and builds a debug APK for pull requests. Tags
 matching vX.Y.Z can build signed **productionRelease only** APK and AAB, validate their signatures and
@@ -25,9 +27,15 @@ publish SHA256 checksums in GitHub Releases.
    It sets GitHub Actions secrets ANDROID_KEYSTORE_BASE64,
    ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD,
    without storing them in version control. Do not paste keys in chat.
-5. Restrict GitHub v* tag creation to trusted maintainers via repository
+5. Configure the GitHub **Actions repository variable** `ANDROID_PRODUCTION_API_ORIGIN`
+   (Settings → Secrets and variables → Actions → Variables) with the real,
+   publicly accessible HTTPS API origin. Deploy `flightiran-web` behind HTTPS,
+   sharing the SQLite database volume with `bot`, then check that
+   `GET /api/v1/tickets/prices` returns nonempty, non-stale price data.
+   The origin is public, not a bot token or password.
+6. Restrict GitHub v* tag creation to trusted maintainers via repository
    rulesets. Confirm job-scoped Actions contents:write can publish Releases.
-6. Enroll with Google Play Console and Play App Signing if Play publication
+7. Enroll with Google Play Console and Play App Signing if Play publication
    is intended. This requires the owner's developer account and verification.
 
 ## Each release
@@ -78,10 +86,12 @@ Production does not inherit staging or development addresses and vice versa.
 Set `ANDROID_PRODUCTION_API_ORIGIN`, `ANDROID_STAGING_API_ORIGIN`, and
 `ANDROID_DEVELOPMENT_API_ORIGIN` as HTTPS *origins* only; no real endpoints
 are configured by this change. Builds reject equivalent environment hosts
-and attempts to configure nonproduction without a production origin. These
-variables are not required to build the current offline/Telegram companion.
-The native app does not yet call the server's new API; that work requires
-API-001 and authentication design.
+and attempts to configure nonproduction without a production origin. These variables are optional for development/debug CI. The **tagged signed
+production release requires** the Actions repository variable
+`ANDROID_PRODUCTION_API_ORIGIN`. The pipeline validates that the deployed
+`GET /api/v1/tickets/prices` returns nonempty, non-stale JSON before
+compiling production artifacts. Release fails instead of publishing an APK
+whose native price screen cannot retrieve real database prices.
 
 For a local verified build without server configuration:
 

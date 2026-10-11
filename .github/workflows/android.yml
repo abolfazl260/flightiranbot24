@@ -169,8 +169,52 @@ jobs:
           umask 077
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/flightiran-upload.jks"
           [[ -s "$RUNNER_TEMP/flightiran-upload.jks" ]]
+      - name: Verify live ticket API for release
+        env:
+          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${ANDROID_PRODUCTION_API_ORIGIN:-}" ]]; then
+            echo "::error::Set repository variable ANDROID_PRODUCTION_API_ORIGIN to your deployed HTTPS API origin."
+            exit 1
+          fi
+          python - <<'PY'
+          import json
+          import os
+          import urllib.request
+          from urllib.parse import urljoin, urlparse
+
+          origin = os.environ["ANDROID_PRODUCTION_API_ORIGIN"]
+          parsed = urlparse(origin)
+          if (
+              parsed.scheme != "https" or not parsed.hostname
+              or parsed.username or parsed.password or parsed.query or parsed.fragment
+              or parsed.path not in ("", "/") or not origin.endswith("/")
+          ):
+              raise SystemExit("Production API origin must be a bare HTTPS origin ending in /")
+          with urllib.request.urlopen(
+              urllib.request.Request(
+                  urljoin(origin, "api/v1/tickets/prices"),
+                  headers={"Accept": "application/json"},
+              ),
+              timeout=15,
+          ) as response:
+              data = json.load(response)
+          if not (
+              isinstance(data, dict)
+              and data.get("currency") == "TOMAN"
+              and data.get("observed_at")
+              and isinstance(data.get("routes"), list)
+              and data["routes"]
+              and data.get("stale") is False
+          ):
+              raise SystemExit("Deployed API has no usable fresh ticket price data")
+          print("Production ticket API reachable and returning recorded prices")
+          PY
       - name: Build signed release APK and AAB
         env:
+          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN }}
           ANDROID_KEYSTORE_FILE: ${{ runner.temp }}/flightiran-upload.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
