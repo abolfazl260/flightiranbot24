@@ -60,8 +60,6 @@ def test_empty_or_unavailable_upstream_returns_service_unavailable():
 
 
 def test_stale_cached_prices_are_explicitly_marked():
-    import pytest
-
     async def run():
         tickets = FakeTickets()
         feed = PublicTicketPriceFeed(tickets)

@@ -16,8 +16,8 @@ from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository, SQLite
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
-from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
+from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
 STATIC_DIR = Path(__file__).with_name("static")
 LOGGER = logging.getLogger(__name__)

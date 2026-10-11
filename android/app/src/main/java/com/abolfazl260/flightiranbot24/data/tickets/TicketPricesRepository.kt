@@ -33,7 +33,8 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
         }
     }
 
-    internal fun parse(payload: JsonObject): TicketPriceSnapshot? = runCatching {
+    internal fun parse(payload: JsonObject): TicketPriceSnapshot? {
+        return runCatching {
         if (payload.get("currency")?.asString != "TOMAN") return null
         val observed = payload.get("observed_at")?.asString
             ?.takeIf { it.length >= 19 } ?: return null
@@ -65,5 +66,6 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
         }
         if (origins.isEmpty()) return null
         TicketPriceSnapshot(origins, observed, stale)
-    }.getOrNull()
+        }.getOrNull()
+    }
 }
