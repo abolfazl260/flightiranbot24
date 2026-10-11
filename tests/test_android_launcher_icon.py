@@ -33,7 +33,7 @@ def test_all_launcher_variants_use_the_same_unframed_image():
     adaptive = ElementTree.parse(RES / "drawable-anydpi-v26/ic_launcher.xml").getroot()
     assert adaptive.tag == "adaptive-icon"
     assert adaptive.find("background").attrib[ANDROID + "drawable"] == "@android:color/transparent"
-    assert adaptive.find("foreground").attrib[ANDROID + "drawable"] == "@drawable/ic_launcher_foreground"
+    assert (\n        adaptive.find("foreground").attrib[ANDROID + "drawable"]\n        == "@drawable/ic_launcher_foreground"\n    )
 
     foreground = ElementTree.parse(RES / "drawable/ic_launcher_foreground.xml").getroot()
     assert foreground.tag == "inset"
