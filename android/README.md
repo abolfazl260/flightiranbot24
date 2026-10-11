@@ -52,85 +52,33 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
 - The normal INTERNET permission is declared for eventual first-party HTTPS
   access. Nothing is transmitted when the current launcher opens.
 
-## Build / verification
+## One Android app: builds and versioning
 
-JDK 17, Gradle 8.13, Android SDK 36, AGP 8.13.2, Kotlin 2.2.20.
-Android CI runs:
+The app has **one ID**, `com.abolfazl260.flightiranbot24`, and two build
+types (`debug` and `release`), not three product flavors. Debug uses
+a `.debug` package suffix only to avoid replacing the installed release.
 
-```bash
-gradle --no-daemon -p android :app:testProductionDebugUnitTest :app:lintProductionDebug :app:assembleProductionDebug :app:bundleProductionRelease
-```
-
-Production debug APK: `android/app/build/outputs/apk/production/debug/app-production-debug.apk`.
-Production application ID: `com.abolfazl260.flightiranbot24`; debug suffix: `.debug`.
-Release upload signing requires private GitHub Actions secrets; no key is
-included in the repository. See `docs/ANDROID_RELEASE.md`.
-
-### Room schema evolution
-`TravelCacheDatabase` starts at v1. The Java Room annotation processor exports
-its schema under `android/app/schemas`. When bumping the schema, commit the
-new JSON and an explicit tested Room migration. **Never** enable destructive
-fallback on public or user-owned data. Existing checklist data is separate
-and is not touched by this database.
-
-### Future work / known limitations
-API-001 must define the real backend endpoints and identity rules.
-AND-004 adds stage-specific API origins without secrets. Full offline catalogue
-sync and source verification belong to AIR-003; preferences UI and profile
-sync belong to UI/AUTH tasks. Encrypted authenticated token handling is out
-of scope of this deliberately **public-only** transport.
-
-**AND-004 complete. Next: API-001** — real versioned FastAPI endpoints, OpenAPI contracts and standalone Android authentication boundaries.
-
-## AND-004: Development/Staging/Production build separation
-
-Three Android **product flavors** now compile with a separate environment
-indicator displayed on the home screen. Development and Staging deliberately
-do **not** show buttons that launch the live Telegram bot or support account;
-their privacy link and native/offline airport and checklist remain available.
-Production keeps the original service buttons.
-
-| Variant | Release application ID | Debug application ID |
-| --- | --- | --- |
-| development | `com.abolfazl260.flightiranbot24.dev` | `...dev.debug` |
-| staging | `com.abolfazl260.flightiranbot24.staging` | `...staging.debug` |
-| production | `com.abolfazl260.flightiranbot24` | `...debug` |
-
-API origins are **optional, public, first-party HTTPS origins** supplied only
-at build time. There are no production/staging/development defaults. Missing
-origin means `publicApi()` returns null; nothing is contacted by the current
-launcher. Set one or more via Gradle properties or environment variables:
+On relevant pull requests and `main` pushes, GitHub Actions tests/builds
+the app and automatically generates `versionCode` from `GITHUB_RUN_NUMBER`
+and `versionName=1.0.<run number>`. Tagged releases automatically adopt
+`vMAJOR.MINOR.PATCH` for the version name; no manual app version edits.
 
 ```bash
-ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
-ANDROID_STAGING_API_ORIGIN=https://staging.example.org/ \
-ANDROID_DEVELOPMENT_API_ORIGIN=https://dev.example.org/ \
-gradle -p android :app:assembleStagingDebug
+gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug \
+  :app:lintRelease :app:assembleDebug :app:bundleRelease
 ```
 
-These example origins are **not deployed endpoints**. Do not use examples for
-actual installations. All configured origins must be distinct **hosts**.
-Setting a non-production origin requires also setting production's origin so
-isolation can be validated. Invalid, HTTP, credential-bearing, path-bearing or
-query-bearing URLs fail the Gradle build. API keys, bot tokens, passwords and
-Google Play credentials must never be supplied here: API origins are visible
-inside APKs. HTTP loopback is allowed only in controlled JVM MockWebServer
-tests, not as an Android build environment.
+Debug APK: `android/app/build/outputs/apk/debug/app-debug.apk`.
+Release tasks: `:app:assembleRelease :app:bundleRelease`.
+The first-party API uses only `ANDROID_PRODUCTION_API_ORIGIN` or
+`-PapiOrigin=https://your-real-host.example/`; the example URL is not
+deployed. Missing origin produces an explicit unavailable state in the
+in-app price screen. A signed release requires a live HTTPS API and the
+owner's private keystore. See [release instructions](../docs/ANDROID_RELEASE.md).
 
-```bash
-gradle -p android :app:testDevelopmentDebugUnitTest \
-  :app:testStagingDebugUnitTest :app:testProductionDebugUnitTest \
-  :app:lintDevelopmentDebug :app:lintStagingDebug \
-  :app:lintProductionDebug :app:lintProductionRelease \
-  :app:assembleDevelopmentDebug :app:assembleStagingDebug \
-  :app:assembleProductionDebug :app:bundleProductionRelease
-```
-
-Only the `productionRelease` bundle/productionRelease APK can be published.
-The tag-based GitHub release job signs and stages that flavor exclusively.
-The upcoming API-001 task will define real versioned FastAPI endpoints; no
-Android flavor currently logs in or automatically contacts a remote API.
-
+Room v1 schema is stored in `android/app/schemas`; do not perform destructive
+migrations. Remaining alert, visa, offline sync, auth and push work is tracked
+separately and is not completed by this build-system change.
 
 ## Native ticket prices
 The native Persian RTL fare screen consumes the public read-only
@@ -138,10 +86,9 @@ The native Persian RTL fare screen consumes the public read-only
 tomans, recorded averages, percentage movement, UTC observation time, and
 an explicit stale-data warning. Origin selection, destination search and
 sorting work locally. Booking opens verified Advertio support.
-Production needs `ANDROID_PRODUCTION_API_ORIGIN=https://your-real-api-host.example/`
-at build time. This is only an example, not a deployed URL. An unset origin
-displays an honest setup message rather than fabricated prices. Nonproduction
-builds can access isolated configured origins without opening live Telegram.
+The single app needs an HTTPS `ANDROID_PRODUCTION_API_ORIGIN` at build time.
+Without it, the screen clearly reports missing API configuration rather than
+showing fake prices or opening Telegram.
 User-owned alerts, push, visa data and authentication remain separate tasks.
 
 
@@ -165,15 +112,14 @@ retrieves the database-backed prices through its HTTPS Retrofit repository
 and renders origin filters, search, fares, recorded averages and differences
 in Jetpack Compose. Neither normal navigation nor connection/setup errors
 offer a Telegram fallback. The separate **هماهنگی رزرو با پشتیبانی** action
-is only for a deliberate booking/support handoff in production, not viewing
+is only for a deliberate booking/support handoff, not viewing
 prices. Without a configured HTTPS API origin, the screen reports the missing
 configuration instead of launching Telegram or showing fake fares.
 
 ### Signed-release API validation
 The tagged Android release job uses the GitHub Actions repository variable
-`ANDROID_PRODUCTION_API_ORIGIN` as its `productionRelease` build-time origin.
+`ANDROID_PRODUCTION_API_ORIGIN` as its release build-time origin.
 Before publishing, it checks that the HTTPS `api/v1/tickets/prices` endpoint
 is reachable and returns nonempty, non-stale stored ticket prices. The release
 fails without a configured origin or working DB-backed API, rather than
-shipping a misleading in-app price screen. CI pull-request debug builds
-continue intentionally without configured public API origins.
+shipping a misleading in-app price screen. CI pull-request debug builds remain possible without public API configuration.

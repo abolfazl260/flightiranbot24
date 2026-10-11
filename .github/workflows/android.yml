@@ -9,6 +9,7 @@ on:
       - "scripts/generate_android_store_graphics.py"
       - "src/flightiran/modules/airport/data/airports.json"
       - "scripts/check_android_environments.py"
+      - "src/flightiran/webapp/**"
       - ".github/workflows/android.yml"
   push:
     branches: [main]
@@ -20,6 +21,7 @@ on:
       - "scripts/generate_android_store_graphics.py"
       - "src/flightiran/modules/airport/data/airports.json"
       - "scripts/check_android_environments.py"
+      - "src/flightiran/webapp/**"
       - ".github/workflows/android.yml"
   workflow_dispatch:
 
@@ -49,40 +51,38 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
-      - name: Test and build all environments without API configuration
+      - name: Test and build the single Android app with CI-generated version
         run: |
           gradle --no-daemon -p android \
-            :app:testDevelopmentDebugUnitTest :app:testStagingDebugUnitTest \
-            :app:testProductionDebugUnitTest \
-            :app:lintDevelopmentDebug :app:lintStagingDebug \
-            :app:lintProductionDebug :app:lintProductionRelease \
-            :app:assembleDevelopmentDebug :app:assembleStagingDebug \
-            :app:assembleProductionDebug :app:bundleProductionRelease
-      - name: Confirm unsafe API environment inputs fail Gradle configuration
+            :app:testDebugUnitTest :app:lintDebug :app:lintRelease \
+            :app:assembleDebug :app:bundleRelease
+      - name: Verify insecure API and invalid version inputs are rejected
         shell: bash
         run: |
           set -euo pipefail
           reject_env() {
-            if env "$@" gradle --offline --no-daemon -p android :app:help > "$RUNNER_TEMP/unsafe-api-origin.log" 2>&1; then
-              echo "::error::Unsafe API environment configuration unexpectedly accepted"
+            if env "$@" gradle --offline --no-daemon -p android :app:help > "$RUNNER_TEMP/unsafe-build.log" 2>&1; then
+              echo "::error::Unsafe Android build unexpectedly accepted"
               exit 1
             fi
           }
-          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
-            ANDROID_STAGING_API_ORIGIN=https://api.example.org/
-          reject_env ANDROID_STAGING_API_ORIGIN=https://staging.example.org/
-          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
-            ANDROID_STAGING_API_ORIGIN=http://staging.example.org/
-          # Distinct valid HTTPS example origins must be accepted, but are
-          # NEVER installed as defaults or contacted by a production build.
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=http://api.example.org/
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://example.org/path/
+          reject_env ANDROID_PRODUCTION_API_ORIGIN=https://user:pass@example.org/
+          reject_env GITHUB_RUN_NUMBER=invalid
           env ANDROID_PRODUCTION_API_ORIGIN=https://api.example.org/ \
-            ANDROID_STAGING_API_ORIGIN=https://staging.example.org/ \
-            ANDROID_DEVELOPMENT_API_ORIGIN=https://dev.example.org/ \
             gradle --offline --no-daemon -p android :app:help
-      - name: Verify isolated package IDs, flavors and fail-closed defaults
+      - name: Verify single package and automatically derived APK version
+        shell: bash
         run: |
+          set -euo pipefail
+          version="1.0.$GITHUB_RUN_NUMBER"
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            version="${GITHUB_REF_NAME#v}"
+          fi
           python scripts/check_android_environments.py \
-            --app-dir android/app/build/outputs
+            --app-dir android/app/build/outputs \
+            --version-code "$GITHUB_RUN_NUMBER" --version-name "$version"
       - name: Verify and display versioned Room v1 schema
         shell: bash
         run: |
@@ -106,10 +106,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: android-debug-apk
-          path: |
-            android/app/build/outputs/apk/development/debug/*.apk
-            android/app/build/outputs/apk/staging/debug/*.apk
-            android/app/build/outputs/apk/production/debug/*.apk
+          path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
 
@@ -125,18 +122,17 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Verify version and tag match
+      - name: Verify release tag and main ancestry without Gradle version edits
         shell: bash
         run: |
           set -euo pipefail
-          app_version="$(sed -n 's/^appVersionName=//p' android/gradle.properties)"
-          [[ -n "$app_version" && "$GITHUB_REF_NAME" == "v$app_version" ]] || {
-            echo "::error::Tag must equal v<appVersionName> in android/gradle.properties"
+          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+            echo "::error::Release tags must match vMAJOR.MINOR.PATCH"
             exit 1
           }
           git fetch --no-tags origin main
           git merge-base --is-ancestor HEAD origin/main || {
-            echo "::error::Release tag must point to an ancestor of the main branch."
+            echo "::error::Release tag must point to an ancestor of main"
             exit 1
           }
       - uses: actions/setup-java@v4
@@ -219,24 +215,27 @@ jobs:
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: gradle --no-daemon -p android :app:assembleProductionRelease :app:bundleProductionRelease
-      - name: Verify signed production artifacts use the published package ID
-        run: python scripts/check_android_environments.py --production-release --app-dir android/app/build/outputs
+        run: gradle --no-daemon -p android :app:assembleRelease :app:bundleRelease
+      - name: Verify signed release APK identity and version
+        run: |
+          python scripts/check_android_environments.py --release \
+            --app-dir android/app/build/outputs \
+            --version-code "$GITHUB_RUN_NUMBER" --version-name "${GITHUB_REF_NAME#v}"
       - name: Verify artifact signatures
         shell: bash
         run: |
           set -euo pipefail
           apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
           test -x "$apksigner"
-          "$apksigner" verify --verbose android/app/build/outputs/apk/production/release/*.apk
-          jarsigner -verify android/app/build/outputs/bundle/productionRelease/*.aab
+          "$apksigner" verify --verbose android/app/build/outputs/apk/release/*.apk
+          jarsigner -verify android/app/build/outputs/bundle/release/*.aab
       - name: Stage signed artifacts with verifiable SHA-256
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p android/dist
-          cp android/app/build/outputs/apk/production/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
-          cp android/app/build/outputs/bundle/productionRelease/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
+          cp android/app/build/outputs/apk/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
+          cp android/app/build/outputs/bundle/release/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
           (cd android/dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
       - name: Store signed files as workflow artifacts
         uses: actions/upload-artifact@v4

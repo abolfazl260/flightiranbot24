@@ -70,7 +70,7 @@ class TicketPricesActivity : ComponentActivity() {
                     onBack = ::finish,
                     onRefresh = model::refresh,
                     onSupport = { openUrl(BotLinks.SUPPORT) },
-                    allowSupport = BuildConfig.APP_ENVIRONMENT == "production",
+                    allowSupport = true,
                 )
             }
         }

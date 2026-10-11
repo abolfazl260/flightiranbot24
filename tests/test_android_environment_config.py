@@ -1,54 +1,55 @@
-"""Pure-Python checks for the Android environment artifact verifier."""
+"""Check single Android package identity and CI-derived versions."""
 
 from pathlib import Path
 from runpy import run_path
 
 import pytest
 
-# scripts/ is an executable directory, not a distributable Python package.
-# Load the standalone verifier by its checked-in path instead.
 ROOT = Path(__file__).resolve().parents[1]
 verifier = run_path(str(ROOT / "scripts/check_android_environments.py"))
-DEBUG_IDS = verifier["DEBUG_IDS"]
-RELEASE_ID = verifier["RELEASE_ID"]
-package_name = verifier["package_name"]
+APP_ID = verifier["APP_ID"]
+DEBUG_ID = verifier["DEBUG_ID"]
+package_data = verifier["package_data"]
 verify_outputs = verifier["verify_outputs"]
 
 
-def test_android_package_name_parser_uses_actual_aapt_metadata():
-    assert package_name(
-        "package: name='com.abolfazl260.flightiranbot24.dev.debug' versionCode='1'\n"
-    ) == DEBUG_IDS["development"]
+def test_android_package_identity_and_version_from_real_apk_metadata():
+    assert package_data(
+        "package: name='com.abolfazl260.flightiranbot24.debug' "
+        "versionCode='42' versionName='1.0.42-debug'\n"
+    ) == (DEBUG_ID, 42, "1.0.42-debug")
     with pytest.raises(ValueError):
-        package_name("application-label:'Flight Iran'\n")
-    assert len({*DEBUG_IDS.values(), RELEASE_ID}) == 4
+        package_data("application-label:'Flight Iran'\n")
+    assert APP_ID == "com.abolfazl260.flightiranbot24"
 
 
-def test_android_environment_artifact_gate_fails_on_absent_build_outputs(tmp_path):
-    with pytest.raises(RuntimeError, match="exactly one APK"):
-        verify_outputs(tmp_path, Path("/fake/aapt"), production_release=False)
-    with pytest.raises(RuntimeError, match="exactly one APK"):
-        verify_outputs(tmp_path, Path("/fake/aapt"), production_release=True)
+def test_android_artifact_gate_fails_without_built_outputs(tmp_path):
+    for release in (True, False):
+        with pytest.raises(RuntimeError, match="exactly one APK"):
+            verify_outputs(tmp_path, Path("/fake/aapt"), release, 42, "1.0.42")
 
 
-def test_android_release_build_not_renamed_to_staging_artifact():
-    workflow = (Path(__file__).resolve().parents[1]
-        / ".github/workflows/android.yml").read_text()
-    assert ":app:assembleProductionRelease :app:bundleProductionRelease" in workflow
-    assert "outputs/apk/production/release/" in workflow
-    assert "outputs/bundle/productionRelease/" in workflow
-    assert "outputs/apk/staging/release/" not in workflow
+def test_single_app_release_paths_and_auto_version_numbers():
+    workflow = (ROOT / ".github/workflows/android.yml").read_text()
+    assert ":app:assembleRelease :app:bundleRelease" in workflow
+    assert "outputs/apk/release/" in workflow
+    assert "outputs/bundle/release/" in workflow
+    assert "GITHUB_RUN_NUMBER" in workflow
+    assert "assembleProductionRelease" not in workflow
+    assert "assembleStaging" not in workflow
+    gradle = (ROOT / "android/app/build.gradle").read_text()
+    assert "productFlavors" not in gradle
+    assert "flavorDimensions" not in gradle
+    assert "appVersionBase" in gradle
+    assert "GITHUB_RUN_NUMBER" in gradle
+    assert "applicationId 'com.abolfazl260.flightiranbot24'" in gradle
+    assert "ANDROID_PRODUCTION_API_ORIGIN" in gradle
 
 
-def test_android_app_keeps_production_only_telegram_handoff():
-    base = Path(__file__).resolve().parents[1]
-    activity = (base / "android/app/src/main/java/com/abolfazl260/"
-                "flightiranbot24/MainActivity.kt").read_text()
-    assert 'BuildConfig.APP_ENVIRONMENT != "production"' in activity
-    assert "state.sections.online.filter" in activity
-    assert 'HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)' in activity
-    build_file = (base / "android/app/build.gradle").read_text()
-    assert "applicationIdSuffix '.dev'" in build_file
-    assert "applicationIdSuffix '.staging'" in build_file
-    assert "'productionApiOrigin'" in build_file
-    assert "'APP_ENVIRONMENT'" in build_file
+def test_single_app_keeps_native_prices_and_other_service_handoff():
+    base = ROOT / "android/app/src/main/java/com/abolfazl260/flightiranbot24"
+    activity = (base / "MainActivity.kt").read_text()
+    assert "BuildConfig.APP_ENVIRONMENT" not in activity
+    assert "HomeDestination.TICKET_PRICES ->" in activity
+    assert "startActivity(Intent(this, TicketPricesActivity::class.java))" in activity
+    assert "HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)" in activity

@@ -1,7 +1,6 @@
-"""Verify native Android flavor outputs and release isolation (AND-004).
+"""Verify the one Android application's APK/AAB identities and CI versions.
 
-Uses Android's own aapt metadata for the **built APK**, not filenames alone.
-Missing expected artifacts, extra release flavors and mismatched IDs fail CI.
+Uses Android's aapt metadata, never only the APK filename.
 """
 
 from __future__ import annotations
@@ -12,20 +11,18 @@ import re
 import subprocess
 from pathlib import Path
 
-PRODUCTION_ID = "com.abolfazl260.flightiranbot24"
-DEBUG_IDS = {
-    "development": f"{PRODUCTION_ID}.dev.debug",
-    "staging": f"{PRODUCTION_ID}.staging.debug",
-    "production": f"{PRODUCTION_ID}.debug",
-}
-RELEASE_ID = PRODUCTION_ID
+APP_ID = "com.abolfazl260.flightiranbot24"
+DEBUG_ID = f"{APP_ID}.debug"
 
 
-def package_name(aapt_output: str) -> str:
-    match = re.search(r"^package: name='([A-Za-z][\w.]*)'", aapt_output, re.MULTILINE)
+def package_data(aapt_output: str) -> tuple[str, int, str]:
+    match = re.search(
+        r"^package: name='([^']+)' versionCode='([0-9]+)' versionName='([^']+)'",
+        aapt_output, re.MULTILINE,
+    )
     if match is None:
-        raise ValueError("Android APK lacks readable package identity")
-    return match.group(1)
+        raise ValueError("Android APK lacks readable package and version metadata")
+    return match.group(1), int(match.group(2)), match.group(3)
 
 
 def aapt_binary() -> Path:
@@ -38,44 +35,60 @@ def aapt_binary() -> Path:
     return aapt
 
 
-def verify_apk(aapt: Path, apk_dir: Path, expected_id: str) -> None:
+def verify_apk(
+    aapt: Path,
+    apk_dir: Path,
+    expected_id: str,
+    expected_version_code: int,
+    expected_version_name: str,
+) -> None:
     packages = sorted(apk_dir.glob("*.apk"))
     if len(packages) != 1:
         raise RuntimeError(f"Expected exactly one APK at {apk_dir}, got {len(packages)}")
     result = subprocess.run(
         [str(aapt), "dump", "badging", str(packages[0])],
-        check=True,
-        capture_output=True,
-        text=True,
+        check=True, capture_output=True, text=True,
     )
-    actual = package_name(result.stdout)
-    if actual != expected_id:
-        raise RuntimeError(f"Android package mismatch: {actual} (expected {expected_id})")
-    print(f"Verified APK variant: {actual}")
+    identity, code, name = package_data(result.stdout)
+    if (identity, code, name) != (
+        expected_id, expected_version_code, expected_version_name,
+    ):
+        raise RuntimeError(
+            f"Android package/version mismatch: {identity}/{code}/{name} "
+            f"(expected {expected_id}/{expected_version_code}/{expected_version_name})"
+        )
+    print(f"Verified Android APK: {identity} v{name} ({code})")
 
 
-def verify_outputs(output: Path, aapt: Path, production_release: bool) -> None:
-    if production_release:
-        verify_apk(aapt, output / "apk" / "production" / "release", RELEASE_ID)
-        bundles = sorted((output / "bundle" / "productionRelease").glob("*.aab"))
-        if len(bundles) != 1:
-            raise RuntimeError("Exactly one productionRelease AAB is required")
-        # Only production artifacts are released. Never use the development or
-        # staging subdirectories as the source for signed release uploads.
-        return
-    for flavor, expected_id in DEBUG_IDS.items():
-        verify_apk(aapt, output / "apk" / flavor / "debug", expected_id)
-    bundles = sorted((output / "bundle" / "productionRelease").glob("*.aab"))
+def verify_outputs(
+    output: Path, aapt: Path, release: bool, code: int, version_name: str,
+) -> None:
+    if release:
+        verify_apk(aapt, output / "apk" / "release", APP_ID, code, version_name)
+        bundles = sorted((output / "bundle" / "release").glob("*.aab"))
+    else:
+        verify_apk(
+            aapt, output / "apk" / "debug", DEBUG_ID, code,
+            f"{version_name}-debug",
+        )
+        bundles = sorted((output / "bundle" / "release").glob("*.aab"))
     if len(bundles) != 1:
-        raise RuntimeError("Missing unsigned productionRelease AAB")
+        raise RuntimeError("Exactly one release AAB is required")
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--app-dir", type=Path, required=True)
-    parser.add_argument("--production-release", action="store_true")
+    parser.add_argument("--release", action="store_true")
+    parser.add_argument("--version-code", type=int, required=True)
+    parser.add_argument("--version-name", required=True)
     args = parser.parse_args()
-    verify_outputs(args.app_dir, aapt_binary(), args.production_release)
+    if args.version_code <= 0 or not re.fullmatch(r"[0-9]+\.[0-9]+\.[0-9]+", args.version_name):
+        parser.error("Expected positive version code and MAJOR.MINOR.PATCH version name")
+    verify_outputs(
+        args.app_dir, aapt_binary(), args.release,
+        args.version_code, args.version_name,
+    )
 
 
 if __name__ == "__main__":
