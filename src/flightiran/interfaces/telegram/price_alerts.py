@@ -448,11 +448,13 @@ def _alert_buttons(item, language: str) -> tuple[tuple[str, str], ...]:
     )
 
 
-def _rich_action_row(actions: tuple[tuple[str, str], ...]) -> str:
+def _rich_action_row(
+    actions: tuple[tuple[str, str], ...], *, stretch: bool = False
+) -> str:
     if len(actions) > 2:
         raise ValueError("Rich alert action rows allow two buttons at most")
     return (
-        '<tg-button-row align="center">'
+        ('<tg-button-row>' if stretch else '<tg-button-row align="center">')
         + "".join(
             '<tg-button type="callback_data" data="'
             + escape(callback, quote=True) + '">'
@@ -477,9 +479,12 @@ def render_rich_alert_pages(alerts: list, language: str) -> list[dict]:
     if not alerts:
         header += "<p>" + escape(word(language, "empty")) + "</p>"
 
-    footer = (
-        _rich_action_row(((word(language, "new"), "alerts:new"),))
-        + _rich_action_row(((word(language, "back"), "back"),))
+    footer = _rich_action_row(
+        (
+            (word(language, "new"), "alerts:new"),
+            (word(language, "back"), "back"),
+        ),
+        stretch=True,
     )
     sections: list[str] = []
     pages: list[dict] = []
@@ -492,8 +497,11 @@ def render_rich_alert_pages(alerts: list, language: str) -> list[dict]:
 
     for item in alerts:
         route, details = _alert_description(item, language)
+        # Quote the description as one visually distinct alert. Keep its
+        # pause/delete row immediately after the quote; never mix controls
+        # belonging to different alerts.
         section = (
-            f"<p>{route}</p><p>{details}</p>"
+            f"<blockquote><p>{route}</p><p>{details}</p></blockquote>"
             + _rich_action_row(_alert_buttons(item, language))
         )
         candidate = header + "".join(sections) + section + footer
@@ -520,14 +528,14 @@ def _alert_fallback_pages(alerts: list, language: str) -> list[tuple[str, Inline
             lines.append(word(language, "empty"))
         for item in chunk:
             route, description = _alert_description(item, language)
-            lines.append(f"{route}\n{description}")
+            lines.append(f"<blockquote>{route}\n{description}</blockquote>")
             rows.append([
                 InlineKeyboardButton(label, callback_data=data)
                 for label, data in _alert_buttons(item, language)
             ])
-        rows.extend([
-            [InlineKeyboardButton(word(language, "new"), callback_data="alerts:new")],
-            [InlineKeyboardButton(word(language, "back"), callback_data="back")],
+        rows.append([
+            InlineKeyboardButton(word(language, "new"), callback_data="alerts:new"),
+            InlineKeyboardButton(word(language, "back"), callback_data="back"),
         ])
         output.append(("\n".join(lines), InlineKeyboardMarkup(rows)))
     return output
