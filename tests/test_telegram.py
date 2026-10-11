@@ -146,21 +146,22 @@ async def test_unknown_callback_has_safe_fallback():
 
 
 @pytest.mark.asyncio
-async def test_airport_menu_routes_to_catalog_and_selection():
-    catalog = AirportCatalog.from_json(
-        __import__("pathlib").Path("src/flightiran/modules/airport/data/airports.json")
-    )
-    deps = dependencies(airport_catalog=catalog)
-    query = Query()
-    query.data = "menu:airports"
-    await callback_handler(update(query=query), None, deps)
-    assert "فرودگاه" in query.calls[0][0][0]
-    assert query.calls[0][1]["reply_markup"].inline_keyboard
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+async def test_airport_menu_only_shows_coming_soon(language):
+    deps = dependencies()
+    deps.users.languages[42] = language
+    for action in ("menu:airports", "airports:page:1", "airport:IKA"):
+        query = Query()
+        query.data = action
+        await callback_handler(update(query=query), None, deps)
+        assert len(query.calls) == 1
+        rendered = query.calls[0][0][0]
+        assert "فرودگاه" in rendered or "Airport" in rendered or "المطارات" in rendered
+        buttons = query.calls[0][1]["reply_markup"].inline_keyboard
+        assert len(buttons) == 1
+        assert [button.callback_data for button in buttons[0]] == ["back"]
 
-    selected = Query()
-    selected.data = "airport:IKA"
-    await callback_handler(update(query=selected), None, deps)
-    assert "IKA" in selected.calls[0][0][0]
+
 
 
 @pytest.mark.asyncio
