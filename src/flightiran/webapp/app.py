@@ -13,9 +13,6 @@ from fastapi.responses import HTMLResponse
 from flightiran.config import Settings, load_settings
 from flightiran.db.engine import Database, create_database
 from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository, SQLiteUserRepository
-from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
-from flightiran.modules.tickets.mz724 import Mz724TicketProvider
-from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
@@ -25,33 +22,22 @@ LOGGER = logging.getLogger(__name__)
 
 def create_app(
     settings: Settings | None = None, *, activity_database: Database | None = None,
-    ticket_price_service: CheapTicketService | None = None,
 ) -> FastAPI:
     settings = settings or load_settings()
     service = WebAppService(
         WebAppAuthenticator(settings.telegram_bot_token.get_secret_value()),
         enabled=settings.web_app_enabled,
     )
-    ticket_http = None
-    if ticket_price_service is None:
-        ticket_http = ProviderHttpClient(ProviderHttpConfig(
-            timeout_seconds=12, max_retries=2, cache_ttl_seconds=120,
-            default_headers={"Accept-Language": "fa-IR,fa;q=0.9"},
-        ))
-        ticket_price_service = CheapTicketService(
-            Mz724TicketProvider(ticket_http, url=settings.ticket_provider_url),
-            SQLiteMz724PriceHistoryRepository(activity_database) if activity_database else None,
-            retention_days=settings.ticket_history_retention_days,
-        )
-    public_prices = PublicTicketPriceFeed(ticket_price_service)
+    public_prices = (
+        PublicTicketPriceFeed(SQLiteMz724PriceHistoryRepository(activity_database))
+        if activity_database is not None else None
+    )
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
         try:
             yield
         finally:
-            if ticket_http is not None:
-                await ticket_http.aclose()
             if activity_database is not None:
                 await activity_database.close()
 
@@ -97,8 +83,10 @@ def create_app(
 
     @app.get("/api/v1/tickets/prices")
     async def public_ticket_prices(response: Response) -> dict[str, object]:
-        """No Telegram login required: prices only, with bounded upstream polling."""
+        """No Telegram login required: public quotes from the shared database."""
         response.headers["Cache-Control"] = "public, max-age=60"
+        if public_prices is None:
+            raise HTTPException(status_code=503, detail="Ticket database unavailable")
         try:
             return await public_prices.get()
         except Exception as exc:
