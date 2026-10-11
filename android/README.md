@@ -123,3 +123,13 @@ Before publishing, it checks that the HTTPS `api/v1/tickets/prices` endpoint
 is reachable and returns nonempty, non-stale stored ticket prices. The release
 fails without a configured origin or working DB-backed API, rather than
 shipping a misleading in-app price screen. CI pull-request debug builds remain possible without public API configuration.
+
+### Android launcher artwork
+The previous generic vector globe/plane launcher icon has been replaced by the
+user-approved transparent airplane, passport, and globe emblem. The PNG source
+is in `app/src/main/res/drawable-nodpi/ic_launcher_art.png`; the unframed
+legacy launcher drawable and Android 8+ adaptive foreground both reference it.
+The adaptive foreground has an 18dp inset within the 108dp design canvas, so
+Android launchers can apply their own circular/squircle masks. No additional
+rounded-square image background is baked into the emblem. The Play Store
+artwork generator uses this same icon, avoiding visual brand divergence.
