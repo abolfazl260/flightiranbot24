@@ -11,43 +11,30 @@ import org.junit.Test
 
 class EnvironmentSettingsTest {
     @Test
-    fun eachCompiledFlavorKeepsTheExpectedNoncollidingId() {
-        val expected = when (BuildConfig.APP_ENVIRONMENT) {
-            "development" -> "com.abolfazl260.flightiranbot24.dev.debug"
-            "staging" -> "com.abolfazl260.flightiranbot24.staging.debug"
-            "production" -> "com.abolfazl260.flightiranbot24.debug"
-            else -> throw AssertionError("Unexpected environment")
-        }
-        assertEquals(expected, BuildConfig.APPLICATION_ID)
+    fun singleDebugPackageAndConfiguredApi() {
+        assertEquals("com.abolfazl260.flightiranbot24.debug", BuildConfig.APPLICATION_ID)
         val environment = EnvironmentSettings.fromBuild()
-        assertEquals(BuildConfig.APP_ENVIRONMENT, environment.name)
         assertEquals(BuildConfig.API_BASE_URL, environment.apiOrigin)
-        assertEquals(BuildConfig.APP_ENVIRONMENT == "production", environment.isProduction)
     }
 
     @Test
-    fun unconfiguredEnvironmentsDoNotMakeUpAnApiOrigin() {
-        val environment = EnvironmentSettings("staging", "")
+    fun unconfiguredApiNeverInventsAnOrigin() {
+        val environment = EnvironmentSettings("")
         assertFalse(environment.isConfigured)
         assertNull(environment.publicApi())
-        val configured = EnvironmentSettings(
-            "development", "https://dev.example.org/"
-        )
+        val configured = EnvironmentSettings("https://api.example.org/")
         assertTrue(configured.isConfigured)
         assertNotNull(configured.publicApi())
     }
 
     @Test
-    fun rejectsUnknownEnvironmentsAndInsecureNetworkUrls() {
-        assertThrows(IllegalArgumentException::class.java) {
-            EnvironmentSettings("unknown", "")
-        }
+    fun rejectsInsecureNetworkUrls() {
         for (bad in listOf(
             "http://api.example.com/", "https://user:pass@api.example.com/",
             "https://example.com/route", "https://example.com/?token=1",
         )) {
             assertThrows(IllegalArgumentException::class.java) {
-                EnvironmentSettings("production", bad)
+                EnvironmentSettings(bad)
             }
         }
     }

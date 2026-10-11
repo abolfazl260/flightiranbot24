@@ -81,15 +81,6 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun navigateTo(destination: HomeDestination) {
-        if (BuildConfig.APP_ENVIRONMENT != "production" &&
-            destination != HomeDestination.OFFLINE_AIRPORTS &&
-            destination != HomeDestination.OFFLINE_CHECKLIST &&
-            destination != HomeDestination.TICKET_PRICES &&
-            destination != HomeDestination.PRIVACY
-        ) {
-            Toast.makeText(this, R.string.test_build_online_disabled, Toast.LENGTH_LONG).show()
-            return
-        }
         when (destination) {
             HomeDestination.OFFLINE_AIRPORTS ->
                 startActivity(Intent(this, AirportDirectoryActivity::class.java))
@@ -190,15 +181,6 @@ internal fun TravelHomeScreen(
                     )
                 }
             }
-            val environmentLabel = stringResource(R.string.deployment_status)
-            if (environmentLabel.isNotBlank()) {
-                Text(
-                    text = environmentLabel,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelMedium,
-                )
-            }
-
             when (state) {
                 HomeUiState.Loading -> TravelLoadingState()
                 HomeUiState.Error -> TravelErrorState(
@@ -217,12 +199,12 @@ internal fun TravelHomeScreen(
                             title = stringResource(R.string.home_quick_services),
                             description = stringResource(R.string.online_service_hint),
                             destinations = state.sections.online.filter {
-                                it == HomeDestination.TICKET_PRICES || (
                                 it in listOf(
+                                    HomeDestination.TICKET_PRICES,
                                     HomeDestination.TELEGRAM_VISA,
                                     HomeDestination.TELEGRAM_USEFUL,
                                     HomeDestination.SUPPORT,
-                                ) && (BuildConfig.APP_ENVIRONMENT == "production"))
+                                )
                             },
                             onSelect = onSelect,
                         )
@@ -230,13 +212,7 @@ internal fun TravelHomeScreen(
                         ShortcutSection(
                             title = stringResource(R.string.home_online_heading),
                             description = stringResource(R.string.online_service_hint),
-                            destinations = if (BuildConfig.APP_ENVIRONMENT == "production") {
-                                state.sections.online
-                            } else {
-                                state.sections.online.filter {
-                                    it == HomeDestination.PRIVACY || it == HomeDestination.TICKET_PRICES
-                                }
-                            },
+                            destinations = state.sections.online,
                             onSelect = onSelect,
                         )
                     }

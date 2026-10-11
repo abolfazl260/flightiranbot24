@@ -4,47 +4,36 @@ plugins {
     id 'org.jetbrains.kotlin.plugin.compose'
 }
 
-// Public HTTPS API origins; absent means offline-only, never a fallback.
-def apiOrigins = [
-    development: (providers.gradleProperty('developmentApiOrigin').orElse(
-        providers.environmentVariable('ANDROID_DEVELOPMENT_API_ORIGIN')).getOrElse('')).trim(),
-    staging: (providers.gradleProperty('stagingApiOrigin').orElse(
-        providers.environmentVariable('ANDROID_STAGING_API_ORIGIN')).getOrElse('')).trim(),
-    production: (providers.gradleProperty('productionApiOrigin').orElse(
-        providers.environmentVariable('ANDROID_PRODUCTION_API_ORIGIN')).getOrElse('')).trim(),
-]
-apiOrigins.each { environment, origin ->
-    if (origin) {
-        def uri
-        try {
-            uri = new URI(origin)
-        } catch (Exception ignored) {
-            throw new GradleException("Invalid ${environment} API origin")
-        }
-        if (!'https'.equalsIgnoreCase(uri.scheme) || !uri.host ||
-                uri.rawUserInfo != null || uri.rawQuery != null || uri.rawFragment != null ||
-                !(uri.rawPath == null || uri.rawPath == '' || uri.rawPath == '/') ||
-                !origin.endsWith('/')) {
-            throw new GradleException(
-                "${environment} API origin must be HTTPS and contain no credentials, path or query"
-            )
-        }
+// One app identity. CI generates a monotonically increasing build number per
+// Android workflow run; no manual version edits or variant-specific IDs.
+def apiOrigin = providers.gradleProperty('apiOrigin').orElse(
+    providers.environmentVariable('ANDROID_PRODUCTION_API_ORIGIN')).getOrElse('').trim()
+if (apiOrigin) {
+    URI uri
+    try { uri = new URI(apiOrigin) }
+    catch (Exception ignored) { throw new GradleException('Invalid Android API origin') }
+    if (!'https'.equalsIgnoreCase(uri.scheme) || !uri.host ||
+            uri.rawUserInfo != null || uri.rawQuery != null || uri.rawFragment != null ||
+            !(uri.rawPath == null || uri.rawPath == '' || uri.rawPath == '/') ||
+            !apiOrigin.endsWith('/')) {
+        throw new GradleException('Android API origin must be HTTPS without credentials, path or query, ending in /')
     }
 }
-if ((apiOrigins.development || apiOrigins.staging) && !apiOrigins.production) {
-    throw new GradleException(
-        'Production API origin required to validate isolation of non-production origins'
-    )
+def versionNumberRaw = providers.gradleProperty('appBuildNumber').orElse(
+    providers.environmentVariable('GITHUB_RUN_NUMBER')).getOrElse('1').trim()
+if (!(versionNumberRaw ==~ /[1-9][0-9]*/) || versionNumberRaw.length() > 9) {
+    throw new GradleException('appBuildNumber must be a positive 1–9 digit CI run number')
 }
-def authority = { origin ->
-    def uri = new URI(origin)
-    return "${uri.host.toLowerCase(java.util.Locale.ROOT)}:${uri.port < 0 ? 443 : uri.port}"
+def buildNumber = Integer.parseInt(versionNumberRaw)
+def baseVersion = project.property('appVersionBase').toString()
+if (!(baseVersion ==~ /[0-9]+\.[0-9]+/)) {
+    throw new GradleException('appVersionBase must follow MAJOR.MINOR')
 }
-def configured = apiOrigins.findAll { key, origin -> !origin.isEmpty() }
-    .collectEntries { key, origin -> [(key): authority(origin)] }
-if (configured.values().toSet().size() != configured.size()) {
-    throw new GradleException('Each configured API environment requires a distinct host')
+def releaseTag = System.getenv('GITHUB_REF_TYPE') == 'tag' ? System.getenv('GITHUB_REF_NAME') : null
+if (releaseTag && !(releaseTag ==~ /v[0-9]+\.[0-9]+\.[0-9]+/)) {
+    throw new GradleException('Android release tags must be vMAJOR.MINOR.PATCH')
 }
+def resolvedVersionName = releaseTag ? releaseTag.substring(1) : "${baseVersion}.${buildNumber}"
 def jsonField = { value -> groovy.json.JsonOutput.toJson(value) }
 
 def signingEnv = [
@@ -66,39 +55,14 @@ android {
         applicationId 'com.abolfazl260.flightiranbot24'
         minSdk 24
         targetSdk 36
-        versionCode Integer.parseInt(project.property('appVersionCode').toString())
-        versionName project.property('appVersionName').toString()
+        versionCode buildNumber
+        versionName resolvedVersionName
+        buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigin)
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
-        }
-    }
-
-    flavorDimensions 'environment'
-    productFlavors {
-        development {
-            dimension 'environment'
-            applicationIdSuffix '.dev'
-            versionNameSuffix '-dev'
-            buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('development')
-            buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.development)
-            resValue 'string', 'deployment_status', 'نسخه توسعه — خدمات آنلاین غیرفعال هستند'
-        }
-        staging {
-            dimension 'environment'
-            applicationIdSuffix '.staging'
-            versionNameSuffix '-staging'
-            buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('staging')
-            buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.staging)
-            resValue 'string', 'deployment_status', 'نسخه آزمایشی — خدمات آنلاین غیرفعال هستند'
-        }
-        production {
-            dimension 'environment'
-            buildConfigField 'String', 'APP_ENVIRONMENT', jsonField('production')
-            buildConfigField 'String', 'API_BASE_URL', jsonField(apiOrigins.production)
-            resValue 'string', 'deployment_status', ''
         }
     }
 
