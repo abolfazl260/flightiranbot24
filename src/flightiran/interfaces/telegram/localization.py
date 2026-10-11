@@ -7,6 +7,10 @@ DEFAULT_LANGUAGE = "fa"
 
 MESSAGES = {
     "en": {
+        "free_text_hint": (
+            "This bot does not process free-form messages.\n"
+            "Select a service below, or choose Support for help."
+        ),
         "ticket_choose_origin": "Choose your departure city to view its fares:",
         "ticket_selected_origin": (
             "Flights from {origin}: select another "
@@ -33,6 +37,11 @@ MESSAGES = {
         "admin_reports": "📊 Full bot report",
     },
     "fa": {
+        "free_text_hint": (
+            "این ربات در حال حاضر به پیام‌های آزاد پاسخ نمی‌دهد.\n"
+            "برای استفاده از خدمات، یکی از گزینه‌های زیر را انتخاب کنید "
+            "یا از بخش پشتیبانی کمک بگیرید."
+        ),
         "ticket_choose_origin": (
             "✈️ شهر مبدأ را انتخاب کنید تا فقط "
             "قیمت‌های همان شهر نمایش داده شود:"
@@ -62,6 +71,10 @@ MESSAGES = {
         "admin_reports": "📊 گزارش کامل ربات",
     },
     "ar": {
+        "free_text_hint": (
+            "هذا الروبوت لا يعالج الرسائل النصية الحرة حالياً.\n"
+            "اختر إحدى الخدمات أدناه أو تواصل مع الدعم للمساعدة."
+        ),
         "ticket_choose_origin": "✈️ اختر مدينة المغادرة لعرض أسعار رحلاتها فقط:",
         "ticket_selected_origin": "✈️ أسعار الرحلات من {origin} معروضة أدناه.",
         "ticket_expired": "انتهت صلاحية قائمة المدن. افتح قسم التذاكر مرة أخرى.",
