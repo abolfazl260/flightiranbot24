@@ -708,8 +708,25 @@ async def message_handler(
                 update, context, dependencies.visa_catalog, language
             ):
                 return
-    if update.message:
-        await update.message.reply_text("OK")
+    if update.message is None:
+        return
+    # Unstructured text is not a chat command. Avoid unsolicited replies in groups.
+    if getattr(getattr(update, "effective_chat", None), "type", None) != "private":
+        return
+    language = "fa"
+    if dependencies is not None:
+        _user_id, language = await _user_language(update, dependencies)
+    await update.message.reply_text(
+        text(language, "free_text_hint"),
+        reply_markup=main_menu(
+            language,
+            dependencies.web_app_url if dependencies is not None else None,
+            is_admin=(
+                _is_private_admin(update, dependencies)
+                if dependencies is not None else False
+            ),
+        ),
+    )
 
 
 async def inline_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
