@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">Flight Iran Bot 24</string>
     <string name="welcome_title">دستیار سفر Flight Iran Bot 24</string>
-    <string name="welcome_description">راهنمای فرودگاه‌ها و چک‌لیست سفر بدون اینترنت؛ سایر خدمات در ربات تلگرام.</string>
-    <string name="notice">اطلاعات فرودگاه‌ها برای راهنمایی عمومی است. خدمات آنلاین از طریق تلگرام باز می‌شوند.</string>
+    <string name="welcome_description">فهرست قیمت بلیت‌ها، فرودگاه‌ها و چک‌لیست سفر در اپ؛ سایر خدمات از طریق تلگرام.</string>
+    <string name="notice">قیمت‌های بلیت قطعی نیستند و پیش از رزرو باید تأیید شوند. برخی خدمات هنوز در تلگرام ارائه می‌شوند.</string>
     <string name="home_offline_heading">امکانات آفلاین سفر</string>
     <string name="home_online_heading">خدمات آنلاین سفر</string>
     <string name="open_bot">ورود به دستیار سفر</string>
@@ -40,7 +40,7 @@
     <string name="navigation_services">خدمات</string>
     <string name="home_offline_hint">بدون نیاز به اینترنت، همراه سفر شما</string>
     <string name="home_quick_services">خدمات پرکاربرد</string>
-    <string name="online_service_hint">این خدمات در ربات تلگرام باز می‌شوند.</string>
+    <string name="online_service_hint">فهرست قیمت در اپ نمایش داده می‌شود؛ سایر خدمات از طریق تلگرام باز می‌شوند.</string>
     <string name="home_local_badge">قابل استفاده در اپ</string>
     <string name="home_external_badge">ورود به تلگرام یا وب‌سایت</string>
     <string name="checklist_progress">%1$d مورد از %2$d انجام شده</string>
@@ -49,4 +49,21 @@
     <string name="checklist_reset_confirm">پاک شود</string>
     <string name="checklist_reset_cancel">انصراف</string>
     <string name="checklist_reset_done">چک‌لیست پاک شد.</string>
+
+    <string name="ticket_prices_title">لیست قیمت بلیت‌ها</string>
+    <string name="ticket_prices_explanation">قیمت‌های فعلی برای مقایسه مسیرها هستند و ممکن است تا زمان رزرو تغییر کنند.</string>
+    <string name="ticket_prices_unconfigured">اتصال امن به سرور قیمت‌ها هنوز برای این نسخه تنظیم نشده است. قیمت ساختگی نمایش داده نمی‌شود.</string>
+    <string name="ticket_prices_error">دریافت قیمت‌ها ناموفق بود. اتصال اینترنت را بررسی کنید و دوباره تلاش کنید.</string>
+    <string name="ticket_prices_open_bot">مشاهده قیمت‌ها در تلگرام</string>
+    <string name="ticket_prices_stale">آخرین نرخ ذخیره‌شده نمایش داده می‌شود؛ دریافت اطلاعات جدید ناموفق بود.</string>
+    <string name="ticket_prices_observed">زمان دریافت قیمت توسط سرور (UTC): %1$s</string>
+    <string name="ticket_prices_refresh">به‌روزرسانی قیمت‌ها</string>
+    <string name="ticket_prices_origin">شهر مبدأ</string>
+    <string name="ticket_prices_search">جست‌وجوی مقصد</string>
+    <string name="ticket_prices_empty">برای این جست‌وجو قیمتی پیدا نشد.</string>
+    <string name="ticket_prices_support">هماهنگی رزرو با پشتیبانی</string>
+    <string name="ticket_prices_current">قیمت فعلی</string>
+    <string name="ticket_prices_average">میانگین ثبت‌شده</string>
+    <string name="ticket_prices_no_average">هنوز داده کافی وجود ندارد</string>
+    <string name="ticket_prices_toman">%1$s تومان</string>
 </resources>

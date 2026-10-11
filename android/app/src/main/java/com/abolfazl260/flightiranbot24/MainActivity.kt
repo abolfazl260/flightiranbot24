@@ -84,6 +84,7 @@ class MainActivity : ComponentActivity() {
         if (BuildConfig.APP_ENVIRONMENT != "production" &&
             destination != HomeDestination.OFFLINE_AIRPORTS &&
             destination != HomeDestination.OFFLINE_CHECKLIST &&
+            destination != HomeDestination.TICKET_PRICES &&
             destination != HomeDestination.PRIVACY
         ) {
             Toast.makeText(this, R.string.test_build_online_disabled, Toast.LENGTH_LONG).show()
@@ -94,6 +95,8 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, AirportDirectoryActivity::class.java))
             HomeDestination.OFFLINE_CHECKLIST ->
                 startActivity(Intent(this, ChecklistActivity::class.java))
+            HomeDestination.TICKET_PRICES ->
+                startActivity(Intent(this, TicketPricesActivity::class.java))
             HomeDestination.TELEGRAM_BOT -> openUrl(BotLinks.BOT)
             HomeDestination.TELEGRAM_AIRPORTS -> openUrl(BotLinks.AIRPORTS)
             HomeDestination.TELEGRAM_USEFUL -> openUrl(BotLinks.USEFUL)
@@ -208,11 +211,12 @@ internal fun TravelHomeScreen(
                             title = stringResource(R.string.home_quick_services),
                             description = stringResource(R.string.online_service_hint),
                             destinations = state.sections.online.filter {
+                                it == HomeDestination.TICKET_PRICES || (
                                 it in listOf(
                                     HomeDestination.TELEGRAM_VISA,
                                     HomeDestination.TELEGRAM_USEFUL,
                                     HomeDestination.SUPPORT,
-                                ) && (BuildConfig.APP_ENVIRONMENT == "production")
+                                ) && (BuildConfig.APP_ENVIRONMENT == "production"))
                             },
                             onSelect = onSelect,
                         )
@@ -223,7 +227,9 @@ internal fun TravelHomeScreen(
                             destinations = if (BuildConfig.APP_ENVIRONMENT == "production") {
                                 state.sections.online
                             } else {
-                                state.sections.online.filter { it == HomeDestination.PRIVACY }
+                                state.sections.online.filter {
+                                    it == HomeDestination.PRIVACY || it == HomeDestination.TICKET_PRICES
+                                }
                             },
                             onSelect = onSelect,
                         )
@@ -267,11 +273,13 @@ private fun ShortcutSection(
 }
 
 private fun HomeDestination.isLocal(): Boolean =
-    this == HomeDestination.OFFLINE_AIRPORTS || this == HomeDestination.OFFLINE_CHECKLIST
+    this == HomeDestination.OFFLINE_AIRPORTS || this == HomeDestination.OFFLINE_CHECKLIST ||
+        this == HomeDestination.TICKET_PRICES
 
 private fun HomeDestination.symbol(): String = when (this) {
     HomeDestination.OFFLINE_AIRPORTS -> "✈"
     HomeDestination.OFFLINE_CHECKLIST -> "☑"
+    HomeDestination.TICKET_PRICES -> "↕"
     HomeDestination.TELEGRAM_BOT -> "✦"
     HomeDestination.TELEGRAM_VISA -> "▣"
     HomeDestination.TELEGRAM_AIRPORTS -> "⌖"
@@ -283,6 +291,7 @@ private fun HomeDestination.symbol(): String = when (this) {
 private fun HomeDestination.labelResource(): Int = when (this) {
     HomeDestination.OFFLINE_AIRPORTS -> R.string.offline_airports
     HomeDestination.OFFLINE_CHECKLIST -> R.string.checklist_title
+    HomeDestination.TICKET_PRICES -> R.string.ticket_prices_title
     HomeDestination.TELEGRAM_BOT -> R.string.open_bot
     HomeDestination.TELEGRAM_VISA -> R.string.open_visa
     HomeDestination.TELEGRAM_AIRPORTS -> R.string.open_airports

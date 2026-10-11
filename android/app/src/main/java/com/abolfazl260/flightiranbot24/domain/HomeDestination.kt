@@ -7,6 +7,7 @@ package com.abolfazl260.flightiranbot24.domain
 internal enum class HomeDestination {
     OFFLINE_AIRPORTS,
     OFFLINE_CHECKLIST,
+    TICKET_PRICES,
     TELEGRAM_BOT,
     TELEGRAM_VISA,
     TELEGRAM_AIRPORTS,

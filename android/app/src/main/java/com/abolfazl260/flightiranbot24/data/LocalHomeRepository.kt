@@ -15,6 +15,7 @@ internal class LocalHomeRepository : HomeRepository {
             HomeDestination.OFFLINE_CHECKLIST,
         ),
         online = listOf(
+            HomeDestination.TICKET_PRICES,
             HomeDestination.TELEGRAM_BOT,
             HomeDestination.TELEGRAM_VISA,
             HomeDestination.TELEGRAM_AIRPORTS,

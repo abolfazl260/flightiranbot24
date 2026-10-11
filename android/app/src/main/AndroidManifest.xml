@@ -11,6 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FlightIran">
         <activity android:name=".AirportDirectoryActivity" android:exported="false" />
+        <activity android:name=".TicketPricesActivity" android:exported="false" />
         <activity android:name=".ChecklistActivity" android:exported="false" />
         <activity
             android:name=".MainActivity"
