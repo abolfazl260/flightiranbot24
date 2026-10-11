@@ -130,3 +130,16 @@ Only the `productionRelease` bundle/productionRelease APK can be published.
 The tag-based GitHub release job signs and stages that flavor exclusively.
 The upcoming API-001 task will define real versioned FastAPI endpoints; no
 Android flavor currently logs in or automatically contacts a remote API.
+
+
+## Native ticket prices
+The native Persian RTL fare screen consumes the public read-only
+`GET /api/v1/tickets/prices` endpoint from `flightiran-web`. It shows current
+tomans, recorded averages, percentage movement, UTC observation time, and
+an explicit stale-data warning. Origin selection, destination search and
+sorting work locally. Booking opens verified Advertio support.
+Production needs `ANDROID_PRODUCTION_API_ORIGIN=https://your-real-api-host.example/`
+at build time. This is only an example, not a deployed URL. An unset origin
+displays an honest setup message rather than fabricated prices. Nonproduction
+builds can access isolated configured origins without opening live Telegram.
+User-owned alerts, push, visa data and authentication remain separate tasks.

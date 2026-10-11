@@ -23,7 +23,8 @@ class HomeShortcutTest {
     @Test
     fun onlineLinksRemainExplicitHandOffUntilBackendApiExists() = runBlocking {
         val destinations = LocalHomeRepository().loadHomeSections().online
-        assertEquals(6, destinations.size)
+        assertEquals(7, destinations.size)
+        assertTrue(destinations.contains(HomeDestination.TICKET_PRICES))
         assertTrue(destinations.contains(HomeDestination.TELEGRAM_VISA))
         assertTrue(destinations.contains(HomeDestination.SUPPORT))
         assertTrue(destinations.contains(HomeDestination.PRIVACY))
@@ -35,7 +36,7 @@ class HomeShortcutTest {
     fun eachHomeShortcutHasAUniqueDestination() = runBlocking {
         val data = LocalHomeRepository().loadHomeSections()
         val all = data.offline + data.online
-        assertEquals(8, all.size)
+        assertEquals(9, all.size)
         assertEquals(all.size, all.distinct().size)
     }
 }

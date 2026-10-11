@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.abolfazl260.flightiranbot24.data.LocalHomeRepository
+import com.abolfazl260.flightiranbot24.data.tickets.TicketPricesRepository
+import com.abolfazl260.flightiranbot24.presentation.tickets.TicketPricesViewModel
 import com.abolfazl260.flightiranbot24.data.airports.RoomAirportCacheRepository
 import com.abolfazl260.flightiranbot24.data.airports.TravelCacheDatabase
 import com.abolfazl260.flightiranbot24.data.settings.DataStoreTravelerPreferencesRepository
@@ -35,6 +37,10 @@ internal class AppContainer(
 
     // A caller cannot override environment origin or select production manually.
     fun publicApi() = environment.publicApi()
+
+    val ticketPricesViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
+        initializer { TicketPricesViewModel(TicketPricesRepository(publicApi())) }
+    }
 
     val homeViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
         initializer { HomeViewModel(homeRepository) }
