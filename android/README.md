@@ -157,3 +157,14 @@ instead of generated prices. The bot's scheduled collector remains
 responsible for updating its history and averages. The web container and bot
 must use the same database volume. An HTTPS `ANDROID_PRODUCTION_API_ORIGIN`
 must still be set for the production APK/AAB.
+
+### In-app ticket browsing — native only
+The prominent **قیمت بلیت** bottom navigation item and the dashboard fare
+shortcut both open `TicketPricesActivity` inside the Android app. The screen
+retrieves the database-backed prices through its HTTPS Retrofit repository
+and renders origin filters, search, fares, recorded averages and differences
+in Jetpack Compose. Neither normal navigation nor connection/setup errors
+offer a Telegram fallback. The separate **هماهنگی رزرو با پشتیبانی** action
+is only for a deliberate booking/support handoff in production, not viewing
+prices. Without a configured HTTPS API origin, the screen reports the missing
+configuration instead of launching Telegram or showing fake fares.

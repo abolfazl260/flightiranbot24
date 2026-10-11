@@ -57,7 +57,7 @@ import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingStat
 import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
 import com.abolfazl260.flightiranbot24.presentation.components.TravelSectionHeading
 
-/** Persian RTL travel launcher. Offline tools remain local and online features open Telegram. */
+/** Persian RTL travel launcher. Ticket prices open natively; other services may hand off. */
 class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(PersianContext.wrap(newBase))
@@ -132,6 +132,12 @@ internal fun TravelHomeScreen(
                     onClick = { showServices = false },
                     symbol = "⌂",
                     label = stringResource(R.string.navigation_home),
+                )
+                TravelNavigationItem(
+                    selected = false,
+                    onClick = { onSelect(HomeDestination.TICKET_PRICES) },
+                    symbol = "↕",
+                    label = stringResource(R.string.navigation_prices),
                 )
                 TravelNavigationItem(
                     selected = false,
@@ -262,7 +268,7 @@ private fun ShortcutSection(
             TravelServiceCard(
                 title = stringResource(destination.labelResource()),
                 subtitle = stringResource(
-                    if (destination.isLocal()) R.string.home_local_badge
+                    if (destination.isInApp()) R.string.home_local_badge
                     else R.string.home_external_badge
                 ),
                 symbol = destination.symbol(),
@@ -272,7 +278,7 @@ private fun ShortcutSection(
     }
 }
 
-private fun HomeDestination.isLocal(): Boolean =
+private fun HomeDestination.isInApp(): Boolean =
     this == HomeDestination.OFFLINE_AIRPORTS || this == HomeDestination.OFFLINE_CHECKLIST ||
         this == HomeDestination.TICKET_PRICES
 

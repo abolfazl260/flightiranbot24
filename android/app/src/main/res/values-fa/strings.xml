@@ -35,6 +35,7 @@
     <string name="home_retry">تلاش مجدد</string>
     <string name="test_build_online_disabled">خدمات تلگرام در نسخه آزمایشی غیرفعال‌اند.</string>
     <string name="navigation_home">خانه</string>
+    <string name="navigation_prices">قیمت بلیت</string>
     <string name="navigation_airports">فرودگاه‌ها</string>
     <string name="navigation_checklist">چک‌لیست</string>
     <string name="navigation_services">خدمات</string>
@@ -54,7 +55,6 @@
     <string name="ticket_prices_explanation">قیمت‌های فعلی برای مقایسه مسیرها هستند و ممکن است تا زمان رزرو تغییر کنند.</string>
     <string name="ticket_prices_unconfigured">اتصال امن به سرور قیمت‌ها هنوز برای این نسخه تنظیم نشده است. قیمت ساختگی نمایش داده نمی‌شود.</string>
     <string name="ticket_prices_error">دریافت قیمت‌ها ناموفق بود. اتصال اینترنت را بررسی کنید و دوباره تلاش کنید.</string>
-    <string name="ticket_prices_open_bot">مشاهده قیمت‌ها در تلگرام</string>
     <string name="ticket_prices_stale">قیمت‌ها قدیمی‌اند یا دریافت اطلاعات جدید از دیتابیس ناموفق بوده است؛ قبل از رزرو استعلام کنید.</string>
     <string name="ticket_prices_observed">زمان ثبت قیمت در دیتابیس (UTC): %1$s</string>
     <string name="ticket_prices_refresh">به‌روزرسانی قیمت‌ها</string>

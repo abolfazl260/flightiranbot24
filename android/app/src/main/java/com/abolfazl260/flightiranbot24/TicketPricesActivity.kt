@@ -51,7 +51,7 @@ import java.text.NumberFormat
 import java.util.Locale
 import kotlin.math.abs
 
-/** Persian-only RTL live fare list with explicit support handoff. */
+/** Persian-only RTL fare list; viewing prices never opens Telegram. */
 class TicketPricesActivity : ComponentActivity() {
     private val container by lazy { AppContainer(applicationContext) }
 
@@ -70,8 +70,7 @@ class TicketPricesActivity : ComponentActivity() {
                     onBack = ::finish,
                     onRefresh = model::refresh,
                     onSupport = { openUrl(BotLinks.SUPPORT) },
-                    onBot = { openUrl(BotLinks.BOT) },
-                    allowBot = BuildConfig.APP_ENVIRONMENT == "production",
+                    allowSupport = BuildConfig.APP_ENVIRONMENT == "production",
                 )
             }
         }
@@ -92,8 +91,7 @@ internal fun TicketPricesScreen(
     onBack: () -> Unit,
     onRefresh: () -> Unit,
     onSupport: () -> Unit,
-    onBot: () -> Unit,
-    allowBot: Boolean,
+    allowSupport: Boolean,
 ) {
     var selectedOrigin by rememberSaveable { mutableStateOf("") }
     var search by rememberSaveable { mutableStateOf("") }
@@ -114,15 +112,9 @@ internal fun TicketPricesScreen(
             TicketPricesUiState.Loading -> item { TravelLoadingState() }
             TicketPricesUiState.Unconfigured -> item {
                 TravelErrorState(stringResource(R.string.ticket_prices_unconfigured))
-                if (allowBot) TextButton(onClick = onBot) {
-                    Text(stringResource(R.string.ticket_prices_open_bot))
-                }
             }
             TicketPricesUiState.Error -> item {
                 TravelErrorState(stringResource(R.string.ticket_prices_error), onRefresh)
-                if (allowBot) TextButton(onClick = onBot) {
-                    Text(stringResource(R.string.ticket_prices_open_bot))
-                }
             }
             is TicketPricesUiState.Ready -> {
                 val snapshot = state.snapshot
@@ -174,7 +166,7 @@ internal fun TicketPricesScreen(
                 } else {
                     items(fares) { fare -> FareCard(fare) }
                 }
-                if (allowBot) {
+                if (allowSupport) {
                     item {
                         Button(onClick = onSupport, modifier = Modifier.fillMaxWidth()) {
                             Text(stringResource(R.string.ticket_prices_support))
