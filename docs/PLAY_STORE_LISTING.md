@@ -47,7 +47,8 @@ Offline features work without Telegram. Online features open externally in Teleg
 
 ## Authentic Play media to supply
 
-- A 512x512 PNG icon and 1024x500 feature graphic are generated in CI by scripts/generate_android_store_graphics.py; download the android-play-graphics artifact and review against the app's branding.
+- The Android launcher now uses the approved transparent blue-and-gold airplane/passport/globe emblem. The legacy icon and Android 8+ adaptive icon share the same raster asset under `android/app/src/main/res/drawable-nodpi/ic_launcher_art.png`. The system applies its own adaptive icon shape, without a baked-in rounded-square border.
+- CI generates a 512x512 store icon and 1024x500 feature graphic from that same image using `scripts/generate_android_store_graphics.py`. Review the `android-play-graphics` artifact before publishing.
 - At least two real Android screenshots; suggested home screen, airport search, checklist.
 - Use the manual Android Store Screenshots workflow to capture genuine emulator screens. Verify screenshots on a physical device before publication.
 - Do not advertise in-app flight booking or an independent visa API.
