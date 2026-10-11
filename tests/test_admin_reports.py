@@ -20,6 +20,10 @@ from flightiran.db.models import (
     UserPreference,
 )
 from flightiran.interfaces.telegram.admin_report import render_admin_report
+from flightiran.interfaces.telegram.admin_report_rich import (
+    render_admin_report_fallback,
+    render_rich_admin_report,
+)
 from flightiran.interfaces.telegram.handlers import (
     TelegramDependencies,
     callback_handler,
@@ -106,6 +110,17 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
     assert ("ticket.origin.selected", 1) in report.top_events
     assert report.last_price_capture is not None
 
+    rich = render_rich_admin_report(report)
+    assert rich["is_rtl"] is True
+    assert rich["html"].count("<table bordered striped compact>") >= 8
+    assert "گزارش جامع" in rich["html"]
+    assert "هشدارهای قیمت" in rich["html"]
+    assert "سرویس‌دهنده‌ها" in rich["html"]
+    assert "ticket.origin.selected" in rich["html"]
+    assert "sensitive_user_name" not in rich["html"]
+    assert "do-not-show" not in rich["html"]
+    assert "700123" not in rich["html"]
+    assert len(render_admin_report_fallback(report)) == 1
     messages = render_admin_report(report)
     assert len(messages) == 3
     assert all(0 < len(m) < 4096 for m in messages)
@@ -219,7 +234,9 @@ async def test_forged_admin_report_callback_never_queries_or_sends(
 
 
 @pytest.mark.asyncio
-async def test_admin_callback_sends_three_private_report_sections():
+async def test_admin_callback_sends_one_rich_message(monkeypatch):
+    from flightiran.interfaces.telegram import handlers
+
     class FakeReport:
         calls = 0
 
@@ -227,31 +244,107 @@ async def test_admin_callback_sends_three_private_report_sections():
             self.calls += 1
             return SimpleNamespace()
 
-    fake = FakeReport()
+    report = FakeReport()
     deps = TelegramDependencies(
         users=MemoryUsers(),
         audit=MemoryAudit(),
         admin_chat_id=42,
-        admin_reports=fake,
+        admin_reports=report,
     )
+    sent = []
+
+    async def fake_send(bot, chat_id, rich):
+        sent.append((bot, chat_id, rich))
+
+    monkeypatch.setattr(
+        handlers, "render_rich_admin_report",
+        lambda data: {"html": "<h3>گزارش جامع</h3>", "is_rtl": True},
+    )
+    monkeypatch.setattr(handlers, "send_rich_price_table", fake_send)
+
+    query = Query()
+    query.data = "menu:admin_reports"
+    query.message = Message()
+    bot = SimpleNamespace(token="fake")
+    await callback_handler(
+        _update(42, 42, query=query), SimpleNamespace(bot=bot), deps
+    )
+
+    assert report.calls == 1
+    assert sent == [(bot, 42, {"html": "<h3>گزارش جامع</h3>", "is_rtl": True})]
+    assert query.message.calls == []
+    assert query.calls == []  # The old menu is not replaced with a progress message.
+    assert deps.audit.events[-1][0] == "admin.report.viewed"
+
+
+@pytest.mark.asyncio
+async def test_admin_report_rich_failure_falls_back_to_one_html_message(monkeypatch):
     from flightiran.interfaces.telegram import handlers
 
-    old_renderer = handlers.render_admin_report
-    handlers.render_admin_report = lambda _data: ("first", "second", "third")
-    try:
-        query = Query()
-        query.data = "menu:admin_reports"
-        query.message = Message()
-        await callback_handler(_update(42, 42, query=query), None, deps)
-    finally:
-        handlers.render_admin_report = old_renderer
+    class FakeReport:
+        async def collect(self):
+            return SimpleNamespace()
 
-    assert fake.calls == 1
-    assert [call[0][0] for call in query.message.calls] == [
-        "first", "second", "third"
-    ]
-    assert all(
-        kwargs["parse_mode"] == "HTML"
-        for _args, kwargs in query.message.calls
+    deps = TelegramDependencies(
+        users=MemoryUsers(),
+        audit=MemoryAudit(),
+        admin_chat_id=42,
+        admin_reports=FakeReport(),
     )
+
+    async def cannot_send(*args, **kwargs):
+        raise RuntimeError("sendRichMessage unsupported")
+
+    monkeypatch.setattr(handlers, "send_rich_price_table", cannot_send)
+    monkeypatch.setattr(
+        handlers, "render_rich_admin_report",
+        lambda report: {"html": "<h3>گزارش</h3>", "is_rtl": True},
+    )
+    monkeypatch.setattr(
+        handlers, "render_admin_report_fallback",
+        lambda report: ("گزارش کامل با <b>قالب HTML</b>",),
+    )
+    query = Query()
+    query.data = "menu:admin_reports"
+    query.message = Message()
+    await callback_handler(
+        _update(42, 42, query=query),
+        SimpleNamespace(bot=SimpleNamespace(token="fake")),
+        deps,
+    )
+
+    assert len(query.message.calls) == 1
+    (payload,), options = query.message.calls[0]
+    assert "گزارش کامل" in payload
+    assert options["parse_mode"] == "HTML"
     assert deps.audit.events[-1][0] == "admin.report.viewed"
+
+
+def test_rich_admin_report_escapes_database_labels():
+    from flightiran.modules.admin.reports import BotReport
+    now = datetime(2026, 10, 11, tzinfo=timezone.utc)
+    keys = (
+        "users_total", "new_users_24h", "new_users_7d", "new_users_30d",
+        "active_users_24h", "active_users_7d", "active_users_30d",
+        "audit_total", "events_24h", "events_7d", "events_30d",
+        "tracked_routes", "origins", "price_snapshots", "price_samples_24h",
+        "saved_routes", "price_alerts", "price_notifications",
+        "provider_requests", "failed_provider_7d", "job_runs",
+        "failed_jobs_7d", "runtime_errors_7d",
+    )
+    report = BotReport(
+        generated_at=now, counts=dict.fromkeys(keys, 0),
+        language_counts=(("fa", 1),),
+        top_events=(("<script>alert(1)</script>", 10),),
+        top_origins=(("تهران & مشهد", 3),),
+        price_alert_status=(("active", 1),),
+        provider_status=(("api<provider>", "failed", 1),),
+        job_status=(("capture", "success", 3),),
+        last_price_capture=None,
+    )
+    rich = render_rich_admin_report(report)
+    assert "&lt;script&gt;" in rich["html"]
+    assert "<script>" not in rich["html"]
+    assert "تهران &amp; مشهد" in rich["html"]
+    assert "api&lt;provider&gt;" in rich["html"]
+    assert "هنوز ثبت نشده" in rich["html"]
