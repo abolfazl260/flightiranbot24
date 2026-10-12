@@ -13,8 +13,8 @@ import pytest
 from flightiran.cloudflare_publish import (
     PublicPublisher,
     clean_source_url,
-    public_visa_passports,
     public_airports,
+    public_visa_passports,
     public_visa_row,
     validate_origin,
 )
