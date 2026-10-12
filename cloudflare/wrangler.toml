@@ -3,6 +3,13 @@ main = "src/worker.mjs"
 compatibility_date = "2026-10-01"
 workers_dev = true
 
+# Deploy the existing Persian RTL Telegram Mini App as Worker static assets.
+# All routes pass through the Worker so private mini API auth cannot be bypassed.
+[assets]
+directory = "../src/flightiran/webapp/static"
+binding = "ASSETS"
+run_worker_first = true
+
 # Uses D1 only. Replace the placeholder with your existing D1 database ID.
 # No R2 resource, billing enrollment or object-store binding is required.
 [[d1_databases]]
