@@ -1,31 +1,132 @@
 <!doctype html>
-<html lang="en">
+<html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Flight Iran Bot 24</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
-    body { margin: 0; padding: 1rem; background: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #111); }
-    .card { padding: 1rem; margin: .75rem 0; border-radius:  .75rem; background: var(--tg-theme-secondary-bg-color, #eee); }
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b2137">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="دستیار سفر ادورتیو؛ قیمت پرواز، ویزا، هشدارها و راهنمای سفر">
+  <title>ادورتیو | دستیار سفر</title>
+  <link rel="stylesheet" href="/assets/mini.css?v=1">
+  <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+  <script src="/assets/mini.js?v=1" defer></script>
 </head>
 <body>
-  <h1>Flight Iran Bot 24</h1>
-  <p id="status">در حال دریافت اطلاعات…</p>
-  <div id="features"></div>
-  <script>
-    const app = window.Telegram?.WebApp;
-    app?.ready(); app?.expand();
-    const headers = {'X-Telegram-Init-Data': app?.initData || ''};
-    fetch('/api/dashboard', {headers}).then(async response => {
-      if (!response.ok) throw new Error('unauthorized');
-      return response.json();
-    }).then(data => {
-      document.querySelector('#status').textContent = `کاربر ${data.user_id}`;
-      document.querySelector('#features').innerHTML = data.features.map(item => `<div class="card">${item}</div>`).join('');
-    }).catch(() => { document.querySelector('#status').textContent = 'این صفحه فقط از داخل Telegram قابل استفاده است.'; });
-  </script>
+  <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.5 21 16 14l-4-2-4 2-1.5 7L4 19l1.5-8L2 9V6l3.5 1L10.5 2h3L18.5 7 22 6v3l-3.5 2L20 19l-2.5 2Z"/></symbol>
+    <symbol id="i-ticket" viewBox="0 0 24 24"><path d="M2 9V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v4a3 3 0 0 0 0 6v4a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-4a3 3 0 0 0 0-6Z"/><path d="M13 5v2m0 4v2m0 4v2"/></symbol>
+    <symbol id="i-passport" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="12" r="4"/><path d="M8 12h8M12 8c2 2 2 6 0 8M12 8c-2 2-2 6 0 8"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 10h18c0-2-3-3-3-10M10 22h4"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 3h7c2 0 3 1 3 3v15c0-2-1-3-3-3H4V3Zm16 0h-3c-2 0-3 1-3 3v15c0-2 1-3 3-3h3V3Z"/></symbol>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v11h-7v-7h-4v7H3V10Z"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10" cy="10" r="7"/><path d="m15 15 6 6"/></symbol>
+    <symbol id="i-bag" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="15" rx="3"/><path d="M8 7V5a4 4 0 0 1 8 0v2"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M21 11a8 8 0 0 1-8 8H4l2-4a8 8 0 1 1 15-4Z"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14-5L3 9M3 3v6h6M4 13a8 8 0 0 0 14 5l3-3m0 6v-6h-6"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 6 3 8 8 10 5-2 8-4 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19 12 2-2-2-3-3 1-2-3h-4L8 8 5 7l-2 3 2 2-2 2 2 3 3-1 2 3h4l2-3 3 1 2-3-2-2Z"/></symbol>
+  </svg>
+
+  <div class="shell">
+    <header class="topbar">
+      <div class="brandmark" aria-hidden="true"><svg class="symbol"><use href="#i-plane"></use></svg></div>
+      <div class="brandcopy"><strong>ADVERTIO</strong><small>دستیار هوشمند سفر</small></div>
+      <button type="button" class="icon-button" id="refresh-button" aria-label="بروزرسانی اطلاعات" title="بروزرسانی"><svg class="symbol"><use href="#i-refresh"></use></svg></button>
+    </header>
+
+    <main id="main-content">
+      <section class="screen active" id="screen-home" data-screen="home" aria-labelledby="home-heading">
+        <div class="hero">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <span class="eyebrow"><span class="live-dot"></span> همراه سفر شما</span>
+          <h1 id="home-heading">سلام، <span id="user-name">مسافر</span> <span aria-hidden="true">👋</span></h1>
+          <p>از قیمت بلیت تا شرایط ویزا، همه‌چیز برای سفر بعدی شما اینجاست.</p>
+          <div class="hero-footer">
+            <button type="button" class="hero-cta" data-go="tickets">مشاهده قیمت پرواز <svg class="symbol"><use href="#i-arrow"></use></svg></button>
+            <span class="hero-orbit" aria-hidden="true">✈</span>
+          </div>
+        </div>
+
+        <div class="section-heading"><h2>خدمات سفر</h2><small>چه کاری می‌خواهید انجام دهید؟</small></div>
+        <div class="service-grid">
+          <button type="button" class="service-card" data-go="tickets"><span class="service-icon sky"><svg class="symbol"><use href="#i-ticket"></use></svg></span><strong>قیمت بلیت</strong><small>مسیرها و قیمت روز</small></button>
+          <button type="button" class="service-card" data-go="visa"><span class="service-icon aqua"><svg class="symbol"><use href="#i-passport"></use></svg></span><strong>راهنمای ویزا</strong><small>شرایط ورود کشورها</small></button>
+          <button type="button" class="service-card" data-go="alerts"><span class="service-icon peach"><svg class="symbol"><use href="#i-bell"></use></svg></span><strong>هشدارهای من</strong><small>پایش بلیت و ویزا</small></button>
+          <button type="button" class="service-card" data-go="useful"><span class="service-icon violet"><svg class="symbol"><use href="#i-book"></use></svg></span><strong>راهنمای سفر</strong><small>منابع و اطلاعات کاربردی</small></button>
+        </div>
+
+        <div class="section-heading"><h2>نگاهی به بازار پرواز</h2><button type="button" class="text-action" data-go="tickets">همه مسیرها <svg class="symbol"><use href="#i-arrow"></use></svg></button></div>
+        <div class="panel" id="home-price-preview"><p class="muted">در حال دریافت آخرین قیمت‌های ثبت‌شده…</p></div>
+        <button type="button" class="notice-card" data-go="airports"><span class="notice-icon"><svg class="symbol"><use href="#i-plane"></use></svg></span><span><strong>اطلاعات فرودگاه‌ها</strong><small>این بخش به‌زودی فعال می‌شود.</small></span><svg class="symbol"><use href="#i-arrow"></use></svg></button>
+        <div class="home-help"><span>برای رزرو یا پیگیری سفر کمک می‌خواهید؟</span><button type="button" class="inline-link" data-link="support">ارتباط با پشتیبانی <svg class="symbol"><use href="#i-external"></use></svg></button></div>
+      </section>
+
+      <section class="screen" id="screen-tickets" data-screen="tickets" aria-labelledby="tickets-heading" hidden>
+        <div class="page-title"><span class="page-icon sky"><svg class="symbol"><use href="#i-ticket"></use></svg></span><div><h1 id="tickets-heading">قیمت بلیت هواپیما</h1><p>آخرین نرخ‌های ثبت‌شده، به تومان</p></div></div>
+        <div class="status-strip" id="price-status">در حال دریافت قیمت‌ها…</div>
+        <div class="field"><label for="origin-select">شهر مبدأ</label><select id="origin-select"><option value="">در حال بارگذاری…</option></select></div>
+        <div class="field search-field"><label for="ticket-search">جست‌وجوی مقصد</label><span class="search-wrap"><svg class="symbol"><use href="#i-search"></use></svg><input id="ticket-search" type="search" placeholder="نام شهر مقصد" autocomplete="off"></span></div>
+        <div class="section-heading"><h2>مسیرهای موجود</h2><span class="count" id="ticket-count">—</span></div>
+        <div class="list-stack" id="ticket-results"><div class="panel muted">در حال بارگذاری…</div></div>
+        <p class="footnote">قیمت‌ها به‌معنای موجودی قطعی یا رزرو تضمین‌شده نیستند. نرخ را قبل از پرداخت با پشتیبانی بررسی کنید.</p>
+      </section>
+
+      <section class="screen" id="screen-visa" data-screen="visa" aria-labelledby="visa-heading" hidden>
+        <div class="page-title"><span class="page-icon aqua"><svg class="symbol"><use href="#i-passport"></use></svg></span><div><h1 id="visa-heading">راهنمای ویزا و ورود</h1><p>بر اساس گذرنامه و کشور مقصد</p></div></div>
+        <div class="field"><label for="passport-select">کشور صادرکننده گذرنامه</label><select id="passport-select"><option value="IR">ایران (IR)</option></select></div>
+        <div class="field search-field"><label for="visa-search">جست‌وجوی کشور مقصد</label><span class="search-wrap"><svg class="symbol"><use href="#i-search"></use></svg><input id="visa-search" type="search" autocomplete="off" placeholder="مثلاً ترکیه یا TR"></span></div>
+        <div class="status-strip subtle" id="visa-summary">شرایط هر مقصد را بررسی کنید.</div>
+        <div class="list-stack" id="visa-results"><div class="panel muted">برای دیدن اطلاعات، گذرنامه را انتخاب کنید.</div></div>
+        <p class="footnote">این اطلاعات راهنمای اولیه است و تضمین صدور ویزا یا اجازه ورود نیست. پیش از سفر شرایط رسمی را بررسی کنید.</p>
+      </section>
+
+      <section class="screen" id="screen-alerts" data-screen="alerts" aria-labelledby="alerts-heading" hidden>
+        <div class="page-title"><span class="page-icon peach"><svg class="symbol"><use href="#i-bell"></use></svg></span><div><h1 id="alerts-heading">هشدارهای من</h1><p>از تغییرات قیمت و قوانین ویزا باخبر شوید</p></div></div>
+        <div class="info-banner"><svg class="symbol"><use href="#i-shield"></use></svg><span>اعلان‌ها توسط ربات تلگرام ارسال می‌شوند. برای دریافت آن‌ها، گفت‌وگوی ربات را مسدود نکنید.</span></div>
+        <div class="section-heading"><h2>زنگوله‌های قیمت</h2><span class="count" id="alert-price-count">۰</span></div>
+        <div class="list-stack" id="price-alert-list"><div class="panel muted">در حال بارگذاری…</div></div>
+        <button type="button" class="secondary-cta" data-go="tickets">افزودن زنگوله از فهرست قیمت‌ها <svg class="symbol"><use href="#i-arrow"></use></svg></button>
+        <div class="section-heading with-space"><h2>هشدار تغییرات ویزا</h2><span class="count" id="alert-visa-count">۰</span></div>
+        <div class="list-stack" id="visa-alert-list"><div class="panel muted">در حال بارگذاری…</div></div>
+        <button type="button" class="secondary-cta" data-go="visa">افزودن هشدار از راهنمای ویزا <svg class="symbol"><use href="#i-arrow"></use></svg></button>
+      </section>
+
+      <section class="screen" id="screen-useful" data-screen="useful" aria-labelledby="useful-heading" hidden>
+        <div class="page-title"><span class="page-icon violet"><svg class="symbol"><use href="#i-book"></use></svg></span><div><h1 id="useful-heading">اطلاعات کاربردی سفر</h1><p>منابع منتخب قبل و حین سفر</p></div></div>
+        <div class="list-stack" id="useful-results"><div class="panel muted">در حال دریافت راهنمای سفر…</div></div>
+        <div class="partner-card"><span class="partner-icon"><svg class="symbol"><use href="#i-bag"></use></svg></span><div><strong>خدمات حمل بار بین‌المللی</strong><small>مشاهده کانال رسمی ادورتیو کارگو</small></div><button type="button" class="outline-light" data-link="cargo">مشاهده <svg class="symbol"><use href="#i-external"></use></svg></button></div>
+        <button type="button" class="secondary-cta" data-link="support"><svg class="symbol"><use href="#i-chat"></use></svg> ارتباط با پشتیبانی</button>
+      </section>
+
+      <section class="screen" id="screen-airports" data-screen="airports" aria-labelledby="airports-heading" hidden>
+        <div class="empty-hero"><span class="huge-icon"><svg class="symbol"><use href="#i-plane"></use></svg></span><h1 id="airports-heading">فرودگاه‌ها</h1><p>اطلاعات فرودگاه‌ها به‌زودی به دستیار سفر اضافه می‌شود.</p><button type="button" class="primary-cta" data-go="home">بازگشت به خانه</button></div>
+      </section>
+    </main>
+  </div>
+
+  <nav class="bottom-nav" aria-label="منوی اصلی">
+    <button type="button" class="nav-item selected" data-go="home" aria-current="page"><svg class="symbol"><use href="#i-home"></use></svg><span>خانه</span></button>
+    <button type="button" class="nav-item" data-go="tickets"><svg class="symbol"><use href="#i-ticket"></use></svg><span>بلیت</span></button>
+    <button type="button" class="nav-item" data-go="visa"><svg class="symbol"><use href="#i-passport"></use></svg><span>ویزا</span></button>
+    <button type="button" class="nav-item" data-go="alerts"><svg class="symbol"><use href="#i-bell"></use></svg><span>هشدارها</span></button>
+    <button type="button" class="nav-item" data-go="useful"><svg class="symbol"><use href="#i-book"></use></svg><span>راهنما</span></button>
+  </nav>
+
+  <dialog id="mini-dialog" aria-labelledby="dialog-title">
+    <form method="dialog" class="dialog-content" id="dialog-form">
+      <div class="dialog-handle" aria-hidden="true"></div>
+      <div class="dialog-top"><h2 id="dialog-title">جزئیات</h2><button type="button" class="icon-button" id="dialog-close" aria-label="بستن"><svg class="symbol"><use href="#i-close"></use></svg></button></div>
+      <div id="dialog-body"></div>
+      <div id="dialog-actions"></div>
+    </form>
+  </dialog>
+
+  <div role="status" aria-live="polite" id="toast" class="toast" hidden></div>
+  <div id="startup" class="startup" hidden><div class="startup-card"><span class="startup-icon"><svg class="symbol"><use href="#i-shield"></use></svg></span><h2>ورود از تلگرام</h2><p id="startup-message">برای استفاده از دستیار سفر، از دکمه «مینی‌اپ» داخل ربات وارد شوید.</p><a href="https://t.me/Flightiranbot" class="primary-cta">باز کردن ربات</a></div></div>
 </body>
 </html>
