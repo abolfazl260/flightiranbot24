@@ -16,18 +16,21 @@ function make() {
       };
     },
     async batch(stmts) {
+      assert.ok(stmts.length <= 50, "D1 Free query limit");
+      for (const stmt of stmts) assert.ok((stmt.params?.length || 0) <= 100, "D1 parameter limit");
       const cmd = stmts[0].kind || ""; const kind = cmd.includes("visa_rules") ? "visa" : "airport";
       if (kind === "visa") {
         for (const [k] of visa) if (k.endsWith(":" + stmts[0].params[0])) visa.delete(k);
         for (const s of stmts.slice(1)) {
-          const p=s.params; visa.set(p[0]+":"+p[1], {
-            passport:p[0],destination:p[1],country_name:p[2],status:p[3],
-            stay_days:p[4],notes:p[5],source_url:p[6],verified_on:p[7],source_level:p[8],published_at:p[9]
+          const p=s.params;
+          for (let i=0;i<p.length;i+=10) visa.set(p[i]+":"+p[i+1], {
+            passport:p[i],destination:p[i+1],country_name:p[i+2],status:p[i+3],
+            stay_days:p[i+4],notes:p[i+5],source_url:p[i+6],verified_on:p[i+7],source_level:p[i+8],published_at:p[i+9]
           });
         }
       } else {
         airports.clear();
-        for (const s of stmts.slice(1)) { const p=s.params; airports.set(p[0], {code:p[0],name:p[1],country:p[2],timezone:p[3]}); }
+        for (const s of stmts.slice(1)) { const p=s.params; for(let i=0;i<p.length;i+=4) airports.set(p[i], {code:p[i],name:p[i+1],country:p[i+2],timezone:p[i+3]}); }
       }
     }
   };
@@ -89,4 +92,22 @@ test("GET endpoints never accept writes and unknown import paths deny",async()=>
   assert.equal((await handleRequest(req("/internal/v1/nope",{method:"POST",auth:true,data:{}}),env)).status,404);
   assert.equal((await handleRequest(req("/api/v1/users"),env)).status,404);
   assert.equal((await handleRequest(req("/api/v1/visa/list?passport=NOTVALID"),env)).status,400);
+});
+
+test("D1 bulk import of 190 passport rules uses <=50 queries per request", async () => {
+  const env=make();
+  const rules=Array.from({length:190},(_,i)=>({
+    passport: String.fromCharCode(65+Math.floor(i/26),65+i%26),
+    country_name:"کشور",status:"visa-free",stay_days:90,
+    notes:null,source_url:null,verified_on:"2026-10-11",source_level:"official"
+  }));
+  const response=await handleRequest(req("/internal/v1/visa/destination/TR",{
+    method:"POST",auth:true,data:{destination:"TR",rules}
+  }),env);
+  assert.equal(response.status,200);
+  assert.equal((await response.json()).rules,190);
+  const first=await handleRequest(req("/api/v1/visa/rule?passport=AA&destination=TR"),env);
+  const last=await handleRequest(req("/api/v1/visa/rule?passport=HH&destination=TR"),env);
+  assert.equal(first.status,200);
+  assert.equal(last.status,200);
 });
