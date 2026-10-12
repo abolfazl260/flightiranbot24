@@ -6,6 +6,7 @@ const CODE2 = /^[A-Z]{2}$/;
 const CODE3 = /^[A-Z]{3}$/;
 const bad = (status, message) => Response.json({ error: message }, { status, headers: { "Cache-Control": "no-store" } });
 const good = (payload, cache = 60) => Response.json(payload, { headers: { "Cache-Control": `public, max-age=${cache}`, "X-Content-Type-Options": "nosniff" } });
+const ack = payload => Response.json(payload, { headers: { "Cache-Control": "no-store" } });
 const text = (value, limit = 160) => typeof value === "string" && value.trim().length > 0 && value.length <= limit ? value.trim() : null;
 const optional = (value, limit = 1000) => value == null ? null : text(value, limit);
 const integer = (value, max = 1_000_000_000_000) => Number.isSafeInteger(value) && value > 0 && value <= max ? value : null;
@@ -151,16 +152,21 @@ export async function handleRequest(request, env) {
         } catch { /* a corrupt previous object may be replaced by validated data */ }
       }
       await env.PUBLIC_SNAPSHOTS.put(PRICE_KEY, JSON.stringify(snapshot), { httpMetadata: { contentType: "application/json" } });
-      return good({ published: true, routes: snapshot.routes.length }, 0);
+      return ack({ published: true, routes: snapshot.routes.length });
     }
     if (path === "/internal/v1/airports") {
       if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
       const rows = validatedAirports(payload);
       if (!rows) return bad(422, "Invalid public airport snapshot");
       const statements = [env.PUBLIC_DB.prepare("DELETE FROM airports")];
-      for (const a of rows) statements.push(env.PUBLIC_DB.prepare("INSERT INTO airports(code,name,country,timezone) VALUES(?,?,?,?)").bind(a.code, a.name, a.country, a.timezone));
+      // D1 limits each SQL statement to 100 bound parameters.
+      for (let i = 0; i < rows.length; i += 24) {
+        const group = rows.slice(i, i + 24);
+        const sql = "INSERT INTO airports(code,name,country,timezone) VALUES " + group.map(() => "(?,?,?,?)").join(",");
+        statements.push(env.PUBLIC_DB.prepare(sql).bind(...group.flatMap(a => [a.code, a.name, a.country, a.timezone])));
+      }
       await env.PUBLIC_DB.batch(statements);
-      return good({ published: true, airports: rows.length }, 0);
+      return ack({ published: true, airports: rows.length });
     }
     const visaMatch = /^\/internal\/v1\/visa\/destination\/([A-Z]{2})$/.exec(path);
     if (visaMatch) {
@@ -168,9 +174,16 @@ export async function handleRequest(request, env) {
       const destination = visaMatch[1], rows = validatedVisa(payload, destination), now = new Date().toISOString();
       if (!rows) return bad(422, "Invalid public visa rules");
       const statements = [env.PUBLIC_DB.prepare("DELETE FROM visa_rules WHERE destination = ?").bind(destination)];
-      for (const r of rows) statements.push(env.PUBLIC_DB.prepare("INSERT INTO visa_rules(passport,destination,country_name,status,stay_days,notes,source_url,verified_on,source_level,published_at) VALUES(?,?,?,?,?,?,?,?,?,?)").bind(r.passport,r.destination,r.country_name,r.status,r.stay_days,r.notes,r.source_url,r.verified_on,r.source_level,now));
+      // 10 rows per INSERT = exactly 100 bindings; <=26 statements for 250 rules.
+      // Keep delete + every insert atomic in a single D1 transaction.
+      for (let i = 0; i < rows.length; i += 10) {
+        const group = rows.slice(i, i + 10);
+        const sql = "INSERT INTO visa_rules(passport,destination,country_name,status,stay_days,notes,source_url,verified_on,source_level,published_at) VALUES " + group.map(() => "(?,?,?,?,?,?,?,?,?,?)").join(",");
+        statements.push(env.PUBLIC_DB.prepare(sql).bind(...group.flatMap(r =>
+          [r.passport,r.destination,r.country_name,r.status,r.stay_days,r.notes,r.source_url,r.verified_on,r.source_level,now])));
+      }
       await env.PUBLIC_DB.batch(statements);
-      return good({ published: true, destination, rules: rows.length }, 0);
+      return ack({ published: true, destination, rules: rows.length });
     }
     return bad(404, "Unknown import");
   }
