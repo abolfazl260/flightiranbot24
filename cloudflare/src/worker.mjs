@@ -1,6 +1,5 @@
 // Public, read-only Android API. The only writes are protected, fixed-shape imports.
-// R2 holds recorded ticket snapshots; D1 holds whitelisted visa/airport projections.
-const PRICE_KEY = "public/v1/tickets/prices.json";
+// D1 stores one current ticket snapshot and whitelisted visa/airport projections.
 const MAX_BYTES = 1_500_000;
 const CODE2 = /^[A-Z]{2}$/;
 const CODE3 = /^[A-Z]{3}$/;
@@ -10,6 +9,7 @@ const ack = payload => Response.json(payload, { headers: { "Cache-Control": "no-
 const text = (value, limit = 160) => typeof value === "string" && value.trim().length > 0 && value.length <= limit ? value.trim() : null;
 const optional = (value, limit = 1000) => value == null ? null : text(value, limit);
 const integer = (value, max = 1_000_000_000_000) => Number.isSafeInteger(value) && value > 0 && value <= max ? value : null;
+const positive = (value, max = 1_000_000_000_000) => typeof value === "number" && Number.isFinite(value) && value > 0 && value <= max ? value : null;
 const date = value => typeof value === "string" && /^\d{4}-\d\d-\d\dT/.test(value) && Number.isFinite(Date.parse(value)) && /(?:Z|[+-]\d\d:\d\d)$/.test(value) ? Date.parse(value) : null;
 const https = value => {
   if (value == null) return null;
@@ -60,7 +60,7 @@ function validatedPrices(data) {
     for (const fare of route.destinations) {
       const name = text(fare?.name, 128), price = integer(fare?.price_toman);
       if (!name || !price) return null;
-      const avg = fare.average_price_toman == null ? null : integer(fare.average_price_toman);
+      const avg = fare.average_price_toman == null ? null : positive(fare.average_price_toman);
       if (fare.average_price_toman != null && avg == null) return null;
       const samples = fare.average_sample_count == null ? 0 : fare.average_sample_count;
       if (!Number.isSafeInteger(samples) || samples < 0 || samples > 100000) return null;
@@ -103,13 +103,17 @@ export async function handleRequest(request, env) {
   const url = new URL(request.url), path = url.pathname;
   if (request.method === "GET" && path === "/healthz") return good({ status: "ok" }, 0);
   if (request.method === "GET" && path === "/api/v1/tickets/prices") {
-    if (!env.PUBLIC_SNAPSHOTS) return bad(503, "Snapshot storage unavailable");
-    const item = await env.PUBLIC_SNAPSHOTS.get(PRICE_KEY);
+    if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
+    const item = await env.PUBLIC_DB.prepare(
+      "SELECT snapshot_json, observed_epoch_ms FROM ticket_price_snapshots WHERE id = 1"
+    ).first();
     if (!item) return bad(503, "No published ticket prices");
     let snapshot;
-    try { snapshot = validatedPrices(JSON.parse(await item.text())); } catch { return bad(503, "Invalid published ticket data"); }
-    if (!snapshot) return bad(503, "Invalid published ticket data");
-    const fresh = Date.now() - Date.parse(snapshot.observed_at) <= 3 * 60 * 60 * 1000;
+    try { snapshot = validatedPrices(JSON.parse(item.snapshot_json)); }
+    catch { return bad(503, "Invalid published ticket data"); }
+    if (!snapshot || date(snapshot.observed_at) !== item.observed_epoch_ms)
+      return bad(503, "Invalid published ticket data");
+    const fresh = Date.now() - date(snapshot.observed_at) <= 3 * 60 * 60 * 1000;
     return good({ ...snapshot, stale: snapshot.stale || !fresh }, fresh && !snapshot.stale ? 60 : 0);
   }
   if (request.method === "GET" && path === "/api/v1/airports") {
@@ -140,18 +144,19 @@ export async function handleRequest(request, env) {
     let payload;
     try { payload = await bodyJson(request); } catch { return bad(400, "Invalid JSON payload"); }
     if (path === "/internal/v1/tickets/prices") {
-      if (!env.PUBLIC_SNAPSHOTS) return bad(503, "Snapshot storage unavailable");
+      if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
       const snapshot = validatedPrices(payload);
       if (!snapshot) return bad(422, "Invalid public ticket snapshot");
-      const old = await env.PUBLIC_SNAPSHOTS.get(PRICE_KEY);
-      if (old) {
-        try {
-          const prior = JSON.parse(await old.text());
-          if (date(prior.observed_at) !== null && date(prior.observed_at) > date(snapshot.observed_at))
-            return bad(409, "Refusing older ticket snapshot");
-        } catch { /* a corrupt previous object may be replaced by validated data */ }
-      }
-      await env.PUBLIC_SNAPSHOTS.put(PRICE_KEY, JSON.stringify(snapshot), { httpMetadata: { contentType: "application/json" } });
+      const observed = date(snapshot.observed_at);
+      // Atomic conditional upsert: competing older captures cannot replace newer data.
+      const result = await env.PUBLIC_DB.prepare(
+        "INSERT INTO ticket_price_snapshots (id, observed_epoch_ms, snapshot_json, published_at) " +
+        "VALUES (1, ?, ?, ?) ON CONFLICT(id) DO UPDATE SET " +
+        "observed_epoch_ms = excluded.observed_epoch_ms, " +
+        "snapshot_json = excluded.snapshot_json, published_at = excluded.published_at " +
+        "WHERE excluded.observed_epoch_ms >= ticket_price_snapshots.observed_epoch_ms"
+      ).bind(observed, JSON.stringify(snapshot), new Date().toISOString()).run();
+      if (result?.meta?.changes === 0) return bad(409, "Refusing older ticket snapshot");
       return ack({ published: true, routes: snapshot.routes.length });
     }
     if (path === "/internal/v1/airports") {
