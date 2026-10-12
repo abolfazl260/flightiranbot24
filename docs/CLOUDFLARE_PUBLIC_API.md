@@ -1,141 +1,204 @@
-# Cloudflare public Android API: R2 ticket snapshots + D1 indexes
+# Cloudflare public Android API — Workers + D1 (no R2 / payment card)
 
-The production SQLite database on the FlightIranBot24 server is **authoritative**.
-The `cloudflare-publisher` service reads only recorded public prices, bundled
-public airport data, and the normalized `visa_rule_index` table. It never copies
-the SQLite database, users, saved routes, price/visa alert subscriptions,
-Telegram IDs, admin information, secrets or raw visa documents.
+**Status:** Code is ready in GitHub. The account owner still needs to deploy
+the Worker, configure a private publishing secret and start the server publisher.
+This guide is for the D1-only version; **do not activate R2 or add a bank card.**
 
-Mobile access is **GET-only**, does not require a Telegram session, and uses a
-public HTTPS Worker endpoint. Database changes always originate on the server.
-Do not expose the R2 bucket publicly or place the publisher token in an APK.
+The bot's SQLite database on the Ubuntu server is authoritative. The
+`cloudflare-publisher` container reads only:
+- last recorded public ticket prices/aggregate averages,
+- the bundled public Persian airport catalog,
+- indexed public visa requirements.
 
-## 1. Provision the Cloudflare resources (owner)
+It sends these projections **outbound over HTTPS** to a Worker, which stores
+them in an existing D1 database. No HTTPS certificate or inbound port is needed
+on your Ubuntu server. The Android app does public GET requests over HTTPS to
+the Worker. Bot users, Telegram IDs, subscriptions, secret tokens, raw private
+SQLite, and billing information are **never** replicated.
 
-Install Node.js and Wrangler, then authenticate to your own Cloudflare account:
+## 1. Prepare the already-created D1 database
+
+You already created `flightiran-public-data` using Wrangler. **Do not run
+`wrangler d1 create` again or delete the database.**
+
+The local machine running Wrangler (SSH server) needs an authorized
+`CLOUDFLARE_API_TOKEN` for deployment. It is a *management credential*, not
+the publishing secret. For non-interactive SSH sessions:
 
 ```sh
-cd cloudflare
-npm install
-npx wrangler login
-npx wrangler r2 bucket create flightiran-public-snapshots
-npx wrangler d1 create flightiran-public-data
+cd /opt/Flightiran/flightiranbot24/cloudflare
+read -rsp "Cloudflare management API token: " CLOUDFLARE_API_TOKEN; echo
+export CLOUDFLARE_API_TOKEN
+# If needed, set your Account ID from the Cloudflare dashboard:
+# export CLOUDFLARE_ACCOUNT_ID="YOUR_ACCOUNT_ID"
+npx wrangler whoami
 ```
 
-Copy the **database_id returned by D1 create** into
-`cloudflare/wrangler.toml` (replace the placeholder). This account-specific
-ID must not be guessed.
+Update GitHub code on the Ubuntu server, then verify that
+`cloudflare/wrangler.toml` still points at the **existing** D1 database ID.
+This file is tracked by Git: if edited locally, preserve the real ID before
+`git pull`; if Git reports local changes, safely copy/stash that config first.
+Only the `database_id` field should be replaced. Leave
+`binding = "PUBLIC_DB"` intact. There must be **no** `[[r2_buckets]]` block.
+
+```sh
+cd /opt/Flightiran/flightiranbot24
+git pull origin main
+cd cloudflare
+nano wrangler.toml
+```
+
+**Important:** Replace
+`REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID` with the ID printed by your earlier
+`wrangler d1 create flightiran-public-data` command. The ID identifies a
+database, not a secret; nevertheless it does not belong in an APK. Your local
+config must have:
+
+```toml
+[[d1_databases]]
+binding = "PUBLIC_DB"
+database_name = "flightiran-public-data"
+database_id = "YOUR_EXISTING_D1_DATABASE_ID"
+migrations_dir = "migrations"
+```
+
+Apply both migrations. `0001` sets up visa/airports; `0002` creates a
+**single-row** ticket snapshot table. Both migrations are idempotent when run
+through Wrangler migration tracking; D1 state is preserved.
 
 ```sh
 npx wrangler d1 migrations apply flightiran-public-data --remote
 npx wrangler deploy
 ```
 
-Generate a high-entropy token locally (never paste its value in a chat or Git):
+Wrangler prints a public HTTPS `https://...workers.dev` URL. R2 is not used
+or required at deployment.
+
+## 2. Create the Worker publishing secret
+
+This secret is **different** from your Cloudflare management API token.
+Generate it locally and copy it securely to the Ubuntu server's `.env` file.
+Do not commit it, paste it in chat, or embed it in Android.
 
 ```sh
+# Run on your trusted machine; save the output privately:
 python3 -c 'import secrets; print(secrets.token_urlsafe(48))'
+cd /opt/Flightiran/flightiranbot24/cloudflare
 npx wrangler secret put PUBLISH_TOKEN
 ```
 
-Install the identical token only in the server's private `.env` file. Rotate
-both installations together if compromised. The public Worker URL is displayed
-by Wrangler; a `*.workers.dev` HTTPS address is sufficient. A custom domain is
-optional and must have valid Cloudflare TLS. R2 remains private via the Worker
-binding. D1 SQL is bound to Worker code, not exposed directly to Android.
+When Wrangler prompts, enter the newly generated publishing secret. Keep the
+management API token only for Wrangler administration and preferably revoke or
+rotate it after deployment. Store no management token in Docker or Android.
 
-## 2. Enable the server-side publisher
-
-On the production server, after updating source and Docker containers:
+In the **existing** server `/opt/Flightiran/flightiranbot24/.env` add:
 
 ```dotenv
 CLOUDFLARE_PUBLIC_API_ORIGIN=https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/
-CLOUDFLARE_PUBLISH_TOKEN=YOUR-LOCALLY-GENERATED-SECRET
+CLOUDFLARE_PUBLISH_TOKEN=YOUR_SEPARATELY_GENERATED_PUBLISHING_SECRET
 CLOUDFLARE_SYNC_CHECKPOINT=/data/cloudflare-sync.json
 ```
 
+The Worker origin must use `https://` and end in `/`. Only the publisher
+holds `CLOUDFLARE_PUBLISH_TOKEN`; the Worker keeps it as a secret, never a
+public variable. The server only makes **outbound HTTPS requests (port 443)**.
+
+## 3. Start and verify publisher on Ubuntu
+
 ```sh
+cd /opt/Flightiran/flightiranbot24
 docker compose --profile cloudflare up -d --build
-docker compose logs -f --tail=50 cloudflare-publisher
+docker compose --profile cloudflare ps
+docker compose logs --tail=100 cloudflare-publisher
 ```
 
-The publisher checks every 300 seconds. It publishes new ticket snapshots,
-the bundled airport directory, and destination-scoped visa rule indexes only
-when their public content checksum changes. Each D1 destination replacement is
-transactional. The checkpoint file contains SHA-256 fingerprints only and
-resides inside the server data volume. Failed uploads are retried on the next
-iteration; never update the checkpoint before a successful remote response.
-
-For a one-time manual refresh inside the running Docker service:
+To run a manual synchronization once:
 
 ```sh
 docker compose --profile cloudflare exec cloudflare-publisher \
   flightiran-cloudflare-publish --once
 ```
 
-The initial visa export requires the main database's complete validated visa
-index (at least 190 destinations and 190 passport entries **per destination**). Run the existing
-`/visa_sync` in Telegram first if the visa index is not populated. Ticket
-publication similarly requires recorded price data; empty data is never
-substituted with synthetic prices.
+It compares public payload fingerprints every 300 seconds and only uploads
+changed snapshots. The checkpoint is kept in the Docker data volume. On 401,
+4xx or 5xx, the checkpoint is **not** advanced; failed uploads are retried.
+This does not change the upstream ticket/visa collection frequency.
 
-## 3. Point Android release builds at the Worker
+The *first* visa export requires a complete validated index of at least 190
+passport rules per destination. If incomplete, run the existing Telegram admin
+`/visa_sync` first. The ticket feed also needs recorded prices; it never
+generates fake values.
 
-In GitHub repository `Settings > Secrets and variables > Actions > Variables`
-set:
+If the publisher previously ran against the old R2-based Worker URL and wrote
+a checkpoint, delete **only**
+`/data/cloudflare-sync.json` inside the publisher container after D1
+migration/deployment to force an initial full replay. **Never** delete
+`/data/flightiran.db` or the Docker volume. If this is the first Cloudflare
+deployment, no reset is needed.
+
+## 4. Verify public endpoints (no secret required)
+
+Replace the hostname with your actual deployed `workers.dev` host:
+
+```sh
+curl -fsS https://YOUR-WORKER.workers.dev/healthz
+curl -fsS https://YOUR-WORKER.workers.dev/api/v1/tickets/prices
+curl -fsS https://YOUR-WORKER.workers.dev/api/v1/airports
+curl -fsS 'https://YOUR-WORKER.workers.dev/api/v1/visa/rule?passport=IR&destination=TR'
+curl -fsS 'https://YOUR-WORKER.workers.dev/api/v1/visa/list?passport=IR'
+```
+
+`GET /healthz` only confirms that code is running; check actual ticket,
+visa and airport responses to verify that D1 is populated and connected.
+An unpopulated D1 returns `503` instead of fabricated price data.
+
+Only safe public GET routes are allowed. The protected `POST /internal/v1/`
+import paths require `Authorization: Bearer <publishing secret>`.
+Older ticket batches are rejected atomically; a three-hour-old price is still
+readable but reported as `stale: true`. Android independently validates
+timestamp freshness. Published visa records keep source verification dates.
+
+## 5. Point release Android at the Worker
+
+In repository GitHub settings:
+`Settings → Secrets and variables → Actions → Variables`, set:
 
 ```dotenv
 ANDROID_PRODUCTION_API_ORIGIN=https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/
 ```
 
-The existing Retrofit `GET api/v1/tickets/prices` contract stays unchanged;
-the Android release pipeline tests this route before signing. **Never** set
-`CLOUDFLARE_PUBLISH_TOKEN` or other server tokens as an Android build input.
+The Android Retrofit client already calls `GET api/v1/tickets/prices`.
+The release pipeline checks the endpoint for fresh real ticket data before
+creating the signed release. Do not put either Cloudflare token in the APK.
 
-Public API examples:
+The visa/airport routes are available for future native screens. At present,
+the Android airport list is bundled offline; visa uses Telegram handoff.
 
-```sh
-curl -fsS https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/healthz
-curl -fsS https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/api/v1/tickets/prices
-curl -fsS https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/api/v1/airports
-curl -fsS 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/api/v1/visa/rule?passport=IR&destination=TR'
-curl -fsS 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/api/v1/visa/list?passport=IR'
-```
+## Limits, operational notes and troubleshooting
 
-The visa and airport endpoints are backend-ready for future native Android
-screens; the current native app displays ticket prices, a bundled offline airport
-catalog and a checklist. Visa screens still hand off to Telegram, and no claim
-of native parity is made here.
+- No R2 bucket, payment card, server SSL certificate or open inbound server
+  port is needed for this design. Cloudflare may impose account-specific
+  eligibility requirements on Workers/D1 independently.
+- `ticket_price_snapshots` stores **one row only** containing bounded public
+  JSON. D1 stores no historical ticket prices or user-specific information.
+  Update = one SQL UPSERT. Read = one SQL SELECT.
+- D1 Free quotas apply to *actual SQLite rows* written/read, not member
+  count. The first visa import writes many rows; fingerprint-based publishing
+  prevents unchanged data from being reuploaded at every 5-minute poll.
+  Monitor `Workers & Pages` and `D1` usage in Cloudflare dashboard.
+- If Worker returns 500/503 after deploy, first check remote D1 migrations,
+  the `PUBLIC_DB` binding, and `docker compose logs cloudflare-publisher`.
+- If `wrangler deploy` says the D1 database ID is invalid, verify the existing
+  D1 ID and active Cloudflare account. Do not create a new D1 just to fix
+  a typo.
+- If deployment was already performed with R2, this version can be deployed
+  in place under the same Worker name; add migration 0002 first and replay the
+  latest ticket snapshot. Existing visa/airport data is unaffected.
+- Mobile browser/Worker `Cache-Control` headers may cache a successful fresh
+  response for up to 60 seconds. This does **not** reduce the quota for each
+  invocation of the Worker unless an explicit edge cache is configured.
 
-## Read-only, correctness, resilience
-
-- Only documented public GET routes exist. Writes under `/internal/v1/` require
-  a 32+ character secret Bearer token, accept strictly limited JSON bodies, and
-  validate a fixed whitelist of public fields.
-- The R2 snapshot `public/v1/tickets/prices.json` contains only current recorded
-  fares and aggregate values; Cloudflare checks price age **on every GET**.
-  Quotes older than three hours remain available but are explicitly `stale`.
-  API clients also validate dates and must show stale warnings. Regression to an
-  older observed timestamp is rejected with HTTP 409.
-- Public visa rules retain `verified_on` and `source_level`; they are not a
-  substitute for current official immigration requirements. The publisher
-  uploads only destination-level indexed rules, not upstream raw JSON.
-- D1 and R2 contents are copies, never sources of truth. No general-purpose SQL
-  endpoint, arbitrary public object key, password reset, booking submission, user
-  account, or push notification APIs are provided.
-- Publisher failures leave the last successfully published snapshot intact.
-  During prolonged server outages that snapshot is readable, but fares are
-  marked stale after three hours. D1 visa rows expose publication timestamps.
-- The Worker returns HTTP 503 rather than fabricate prices or return private
-  data when R2/D1 are missing. The publisher uses TLS and disables redirects.
-- Set Cloudflare WAF rate-limiting rules on public API paths as usage grows.
-  Configure monitoring for publisher errors and Cloudflare Worker/D1 limits.
-  Review Cloudflare usage quotas and the privacy policy before production launch.
-- Deploying the Cloudflare resources, configuring owner secrets and publishing
-  signed Android builds require the owner's account credentials; merging code
-  alone does **not** deploy or connect a live Cloudflare service.
-
-## Local verification
+## Local checks
 
 ```sh
 python -m pip install -e '.[dev]'
