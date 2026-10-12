@@ -153,3 +153,75 @@ def test_d1_incremental_migration_preserves_existing_public_data():
         )
     finally:
         connection.close()
+
+
+@pytest.mark.asyncio
+async def test_d1_free_visa_daily_budget_persists_after_restart_and_resets_in_utc(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch,
+):
+    """Protect free-tier D1 writes while still publishing prices during visa backlog."""
+    sent: list[str] = []
+
+    def receive(request: httpx.Request) -> httpx.Response:
+        sent.append(request.url.path)
+        return httpx.Response(200, json={"published": True})
+
+    checkpoint = tmp_path / "quota.json"
+    async with httpx.AsyncClient(transport=httpx.MockTransport(receive)) as client:
+        publisher = PublicPublisher(
+            None, "https://public.example/", "S" * 40, checkpoint, client,
+            max_visa_destinations_per_day=2,
+        )
+        assert await publisher.publish(
+            "visa:TR", "internal/v1/visa/destination/TR", {"rule": 1}
+        )
+        assert await publisher.publish(
+            "visa:IR", "internal/v1/visa/destination/IR", {"rule": 2}
+        )
+        assert not await publisher.publish(
+            "visa:AF", "internal/v1/visa/destination/AF", {"rule": 3}
+        )
+        assert not await publisher.publish(
+            "visa:IR", "internal/v1/visa/destination/IR", {"rule": 2}
+        )
+        assert await publisher.publish(
+            "tickets", "internal/v1/tickets/prices", {"currency": "TOMAN"}
+        )
+        assert len(sent) == 3
+        state = json.loads(checkpoint.read_text(encoding="utf-8"))
+        assert state["visa_published_today"] == 2
+        assert len(state["visa_budget_day"]) == 10
+        assert "SSSS" not in checkpoint.read_text(encoding="utf-8")
+
+        restarted = PublicPublisher(
+            None, "https://public.example/", "S" * 40, checkpoint, client,
+            max_visa_destinations_per_day=2,
+        )
+        assert restarted.visa_published_today == 2
+        assert not await restarted.publish(
+            "visa:AF", "internal/v1/visa/destination/AF", {"rule": 3}
+        )
+        assert len(sent) == 3
+
+        next_utc_day = "2099-01-02"
+        monkeypatch.setattr(
+            PublicPublisher, "_utc_day", staticmethod(lambda: next_utc_day)
+        )
+        assert await restarted.publish(
+            "visa:AF", "internal/v1/visa/destination/AF", {"rule": 3}
+        )
+        assert restarted.visa_published_today == 1
+        assert restarted.visa_budget_day == next_utc_day
+        assert len(sent) == 4
+
+
+@pytest.mark.asyncio
+async def test_invalid_d1_daily_budget_rejected_before_network(tmp_path: Path):
+    async with httpx.AsyncClient() as client:
+        for bad in (0, -1, 81, 500):
+            with pytest.raises(ValueError, match="max_visa_destinations_per_day"):
+                PublicPublisher(
+                    None, "https://public.example/", "S" * 40,
+                    tmp_path / "quota.json", client,
+                    max_visa_destinations_per_day=bad,
+                )
