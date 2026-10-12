@@ -8,7 +8,7 @@ The bot's SQLite database on the Ubuntu server is authoritative. The
 `cloudflare-publisher` container reads only:
 - last recorded public ticket prices/aggregate averages,
 - the bundled public Persian airport catalog,
-- indexed public visa requirements.
+- public visa requirements grouped into ~199 passport JSON snapshots.
 
 It sends these projections **outbound over HTTPS** to a Worker, which stores
 them in an existing D1 database. No HTTPS certificate or inbound port is needed
@@ -125,7 +125,7 @@ changed snapshots. The checkpoint is kept in the Docker data volume. On 401,
 This does not change the upstream ticket/visa collection frequency.
 
 The *first* visa export requires a complete validated index of at least 190
-passport rules per destination. If incomplete, run the existing Telegram admin
+destinations per passport. If incomplete, run the existing Telegram admin
 `/visa_sync` first. The ticket feed also needs recorded prices; it never
 generates fake values.
 
@@ -206,7 +206,7 @@ node --test cloudflare/test/*.test.mjs
 ```
 
 
-## D1 Free quota protection (October 2026)
+## D1 Free quota redesign (October 2026)
 
 The Workers Free plan permits **100,000 rows written and 5 million rows
 read per UTC day**, across the Cloudflare account. Each changed visa rule
@@ -215,16 +215,33 @@ Cloudflare enforces those limits since September 2026: when exhausted,
 D1 operations (including Wrangler migrations) fail until **00:00 UTC**
 (03:30 in Iran); no stored rows are deleted.
 
-**Why this happened:** a previous Worker visa import removed all passport
-rows for a destination and wrote them all back, even for tiny changes.
-The updated Worker does an idempotent conditional UPSERT instead and
-deletes only truly obsolete passport rows. The Ubuntu publisher also
-persists a per-UTC-day publication counter with its existing checkpoint,
-with a conservative default of **60 changed visa destinations/day**
-(set `CLOUDFLARE_VISA_DAILY_LIMIT` from 1 to 80 to LOWER this cap if
-other applications share your account). Importing a complete dataset may
-take multiple days; public ticket snapshots remain first priority and
-are **not** blocked by the visa budget.
+**Root cause:** the old relational public visa projection used roughly
+199 passports × 199 destinations = **39,601 D1 table rows** plus
+secondary-index writes: roughly 79,202 writes just for initial population.
+Even an upsert-only fix retains expensive bulk writes if many facts change.
+
+**New architecture (migration 0004):** one JSON document per passport,
+`visa_passport_snapshots(passport PRIMARY KEY, snapshot_json, published_at)`.
+Initial publication now takes about **199 D1 table rows** (plus primary key
+index maintenance), not ~40,000. Changing facts for one passport writes
+one row; no-change publication writes zero rows via conditional UPSERT and
+publisher fingerprints. At least 190 verified destination rules per
+passport are required; invalid/partial snapshots are refused. Documents
+are bounded to less than 1.6 MB, below D1's 2MB maximum row size.
+
+The previous `visa_rules` table remains **untouched** to preserve
+existing public visa reads while passport documents are populated. The
+Worker prefers compact documents when present and falls back to old rules
+only for passports not yet migrated. The legacy bulk importer is now
+explicitly rejected (HTTP 410) to prevent recurring 40k-row writes.
+
+The publisher's optional safety cap is now
+`CLOUDFLARE_VISA_PASSPORT_DAILY_LIMIT=220` (range 1–250), so a complete
+~199-passport initialization can finish in one day. The old
+`CLOUDFLARE_VISA_DAILY_LIMIT=60` setting is ignored by the new
+publisher. No checkpoint reset is required: new fingerprint keys
+`visa-passport:<CODE>` naturally trigger the initial compact import.
+Existing ticket/airport checkpoints remain intact.
 
 For error 7500 / daily D1 writes exceeded:
 
@@ -245,7 +262,7 @@ git pull --ff-only origin main
 # if you have changed that tracked file locally.
 cd cloudflare
 npx wrangler d1 migrations apply flightiran-public-data --remote
-# 0003_telegram_mini_jobs.sql is pending; earlier migrations remain applied.
+# Pending: 0003_telegram_mini_jobs.sql and 0004_visa_passport_snapshots.sql.
 npx wrangler deploy
 cd ..
 docker compose --profile cloudflare up -d --build
@@ -256,7 +273,7 @@ Ensure Cloudflare CLI authentication, unchanged PUBLISH_TOKEN, and the
 Worker's TELEGRAM_BOT_TOKEN secret are configured per
 `docs/TELEGRAM_MINI_APP.md`. **Do not** clear
 `/data/cloudflare-sync.json`, re-create D1, delete Docker volumes or
-manually rerun every visa import; all would cost extra writes. If quota
+manually re-run old visa imports; all would cost extra writes. If quota
 is exhausted again, stop publisher and inspect Cloudflare's actual
 Rows Written metrics before resuming.
 
