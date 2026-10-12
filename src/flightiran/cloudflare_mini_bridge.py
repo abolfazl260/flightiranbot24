@@ -174,7 +174,10 @@ class MiniAppBridge:
                 )
                 continue
             completed += 1
-            LOGGER.info("cloudflare_mini_completed operation=%s http=%s", job.get("operation"), status)
+            LOGGER.info(
+                "cloudflare_mini_completed operation=%s http=%s",
+                job.get("operation"), status,
+            )
         return completed
 
 
