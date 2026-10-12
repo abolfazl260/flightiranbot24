@@ -14,12 +14,17 @@ class WebAppAuthenticator:
         self.max_age_seconds = max_age_seconds
 
     def validate(self, init_data: str) -> dict[str, str]:
-        values = dict(parse_qsl(init_data, keep_blank_values=True))
+        if not init_data or len(init_data) > 8192:
+            raise ValueError("invalid init data length")
+        pairs = parse_qsl(init_data, keep_blank_values=True)
+        if len(pairs) != len({key for key, _value in pairs}):
+            raise ValueError("duplicate init data keys")
+        values = dict(pairs)
         provided = values.pop("hash", None)
         if not provided:
             raise ValueError("missing init data hash")
         auth_date = int(values.get("auth_date", "0"))
-        if auth_date <= 0 or time.time() - auth_date > self.max_age_seconds:
+        if auth_date <= 0 or not -60 <= time.time() - auth_date <= self.max_age_seconds:
             raise ValueError("expired init data")
         data_check = "\n".join(f"{key}={values[key]}" for key in sorted(values))
         expected = hmac.new(self._secret, data_check.encode(), hashlib.sha256).hexdigest()

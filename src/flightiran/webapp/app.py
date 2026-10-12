@@ -8,12 +8,14 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Header, HTTPException, Response
-from fastapi.responses import HTMLResponse
+from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
 from flightiran.config import Settings, load_settings
 from flightiran.db.engine import Database, create_database
 from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository, SQLiteUserRepository
 from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
+from flightiran.webapp.mini_api import mini_router
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
 STATIC_DIR = Path(__file__).with_name("static")
@@ -45,6 +47,26 @@ def create_app(
         title="Flight Iran Bot Web App", docs_url=None, redoc_url=None, lifespan=lifespan
     )
     users = SQLiteUserRepository(activity_database) if activity_database else None
+    app.include_router(mini_router(settings, activity_database, public_prices))
+    app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="mini-assets")
+
+    @app.middleware("http")
+    async def mini_security_headers(request, call_next):
+        response = await call_next(request)
+        if request.url.path in ("/", "/mini", "/mini/"):
+            response.headers["Cache-Control"] = "no-store"
+            response.headers["Content-Security-Policy"] = (
+                "default-src 'none'; script-src 'self' https://telegram.org; "
+                "style-src 'self'; img-src 'self' data:; connect-src 'self'; "
+                "base-uri 'none'; object-src 'none'; form-action 'none'"
+            )
+            response.headers["Referrer-Policy"] = "no-referrer"
+        if request.url.path.startswith("/api/mini/") or request.url.path in (
+            "/api/session", "/api/dashboard"
+        ):
+            response.headers["Cache-Control"] = "no-store"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        return response
 
     async def record_web_activity(user: dict) -> None:
         if users is None:
@@ -70,8 +92,10 @@ def create_app(
         return {"status": "ok"}
 
     @app.get("/", response_class=HTMLResponse)
-    async def index() -> HTMLResponse:
-        return HTMLResponse((STATIC_DIR / "index.html").read_text(encoding="utf-8"))
+    @app.get("/mini", response_class=HTMLResponse)
+    @app.get("/mini/", response_class=HTMLResponse)
+    async def index() -> FileResponse:
+        return FileResponse(STATIC_DIR / "index.html", media_type="text/html; charset=utf-8")
 
     def authenticate(init_data: str | None) -> dict[str, str]:
         if not init_data:
