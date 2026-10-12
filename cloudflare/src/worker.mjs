@@ -203,7 +203,7 @@ export async function handleRequest(request, env) {
       const snapshot=validatedVisaPassport(payload,passport);
       if (!snapshot) return bad(422,"Invalid public visa passport snapshot");
       const serialized=JSON.stringify(snapshot);
-      if (new TextEncoder().encode(serialized).length>1_600_000)
+      if (new TextEncoder().encode(serialized).length>1_300_000)
         return bad(413,"Visa passport snapshot exceeds safe D1 row size");
       const result=await env.PUBLIC_DB.prepare(
         "INSERT INTO visa_passport_snapshots(passport,snapshot_json,published_at) " +
