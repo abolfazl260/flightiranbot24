@@ -110,10 +110,40 @@ async def public_visa_destinations(database: Database) -> dict[str, dict]:
     return {dest: {"destination": dest, "rules": rules} for dest, rules in grouped.items()}
 
 
+async def public_visa_passports(database: Database) -> dict[str, dict]:
+    """Compact D1 projection: one public JSON document per passport.
+
+    The original 199×199 SQL projection wrote ~40k D1 table rows plus index
+    writes during its first sync; document-by-passport publishes only ~199
+    rows. Each document contains the same allowlisted visa facts, with no
+    bot users or private subscriptions.
+    """
+    async with database.session() as session:
+        result = await session.scalars(
+            select(VisaRuleIndex).order_by(VisaRuleIndex.passport, VisaRuleIndex.destination)
+        )
+        rows = result.all()
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        rule = public_visa_row(row)
+        rule.pop("passport")
+        grouped[row.passport].append({"destination": row.destination, **rule})
+    if (
+        len(grouped) < 190
+        or sum(map(len, grouped.values())) < 190 * 190
+        or any(len(rules) < 190 for rules in grouped.values())
+    ):
+        raise ValueError("Visa rules are not fully indexed; refusing partial publication")
+    return {
+        passport: {"passport": passport, "rules": rules}
+        for passport, rules in grouped.items()
+    }
+
+
 class PublicPublisher:
     def __init__(
         self, database: Database, origin: str, token: str, checkpoint: Path,
-        client: httpx.AsyncClient, *, max_visa_destinations_per_day: int = 60,
+        client: httpx.AsyncClient, *, max_visa_destinations_per_day: int = 220,
     ) -> None:
         self.database = database
         self.origin = validate_origin(origin)
@@ -122,11 +152,10 @@ class PublicPublisher:
         self.token = token
         self.client = client
         self.checkpoint = checkpoint
-        # D1 Free allows 100k rows written per UTC day across the entire account.
-        # A visa destination can require ~200 table writes + index writes;
-        # cap daily destinations so cold-start imports resume over several days.
-        if not 1 <= max_visa_destinations_per_day <= 80:
-            raise ValueError("max_visa_destinations_per_day must be between 1 and 80")
+        # Compact snapshots cost about 199 initial D1 rows, not ~40k.
+        # Retain a configurable per-UTC-day safety ceiling for the whole account.
+        if not 1 <= max_visa_destinations_per_day <= 250:
+            raise ValueError("max_visa_destinations_per_day must be between 1 and 250")
         self.max_visa_destinations_per_day = max_visa_destinations_per_day
         self.visa_budget_day = self._utc_day()
         self.visa_published_today = 0
@@ -181,14 +210,14 @@ class PublicPublisher:
         digest = hashlib.sha256(data).hexdigest()
         if self.state.get(key) == digest:
             return False
-        is_visa = key.startswith("visa:")
+        is_visa = key.startswith("visa:") or key.startswith("visa-passport:")
         if is_visa:
             self._reset_visa_budget_if_needed()
             if self.visa_published_today >= self.max_visa_destinations_per_day:
                 if self._visa_limit_logged_day != self.visa_budget_day:
                     LOGGER.warning(
                         "cloudflare_visa_daily_budget_reached day=%s limit=%s; "
-                        "remaining destinations will resume after 00:00 UTC",
+                        "remaining visa documents will resume after 00:00 UTC",
                         self.visa_budget_day, self.max_visa_destinations_per_day,
                     )
                     self._visa_limit_logged_day = self.visa_budget_day
@@ -230,11 +259,11 @@ class PublicPublisher:
             LOGGER.exception("cloudflare_airports_source_unavailable")
             failed += 1
         try:
-            visa = await public_visa_destinations(self.database)
-            for destination, payload in visa.items():
+            visa = await public_visa_passports(self.database)
+            for passport, payload in visa.items():
                 jobs.append((
-                    f"visa:{destination}",
-                    f"internal/v1/visa/destination/{destination}",
+                    f"visa-passport:{passport}",
+                    f"internal/v1/visa/passport/{passport}",
                     payload,
                 ))
         except Exception:
@@ -256,7 +285,9 @@ async def run(*, once: bool, interval_seconds: int) -> int:
     if not database_url:
         raise ValueError("DATABASE_URL is required")
     checkpoint = Path(os.environ.get("CLOUDFLARE_SYNC_CHECKPOINT", "/data/cloudflare-sync.json"))
-    daily_limit = int(os.environ.get("CLOUDFLARE_VISA_DAILY_LIMIT", "60"))
+    # The previous destination-based limit does not apply to compact passport
+    # snapshots. A fresh installation can safely import the whole catalog.
+    daily_limit = int(os.environ.get("CLOUDFLARE_VISA_PASSPORT_DAILY_LIMIT", "220"))
     database = create_database(database_url)
     try:
         async with httpx.AsyncClient(
