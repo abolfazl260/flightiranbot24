@@ -1,6 +1,7 @@
 package com.abolfazl260.flightiranbot24.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -155,28 +157,55 @@ internal fun TravelLoadingState(message: String = "در حال بارگذاری�
 
 @Composable
 internal fun TravelEmptyState(message: String) {
-    Text(
-        message,
-        style = MaterialTheme.typography.bodyMedium,
-        color = MaterialTheme.colorScheme.onSurfaceVariant,
-        textAlign = TextAlign.Start,
-        modifier = Modifier.fillMaxWidth().padding(vertical = TravelTokens.spacingLg),
-    )
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+    ) {
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp),
+        ) {
+            Text("نتیجه‌ای پیدا نشد", fontWeight = FontWeight.Bold)
+            Text(
+                message,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Start,
+            )
+        }
+    }
 }
 
 @Composable
 internal fun TravelErrorState(message: String, onRetry: (() -> Unit)? = null) {
-    Column(
-        modifier = Modifier.fillMaxWidth().padding(vertical = TravelTokens.spacingLg),
-        verticalArrangement = Arrangement.spacedBy(TravelTokens.spacingSm),
+    Surface(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
     ) {
-        Text(message, color = MaterialTheme.colorScheme.error,
-            style = MaterialTheme.typography.bodyMedium)
-        if (onRetry != null) {
-            TextButton(
-                onClick = onRetry,
-                modifier = Modifier.heightIn(min = TravelTokens.touchTarget),
-            ) { Text("تلاش مجدد") }
+        Column(
+            modifier = Modifier.padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(11.dp),
+        ) {
+            Text(
+                "دریافت اطلاعات ممکن نیست",
+                fontWeight = FontWeight.Bold,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                message,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+            )
+            if (onRetry != null) {
+                TextButton(
+                    onClick = onRetry,
+                    modifier = Modifier.heightIn(min = TravelTokens.touchTarget),
+                ) { Text("↻  تلاش مجدد") }
+            }
         }
     }
 }
@@ -197,6 +226,7 @@ internal fun TravelListRow(
             .onFocusChanged { hasFocus = it.isFocused }
             .semantics { stateDescription = if (expanded) "جزئیات باز است" else "جزئیات بسته است" },
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        shape = RoundedCornerShape(17.dp),
         border = BorderStroke(if (hasFocus) 2.dp else 1.dp,
             if (hasFocus) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outline),
     ) {
@@ -247,7 +277,7 @@ private fun TravelComponentGallery() {
             modifier = Modifier.fillMaxWidth().padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            TravelSectionHeading("امکانات سفر", "راهنمای آفلاین سفر با نمایش فارسی")
+            TravelSectionHeading("امکانات سفر", "راهنمای سفر با نمایش فارسی")
             TravelServiceCard("فهرست فرودگاه‌ها", "قابل استفاده در اپ", "✈", {})
             TravelServiceCard("راهنمای ویزا", "ورود به تلگرام", "▣", {})
             TravelToolbar("فرودگاه‌ها", {})
