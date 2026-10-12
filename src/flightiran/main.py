@@ -22,6 +22,7 @@ from flightiran.db.repositories import (
 )
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
+from flightiran.interfaces.telegram.keyboards import telegram_web_app_url
 from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
 from flightiran.interfaces.telegram.visa_watches import deliver_watch_notifications
 from flightiran.modules.admin.daily_active import (
@@ -338,12 +339,21 @@ def run() -> None:
         price_alert_service=price_alert_service,
         visa_watch_service=visa_watch_service,
     )
+    # Bad Web App URLs must never take down /start: Telegram allows HTTPS only.
+    web_app_url = (
+        telegram_web_app_url(settings.web_app_url) if settings.web_app_enabled else None
+    )
+    if settings.web_app_enabled and web_app_url is None:
+        LOGGER.warning(
+            "Telegram Web App button skipped: WEB_APP_URL must be a valid HTTPS URL; "
+            "bot menus and public price API remain available"
+        )
     register_handlers(
         application,
         TelegramDependencies(
             users=SQLiteUserRepository(database),
             audit=SQLiteAuditRepository(database),
-            web_app_url=settings.web_app_url if settings.web_app_enabled else None,
+            web_app_url=web_app_url,
             airport_catalog=AirportCatalog.from_json(
                 Path(__file__).parent / "modules" / "airport" / "data" / "airports.json"
             ),

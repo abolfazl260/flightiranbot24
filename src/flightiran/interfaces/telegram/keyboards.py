@@ -1,11 +1,36 @@
 """Reusable Telegram keyboard definitions."""
 
+from urllib.parse import urlsplit
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 
 from .localization import safe_text
 from .support import support_url
 
 CARGO_MARKETPLACE_URL = "https://t.me/advertio_cargo"
+
+
+def telegram_web_app_url(url: str | None) -> str | None:
+    """Never construct a Telegram Web App button with an unsafe or invalid URL.
+
+    Telegram enforces HTTPS for WebAppInfo, unlike our localhost FastAPI server.
+    Invalid configuration must not break /start or every returning navigation.
+    """
+    if not url or url != url.strip() or any(char.isspace() for char in url):
+        return None
+    try:
+        parts = urlsplit(url)
+        if (
+            parts.scheme.lower() != "https"
+            or not parts.hostname
+            or parts.username is not None
+            or parts.password is not None
+            or parts.port == 0
+        ):
+            return None
+    except ValueError:
+        return None
+    return url
 
 
 def main_menu(
@@ -23,8 +48,9 @@ def main_menu(
     ]
     if is_admin:
         rows.append([("admin_reports", "menu:admin_reports")])
-    if web_app_url:
-        rows.append([InlineKeyboardButton("Web App", web_app=WebAppInfo(web_app_url))])
+    secure_url = telegram_web_app_url(web_app_url)
+    if secure_url:
+        rows.append([InlineKeyboardButton("Web App", web_app=WebAppInfo(secure_url))])
     def button_for(item: tuple[str, str] | InlineKeyboardButton) -> InlineKeyboardButton:
         if isinstance(item, InlineKeyboardButton):
             return item
