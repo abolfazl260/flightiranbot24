@@ -22,12 +22,12 @@ class PersianUiTest {
             val appLocale = it.resources.configuration.locales[0]
             assertEquals("fa", appLocale.language)
         }
-        rule.onNodeWithText("دستیار سفر Flight Iran Bot 24").assertExists()
+        rule.onNodeWithText("سفر، ساده‌تر از همیشه").assertExists()
         rule.onNodeWithText("خانه").assertExists()
         rule.onNodeWithText("قیمت بلیت").assertHasClickAction()
-        rule.onNodeWithText("فهرست فرودگاه‌ها · آفلاین").assertHasClickAction()
-        rule.onNodeWithText("چک‌لیست سفر من · آفلاین").assertHasClickAction()
+        rule.onNodeWithText("راهنمای فرودگاه‌ها").assertHasClickAction()
+        rule.onNodeWithText("چک‌لیست سفر من").assertHasClickAction()
         rule.onNodeWithText("خدمات").performClick()
-        rule.onNodeWithText("خدمات آنلاین سفر").assertExists()
+        rule.onNodeWithText("خدمات بیشتر").assertExists()
     }
 }
