@@ -1,0 +1,15 @@
+name = "flightiran-public-api"
+main = "src/worker.mjs"
+compatibility_date = "2026-10-01"
+workers_dev = true
+
+# Create the resources before deploying. Replace DATABASE_ID with the real D1 ID.
+[[r2_buckets]]
+binding = "PUBLIC_SNAPSHOTS"
+bucket_name = "flightiran-public-snapshots"
+
+[[d1_databases]]
+binding = "PUBLIC_DB"
+database_name = "flightiran-public-data"
+database_id = "REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID"
+migrations_dir = "migrations"

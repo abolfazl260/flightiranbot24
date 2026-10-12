@@ -33,6 +33,7 @@ dev = [
 [project.scripts]
 flightiran = "flightiran.main:main"
 flightiran-web = "flightiran.webapp.app:main"
+flightiran-cloudflare-publish = "flightiran.cloudflare_publish:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

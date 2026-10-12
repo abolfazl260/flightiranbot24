@@ -43,5 +43,22 @@ services:
         condition: service_completed_successfully
     command: ["flightiran-web"]
 
+  # Opt-in reader of public SQLite tables; no network listener.
+  cloudflare-publisher:
+    profiles: ["cloudflare"]
+    image: flightiranbot24:latest
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/flightiran.db
+    volumes:
+      - flightiran-data:/data
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    command: ["flightiran-cloudflare-publish", "--loop", "--interval-seconds", "300"]
+
 volumes:
   flightiran-data:

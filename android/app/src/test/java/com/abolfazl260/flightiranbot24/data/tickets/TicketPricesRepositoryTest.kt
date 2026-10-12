@@ -4,6 +4,8 @@ import com.abolfazl260.flightiranbot24.domain.network.NetworkResult
 import com.abolfazl260.flightiranbot24.domain.network.PublicJsonRepository
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -19,7 +21,7 @@ class TicketPricesRepositoryTest {
             "change_percent":-10.0,"average_sample_count":5},
            {"name":"تبریز","price_toman":2500000,"average_price_toman":null,
             "change_percent":null,"average_sample_count":0}]}]}
-    """.trimIndent()
+    """.trimIndent().replace("2026-10-11T15:00:00+00:00", OffsetDateTime.now(ZoneOffset.UTC).toString())
 
     @Test fun correctFareAndMissingAverage() {
         val data = TicketPricesRepository(null).parse(JsonParser.parseString(document).asJsonObject)!!
@@ -29,6 +31,21 @@ class TicketPricesRepositoryTest {
         assertEquals(5000000L, data.origins.single().fares.first().averageToman)
         assertEquals(-10.0, data.origins.single().fares.first().differencePercent!!, 0.01)
         assertNull(data.origins.single().fares.last().averageToman)
+    }
+
+    @Test fun oldAndMissingFreshnessAreConservativelyMarkedOrRejected() {
+        val old = document.replace(
+            Regex("(?<=\\\"observed_at\\\":\\\")[^\\\"]+"),
+            OffsetDateTime.now(ZoneOffset.UTC).minusHours(5).toString()
+        )
+        val aged = TicketPricesRepository(null).parse(JsonParser.parseString(old).asJsonObject)
+        assertTrue(aged!!.stale)
+        val missing = document.replace("\"stale\":false,", "")
+        assertNull(TicketPricesRepository(null).parse(JsonParser.parseString(missing).asJsonObject))
+        val malformed = document.replace(
+            Regex("(?<=\\\"observed_at\\\":\\\")[^\\\"]+"), "not-a-time"
+        )
+        assertNull(TicketPricesRepository(null).parse(JsonParser.parseString(malformed).asJsonObject))
     }
 
     @Test fun noApiNeverSendsRequest() = runBlocking {
