@@ -1,4 +1,5 @@
 import { miniRoute } from "./mini.mjs";
+import { publicVisaList, publicVisaRule } from "./visa_snapshot.mjs";
 
 // Public, read-only Android API. The only writes are protected, fixed-shape imports.
 // D1 stores one current ticket snapshot and whitelisted visa/airport projections.
@@ -86,20 +87,34 @@ function validatedAirports(data) {
   }
   return rows;
 }
-function validatedVisa(data, destination) {
-  if (!Array.isArray(data?.rules) || data.destination !== destination || data.rules.length < 190 || data.rules.length > 250) return null;
-  const rows = [], codes = new Set();
+function validatedVisaPassport(data, passport) {
+  if (!CODE2.test(passport) || data?.passport !== passport ||
+      !Array.isArray(data?.rules) || data.rules.length < 190 ||
+      data.rules.length > 250) return null;
+  const rows = [], destinations = new Set();
   for (const r of data.rules) {
-    const passport = r?.passport, country = text(r?.country_name, 128), status = text(r?.status, 40), sourceLevel = text(r?.source_level, 16);
-    const stay = r?.stay_days == null ? null : integer(r.stay_days, 36500);
-    const notes = optional(r?.notes, 2500), url = https(r?.source_url), verified = optional(r?.verified_on, 32);
-    if (!CODE2.test(passport) || codes.has(passport) || !country || !status || !sourceLevel ||
-        (r?.stay_days != null && stay == null) || (r?.notes != null && notes === null) ||
-        (r?.source_url != null && url === null) || (r?.verified_on != null && verified === null)) return null;
-    codes.add(passport); rows.push({ passport, destination, country_name: country, status, stay_days: stay,
-      notes, source_url: url, verified_on: verified, source_level: sourceLevel });
+    const destination=r?.destination, country=text(r?.country_name,128);
+    const status=text(r?.status,40), sourceLevel=text(r?.source_level,16);
+    const stay=r?.stay_days==null ? null : integer(r.stay_days,36500);
+    const notes=optional(r?.notes,2500), url=https(r?.source_url);
+    const verified=optional(r?.verified_on,32);
+    if (!CODE2.test(destination) || destinations.has(destination) ||
+        !country || !status || !sourceLevel ||
+        (r?.stay_days!=null && stay==null) ||
+        (r?.notes!=null && notes==null) ||
+        (r?.source_url!=null && url==null) ||
+        (r?.verified_on!=null && verified==null)) return null;
+    // The legacy exporter included the passport in each row. Reject mismatches.
+    if (r?.passport != null && r.passport !== passport) return null;
+    destinations.add(destination);
+    rows.push({passport,destination,country_name:country,status,
+      stay_days:stay,notes,source_url:url,verified_on:verified,
+      source_level:sourceLevel});
   }
-  return rows;
+  // Deterministic serialized order ensures idempotent payloads and
+  // conditional UPSERTs write zero rows for unchanged passport rules.
+  rows.sort((a,b)=>a.destination.localeCompare(b.destination));
+  return {passport,rules:rows};
 }
 export async function handleRequest(request, env) {
   const url = new URL(request.url), path = url.pathname;
@@ -130,7 +145,7 @@ export async function handleRequest(request, env) {
     const passport = url.searchParams.get("passport"), destination = url.searchParams.get("destination");
     if (!CODE2.test(passport) || !CODE2.test(destination)) return bad(400, "Invalid passport or destination");
     if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
-    const rule = await env.PUBLIC_DB.prepare("SELECT passport, destination, country_name, status, stay_days, notes, source_url, verified_on, source_level, published_at FROM visa_rules WHERE passport = ? AND destination = ?").bind(passport, destination).first();
+    const rule = await publicVisaRule(env.PUBLIC_DB, passport, destination);
     if (!rule) return bad(404, "Visa rule unavailable");
     return good(rule, 900);
   }
@@ -138,7 +153,7 @@ export async function handleRequest(request, env) {
     const passport = url.searchParams.get("passport");
     if (!CODE2.test(passport)) return bad(400, "Invalid passport");
     if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
-    const { results } = await env.PUBLIC_DB.prepare("SELECT passport, destination, country_name, status, stay_days, verified_on, source_level FROM visa_rules WHERE passport = ? ORDER BY country_name LIMIT 250").bind(passport).all();
+    const results = await publicVisaList(env.PUBLIC_DB, passport);
     if (!results?.length) return bad(503, "Visa catalog unavailable");
     return good({ passport, rules: results }, 900);
   }
@@ -177,37 +192,27 @@ export async function handleRequest(request, env) {
       await env.PUBLIC_DB.batch(statements);
       return ack({ published: true, airports: rows.length });
     }
-    const visaMatch = /^\/internal\/v1\/visa\/destination\/([A-Z]{2})$/.exec(path);
-    if (visaMatch) {
-      if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
-      const destination = visaMatch[1], rows = validatedVisa(payload, destination), now = new Date().toISOString();
-      if (!rows) return bad(422, "Invalid public visa rules");
-      // Deleting + reinserting every passport on every small change exhausted
-      // the 100k D1 Free daily row-write quota. Instead, remove ONLY vanished
-      // passports, then insert/update only genuinely changed public rules.
-      // Passport values are validated by CODE2 before being used as SQL literals.
-      const keep = rows.map(r => "'" + r.passport + "'").join(",");
-      const statements = [env.PUBLIC_DB.prepare(
-        "DELETE FROM visa_rules WHERE destination = ? AND passport NOT IN (" + keep + ")"
-      ).bind(destination)];
-      const mutable = ["country_name", "status", "stay_days", "notes",
-        "source_url", "verified_on", "source_level"];
-      const upsert = " ON CONFLICT(passport,destination) DO UPDATE SET " +
-        mutable.map(col => col + " = excluded." + col).join(", ") +
-        ", published_at = excluded.published_at WHERE " +
-        mutable.map(col => "visa_rules." + col + " IS NOT excluded." + col).join(" OR ");
-      // 10 rows per INSERT is exactly 100 bindings. The whole replacement is
-      // atomic, and an identical update writes ZERO table/index rows.
-      for (let i = 0; i < rows.length; i += 10) {
-        const group = rows.slice(i, i + 10);
-        const sql = "INSERT INTO visa_rules(passport,destination,country_name,status,stay_days,notes,source_url,verified_on,source_level,published_at) VALUES " +
-          group.map(() => "(?,?,?,?,?,?,?,?,?,?)").join(",") + upsert;
-        statements.push(env.PUBLIC_DB.prepare(sql).bind(...group.flatMap(r =>
-          [r.passport,r.destination,r.country_name,r.status,r.stay_days,
-            r.notes,r.source_url,r.verified_on,r.source_level,now])));
-      }
-      await env.PUBLIC_DB.batch(statements);
-      return ack({ published: true, destination, rules: rows.length });
+    // Fail closed on old publishers: do not allow a 40k-row relational replay.
+    if (/^\/internal\/v1\/visa\/destination\/[A-Z]{2}$/.test(path)) {
+      return bad(410,"Legacy visa import retired; upgrade cloudflare-publisher");
+    }
+    const passportMatch = /^\/internal\/v1\/visa\/passport\/([A-Z]{2})$/.exec(path);
+    if (passportMatch) {
+      if (!env.PUBLIC_DB) return bad(503,"Public index unavailable");
+      const passport=passportMatch[1];
+      const snapshot=validatedVisaPassport(payload,passport);
+      if (!snapshot) return bad(422,"Invalid public visa passport snapshot");
+      const serialized=JSON.stringify(snapshot);
+      if (new TextEncoder().encode(serialized).length>1_300_000)
+        return bad(413,"Visa passport snapshot exceeds safe D1 row size");
+      const result=await env.PUBLIC_DB.prepare(
+        "INSERT INTO visa_passport_snapshots(passport,snapshot_json,published_at) " +
+        "VALUES(?,?,?) ON CONFLICT(passport) DO UPDATE SET " +
+        "snapshot_json=excluded.snapshot_json,published_at=excluded.published_at " +
+        "WHERE visa_passport_snapshots.snapshot_json IS NOT excluded.snapshot_json"
+      ).bind(passport,serialized,new Date().toISOString()).run();
+      return ack({published:true,passport,rules:snapshot.rules.length,
+        changed:result?.meta?.changes !== 0});
     }
     return bad(404, "Unknown import");
   }

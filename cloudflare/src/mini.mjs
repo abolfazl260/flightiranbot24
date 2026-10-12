@@ -1,3 +1,5 @@
+import {publicVisaList,publicVisaRule} from "./visa_snapshot.mjs";
+
 // Telegram Mini App hosted on the same free workers.dev Worker as the public API.
 // Only the bot's Ubuntu SQLite services execute private actions. Cloudflare D1
 // contains a short-lived authenticated job envelope, never the user database.
@@ -143,22 +145,21 @@ async function miniVisa(url,env,path) {
   if (path==="/api/mini/visa") {
     const passport=url.searchParams.get("passport")||"IR";
     if (!CODE2.test(passport)) return error(422,"Invalid passport");
-    const {results}=await env.PUBLIC_DB.prepare(
-      "SELECT passport,destination,country_name,status,stay_days,verified_on,source_level "+
-      "FROM visa_rules WHERE passport=? ORDER BY country_name LIMIT 250"
-    ).bind(passport).all();
-    if (!results?.length) return error(503,"Visa catalog unavailable");
-    return json({passport,rules:results});
+    const rules=await publicVisaList(env.PUBLIC_DB,passport);
+    if (!rules.length) return error(503,"Visa catalog unavailable");
+    return json({passport,rules});
   }
   if (path==="/api/mini/visa/rule") {
     const passport=url.searchParams.get("passport")||"IR";
     const destination=url.searchParams.get("destination");
-    if (!CODE2.test(passport)||!CODE2.test(destination)) return error(422,"Invalid country code");
-    const row=await env.PUBLIC_DB.prepare(
-      "SELECT passport,destination,country_name,status,stay_days,notes,source_url,"+
-      "verified_on,source_level FROM visa_rules WHERE passport=? AND destination=?"
-    ).bind(passport,destination).first();
-    return row?json(row):error(404,"Visa rule unavailable");
+    if (!CODE2.test(passport)||!CODE2.test(destination))
+      return error(422,"Invalid country code");
+    const row=await publicVisaRule(env.PUBLIC_DB,passport,destination);
+    if (!row) return error(404,"Visa rule unavailable");
+    // Mini App uses source verification dates but does not need publication
+    // time, which is already available from /api/v1/visa/rule.
+    const {published_at:unused,...data}=row;
+    return json(data);
   }
   return null;
 }

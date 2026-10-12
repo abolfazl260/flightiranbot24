@@ -14,6 +14,7 @@ from flightiran.cloudflare_publish import (
     PublicPublisher,
     clean_source_url,
     public_airports,
+    public_visa_passports,
     public_visa_row,
     validate_origin,
 )
@@ -218,10 +219,118 @@ async def test_d1_free_visa_daily_budget_persists_after_restart_and_resets_in_ut
 @pytest.mark.asyncio
 async def test_invalid_d1_daily_budget_rejected_before_network(tmp_path: Path):
     async with httpx.AsyncClient() as client:
-        for bad in (0, -1, 81, 500):
+        for bad in (0, -1, 251, 500):
             with pytest.raises(ValueError, match="max_visa_destinations_per_day"):
                 PublicPublisher(
                     None, "https://public.example/", "S" * 40,
                     tmp_path / "quota.json", client,
                     max_visa_destinations_per_day=bad,
                 )
+
+
+@pytest.mark.asyncio
+async def test_compact_visa_projection_contains_190_passports_not_36100_rows():
+    """A complete original 190×190 visa index produces 190 D1 documents."""
+    from contextlib import asynccontextmanager
+
+    codes = [
+        chr(65 + i // 26) + chr(65 + i % 26)
+        for i in range(190)
+    ]
+    rows = [
+        SimpleNamespace(
+            passport=passport, destination=destination,
+            country_name="مقصد " + destination,
+            status="visa-free", stay_days=90, notes=None,
+            source_url="https://example.org/rule",
+            verified_on="2026-10-12", source_level="official",
+        )
+        for passport in codes for destination in codes
+    ]
+
+    class FakeDatabase:
+        @asynccontextmanager
+        async def session(self):
+            class FakeSession:
+                async def scalars(self, _query):
+                    return SimpleNamespace(all=lambda: rows)
+            yield FakeSession()
+
+    projected = await public_visa_passports(FakeDatabase())
+    assert len(projected) == 190
+    assert sum(len(x["rules"]) for x in projected.values()) == 190 * 190
+    assert projected["AA"]["passport"] == "AA"
+    assert len(projected["AA"]["rules"]) == 190
+    assert projected["AA"]["rules"][0]["destination"] == "AA"
+    assert "telegram_id" not in json.dumps(projected["AA"], ensure_ascii=False)
+    assert len(json.dumps(projected["AA"]).encode()) < 1_500_000
+
+
+def test_new_d1_visa_passport_migration_is_additive_and_idempotent():
+    """Old rules remain queryable while new compact documents are populated."""
+    root = Path(__file__).resolve().parent.parent / "cloudflare" / "migrations"
+    connection = sqlite3.connect(":memory:")
+    try:
+        for name in (
+            "0001_public_data.sql",
+            "0002_d1_ticket_prices.sql",
+            "0003_telegram_mini_jobs.sql",
+            "0004_visa_passport_snapshots.sql",
+        ):
+            connection.executescript((root / name).read_text(encoding="utf-8"))
+        connection.execute(
+            "INSERT INTO visa_rules(passport,destination,country_name,status,source_level,"
+            "published_at) VALUES('IR','TR','ترکیه','visa-free','official','2026-10-12')"
+        )
+        blob = json.dumps({
+            "passport": "IR", "rules": [
+                {"passport": "IR", "destination": "TR", "country_name": "ترکیه"}
+            ],
+        }, ensure_ascii=False)
+        upsert = (
+            "INSERT INTO visa_passport_snapshots(passport,snapshot_json,published_at)"
+            " VALUES(?,?,?) ON CONFLICT(passport) DO UPDATE SET"
+            " snapshot_json=excluded.snapshot_json,published_at=excluded.published_at"
+            " WHERE visa_passport_snapshots.snapshot_json IS NOT excluded.snapshot_json"
+        )
+        assert connection.execute(upsert, ("IR", blob, "2026-10-12")).rowcount == 1
+        assert connection.execute(upsert, ("IR", blob, "2026-10-13")).rowcount == 0
+        assert connection.execute(
+            "SELECT published_at FROM visa_passport_snapshots WHERE passport='IR'"
+        ).fetchone()[0] == "2026-10-12"
+        assert connection.execute(
+            "SELECT status FROM visa_rules WHERE passport='IR' AND destination='TR'"
+        ).fetchone()[0] == "visa-free"
+        assert connection.execute(
+            "SELECT COUNT(*) FROM visa_passport_snapshots"
+        ).fetchone()[0] == 1
+        with pytest.raises(sqlite3.IntegrityError):
+            connection.execute(
+                "INSERT INTO visa_passport_snapshots(passport,snapshot_json,published_at)"
+                " VALUES(?,?,?)", ("US", "not-json", "2026-10-13")
+            )
+    finally:
+        connection.close()
+
+
+@pytest.mark.asyncio
+async def test_legacy_visa_daily_counter_does_not_limit_compact_documents(tmp_path: Path):
+    """Preserve ticket/airport fingerprints but migrate old 60-destination counter."""
+    async with httpx.AsyncClient() as client:
+        checkpoint = tmp_path / "old-budget.json"
+        original = PublicPublisher(
+            None, "https://public.example/", "S" * 40, checkpoint, client
+        )
+        checkpoint.write_text(json.dumps({
+            "scope": original.scope,
+            "fingerprints": {"tickets": "keep-price", "airports": "keep-airports"},
+            "visa_budget_day": original.visa_budget_day,
+            "visa_published_today": 60,
+        }))
+        fresh = PublicPublisher(
+            None, "https://public.example/", "S" * 40, checkpoint, client
+        )
+        assert fresh.state["tickets"] == "keep-price"
+        assert fresh.state["airports"] == "keep-airports"
+        assert fresh.visa_published_today == 0
+        assert fresh.max_visa_destinations_per_day == 220

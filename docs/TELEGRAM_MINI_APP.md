@@ -17,8 +17,8 @@ https://flightiran-public-api.abolfazl260.workers.dev/mini/
 - The Worker serves the existing `index.html`, `mini.css` and `mini.js`
   as first-party static assets. The existing Android endpoints
   `/api/v1/tickets/prices` and `/api/v1/visa/*` still read D1 unchanged.
-- Public visa listings and actual recorded ticket prices read the existing
-  **D1 public projection**; no synthetic prices or raw source JSON links.
+- Public visa listings and actual recorded ticket prices read the
+  **compact D1 public projection**; no synthetic prices or raw source JSON links.
 - For user-specific actions (passport settings, alerts, links, home profile)
   the Worker validates Telegram-signed `initData` using a **Worker secret**,
   queues a minimal request in a **private, short-lived D1 table**, and returns
@@ -82,7 +82,7 @@ the correct ID, this command does nothing.
 
 ## Cloudflare D1 Free quota caution
 
-Before applying the pending Migration 0003, **stop the existing
+Before applying pending Migrations 0003 and 0004, **stop the existing
 cloudflare-publisher** if your account has just hit error `7500`:
 
 ```sh
@@ -94,13 +94,15 @@ D1 Free limits reset at **00:00 UTC (03:30 Iran)**. Wait for reset before
 re-running `wrangler d1 migrations apply ... --remote`. The bot and its
 original SQLite DB are unaffected. Keep the publisher stopped until
 you have deployed the quota-efficient Worker and rebuilt the
-rate-limited publisher from `main`. The updated public visa importer
-writes only changed records and the publisher limits visa destinations
-to 60 per UTC day, preserving the existing D1 database and checkpoint.
+compact passport-snapshot publisher from `main`. Migration 0004 creates
+a public visa JSON table containing ~199 rows instead of ~40k relational
+records. The new Worker forbids the old high-write importer; the publisher
+defaults to at most 220 compact passport documents per UTC day.
+Existing D1 data and publisher checkpoints are preserved.
 Do not repeatedly retry 7500, reset your checkpoint or delete the D1
 database. Check Cloudflare D1 Dashboard > Metrics > Row Metrics.
 
-## 2. Deploy migration 0003 and the Worker static assets
+## 2. Deploy migrations 0003 + 0004 and the Worker static assets
 
 Wrangler must use the Cloudflare **management** API token in your current
 SSH shell. It is NOT the app publisher token.
@@ -114,15 +116,17 @@ npx wrangler whoami
 npx wrangler d1 migrations apply flightiran-public-data --remote
 ```
 
-Only one *new* migration should be pending:
+The pending migrations should include:
 
 ```text
 0003_telegram_mini_jobs.sql
+0004_visa_passport_snapshots.sql
 ```
 
-Confirm it with `Y`. Migrations 0001 and 0002 are already applied and
-remain intact. This new table holds transient request envelopes, **not**
-a duplicate user or alert database.
+Confirm with `Y`. Migrations 0001 and 0002 remain applied.
+Migration 0003 holds transient Mini App requests; 0004 holds compact
+public visa documents. No existing visa, user, or ticket rows are deleted.
+If 0003 was already applied on a prior day, only 0004 will be pending.
 
 Install two **different** Worker secrets. The first should already be
 configured from the existing public API publisher deployment:
