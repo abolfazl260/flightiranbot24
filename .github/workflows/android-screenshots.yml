@@ -42,9 +42,8 @@ jobs:
           script: |
             set -e
             gradle --no-daemon -p android :app:assembleDebug
-            apk="android/app/build/outputs/apk/debug/app-debug.apk"
-            test -s "$apk"
-            adb install -r "$apk"
+            test -s android/app/build/outputs/apk/debug/app-debug.apk
+            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             mkdir -p android/screenshots
             adb shell am start -W -n com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.MainActivity | tee /tmp/launch.txt
             grep -q 'Status: ok' /tmp/launch.txt
