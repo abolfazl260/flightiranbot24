@@ -62,9 +62,11 @@ database_id = "YOUR_EXISTING_D1_DATABASE_ID"
 migrations_dir = "migrations"
 ```
 
-Apply both migrations. `0001` sets up visa/airports; `0002` creates a
-**single-row** ticket snapshot table. Both migrations are idempotent when run
-through Wrangler migration tracking; D1 state is preserved.
+Apply pending migrations in order. `0001` sets up legacy public
+visa/airport tables; `0002` adds the single-row ticket snapshot;
+`0003` adds transient Telegram Mini App jobs; `0004` adds compact public
+visa passport JSON snapshots. Wrangler tracks which are already applied
+and preserves the existing D1 database and all its rows.
 
 ```sh
 npx wrangler d1 migrations apply flightiran-public-data --remote
@@ -132,7 +134,8 @@ generates fake values.
 When upgrading from the old R2 architecture, the publisher automatically
 invalidates the old checkpoint scope and uploads the current public data again.
 There is **no** need to delete any Docker data file, SQLite database, or volume.
-Apply D1 migration 0002 and deploy the new Worker before starting the publisher.
+Apply all pending D1 migrations (including 0004) and deploy the new
+Worker before starting the publisher.
 
 ## 4. Verify public endpoints (no secret required)
 
