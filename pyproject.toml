@@ -42,6 +42,8 @@ where = ["src"]
 flightiran = [
   "modules/airport/data/*.json",
   "webapp/static/*.html",
+  "webapp/static/*.css",
+  "webapp/static/*.js",
 ]
 
 [tool.pytest.ini_options]
