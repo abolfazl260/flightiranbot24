@@ -3,6 +3,9 @@ package com.abolfazl260.flightiranbot24.data.tickets
 import com.abolfazl260.flightiranbot24.domain.network.NetworkResult
 import com.abolfazl260.flightiranbot24.domain.network.PublicJsonRepository
 import com.google.gson.JsonObject
+import java.time.OffsetDateTime
+import java.time.Instant
+import java.time.Duration
 
 internal data class TicketFare(
     val destination: String,
@@ -36,9 +39,14 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
     internal fun parse(payload: JsonObject): TicketPriceSnapshot? {
         return runCatching {
         if (payload.get("currency")?.asString != "TOMAN") return null
-        val observed = payload.get("observed_at")?.asString
-            ?.takeIf { it.length >= 19 } ?: return null
-        val stale = payload.get("stale")?.asBoolean ?: false
+        val observed = payload.get("observed_at")?.asString ?: return null
+        val observedAt = runCatching { OffsetDateTime.parse(observed).toInstant() }.getOrNull()
+            ?: return null
+        val age = Duration.between(observedAt, Instant.now())
+        if (age.isNegative && age.abs() > Duration.ofMinutes(5)) return null
+        val publishedStale = payload.get("stale")?.takeIf { it.isJsonPrimitive }
+            ?.asBoolean ?: return null
+        val stale = publishedStale || age > Duration.ofHours(3)
         val routes = payload.get("routes")?.takeIf { it.isJsonArray }?.asJsonArray ?: return null
         val origins = routes.take(150).mapNotNull { route ->
             if (!route.isJsonObject) return@mapNotNull null
