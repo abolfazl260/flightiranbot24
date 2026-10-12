@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from datetime import date
 from html import escape
 
 from babel import Locale
@@ -16,6 +17,7 @@ from flightiran.modules.visa.provenance import (
     visa_provenance,
 )
 from flightiran.modules.visa.stay import StayRule, stay_rule_for
+from flightiran.modules.visa.watch import matching_waivers
 
 from .visa_quality import render_authority
 
@@ -524,6 +526,37 @@ def _limited_lines(lines: list[str], *, max_chars: int = 3900) -> str:
     return "\n".join(selected)
 
 
+_RULE_VALIDITY = {
+    "fa": (
+        "اعتبار اعلام‌شده این مقرره تا {until} بوده است؛ "
+        "ممکن است منقضی شده باشد. شرایط فعلی را از مرجع رسمی تأیید کنید.",
+        "این مقرره در منبع تا {until} معتبر اعلام شده؛ "
+        "برای تاریخ سفر خود مجدداً بررسی کنید.",
+    ),
+    "en": (
+        "This published rule was valid until {until}; it may have expired. "
+        "Confirm the current requirement with the official authority.",
+        "The source lists this rule as valid until {until}; check your travel date.",
+    ),
+    "ar": (
+        "انتهت الصلاحية المنشورة لهذه القاعدة في {until}؛ تحقق من الجهة الرسمية.",
+        "ينص المصدر على صلاحية هذه القاعدة حتى {until}؛ تحقق من تاريخ سفرك.",
+    ),
+}
+
+
+def rule_validity_notice(detail: VisaDetail, language: str) -> str:
+    """Check the published rule expiry, never the user's individual visa validity."""
+    until = source_date(detail.record.get("validUntil"))
+    if not until:
+        return ""
+    expired = date.fromisoformat(until) < date.today()
+    templates = _RULE_VALIDITY.get(language, _RULE_VALIDITY["en"])
+    return ("⚠️ " if expired else "🗓 ") + escape(
+        templates[0 if expired else 1].format(until=until)
+    )
+
+
 def render_overview(
     detail: VisaDetail,
     language: str,
@@ -566,6 +599,9 @@ def render_overview(
     }.get(rule.status)
     if status_notice:
         lines.append("⚠️ " + escape(tr(language, status_notice)))
+    validity_notice = rule_validity_notice(detail, language)
+    if validity_notice:
+        lines.append(validity_notice)
     stay_window = stay_rule_for(detail)
     if stay_window:
         lines.extend(["", *_stay_rule_lines(stay_window, language)])
@@ -586,12 +622,13 @@ def render_overview(
     if rule.notes:
         lines.extend(["", f"<b>{escape(tr(language, 'more'))}</b>"])
         lines.append(escape(rule.notes[:450]))
-    waivers = detail.destination_data.get("visaPolicy", {}).get("conditionalWaivers") or []
-    if waivers and rule.status not in {"visa-free", "freedom-of-movement"}:
+    policy = detail.destination_data.get("visaPolicy") or {}
+    waivers = matching_waivers(policy, rule.status, rule.passport)
+    waivers = [waiver for waiver in waivers if isinstance(waiver.get("text"), str)]
+    if waivers:
         lines.extend(["", f"<b>{escape(tr(language, 'condition'))}</b>"])
-        for waiver in waivers[:1]:
-            if isinstance(waiver, dict) and waiver.get("text"):
-                lines.append("• " + escape(str(waiver["text"])[:200]))
+        for waiver in waivers[:3]:
+            lines.append("• " + escape(waiver["text"][:200]))
         lines.append("<i>" + escape(tr(language, "conditional_notice")) + "</i>")
     if freshness_notice:
         lines.extend(["", freshness_notice])
@@ -910,6 +947,9 @@ def render_section(
                     lines.extend([escape(str(answer)[:600]), ""])
         lines.append("⚠️ " + escape(tr(language, "general_faq")))
     elif section == "sources":
+        validity_notice = rule_validity_notice(detail, language)
+        if validity_notice:
+            lines.extend([validity_notice, ""])
         lines.extend(_source_dates(provenance, language, full=True))
         lines.extend(["", render_authority(provenance, language, full=True)])
         lines.append("<i>" + escape(tr(language, "no_expiry")) + "</i>")
@@ -1015,13 +1055,16 @@ def render_rich_report(
     ]
     if provenance.source_changed_on:
         rows.append((tr(language, "changed_date"), provenance.source_changed_on))
+    validity_notice = rule_validity_notice(detail, language)
+    if validity_notice:
+        rows.append((tr(language, "validity"), validity_notice))
     rows.append((
         tr(language, "source"),
         render_authority(provenance, language).replace("\n", " · "),
     ))
     table_rows = []
     for key, value in rows:
-        cell = value if key == tr(language, "source") else escape(str(value))
+        cell = value if key in {tr(language, "source"), tr(language, "validity")} else escape(str(value))
         table_rows.append(f"<tr><th>{escape(str(key))}</th><td>{cell}</td></tr>")
     table = "<table bordered striped compact>" + "".join(table_rows) + "</table>"
     intro = "<p>" + _provider_links(provenance, language) + "</p>"
