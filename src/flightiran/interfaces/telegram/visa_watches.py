@@ -68,7 +68,7 @@ WORDS = {
             "Application or entry-condition details for this route changed in the dataset."
         ),
         "unknown": "Not specified", "days": "days",
-        "unavailable": "This passport rule was removed from the latest published dataset; "
+        "rule_removed": "This passport rule was removed from the latest published dataset; "
                        "do not rely on the previous result without official confirmation.",
         "rule_restored": "A passport-specific rule has reappeared in the published dataset.",
         "stay_window_changed": "Stay-window counting or re-entry rules were updated.",
@@ -100,7 +100,7 @@ WORDS = {
             "تغيرت شروط التقديم أو وثائق الدخول المنشورة لهذا المسار."
         ),
         "unknown": "غير محدد", "days": "يوم",
-        "unavailable": "حُذفت قاعدة هذا الجواز من البيانات الجديدة؛ تحقق من المصدر الرسمي.",
+        "rule_removed": "حُذفت قاعدة هذا الجواز من البيانات الجديدة؛ تحقق من المصدر الرسمي.",
         "rule_restored": "أُعيد نشر قاعدة هذا الجواز في البيانات الجديدة.",
         "stay_window_changed": "تغيرت قواعد احتساب أيام الإقامة أو إعادة الدخول.",
         "publication": "تاريخ نشر البيانات", "source": "فتح السجل الأصلي للوجهة",
