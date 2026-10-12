@@ -44,7 +44,7 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
             ?: return null
         val age = Duration.between(observedAt, Instant.now())
         if (age.isNegative && age.abs() > Duration.ofMinutes(5)) return null
-        val publishedStale = payload.get("stale")?.takeIf { it.isJsonPrimitive }
+        val publishedStale = payload.get("stale")?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isBoolean }
             ?.asBoolean ?: return null
         val stale = publishedStale || age > Duration.ofHours(3)
         val routes = payload.get("routes")?.takeIf { it.isJsonArray }?.asJsonArray ?: return null
