@@ -6,8 +6,13 @@ plugins {
 
 // One app identity. CI generates a monotonically increasing build number per
 // Android workflow run; no manual version edits or variant-specific IDs.
+// Public, credential-free HTTPS endpoint deployed for this project.
+// Debug APKs produced by CI must not silently lack an API origin when the
+// release-only Actions variable has not yet been configured.
+def defaultPublicApiOrigin = 'https://flightiran-public-api.abolfazl260.workers.dev/'
 def apiOrigin = providers.gradleProperty('apiOrigin').orElse(
-    providers.environmentVariable('ANDROID_PRODUCTION_API_ORIGIN')).getOrElse('').trim()
+    providers.environmentVariable('ANDROID_PRODUCTION_API_ORIGIN')
+).getOrElse(defaultPublicApiOrigin).trim()
 if (apiOrigin) {
     URI uri
     try { uri = new URI(apiOrigin) }
