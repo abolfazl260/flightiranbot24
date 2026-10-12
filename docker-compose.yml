@@ -60,5 +60,23 @@ services:
         condition: service_completed_successfully
     command: ["flightiran-cloudflare-publish", "--loop", "--interval-seconds", "300"]
 
+  # Private Mini App actions flow FROM Worker to the shared SQLite services.
+  # No inbound port, Cloudflare Tunnel, or modification to advertio.ir required.
+  cloudflare-mini-bridge:
+    profiles: ["cloudflare"]
+    image: flightiranbot24:latest
+    build: .
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/flightiran.db
+    volumes:
+      - flightiran-data:/data
+    restart: unless-stopped
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    command: ["flightiran-cloudflare-mini-bridge", "--loop", "--interval-seconds", "5"]
+
 volumes:
   flightiran-data:
