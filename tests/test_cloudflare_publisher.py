@@ -1,8 +1,8 @@
 """The replica only uploads whitelisted public facts; failures never checkpoint."""
 from __future__ import annotations
 
-import json
 import hashlib
+import json
 import sqlite3
 from pathlib import Path
 from types import SimpleNamespace
