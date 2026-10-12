@@ -218,3 +218,24 @@ def test_disabled_mini_app_denies_identity_and_protected_data():
         assert c.get("/api/mini/bootstrap",headers=headers()).status_code == 401
         assert c.get("/api/mini/alerts",headers=headers()).status_code == 401
         assert c.get("/api/v1/tickets/prices").status_code == 503
+
+
+@pytest.mark.asyncio
+async def test_resuming_prices_cannot_exceed_active_alert_limit(tmp_path):
+    from flightiran.db.repositories import SQLiteUserRepository
+    from flightiran.modules.tickets.alerts import PriceAlertService
+
+    db = await initialize_database(f"sqlite+aiosqlite:///{tmp_path / 'limit.db'}")
+    users = SQLiteUserRepository(db)
+    user = await users.get_or_create(12345)
+    service = PriceAlertService(db, max_alerts_per_user=1)
+    route = await service.save_route(user.id, "تهران", "کیش")
+    first = await service.create_percent(user.id, route.id, 10)
+    assert await service.set_user_status(user.id, first.id, "paused")
+    second = await service.create_percent(user.id, route.id, 15)
+    assert second.id != first.id
+    with pytest.raises(ValueError, match="limit"):
+        await service.set_user_status(user.id, first.id, "active")
+    rows = await service.list_user_alerts(user.id)
+    assert sum(item.status == "active" for item in rows) == 1
+    await db.close()
