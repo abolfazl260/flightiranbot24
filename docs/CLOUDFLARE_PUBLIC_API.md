@@ -227,7 +227,8 @@ index maintenance), not ~40,000. Changing facts for one passport writes
 one row; no-change publication writes zero rows via conditional UPSERT and
 publisher fingerprints. At least 190 verified destination rules per
 passport are required; invalid/partial snapshots are refused. Documents
-are bounded to less than 1.6 MB, below D1's 2MB maximum row size.
+are bounded to less than 1.3 MB, below the Worker's 1.5MB inbound
+request limit and D1's 2MB maximum row size.
 
 The previous `visa_rules` table remains **untouched** to preserve
 existing public visa reads while passport documents are populated. The
