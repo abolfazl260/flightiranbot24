@@ -51,6 +51,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
+      - name: Check Persian Android UI copy and secure default API origin
+        run: python scripts/check_android_ui_contract.py
       - name: Test and build the single Android app with CI-generated version
         run: |
           gradle --no-daemon -p android \
