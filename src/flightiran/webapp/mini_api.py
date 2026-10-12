@@ -5,8 +5,6 @@ mutations require Telegram's signed initData; no browser-supplied user ID is
 trusted. The public Android ticket API remains unchanged.
 """
 
-from __future__ import annotations
-
 import json
 import re
 from dataclasses import asdict
@@ -119,7 +117,7 @@ def mini_router(
             "links": {
                 "support": support_url(settings.ticket_support_username),
                 "cargo": "https://t.me/advertio_cargo",
-                "bot": "https://t.me/Flightiranbot",
+                "bot": f"https://t.me/{settings.telegram_bot_username}",
             },
         }
 
