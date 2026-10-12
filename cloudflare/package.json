@@ -1,0 +1,13 @@
+{
+  "name": "flightiran-cloudflare-api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "deploy": "wrangler deploy",
+    "migrate": "wrangler d1 migrations apply flightiran-public-data --remote"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}
