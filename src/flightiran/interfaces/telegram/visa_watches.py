@@ -35,9 +35,9 @@ WORDS = {
             "شرایط درخواست یا مدارک مربوط به این مسیر در دیتاست تغییر کرده است."
         ),
         "unknown": "نامشخص", "days": "روز",
-        "unavailable": "اطلاعات مقررات این پاسپورت در فایل جدید مقصد حذف شده است؛ "
+        "rule_removed": "اطلاعات مقررات این پاسپورت در فایل جدید مقصد حذف شده است؛ "
                        "تا بررسی مرجع رسمی، به نتیجه قبلی اتکا نکنید.",
-        "restored": "اطلاعات مقررات این پاسپورت دوباره در منبع منتشر شده است.",
+        "rule_restored": "اطلاعات مقررات این پاسپورت دوباره در منبع منتشر شده است.",
         "stay_window_changed": "قوانین شمارش روزهای اقامت یا شرایط ورود مجدد تغییر کرده‌اند.",
         "publication": "تاریخ اعلام‌شده انتشار داده", "source": "مشاهده فایل مرجع مقصد",
         "official_source": "مشاهده منبع رسمی/استنادی مقررات",
@@ -70,7 +70,7 @@ WORDS = {
         "unknown": "Not specified", "days": "days",
         "unavailable": "This passport rule was removed from the latest published dataset; "
                        "do not rely on the previous result without official confirmation.",
-        "restored": "A passport-specific rule has reappeared in the published dataset.",
+        "rule_restored": "A passport-specific rule has reappeared in the published dataset.",
         "stay_window_changed": "Stay-window counting or re-entry rules were updated.",
         "publication": "Published data date", "source": "View source destination record",
         "official_source": "View cited visa regulation",
@@ -101,7 +101,7 @@ WORDS = {
         ),
         "unknown": "غير محدد", "days": "يوم",
         "unavailable": "حُذفت قاعدة هذا الجواز من البيانات الجديدة؛ تحقق من المصدر الرسمي.",
-        "restored": "أُعيد نشر قاعدة هذا الجواز في البيانات الجديدة.",
+        "rule_restored": "أُعيد نشر قاعدة هذا الجواز في البيانات الجديدة.",
         "stay_window_changed": "تغيرت قواعد احتساب أيام الإقامة أو إعادة الدخول.",
         "publication": "تاريخ نشر البيانات", "source": "فتح السجل الأصلي للوجهة",
         "official_source": "فتح مرجع شروط الدخول",
@@ -244,7 +244,7 @@ def render_change_alert(notification: PendingNotification, language: str) -> str
         "",
     ]
     if "availability" in categories:
-        notice = "unavailable" if after.get("status") is None else "restored"
+        notice = "rule_removed" if after.get("status") is None else "rule_restored"
         lines.append("⚠️ " + escape(word(language, notice)))
     if "status" in categories:
         old_status = status_label(str(before.get("status")), language)
