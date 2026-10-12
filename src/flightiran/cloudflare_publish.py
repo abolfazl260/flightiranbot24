@@ -14,6 +14,7 @@ import json
 import logging
 import os
 from collections import defaultdict
+from datetime import datetime, timezone
 from importlib.resources import files
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -112,7 +113,7 @@ async def public_visa_destinations(database: Database) -> dict[str, dict]:
 class PublicPublisher:
     def __init__(
         self, database: Database, origin: str, token: str, checkpoint: Path,
-        client: httpx.AsyncClient,
+        client: httpx.AsyncClient, *, max_visa_destinations_per_day: int = 60,
     ) -> None:
         self.database = database
         self.origin = validate_origin(origin)
@@ -121,17 +122,43 @@ class PublicPublisher:
         self.token = token
         self.client = client
         self.checkpoint = checkpoint
+        # D1 Free allows 100k rows written per UTC day across the entire account.
+        # A visa destination can require ~200 table writes + index writes;
+        # cap daily destinations so cold-start imports resume over several days.
+        if not 1 <= max_visa_destinations_per_day <= 80:
+            raise ValueError("max_visa_destinations_per_day must be between 1 and 80")
+        self.max_visa_destinations_per_day = max_visa_destinations_per_day
+        self.visa_budget_day = self._utc_day()
+        self.visa_published_today = 0
+        self._visa_limit_logged_day: str | None = None
         # Version the checkpoint scope across backends. Pre-D1 (R2) uploads
         # must NOT suppress the initial ticket import when the Worker changes.
         self.scope = hashlib.sha256(("d1-v2:" + self.origin).encode()).hexdigest()[:16]
         self.state = self._read_state()
 
+    @staticmethod
+    def _utc_day() -> str:
+        return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+
+    def _reset_visa_budget_if_needed(self) -> None:
+        current = self._utc_day()
+        if current != self.visa_budget_day:
+            self.visa_budget_day = current
+            self.visa_published_today = 0
+            self._visa_limit_logged_day = None
+
     def _read_state(self) -> dict[str, str]:
         try:
             doc = json.loads(self.checkpoint.read_text(encoding="utf-8"))
             if doc.get("scope") == self.scope and isinstance(doc.get("fingerprints"), dict):
+                count = doc.get("visa_published_today")
+                if (
+                    doc.get("visa_budget_day") == self.visa_budget_day
+                    and type(count) is int and count >= 0
+                ):
+                    self.visa_published_today = count
                 return doc["fingerprints"]
-        except (OSError, ValueError, AttributeError):
+        except (OSError, ValueError, AttributeError, TypeError):
             pass
         return {}
 
@@ -139,8 +166,12 @@ class PublicPublisher:
         self.checkpoint.parent.mkdir(parents=True, exist_ok=True)
         staged = self.checkpoint.with_name(self.checkpoint.name + ".tmp")
         staged.write_text(
-            json.dumps({"scope": self.scope, "fingerprints": self.state},
-                       ensure_ascii=False, sort_keys=True),
+            json.dumps({
+                "scope": self.scope,
+                "fingerprints": self.state,
+                "visa_budget_day": self.visa_budget_day,
+                "visa_published_today": self.visa_published_today,
+            }, ensure_ascii=False, sort_keys=True),
             encoding="utf-8",
         )
         staged.replace(self.checkpoint)
@@ -150,6 +181,18 @@ class PublicPublisher:
         digest = hashlib.sha256(data).hexdigest()
         if self.state.get(key) == digest:
             return False
+        is_visa = key.startswith("visa:")
+        if is_visa:
+            self._reset_visa_budget_if_needed()
+            if self.visa_published_today >= self.max_visa_destinations_per_day:
+                if self._visa_limit_logged_day != self.visa_budget_day:
+                    LOGGER.warning(
+                        "cloudflare_visa_daily_budget_reached day=%s limit=%s; "
+                        "remaining destinations will resume after 00:00 UTC",
+                        self.visa_budget_day, self.max_visa_destinations_per_day,
+                    )
+                    self._visa_limit_logged_day = self.visa_budget_day
+                return False
         response = await self.client.post(
             self.origin + endpoint,
             content=data,
@@ -164,6 +207,8 @@ class PublicPublisher:
         if not isinstance(confirmation, dict) or confirmation.get("published") is not True:
             raise ValueError("Cloudflare import endpoint did not acknowledge publication")
         self.state[key] = digest
+        if is_visa:
+            self.visa_published_today += 1
         self._save()
         LOGGER.info("cloudflare_published key=%s", key)
         return True
@@ -211,12 +256,16 @@ async def run(*, once: bool, interval_seconds: int) -> int:
     if not database_url:
         raise ValueError("DATABASE_URL is required")
     checkpoint = Path(os.environ.get("CLOUDFLARE_SYNC_CHECKPOINT", "/data/cloudflare-sync.json"))
+    daily_limit = int(os.environ.get("CLOUDFLARE_VISA_DAILY_LIMIT", "60"))
     database = create_database(database_url)
     try:
         async with httpx.AsyncClient(
             follow_redirects=False, timeout=httpx.Timeout(35),
         ) as client:
-            publisher = PublicPublisher(database, origin, token, checkpoint, client)
+            publisher = PublicPublisher(
+                database, origin, token, checkpoint, client,
+                max_visa_destinations_per_day=daily_limit,
+            )
             while True:
                 failed = await publisher.sync_once()
                 if once:
