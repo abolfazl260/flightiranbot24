@@ -15,7 +15,8 @@ from html import escape
 from urllib.parse import urlparse
 
 import httpx
-from sqlalchemy import func, select
+from jsonschema import FormatChecker, validators
+from sqlalchemy import delete, func, select
 from sqlalchemy.dialects.sqlite import insert as sqlite_insert
 
 from flightiran.db.engine import Database
@@ -28,15 +29,43 @@ from .watch import VisaWatchService
 LOGGER = logging.getLogger(__name__)
 BASE = "https://travelrequirements.info/data/"
 MANIFEST_URL = BASE + "index.json"
+SCHEMA_URL = BASE + "schema.json"
 MATRIX_URL = BASE + "visa-matrix.csv"
 CHANGELOG_URL = BASE + "changelog.json"
 MIN_DESTINATIONS = 190
-RECHECK_AFTER = timedelta(days=7)
+RECHECK_AFTER = timedelta(hours=24)  # Revalidate files daily even if manifest dates stay fixed.
 
 
 def _canonical_hash(value: dict) -> str:
     serialized = json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def _build_destination_validator(schema: object):
+    """Enforce the *complete* publisher JSON Schema before accepting any records.
+
+    Disallow remote references so upstream schema changes cannot make our
+    server resolve an untrusted URL during validation.
+    """
+    if not isinstance(schema, dict):
+        raise ValueError("Visa schema is not a JSON object")
+
+    def check_refs(node: object) -> None:
+        if isinstance(node, dict):
+            if "$ref" in node:
+                raise ValueError("External or unresolved visa schema references are not allowed")
+            for value in node.values():
+                check_refs(value)
+        elif isinstance(node, list):
+            for item in node:
+                check_refs(item)
+
+    check_refs(schema)
+    cls = validators.validator_for(schema)
+    cls.check_schema(schema)
+    if schema.get("type") != "object" or not schema.get("required"):
+        raise ValueError("Visa schema does not define required destination fields")
+    return cls(schema, format_checker=FormatChecker())
 
 
 def _safe_destination_url(url: str) -> bool:
@@ -235,6 +264,15 @@ class VisaSyncService:
                 if len(current) and len(current) > len(entries):
                     raise ValueError("Manifest contains fewer destinations than stored dataset")
 
+                # A schema mismatch must abort the whole sync before any
+                # record/index/notification is committed. It is fetched only
+                # when at least one destination needs revalidation.
+                validator = None
+                if jobs:
+                    schema_response = await client.get(SCHEMA_URL)
+                    schema_response.raise_for_status()
+                    validator = _build_destination_validator(schema_response.json())
+
                 semaphore = asyncio.Semaphore(6)
 
                 async def fetch_one(entry: dict) -> tuple[dict, dict, str]:
@@ -242,9 +280,19 @@ class VisaSyncService:
                         result = await client.get(entry["url"])
                         result.raise_for_status()
                         document = result.json()
+                        if not isinstance(document, dict):
+                            raise ValueError(f"Invalid destination JSON for {entry['id']}")
+                        if validator is None:
+                            raise RuntimeError("Visa schema validation was not initialized")
+                        failure = next(validator.iter_errors(document), None)
+                        if failure is not None:
+                            field = "/".join(map(str, failure.absolute_path)) or "root"
+                            raise ValueError(
+                                f"Visa schema validation failed for {entry['id']} at {field}: "
+                                f"{failure.message[:160]}"
+                            )
                         if (
-                            not isinstance(document, dict)
-                            or document.get("id") != entry["id"]
+                            document.get("id") != entry["id"]
                             or document.get("iso2") != entry["iso2"]
                             or not isinstance(
                                 document.get("visaPolicy", {}).get("byPassport"), dict
@@ -284,26 +332,17 @@ class VisaSyncService:
                         row.manifest_updated = entry.get("lastUpdated")
                         row.last_fetched_at = now
 
-                        # Upsert the 199 indexed passport rows for this country.
-                        # Small batches remain compatible with SQLite bind limits.
+                        # Replace this destination's complete passport index in
+                        # the *same transaction* as raw JSON and watch events.
+                        # Upsert alone leaves stale rows for removed passports.
                         indexed = index_destination(document)
+                        await session.execute(
+                            delete(VisaRuleIndex).where(VisaRuleIndex.destination == entry["iso2"])
+                        )
                         for start in range(0, len(indexed), 40):
-                            values = indexed[start : start + 40]
-                            insert = sqlite_insert(VisaRuleIndex).values(values)
-                            excluded = insert.excluded
-                            statement = insert.on_conflict_do_update(
-                                index_elements=["passport", "destination"],
-                                set_={
-                                    "country_name": excluded.country_name,
-                                    "status": excluded.status,
-                                    "stay_days": excluded.stay_days,
-                                    "notes": excluded.notes,
-                                    "source_url": excluded.source_url,
-                                    "verified_on": excluded.verified_on,
-                                    "source_level": excluded.source_level,
-                                },
+                            await session.execute(
+                                sqlite_insert(VisaRuleIndex).values(indexed[start:start + 40])
                             )
-                            await session.execute(statement)
                     state.dataset_version = str(manifest.get("version", ""))
                     state.manifest_hash = _canonical_hash(manifest)
                     state.last_checked_at = now
