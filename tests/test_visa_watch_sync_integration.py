@@ -3,9 +3,9 @@
 from __future__ import annotations
 
 from copy import deepcopy
+from datetime import datetime, timedelta, timezone
 
 import pytest
-from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import func, select
 
