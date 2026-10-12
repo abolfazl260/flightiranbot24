@@ -17,3 +17,9 @@ __pycache__/
 *.key
 *service-account*.json
 android/local.properties
+
+# Cloudflare Wrangler and Node local caches (never commit secrets)
+node_modules/
+cloudflare/.wrangler/
+cloudflare/.dev.vars
+npm-debug.log*
