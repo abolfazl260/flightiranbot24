@@ -53,22 +53,35 @@ def _strip_metadata(value: object) -> object:
     return value
 
 
-def _matching_waivers(policy: dict, status: str) -> list[dict]:
-    """Select only waiver rules potentially applicable to this status."""
+def matching_waivers(policy: dict, status: str, passport: str) -> list[dict]:
+    """Match waiver scope to the selected passport, not merely the destination.
+
+    In the upstream schema, appliesTo is either "visa-required" (a category)
+    or an array of two-letter passport codes. Legacy status strings are also
+    accepted for previously imported data. Unknown scopes fail closed.
+    """
     result = []
     for waiver in policy.get("conditionalWaivers") or []:
         if not isinstance(waiver, dict):
             continue
         applies_to = waiver.get("appliesTo")
-        relevant = (
-            applies_to in (status, "all")
-            or (applies_to == "visa-required" and status in (
-                "embassy-visa", "visa-required"
-            ))
-            or (applies_to == "visa-exempt" and status == "visa-free")
-        )
+        if isinstance(applies_to, list):
+            relevant = passport.upper() in {
+                item.upper() for item in applies_to
+                if isinstance(item, str) and len(item) == 2 and item.isascii()
+            }
+        elif isinstance(applies_to, str):
+            relevant = (
+                applies_to in (status, "all")
+                or (applies_to == "visa-required" and status in (
+                    "embassy-visa", "visa-required"
+                ))
+                or (applies_to == "visa-exempt" and status == "visa-free")
+            )
+        else:
+            relevant = False
         if relevant:
-            result.append(_strip_metadata(waiver))
+            result.append(waiver)
     return result
 
 
@@ -112,11 +125,17 @@ def semantic_rule(document: dict, passport: str) -> dict | None:
         "notes": record.get("notes"),
         "visa_types": visa_types,
         "entry_requirements": entry_rules,
-        "conditional_waivers": _matching_waivers(policy, status),
+        "conditional_waivers": [
+            _strip_metadata(item) for item in matching_waivers(policy, status, passport)
+        ],
     }
 
 
-def rule_changes(previous: dict, current: dict) -> tuple[str, ...]:
+def rule_changes(previous: dict | None, current: dict | None) -> tuple[str, ...]:
+    # Loss or restoration of a passport row is itself a material change; users
+    # must never silently continue relying on a rule that disappeared upstream.
+    if previous is None or current is None:
+        return ("availability",) if previous != current else ()
     categories: list[str] = []
     if previous["status"] != current["status"]:
         categories.append("status")
@@ -280,23 +299,23 @@ class VisaWatchService:
         for watch in watches:
             old = semantic_rule(previous, watch.passport)
             new = semantic_rule(current, watch.passport)
-            if old is None or new is None:
-                continue
             categories = rule_changes(old, new)
             if not categories:
                 continue
             change_hash = _digest_change(watch.passport, destination, old, new)
-            policy = current.get("visaPolicy") or {}
-            new_row = (policy.get("byPassport") or {}).get(watch.passport) or {}
-            citation = new_row.get("source") or policy.get("defaultSource") or {}
+            policy = (current if new is not None else previous).get("visaPolicy") or {}
+            row = (policy.get("byPassport") or {}).get(watch.passport) or {}
+            citation = row.get("source") or policy.get("defaultSource") or {}
             citation_url = citation.get("url") if isinstance(citation, dict) else None
             payload = {
                 "categories": list(categories),
                 "before": {
-                    "status": old["status"], "stay_days": old["stay_days"]
+                    "status": old.get("status") if old else None,
+                    "stay_days": old.get("stay_days") if old else None,
                 },
                 "after": {
-                    "status": new["status"], "stay_days": new["stay_days"]
+                    "status": new.get("status") if new else None,
+                    "stay_days": new.get("stay_days") if new else None,
                 },
                 "source_url": source_url,
                 "official_source_url": citation_url if isinstance(citation_url, str) else None,
