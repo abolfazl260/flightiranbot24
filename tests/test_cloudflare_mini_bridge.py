@@ -1,7 +1,5 @@
 """Integration tests for the free workers.dev Mini App outbound SQLite bridge."""
 
-import hashlib
-import hmac
 import json
 import sqlite3
 import time
