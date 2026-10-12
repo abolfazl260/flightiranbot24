@@ -247,6 +247,18 @@ async def start_handler(
             await open_visa_menu(
                 update, context, dependencies.visa_catalog, language, edit=False
             )
+        elif entrypoint == "alerts":
+            if dependencies.price_alert_service is None:
+                await update.message.reply_text(
+                    word(language, "unavailable"), reply_markup=back_menu(language)
+                )
+            else:
+                await update.message.reply_text(
+                    "🔔 <b>زنگوله قیمت بلیت</b>\n"
+                    "برای مشاهده هشدارهای ذخیره‌شده یا ثبت هشدار جدید، گزینه زیر را بزنید.",
+                    parse_mode="HTML",
+                    reply_markup=menu_keyboard(language),
+                )
         elif entrypoint == "airports":
             await update.message.reply_text(
                 text(language, "airports_coming_soon"),
