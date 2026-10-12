@@ -50,7 +50,9 @@ class Settings(BaseSettings):
     active_users_report_timezone: str = "Asia/Tehran"
     web_app_enabled: bool = False
     web_app_url: str | None = None
-    telegram_bot_username: str = Field(default="Flightiranbot", pattern=r"^[A-Za-z][A-Za-z0-9_]{4,31}$")
+    telegram_bot_username: str = Field(
+        default="Flightiranbot", pattern=r"^[A-Za-z][A-Za-z0-9_]{4,31}$"
+    )
 
     @field_validator("active_users_report_time")
     @classmethod
