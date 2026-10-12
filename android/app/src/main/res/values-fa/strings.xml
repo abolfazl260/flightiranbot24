@@ -56,7 +56,7 @@
     <string name="ticket_prices_unconfigured">سرویس قیمت‌ها در این نسخه در دسترس نیست. لطفاً نسخه جدید را نصب کنید.</string>
     <string name="ticket_prices_error">در حال حاضر دریافت قیمت‌ها ممکن نیست. اتصال را بررسی کرده و دوباره تلاش کنید.</string>
     <string name="ticket_prices_stale">قیمت‌های نمایش‌داده‌شده تازه نیستند؛ پیش از رزرو استعلام بگیرید.</string>
-    <string name="ticket_prices_observed">آخرین ثبت: %1$s</string>
+    <string name="ticket_prices_observed">آخرین ثبت (به وقت ایران): %1$s</string>
     <string name="ticket_prices_refresh">بروزرسانی</string>
     <string name="ticket_prices_origin">شهر مبدأ</string>
     <string name="ticket_prices_search">جست‌وجوی مقصد</string>
