@@ -204,3 +204,61 @@ ruff check src tests migrations
 pytest tests/test_cloudflare_publisher.py
 node --test cloudflare/test/*.test.mjs
 ```
+
+
+## D1 Free quota protection (October 2026)
+
+The Workers Free plan permits **100,000 rows written and 5 million rows
+read per UTC day**, across the Cloudflare account. Each changed visa rule
+also updates SQLite indexes and therefore costs additional row writes.
+Cloudflare enforces those limits since September 2026: when exhausted,
+D1 operations (including Wrangler migrations) fail until **00:00 UTC**
+(03:30 in Iran); no stored rows are deleted.
+
+**Why this happened:** a previous Worker visa import removed all passport
+rows for a destination and wrote them all back, even for tiny changes.
+The updated Worker does an idempotent conditional UPSERT instead and
+deletes only truly obsolete passport rows. The Ubuntu publisher also
+persists a per-UTC-day publication counter with its existing checkpoint,
+with a conservative default of **60 changed visa destinations/day**
+(set `CLOUDFLARE_VISA_DAILY_LIMIT` from 1 to 80 to LOWER this cap if
+other applications share your account). Importing a complete dataset may
+take multiple days; public ticket snapshots remain first priority and
+are **not** blocked by the visa budget.
+
+For error 7500 / daily D1 writes exceeded:
+
+```sh
+cd /opt/Flightiran/flightiranbot24
+docker compose --profile cloudflare stop cloudflare-publisher
+# Keep bot, web and existing SQLite database running.
+# Check account usage: Cloudflare dashboard > D1 > flightiran-public-data
+# > Metrics > Row Metrics (Rows Written).
+```
+
+After **00:00 UTC**, with publisher still stopped:
+
+```sh
+cd /opt/Flightiran/flightiranbot24
+git pull --ff-only origin main
+# Preserve and restore your account-specific cloudflare/wrangler.toml D1 ID
+# if you have changed that tracked file locally.
+cd cloudflare
+npx wrangler d1 migrations apply flightiran-public-data --remote
+# 0003_telegram_mini_jobs.sql is pending; earlier migrations remain applied.
+npx wrangler deploy
+cd ..
+docker compose --profile cloudflare up -d --build
+docker compose logs --tail=100 cloudflare-publisher
+```
+
+Ensure Cloudflare CLI authentication, unchanged PUBLISH_TOKEN, and the
+Worker's TELEGRAM_BOT_TOKEN secret are configured per
+`docs/TELEGRAM_MINI_APP.md`. **Do not** clear
+`/data/cloudflare-sync.json`, re-create D1, delete Docker volumes or
+manually rerun every visa import; all would cost extra writes. If quota
+is exhausted again, stop publisher and inspect Cloudflare's actual
+Rows Written metrics before resuming.
+
+Quota documentation:
+https://developers.cloudflare.com/d1/platform/pricing/

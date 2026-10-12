@@ -182,14 +182,29 @@ export async function handleRequest(request, env) {
       if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
       const destination = visaMatch[1], rows = validatedVisa(payload, destination), now = new Date().toISOString();
       if (!rows) return bad(422, "Invalid public visa rules");
-      const statements = [env.PUBLIC_DB.prepare("DELETE FROM visa_rules WHERE destination = ?").bind(destination)];
-      // 10 rows per INSERT = exactly 100 bindings; <=26 statements for 250 rules.
-      // Keep delete + every insert atomic in a single D1 transaction.
+      // Deleting + reinserting every passport on every small change exhausted
+      // the 100k D1 Free daily row-write quota. Instead, remove ONLY vanished
+      // passports, then insert/update only genuinely changed public rules.
+      // Passport values are validated by CODE2 before being used as SQL literals.
+      const keep = rows.map(r => "'" + r.passport + "'").join(",");
+      const statements = [env.PUBLIC_DB.prepare(
+        "DELETE FROM visa_rules WHERE destination = ? AND passport NOT IN (" + keep + ")"
+      ).bind(destination)];
+      const mutable = ["country_name", "status", "stay_days", "notes",
+        "source_url", "verified_on", "source_level"];
+      const upsert = " ON CONFLICT(passport,destination) DO UPDATE SET " +
+        mutable.map(col => col + " = excluded." + col).join(", ") +
+        ", published_at = excluded.published_at WHERE " +
+        mutable.map(col => "visa_rules." + col + " IS NOT excluded." + col).join(" OR ");
+      // 10 rows per INSERT is exactly 100 bindings. The whole replacement is
+      // atomic, and an identical update writes ZERO table/index rows.
       for (let i = 0; i < rows.length; i += 10) {
         const group = rows.slice(i, i + 10);
-        const sql = "INSERT INTO visa_rules(passport,destination,country_name,status,stay_days,notes,source_url,verified_on,source_level,published_at) VALUES " + group.map(() => "(?,?,?,?,?,?,?,?,?,?)").join(",");
+        const sql = "INSERT INTO visa_rules(passport,destination,country_name,status,stay_days,notes,source_url,verified_on,source_level,published_at) VALUES " +
+          group.map(() => "(?,?,?,?,?,?,?,?,?,?)").join(",") + upsert;
         statements.push(env.PUBLIC_DB.prepare(sql).bind(...group.flatMap(r =>
-          [r.passport,r.destination,r.country_name,r.status,r.stay_days,r.notes,r.source_url,r.verified_on,r.source_level,now])));
+          [r.passport,r.destination,r.country_name,r.status,r.stay_days,
+            r.notes,r.source_url,r.verified_on,r.source_level,now])));
       }
       await env.PUBLIC_DB.batch(statements);
       return ack({ published: true, destination, rules: rows.length });
