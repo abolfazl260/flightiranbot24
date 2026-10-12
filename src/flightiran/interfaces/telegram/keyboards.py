@@ -50,7 +50,12 @@ def main_menu(
         rows.append([("admin_reports", "menu:admin_reports")])
     secure_url = telegram_web_app_url(web_app_url)
     if secure_url:
-        rows.append([InlineKeyboardButton("Web App", web_app=WebAppInfo(secure_url))])
+        label = {
+            "fa": "🚀 ورود به مینی‌اپ سفر",
+            "en": "🚀 Travel Mini App (فارسی)",
+            "ar": "🚀 تطبيق السفر المصغر (فارسی)",
+        }.get(language, "🚀 ورود به مینی‌اپ سفر")
+        rows.append([InlineKeyboardButton(label, web_app=WebAppInfo(secure_url))])
     def button_for(item: tuple[str, str] | InlineKeyboardButton) -> InlineKeyboardButton:
         if isinstance(item, InlineKeyboardButton):
             return item
