@@ -277,13 +277,14 @@ async function serveAsset(request,env,path) {
   const headers=new Headers(asset.headers);
   headers.set("X-Content-Type-Options","nosniff");
   headers.set("Referrer-Policy","no-referrer");
-  headers.set("X-Frame-Options","DENY");
+  // Telegram Web runs Mini Apps in an iframe. Do not use X-Frame-Options:DENY.
   if (target==="/index.html") {
     headers.set("Cache-Control","no-store");
     headers.set("Content-Security-Policy",
       "default-src 'none'; script-src 'self' https://telegram.org; "+
       "style-src 'self'; img-src 'self' data:; connect-src 'self'; "+
-      "base-uri 'none'; object-src 'none'; form-action 'none'");
+      "base-uri 'none'; object-src 'none'; form-action 'none'; " +
+      "frame-ancestors 'self' https://web.telegram.org https://*.telegram.org https://t.me");
   } else headers.set("Cache-Control","public, max-age=300");
   return new Response(request.method==="HEAD"?null:asset.body,{status:asset.status,headers});
 }
