@@ -2,10 +2,9 @@
 
 from __future__ import annotations
 
-import hashlib
-import json
 from dataclasses import dataclass
 from typing import Awaitable, Callable
+from uuid import uuid4
 
 from sqlalchemy import delete, func, select
 
@@ -133,14 +132,16 @@ class PriceAlertService:
         reference_average_toman: float | None = None,
         average_sample_count: int = 0,
     ) -> bool:
-        digest = hashlib.sha256(json.dumps(price).encode()).hexdigest()
+        """Notify once per threshold crossing, not on every qualifying fare update.
+
+        Failed deliveries may be retried with the same pending snapshot. Once
+        delivered, the alert is disarmed until the fare stops qualifying.
+        """
         async with self.database.session() as session:
             alert = await session.get(PriceAlert, alert_id)
             if alert is None or alert.status != "active":
                 return False
             if alert.threshold_type == "percent":
-                # The mean is calculated from hourly samples retained up to
-                # 21 days. A single observation is not a meaningful baseline.
                 if (
                     reference_average_toman is None
                     or reference_average_toman <= 0
@@ -153,48 +154,58 @@ class PriceAlertService:
                 qualifies = (
                     price <= reference_average_toman * (1 - alert.target_percent / 100)
                 )
-                # Do not mark non-matching prices as seen: with the same
-                # current fare and a later, higher mean the alert may qualify.
-                if not qualifies:
-                    return False
             else:
                 qualifies = price <= alert.target_price
-            if alert.last_snapshot_hash == digest:
+
+            if not qualifies:
+                # Re-arm only after the price crosses back above the ceiling
+                # (or the discount ceases to meet the chosen percentage).
+                alert.is_armed = True
                 return False
+            if not alert.is_armed:
+                return False
+
+            # Reuse an undelivered event after a Telegram failure, but generate
+            # a new event ID on a later threshold crossing even if the price
+            # equals an older, already-delivered price.
             snapshot = await session.scalar(
-                select(PriceSnapshot).where(
+                select(PriceSnapshot)
+                .where(
                     PriceSnapshot.alert_id == alert_id,
-                    PriceSnapshot.snapshot_hash == digest,
+                    PriceSnapshot.price == price,
+                    PriceSnapshot.notified.is_(False),
                 )
+                .order_by(PriceSnapshot.id.desc())
+                .limit(1)
             )
-            if snapshot is not None:
-                if snapshot.notified:
-                    return False
-            else:
+            if snapshot is None:
                 snapshot = PriceSnapshot(
-                    alert_id=alert_id, price=price, snapshot_hash=digest, notified=False,
+                    alert_id=alert_id,
+                    price=price,
+                    snapshot_hash=uuid4().hex,
+                    notified=False,
                     reference_average_toman=(
                         reference_average_toman if alert.threshold_type == "percent" else None
                     ),
                 )
                 session.add(snapshot)
                 await session.flush()
-            if alert.threshold_type == "percent":
+            elif alert.threshold_type == "percent":
                 snapshot.reference_average_toman = reference_average_toman
-            if not qualifies:
-                alert.last_snapshot_hash = digest
-                return False
+
         try:
             await notify(alert, snapshot)
         except Exception:
             return False
+
         async with self.database.session() as session:
             stored = await session.get(PriceSnapshot, snapshot.id)
             current_alert = await session.get(PriceAlert, alert_id)
             if stored:
                 stored.notified = True
             if current_alert:
-                current_alert.last_snapshot_hash = digest
+                current_alert.is_armed = False
+                current_alert.last_snapshot_hash = snapshot.snapshot_hash
         return True
 
     async def list_user_alerts(self, user_id: int) -> list[UserPriceAlert]:
@@ -238,6 +249,7 @@ class PriceAlertService:
                     delete(PriceSnapshot).where(PriceSnapshot.alert_id == alert_id)
                 )
                 alert.last_snapshot_hash = None
+                alert.is_armed = True
             alert.status = status
             return True
 

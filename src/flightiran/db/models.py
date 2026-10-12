@@ -110,6 +110,11 @@ class PriceAlert(TimestampedModel):
     target_percent: Mapped[int | None] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(16), default="active", nullable=False, index=True)
     last_snapshot_hash: Mapped[str | None] = mapped_column(String(64))
+    # A notification is sent once when a fare crosses the threshold; price
+    # updates below the threshold do not create another Telegram message.
+    is_armed: Mapped[bool] = mapped_column(
+        default=True, server_default="1", nullable=False
+    )
 
 
 class PriceSnapshot(TimestampedModel):

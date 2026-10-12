@@ -90,7 +90,7 @@ def test_schema_migration_preserves_explicit_english_and_arabic(tmp_path, monkey
             )) == "fa"
             assert conn.scalar(text("PRAGMA foreign_key_check")) is None
             assert conn.scalar(text("SELECT version_num FROM alembic_version")) == (
-                "0011_default_persian_language"
+                "0012_ticket_price_units_alert_arming"
             )
     finally:
         engine.dispose()

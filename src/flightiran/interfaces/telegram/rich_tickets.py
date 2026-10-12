@@ -52,9 +52,9 @@ def render_ticket_footer(language: str = "fa", *, rich: bool = True) -> str:
 
 
 _TABLE_TITLES = {
-    "fa": "پروازها از {origin}",
-    "en": "Flights from {origin}",
-    "ar": "الرحلات من {origin}",
+    "fa": "پروازها از {origin} (تومان)",
+    "en": "Flights from {origin} (tomans)",
+    "ar": "الرحلات من {origin} (تومان)",
 }
 _TABLE_CONTINUATION = {"fa": " (ادامه)", "en": " (continued)", "ar": " (متابعة)"}
 
