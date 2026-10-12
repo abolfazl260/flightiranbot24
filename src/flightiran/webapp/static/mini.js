@@ -68,6 +68,38 @@
     });
     let data = {};
     try { data = await response.json(); } catch { /* unavailable upstream */ }
+    if (response.status === 202 && data?.job_id) {
+      // Only user-scoped operations use the outbound D1->SQLite queue. Cloudflare
+      // public ticket/visa reads return immediately from D1 without polling.
+      const deadline = Date.now() + 48_000;
+      while (Date.now() < deadline) {
+        await new Promise(resolve => setTimeout(resolve, 1800));
+        const follow = await fetch(
+          "/api/mini/results/" + encodeURIComponent(data.job_id), {
+            method: "GET", credentials: "omit", cache: "no-store",
+            headers: {"X-Telegram-Init-Data": state.initData},
+          }
+        );
+        const result = await follow.json();
+        if (follow.status === 202 && result.state === "pending") continue;
+        if (follow.ok && result.state === "complete") {
+          // Return the same body/status interface as the direct FastAPI API.
+          data = result.body || {};
+          if (result.http_status >= 200 && result.http_status < 300) return data;
+          throw new Error(
+            result.http_status === 404 ? "این مورد دیگر در دسترس نیست." :
+            result.http_status === 422 ? "اطلاعات واردشده معتبر نیست یا محدودیت هشدارها تکمیل شده است." :
+            result.http_status === 409 ? "قیمت‌های فعلی نیاز به بروزرسانی دارند." :
+            "درخواست انجام نشد. کمی بعد دوباره تلاش کنید."
+          );
+        }
+        if (follow.status === 401) throw new Error("نشست تلگرام معتبر نیست. مینی‌اپ را دوباره باز کنید.");
+        if (follow.status === 503) throw new Error("وضعیت درخواست مشخص نیست. پیش از ثبت دوباره، هشدارها را بررسی کنید.");
+        if (follow.status === 410) throw new Error("زمان پاسخگویی تمام شد. لطفاً بعداً دوباره تلاش کنید.");
+        throw new Error("ارتباط با سرویس مینی‌اپ برقرار نشد.");
+      }
+      throw new Error("پاسخ سرور طول کشید. قبل از تکرار درخواست، هشدارها را بررسی کنید.");
+    }
     if (!response.ok) {
       if (response.status === 401) throw new Error("نشست تلگرام معتبر نیست. مینی‌اپ را دوباره از ربات باز کنید.");
       if (response.status === 409) throw new Error("قیمت‌های فعلی نیاز به بروزرسانی دارند. کمی بعد دوباره تلاش کنید.");
