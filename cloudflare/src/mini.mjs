@@ -243,7 +243,7 @@ async function internalMini(request,env,path,authorized) {
   return error(404,"Unknown private endpoint");
 }
 async function serveAsset(request,env,path) {
-  if (!env.ASSETS || request.method!=="GET") return error(404,"Not found");
+  if (!env.ASSETS || !["GET","HEAD"].includes(request.method)) return error(404,"Not found");
   const target={
     "/":"/index.html","/mini":"/index.html","/mini/":"/index.html",
     "/assets/mini.js":"/mini.js","/assets/mini.css":"/mini.css"
@@ -265,7 +265,7 @@ async function serveAsset(request,env,path) {
       "style-src 'self'; img-src 'self' data:; connect-src 'self'; "+
       "base-uri 'none'; object-src 'none'; form-action 'none'");
   } else headers.set("Cache-Control","public, max-age=300");
-  return new Response(asset.body,{status:asset.status,headers});
+  return new Response(request.method==="HEAD"?null:asset.body,{status:asset.status,headers});
 }
 // Called by the existing Android/public Worker dispatcher.
 // If null is returned, continue with the unchanged public Android API routes.
