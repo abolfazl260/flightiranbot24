@@ -7,9 +7,9 @@ trusted. The public Android ticket API remains unchanged.
 
 import json
 import re
-from urllib.parse import urlsplit
 from dataclasses import asdict
 from typing import Annotated, Literal
+from urllib.parse import urlsplit
 
 from babel import Locale
 from fastapi import APIRouter, Depends, Header, HTTPException
