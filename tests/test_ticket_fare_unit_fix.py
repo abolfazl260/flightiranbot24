@@ -129,9 +129,10 @@ async def test_bidirectional_routes_are_not_confused(tmp_path):
         await db.close()
 
 
-def test_migration_corrects_history_and_disarms_previously_notified(tmp_path):
+def test_migration_corrects_history_and_disarms_previously_notified(tmp_path, monkeypatch):
     db_path = tmp_path / "previous.db"
     url = f"sqlite:///{db_path}"
+    monkeypatch.setenv("DATABASE_URL", f"sqlite+aiosqlite:///{db_path}")
     alembic = Config(str(ROOT / "alembic.ini"))
     alembic.set_main_option("sqlalchemy.url", url)
     command.upgrade(alembic, "0011_default_persian_language")
