@@ -182,7 +182,8 @@ class PublicPublisher:
             if doc.get("scope") == self.scope and isinstance(doc.get("fingerprints"), dict):
                 count = doc.get("visa_published_today")
                 if (
-                    doc.get("visa_budget_day") == self.visa_budget_day
+                    doc.get("visa_budget_model") == "passport-v1"
+                    and doc.get("visa_budget_day") == self.visa_budget_day
                     and type(count) is int and count >= 0
                 ):
                     self.visa_published_today = count
@@ -198,6 +199,7 @@ class PublicPublisher:
             json.dumps({
                 "scope": self.scope,
                 "fingerprints": self.state,
+                "visa_budget_model": "passport-v1",
                 "visa_budget_day": self.visa_budget_day,
                 "visa_published_today": self.visa_published_today,
             }, ensure_ascii=False, sort_keys=True),
