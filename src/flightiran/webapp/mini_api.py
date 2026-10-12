@@ -233,7 +233,11 @@ def mini_router(
 
     @router.patch("/alerts/prices/{alert_id}")
     async def update_price_alert(alert_id: int, payload: PriceAlertStatus, user: Identity) -> dict:
-        if not await prices.set_user_status(user.id, alert_id, payload.status):
+        try:
+            updated = await prices.set_user_status(user.id, alert_id, payload.status)
+        except ValueError as exc:
+            raise HTTPException(422, str(exc)) from exc
+        if not updated:
             raise HTTPException(404, "Price alert unavailable")
         return {"updated": True}
 
