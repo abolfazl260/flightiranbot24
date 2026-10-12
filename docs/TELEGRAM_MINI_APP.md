@@ -80,6 +80,26 @@ This ID is the existing database created earlier for this project; no
 additional Cloudflare database is provisioned. If the local file already has
 the correct ID, this command does nothing.
 
+## Cloudflare D1 Free quota caution
+
+Before applying the pending Migration 0003, **stop the existing
+cloudflare-publisher** if your account has just hit error `7500`:
+
+```sh
+cd /opt/Flightiran/flightiranbot24
+docker compose --profile cloudflare stop cloudflare-publisher
+```
+
+D1 Free limits reset at **00:00 UTC (03:30 Iran)**. Wait for reset before
+re-running `wrangler d1 migrations apply ... --remote`. The bot and its
+original SQLite DB are unaffected. Keep the publisher stopped until
+you have deployed the quota-efficient Worker and rebuilt the
+rate-limited publisher from `main`. The updated public visa importer
+writes only changed records and the publisher limits visa destinations
+to 60 per UTC day, preserving the existing D1 database and checkpoint.
+Do not repeatedly retry 7500, reset your checkpoint or delete the D1
+database. Check Cloudflare D1 Dashboard > Metrics > Row Metrics.
+
 ## 2. Deploy migration 0003 and the Worker static assets
 
 Wrangler must use the Cloudflare **management** API token in your current
