@@ -85,7 +85,7 @@ function validatedAirports(data) {
   return rows;
 }
 function validatedVisa(data, destination) {
-  if (!Array.isArray(data?.rules) || data.destination !== destination || data.rules.length < 1 || data.rules.length > 250) return null;
+  if (!Array.isArray(data?.rules) || data.destination !== destination || data.rules.length < 190 || data.rules.length > 250) return null;
   const rows = [], codes = new Set();
   for (const r of data.rules) {
     const passport = r?.passport, country = text(r?.country_name, 128), status = text(r?.status, 40), sourceLevel = text(r?.source_level, 16);
