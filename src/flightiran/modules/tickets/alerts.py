@@ -244,6 +244,15 @@ class PriceAlertService:
             if alert is None:
                 return False
             if status == "active" and alert.status != "active":
+                # Enforce the bot's active-alert limit for every interface,
+                # including authenticated Mini App requests.
+                active = await session.scalar(
+                    select(func.count(PriceAlert.id)).where(
+                        PriceAlert.user_id == user_id, PriceAlert.status == "active"
+                    )
+                )
+                if (active or 0) >= self.max_alerts_per_user:
+                    raise ValueError("price alert limit reached")
                 # Resuming re-arms the price threshold, even at the same price.
                 await session.execute(
                     delete(PriceSnapshot).where(PriceSnapshot.alert_id == alert_id)
