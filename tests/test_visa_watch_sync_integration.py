@@ -6,7 +6,6 @@ from copy import deepcopy
 from datetime import datetime, timedelta, timezone
 
 import pytest
-
 from sqlalchemy import func, select
 
 from flightiran.db import initialize_database
