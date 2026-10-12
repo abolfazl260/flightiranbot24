@@ -15,7 +15,7 @@ SQL tables to browsers. No additional database or Cloudflare R2 is necessary.
 - **Visa:** defaults to **Iranian passport (IR)** for new visitors, with a
   synchronized stored passport preference and searchable destinations sourced
   from the indexed visa dataset, source links, verification date, and visa alerts.
-- **Alerts:** create percentage/amount-based ticket alerts, follow visa rule
+- **Alerts:** create percentage-based ticket alerts, follow visa rule
   changes, pause/resume/delete **your own** alerts using the same bot services.
   Notifications are delivered through the existing Telegram bot scheduler.
 - **Useful information:** curated categorized links shared with Telegram;
