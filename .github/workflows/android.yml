@@ -51,6 +51,8 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.13"
+      - name: Check Persian Android UI copy and secure default API origin
+        run: python scripts/check_android_ui_contract.py
       - name: Test and build the single Android app with CI-generated version
         run: |
           gradle --no-daemon -p android \
@@ -167,12 +169,12 @@ jobs:
           [[ -s "$RUNNER_TEMP/flightiran-upload.jks" ]]
       - name: Verify live ticket API for release
         env:
-          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN }}
+          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN || 'https://flightiran-public-api.abolfazl260.workers.dev/' }}
         shell: bash
         run: |
           set -euo pipefail
           if [[ -z "${ANDROID_PRODUCTION_API_ORIGIN:-}" ]]; then
-            echo "::error::Set repository variable ANDROID_PRODUCTION_API_ORIGIN to your deployed HTTPS API origin."
+            echo "::error::A valid HTTPS ticket API origin is required."
             exit 1
           fi
           python - <<'PY'
@@ -210,7 +212,7 @@ jobs:
           PY
       - name: Build signed release APK and AAB
         env:
-          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN }}
+          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN || 'https://flightiran-public-api.abolfazl260.workers.dev/' }}
           ANDROID_KEYSTORE_FILE: ${{ runner.temp }}/flightiran-upload.jks
           ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}

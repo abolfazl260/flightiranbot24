@@ -3,53 +3,149 @@
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:layoutDirection="rtl"
+    android:fillViewport="true"
     android:background="@color/pale">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
+        android:layoutDirection="rtl"
+        android:textDirection="rtl"
         android:orientation="vertical"
-        android:textDirection="rtl">
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="24dp"
+        android:paddingBottom="36dp">
+
         <TextView
             style="@style/AdvertioHeadline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/checklist_title"
-            />
+            android:text="@string/checklist_title" />
+
         <TextView
             style="@style/AdvertioBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="7dp"
             android:text="@string/checklist_note" />
-        <TextView
-            android:id="@+id/checklistProgress"
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:padding="14dp"
-            android:background="@drawable/airport_card"
-            android:textColor="@color/teal"
-            android:textSize="16sp"
-            android:accessibilityLiveRegion="polite" />
+            android:layout_marginTop="24dp"
+            android:background="@drawable/checklist_surface"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/checklist_summary"
+                android:textColor="@color/slate"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/checklistPercent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/teal"
+                    android:textSize="37sp"
+                    android:fontFamily="sans-serif-medium"
+                    android:importantForAccessibility="no" />
+
+                <TextView
+                    android:id="@+id/checklistProgress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:textColor="@color/navy"
+                    android:textSize="13sp"
+                    android:accessibilityLiveRegion="polite" />
+            </LinearLayout>
+
+            <ProgressBar
+                android:id="@+id/checklistProgressBar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="11dp"
+                android:layout_marginTop="16dp"
+                android:max="100"
+                android:progress="0"
+                android:indeterminate="false"
+                android:progressTint="@color/teal"
+                android:progressBackgroundTint="@color/surface_variant" />
+
+            <TextView
+                android:id="@+id/checklistRemaining"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/slate"
+                android:textSize="12sp"
+                android:accessibilityLiveRegion="polite" />
+        </LinearLayout>
+
+        <TextView
+            style="@style/ChecklistSectionHeading"
+            android:text="@string/checklist_category_documents" />
+        <TextView
+            style="@style/ChecklistSectionHint"
+            android:text="@string/checklist_category_documents_detail" />
+
         <CheckBox android:id="@+id/checkPassport"
             style="@style/ChecklistItem" android:text="@string/check_passport" />
         <CheckBox android:id="@+id/checkVisa"
             style="@style/ChecklistItem" android:text="@string/check_visa" />
         <CheckBox android:id="@+id/checkTickets"
             style="@style/ChecklistItem" android:text="@string/check_tickets" />
+        <CheckBox android:id="@+id/checkBoarding"
+            style="@style/ChecklistItem" android:text="@string/check_boarding" />
+        <CheckBox android:id="@+id/checkStay"
+            style="@style/ChecklistItem" android:text="@string/check_stay" />
+
+        <TextView
+            style="@style/ChecklistSectionHeading"
+            android:text="@string/checklist_category_health" />
+        <TextView
+            style="@style/ChecklistSectionHint"
+            android:text="@string/checklist_category_health_detail" />
+
         <CheckBox android:id="@+id/checkInsurance"
             style="@style/ChecklistItem" android:text="@string/check_insurance" />
-        <CheckBox android:id="@+id/checkMoney"
-            style="@style/ChecklistItem" android:text="@string/check_money" />
         <CheckBox android:id="@+id/checkEssentials"
             style="@style/ChecklistItem" android:text="@string/check_essentials" />
+        <CheckBox android:id="@+id/checkEmergency"
+            style="@style/ChecklistItem" android:text="@string/check_emergency" />
+
+        <TextView
+            style="@style/ChecklistSectionHeading"
+            android:text="@string/checklist_category_essentials" />
+        <TextView
+            style="@style/ChecklistSectionHint"
+            android:text="@string/checklist_category_essentials_detail" />
+
+        <CheckBox android:id="@+id/checkMoney"
+            style="@style/ChecklistItem" android:text="@string/check_money" />
+        <CheckBox android:id="@+id/checkConnectivity"
+            style="@style/ChecklistItem" android:text="@string/check_connectivity" />
+        <CheckBox android:id="@+id/checkLuggage"
+            style="@style/ChecklistItem" android:text="@string/check_luggage" />
+        <CheckBox android:id="@+id/checkTransfers"
+            style="@style/ChecklistItem" android:text="@string/check_transfers" />
+
         <Button
             android:id="@+id/resetChecklist"
-            style="@style/ServiceButton"
-            android:layout_marginTop="18dp"
+            style="@style/ChecklistResetButton"
             android:text="@string/checklist_reset" />
     </LinearLayout>
 </ScrollView>

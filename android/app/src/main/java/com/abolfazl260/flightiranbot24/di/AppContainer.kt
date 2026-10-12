@@ -16,9 +16,9 @@ import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
 
 /**
  * Explicit composition root, keeping dependency creation out of Composables.
- * Offline services are lazy and don't interrupt the existing Java Activities.
- * The versioned API has not been implemented: no client is constructed or
- * invoked until a verified URL is provided by AND-004 and API-001.
+ * Local services are lazy and preserve existing Java Activities.
+ * The versioned public ticket API is configured with a deployed HTTPS origin
+ * at build time; no credentials are embedded in the Android application.
  */
 internal class AppContainer(
     context: Context,

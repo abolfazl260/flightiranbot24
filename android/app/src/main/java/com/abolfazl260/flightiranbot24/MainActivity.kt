@@ -8,9 +8,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -22,14 +21,16 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -44,20 +45,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.domain.HomeDestination
+import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelNavigationItem
 import com.abolfazl260.flightiranbot24.presentation.home.HomeUiState
 import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
-import com.abolfazl260.flightiranbot24.presentation.components.TravelServiceCard
-import com.abolfazl260.flightiranbot24.presentation.components.TravelNavigationItem
-import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingState
-import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
-import com.abolfazl260.flightiranbot24.presentation.components.TravelSectionHeading
 
-/** Persian RTL travel launcher. Ticket prices open natively; other services may hand off. */
+/** Persian-only RTL launcher with calm, minimal Material 3 surfaces and real navigation. */
 class MainActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(PersianContext.wrap(newBase))
@@ -113,11 +113,13 @@ internal fun TravelHomeScreen(
     onRetry: () -> Unit,
 ) {
     var showServices by rememberSaveable { mutableStateOf(false) }
-
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            NavigationBar {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface,
+                tonalElevation = 0.dp,
+            ) {
                 TravelNavigationItem(
                     selected = !showServices,
                     onClick = { showServices = false },
@@ -127,7 +129,7 @@ internal fun TravelHomeScreen(
                 TravelNavigationItem(
                     selected = false,
                     onClick = { onSelect(HomeDestination.TICKET_PRICES) },
-                    symbol = "↕",
+                    symbol = "↗",
                     label = stringResource(R.string.navigation_prices),
                 )
                 TravelNavigationItem(
@@ -139,129 +141,347 @@ internal fun TravelHomeScreen(
                 TravelNavigationItem(
                     selected = false,
                     onClick = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
-                    symbol = "✓",
+                    symbol = "☑",
                     label = stringResource(R.string.navigation_checklist),
                 )
                 TravelNavigationItem(
                     selected = showServices,
                     onClick = { showServices = true },
-                    symbol = "☰",
+                    symbol = "☷",
                     label = stringResource(R.string.navigation_services),
                 )
             }
         },
-    ) { screenPadding ->
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(screenPadding)
+                .padding(padding)
                 .windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.safeDrawing)
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+                .padding(horizontal = 20.dp, vertical = 18.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
-            ) {
-                Column(
-                    modifier = Modifier.padding(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                ) {
-                    Text(
-                        text = stringResource(R.string.welcome_title),
-                        style = MaterialTheme.typography.headlineSmall,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
+            HomeBrandBar()
+            if (!showServices) {
+                HomeHero(onTickets = { onSelect(HomeDestination.TICKET_PRICES) })
+                when (state) {
+                    HomeUiState.Loading -> TravelLoadingState()
+                    HomeUiState.Error -> TravelErrorState(
+                        message = stringResource(R.string.home_load_error),
+                        onRetry = onRetry,
                     )
-                    Text(
-                        text = stringResource(R.string.welcome_description),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White,
-                    )
-                }
-            }
-            when (state) {
-                HomeUiState.Loading -> TravelLoadingState()
-                HomeUiState.Error -> TravelErrorState(
-                    message = stringResource(R.string.home_load_error),
-                    onRetry = onRetry,
-                )
-                is HomeUiState.Ready -> {
-                    if (!showServices) {
-                        ShortcutSection(
-                            title = stringResource(R.string.home_offline_heading),
-                            description = stringResource(R.string.home_offline_hint),
-                            destinations = state.sections.offline,
-                            onSelect = onSelect,
-                        )
-                        ShortcutSection(
-                            title = stringResource(R.string.home_quick_services),
-                            description = stringResource(R.string.online_service_hint),
-                            destinations = state.sections.online.filter {
-                                it in listOf(
-                                    HomeDestination.TICKET_PRICES,
-                                    HomeDestination.TELEGRAM_VISA,
-                                    HomeDestination.TELEGRAM_USEFUL,
-                                    HomeDestination.SUPPORT,
-                                )
-                            },
-                            onSelect = onSelect,
-                        )
-                    } else {
-                        ShortcutSection(
-                            title = stringResource(R.string.home_online_heading),
-                            description = stringResource(R.string.online_service_hint),
-                            destinations = state.sections.online,
-                            onSelect = onSelect,
-                        )
+                    is HomeUiState.Ready -> {
+                        HomeFeatureGrid(onSelect)
+                        HomeTicketHighlight(onClick = { onSelect(HomeDestination.TICKET_PRICES) })
+                        HomeQuickServices(onSelect)
                     }
                 }
+            } else {
+                Text(
+                    stringResource(R.string.home_online_heading),
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    stringResource(R.string.home_services_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                when (state) {
+                    HomeUiState.Loading -> TravelLoadingState()
+                    HomeUiState.Error -> TravelErrorState(
+                        message = stringResource(R.string.home_load_error),
+                        onRetry = onRetry,
+                    )
+                    is HomeUiState.Ready ->
+                        state.sections.online.forEach { destination ->
+                            HomeServiceRow(destination, onClick = { onSelect(destination) })
+                        }
+                }
             }
-
             Text(
-                text = stringResource(R.string.notice),
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                stringResource(R.string.notice),
                 style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
             )
         }
     }
 }
 
 @Composable
-private fun ShortcutSection(
-    title: String,
-    description: String,
-    destinations: List<HomeDestination>,
-    onSelect: (HomeDestination) -> Unit,
-) {
-    if (destinations.isEmpty()) return
-    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-        TravelSectionHeading(title = title, description = description)
-        destinations.forEach { destination ->
-            TravelServiceCard(
-                title = stringResource(destination.labelResource()),
-                subtitle = stringResource(
-                    if (destination.isInApp()) R.string.home_local_badge
-                    else R.string.home_external_badge
-                ),
-                symbol = destination.symbol(),
-                onClick = { onSelect(destination) },
+private fun HomeBrandBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Surface(
+            shape = RoundedCornerShape(15.dp),
+            color = MaterialTheme.colorScheme.secondary,
+        ) {
+            Text(
+                "✈",
+                color = Color.White,
+                style = MaterialTheme.typography.titleLarge,
+                modifier = Modifier.padding(horizontal = 13.dp, vertical = 8.dp),
+            )
+        }
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                "ADVERTIO",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.ExtraBold,
+                letterSpacing = 1.6.sp,
+            )
+            Text(
+                "دستیار هوشمند سفر",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelSmall,
+            )
+        }
+        Surface(
+            shape = RoundedCornerShape(50),
+            color = MaterialTheme.colorScheme.primaryContainer,
+        ) {
+            Text(
+                "همراه سفر شما",
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.labelSmall,
+                modifier = Modifier.padding(horizontal = 12.dp, vertical = 9.dp),
             )
         }
     }
 }
 
-private fun HomeDestination.isInApp(): Boolean =
-    this == HomeDestination.OFFLINE_AIRPORTS || this == HomeDestination.OFFLINE_CHECKLIST ||
-        this == HomeDestination.TICKET_PRICES
+@Composable
+private fun HomeHero(onTickets: () -> Unit) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(26.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondary),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 23.dp, vertical = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+        ) {
+            Text(
+                stringResource(R.string.hero_eyebrow),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                style = MaterialTheme.typography.labelSmall,
+                letterSpacing = 0.4.sp,
+            )
+            Text(
+                stringResource(R.string.welcome_title),
+                color = Color.White,
+                style = MaterialTheme.typography.headlineSmall,
+                fontWeight = FontWeight.Bold,
+            )
+            Text(
+                stringResource(R.string.welcome_description),
+                color = Color.White.copy(alpha = 0.8f),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Spacer(Modifier.height(1.dp))
+            Button(
+                onClick = onTickets,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = MaterialTheme.colorScheme.secondary,
+                ),
+                contentPadding = PaddingValues(horizontal = 17.dp, vertical = 12.dp),
+            ) {
+                Text(stringResource(R.string.hero_action), fontWeight = FontWeight.Bold)
+                Text("  ←", fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeFeatureGrid(onSelect: (HomeDestination) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        HomeSectionHeading(
+            stringResource(R.string.home_offline_heading),
+            stringResource(R.string.home_tools_hint),
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            HomeFeatureCard(
+                title = stringResource(R.string.checklist_title),
+                subtitle = "۱۲ گام برای آمادگی",
+                symbol = "☑",
+                modifier = Modifier.weight(1f),
+                onClick = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
+            )
+            HomeFeatureCard(
+                title = stringResource(R.string.offline_airports),
+                subtitle = "جست‌وجوی فرودگاه‌ها",
+                symbol = "✈",
+                modifier = Modifier.weight(1f),
+                onClick = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
+            )
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            HomeFeatureCard(
+                title = stringResource(R.string.open_visa),
+                subtitle = "مدارک و شرایط ورود",
+                symbol = "▣",
+                modifier = Modifier.weight(1f),
+                onClick = { onSelect(HomeDestination.TELEGRAM_VISA) },
+            )
+            HomeFeatureCard(
+                title = stringResource(R.string.open_useful),
+                subtitle = "نکته‌های کاربردی سفر",
+                symbol = "✧",
+                modifier = Modifier.weight(1f),
+                onClick = { onSelect(HomeDestination.TELEGRAM_USEFUL) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeFeatureCard(
+    title: String,
+    subtitle: String,
+    symbol: String,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Card(
+        onClick = onClick,
+        modifier = modifier,
+        shape = RoundedCornerShape(19.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+    ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(17.dp),
+            verticalArrangement = Arrangement.spacedBy(7.dp),
+        ) {
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+            ) {
+                Text(
+                    symbol,
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 11.dp, vertical = 5.dp),
+                )
+            }
+            Spacer(Modifier.height(3.dp))
+            Text(title, fontWeight = FontWeight.Bold, style = MaterialTheme.typography.titleSmall)
+            Text(
+                subtitle,
+                style = MaterialTheme.typography.labelSmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeTicketHighlight(onClick: () -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(11.dp)) {
+        HomeSectionHeading(
+            stringResource(R.string.home_fares_tile_title),
+            stringResource(R.string.home_fares_tile_hint),
+        )
+        Card(
+            onClick = onClick,
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(19.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(19.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(14.dp),
+            ) {
+                Text(
+                    "↗",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        stringResource(R.string.ticket_prices_title),
+                        fontWeight = FontWeight.Bold,
+                        style = MaterialTheme.typography.titleMedium,
+                    )
+                    Text(
+                        stringResource(R.string.home_fares_tile_hint),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
+                Text("←", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+private fun HomeQuickServices(onSelect: (HomeDestination) -> Unit) {
+    Column(verticalArrangement = Arrangement.spacedBy(11.dp)) {
+        HomeSectionHeading(
+            stringResource(R.string.home_quick_services),
+            stringResource(R.string.home_services_hint),
+        )
+        HomeServiceRow(HomeDestination.SUPPORT) { onSelect(HomeDestination.SUPPORT) }
+        HomeServiceRow(HomeDestination.TELEGRAM_BOT) { onSelect(HomeDestination.TELEGRAM_BOT) }
+    }
+}
+
+@Composable
+private fun HomeServiceRow(destination: HomeDestination, onClick: () -> Unit) {
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 15.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Text(
+                destination.symbol(),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+            Text(
+                stringResource(destination.labelResource()),
+                modifier = Modifier.weight(1f),
+                fontWeight = FontWeight.Medium,
+                style = MaterialTheme.typography.bodyMedium,
+            )
+            Text("‹", color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
+}
+
+@Composable
+private fun HomeSectionHeading(title: String, subtitle: String) {
+    Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+        Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+        Text(
+            subtitle,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
+    }
+}
 
 private fun HomeDestination.symbol(): String = when (this) {
     HomeDestination.OFFLINE_AIRPORTS -> "✈"
     HomeDestination.OFFLINE_CHECKLIST -> "☑"
-    HomeDestination.TICKET_PRICES -> "↕"
+    HomeDestination.TICKET_PRICES -> "↗"
     HomeDestination.TELEGRAM_BOT -> "✦"
     HomeDestination.TELEGRAM_VISA -> "▣"
     HomeDestination.TELEGRAM_AIRPORTS -> "⌖"

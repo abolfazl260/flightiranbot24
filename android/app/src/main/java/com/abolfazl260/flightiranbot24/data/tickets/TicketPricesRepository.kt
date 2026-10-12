@@ -3,9 +3,9 @@ package com.abolfazl260.flightiranbot24.data.tickets
 import com.abolfazl260.flightiranbot24.domain.network.NetworkResult
 import com.abolfazl260.flightiranbot24.domain.network.PublicJsonRepository
 import com.google.gson.JsonObject
-import java.time.OffsetDateTime
-import java.time.Instant
 import java.time.Duration
+import java.time.Instant
+import java.time.OffsetDateTime
 
 internal data class TicketFare(
     val destination: String,
@@ -64,7 +64,8 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
                     val price = item.get("price_toman")?.asLong
                         ?.takeIf { it > 0L } ?: return@runCatching null
                     val average = item.get("average_price_toman")
-                        ?.takeUnless { it.isJsonNull }?.asLong?.takeIf { it > 0L }
+                        ?.takeUnless { it.isJsonNull }?.asDouble
+                        ?.takeIf { it.isFinite() && it > 0.0 }?.toLong()?.takeIf { it > 0L }
                     val movement = item.get("change_percent")
                         ?.takeUnless { it.isJsonNull }?.asDouble?.takeIf { it.isFinite() }
                     TicketFare(name, price, average, if (average == null) null else movement)

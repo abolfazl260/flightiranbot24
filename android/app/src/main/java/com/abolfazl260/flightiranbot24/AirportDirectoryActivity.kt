@@ -47,7 +47,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONArray
 
-/** Offline-first airport list: prefer a valid local Room snapshot, otherwise packaged data. */
+/** Airport directory: prefer a valid local Room snapshot, otherwise packaged data. */
 class AirportDirectoryActivity : ComponentActivity() {
     private val container by lazy { AppContainer(applicationContext) }
 
@@ -83,7 +83,7 @@ class AirportDirectoryActivity : ComponentActivity() {
     }
 
     private suspend fun loadOfflineCatalog(): Pair<List<AirportRow>, String> {
-        // If Room cannot be opened, the packaged list remains usable offline.
+        // If Room cannot be opened, the bundled airport list remains usable.
         val cached = try {
             container.airportCacheRepository.all()
         } catch (_: Exception) {
@@ -92,7 +92,7 @@ class AirportDirectoryActivity : ComponentActivity() {
         if (cached.isNotEmpty()) {
             return cached.map { airport ->
                 AirportRow(airport.iata, airport.name, airport.country, airport.timezone)
-            } to "ذخیره آفلاین دستگاه"
+            } to "اطلاعات ذخیره‌شده دستگاه"
         }
         val source = assets.open("airports.json").bufferedReader(Charsets.UTF_8).use {
             it.readText()
@@ -158,7 +158,7 @@ internal fun AirportDirectoryScreen(
     ) {
         TravelToolbar(title = "فرودگاه‌ها", onBack = onBack)
         Text(
-            "جست‌وجوی آفلاین با نام فرودگاه، شهر یا کد IATA",
+            "جست‌وجو براساس نام فرودگاه، شهر یا کد IATA",
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             style = MaterialTheme.typography.bodyMedium,
         )

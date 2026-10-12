@@ -15,6 +15,10 @@ class EnvironmentSettingsTest {
         assertEquals("com.abolfazl260.flightiranbot24.debug", BuildConfig.APPLICATION_ID)
         val environment = EnvironmentSettings.fromBuild()
         assertEquals(BuildConfig.API_BASE_URL, environment.apiOrigin)
+        assertTrue(BuildConfig.API_BASE_URL.startsWith("https://"))
+        assertTrue(BuildConfig.API_BASE_URL.endsWith("/"))
+        assertTrue(environment.isConfigured)
+        assertNotNull(environment.publicApi())
     }
 
     @Test
