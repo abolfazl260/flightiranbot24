@@ -147,6 +147,9 @@ def test_d1_incremental_migration_preserves_existing_public_data():
         assert connection.execute(
             "SELECT count(*) FROM ticket_price_snapshots"
         ).fetchone()[0] == 1
-        assert connection.execute("SELECT name FROM airports WHERE code='IKA'").fetchone()[0] == "امام خمینی"
+        assert (
+            connection.execute("SELECT name FROM airports WHERE code='IKA'").fetchone()[0]
+            == "امام خمینی"
+        )
     finally:
         connection.close()
