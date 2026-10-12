@@ -3,7 +3,7 @@
 ## Implemented
 
 Kotlin/Jetpack Compose Android app with preserved native Java offline screens, minimum SDK 24, target SDK 36, JDK 17, Gradle 8.13.
-Offline airport directory and offline travel checklist are included.
+The built-in airport directory and the 12-step travel checklist are included.
 Ticket fares display natively through the database-backed HTTPS API; only
 separate services such as support may intentionally hand off to Telegram.
 No bot token is embedded in the APK.
@@ -27,12 +27,15 @@ Tags matching vX.Y.Z can build a signed release APK/AAB and publish checksums.
    It sets GitHub Actions secrets ANDROID_KEYSTORE_BASE64,
    ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS, ANDROID_KEY_PASSWORD,
    without storing them in version control. Do not paste keys in chat.
-5. Configure the GitHub **Actions repository variable** `ANDROID_PRODUCTION_API_ORIGIN`
-   (Settings → Secrets and variables → Actions → Variables) with the real,
-   publicly accessible HTTPS API origin. Deploy `flightiran-web` behind HTTPS,
-   sharing the SQLite database volume with `bot`, then check that
-   `GET /api/v1/tickets/prices` returns nonempty, non-stale price data.
-   The origin is public, not a bot token or password.
+5. Android Debug and signed Release APKs default to the already-deployed
+   credential-free HTTPS origin:
+   `https://flightiran-public-api.abolfazl260.workers.dev/`.
+   **No Actions variable is required** for the default endpoint. To override,
+   set `ANDROID_PRODUCTION_API_ORIGIN` in
+   GitHub Settings → Secrets and variables → Actions → Variables.
+   Release CI verifies real, fresh, nonempty `GET /api/v1/tickets/prices`
+   before signing. The endpoint is public and must NEVER contain a bot token.
+   Run the Cloudflare Publisher on Ubuntu to populate the D1 feed.
 6. Restrict GitHub v* tag creation to trusted maintainers via repository
    rulesets. Confirm job-scoped Actions contents:write can publish Releases.
 7. Enroll with Google Play Console and Play App Signing if Play publication
@@ -87,11 +90,15 @@ Releases: https://github.com/abolfazl260/flightiranbot24/releases
 
 ## Single application configuration
 
-The only first-party backend setting is `ANDROID_PRODUCTION_API_ORIGIN`,
-or the Gradle property `apiOrigin`. It must be a bare HTTPS origin ending
-in `/`, without username/password/query/path. Release CI validates that
-the deployed `GET /api/v1/tickets/prices` endpoint serves fresh saved fares
-before allowing signed publication.
+The public API has a **known HTTPS default** in `app/build.gradle`,
+so Debug APKs no longer report an unconfigured server. If a different
+origin is intentionally deployed, override it with
+`ANDROID_PRODUCTION_API_ORIGIN` or Gradle property `apiOrigin`.
+Overrides must be bare HTTPS origins ending in `/`, without
+username/password/query/path. Release CI validates that
+`GET /api/v1/tickets/prices` serves fresh saved fares before signing.
+If the Worker has no published ticket snapshots, the UI shows a real
+retrieval error rather than fabricated prices.
 
 ```bash
 gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug \
