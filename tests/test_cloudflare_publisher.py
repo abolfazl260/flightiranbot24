@@ -311,3 +311,26 @@ def test_new_d1_visa_passport_migration_is_additive_and_idempotent():
             )
     finally:
         connection.close()
+
+
+@pytest.mark.asyncio
+async def test_legacy_visa_daily_counter_does_not_limit_compact_documents(tmp_path: Path):
+    """Preserve ticket/airport fingerprints but migrate old 60-destination counter."""
+    async with httpx.AsyncClient() as client:
+        checkpoint = tmp_path / "old-budget.json"
+        original = PublicPublisher(
+            None, "https://public.example/", "S" * 40, checkpoint, client
+        )
+        checkpoint.write_text(json.dumps({
+            "scope": original.scope,
+            "fingerprints": {"tickets": "keep-price", "airports": "keep-airports"},
+            "visa_budget_day": original.visa_budget_day,
+            "visa_published_today": 60,
+        }))
+        fresh = PublicPublisher(
+            None, "https://public.example/", "S" * 40, checkpoint, client
+        )
+        assert fresh.state["tickets"] == "keep-price"
+        assert fresh.state["airports"] == "keep-airports"
+        assert fresh.visa_published_today == 0
+        assert fresh.max_visa_destinations_per_day == 220
