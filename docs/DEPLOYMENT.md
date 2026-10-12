@@ -8,6 +8,10 @@
 
 ## Web App
 
+The production-ready Persian Telegram Mini App is documented in
+[TELEGRAM_MINI_APP.md](TELEGRAM_MINI_APP.md). It uses the existing FastAPI web
+service and shared SQLite volume, with user-scoped Telegram initData authentication.
+
 Set `WEB_APP_ENABLED=true` and `WEB_APP_URL=https://your-domain.example` only after the
 domain points to this server and HTTPS is configured. Install `deploy/flightiran-web.service`
 alongside the bot service, then proxy the domain to `127.0.0.1:8000` with nginx or another TLS
