@@ -121,7 +121,9 @@ class PublicPublisher:
         self.token = token
         self.client = client
         self.checkpoint = checkpoint
-        self.scope = hashlib.sha256(self.origin.encode()).hexdigest()[:16]
+        # Version the checkpoint scope across backends. Pre-D1 (R2) uploads
+        # must NOT suppress the initial ticket import when the Worker changes.
+        self.scope = hashlib.sha256(("d1-v2:" + self.origin).encode()).hexdigest()[:16]
         self.state = self._read_state()
 
     def _read_state(self) -> dict[str, str]:

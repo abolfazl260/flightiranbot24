@@ -1,7 +1,9 @@
 """The replica only uploads whitelisted public facts; failures never checkpoint."""
 from __future__ import annotations
 
+import hashlib
 import json
+import sqlite3
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -87,3 +89,67 @@ async def test_failed_import_does_not_commit_checkpoint(tmp_path: Path):
             await publisher.publish("airports", "internal/v1/airports", {"airports": []})
         assert publisher.state == {}
         assert not checkpoint.exists()
+
+
+@pytest.mark.asyncio
+async def test_migration_from_legacy_r2_checkpoint_replays_into_new_d1(tmp_path: Path):
+    """Old R2 fingerprints must not skip the first D1 publication."""
+    origin = "https://public.example/"
+    old_scope = hashlib.sha256(origin.encode()).hexdigest()[:16]
+    checkpoint = tmp_path / "sync.json"
+    checkpoint.write_text(json.dumps({
+        "scope": old_scope,
+        "fingerprints": {"tickets": "old-fingerprint", "airports": "old-fingerprint"},
+    }), encoding="utf-8")
+    seen = []
+
+    def receive(request: httpx.Request) -> httpx.Response:
+        seen.append(str(request.url))
+        return httpx.Response(200, json={"published": True})
+
+    async with httpx.AsyncClient(transport=httpx.MockTransport(receive)) as client:
+        publisher = PublicPublisher(None, origin, "S" * 40, checkpoint, client)
+        assert publisher.state == {}
+        assert await publisher.publish("tickets", "internal/v1/tickets/prices", {
+            "currency": "TOMAN", "stale": True,
+        })
+        assert len(seen) == 1
+        assert checkpoint.exists()
+        assert json.loads(checkpoint.read_text())["scope"] != old_scope
+
+
+def test_d1_incremental_migration_preserves_existing_public_data():
+    """Exercise migrations against SQLite, including guarded single-row pricing."""
+    root = Path(__file__).resolve().parent.parent / "cloudflare" / "migrations"
+    connection = sqlite3.connect(":memory:")
+    try:
+        for script in ("0001_public_data.sql", "0002_d1_ticket_prices.sql"):
+            connection.executescript((root / script).read_text(encoding="utf-8"))
+        connection.execute(
+            "INSERT INTO airports(code,name,country,timezone) VALUES (?,?,?,?)",
+            ("IKA", "امام خمینی", "IR", "Asia/Tehran"),
+        )
+        statement = (
+            "INSERT INTO ticket_price_snapshots(id,observed_epoch_ms,snapshot_json,published_at) "
+            "VALUES (1,?,?,?) ON CONFLICT(id) DO UPDATE SET "
+            "observed_epoch_ms=excluded.observed_epoch_ms, "
+            "snapshot_json=excluded.snapshot_json, "
+            "published_at=excluded.published_at "
+            "WHERE excluded.observed_epoch_ms >= ticket_price_snapshots.observed_epoch_ms"
+        )
+        fresh = '{"routes":[{"origin":"تهران"}]}'
+        older = '{"routes":[{"origin":"قدیمی"}]}'
+        assert connection.execute(statement, (200, fresh, "2026-10-12")).rowcount == 1
+        assert connection.execute(statement, (100, older, "2026-10-11")).rowcount == 0
+        assert connection.execute(
+            "SELECT observed_epoch_ms,snapshot_json FROM ticket_price_snapshots WHERE id=1"
+        ).fetchone() == (200, fresh)
+        assert connection.execute(
+            "SELECT count(*) FROM ticket_price_snapshots"
+        ).fetchone()[0] == 1
+        assert (
+            connection.execute("SELECT name FROM airports WHERE code='IKA'").fetchone()[0]
+            == "امام خمینی"
+        )
+    finally:
+        connection.close()

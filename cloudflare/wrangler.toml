@@ -3,11 +3,8 @@ main = "src/worker.mjs"
 compatibility_date = "2026-10-01"
 workers_dev = true
 
-# Create the resources before deploying. Replace DATABASE_ID with the real D1 ID.
-[[r2_buckets]]
-binding = "PUBLIC_SNAPSHOTS"
-bucket_name = "flightiran-public-snapshots"
-
+# Uses D1 only. Replace the placeholder with your existing D1 database ID.
+# No R2 resource, billing enrollment or object-store binding is required.
 [[d1_databases]]
 binding = "PUBLIC_DB"
 database_name = "flightiran-public-data"
