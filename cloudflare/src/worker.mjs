@@ -1,3 +1,5 @@
+import { miniRoute } from "./mini.mjs";
+
 // Public, read-only Android API. The only writes are protected, fixed-shape imports.
 // D1 stores one current ticket snapshot and whitelisted visa/airport projections.
 const MAX_BYTES = 1_500_000;
@@ -101,6 +103,8 @@ function validatedVisa(data, destination) {
 }
 export async function handleRequest(request, env) {
   const url = new URL(request.url), path = url.pathname;
+  const mini = await miniRoute(request, env, authorized);
+  if (mini) return mini;
   if (request.method === "GET" && path === "/healthz") return good({ status: "ok" }, 0);
   if (request.method === "GET" && path === "/api/v1/tickets/prices") {
     if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");

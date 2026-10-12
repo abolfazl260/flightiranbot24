@@ -24,3 +24,4 @@ jobs:
           node-version: "22"
       - run: node --test cloudflare/test/*.test.mjs
       - run: node --check src/flightiran/webapp/static/mini.js
+      - run: node --check cloudflare/src/mini.mjs

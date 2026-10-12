@@ -1,168 +1,260 @@
-# FlightIranBot24 — Telegram Mini App (Persian, RTL)
+# FlightIranBot24 Telegram Mini App — Cloudflare workers.dev (no custom domain)
 
-The Telegram Mini App is served by the **existing** FastAPI `web` Docker
-service over a public HTTPS domain with TLS termination at the existing
-reverse proxy. It shares the bot's **same persistent SQLite Docker volume**;
-it does **not** connect directly to SQLite from JavaScript or expose private
-SQL tables to browsers. No additional database or Cloudflare R2 is necessary.
+## What is deployed
 
-## Implemented screens
+The Persian-only RTL Telegram Mini App runs on **the same free Cloudflare
+Worker** already serving the Android read-only API.
 
-- **Home:** Persian greeting, compact last-recorded ticket fare preview, service shortcuts.
-- **Tickets:** current recorded fare list, origin selection, destination search,
-  comparison change indicator, timestamp and explicit stale warning. The booking
-  button opens `@Advertio_support`; the price is not a guaranteed booking.
-- **Visa:** defaults to **Iranian passport (IR)** for new visitors, with a
-  synchronized stored passport preference and searchable destinations sourced
-  from the indexed visa dataset, source links, verification date, and visa alerts.
-- **Alerts:** create percentage-based ticket alerts, follow visa rule
-  changes, pause/resume/delete **your own** alerts using the same bot services.
-  Notifications are delivered through the existing Telegram bot scheduler.
-- **Useful information:** curated categorized links shared with Telegram;
-  international cargo channel at `https://t.me/advertio_cargo`.
-- **Airports:** explicitly “به‌زودی”, consistent with the Telegram bot.
+**Mini App URL:**
 
-The interface is **Persian-only, right-to-left**, responsive, adapts to
-Telegram theme colors, and uses Telegram BackButton/HapticFeedback where
-supported. No external UI framework, no front-end API secrets, and no raw
-user HTML injection.
+```text
+https://flightiran-public-api.abolfazl260.workers.dev/mini/
+```
 
-## Configure the existing Ubuntu server
+- **No** custom domain, DNS edits, certbot, nginx, Cloudflare Tunnel, R2
+  subscription or payment card is needed.
+- Existing `https://advertio.ir` stays on its current unrelated service.
+- The Worker serves the existing `index.html`, `mini.css` and `mini.js`
+  as first-party static assets. The existing Android endpoints
+  `/api/v1/tickets/prices` and `/api/v1/visa/*` still read D1 unchanged.
+- Public visa listings and actual recorded ticket prices read the existing
+  **D1 public projection**; no synthetic prices or raw source JSON links.
+- For user-specific actions (passport settings, alerts, links, home profile)
+  the Worker validates Telegram-signed `initData` using a **Worker secret**,
+  queues a minimal request in a **private, short-lived D1 table**, and returns
+  a job handle. A new `cloudflare-mini-bridge` Docker container on Ubuntu
+  polls Worker **outbound using HTTPS 443**, then executes the request via the
+  *existing authenticated FastAPI domain service in memory* against the
+  existing authoritative SQLite database. The result is delivered only to
+  the same validated Telegram user via job polling.
 
-1. Point an HTTPS-enabled domain or subdomain to the **existing** FastAPI web
-   service (Docker published port 8000). Prefer a dedicated subdomain such as
-   `app.YOUR-DOMAIN` to avoid conflicting with an existing website. The
-   Mini App is available at `https://YOUR-HTTPS-HOST/mini/`; static assets
-   under `/assets/`, JSON endpoints under `/api/`. The TLS certificate
-   must be valid, and the URL reachable from the public Internet, not just
-   localhost or `http://YOUR-DOMAIN:8086/`. Cloudflare Worker HTTPS for
-   public Android prices does **not** automatically serve this Mini App.
-2. Keep the current nginx / Caddy TLS configuration. Reverse-proxy all
-   relevant paths to `http://127.0.0.1:8000` (or the Docker web service)
-   **without path stripping**. Example nginx **inside an existing HTTPS
-   server block**, not an additional competing virtual host:
+**Architecture**
 
-   ```nginx
-   location /mini/ {
-       proxy_pass http://127.0.0.1:8000;
-       proxy_set_header Host $host;
-       proxy_set_header X-Forwarded-Proto $scheme;
-       proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-   }
-   location /assets/ {
-       proxy_pass http://127.0.0.1:8000;
-   }
-   location /api/ {
-       proxy_pass http://127.0.0.1:8000;
-   }
-   ```
+```text
+Telegram webview
+       |
+       | HTTPS (public Cloudflare domain, no new DNS)
+       v
+flightiran-public-api.<account>.workers.dev
+  |-- /mini/ + /assets/*   Worker static HTML/CSS/JS
+  |-- /api/v1/*            existing public D1 prices/visa/airports (Android)
+  |-- /api/mini/visa*      HMAC-authenticated D1 visa read
+  |-- /api/mini/*          HMAC-authenticated private job queue (D1)
+       ^
+       | outbound-only polling every 5 seconds (PUBLISH_TOKEN)
+       |
+Ubuntu: cloudflare-mini-bridge -> existing FastAPI Mini APIs -> SQLite
+Ubuntu: bot                    -> Telegram notifications
+Ubuntu: cloudflare-publisher   -> existing D1 public data
+```
 
-   If the HTTPS host is **dedicated** to the Mini App, an all-paths
-   `location /` reverse proxy is simpler. Adjust `proxy_pass` address
-   to your deployment and restrict external port 8000 with firewall/TLS
-   proxy rules. Do not overwrite an existing website's unrelated `/api/`
-   routes without auditing them.
+No browser or Worker endpoint has direct access to the original SQLite
+database, bot admin reports, private tokens or user's other subscriptions.
 
-3. In the **server-side** `.env`, set:
+## 1. Update the Ubuntu checkout
 
-   ```dotenv
-   WEB_APP_ENABLED=true
-   WEB_APP_URL=https://YOUR-HTTPS-HOST/mini/
-   TELEGRAM_BOT_USERNAME=Flightiranbot
-   SUPPORT_USERNAME=@Advertio_support
-   ```
+SSH into the existing server:
 
-   The `WEB_APP_URL` must be public HTTPS. Both bot and web use the same
-   `TELEGRAM_BOT_TOKEN` and `DATABASE_URL` from existing settings.
-   **No new Telegram secret** is required. Never put the bot token,
-   Cloudflare publishing secret or SQLite DB file in web assets.
+```sh
+cd /opt/Flightiran/flightiranbot24
+git status --short
+```
 
-4. Deploy using your existing Docker Compose setup:
+If you previously edited `cloudflare/wrangler.toml` locally to set the D1
+ID, preserve it before pulling the tracked file:
 
-   ```sh
-   cd /opt/Flightiran/flightiranbot24
-   git pull --ff-only origin main
-   docker compose --profile cloudflare up -d --build
-   docker compose --profile cloudflare ps
-   docker compose logs --tail=60 web bot
-   ```
+```sh
+git stash push -m "local Cloudflare D1 ID" -- cloudflare/wrangler.toml
+git pull --ff-only origin main
+```
 
-   The `cloudflare` profile is only necessary if you already use
-   `cloudflare-publisher`; otherwise `docker compose up -d --build`
-   is sufficient.
+Then restore the **same previously created** D1 database ID in the new
+`cloudflare/wrangler.toml`. Do **not** run `wrangler d1 create`.
+Keep `binding = "PUBLIC_DB"`; do not use the CLI-generated lowercase binding.
 
-5. Verify:
+```sh
+sed -i 's/REPLACE_WITH_CLOUDFLARE_D1_DATABASE_ID/84874cc1-8283-40fc-aa71-2a3697abeec8/' cloudflare/wrangler.toml
+```
 
-   ```sh
-   curl -i https://YOUR-HTTPS-HOST/mini/
-   curl -i https://YOUR-HTTPS-HOST/assets/mini.js
-   # With no Telegram session this protected API must respond HTTP 401:
-   curl -i https://YOUR-HTTPS-HOST/api/mini/bootstrap
-   ```
+This ID is the existing database created earlier for this project; no
+additional Cloudflare database is provisioned. If the local file already has
+the correct ID, this command does nothing.
 
-   Opening `/mini/` directly in an ordinary browser displays a
-   **Telegram sign-in required** notice. This is expected. Real data
-   and subscription actions require a valid Telegram signed `initData`
-   payload, which the official Telegram webview supplies.
+## 2. Deploy migration 0003 and the Worker static assets
 
-## Telegram integration
+Wrangler must use the Cloudflare **management** API token in your current
+SSH shell. It is NOT the app publisher token.
 
-- Send `/start` to `@Flightiranbot` to refresh the inline keyboard.
-  When `WEB_APP_ENABLED=true` and `WEB_APP_URL` is valid HTTPS, a
-  **🚀 ورود به مینی‌اپ سفر** button appears in the bot main menu.
-- Optional persistent Mini App entry: in `@BotFather`, choose
-  `/setmenubutton`, select the bot and enter the same HTTPS Mini App URL
-  as the menu-button Web App. You must configure this manually in the owner
-  account; merging code does not change BotFather configuration.
-- Telegram `/start alerts` is a safe deep link to the existing bot alert
-  manager, useful when a user prefers Telegram messages.
+```sh
+cd /opt/Flightiran/flightiranbot24/cloudflare
+read -rsp "Cloudflare API Token: " CLOUDFLARE_API_TOKEN
+echo
+export CLOUDFLARE_API_TOKEN
+npx wrangler whoami
+npx wrangler d1 migrations apply flightiran-public-data --remote
+```
 
-## API and security contract
+Only one *new* migration should be pending:
 
-- Public, unpersonalized: `GET /api/v1/tickets/prices` (also used by Android).
-- **Every** `/api/mini/*` call requires valid
-  `X-Telegram-Init-Data` HMAC signed with the bot token, checked
-  **server-side**, and up to 24 hours old (future timestamps rejected).
-- The authenticated user ID comes **only** from validated Telegram
-  initData. Client supplied user IDs are ignored and other users' alert IDs
-  fail with 404. Mutations use server-side alert/visa service validation.
-- `GET /api/mini/bootstrap`: first name, country choices, stored passport,
-  bot/cargo/support URLs; **no numeric user ID, Telegram token or admin data**.
-- `POST /api/mini/passport`: save your own passport preference.
-- `GET /api/mini/visa` and `GET /api/mini/visa/rule`: bounded,
-  indexed visa facts; never raw upstream documents or private data.
-- `GET /api/mini/useful`: shared curated HTTPS links.
-- `GET /api/mini/alerts`, `POST /api/mini/alerts/prices`,
-  `PATCH|DELETE /api/mini/alerts/prices/{id}`,
-  `POST /api/mini/alerts/visa`,
-  `PATCH|DELETE /api/mini/alerts/visa/{id}`: own alert management only.
-- Mini App session responses set `Cache-Control: no-store`. Static
-  shell has a restrictive CSP; the webview loads the official
-  `https://telegram.org/js/telegram-web-app.js` integration.
-- It does **not** allow logging in through a random browser, unvalidated
-  `initDataUnsafe`, Telegram username alone, a query-string token,
-  or a shared application-wide API key.
+```text
+0003_telegram_mini_jobs.sql
+```
 
-## Operational cautions
+Confirm it with `Y`. Migrations 0001 and 0002 are already applied and
+remain intact. This new table holds transient request envelopes, **not**
+a duplicate user or alert database.
 
-- D1/Workers power the **public Android API** from the prior work.
-  This **authenticated** Mini App uses existing FastAPI + primary SQLite;
-  do not proxy these private Mini App endpoints to the public Cloudflare
-  Worker and do not expose SQLite/D1 credentials to the client.
-- The Mini App requires both existing `web` and `bot` containers:
-  the web process reads/writes the same SQLite DB; Telegram bot continues
-  to perform price captures and send notifications.
-- If the visa index is empty, sync it via Telegram `/visa_sync`
-  with administrator privileges. Ticket previews require recorded prices;
-  no synthetic fares or confirmations are generated.
-- External users cannot invoke Admin Reports via the Mini App.
-  Only the bot's existing private admin menu may access such data.
+Install two **different** Worker secrets. The first should already be
+configured from the existing public API publisher deployment:
 
-## Local tests
+```sh
+# Existing private server-to-Worker publishing secret (leave unchanged):
+# PUBLISH_TOKEN
+
+# Additional Telegram bot secret for validating authentic Mini App sessions:
+npx wrangler secret put TELEGRAM_BOT_TOKEN
+```
+
+At the interactive prompt enter the **same actual Telegram bot token**
+already configured in your server's `TELEGRAM_BOT_TOKEN` in `.env`.
+Never paste the token into GitHub, the Android app, a chat, or a public URL.
+Wrangler stores it as a Cloudflare secret; it is not a public `[vars]` value.
+
+Finally:
+
+```sh
+npx wrangler deploy
+```
+
+The deploy should list:
+
+```text
+ASSETS             Static Assets
+PUBLIC_DB          D1 Database
+```
+
+The Worker name and URL are unchanged. The upload now includes HTML, CSS and
+JavaScript static assets. `PUBLISH_TOKEN` remains a separate Worker secret.
+
+## 3. Enable the Telegram bot's Mini App menu and outbound bridge
+
+In the existing server `/opt/Flightiran/flightiranbot24/.env`:
+
+```dotenv
+WEB_APP_ENABLED=true
+WEB_APP_URL=https://flightiran-public-api.abolfazl260.workers.dev/mini/
+TELEGRAM_BOT_USERNAME=Flightiranbot
+
+# Keep your existing secret values unchanged:
+# TELEGRAM_BOT_TOKEN=...
+# CLOUDFLARE_PUBLISH_TOKEN=...
+CLOUDFLARE_PUBLIC_API_ORIGIN=https://flightiran-public-api.abolfazl260.workers.dev/
+CLOUDFLARE_SYNC_CHECKPOINT=/data/cloudflare-sync.json
+```
+
+`TELEGRAM_BOT_TOKEN` must be the same token stored in the Worker secret;
+`CLOUDFLARE_PUBLISH_TOKEN` must equal the *other* Worker
+`PUBLISH_TOKEN` secret. Never use the Cloudflare management API token as
+either of these secrets.
+
+Build/start the **existing** services plus the new outbound-only bridge:
+
+```sh
+cd /opt/Flightiran/flightiranbot24
+docker compose --profile cloudflare up -d --build
+docker compose --profile cloudflare ps
+docker compose logs --tail=100 cloudflare-mini-bridge
+```
+
+The new bridge connects to Worker every five seconds. It has **no published
+Docker port** and does not require an HTTPS certificate on Ubuntu.
+Keep `cloudflare-publisher` running for public tickets, airports and visa
+data. Both services use the existing `flightiran-data:/data` volume.
+Do not delete that volume or any stored bot database.
+
+## 4. Verify without Telegram credentials
+
+```sh
+# HTML must return HTTP 200 with Content-Type text/html
+curl -i https://flightiran-public-api.abolfazl260.workers.dev/mini/
+
+# Assets must return HTTP 200
+curl -I https://flightiran-public-api.abolfazl260.workers.dev/assets/mini.js
+curl -I https://flightiran-public-api.abolfazl260.workers.dev/assets/mini.css
+
+# Health and the unchanged Android API
+curl -i https://flightiran-public-api.abolfazl260.workers.dev/healthz
+curl -i https://flightiran-public-api.abolfazl260.workers.dev/api/v1/tickets/prices
+
+# Private API without signed Telegram initData MUST be rejected with 401
+curl -i https://flightiran-public-api.abolfazl260.workers.dev/api/mini/bootstrap
+```
+
+A normal desktop browser shows a **Telegram login required** notice at
+`/mini/` because no signed Telegram webview context is present; this is
+intentional and secure.
+
+## 5. Test through the actual Telegram bot
+
+1. Open `@Flightiranbot` privately and send `/start`.
+2. Click **🚀 ورود به مینی‌اپ سفر**. It opens the above
+   `workers.dev/mini/` address.
+3. Open ticket prices and search an existing origin/destination; do not
+   assume every fare is current or every route is bookable.
+4. Open visa requirements for Iranian passport; try searching a country
+   in **Persian**. The browser localizes ISO country codes using Intl
+   DisplayNames; actual visa facts and official source date still come from
+   the published index.
+5. Create one price alert from a real, **fresh** ticket route and subscribe to
+   a verified visa rule. Open **هشدارهای من** and verify each subscription;
+   pause, resume and remove your own entries.
+6. Inspect `docker compose logs --tail=100 cloudflare-mini-bridge` to
+   confirm real job completions. The existing Telegram bot continues to
+   deliver alerts on the scheduled capture/change notifications.
+
+**Optional persistent launch icon:** use `@BotFather` `/setmenubutton`
+for `@Flightiranbot` and paste the same URL
+`https://flightiran-public-api.abolfazl260.workers.dev/mini/`.
+The inline button works without configuring BotFather.
+
+## Security, accuracy and free-tier behavior
+
+- Cloudflare Worker verifies the Telegram Web App HMAC over the actual
+  signed initData, rejects invalid/expired/future/duplicate fields and
+  strictly authorizes the same Telegram numeric ID when fetching a result.
+  It never trusts `initDataUnsafe`, a URL user ID, username or a forged
+  JavaScript object for authentication.
+- A job contains its Telegram user ID, sanitized first/last name and
+  username, a fixed allowlisted operation, and bounded JSON parameters.
+  These are **private transient D1 rows**, deleted when the bridge polls
+  after their 10-minute retention. No raw initData, bot token, session
+  signature, full SQLite database or historical personal archive is
+  saved to D1. Cloudflare account administrators may access D1 data.
+- User preferences, alerts, ownership/limit checks and notification state
+  still live **only in SQLite**. Internal jobs are accessed only through
+  `Authorization: Bearer PUBLISH_TOKEN` protected endpoints; Worker and
+  bridge are the only components holding the secrets. The public Android
+  API cannot query private D1 tables.
+- To avoid duplicate writes after lost acknowledgements, **expired leased
+  mutations are not retried automatically**. If a write times out, inspect
+  the Mini App **My alerts** list before attempting another creation.
+  Read-only jobs may retry once. Successful results expire after 90 s.
+- Requests and job polling count toward Workers Free requests and D1
+  usage, and are subject to Cloudflare free-tier quotas. The bridge
+  polls once every **5 seconds**, approximately 17,280 internal requests
+  each 24-hour period even when idle; this is within the nominal daily
+  100k Workers Free request quota, but your total load matters.
+- Existing `advertio.ir` DNS, SSL, server routes and services are unchanged.
+  No Cloudflare R2 or payment card is required.
+- Public Android `/api/v1/*` paths continue to use the original D1 public
+  projection and stay independent of the new authenticated Mini App.
+
+## Local checks / CI
 
 ```sh
 python -m pip install -e '.[dev]'
 ruff check src tests migrations
-pytest tests/test_telegram_mini_app.py tests/test_webapp_api.py tests/test_webapp.py
+pytest tests/test_cloudflare_mini_bridge.py tests/test_telegram_mini_app.py
+node --test cloudflare/test/*.test.mjs
 node --check src/flightiran/webapp/static/mini.js
 ```
