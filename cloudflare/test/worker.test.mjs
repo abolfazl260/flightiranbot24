@@ -75,7 +75,10 @@ test("reject invalid JSON source currency and fake timestamps",async()=>{
 });
 test("D1 visa rule and airports serve only validated public projections",async()=>{
   const env=make();
-  const visa={destination:"TR",rules:[{passport:"IR",country_name:"ترکیه",status:"visa-free",stay_days:90,notes:null,source_url:"https://example.org/rules",verified_on:"2026-10-11",source_level:"official"}]};
+  const mainRule={passport:"IR",country_name:"ترکیه",status:"visa-free",stay_days:90,notes:null,source_url:"https://example.org/rules",verified_on:"2026-10-11",source_level:"official"};
+  const visa={destination:"TR",rules:[mainRule,...Array.from({length:189},(_,i)=>({
+    ...mainRule,passport:String.fromCharCode(65+Math.floor(i/26),65+i%26)
+  }))]};
   assert.equal((await handleRequest(req("/internal/v1/visa/destination/TR",{method:"POST",auth:true,data:visa}),env)).status,200);
   const response=await handleRequest(req("/api/v1/visa/rule?passport=IR&destination=TR"),env);
   assert.equal((await response.json()).status,"visa-free");
