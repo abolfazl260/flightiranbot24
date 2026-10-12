@@ -6,6 +6,7 @@ import { handleRequest } from "../src/worker.mjs";
 // It intentionally exposes NO R2 interface.
 function make() {
   const visa = new Map(), airports = new Map();
+  const metrics = { visaRowsWritten: 0 };
   let ticket = null;
   const statement = (sql, params = []) => ({
     kind: sql,
@@ -41,15 +42,35 @@ function make() {
         assert.ok(stmt.params.length <= 100, "D1 parameter count");
       const visaImport = statements[0].kind.includes("visa_rules");
       if (visaImport) {
+        assert.match(statements[0].kind, /passport NOT IN/);
         const destination = statements[0].params[0];
-        for (const key of visa.keys()) if (key.endsWith(":" + destination)) visa.delete(key);
+        const incoming = new Map();
         for (const stmt of statements.slice(1)) {
+          assert.match(stmt.kind, /ON CONFLICT\(passport,destination\) DO UPDATE/);
+          assert.match(stmt.kind, /IS NOT excluded/);
           const p = stmt.params;
-          for (let i=0;i<p.length;i+=10) visa.set(p[i] + ":" + p[i+1], {
-            passport:p[i], destination:p[i+1], country_name:p[i+2], status:p[i+3],
-            stay_days:p[i+4], notes:p[i+5], source_url:p[i+6],
-            verified_on:p[i+7], source_level:p[i+8], published_at:p[i+9]
-          });
+          for (let i=0;i<p.length;i+=10) {
+            const row = {
+              passport:p[i],destination:p[i+1],country_name:p[i+2],status:p[i+3],
+              stay_days:p[i+4],notes:p[i+5],source_url:p[i+6],
+              verified_on:p[i+7],source_level:p[i+8],published_at:p[i+9]
+            };
+            incoming.set(row.passport + ":" + row.destination,row);
+          }
+        }
+        const columns=["country_name","status","stay_days","notes","source_url",
+          "verified_on","source_level"];
+        for (const key of visa.keys()) {
+          if (!key.endsWith(":" + destination) || incoming.has(key)) continue;
+          visa.delete(key);
+          metrics.visaRowsWritten++;
+        }
+        for (const [key,row] of incoming.entries()) {
+          const previous=visa.get(key);
+          if (!previous || columns.some(c=>previous[c]!==row[c])) {
+            visa.set(key,row);
+            metrics.visaRowsWritten++;
+          }
         }
       } else {
         airports.clear();
@@ -62,7 +83,7 @@ function make() {
       }
     }
   };
-  return { PUBLIC_DB: db, PUBLISH_TOKEN: "x".repeat(48) };
+  return { PUBLIC_DB: db, PUBLISH_TOKEN: "x".repeat(48), metrics };
 }
 
 const req = (path, { method = "GET", auth = false, data } = {}) =>
@@ -186,6 +207,39 @@ test("D1 import of 190 visa records stays within parameter/statement limits",asy
   assert.equal(response.status,200);
   assert.equal((await response.json()).rules,190);
   assert.equal((await handleRequest(req("/api/v1/visa/rule?passport=HH&destination=TR"),env)).status,200);
+});
+
+test("visa imports are idempotent and only write changed or removed passports",async()=>{
+  const env=make();
+  const path="/internal/v1/visa/destination/TR";
+  const upload = rules=>handleRequest(req(path,{method:"POST",auth:true,
+    data:{destination:"TR",rules}
+  }),env);
+  const initial=[...passports.map(visaRule),visaRule("ZZ")];
+  assert.equal((await upload(initial)).status,200);
+  assert.equal(env.metrics.visaRowsWritten,191);
+  const before=await (await handleRequest(req(
+    "/api/v1/visa/rule?passport=AA&destination=TR"),env)).json();
+  assert.equal((await upload(initial)).status,200);
+  assert.equal(env.metrics.visaRowsWritten,191,
+    "repeated identical input must not consume any D1 row writes");
+  const again=await (await handleRequest(req(
+    "/api/v1/visa/rule?passport=AA&destination=TR"),env)).json();
+  assert.equal(again.published_at,before.published_at);
+
+  const changed=passports.map(p=>p==="AA"
+    ? {...visaRule(p),notes:"One changed verified visa instruction"}
+    : visaRule(p));
+  assert.equal((await upload(changed)).status,200);
+  assert.equal(env.metrics.visaRowsWritten,193,
+    "only one changed passport and one removed passport must be written");
+  assert.equal((await handleRequest(req(
+    "/api/v1/visa/rule?passport=ZZ&destination=TR"),env)).status,404);
+  assert.equal((await (await handleRequest(req(
+    "/api/v1/visa/rule?passport=AA&destination=TR"),env)).json()).notes,
+    "One changed verified visa instruction");
+  assert.equal((await upload(changed)).status,200);
+  assert.equal(env.metrics.visaRowsWritten,193);
 });
 
 test("public API is GET-only and arbitrary endpoints cannot expose SQLite",async()=>{
