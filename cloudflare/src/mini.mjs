@@ -66,10 +66,30 @@ async function miniJsonBody(request) {
   if (!type.toLowerCase().startsWith("application/json") ||
       Number(request.headers.get("Content-Length")||"0")>8192)
     return null;
-  const raw=await request.text();
-  if (encoder.encode(raw).length>8192) return null;
+  // Limit streamed request bodies even when Content-Length is absent; do
+  // not buffer an arbitrary untrusted payload in a Worker isolate.
+  const reader=request.body?.getReader();
+  if (!reader) return null;
+  const chunks=[];
+  let size=0;
   try {
-    const value=JSON.parse(raw);
+    while (true) {
+      const {done,value}=await reader.read();
+      if (done) break;
+      size+=value.byteLength;
+      if (size>8192) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(value);
+    }
+  } catch { return null; }
+  finally { reader.releaseLock(); }
+  const bytes=new Uint8Array(size);
+  let offset=0;
+  for(const chunk of chunks) { bytes.set(chunk,offset);offset+=chunk.byteLength; }
+  try {
+    const value=JSON.parse(new TextDecoder("utf-8",{fatal:true}).decode(bytes));
     return value && typeof value==="object" && !Array.isArray(value) ? value : null;
   } catch { return null; }
 }
