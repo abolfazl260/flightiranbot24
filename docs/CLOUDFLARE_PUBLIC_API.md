@@ -129,12 +129,10 @@ passport rules per destination. If incomplete, run the existing Telegram admin
 `/visa_sync` first. The ticket feed also needs recorded prices; it never
 generates fake values.
 
-If the publisher previously ran against the old R2-based Worker URL and wrote
-a checkpoint, delete **only**
-`/data/cloudflare-sync.json` inside the publisher container after D1
-migration/deployment to force an initial full replay. **Never** delete
-`/data/flightiran.db` or the Docker volume. If this is the first Cloudflare
-deployment, no reset is needed.
+When upgrading from the old R2 architecture, the publisher automatically
+invalidates the old checkpoint scope and uploads the current public data again.
+There is **no** need to delete any Docker data file, SQLite database, or volume.
+Apply D1 migration 0002 and deploy the new Worker before starting the publisher.
 
 ## 4. Verify public endpoints (no secret required)
 
