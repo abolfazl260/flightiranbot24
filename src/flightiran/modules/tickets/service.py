@@ -74,7 +74,17 @@ def parse_toman_price(value: str) -> int:
     digits = re.sub(r"[^0-9]", "", normalized)
     if not digits:
         raise ValueError(f"Invalid ticket price: {value!r}")
-    return int(digits)
+    amount = int(digits)
+    if "ریال" in normalized:
+        return amount // 10
+    if "هزار" in normalized:
+        return amount * 1_000
+    # mz724's bare prices are quoted in thousands of tomans (e.g. 20,351
+    # means 20,351,000 tomans). Explicitly labelled or already-full toman
+    # amounts must not be multiplied again.
+    if "تومان" not in normalized and 0 < amount < 1_000_000:
+        return amount * 1_000
+    return amount
 
 
 class CheapTicketService:
