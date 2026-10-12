@@ -7,6 +7,7 @@ trusted. The public Android ticket API remains unchanged.
 
 import json
 import re
+from urllib.parse import urlsplit
 from dataclasses import asdict
 from typing import Annotated, Literal
 
@@ -178,8 +179,13 @@ def mini_router(
         result = asdict(rule)
         result["country_name"] = persian_country(rule.destination, rule.country_name)
         # Only explicitly HTTPS citations may be linked from the Mini App.
-        if result["source_url"] and not result["source_url"].startswith("https://"):
-            result["source_url"] = None
+        if result["source_url"]:
+            parsed = urlsplit(result["source_url"])
+            if (
+                parsed.scheme != "https" or not parsed.hostname
+                or parsed.username or parsed.password or len(result["source_url"]) > 600
+            ):
+                result["source_url"] = None
         return result
 
     @router.get("/useful")
@@ -204,6 +210,8 @@ def mini_router(
 
     @router.post("/alerts/prices", status_code=201)
     async def create_price_alert(payload: PriceAlertCreation, user: Identity) -> dict:
+        if not settings.price_alerts_enabled:
+            raise HTTPException(503, "Ticket price alerts are disabled")
         if public_prices is None:
             raise HTTPException(503, "Ticket prices unavailable")
         origin, destination = payload.origin.strip(), payload.destination.strip()
@@ -245,6 +253,8 @@ def mini_router(
 
     @router.patch("/alerts/prices/{alert_id}")
     async def update_price_alert(alert_id: int, payload: PriceAlertStatus, user: Identity) -> dict:
+        if payload.status == "active" and not settings.price_alerts_enabled:
+            raise HTTPException(503, "Ticket price alerts are disabled")
         try:
             updated = await prices.set_user_status(user.id, alert_id, payload.status)
         except ValueError as exc:
@@ -261,6 +271,8 @@ def mini_router(
 
     @router.post("/alerts/visa", status_code=201)
     async def create_visa_watch(payload: VisaWatchCreation, user: Identity) -> dict:
+        if not settings.visa_watch_enabled:
+            raise HTTPException(503, "Visa change alerts are disabled")
         try:
             result = await watches.subscribe(user.id, payload.passport, payload.destination)
         except ValueError as exc:
@@ -269,6 +281,8 @@ def mini_router(
 
     @router.patch("/alerts/visa/{watch_id}")
     async def update_visa_watch(watch_id: int, payload: VisaWatchStatus, user: Identity) -> dict:
+        if payload.active and not settings.visa_watch_enabled:
+            raise HTTPException(503, "Visa change alerts are disabled")
         try:
             changed = await watches.set_active(user.id, watch_id, payload.active)
         except ValueError as exc:
