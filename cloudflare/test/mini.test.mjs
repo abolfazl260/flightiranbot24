@@ -50,6 +50,7 @@ function fixture() {
         }
         if(sql.includes("SELECT result_status,result_json,status"))
           return jobs.get(params[0])||null;
+        if(sql.includes("FROM visa_passport_snapshots")) return null; // legacy fallback
         if(sql.includes("FROM visa_rules")) return visa[params.join(":")]||null;
         throw Error("Unknown D1 first: "+sql);
       },
