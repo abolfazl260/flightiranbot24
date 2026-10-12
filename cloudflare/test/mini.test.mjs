@@ -28,7 +28,7 @@ function req(path,{method="GET",user,auth=false,json}={}) {
   });
 }
 function fixture() {
-  const jobs=new Map();
+  const jobs=new Map(), passportDocuments=new Map();
   const visa={
     "IR:TR":{
       passport:"IR",destination:"TR",country_name:"Turkey",status:"visa-free",
@@ -50,7 +50,7 @@ function fixture() {
         }
         if(sql.includes("SELECT result_status,result_json,status"))
           return jobs.get(params[0])||null;
-        if(sql.includes("FROM visa_passport_snapshots")) return null; // legacy fallback
+        if(sql.includes("FROM visa_passport_snapshots")) return passportDocuments.get(params[0])||null;
         if(sql.includes("FROM visa_rules")) return visa[params.join(":")]||null;
         throw Error("Unknown D1 first: "+sql);
       },
@@ -115,7 +115,7 @@ function fixture() {
       return new Response("Not found",{status:404});
     }}
   };
-  return {env,jobs};
+  return {env,jobs,passportDocuments};
 }
 
 test("Worker static-asset binding serves the existing Mini App at / and /mini/",async()=>{
@@ -224,4 +224,34 @@ test("Invalid mutations never create jobs and no unauthenticated owner APIs exis
   assert.equal(jobs.size,0);
   assert.equal((await handleRequest(req("/api/mini/alerts"),env)).status,401);
   assert.equal((await handleRequest(req("/api/mini/alerts/prices/9",{method:"DELETE"}),env)).status,401);
+});
+
+test("signed Mini App reads compact visa JSON without scanning legacy visa_rules",async()=>{
+  const {env,passportDocuments}=fixture();
+  const codes=Array.from({length:190},(_,i)=>
+    String.fromCharCode(65+Math.floor(i/26),65+i%26));
+  passportDocuments.set("IR",{
+    snapshot_json:JSON.stringify({passport:"IR",rules:codes.map(destination=>({
+      passport:"IR",destination,country_name:"مقصد "+destination,
+      status:"visa-free",stay_days:90,notes:"Rules for "+destination,
+      source_url:"https://example.org/visa",verified_on:"2026-10-12",
+      source_level:"official"
+    }))}),
+    published_at:"2026-10-12T13:00:00Z"
+  });
+  const signed=signedUser();
+  const listing=await handleRequest(req("/api/mini/visa?passport=IR",{user:signed}),env);
+  assert.equal(listing.status,200);
+  const data=await listing.json();
+  assert.equal(data.rules.length,190);
+  assert.equal(data.rules[0].passport,"IR");
+  const detailed=await handleRequest(req(
+    "/api/mini/visa/rule?passport=IR&destination=AA",{user:signed}),env);
+  assert.equal(detailed.status,200);
+  const rule=await detailed.json();
+  assert.equal(rule.country_name,"مقصد AA");
+  assert.equal(rule.notes,"Rules for AA");
+  assert.equal("published_at" in rule,false);
+  assert.equal((await handleRequest(req(
+    "/api/mini/visa/rule?passport=IR&destination=ZZ",{user:signed}),env)).status,404);
 });
