@@ -10,6 +10,7 @@ import re
 from dataclasses import asdict
 from typing import Annotated, Literal
 
+from babel import Locale
 from fastapi import APIRouter, Depends, Header, HTTPException
 from pydantic import BaseModel, Field
 
@@ -26,6 +27,13 @@ from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
 _CODE = re.compile(r"[A-Z]{2}\Z")
+_FA_TERRITORIES = Locale.parse("fa").territories
+
+
+def persian_country(code: str, fallback: str) -> str:
+    return str(_FA_TERRITORIES.get(code) or fallback)
+
+
 _CATEGORIES = (
     ("documents", "مدارک و خروج از کشور"),
     ("flights", "پرواز و حقوق مسافر"),
@@ -113,7 +121,10 @@ def mini_router(
                 "username": user.username,
             },
             "passport": passport,
-            "countries": [asdict(country) for country in countries],
+            "countries": [
+                {"code": country.code, "name": persian_country(country.code, country.name)}
+                for country in countries
+            ],
             "links": {
                 "support": support_url(settings.ticket_support_username),
                 "cargo": "https://t.me/advertio_cargo",
@@ -146,7 +157,7 @@ def mini_router(
             items, count = await visas.listing(passport, page=page, page_size=30)
             all_rules.extend({
                 "destination": item.destination,
-                "country_name": item.country_name,
+                "country_name": persian_country(item.destination, item.country_name),
                 "status": item.status,
                 "stay_days": item.stay_days,
                 "verified_on": item.verified_on,
@@ -165,6 +176,7 @@ def mini_router(
         if rule is None:
             raise HTTPException(404, "Visa rule unavailable")
         result = asdict(rule)
+        result["country_name"] = persian_country(rule.destination, rule.country_name)
         # Only explicitly HTTPS citations may be linked from the Mini App.
         if result["source_url"] and not result["source_url"].startswith("https://"):
             result["source_url"] = None
