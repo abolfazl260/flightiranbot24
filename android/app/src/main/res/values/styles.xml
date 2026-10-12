@@ -28,15 +28,44 @@
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">16sp</item>
     </style>
-    <style name="ChecklistItem" parent="@android:style/Widget.CompoundButton.CheckBox">
+    <style name="ChecklistSectionHeading">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">26dp</item>
+        <item name="android:textColor">@color/navy</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="ChecklistSectionHint">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">4dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/slate</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+    <style name="ChecklistResetButton" parent="@android:style/Widget.Material.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:minHeight">56dp</item>
+        <item name="android:layout_marginTop">24dp</item>
+        <item name="android:textColor">@color/slate</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="ChecklistItem" parent="@android:style/Widget.CompoundButton.CheckBox">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">60dp</item>
         <item name="android:layout_marginTop">8dp</item>
-        <item name="android:padding">10dp</item>
+        <item name="android:paddingStart">14dp</item>
+        <item name="android:paddingEnd">14dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
         <item name="android:gravity">center_vertical</item>
+        <item name="android:background">@drawable/checklist_task_background</item>
         <item name="android:buttonTint">@color/teal</item>
-        <item name="android:textSize">16sp</item>
+        <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/navy</item>
     </style>
 </resources>
