@@ -190,3 +190,15 @@ dialog::backdrop { background: #0717279c; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Interactive preview and detail headings */
+.preview-row { border: 0; background: none; border-bottom: 1px solid var(--line); width: 100%; text-align: right; display: flex; align-items: center; gap: 11px; padding: 11px 0; color: var(--ink); }
+.preview-row:first-child { padding-top: 0; }
+.preview-row:last-child { border-bottom: 0; padding-bottom: 0; }
+.preview-index { flex: none; width: 28px; height: 28px; display: grid; place-items: center; border-radius: 9px; background: var(--accent-soft); color: var(--accent); font-size: 11px; }
+.preview-route { flex: 1; display: flex; gap: 4px; flex-direction: column; min-width: 0; }
+.preview-route strong { font-size: 11px; }
+.preview-route small { color: var(--muted); font-size: 9px; }
+.preview-price { direction: ltr; font-size: 11px; white-space: nowrap; text-align: left; }
+.preview-row > .symbol { width: 13px; height: 13px; color: var(--muted); }
+.page-subhead { margin: 18px 0 9px; font-size: 12px; }
