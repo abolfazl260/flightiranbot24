@@ -50,6 +50,7 @@ class Settings(BaseSettings):
     active_users_report_timezone: str = "Asia/Tehran"
     web_app_enabled: bool = False
     web_app_url: str | None = None
+    telegram_bot_username: str = Field(default="Flightiranbot", pattern=r"^[A-Za-z][A-Za-z0-9_]{4,31}$")
 
     @field_validator("active_users_report_time")
     @classmethod
@@ -86,8 +87,11 @@ class Settings(BaseSettings):
             and len(self.telegram_bot_token.get_secret_value()) < 20
         ):
             raise ValueError("TELEGRAM_BOT_TOKEN is too short for production")
-        if self.web_app_enabled and not self.web_app_url:
-            raise ValueError("WEB_APP_URL is required when WEB_APP_ENABLED=true")
+        if self.web_app_enabled:
+            from flightiran.interfaces.telegram.keyboards import telegram_web_app_url
+
+            if telegram_web_app_url(self.web_app_url) is None:
+                raise ValueError("WEB_APP_URL must be a valid HTTPS URL for Telegram")
         if self.visa_sync_interval_hours < 1:
             raise ValueError("VISA_SYNC_INTERVAL_HOURS must be positive")
         if self.visa_stale_after_hours < 1:
