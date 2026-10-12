@@ -60,7 +60,8 @@
       credentials: "omit",
       cache: "no-store",
       headers: {
-        "X-Telegram-Init-Data": state.initData,
+        ...(path.startsWith("/api/mini/")
+          ? {"X-Telegram-Init-Data": state.initData} : {}),
         ...(options.body ? {"Content-Type":"application/json"} : {}),
       },
       body: options.body ? JSON.stringify(options.body) : undefined,
@@ -91,7 +92,7 @@
       else button.removeAttribute("aria-current");
     });
     state.active = screen;
-    window.scrollTo({top:0,behavior:"instant"});
+    window.scrollTo(0,0);
     if (telegram?.BackButton) {
       if (screen === "home") telegram.BackButton.hide();
       else telegram.BackButton.show();
@@ -198,7 +199,7 @@
     quotes.slice(0,3).forEach((fare,index) => {
       const btn = el("button",{type:"button",className:"preview-row",onClick:()=>selectRoute(fare.origin,fare.name)},
         el("span",{className:"preview-index",text:fmt(index+1)}),
-        el("span",{className:"preview-route"},el("strong",{text:fare.origin+" ← "+fare.name}),
+        el("span",{className:"preview-route"},el("strong",{text:"از "+fare.origin+" به "+fare.name}),
           el("small",{text:"قیمت ثبت‌شده"})),
         el("strong",{className:"preview-price",text:money(fare.price_toman)}),
         icon("arrow")
@@ -230,7 +231,7 @@
       return el("article",{className:"fare-card"},
         el("div",{className:"fare-main"},
           el("div",{className:"fare-route"},
-            el("strong",{text:state.origin+" ← "+fare.name}),
+            el("strong",{text:"از "+state.origin+" به "+fare.name}),
             el("small",{text:avg})
           ),
           el("div",{className:"fare-price"},fmt(fare.price_toman)," ",el("small",{text:"تومان"}))
@@ -347,7 +348,7 @@
         el("span",{className:"visa-tag "+tone,text:status}),
         detail("مدت اقامت",data.stay_days?fmt(data.stay_days)+" روز":"براساس نوع ویزا"),
         detail("آخرین بررسی منبع",data.verified_on || "ثبت نشده"),
-        detail("سطح منبع",data.source_level || "نامشخص"),
+        detail("سطح منبع",({official:"رسمی",secondary:"ثانویه",aggregated:"تجمیعی"})[data.source_level] || "نامشخص"),
         ...(data.notes?[el("h3",{className:"page-subhead",text:"توضیحات"}),el("p",{className:"detail-notes",text:data.notes})]:[]),
         el("p",{className:"footnote",text:"برای تصمیم‌گیری نهایی، منابع رسمی کشور مقصد را کنترل کنید."})
       );
@@ -397,7 +398,7 @@
   function alertCard(type,data) {
     const isPrice=type==="prices";
     const enabled=isPrice ? data.status === "active" : data.active;
-    const label=isPrice ? data.origin+" ← "+data.destination :
+    const label=isPrice ? "از "+data.origin+" به "+data.destination :
       "گذرنامه "+data.passport+" · مقصد "+data.destination;
     const desc=isPrice
       ? (data.threshold_type === "percent"
