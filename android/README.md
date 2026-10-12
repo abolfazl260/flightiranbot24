@@ -70,11 +70,12 @@ gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug \
 
 Debug APK: `android/app/build/outputs/apk/debug/app-debug.apk`.
 Release tasks: `:app:assembleRelease :app:bundleRelease`.
-The first-party API uses only `ANDROID_PRODUCTION_API_ORIGIN` or
-`-PapiOrigin=https://your-real-host.example/`; the example URL is not
-deployed. Missing origin produces an explicit unavailable state in the
-in-app price screen. A signed release requires a live HTTPS API and the
-owner's private keystore. See [release instructions](../docs/ANDROID_RELEASE.md).
+The Android Gradle build now defaults to the deployed, credential-free
+`https://flightiran-public-api.abolfazl260.workers.dev/` origin in **all**
+build types, including debug. The `ANDROID_PRODUCTION_API_ORIGIN` variable or
+`-PapiOrigin=https://other-verified-endpoint.example/` can override it.
+A signed release still requires fresh prices from the live HTTPS endpoint
+and the owner's private keystore. See [release instructions](../docs/ANDROID_RELEASE.md).
 
 Room v1 schema is stored in `android/app/schemas`; do not perform destructive
 migrations. Remaining alert, visa, offline sync, auth and push work is tracked
@@ -86,9 +87,9 @@ The native Persian RTL fare screen consumes the public read-only
 tomans, recorded averages, percentage movement, UTC observation time, and
 an explicit stale-data warning. Origin selection, destination search and
 sorting work locally. Booking opens verified Advertio support.
-The single app needs an HTTPS `ANDROID_PRODUCTION_API_ORIGIN` at build time.
-Without it, the screen clearly reports missing API configuration rather than
-showing fake prices or opening Telegram.
+The single app embeds the existing, public Cloudflare Workers HTTPS base
+URL by default. It reports network/API failures if D1 has not yet received
+verified prices; no fake prices or Telegram fallback are used.
 User-owned alerts, push, visa data and authentication remain separate tasks.
 
 
@@ -102,8 +103,8 @@ recorded time and warns if quotes exceed the accepted age threshold or a
 refresh fails. If there are no recorded fares, the API returns HTTP 503
 instead of generated prices. The bot's scheduled collector remains
 responsible for updating its history and averages. The web container and bot
-must use the same database volume. An HTTPS `ANDROID_PRODUCTION_API_ORIGIN`
-must still be set for the production APK/AAB.
+must use the same database volume. A production HTTPS origin is included in the app by default;
+an override variable is optional.
 
 ### In-app ticket browsing — native only
 The prominent **قیمت بلیت** bottom navigation item and the dashboard fare
@@ -113,16 +114,17 @@ and renders origin filters, search, fares, recorded averages and differences
 in Jetpack Compose. Neither normal navigation nor connection/setup errors
 offer a Telegram fallback. The separate **هماهنگی رزرو با پشتیبانی** action
 is only for a deliberate booking/support handoff, not viewing
-prices. Without a configured HTTPS API origin, the screen reports the missing
-configuration instead of launching Telegram or showing fake fares.
+prices. If the HTTPS API is temporarily unavailable, the screen provides retry
+instead of launching Telegram or showing fake fares.
 
 ### Signed-release API validation
-The tagged Android release job uses the GitHub Actions repository variable
-`ANDROID_PRODUCTION_API_ORIGIN` as its release build-time origin.
+The tagged Android release job uses the known public HTTPS Worker origin by
+default, or the GitHub Actions repository variable
+`ANDROID_PRODUCTION_API_ORIGIN` as an optional override.
 Before publishing, it checks that the HTTPS `api/v1/tickets/prices` endpoint
-is reachable and returns nonempty, non-stale stored ticket prices. The release
-fails without a configured origin or working DB-backed API, rather than
-shipping a misleading in-app price screen. CI pull-request debug builds remain possible without public API configuration.
+is reachable and returns nonempty, non-stale stored ticket prices. The release fails without a working DB-backed API, rather than
+shipping a misleading in-app price screen. CI pull-request debug builds
+use the same secure public Worker endpoint.
 
 ### Android launcher artwork
 The previous generic vector globe/plane launcher icon has been replaced by the
