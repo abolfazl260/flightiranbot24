@@ -154,6 +154,9 @@ class PublicPublisher:
             },
         )
         response.raise_for_status()
+        confirmation = response.json()
+        if not isinstance(confirmation, dict) or confirmation.get("published") is not True:
+            raise ValueError("Cloudflare import endpoint did not acknowledge publication")
         self.state[key] = digest
         self._save()
         LOGGER.info("cloudflare_published key=%s", key)
