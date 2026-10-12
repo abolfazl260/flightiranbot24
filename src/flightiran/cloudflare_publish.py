@@ -260,7 +260,11 @@ class PublicPublisher:
             failed += 1
         try:
             visa = await public_visa_passports(self.database)
-            for passport, payload in visa.items():
+            # The bot defaults to Iranian passports: restore IR quickly after
+            # deployment before bulk-publishing the other public documents.
+            for passport, payload in sorted(
+                visa.items(), key=lambda item: (item[0] != "IR", item[0])
+            ):
                 jobs.append((
                     f"visa-passport:{passport}",
                     f"internal/v1/visa/passport/{passport}",
