@@ -74,7 +74,7 @@ docker compose --profile cloudflare exec cloudflare-publisher \
 ```
 
 The initial visa export requires the main database's complete validated visa
-index (at least 190 destinations and 190² rule entries). Run the existing
+index (at least 190 destinations and 190 passport entries **per destination**). Run the existing
 `/visa_sync` in Telegram first if the visa index is not populated. Ticket
 publication similarly requires recorded price data; empty data is never
 substituted with synthetic prices.
