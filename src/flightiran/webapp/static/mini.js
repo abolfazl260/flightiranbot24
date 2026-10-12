@@ -260,9 +260,9 @@
     percent.value="10";
     const body = el("div",{},
       el("p",{className:"dialog-text",text:"مسیر "+origin+" به "+fare.name+" · قیمت فعلی "+money(fare.price_toman)}),
-      el("label",{className:"dialog-text",text:"درصد کاهش قیمت برای ارسال هشدار"}),
+      el("label",{className:"dialog-text",text:"درصد افت نسبت به میانگین قیمت ثبت‌شده"}),
       percent,
-      el("p",{className:"footnote",text:"در صورت رسیدن قیمت به درصد کاهش انتخاب‌شده، ربات تلگرام اعلان می‌فرستد."})
+      el("p",{className:"footnote",text:"هنگامی که قیمت از میانگین ثبت‌شده به اندازه درصد انتخابی پایین‌تر بیاید، ربات تلگرام اعلان می‌فرستد. اگر داده کافی موجود نباشد، هشدار منتظر می‌ماند."})
     );
     let submitting=false;
     modal("ثبت زنگوله قیمت",body,[
