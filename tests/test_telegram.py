@@ -588,3 +588,56 @@ async def test_unknown_android_deep_link_cannot_bypass_default_menu():
     await start_handler(update(message=message), context, deps)
     assert "سلام" in message.calls[0][0][0]
     assert any(event[0] == "user.start" for event in deps.audit.events)
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://advertio.ir:8086/",
+        "http://127.0.0.1:8000/",
+        "https://",
+        "https://user:password@example.com/",
+        "https://example.com:invalid/",
+        "https://example.com:0/",
+        " https://example.com/",
+        "",
+        None,
+    ],
+)
+def test_invalid_telegram_web_app_url_is_omitted_without_breaking_menu(url):
+    from flightiran.interfaces.telegram.keyboards import main_menu, telegram_web_app_url
+
+    assert telegram_web_app_url(url) is None
+    keyboard = main_menu("fa", web_app_url=url)
+    assert keyboard.inline_keyboard
+    assert not any(button.web_app for row in keyboard.inline_keyboard for button in row)
+    assert any(
+        button.callback_data == "menu:tickets"
+        for row in keyboard.inline_keyboard
+        for button in row
+    )
+
+
+def test_valid_https_telegram_web_app_url_is_available():
+    from flightiran.interfaces.telegram.keyboards import main_menu, telegram_web_app_url
+
+    url = "https://example.com:8443/travel?lang=fa"
+    assert telegram_web_app_url(url) == url
+    buttons = [button for row in main_menu("fa", web_app_url=url).inline_keyboard for button in row]
+    assert len([button for button in buttons if button.web_app]) == 1
+    assert next(button.web_app.url for button in buttons if button.web_app) == url
+
+
+@pytest.mark.asyncio
+async def test_http_webapp_configuration_does_not_break_start_message():
+    deps = dependencies(web_app_url="http://advertio.ir:8086/")
+    message = Message()
+    await start_handler(update(message=message), None, deps)
+    assert len(message.calls) == 1
+    markup = message.calls[0][1]["reply_markup"]
+    assert not any(button.web_app for row in markup.inline_keyboard for button in row)
+    assert any(
+        button.callback_data == "menu:visa"
+        for row in markup.inline_keyboard
+        for button in row
+    )
