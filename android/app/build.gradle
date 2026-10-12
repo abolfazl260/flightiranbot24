@@ -10,9 +10,10 @@ plugins {
 // Debug APKs produced by CI must not silently lack an API origin when the
 // release-only Actions variable has not yet been configured.
 def defaultPublicApiOrigin = 'https://flightiran-public-api.abolfazl260.workers.dev/'
-def apiOrigin = providers.gradleProperty('apiOrigin').orElse(
+def configuredApiOrigin = providers.gradleProperty('apiOrigin').orElse(
     providers.environmentVariable('ANDROID_PRODUCTION_API_ORIGIN')
-).getOrElse(defaultPublicApiOrigin).trim()
+).getOrElse('').trim()
+def apiOrigin = configuredApiOrigin ? configuredApiOrigin : defaultPublicApiOrigin
 if (apiOrigin) {
     URI uri
     try { uri = new URI(apiOrigin) }
