@@ -1064,7 +1064,8 @@ def render_rich_report(
     ))
     table_rows = []
     for key, value in rows:
-        cell = value if key in {tr(language, "source"), tr(language, "validity")} else escape(str(value))
+        html_labels = {tr(language, "source"), tr(language, "validity")}
+        cell = value if key in html_labels else escape(str(value))
         table_rows.append(f"<tr><th>{escape(str(key))}</th><td>{cell}</td></tr>")
     table = "<table bordered striped compact>" + "".join(table_rows) + "</table>"
     intro = "<p>" + _provider_links(provenance, language) + "</p>"
