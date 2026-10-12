@@ -34,6 +34,7 @@ dev = [
 flightiran = "flightiran.main:main"
 flightiran-web = "flightiran.webapp.app:main"
 flightiran-cloudflare-publish = "flightiran.cloudflare_publish:main"
+flightiran-cloudflare-mini-bridge = "flightiran.cloudflare_mini_bridge:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
