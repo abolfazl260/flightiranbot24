@@ -238,8 +238,9 @@ async def test_pct_alert_needs_history_then_fires_at_exact_threshold(tmp_path):
     assert "20.0%" in render_ticket_alert(
         "تهران", "مشهد", received[0][3], received[0][4], "en"
     )
-    assert await service.process_feed([("تهران", "مشهد", 7_000_000)], notify) == 1
-    assert len(received) == 2
+    # A deeper discount within the same below-threshold period should not spam.
+    assert await service.process_feed([("تهران", "مشهد", 7_000_000)], notify) == 0
+    assert len(received) == 1
     assert await service.set_user_status(user.id, rule.id, "paused")
     assert await service.process_feed([("تهران", "مشهد", 6_000_000)], notify) == 0
     assert await service.set_user_status(user.id, rule.id, "active")
