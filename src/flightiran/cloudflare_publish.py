@@ -100,7 +100,11 @@ async def public_visa_destinations(database: Database) -> dict[str, dict]:
     for row in rows:
         grouped[row.destination].append(public_visa_row(row))
     # Fail closed while the initial upstream dataset is incomplete.
-    if len(grouped) < 190 or sum(map(len, grouped.values())) < 190 * 190:
+    if (
+        len(grouped) < 190
+        or sum(map(len, grouped.values())) < 190 * 190
+        or any(len(rules) < 190 for rules in grouped.values())
+    ):
         raise ValueError("Visa rules are not fully indexed; refusing partial publication")
     return {dest: {"destination": dest, "rules": rules} for dest, rules in grouped.items()}
 
