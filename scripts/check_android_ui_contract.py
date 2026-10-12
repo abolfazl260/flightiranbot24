@@ -29,7 +29,7 @@ def check() -> None:
         )
 
     gradle = BUILD.read_text(encoding="utf-8")
-    if DEFAULT_ORIGIN not in gradle or "getOrElse(defaultPublicApiOrigin)" not in gradle:
+    if DEFAULT_ORIGIN not in gradle or "configuredApiOrigin ? configuredApiOrigin : defaultPublicApiOrigin" not in gradle:
         raise SystemExit("All Android build variants must use a known HTTPS Worker origin")
     print("Android Persian copy and HTTPS ticket API configuration validated")
 
