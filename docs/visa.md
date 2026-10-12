@@ -43,7 +43,7 @@ for both new and existing users; it does not touch stored travel-rule data.
 - The bot also runs a check at startup, then every 6 hours (configurable with
   `VISA_SYNC_INTERVAL_HOURS`).
 - Unchanged country files are skipped by manifest `lastUpdated`, with periodic
-  unconditional file rechecks every seven days.
+  unconditional file rechecks at least every 24 hours.
 - Both the detailed country JSON and the flattened passport/destination index are written
   inside one transaction. A failed download or invalid document preserves the last
   committed version.
@@ -54,6 +54,21 @@ for both new and existing users; it does not touch stored travel-rule data.
   runs the scheduler, not the web service.
 
 Initial import downloads the full coverage and populates ~39,601 indexed passport routes.
+
+Every downloaded destination is validated against the publisher's live HTTPS
+`/data/schema.json` using JSON Schema before any part of the batch is saved.
+If the schema cannot be fetched or a destination fails validation, the entire
+synchronization fails and the last valid dataset remains in place. Remote schema
+references are prohibited. The index for each refreshed destination is replaced
+atomically so passport rules deleted upstream do not linger in SQLite. A watched
+passport rule being removed/restored generates a dedicated "availability" alert.
+
+The published passport-specific `validUntil` date is surfaced with an explicit
+warning when it has passed. It is the published rule's end date, **not** the
+validity period of a user's issued visa. `conditionalWaivers` appear in the
+passport summary only when `appliesTo` matches the selected passport code or
+the selected visa-required category; they are never treated as automatic
+eligibility.
 The UI may show "Data not imported yet" until this has completed.
 
 ## Date provenance and source-link policy
