@@ -1056,15 +1056,20 @@ def render_rich_report(
     if provenance.source_changed_on:
         rows.append((tr(language, "changed_date"), provenance.source_changed_on))
     validity_notice = rule_validity_notice(detail, language)
+    validity_label = {
+        "fa": "اعتبار مقرره منتشرشده",
+        "en": "Published rule validity",
+        "ar": "صلاحية القاعدة المنشورة",
+    }.get(language, "Published rule validity")
     if validity_notice:
-        rows.append((tr(language, "validity"), validity_notice))
+        rows.append((validity_label, validity_notice))
     rows.append((
         tr(language, "source"),
         render_authority(provenance, language).replace("\n", " · "),
     ))
     table_rows = []
     for key, value in rows:
-        html_labels = {tr(language, "source"), tr(language, "validity")}
+        html_labels = {tr(language, "source"), validity_label}
         cell = value if key in html_labels else escape(str(value))
         table_rows.append(f"<tr><th>{escape(str(key))}</th><td>{cell}</td></tr>")
     table = "<table bordered striped compact>" + "".join(table_rows) + "</table>"
