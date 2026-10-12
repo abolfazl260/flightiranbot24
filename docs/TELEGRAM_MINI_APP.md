@@ -94,9 +94,10 @@ user HTML injection.
 5. Verify:
 
    ```sh
-   curl -i https://YOUR-HTTPS-HOST/healthz
    curl -i https://YOUR-HTTPS-HOST/mini/
    curl -i https://YOUR-HTTPS-HOST/assets/mini.js
+   # With no Telegram session this protected API must respond HTTP 401:
+   curl -i https://YOUR-HTTPS-HOST/api/mini/bootstrap
    ```
 
    Opening `/mini/` directly in an ordinary browser displays a
