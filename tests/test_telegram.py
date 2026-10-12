@@ -611,7 +611,11 @@ def test_invalid_telegram_web_app_url_is_omitted_without_breaking_menu(url):
     keyboard = main_menu("fa", web_app_url=url)
     assert keyboard.inline_keyboard
     assert not any(button.web_app for row in keyboard.inline_keyboard for button in row)
-    assert any(button.callback_data == "menu:tickets" for row in keyboard.inline_keyboard for button in row)
+    assert any(
+        button.callback_data == "menu:tickets"
+        for row in keyboard.inline_keyboard
+        for button in row
+    )
 
 
 def test_valid_https_telegram_web_app_url_is_available():
@@ -632,4 +636,8 @@ async def test_http_webapp_configuration_does_not_break_start_message():
     assert len(message.calls) == 1
     markup = message.calls[0][1]["reply_markup"]
     assert not any(button.web_app for row in markup.inline_keyboard for button in row)
-    assert any(button.callback_data == "menu:visa" for row in markup.inline_keyboard for button in row)
+    assert any(
+        button.callback_data == "menu:visa"
+        for row in markup.inline_keyboard
+        for button in row
+    )
