@@ -5,7 +5,7 @@ import { handleRequest } from "../src/worker.mjs";
 // Minimal D1 SQL adapter: validates prepared statements and their bound values.
 // It intentionally exposes NO R2 interface.
 function make() {
-  const visa = new Map(), airports = new Map();
+  const visa = new Map(), airports = new Map(), passportDocuments = new Map();
   const metrics = { visaRowsWritten: 0 };
   let ticket = null;
   const statement = (sql, params = []) => ({
@@ -14,6 +14,7 @@ function make() {
     bind(...values) { return statement(sql, values); },
     async first() {
       if (sql.includes("FROM ticket_price_snapshots")) return ticket ? { ...ticket } : null;
+      if (sql.includes("FROM visa_passport_snapshots")) return passportDocuments.get(params[0]) || null;
       if (sql.includes("FROM visa_rules")) return visa.get(params.join(":")) || null;
       throw Error("Unknown SELECT first: " + sql);
     },
@@ -25,6 +26,15 @@ function make() {
       throw Error("Unknown SELECT all: " + sql);
     },
     async run() {
+      if (sql.includes("INSERT INTO visa_passport_snapshots")) {
+        assert.match(sql, /WHERE visa_passport_snapshots.snapshot_json IS NOT excluded.snapshot_json/);
+        const [passport,snapshot_json,published_at]=params;
+        const before=passportDocuments.get(passport);
+        if (before?.snapshot_json===snapshot_json) return {meta:{changes:0}};
+        passportDocuments.set(passport,{snapshot_json,published_at});
+        metrics.visaRowsWritten++;
+        return {meta:{changes:1}};
+      }
       if (!sql.includes("INSERT INTO ticket_price_snapshots")) throw Error("Unknown D1 run");
       const [observed_epoch_ms, snapshot_json, published_at] = params;
       assert.equal(typeof snapshot_json, "string");
@@ -83,7 +93,7 @@ function make() {
       }
     }
   };
-  return { PUBLIC_DB: db, PUBLISH_TOKEN: "x".repeat(48), metrics };
+  return { PUBLIC_DB: db, PUBLISH_TOKEN: "x".repeat(48), metrics, passportDocuments, legacyVisa:visa };
 }
 
 const req = (path, { method = "GET", auth = false, data } = {}) =>
@@ -178,19 +188,46 @@ const visaRule = passport => ({
   verified_on:"2026-10-11",source_level:"official"
 });
 
-test("D1 visa and airports preserve API behavior and reject partial replacements",async()=>{
+const visaPassportRule = destination => ({
+  destination,country_name:"ترکیه",status:"visa-free",stay_days:90,
+  notes:null,source_url:"https://example.org/rules",
+  verified_on:"2026-10-11",source_level:"official"
+});
+const uploadPassport = (env,data) => handleRequest(req(
+  "/internal/v1/visa/passport/IR",{method:"POST",auth:true,data}),env);
+
+test("compact D1 visa documents preserve public rule/list API and airports",async()=>{
   const env=make();
-  const visa = {destination:"TR",rules:passports.map(visaRule)};
-  assert.equal((await handleRequest(req("/internal/v1/visa/destination/TR",{
-    method:"POST",auth:true,data:visa
-  }),env)).status,200);
-  const rule=await (await handleRequest(req("/api/v1/visa/rule?passport=AA&destination=TR"),env)).json();
+  const data={passport:"IR",rules:passports.map(visaPassportRule)};
+  assert.equal((await handleRequest(req("/api/v1/visa/list?passport=IR"),env)).status,503);
+  assert.equal((await uploadPassport(env,data)).status,200);
+  assert.equal(env.metrics.visaRowsWritten,1);
+  assert.equal(env.passportDocuments.size,1);
+  const rule=await (await handleRequest(req(
+    "/api/v1/visa/rule?passport=IR&destination=AA"),env)).json();
   assert.equal(rule.status,"visa-free");
-  assert.equal((await handleRequest(req("/api/v1/visa/list?passport=AA"),env)).status,200);
+  assert.equal(rule.source_url,"https://example.org/rules");
+  assert.ok(rule.published_at);
+  const listed=await (await handleRequest(req(
+    "/api/v1/visa/list?passport=IR"),env)).json();
+  assert.equal(listed.rules.length,190);
+  assert.equal(listed.rules[0].passport,"IR");
+  assert.equal((await handleRequest(req(
+    "/api/v1/visa/rule?passport=IR&destination=ZZ"),env)).status,404);
+
+  assert.equal((await uploadPassport(env,{passport:"IR",
+    rules:[visaPassportRule("TR")]})).status,422);
+  assert.equal((await uploadPassport(env,{passport:"IR",
+    rules:[...passports.slice(0,189).map(visaPassportRule),
+      visaPassportRule(passports[0])]})).status,422);
+  assert.equal((await uploadPassport(env,{passport:"US",rules:data.rules})).status,422);
+  assert.equal(env.metrics.visaRowsWritten,1);
+
+  // An outdated uploader must never write ~40k indexed D1 rows again.
   assert.equal((await handleRequest(req("/internal/v1/visa/destination/TR",{
-    method:"POST",auth:true,data:{destination:"TR",rules:[visaRule("IR")]}
-  }),env)).status,422);
-  assert.equal((await handleRequest(req("/api/v1/visa/rule?passport=AA&destination=TR"),env)).status,200);
+    method:"POST",auth:true,data:{destination:"TR",rules:passports.map(visaRule)}
+  }),env)).status,410);
+
   assert.equal((await handleRequest(req("/internal/v1/airports",{
     method:"POST",auth:true,data:{airports:[
       {code:"IKA",name:"فرودگاه امام",country:"IR",timezone:"Asia/Tehran"}
@@ -199,49 +236,43 @@ test("D1 visa and airports preserve API behavior and reject partial replacements
   assert.equal((await (await handleRequest(req("/api/v1/airports"),env)).json()).airports[0].code,"IKA");
 });
 
-test("D1 import of 190 visa records stays within parameter/statement limits",async()=>{
+test("visa passport JSON snapshot uploads write one row, and identical replay writes zero",async()=>{
   const env=make();
-  const response=await handleRequest(req("/internal/v1/visa/destination/TR",{
-    method:"POST",auth:true,data:{destination:"TR",rules:passports.map(visaRule)}
-  }),env);
-  assert.equal(response.status,200);
-  assert.equal((await response.json()).rules,190);
-  assert.equal((await handleRequest(req("/api/v1/visa/rule?passport=HH&destination=TR"),env)).status,200);
-});
-
-test("visa imports are idempotent and only write changed or removed passports",async()=>{
-  const env=make();
-  const path="/internal/v1/visa/destination/TR";
-  const upload = rules=>handleRequest(req(path,{method:"POST",auth:true,
-    data:{destination:"TR",rules}
-  }),env);
-  const initial=[...passports.map(visaRule),visaRule("ZZ")];
-  assert.equal((await upload(initial)).status,200);
-  assert.equal(env.metrics.visaRowsWritten,191);
+  const rules=passports.map(visaPassportRule);
+  assert.equal((await uploadPassport(env,{passport:"IR",rules})).status,200);
+  assert.equal(env.metrics.visaRowsWritten,1);
   const before=await (await handleRequest(req(
-    "/api/v1/visa/rule?passport=AA&destination=TR"),env)).json();
-  assert.equal((await upload(initial)).status,200);
-  assert.equal(env.metrics.visaRowsWritten,191,
-    "repeated identical input must not consume any D1 row writes");
-  const again=await (await handleRequest(req(
-    "/api/v1/visa/rule?passport=AA&destination=TR"),env)).json();
-  assert.equal(again.published_at,before.published_at);
-
-  const changed=passports.map(p=>p==="AA"
-    ? {...visaRule(p),notes:"One changed verified visa instruction"}
-    : visaRule(p));
-  assert.equal((await upload(changed)).status,200);
-  assert.equal(env.metrics.visaRowsWritten,193,
-    "only one changed passport and one removed passport must be written");
-  assert.equal((await handleRequest(req(
-    "/api/v1/visa/rule?passport=ZZ&destination=TR"),env)).status,404);
-  assert.equal((await (await handleRequest(req(
-    "/api/v1/visa/rule?passport=AA&destination=TR"),env)).json()).notes,
-    "One changed verified visa instruction");
-  assert.equal((await upload(changed)).status,200);
-  assert.equal(env.metrics.visaRowsWritten,193);
+    "/api/v1/visa/rule?passport=IR&destination=AA"),env)).json();
+  const repeat=await uploadPassport(env,{passport:"IR",rules});
+  assert.equal(repeat.status,200);
+  assert.equal((await repeat.json()).changed,false);
+  assert.equal(env.metrics.visaRowsWritten,1);
+  const changed=rules.map(r=>r.destination==="AA"
+    ? {...r,notes:"updated rule"} : r);
+  assert.equal((await uploadPassport(env,{passport:"IR",rules:changed})).status,200);
+  assert.equal(env.metrics.visaRowsWritten,2);
+  const after=await (await handleRequest(req(
+    "/api/v1/visa/rule?passport=IR&destination=AA"),env)).json();
+  assert.equal(after.notes,"updated rule");
+  assert.equal(before.notes,null);
+  assert.equal((await uploadPassport(env,{passport:"IR",rules:changed})).status,200);
+  assert.equal(env.metrics.visaRowsWritten,2);
 });
 
+test("legacy public visa table remains readable during incremental migration",async()=>{
+  const env=make();
+  env.legacyVisa.set("IR:TR",{
+    passport:"IR",destination:"TR",country_name:"ترکیه",status:"visa-free",
+    stay_days:90,notes:null,source_url:null,
+    verified_on:"2026-10-10",source_level:"official",published_at:"2026-10-11"
+  });
+  const list=await (await handleRequest(req("/api/v1/visa/list?passport=IR"),env)).json();
+  assert.equal(list.rules.length,1);
+  assert.equal(list.rules[0].destination,"TR");
+  const rule=await (await handleRequest(req(
+    "/api/v1/visa/rule?passport=IR&destination=TR"),env)).json();
+  assert.equal(rule.verified_on,"2026-10-10");
+});
 test("public API is GET-only and arbitrary endpoints cannot expose SQLite",async()=>{
   const env=make();
   assert.equal((await handleRequest(req("/internal/v1/airports"),env)).status,405);
