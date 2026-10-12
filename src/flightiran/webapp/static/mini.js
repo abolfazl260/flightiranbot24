@@ -246,49 +246,38 @@
     }));
   }
   function priceDialog(origin, fare) {
-    if (state.prices?.stale) { toast("قیمت‌ها قدیمی هستند؛ لطفاً بعد از بروزرسانی دوباره تلاش کنید."); return; }
-    const typeSelect = el("select",{className:"dialog-select","aria-label":"نوع هشدار"},
-      el("option",{value:"percent",text:"کاهش درصدی قیمت"}),
-      el("option",{value:"price",text:"سقف قیمت به تومان"})
-    );
-    const percent = el("select",{className:"dialog-select","aria-label":"درصد کاهش"},
+    if (state.prices?.stale) {
+      toast("قیمت‌ها قدیمی هستند؛ لطفاً بعد از بروزرسانی دوباره تلاش کنید.");
+      return;
+    }
+    const percent = el("select",{className:"dialog-select","aria-label":"درصد کاهش قیمت"},
       ...Array.from({length:10},(_,i)=> {
         const val=(i+1)*5;
         return el("option",{value:String(val),text:fmt(val)+" درصد"});
       })
     );
     percent.value="10";
-    const amount = el("input",{className:"dialog-select",type:"text",inputmode:"numeric",
-      placeholder:"مثلاً ۳۵۰۰۰۰۰", "aria-label":"سقف قیمت به تومان"});
-    amount.hidden = true;
-    typeSelect.addEventListener("change",() => {
-      percent.hidden = typeSelect.value !== "percent";
-      amount.hidden = typeSelect.value !== "price";
-    });
     const body = el("div",{},
       el("p",{className:"dialog-text",text:"مسیر "+origin+" به "+fare.name+" · قیمت فعلی "+money(fare.price_toman)}),
-      el("label",{className:"dialog-text",text:"چه زمانی به شما اطلاع بدهیم؟"}),
-      typeSelect,percent,amount,
-      el("p",{className:"footnote",text:"در صورت رسیدن قیمت به شرط انتخاب‌شده، ربات تلگرام اعلان می‌فرستد."})
+      el("label",{className:"dialog-text",text:"درصد کاهش قیمت برای ارسال هشدار"}),
+      percent,
+      el("p",{className:"footnote",text:"در صورت رسیدن قیمت به درصد کاهش انتخاب‌شده، ربات تلگرام اعلان می‌فرستد."})
     );
+    let submitting=false;
     modal("ثبت زنگوله قیمت",body,[
       act("ثبت و فعال‌سازی هشدار",async () => {
-        const payload={origin,destination:fare.name,kind:typeSelect.value};
-        if (typeSelect.value === "percent") {
-          payload.threshold_percent = Number(percent.value);
-        } else {
-          const normalized=amount.value.replace(/[۰-۹]/g,d=>String(d.charCodeAt(0)-1776))
-            .replace(/[٠-٩]/g,d=>String(d.charCodeAt(0)-1632)).replace(/[ ,٬،]/g,"");
-          if (!/^[0-9]+$/.test(normalized) || !Number.isSafeInteger(Number(normalized)) ||
-              Number(normalized) <= 0) {
-            toast("مبلغ معتبر به تومان وارد کنید."); return;
-          }
-          payload.target_price_toman = Number(normalized);
-        }
+        if (submitting) return;
+        submitting=true;
         try {
-          await request("/api/mini/alerts/prices",{method:"POST",body:payload});
-          closeModal(); toast("زنگوله قیمت فعال شد."); state.alerts = null;
-        } catch (e) { toast(e.message); }
+          await request("/api/mini/alerts/prices",{method:"POST",body:{
+            origin,destination:fare.name,kind:"percent",
+            threshold_percent:Number(percent.value),
+          }});
+          closeModal(); toast("زنگوله قیمت فعال شد."); state.alerts=null;
+        } catch (e) {
+          submitting=false;
+          toast(e.message);
+        }
       }),
       act("انصراف",closeModal,"secondary-cta")
     ]);
