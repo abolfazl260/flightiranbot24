@@ -6,6 +6,11 @@
   const $ = id => document.getElementById(id);
   const telegram = window.Telegram && window.Telegram.WebApp;
   const fmt = value => new Intl.NumberFormat("fa-IR").format(value);
+  const territories = new Intl.DisplayNames(["fa"], {type:"region"});
+  function persianCountry(code, fallback) {
+    const name = /^[A-Z]{2}$/.test(code) ? territories.of(code) : null;
+    return name && name !== code ? name : (fallback || code);
+  }
   const state = {
     initData: "", bootstrap: null, prices: null, origin: "",
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
@@ -346,7 +351,9 @@
   }
   function renderVisa() {
     const term = $("visa-search").value.trim().toLocaleLowerCase("fa-IR");
-    const all = state.visa?.rules || [];
+    const all = (state.visa?.rules || []).map(rule => ({
+      ...rule, country_name:persianCountry(rule.destination,rule.country_name)
+    }));
     const items=all.filter(x => x.country_name.toLocaleLowerCase("fa-IR").includes(term)
       || x.destination.toLocaleLowerCase().includes(term));
     $("visa-summary").textContent=fmt(all.length)+" مقصد برای گذرنامه "+
@@ -374,7 +381,7 @@
         encodeURIComponent(state.passport)+"&destination="+encodeURIComponent(destination));
       const [status,tone]=visaStatus(data.status);
       const country=state.bootstrap?.countries?.find(x=>x.code===destination)?.name ||
-        data.country_name || destination;
+        persianCountry(destination,data.country_name);
       const body=el("div",{},
         el("p",{className:"dialog-text",text:country+" · گذرنامه "+state.passport}),
         el("span",{className:"visa-tag "+tone,text:status}),
