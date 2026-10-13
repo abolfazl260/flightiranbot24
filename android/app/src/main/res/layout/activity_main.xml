@@ -17,7 +17,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_launcher"
+            android:src="@drawable/advertio_brand"
             android:contentDescription="@string/app_name" />
 
         <TextView
