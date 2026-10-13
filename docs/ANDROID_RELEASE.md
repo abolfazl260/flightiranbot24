@@ -107,3 +107,28 @@ gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug \
 
 Android release artifacts: `android/app/build/outputs/apk/release/app-release.apk`
 and `android/app/build/outputs/bundle/release/app-release.aab`.
+
+## Current production release gates (October 2026)
+
+- Android CI on `main` produces a debug APK and an **unsigned release AAB**
+  available as separate Actions artifacts (`android-debug-apk` and
+  `android-unsigned-release-aab`). The unsigned AAB is for review/testing
+  only, **not** a production package ready for Google Play.
+- The `Android Store Screenshots` workflow must boot an accelerated emulator,
+  run the instrumented tests, and upload authentic PNG screenshots. KVM access
+  is configured in the workflow; review the actual artifact before using the
+  pictures in a public store listing.
+- A signed production release requires the four owner-controlled signing
+  secrets listed above. A fresh `vMAJOR.MINOR.PATCH` tag must refer to the
+  **current HEAD of `main`** at release time, not an older ancestor.
+- The release job checks the live ticket API, builds both APK and AAB using
+  the owner upload key, runs `apksigner verify` and strict AAB `jarsigner`
+  verification, and attaches both files plus SHA-256 digests to GitHub Release.
+- Never tag or claim a production release while signing secrets, endpoint
+  freshness, physical-device checks, privacy review or Play Console steps
+  are incomplete. A GitHub Release is not a published Google Play app.
+
+Before tagging, verify `GET /api/v1/tickets/prices` on the configured
+Cloudflare HTTPS origin returns a non-empty `routes` array, `currency` of
+`TOMAN`, `observed_at`, and `stale: false`. If it does not, fix data
+publishing rather than bypass the release gate.
