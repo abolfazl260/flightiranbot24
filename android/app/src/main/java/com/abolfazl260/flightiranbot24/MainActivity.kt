@@ -93,7 +93,8 @@ class MainActivity : ComponentActivity() {
             HomeDestination.TICKET_PRICES ->
                 startActivity(Intent(this, TicketPricesActivity::class.java))
             HomeDestination.TELEGRAM_BOT -> openUrl(BotLinks.BOT)
-            HomeDestination.TELEGRAM_AIRPORTS -> openUrl(BotLinks.AIRPORTS)
+            HomeDestination.TELEGRAM_AIRPORTS ->
+                startActivity(Intent(this, AirportDirectoryActivity::class.java))
             HomeDestination.TELEGRAM_USEFUL -> openUrl(BotLinks.USEFUL)
             HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)
             HomeDestination.SUPPORT -> openUrl(BotLinks.SUPPORT)
@@ -316,7 +317,7 @@ private fun HomeFeatureGrid(onSelect: (HomeDestination) -> Unit) {
             )
             HomeFeatureCard(
                 title = stringResource(R.string.offline_airports),
-                subtitle = "جست‌وجوی فرودگاه‌ها",
+                subtitle = "به‌زودی",
                 symbol = "✈",
                 modifier = Modifier.weight(1f),
                 onClick = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
