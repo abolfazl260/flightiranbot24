@@ -122,8 +122,8 @@ and `android/app/build/outputs/bundle/release/app-release.aab`.
   secrets listed above. A fresh `vMAJOR.MINOR.PATCH` tag must refer to the
   **current HEAD of `main`** at release time, not an older ancestor.
 - The release job checks the live ticket API, builds both APK and AAB using
-  the owner upload key, runs `apksigner verify` and strict AAB `jarsigner`
-  verification, and attaches both files plus SHA-256 digests to GitHub Release.
+  the owner upload key, runs `apksigner verify` and checks the signed-AAB success result from
+  `jarsigner` (without false failures from self-signed upload certificates), and attaches both files plus SHA-256 digests to GitHub Release.
 - Never tag or claim a production release while signing secrets, endpoint
   freshness, physical-device checks, privacy review or Play Console steps
   are incomplete. A GitHub Release is not a published Google Play app.
