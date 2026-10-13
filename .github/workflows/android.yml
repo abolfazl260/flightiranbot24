@@ -57,7 +57,7 @@ jobs:
         run: |
           gradle --no-daemon -p android \
             :app:testDebugUnitTest :app:lintDebug :app:lintRelease \
-            :app:assembleDebug :app:bundleRelease
+            :app:assembleDebug :app:assembleDebugAndroidTest :app:bundleRelease
       - name: Verify insecure API and invalid version inputs are rejected
         shell: bash
         run: |
