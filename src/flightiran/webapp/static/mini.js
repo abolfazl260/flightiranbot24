@@ -15,6 +15,7 @@
     initData: "", bootstrap: null, prices: null, origin: "",
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
     toastTimer: null, visaRequest: 0,
+    checklist: new Set(), checklistKey: null, checklistPersistent: false,
   };
 
   function el(tag, attrs = {}, ...children) {
@@ -137,6 +138,7 @@
     if (screen === "alerts") loadAlerts();
     if (screen === "useful") loadUseful();
     if (screen === "visa" && !state.visa) loadVisa();
+    if (screen === "checklist") renderChecklist();
     telegram?.HapticFeedback?.selectionChanged?.();
   }
   function link(kind, fallback) {
@@ -493,6 +495,109 @@
           }},el("span",{text:x.title}),icon("external")))
       )));
   }
+
+  // Keep the Mini App checklist in step with the 12 native Android tasks.
+  // Save only non-sensitive completion keys, never Telegram initData or tokens.
+  // Per-account browser storage is intentionally device-local, just like Android.
+  const checklistGroups = [
+    {title:"مدارک و رزروها",hint:"اطمینان از اعتبار مدارک و برنامه سفر",items:[
+      ["passport","اعتبار گذرنامه و تاریخ انقضا"],
+      ["visa","ویزای مقصد و شرایط ورود"],
+      ["tickets","بلیت و شماره رزرو پرواز"],
+      ["boarding","مدارک پذیرش و کارت پرواز"],
+      ["stay","نشانی و تأییدیه اقامتگاه"],
+    ]},
+    {title:"سلامت و امنیت",hint:"برای شرایط غیرمنتظره آماده باش",items:[
+      ["insurance","بیمه سفر و پوشش درمان"],
+      ["essentials","داروهای شخصی و نسخه پزشک"],
+      ["emergency","شماره‌های ضروری و مدارک پشتیبان"],
+    ]},
+    {title:"وسایل و هماهنگی‌ها",hint:"جزئیات کوچک، سفر آسوده‌تر",items:[
+      ["money","ارز، کارت و هزینه‌های ضروری"],
+      ["connectivity","اینترنت و ارتباط در مقصد"],
+      ["luggage","وزن، اندازه و قوانین بار"],
+      ["transfers","مسیر فرودگاه تا محل اقامت"],
+    ]},
+  ];
+  const checklistKeys = new Set(checklistGroups.flatMap(group => group.items.map(item => item[0])));
+  function initChecklist() {
+    // SDK initDataUnsafe is only a local storage namespace hint. Authorization
+    // remains server-side via the verified, signed Telegram initData.
+    const userId = Number(telegram?.initDataUnsafe?.user?.id);
+    if (Number.isSafeInteger(userId) && userId > 0) {
+      state.checklistKey = "flightiran:checklist:v1:" + String(userId);
+      try {
+        const stored = localStorage.getItem(state.checklistKey);
+        const values = stored === null ? [] : JSON.parse(stored);
+        if (Array.isArray(values)) {
+          state.checklist = new Set(values.filter(key => checklistKeys.has(key)));
+          state.checklistPersistent = true;
+        }
+      } catch { state.checklistPersistent = false; }
+    }
+    renderChecklist();
+  }
+  function saveChecklist() {
+    if (!state.checklistKey) return false;
+    try {
+      localStorage.setItem(state.checklistKey, JSON.stringify([...state.checklist]));
+      state.checklistPersistent = true;
+      return true;
+    } catch {
+      state.checklistPersistent = false;
+      return false;
+    }
+  }
+  function updateChecklistProgress() {
+    const completed = state.checklist.size;
+    const total = checklistKeys.size;
+    const percentage = Math.round(100 * completed / total);
+    $("checklist-percent").textContent = fmt(percentage) + "٪";
+    $("checklist-count").textContent = fmt(completed) + " مورد از " + fmt(total) + " انجام شده";
+    $("checklist-progress").value = completed;
+    $("checklist-remaining").textContent = completed === total
+      ? "همه کارها انجام شده؛ سفرت به‌خیر!"
+      : fmt(total - completed) + " کار تا پایان آماده‌سازی";
+    $("checklist-storage-note").textContent = state.checklistPersistent
+      ? "انتخاب‌ها روی همین دستگاه و برای حساب تلگرام شما ذخیره می‌شوند؛ با چک‌لیست اپ اندروید همگام نیستند."
+      : "ذخیره محلی در این مرورگر در دسترس نیست. تیک‌ها ممکن است پس از بستن مینی‌اپ حفظ نشوند.";
+  }
+  function renderChecklist() {
+    fill("checklist-groups", checklistGroups.map(group =>
+      el("section",{className:"checklist-group"},
+        el("h2",{text:group.title}),
+        el("p",{text:group.hint}),
+        ...group.items.map(([key,title]) => {
+          const check = el("input",{
+            type:"checkbox",name:"travel-"+key,"aria-label":title,
+          });
+          check.checked = state.checklist.has(key);
+          check.addEventListener("change", () => {
+            if (check.checked) state.checklist.add(key);
+            else state.checklist.delete(key);
+            if (!saveChecklist()) toast("ذخیره انتخاب‌ها در این دستگاه در دسترس نیست.");
+            updateChecklistProgress();
+          });
+          return el("label",{className:"checklist-item"},check,el("span",{text:title}));
+        })
+      )
+    ));
+    updateChecklistProgress();
+  }
+  function confirmChecklistReset() {
+    modal("پاک‌کردن چک‌لیست",el("p",{className:"dialog-text",text:"تمام انتخاب‌های شما پاک شوند؟"}),[
+      act("پاک شود",()=>{
+        state.checklist.clear();
+        const saved = saveChecklist();
+        closeModal();
+        renderChecklist();
+        if (saved) toast("چک‌لیست پاک شد.");
+        else toast("چک‌لیست فعلی پاک شد، اما ذخیره محلی در دسترس نیست.");
+      }),
+      act("انصراف",closeModal,"secondary-cta"),
+    ]);
+  }
+
   function showStartup(message) {
     $("startup-message").textContent=message;
     $("startup").hidden=false;
@@ -512,6 +617,7 @@
       state.bootstrap=await request("/api/mini/bootstrap");
       $("user-name").textContent=state.bootstrap.user.first_name || "مسافر";
       populatePassport();
+      initChecklist();
       await Promise.all([loadPrices(),loadVisa()]);
     } catch(e) {
       showStartup(e.message);
@@ -546,6 +652,7 @@
       toast(e.message);
     }
   });
+  $("checklist-reset").addEventListener("click",confirmChecklistReset);
   $("dialog-close").addEventListener("click",closeModal);
   $("dialog-form").addEventListener("submit",event=>event.preventDefault());
   initialize();
