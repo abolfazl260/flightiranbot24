@@ -239,8 +239,15 @@ jobs:
           apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
           test -x "$apksigner"
           "$apksigner" verify --verbose --print-certs android/app/build/outputs/apk/release/*.apk
-          # jarsigner without -strict can exit successfully for an unsigned JAR.
-          jarsigner -verify -strict android/app/build/outputs/bundle/release/*.aab
+          # Self-signed Android upload certificates trigger false -strict failures.
+          # Non-strict mode also accepts unsigned archives; explicitly require
+          # the exact success marker from jarsigner's signature verification.
+          aab_verification="$(jarsigner -verify android/app/build/outputs/bundle/release/*.aab)"
+          printf '%s\n' "$aab_verification"
+          if ! grep -Fxq 'jar verified.' <<< "$aab_verification"; then
+            echo "::error::Release AAB is unsigned or has an invalid JAR signature"
+            exit 1
+          fi
       - name: Stage signed artifacts with verifiable SHA-256
         shell: bash
         run: |
