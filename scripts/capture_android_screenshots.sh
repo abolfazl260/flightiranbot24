@@ -9,16 +9,93 @@ test -s "$apk"
 adb install -r "$apk"
 mkdir -p android/screenshots
 
-capture() {
-  local activity="$1" file="$2"
-  adb shell am start -W -n "com.abolfazl260.flightiranbot24.debug/com.abolfazl260.flightiranbot24.$activity" | tee /tmp/flightiran-launch.txt
+# Only the launcher is exported. Never make private screens exported
+# just for test automation: navigate via the same Persian tabs as users.
+package="com.abolfazl260.flightiranbot24.debug"
+activity_prefix="com.abolfazl260.flightiranbot24"
+
+open_launcher() {
+  adb shell am start -W -n "$package/$activity_prefix.MainActivity" | tee /tmp/flightiran-launch.txt
   grep -q 'Status: ok' /tmp/flightiran-launch.txt
+}
+
+wait_for_activity() {
+  local expected="$1"
+  for _ in $(seq 1 30); do
+    if adb shell dumpsys activity activities |
+       grep -E '(topResumedActivity|mResumedActivity)' |
+       grep -Fq "$activity_prefix.$expected"; then
+      return 0
+    fi
+    sleep 1
+  done
+  echo "Expected $expected to be foreground after navigation" >&2
+  adb shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' >&2 || true
+  return 1
+}
+
+tap_persian_navigation() {
+  local label="$1"
+  python3 - "$label" <<'PY'
+import re
+import subprocess
+import sys
+import xml.etree.ElementTree as ET
+
+label = sys.argv[1]
+subprocess.run(
+    ["adb", "shell", "uiautomator", "dump", "/sdcard/flightiran-window.xml"],
+    check=True, capture_output=True, text=True,
+)
+xml_data = subprocess.check_output(
+    ["adb", "exec-out", "cat", "/sdcard/flightiran-window.xml"]
+)
+root = ET.fromstring(xml_data)
+candidates = []
+for node in root.iter("node"):
+    desc = node.attrib.get("content-desc", "")
+    text = node.attrib.get("text", "")
+    # Compose NavigationBarItem can expose either text or contentDescription.
+    if label != text and label not in desc:
+        continue
+    match = re.fullmatch(
+        r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]", node.attrib.get("bounds", "")
+    )
+    if match is None:
+        continue
+    left, top, right, bottom = map(int, match.groups())
+    if right > left and bottom > top:
+        candidates.append((top, (left + right) // 2, (top + bottom) // 2))
+
+if not candidates:
+    raise SystemExit(f"Cannot find Persian navigation item: {label}")
+# The bottom bar is below similarly named feature cards.
+_, x, y = max(candidates)
+subprocess.run(["adb", "shell", "input", "tap", str(x), str(y)], check=True)
+PY
+}
+
+capture() {
+  local file="$1"
   sleep 2
   adb exec-out screencap -p > "android/screenshots/$file"
 }
-capture MainActivity 01-home.png
-capture AirportDirectoryActivity 02-airports.png
-capture ChecklistActivity 03-checklist.png
+
+open_launcher
+wait_for_activity MainActivity
+capture 01-home.png
+
+open_launcher
+wait_for_activity MainActivity
+tap_persian_navigation "فرودگاه‌ها"
+wait_for_activity AirportDirectoryActivity
+capture 02-airports.png
+
+open_launcher
+wait_for_activity MainActivity
+tap_persian_navigation "چک‌لیست"
+wait_for_activity ChecklistActivity
+capture 03-checklist.png
 
 python3 - <<'PY'
 import pathlib
