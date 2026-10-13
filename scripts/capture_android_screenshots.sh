@@ -15,6 +15,11 @@ package="com.abolfazl260.flightiranbot24.debug"
 activity_prefix="com.abolfazl260.flightiranbot24"
 
 open_launcher() {
+  # Merely starting MainActivity again can deliver the intent to the task
+  # while a non-exported child Activity remains foreground (Android task reuse).
+  # Force-stop the test app before launch so every screenshot starts from home.
+  # This does not clear user preferences or other app data.
+  adb shell am force-stop "$package"
   adb shell am start -W -n "$package/$activity_prefix.MainActivity" | tee /tmp/flightiran-launch.txt
   grep -q 'Status: ok' /tmp/flightiran-launch.txt
 }
