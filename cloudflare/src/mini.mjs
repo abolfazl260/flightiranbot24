@@ -267,7 +267,8 @@ async function serveAsset(request,env,path) {
   if (!env.ASSETS || !["GET","HEAD"].includes(request.method)) return error(404,"Not found");
   const target={
     "/":"/index.html","/mini":"/index.html","/mini/":"/index.html",
-    "/assets/mini.js":"/mini.js","/assets/mini.css":"/mini.css"
+    "/assets/mini.js":"/mini.js","/assets/mini.css":"/mini.css",
+    "/assets/advertio-brand.webp":"/advertio-brand.webp"
   }[path];
   if (!target) return error(404,"Not found");
   const assetUrl=new URL(request.url);
@@ -307,7 +308,8 @@ export async function miniRoute(request,env,authorized) {
     }
     return enqueue(request,user,env,path);
   }
-  if (["/","/mini","/mini/","/assets/mini.js","/assets/mini.css"].includes(path))
+  if (["/","/mini","/mini/","/assets/mini.js","/assets/mini.css",
+    "/assets/advertio-brand.webp"].includes(path))
     return serveAsset(request,env,path);
   return null;
 }
