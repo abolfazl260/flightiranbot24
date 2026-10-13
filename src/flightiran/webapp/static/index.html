@@ -7,9 +7,9 @@
   <meta name="color-scheme" content="light dark">
   <meta name="description" content="دستیار سفر ادورتیو؛ قیمت پرواز، ویزا، هشدارها و راهنمای سفر">
   <title>ادورتیو | دستیار سفر</title>
-  <link rel="stylesheet" href="/assets/mini.css?v=1">
+  <link rel="stylesheet" href="/assets/mini.css?v=2">
   <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script src="/assets/mini.js?v=1" defer></script>
+  <script src="/assets/mini.js?v=2" defer></script>
 </head>
 <body>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -27,6 +27,7 @@
     <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
     <symbol id="i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5 5 19"/></symbol>
     <symbol id="i-check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6"/></symbol>
+    <symbol id="i-list-check" viewBox="0 0 24 24"><path d="m3 7 2 2 4-4M12 7h9M3 18l2 2 4-4M12 18h9"/></symbol>
     <symbol id="i-external" viewBox="0 0 24 24"><path d="M13 5h6v6M19 5l-9 9M19 13v6H5V5h6"/></symbol>
     <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2 4 6v6c0 6 3 8 8 10 5-2 8-4 8-10V6l-8-4Z"/><path d="m9 12 2 2 4-4"/></symbol>
     <symbol id="i-settings" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="m19 12 2-2-2-3-3 1-2-3h-4L8 8 5 7l-2 3 2 2-2 2 2 3 3-1 2 3h4l2-3 3 1 2-3-2-2Z"/></symbol>
@@ -58,6 +59,7 @@
           <button type="button" class="service-card" data-go="visa"><span class="service-icon aqua"><svg class="symbol"><use href="#i-passport"></use></svg></span><strong>راهنمای ویزا</strong><small>شرایط ورود کشورها</small></button>
           <button type="button" class="service-card" data-go="alerts"><span class="service-icon peach"><svg class="symbol"><use href="#i-bell"></use></svg></span><strong>هشدارهای من</strong><small>پایش بلیت و ویزا</small></button>
           <button type="button" class="service-card" data-go="useful"><span class="service-icon violet"><svg class="symbol"><use href="#i-book"></use></svg></span><strong>راهنمای سفر</strong><small>منابع و اطلاعات کاربردی</small></button>
+          <button type="button" class="service-card" data-go="checklist"><span class="service-icon aqua"><svg class="symbol"><use href="#i-list-check"></use></svg></span><strong>چک‌لیست سفر من</strong><small>۱۲ گام برای آمادگی سفر</small></button>
         </div>
 
         <div class="section-heading"><h2>نگاهی به بازار پرواز</h2><button type="button" class="text-action" data-go="tickets">همه مسیرها <svg class="symbol"><use href="#i-arrow"></use></svg></button></div>
@@ -103,6 +105,19 @@
         <button type="button" class="secondary-cta" data-link="support"><svg class="symbol"><use href="#i-chat"></use></svg> ارتباط با پشتیبانی</button>
       </section>
 
+      <section class="screen" id="screen-checklist" data-screen="checklist" aria-labelledby="checklist-heading" hidden>
+        <div class="page-title"><span class="page-icon aqua"><svg class="symbol"><use href="#i-list-check"></use></svg></span><div><h1 id="checklist-heading">چک‌لیست سفر من</h1><p>کارهای سفر را مرحله‌به‌مرحله انجام بده.</p></div></div>
+        <div class="checklist-summary" aria-label="پیشرفت برنامه سفر">
+          <span class="checklist-summary-label">پیشرفت برنامه سفر</span>
+          <div class="checklist-summary-numbers"><strong id="checklist-percent">۰٪</strong><span id="checklist-count" aria-live="polite">۰ مورد از ۱۲ انجام شده</span></div>
+          <progress id="checklist-progress" value="0" max="12" aria-label="کارهای انجام‌شده از ۱۲ مرحله"></progress>
+          <p id="checklist-remaining" aria-live="polite">۱۲ کار تا پایان آماده‌سازی</p>
+        </div>
+        <div id="checklist-groups" class="checklist-groups"></div>
+        <button type="button" class="checklist-reset" id="checklist-reset">پاک‌کردن چک‌لیست من</button>
+        <p id="checklist-storage-note" class="footnote">انتخاب‌ها روی همین دستگاه و برای حساب تلگرام شما ذخیره می‌شوند و با چک‌لیست اپ اندروید همگام نیستند.</p>
+      </section>
+
       <section class="screen" id="screen-airports" data-screen="airports" aria-labelledby="airports-heading" hidden>
         <div class="empty-hero"><span class="huge-icon"><svg class="symbol"><use href="#i-plane"></use></svg></span><h1 id="airports-heading">فرودگاه‌ها</h1><p>اطلاعات فرودگاه‌ها به‌زودی به دستیار سفر اضافه می‌شود.</p><button type="button" class="primary-cta" data-go="home">بازگشت به خانه</button></div>
       </section>
@@ -114,6 +129,7 @@
     <button type="button" class="nav-item" data-go="tickets"><svg class="symbol"><use href="#i-ticket"></use></svg><span>بلیت</span></button>
     <button type="button" class="nav-item" data-go="visa"><svg class="symbol"><use href="#i-passport"></use></svg><span>ویزا</span></button>
     <button type="button" class="nav-item" data-go="alerts"><svg class="symbol"><use href="#i-bell"></use></svg><span>هشدارها</span></button>
+    <button type="button" class="nav-item" data-go="checklist"><svg class="symbol"><use href="#i-list-check"></use></svg><span>چک‌لیست</span></button>
     <button type="button" class="nav-item" data-go="useful"><svg class="symbol"><use href="#i-book"></use></svg><span>راهنما</span></button>
   </nav>
 
