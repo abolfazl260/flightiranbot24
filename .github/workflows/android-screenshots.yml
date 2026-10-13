@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "android/**"
+      - "scripts/capture_android_screenshots.sh"
       - ".github/workflows/android-screenshots.yml"
   workflow_dispatch:
 
