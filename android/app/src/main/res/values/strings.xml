@@ -16,6 +16,9 @@
     <string name="command_copied">دستور کپی شد؛ آن را در تلگرام جای‌گذاری کنید.</string>
     <string name="link_unavailable">امکان باز کردن لینک در این دستگاه وجود ندارد.</string>
     <string name="offline_airports">راهنمای فرودگاه‌ها</string>
+    <string name="airports_coming_soon_title">به‌زودی</string>
+    <string name="airports_coming_soon_message">اطلاعات فرودگاه‌ها به‌زودی به دستیار سفر اضافه می‌شود.</string>
+    <string name="airports_back_home">بازگشت به خانه</string>
     <string name="airports_description">جست‌وجوی فرودگاه با نام شهر، کشور، کد IATA یا منطقه زمانی. داده‌ها درون برنامه هستند و ممکن است تغییرات جدید را پوشش ندهند.</string>
     <string name="search_airports">نام فرودگاه یا کد IATA</string>
     <string name="airport_count">%1$d فرودگاه از %2$d</string>

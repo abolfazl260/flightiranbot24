@@ -239,3 +239,55 @@ async def test_resuming_prices_cannot_exceed_active_alert_limit(tmp_path):
     rows = await service.list_user_alerts(user.id)
     assert sum(item.status == "active" for item in rows) == 1
     await db.close()
+
+
+def test_android_and_mini_travel_checklist_parity():
+    """Prevent future drift in the Persian twelve-item checklist and airport launch state."""
+    import re
+    from pathlib import Path
+    from xml.etree import ElementTree
+
+    root = Path(__file__).resolve().parents[1]
+    android = root / "android/app/src/main"
+    mini = root / "src/flightiran/webapp/static"
+    java = (android / "java/com/abolfazl260/flightiranbot24/ChecklistActivity.java").read_text()
+    js = (mini / "mini.js").read_text()
+    html = (mini / "index.html").read_text()
+    strings = {
+        item.attrib["name"]: item.text
+        for item in ElementTree.parse(android / "res/values/strings.xml").getroot()
+        if item.tag == "string"
+    }
+
+    java_keys = re.search(r"static final String\[\] KEYS = \{(.*?)\};", java, re.S)
+    assert java_keys is not None
+    native_keys = re.findall(r'"([a-z]+)"', java_keys.group(1))
+    assert len(native_keys) == 12 and len(set(native_keys)) == 12
+
+    mini_groups = js.split("const checklistGroups = [", 1)[1].split(
+        "const checklistKeys =", 1
+    )[0]
+    mini_items = re.findall(r'\["([a-z]+)","([^"]+)"\]', mini_groups)
+    assert len(mini_items) == 12
+    assert [key for key, _ in mini_items] == native_keys
+    assert all(label == strings["check_" + key] for key, label in mini_items)
+    for group in ("documents", "health", "essentials"):
+        assert strings["checklist_category_" + group] in mini_groups
+        assert strings["checklist_category_" + group + "_detail"] in mini_groups
+
+    for marker in ('id="screen-checklist"', 'id="checklist-progress"',
+                   'id="checklist-reset"', 'data-go="checklist"'):
+        assert marker in html
+    assert 'lang="fa" dir="rtl"' in html
+    assert "localStorage.setItem(state.checklistKey" in js
+    assert 'telegram?.initDataUnsafe?.user?.id' in js
+    assert "state.checklist.clear()" in js
+
+    airport = (android / "java/com/abolfazl260/flightiranbot24/"
+               "AirportDirectoryActivity.kt").read_text()
+    assert "AirportComingSoonScreen" in airport
+    assert "loadOfflineCatalog()" not in airport
+    assert "TravelFormField" not in airport
+    assert "airports_coming_soon_message" in airport
+    assert 'id="screen-airports"' in html
+    assert "اطلاعات فرودگاه‌ها به‌زودی" in html
