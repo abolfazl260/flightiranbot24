@@ -32,6 +32,13 @@ jobs:
           gradle-version: "8.13"
       - name: Install SDK
         run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
+      # Required for a reliable hardware-accelerated Linux emulator boot.
+      - name: Enable KVM for Android emulator
+        shell: bash
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
       - name: Capture genuine Android app screenshots
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -39,6 +46,7 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_6
+          emulator-boot-timeout: 900
           script: bash scripts/capture_android_screenshots.sh
       - name: Generate Google Play graphics
         run: |
