@@ -1,6 +1,5 @@
 package com.abolfazl260.flightiranbot24
 
-import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -25,8 +24,8 @@ class PersianUiTest {
         rule.onNodeWithText("سفر، ساده‌تر از همیشه").assertExists()
         rule.onNodeWithText("خانه").assertExists()
         rule.onNodeWithText("قیمت بلیت").assertHasClickAction()
-        rule.onNodeWithText("راهنمای فرودگاه‌ها").assertHasClickAction()
-        rule.onNodeWithText("چک‌لیست سفر من").assertHasClickAction()
+        rule.onNodeWithText("فرودگاه‌ها").assertHasClickAction()
+        rule.onNodeWithText("چک‌لیست").assertHasClickAction()
         rule.onNodeWithText("خدمات").performClick()
         rule.onNodeWithText("خدمات بیشتر").assertExists()
     }
