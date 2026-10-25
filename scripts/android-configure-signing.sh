@@ -32,7 +32,7 @@ export ANDROID_KEYSTORE_PASSWORD="$store_password"
 export ANDROID_KEY_ALIAS="$key_alias"
 export ANDROID_KEY_PASSWORD="$key_password"
 unset store_password key_password key_alias
-"$script_dir/android-validate-signing.sh"
+bash "$script_dir/android-validate-signing.sh"
 
 # Write secrets only after the local cryptographic preflight succeeds.
 base64 < "$ANDROID_KEYSTORE_FILE" | tr -d '\r\n' | gh secret set ANDROID_KEYSTORE_BASE64 -R "$repo"
