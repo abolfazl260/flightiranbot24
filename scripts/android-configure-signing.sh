@@ -1,27 +1,43 @@
 #!/usr/bin/env bash
-# Run locally: never commit your private upload keystore.
+# Run locally on a trusted computer. Never commit or paste the private upload key.
 set -euo pipefail
 repo="abolfazl260/flightiranbot24"
-if [[ $# -ne 1 || ! -f "$1" ]]; then
+if [[ $# -ne 1 || ! -f "$1" || ! -s "$1" ]]; then
   echo "Usage: bash scripts/android-configure-signing.sh /secure/path/upload-key.jks" >&2
   exit 2
 fi
-for executable in gh base64 tr; do
+if [[ ! -t 0 ]]; then
+  echo "Run interactively in a local terminal, not inside CI or a pipe" >&2
+  exit 1
+fi
+for executable in gh base64 tr keytool jarsigner jar; do
   command -v "$executable" >/dev/null || { echo "Missing $executable" >&2; exit 1; }
 done
 gh auth status >/dev/null || { echo "Run gh auth login first" >&2; exit 1; }
-echo "Set private signing secrets for $repo. Back up keystore/passwords offline!"
-base64 < "$1" | tr -d '\r\n' | gh secret set ANDROID_KEYSTORE_BASE64 -R "$repo"
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+printf 'Configure upload signing for %s. Back up your keystore and passwords offline.\n' "$repo"
 read -r -s -p "Keystore password: " store_password
 printf '\n'
-printf '%s' "$store_password" | gh secret set ANDROID_KEYSTORE_PASSWORD -R "$repo"
-unset store_password
-read -r -p "Key alias: " key_alias
-[[ -n "$key_alias" ]] || exit 1
-printf '%s' "$key_alias" | gh secret set ANDROID_KEY_ALIAS -R "$repo"
-unset key_alias
+read -r -p "Key alias [flightiran-upload]: " key_alias
+key_alias="${key_alias:-flightiran-upload}"
 read -r -s -p "Key password: " key_password
 printf '\n'
-printf '%s' "$key_password" | gh secret set ANDROID_KEY_PASSWORD -R "$repo"
-unset key_password
-echo "Signing secrets have been configured. Keep the private key backed up."
+if [[ -z "$store_password" || -z "$key_password" || -z "$key_alias" ]]; then
+  echo 'Passwords and alias are required' >&2
+  exit 1
+fi
+export ANDROID_KEYSTORE_FILE="$1"
+export ANDROID_KEYSTORE_PASSWORD="$store_password"
+export ANDROID_KEY_ALIAS="$key_alias"
+export ANDROID_KEY_PASSWORD="$key_password"
+unset store_password key_password key_alias
+bash "$script_dir/android-validate-signing.sh"
+
+# Write secrets only after the local cryptographic preflight succeeds.
+base64 < "$ANDROID_KEYSTORE_FILE" | tr -d '\r\n' | gh secret set ANDROID_KEYSTORE_BASE64 -R "$repo"
+printf '%s' "$ANDROID_KEYSTORE_PASSWORD" | gh secret set ANDROID_KEYSTORE_PASSWORD -R "$repo"
+printf '%s' "$ANDROID_KEY_ALIAS" | gh secret set ANDROID_KEY_ALIAS -R "$repo"
+printf '%s' "$ANDROID_KEY_PASSWORD" | gh secret set ANDROID_KEY_PASSWORD -R "$repo"
+unset ANDROID_KEYSTORE_PASSWORD ANDROID_KEY_PASSWORD
+printf 'Four GitHub Actions secrets uploaded. Verify them with the Android Signing Preflight workflow before tagging a release.\n'

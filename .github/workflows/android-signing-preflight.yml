@@ -1,0 +1,36 @@
+name: Android Signing Preflight
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-signing:
+    name: Validate private upload key and passwords
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Cryptographically validate upload keystore secrets
+        shell: bash
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          [[ -n "$KEYSTORE_BASE64" ]] || { echo '::error::ANDROID_KEYSTORE_BASE64 is missing'; exit 1; }
+          umask 077
+          tempdir="$(mktemp -d)"
+          trap 'rm -rf "$tempdir"' EXIT
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$tempdir/upload.jks"
+          export ANDROID_KEYSTORE_FILE="$tempdir/upload.jks"
+          bash scripts/android-validate-signing.sh
+          echo '::notice::Signing preflight passed; no signing material or signed artifact was uploaded.'

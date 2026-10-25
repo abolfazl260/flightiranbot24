@@ -41,6 +41,52 @@ Tags matching vX.Y.Z can build a signed release APK/AAB and publish checksums.
 7. Enroll with Google Play Console and Play App Signing if Play publication
    is intended. This requires the owner's developer account and verification.
 
+## Verify upload signing before creating a release
+
+The local upload keystore must remain outside the Git repository. If the
+maintainer has already created `~/Desktop/flightiran-upload.jks`, reuse
+that existing key; **do not generate a replacement** without first checking
+whether its signing identity is already registered with Google Play.
+
+On the maintainer's Mac (never in CI or chat), after pulling the latest
+`main` branch and authenticating GitHub CLI:
+
+```bash
+git checkout main && git pull --ff-only
+gh auth status
+bash scripts/android-configure-signing.sh "$HOME/Desktop/flightiran-upload.jks"
+gh secret list -R abolfazl260/flightiranbot24
+```
+
+The interactive setup asks for the keystore password, alias
+(default `flightiran-upload`), and key password without echoing passwords.
+Before uploading anything it verifies the store, alias, and private key by
+signing a **temporary disposable JAR**. It then uploads four encrypted GitHub
+Actions repository secrets: `ANDROID_KEYSTORE_BASE64`,
+`ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS`, and
+`ANDROID_KEY_PASSWORD`. The secret list shows metadata, not values, and
+**does not prove that credentials are correct**.
+
+Run the separate **Android Signing Preflight** workflow from Actions (or use
+these commands once the workflow exists on `main`):
+
+```bash
+gh workflow run android-signing-preflight.yml -R abolfazl260/flightiranbot24 --ref main
+gh run list -R abolfazl260/flightiranbot24 --workflow android-signing-preflight.yml --limit 3
+```
+
+Open the newest workflow run and require the `Validate private upload key
+and passwords` job to pass. The preflight restores the encrypted keystore
+to a temporary runner file, verifies both passwords and the alias with
+`keytool` and `jarsigner`, and discards the file without uploading an APK,
+AAB, keystore, or signed test artifact. On error, correct the local
+credentials and rerun setup; **do not create a release tag to test signing**.
+
+This preflight proves the Actions secrets can unlock the upload key. It does
+not validate Google Play upload-key enrollment, tag-protection rules, a fresh
+ticket API, a signed production APK/AAB, or Play approval. Those are separate
+publication gates.
+
 ## Automatic builds and versions
 
 Android now has exactly **one application ID**,
