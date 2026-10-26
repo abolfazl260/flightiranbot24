@@ -1,0 +1,307 @@
+{
+  "schema_version": 1,
+  "categories": [
+    {
+      "id": "flight-search",
+      "name_fa": "جست‌وجو و مقایسه پرواز",
+      "order": 0
+    },
+    {
+      "id": "flight-tracking",
+      "name_fa": "رهگیری پرواز و مسیرها",
+      "order": 1
+    },
+    {
+      "id": "iran-aviation",
+      "name_fa": "هوانوردی و فرودگاه‌های ایران",
+      "order": 2
+    },
+    {
+      "id": "visa-entry",
+      "name_fa": "ویزا، شرایط ورود و گذرنامه",
+      "order": 3
+    },
+    {
+      "id": "health-weather",
+      "name_fa": "سلامت سفر و هواشناسی هوانوردی",
+      "order": 4
+    },
+    {
+      "id": "airport-services",
+      "name_fa": "خدمات فرودگاهی، صندلی و بار",
+      "order": 5
+    },
+    {
+      "id": "travel-planning",
+      "name_fa": "ابزارهای برنامه‌ریزی سفر",
+      "order": 6
+    },
+    {
+      "id": "passenger-rights",
+      "name_fa": "حقوق مسافر و ثبت شکایت",
+      "order": 7
+    }
+  ],
+  "websites": [
+    {
+      "id": "google-flights",
+      "name_fa": "گوگل فلایتس (Google Flights)",
+      "description_fa": "تقویم قیمت، مقایسه تاریخ‌های مختلف و کشف مقصدها؛ برای بررسی اولیه قیمت پروازها مناسب است.",
+      "category_id": "flight-search",
+      "url": "https://www.google.com/travel/flights",
+      "image": "images/google-flights.webp",
+      "order": 0,
+      "enabled": true
+    },
+    {
+      "id": "skyscanner",
+      "name_fa": "اسکای‌اسکنر (Skyscanner)",
+      "description_fa": "جست‌وجوی مقصد با گزینه Everywhere، مقایسه قیمت‌ها و پیدا کردن ماه یا روزهای ارزان‌تر سفر.",
+      "category_id": "flight-search",
+      "url": "https://www.skyscanner.net/",
+      "image": "images/skyscanner.webp",
+      "order": 1,
+      "enabled": true
+    },
+    {
+      "id": "kayak",
+      "name_fa": "کایاک (KAYAK)",
+      "description_fa": "مقایسه قیمت پرواز و ابزارهای تاریخ منعطف، جست‌وجوی چندمقصدی و هشدار تغییر قیمت.",
+      "category_id": "flight-search",
+      "url": "https://www.kayak.com/flights",
+      "image": "images/kayak.webp",
+      "order": 2,
+      "enabled": true
+    },
+    {
+      "id": "momondo",
+      "name_fa": "موموندو (momondo)",
+      "description_fa": "موتور جست‌وجوی مقایسه‌ای برای بررسی نرخ‌های شرکت‌های هواپیمایی و آژانس‌های مختلف.",
+      "category_id": "flight-search",
+      "url": "https://www.momondo.com/",
+      "image": "images/momondo.webp",
+      "order": 3,
+      "enabled": true
+    },
+    {
+      "id": "flightstats-cirium",
+      "name_fa": "فلایت‌استتس / سیریوم (FlightStats / Cirium)",
+      "description_fa": "بررسی وضعیت پرواز و اطلاعات عملیاتی پروازها و فرودگاه‌ها؛ پوشش بعضی داده‌ها ممکن است محدود یا تجاری باشد.",
+      "category_id": "flight-tracking",
+      "url": "https://www.flightstats.com/v2/",
+      "image": "images/flightstats-cirium.webp",
+      "order": 4,
+      "enabled": true
+    },
+    {
+      "id": "flightconnections",
+      "name_fa": "فلایت‌کانکشنز (FlightConnections)",
+      "description_fa": "نقشه مسیرهای هوایی و پروازهای مستقیم؛ برای بررسی مسیرهای موجود و فرودگاه‌های متصل به هم.",
+      "category_id": "flight-tracking",
+      "url": "https://www.flightconnections.com/",
+      "image": "images/flightconnections.webp",
+      "order": 5,
+      "enabled": true
+    },
+    {
+      "id": "flightaware",
+      "name_fa": "فلایت‌اِویر (FlightAware)",
+      "description_fa": "رهگیری پروازها و مشاهده وضعیت، مسیر و زمان‌های تخمینی پروازهای قابل ردیابی.",
+      "category_id": "flight-tracking",
+      "url": "https://www.flightaware.com/",
+      "image": "images/flightaware.webp",
+      "order": 6,
+      "enabled": true
+    },
+    {
+      "id": "flightradar24",
+      "name_fa": "فلایت‌رادار۲۴ (Flightradar24)",
+      "description_fa": "نقشه زنده ترافیک هوایی و جست‌وجوی پرواز، هواپیما و فرودگاه با داده‌های رهگیری.",
+      "category_id": "flight-tracking",
+      "url": "https://www.flightradar24.com/",
+      "image": "images/flightradar24.webp",
+      "order": 7,
+      "enabled": true
+    },
+    {
+      "id": "iran-civil-aviation",
+      "name_fa": "سازمان هواپیمایی کشوری ایران",
+      "description_fa": "مرجع رسمی اطلاعیه‌ها و اطلاعات نظارتی هوانوردی ایران؛ برای پیگیری موضوعات حقوق مسافر و شکایت، بخش‌های مرتبط سایت را بررسی کنید.",
+      "category_id": "iran-aviation",
+      "url": "https://www.caa.gov.ir/",
+      "image": "images/iran-civil-aviation.webp",
+      "order": 8,
+      "enabled": true
+    },
+    {
+      "id": "iran-fids",
+      "name_fa": "سامانه اطلاعات پرواز فرودگاه‌ها (FIDS)",
+      "description_fa": "مشاهده اطلاعات پروازهای ورودی و خروجی شماری از فرودگاه‌های ایران از طریق سامانه اطلاعات پرواز.",
+      "category_id": "iran-aviation",
+      "url": "https://fids.airport.ir/",
+      "image": "images/iran-fids.webp",
+      "order": 9,
+      "enabled": true
+    },
+    {
+      "id": "iran-airports-company",
+      "name_fa": "شرکت فرودگاه‌ها و ناوبری هوایی ایران",
+      "description_fa": "وب‌سایت شرکت فرودگاه‌ها برای دسترسی به اطلاعیه‌ها و خدمات رسمی فرودگاهی؛ ممکن است برخی بخش‌ها موقتاً در دسترس نباشند.",
+      "category_id": "iran-aviation",
+      "url": "https://www.airport.ir/",
+      "image": "images/iran-airports-company.webp",
+      "order": 10,
+      "enabled": true
+    },
+    {
+      "id": "iata-travel-centre",
+      "name_fa": "مرکز سفر یاتا (IATA Travel Centre)",
+      "description_fa": "بررسی شرایط گذرنامه، ویزا، سلامت و برخی مقررات مقصد بر اساس تابعیت و مسیر سفر؛ پیش از حرکت دوباره بررسی کنید.",
+      "category_id": "visa-entry",
+      "url": "https://www.iata.org/en/travel-centre/",
+      "image": "images/iata-travel-centre.webp",
+      "order": 11,
+      "enabled": true
+    },
+    {
+      "id": "travel-requirements-info",
+      "name_fa": "Travel Requirements",
+      "description_fa": "راهنمای آنلاین شرایط ورود و الزامات مقصد بر اساس کشور و گذرنامه؛ تاریخ اعتبار و منبع هر داده را در صفحه مقصد بررسی کنید.",
+      "category_id": "visa-entry",
+      "url": "https://travelrequirements.info/",
+      "image": "images/travel-requirements-info.webp",
+      "order": 12,
+      "enabled": true
+    },
+    {
+      "id": "uk-foreign-travel-advice",
+      "name_fa": "راهنمای سفر خارجی دولت بریتانیا",
+      "description_fa": "هشدارهای امنیتی، شرایط ورود، سلامت و اطلاعات کمک اضطراری برای کشورها از سوی وزارت خارجه بریتانیا.",
+      "category_id": "visa-entry",
+      "url": "https://www.gov.uk/foreign-travel-advice",
+      "image": "images/uk-foreign-travel-advice.webp",
+      "order": 13,
+      "enabled": true
+    },
+    {
+      "id": "us-travel-advisories",
+      "name_fa": "هشدارهای سفر وزارت خارجه آمریکا",
+      "description_fa": "سطح هشدار سفر، نکات امنیتی و اطلاعات کنسولی کشورها؛ برای تصمیم‌گیری، هشدارهای رسمی کشور مقصد را نیز ببینید.",
+      "category_id": "visa-entry",
+      "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories.html",
+      "image": "images/us-travel-advisories.webp",
+      "order": 14,
+      "enabled": true
+    },
+    {
+      "id": "cdc-travelers-health",
+      "name_fa": "سلامت مسافران CDC",
+      "description_fa": "توصیه‌های سلامت، واکسن‌ها و پیشگیری از بیماری‌ها بر اساس مقصد؛ برای نیازهای پزشکی با متخصص سلامت مشورت کنید.",
+      "category_id": "health-weather",
+      "url": "https://wwwnc.cdc.gov/travel",
+      "image": "images/cdc-travelers-health.webp",
+      "order": 15,
+      "enabled": true
+    },
+    {
+      "id": "aviationweather",
+      "name_fa": "AviationWeather.gov",
+      "description_fa": "اطلاعات هواشناسی هوانوردی از جمله METAR، TAF، نقشه‌ها و محصولات هواشناسی برای برنامه‌ریزی پرواز.",
+      "category_id": "health-weather",
+      "url": "https://aviationweather.gov/",
+      "image": "images/aviationweather.webp",
+      "order": 16,
+      "enabled": true
+    },
+    {
+      "id": "windy",
+      "name_fa": "وِندی (Windy)",
+      "description_fa": "نقشه‌های تعاملی باد، بارش و شرایط جوی برای بررسی کلی آب‌وهوا در مقصد و مسیر سفر.",
+      "category_id": "health-weather",
+      "url": "https://www.windy.com/",
+      "image": "images/windy.webp",
+      "order": 17,
+      "enabled": true
+    },
+    {
+      "id": "aerolopa",
+      "name_fa": "اِئرو لوپا (AeroLOPA)",
+      "description_fa": "نقشه‌های جزئی کابین هواپیما و چیدمان صندلی‌ها برای بررسی محل صندلی و امکانات هر نوع هواپیما.",
+      "category_id": "airport-services",
+      "url": "https://www.aerolopa.com/",
+      "image": "images/aerolopa.webp",
+      "order": 18,
+      "enabled": true
+    },
+    {
+      "id": "seatmaps",
+      "name_fa": "نقشه صندلی‌ها (SeatMaps)",
+      "description_fa": "جست‌وجوی نقشه صندلی‌های هواپیما و بررسی چیدمان کابین بر اساس شرکت هواپیمایی و مدل هواپیما.",
+      "category_id": "airport-services",
+      "url": "https://seatmaps.com/",
+      "image": "images/seatmaps.webp",
+      "order": 19,
+      "enabled": true
+    },
+    {
+      "id": "iata-baggage",
+      "name_fa": "راهنمای بار یاتا (IATA Baggage)",
+      "description_fa": "اطلاعات عمومی درباره حمل بار و مقررات مرتبط؛ میزان مجاز بار و هزینه‌ها را حتماً در قوانین شرکت هواپیمایی خود تأیید کنید.",
+      "category_id": "airport-services",
+      "url": "https://www.iata.org/en/programs/ops-infra/baggage/",
+      "image": "images/iata-baggage.webp",
+      "order": 20,
+      "enabled": true
+    },
+    {
+      "id": "rome2rio",
+      "name_fa": "روم‌تو‌ریو (Rome2Rio)",
+      "description_fa": "مقایسه روش‌های رسیدن از یک نقطه به نقطه دیگر، از جمله هواپیما، قطار، اتوبوس، خودرو و مسیرهای ترکیبی.",
+      "category_id": "travel-planning",
+      "url": "https://www.rome2rio.com/",
+      "image": "images/rome2rio.webp",
+      "order": 21,
+      "enabled": true
+    },
+    {
+      "id": "timeanddate-worldclock",
+      "name_fa": "ساعت جهانی Timeanddate",
+      "description_fa": "مقایسه ساعت محلی شهرها و اختلاف زمانی برای هماهنگی پروازها، توقف‌ها و تماس با مقصد.",
+      "category_id": "travel-planning",
+      "url": "https://www.timeanddate.com/worldclock/",
+      "image": "images/timeanddate-worldclock.webp",
+      "order": 22,
+      "enabled": true
+    },
+    {
+      "id": "eu-air-passenger-rights",
+      "name_fa": "حقوق مسافر هوایی اتحادیه اروپا",
+      "description_fa": "توضیحات رسمی اتحادیه اروپا درباره حقوق مسافر در برخی موارد تأخیر، لغو پرواز و رد سوارشدن؛ شمول مقررات به مسیر بستگی دارد.",
+      "category_id": "passenger-rights",
+      "url": "https://transport.ec.europa.eu/transport-themes/passenger-rights/air_en",
+      "image": "images/eu-air-passenger-rights.webp",
+      "order": 23,
+      "enabled": true
+    },
+    {
+      "id": "uk-caa-passengers",
+      "name_fa": "راهنمای مسافران سازمان هواپیمایی کشوری بریتانیا",
+      "description_fa": "راهنمای رسمی حقوق مسافر و راه‌های پیگیری مشکلات پرواز در بریتانیا؛ شرایط کاربرد به مسیر و شرکت مربوط است.",
+      "category_id": "passenger-rights",
+      "url": "https://www.caa.co.uk/passengers/",
+      "image": "images/uk-caa-passengers.webp",
+      "order": 24,
+      "enabled": true
+    },
+    {
+      "id": "us-dot-airconsumer",
+      "name_fa": "حمایت از مصرف‌کننده سفر هوایی آمریکا",
+      "description_fa": "راهنمای وزارت حمل‌ونقل آمریکا درباره حقوق مسافران، شکایت از شرکت‌های هواپیمایی، بازپرداخت و خدمات سفر هوایی.",
+      "category_id": "passenger-rights",
+      "url": "https://www.transportation.gov/airconsumer",
+      "image": "images/us-dot-airconsumer.webp",
+      "order": 25,
+      "enabled": true
+    }
+  ]
+}
