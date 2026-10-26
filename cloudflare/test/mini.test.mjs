@@ -183,6 +183,69 @@ test("User-scoped Mini App jobs flow securely through the outbound polling bridg
   assert.equal(jobs.size,1);
 });
 
+test("Internal Mini App results accept a bounded bootstrap payload larger than 8 KiB",async()=>{
+  const {env}=fixture();
+  const pending=await handleRequest(req("/api/mini/bootstrap",{user:signedUser()}),env);
+  assert.equal(pending.status,202);
+  const {job_id:id}=await pending.json();
+  const poll=await handleRequest(req("/internal/v1/mini/jobs",{auth:true}),env);
+  assert.equal(poll.status,200);
+  assert.equal((await poll.json()).jobs[0].id,id);
+
+  const codes=Array.from({length:199},(_,i)=>
+    String.fromCharCode(65+Math.floor(i/26),65+i%26));
+  const body={
+    user:{first_name:"محمد"},
+    passport:"IR",
+    countries:codes.map((code,i)=>({
+      code,
+      name:`مقصد ${String(i+1).padStart(3,"0")} — جمهوری نمونه ${"جزیره ".repeat(2)}`
+    })),
+    links:{}
+  };
+  const envelope={http_status:200,body};
+  const encoder=new TextEncoder();
+  assert.ok(encoder.encode(JSON.stringify(envelope)).length>8192);
+  assert.ok(encoder.encode(JSON.stringify(body)).length<=131072);
+
+  const resultUrl="/internal/v1/mini/jobs/"+id+"/result";
+  const acknowledgement=await handleRequest(req(resultUrl,{
+    method:"POST",auth:true,json:envelope
+  }),env);
+  assert.equal(acknowledgement.status,200);
+  assert.deepEqual(await acknowledgement.json(),{accepted:true});
+
+  const finished=await handleRequest(req("/api/mini/results/"+id,{user:signedUser()}),env);
+  assert.equal(finished.status,200);
+  const result=await finished.json();
+  assert.equal(result.body.countries.length,199);
+  assert.equal(result.body.countries[198].code,codes[198]);
+});
+
+test("Mini App user JSON requests remain capped at 8 KiB",async()=>{
+  const {env,jobs}=fixture();
+  const response=await handleRequest(req("/api/mini/passport",{
+    method:"POST",user:signedUser(),
+    json:{passport:"IR",padding:"x".repeat(9000)}
+  }),env);
+  assert.equal(response.status,400);
+  assert.equal(jobs.size,0);
+});
+
+test("Internal Mini App results still enforce the 128 KiB result limit",async()=>{
+  const {env}=fixture();
+  const pending=await handleRequest(req("/api/mini/bootstrap",{user:signedUser()}),env);
+  const {job_id:id}=await pending.json();
+  await handleRequest(req("/internal/v1/mini/jobs",{auth:true}),env);
+
+  const body={padding:"x".repeat(131073)};
+  assert.ok(new TextEncoder().encode(JSON.stringify(body)).length>131072);
+  const response=await handleRequest(req("/internal/v1/mini/jobs/"+id+"/result",{
+    method:"POST",auth:true,json:{http_status:200,body}
+  }),env);
+  assert.equal(response.status,413);
+});
+
 test("A leased mutating action is NOT executed twice after lost acknowledgement",async()=>{
   const {env,jobs}=fixture();
   const signed=signedUser();

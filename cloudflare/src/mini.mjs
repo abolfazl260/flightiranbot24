@@ -7,8 +7,11 @@ const encoder = new TextEncoder();
 const CODE2 = /^[A-Z]{2}$/;
 const JOB_ID = /^[a-f0-9-]{36}$/i;
 const MAX_AUTH_LENGTH = 8192;
+const MAX_JSON_REQUEST_BYTES = 8192;
 const MAX_JOB_AGE_MS = 90_000;
 const MAX_RESULT_LENGTH = 131_072;
+// The result envelope adds only a small amount of JSON framing around the body.
+const MAX_RESULT_ENVELOPE_BYTES = MAX_RESULT_LENGTH + 1024;
 const READ_OPERATIONS = new Set(["bootstrap", "alerts", "useful"]);
 const error = (status, message) => Response.json({error:message}, {
   status, headers: {"Cache-Control":"no-store", "X-Content-Type-Options":"nosniff"}
@@ -63,10 +66,10 @@ export async function telegramUser(request,env) {
     };
   } catch { return null; }
 }
-async function miniJsonBody(request) {
+async function miniJsonBody(request, maxBytes = MAX_JSON_REQUEST_BYTES) {
   const type=request.headers.get("Content-Type")||"";
   if (!type.toLowerCase().startsWith("application/json") ||
-      Number(request.headers.get("Content-Length")||"0")>8192)
+      Number(request.headers.get("Content-Length")||"0")>maxBytes)
     return null;
   // Limit streamed request bodies even when Content-Length is absent; do
   // not buffer an arbitrary untrusted payload in a Worker isolate.
@@ -79,7 +82,7 @@ async function miniJsonBody(request) {
       const {done,value}=await reader.read();
       if (done) break;
       size+=value.byteLength;
-      if (size>8192) {
+      if (size>maxBytes) {
         await reader.cancel();
         return null;
       }
@@ -240,7 +243,7 @@ async function internalMini(request,env,path,authorized) {
   }
   const match=/^\/internal\/v1\/mini\/jobs\/([a-f0-9-]{36})\/result$/i.exec(path);
   if (match && request.method==="POST") {
-    const payload=await miniJsonBody(request);
+    const payload=await miniJsonBody(request, MAX_RESULT_ENVELOPE_BYTES);
     const status=payload?.http_status;
     if (!Number.isInteger(status) || ![200,201,400,401,404,409,422,429,503].includes(status) ||
         !payload?.body || typeof payload.body!=="object" || Array.isArray(payload.body))
