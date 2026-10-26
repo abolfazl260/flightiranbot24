@@ -71,6 +71,21 @@ def test_rtl_shell_and_static_assets_have_safe_browser_headers():
         assert "dir" in css.text or "RTL-first" in css.text
 
 
+def test_mini_app_medium_width_layout_keeps_navigation_in_viewport():
+    with TestClient(create_app(mini_settings())) as client:
+        css = client.get("/assets/mini.css").text
+
+    # 650–779px must use three readable card columns and a viewport-bounded nav.
+    assert ".service-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }" in css
+    assert "width: min(100%, 780px);" in css
+    assert "left: 50%;" in css
+    assert "right: auto;" in css
+    assert "transform: translateX(-50%);" in css
+    assert "@media (min-width: 780px)" in css
+    assert ".service-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }" in css
+    assert "left: calc(50% - 390px)" not in css
+
+
 def test_webapp_key_validation_rejects_duplicate_and_future_signed_values():
     auth = WebAppAuthenticator(BOT_TOKEN)
     signed = signed_user()
