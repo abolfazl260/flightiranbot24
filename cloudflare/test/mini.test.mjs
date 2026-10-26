@@ -108,6 +108,7 @@ function fixture() {
       const path=new URL(request.url).pathname;
       if(path==="/index.html") return new Response("<!doctype html><html lang='fa'>Mini</html>",{
         headers:{"Content-Type":"text/html"}});
+      if(path==="/travel-catalog.mjs") return new Response("export const catalog = true",{headers:{"Content-Type":"text/javascript"}});
       if(path==="/mini.js") return new Response("console.log('mini')",{
         headers:{"Content-Type":"text/javascript"}});
       if(path==="/mini.css") return new Response("body{}",{
@@ -130,6 +131,10 @@ test("Worker static-asset binding serves the existing Mini App at / and /mini/",
   const script=await handleRequest(req("/assets/mini.js"),env);
   assert.equal(script.status,200);
   assert.match(await script.text(),/mini/);
+  const catalogModule=await handleRequest(req("/assets/travel-catalog.mjs"),env);
+  assert.equal(catalogModule.status,200);
+  assert.match(await catalogModule.text(),/catalog/);
+  assert.match((await handleRequest(req("/mini"),env)).headers.get("content-security-policy"),/https:\/\/raw\.githubusercontent\.com/);
   assert.equal((await handleRequest(req("/assets/.env"),env)).status,404);
   assert.equal((await handleRequest(req("/api/random"),env)).status,404);
   assert.match(readFileSync(new URL("../wrangler.toml",import.meta.url),"utf8"),

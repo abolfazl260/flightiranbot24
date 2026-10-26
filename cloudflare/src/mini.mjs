@@ -268,6 +268,7 @@ async function serveAsset(request,env,path) {
   const target={
     "/":"/index.html","/mini":"/index.html","/mini/":"/index.html",
     "/assets/mini.js":"/mini.js","/assets/mini.css":"/mini.css",
+    "/assets/travel-catalog.mjs":"/travel-catalog.mjs",
     "/assets/advertio-brand.webp":"/advertio-brand.webp"
   }[path];
   if (!target) return error(404,"Not found");
@@ -284,7 +285,8 @@ async function serveAsset(request,env,path) {
     headers.set("Cache-Control","no-store");
     headers.set("Content-Security-Policy",
       "default-src 'none'; script-src 'self' https://telegram.org; "+
-      "style-src 'self'; img-src 'self' data:; connect-src 'self'; "+
+      "style-src 'self'; img-src 'self' data: https://raw.githubusercontent.com; " +
+      "connect-src 'self' https://raw.githubusercontent.com; "+
       "base-uri 'none'; object-src 'none'; form-action 'none'; " +
       "frame-ancestors 'self' https://web.telegram.org https://*.telegram.org https://t.me");
   } else headers.set("Cache-Control","public, max-age=300");
@@ -309,7 +311,7 @@ export async function miniRoute(request,env,authorized) {
     return enqueue(request,user,env,path);
   }
   if (["/","/mini","/mini/","/assets/mini.js","/assets/mini.css",
-    "/assets/advertio-brand.webp"].includes(path))
+    "/assets/travel-catalog.mjs","/assets/advertio-brand.webp"].includes(path))
     return serveAsset(request,env,path);
   return null;
 }
