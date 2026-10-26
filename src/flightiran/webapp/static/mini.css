@@ -184,8 +184,20 @@ dialog::backdrop { background: #0717279c; }
 .startup-card p { color: var(--muted); line-height: 2; font-size: 12px; }
 @media (min-width: 650px) {
   .shell { padding-left: 27px; padding-right: 27px; }
+  /* Keep service cards readable until the shell has room for four columns. */
+  .service-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  /* Center the bottom navigation without expanding it beyond the viewport. */
+  .bottom-nav {
+    width: min(100%, 780px);
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    border: 1px solid var(--line);
+    border-radius: 16px 16px 0 0;
+  }
+}
+@media (min-width: 780px) {
   .service-grid { grid-template-columns: repeat(4,minmax(0,1fr)); }
-  .bottom-nav { left: calc(50% - 390px); right: calc(50% - 390px); border: 1px solid var(--line); border-radius: 16px 16px 0 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
