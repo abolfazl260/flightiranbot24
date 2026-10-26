@@ -57,7 +57,8 @@ def create_app(
             response.headers["Cache-Control"] = "no-store"
             response.headers["Content-Security-Policy"] = (
                 "default-src 'none'; script-src 'self' https://telegram.org; "
-                "style-src 'self'; img-src 'self' data:; connect-src 'self'; "
+                "style-src 'self'; img-src 'self' data: https://raw.githubusercontent.com; "
+                "connect-src 'self' https://raw.githubusercontent.com; "
                 "base-uri 'none'; object-src 'none'; form-action 'none'"
             )
             response.headers["Referrer-Policy"] = "no-referrer"
