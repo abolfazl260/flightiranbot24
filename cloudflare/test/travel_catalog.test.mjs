@@ -27,7 +27,7 @@ test("v1 shared catalog displays 26 distinct sites in 8 remotely defined categor
   assert(parsed.sites.every(x=>x.image.startsWith(
     "https://raw.githubusercontent.com/abolfazl260/flightiranbot24/main/data/travel-websites/images/")));
   assert.equal(filterWebsites(parsed.sites,"category_1","").length,4);
-  assert.equal(filterWebsites(parsed.sites,"all","وب‌سایت ۲").length,1);
+  assert.equal(filterWebsites(parsed.sites,"all","وب‌سایت ۱۶").length,1);
   assert.equal(parsed.sites[0].id,"website_0");
   assert.equal(parsed.sites[1].id,"website_8");
   assert.equal(parsed.sites[2].id,"website_16");
