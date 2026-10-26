@@ -43,3 +43,9 @@ def test_catalog_security_contract_and_first_party_hosts():
     assert '"/assets/travel-catalog.mjs":"/travel-catalog.mjs"' in worker
     assert "el(\"h3\",{text:site.name})" in (STATIC / "mini.js").read_text(encoding="utf-8")
     assert "innerHTML" not in (STATIC / "mini.js").read_text(encoding="utf-8")
+
+    # The Python wheel must include the ES module imported by mini.js.
+    import tomllib
+    project = tomllib.loads((ROOT / "pyproject.toml").read_text(encoding="utf-8"))
+    package_data = project["tool"]["setuptools"]["package-data"]["flightiran"]
+    assert "webapp/static/*.mjs" in package_data
