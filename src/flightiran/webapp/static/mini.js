@@ -153,8 +153,10 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
       if (parsed.hostname === "t.me" || parsed.hostname === "telegram.me") {
         if (telegram?.openTelegramLink) telegram.openTelegramLink(parsed.href);
         else window.open(parsed.href,"_blank","noopener,noreferrer");
-      } else if (telegram?.openLink) telegram.openLink(parsed.href);
-      else window.open(parsed.href,"_blank","noopener,noreferrer");
+      } else if (telegram?.openLink) {
+        try { telegram.openLink(parsed.href); }
+        catch { window.open(parsed.href,"_blank","noopener,noreferrer"); }
+      } else window.open(parsed.href,"_blank","noopener,noreferrer");
     } catch { toast("لینک معتبر نیست."); }
   }
   function openUrl(url) {
