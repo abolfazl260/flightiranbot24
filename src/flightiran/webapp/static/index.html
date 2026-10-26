@@ -7,9 +7,9 @@
   <meta name="color-scheme" content="light dark">
   <meta name="description" content="دستیار سفر ادورتیو؛ قیمت پرواز، ویزا، هشدارها و راهنمای سفر">
   <title>ادورتیو | دستیار سفر</title>
-  <link rel="stylesheet" href="/assets/mini.css?v=2">
+  <link rel="stylesheet" href="/assets/mini.css?v=3">
   <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script src="/assets/mini.js?v=2" defer></script>
+  <script type="module" src="/assets/mini.js?v=3"></script>
 </head>
 <body>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -59,6 +59,7 @@
           <button type="button" class="service-card" data-go="visa"><span class="service-icon aqua"><svg class="symbol"><use href="#i-passport"></use></svg></span><strong>راهنمای ویزا</strong><small>شرایط ورود کشورها</small></button>
           <button type="button" class="service-card" data-go="alerts"><span class="service-icon peach"><svg class="symbol"><use href="#i-bell"></use></svg></span><strong>هشدارهای من</strong><small>پایش بلیت و ویزا</small></button>
           <button type="button" class="service-card" data-go="useful"><span class="service-icon violet"><svg class="symbol"><use href="#i-book"></use></svg></span><strong>راهنمای سفر</strong><small>منابع و اطلاعات کاربردی</small></button>
+          <button type="button" class="service-card" data-go="websites"><span class="service-icon violet"><svg class="symbol"><use href="#i-external"></use></svg></span><strong>وب‌سایت‌های کاربردی سفر</strong><small>منابع معتبر سفر در یک مکان</small></button>
           <button type="button" class="service-card" data-go="checklist"><span class="service-icon aqua"><svg class="symbol"><use href="#i-list-check"></use></svg></span><strong>چک‌لیست سفر من</strong><small>۱۲ گام برای آمادگی سفر</small></button>
         </div>
 
@@ -100,9 +101,20 @@
 
       <section class="screen" id="screen-useful" data-screen="useful" aria-labelledby="useful-heading" hidden>
         <div class="page-title"><span class="page-icon violet"><svg class="symbol"><use href="#i-book"></use></svg></span><div><h1 id="useful-heading">اطلاعات کاربردی سفر</h1><p>منابع منتخب قبل و حین سفر</p></div></div>
+        <button type="button" class="secondary-cta website-guide-link" data-go="websites"><svg class="symbol"><use href="#i-external"></use></svg> وب‌سایت‌های کاربردی سفر <svg class="symbol"><use href="#i-arrow"></use></svg></button>
         <div class="list-stack" id="useful-results"><div class="panel muted">در حال دریافت راهنمای سفر…</div></div>
         <div class="partner-card"><span class="partner-icon"><svg class="symbol"><use href="#i-bag"></use></svg></span><div><strong>خدمات حمل بار بین‌المللی</strong><small>مشاهده کانال رسمی ادورتیو کارگو</small></div><button type="button" class="outline-light" data-link="cargo">مشاهده <svg class="symbol"><use href="#i-external"></use></svg></button></div>
         <button type="button" class="secondary-cta" data-link="support"><svg class="symbol"><use href="#i-chat"></use></svg> ارتباط با پشتیبانی</button>
+      </section>
+
+      <section class="screen" id="screen-websites" data-screen="websites" aria-labelledby="websites-heading" hidden>
+        <div class="page-title"><span class="page-icon violet"><svg class="symbol"><use href="#i-external"></use></svg></span><div><h1 id="websites-heading">وب‌سایت‌های کاربردی سفر</h1><p>منابع منتخب برای برنامه‌ریزی و پیگیری سفر</p></div></div>
+        <div class="field search-field"><label for="website-search">جست‌وجوی وب‌سایت</label><span class="search-wrap"><svg class="symbol"><use href="#i-search"></use></svg><input id="website-search" type="search" placeholder="نام یا کاربرد وب‌سایت را جست‌وجو کنید" autocomplete="off"></span></div>
+        <div class="field"><label for="website-category">دسته‌بندی</label><select id="website-category"><option value="all">همه دسته‌بندی‌ها</option></select></div>
+        <div class="section-heading"><h2>فهرست منابع</h2><span class="count" id="website-count" aria-live="polite">—</span></div>
+        <div id="website-status" role="status" aria-live="polite"></div>
+        <div class="list-stack" id="website-results" aria-live="polite"></div>
+        <p class="footnote">پیش از استفاده از خدمات یا ارائه اطلاعات شخصی، نشانی و اعتبار وب‌سایت مقصد را بررسی کنید.</p>
       </section>
 
       <section class="screen" id="screen-checklist" data-screen="checklist" aria-labelledby="checklist-heading" hidden>
