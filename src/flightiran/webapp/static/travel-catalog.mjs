@@ -41,6 +41,8 @@ export function normalizePersian(value) {
     .replace(/[يى]/g, "ی").replace(/ك/g, "ک")
     .replace(/[\u064b-\u065f\u0670\u0640]/g, "")
     .replace(/[\u200c\u200d]/g, " ")
+    .replace(/[۰-۹]/g, digit => String(digit.charCodeAt(0)-1776))
+    .replace(/[٠-٩]/g, digit => String(digit.charCodeAt(0)-1632))
     .replace(/\s+/g, " ").trim();
 }
 export function filterWebsites(sites, category, term) {
