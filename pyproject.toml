@@ -45,6 +45,7 @@ flightiran = [
   "webapp/static/*.html",
   "webapp/static/*.css",
   "webapp/static/*.js",
+  "webapp/static/*.mjs",
 ]
 
 [tool.pytest.ini_options]
