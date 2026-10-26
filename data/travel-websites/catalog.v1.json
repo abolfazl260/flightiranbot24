@@ -126,9 +126,9 @@
     {
       "id": "iran-civil-aviation",
       "name_fa": "سازمان هواپیمایی کشوری ایران",
-      "description_fa": "مرجع رسمی اطلاعیه‌ها و اطلاعات نظارتی هوانوردی ایران؛ برای پیگیری موضوعات حقوق مسافر و شکایت، بخش‌های مرتبط سایت را بررسی کنید.",
+      "description_fa": "سامانه حقوق مسافر سازمان هواپیمایی کشوری برای ثبت و پیگیری شکایت‌های مرتبط با پرواز؛ پیش از ثبت درخواست، مدارک و اطلاعات پرواز را آماده کنید.",
       "category_id": "iran-aviation",
-      "url": "https://www.caa.gov.ir/",
+      "url": "https://farasa.cao.ir/",
       "image": "images/iran-civil-aviation.webp",
       "order": 8,
       "enabled": true
