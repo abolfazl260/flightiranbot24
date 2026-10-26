@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/abolfazl260/flightiranbot24/main/data/travel-websites/catalog.schema.json",
+  "title": "FlightIranBot24 Useful Travel Websites Catalog v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "categories",
+    "websites"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "categories": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name_fa",
+          "order"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{1,79}$"
+          },
+          "name_fa": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 120
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          }
+        }
+      }
+    },
+    "websites": {
+      "type": "array",
+      "minItems": 26,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name_fa",
+          "description_fa",
+          "category_id",
+          "url",
+          "image",
+          "order",
+          "enabled"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{1,79}$"
+          },
+          "name_fa": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "description_fa": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 800
+          },
+          "category_id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{1,79}$"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "maxLength": 2048,
+            "pattern": "^https://"
+          },
+          "image": {
+            "type": "string",
+            "pattern": "^images/[a-z0-9][a-z0-9._-]*\\.webp$",
+            "maxLength": 400
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
