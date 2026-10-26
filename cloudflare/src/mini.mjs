@@ -311,7 +311,7 @@ export async function miniRoute(request,env,authorized) {
     return enqueue(request,user,env,path);
   }
   if (["/","/mini","/mini/","/assets/mini.js","/assets/mini.css",
-    "/assets/advertio-brand.webp","/assets/travel-catalog.mjs"].includes(path))
+    "/assets/travel-catalog.mjs","/assets/advertio-brand.webp"].includes(path))
     return serveAsset(request,env,path);
   return null;
 }
