@@ -1,6 +1,8 @@
 /* Telegram Mini App: user input and API responses are rendered as text nodes.
  * No external UI framework, localStorage credentials, or unsafe HTML insertion.
  */
+import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
+
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
@@ -14,6 +16,7 @@
   const state = {
     initData: "", bootstrap: null, prices: null, origin: "",
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
+    websites: null, websitesFetchedAt: 0, websitesRequest: null,
     toastTimer: null, visaRequest: 0,
     checklist: new Set(), checklistKey: null, checklistPersistent: false,
   };
@@ -137,6 +140,7 @@
     }
     if (screen === "alerts") loadAlerts();
     if (screen === "useful") loadUseful();
+    if (screen === "websites") loadWebsites();
     if (screen === "visa" && !state.visa) loadVisa();
     if (screen === "checklist") renderChecklist();
     telegram?.HapticFeedback?.selectionChanged?.();
@@ -496,6 +500,92 @@
       )));
   }
 
+  // WEB-002: website inventory, names, categories, images and ordering are
+  // always taken from the shared GitHub JSON, never bundled with the Mini App.
+  const WEBSITE_TTL_MS = 15 * 60 * 1000;
+  function websiteSkeletons() {
+    return Array.from({length:3},()=>
+      el("div",{className:"website-skeleton","aria-hidden":"true"},
+        el("span",{className:"website-skeleton-image"}),
+        el("span",{className:"website-skeleton-copy"},
+          el("span",{className:"website-skeleton-line"}),
+          el("span",{className:"website-skeleton-line short"}))));
+  }
+  function websiteFailure(message) {
+    $("website-count").textContent="—";
+    fill("website-status",el("div",{className:"website-warning",text:message}));
+    fill("website-results",el("div",{className:"empty-list"},
+      el("strong",{text:"فهرست وب‌سایت‌ها در دسترس نیست"}),
+      el("p",{text:"لطفاً اتصال اینترنت را بررسی کنید و دوباره تلاش کنید."}),
+      el("button",{type:"button",className:"secondary-cta website-retry",
+        onClick:()=>loadWebsites(true)},"تلاش دوباره",icon("refresh"))));
+  }
+  async function loadWebsites(force=false) {
+    if (!force && state.websites && Date.now()-state.websitesFetchedAt < WEBSITE_TTL_MS) {
+      renderWebsites();
+      return;
+    }
+    if (state.websitesRequest) return state.websitesRequest;
+    fill("website-status",el("p",{className:"muted",text:"در حال دریافت فهرست وب‌سایت‌ها…"}));
+    fill("website-results",websiteSkeletons());
+    const operation=(async()=>{
+      try {
+        // No initData or authentication headers ever leave this WebView.
+        const catalog=await fetchCatalog(fetch,9000,force?"reload":"default");
+        state.websites=catalog;
+        state.websitesFetchedAt=Date.now();
+        const select=$("website-category"), previous=select.value;
+        select.replaceChildren(el("option",{value:"all",text:"همه دسته‌بندی‌ها"}),
+          ...catalog.categories.map(category=>
+            el("option",{value:category.id,text:category.name})));
+        select.value=catalog.categories.some(item=>item.id===previous) ? previous : "all";
+        renderWebsites();
+      } catch(error) {
+        state.websites=null;
+        websiteFailure(error?.message || "دریافت اطلاعات با خطا مواجه شد.");
+      } finally {
+        state.websitesRequest=null;
+      }
+    })();
+    state.websitesRequest=operation;
+    return operation;
+  }
+  function websiteCard(site) {
+    const image=el("img",{className:"website-image",src:site.image,
+      loading:"lazy",decoding:"async",alt:site.name,
+      width:"108",height:"88",referrerpolicy:"no-referrer"});
+    image.addEventListener("error",()=>{
+      image.replaceWith(el("span",{className:"website-image-fallback",
+        text:"تصویر در دسترس نیست"}));
+    },{once:true});
+    return el("article",{className:"website-card",dataset:{websiteId:site.id}},
+      el("div",{className:"website-card-top"},
+        el("div",{className:"website-image-wrap"},image),
+        el("div",{className:"website-card-detail"},
+          el("span",{className:"website-category",text:site.categoryName}),
+          el("h3",{text:site.name}),
+          el("p",{text:site.description}))),
+      el("button",{type:"button",className:"website-open",
+        onClick:()=>{
+          const url=approvedExternalUrl(site.url);
+          if (url) openUrl(url);
+          else toast("نشانی این وب‌سایت معتبر نیست.");
+        }},"مشاهده وب‌سایت",icon("external")));
+  }
+  function renderWebsites() {
+    if (!state.websites) return;
+    fill("website-status");
+    const sites=filterWebsites(state.websites.sites,
+      $("website-category").value,$("website-search").value);
+    $("website-count").textContent=fmt(sites.length);
+    if (!sites.length) {
+      fill("website-results",empty("موردی پیدا نشد",
+        "عبارت جست‌وجو یا دسته‌بندی را تغییر دهید."));
+      return;
+    }
+    fill("website-results",sites.map(websiteCard));
+  }
+
   // Keep the Mini App checklist in step with the 12 native Android tasks.
   // Save only non-sensitive completion keys, never Telegram initData or tokens.
   // Per-account browser storage is intentionally device-local, just like Android.
@@ -633,6 +723,7 @@
     await Promise.all([loadPrices(),loadVisa()]);
     if (state.active === "alerts") await loadAlerts();
     if (state.active === "useful") { state.useful=null; await loadUseful(); }
+    if (state.active === "websites") await loadWebsites(true);
     toast("اطلاعات دریافت شد.");
   });
   $("origin-select").addEventListener("change",event=>{
@@ -640,6 +731,8 @@
   });
   $("ticket-search").addEventListener("input",renderTickets);
   $("visa-search").addEventListener("input",renderVisa);
+  $("website-search").addEventListener("input",renderWebsites);
+  $("website-category").addEventListener("change",renderWebsites);
   $("passport-select").addEventListener("change",async event=>{
     const previous=state.passport;
     const selected=event.target.value;
