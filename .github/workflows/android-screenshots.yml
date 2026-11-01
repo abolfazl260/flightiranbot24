@@ -49,6 +49,17 @@ jobs:
           profile: pixel_6
           emulator-boot-timeout: 900
           script: bash scripts/capture_android_screenshots.sh
+      - name: Upload emulator navigation diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-navigation-diagnostics
+          path: |
+            android/screenshots/failed-navigation.png
+            android/screenshots/failed-window.xml
+            android/screenshots/01-home.png
+          if-no-files-found: warn
+          retention-days: 7
       - name: Generate Google Play graphics
         run: |
           python -m pip install --disable-pip-version-check "Pillow==11.3.0"
