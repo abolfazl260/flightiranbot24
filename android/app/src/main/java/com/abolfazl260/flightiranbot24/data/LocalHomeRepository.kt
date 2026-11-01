@@ -11,7 +11,6 @@ import com.abolfazl260.flightiranbot24.domain.HomeSections
 internal class LocalHomeRepository : HomeRepository {
     override suspend fun loadHomeSections() = HomeSections(
         offline = listOf(
-            HomeDestination.OFFLINE_AIRPORTS,
             HomeDestination.OFFLINE_CHECKLIST,
         ),
         online = listOf(
@@ -19,7 +18,6 @@ internal class LocalHomeRepository : HomeRepository {
             HomeDestination.IRAN_FLIGHTS,
             HomeDestination.TELEGRAM_BOT,
             HomeDestination.TELEGRAM_VISA,
-            HomeDestination.TELEGRAM_AIRPORTS,
             HomeDestination.TELEGRAM_USEFUL,
             HomeDestination.SUPPORT,
             HomeDestination.PRIVACY,
