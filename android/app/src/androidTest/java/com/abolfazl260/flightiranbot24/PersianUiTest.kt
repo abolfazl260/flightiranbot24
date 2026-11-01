@@ -29,6 +29,13 @@ class PersianUiTest {
         rule.onNodeWithText("فرودگاه‌ها").assertDoesNotExist()
         rule.onNodeWithContentDescription("راهنمای فرودگاه‌ها").assertHasClickAction()
         rule.onNodeWithText("چک‌لیست").assertHasClickAction()
+        // The airport feature is disabled: tapping the card opens Services
+        // without launching the former AirportDirectoryActivity.
+        rule.onNodeWithContentDescription("راهنمای فرودگاه‌ها").performClick()
+        rule.onNodeWithText("خدمات بیشتر").assertExists()
+        rule.onNodeWithText("اطلاعات فرودگاه‌ها").assertDoesNotExist()
+        rule.onNodeWithText("خانه").performClick()
+        rule.onNodeWithText("سفر، ساده‌تر از همیشه").assertExists()
         rule.onNodeWithText("خدمات").performClick()
         rule.onNodeWithText("خدمات بیشتر").assertExists()
     }
