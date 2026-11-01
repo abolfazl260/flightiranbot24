@@ -88,7 +88,7 @@ else:
     size = subprocess.check_output(
         ["adb", "shell", "wm", "size"], text=True
     ).strip()
-    resolution = re.search(r"(\\d+)x(\\d+)", size)
+    resolution = re.search(r"(\d+)x(\d+)", size)
     if not resolution:
         raise SystemExit(f"Unable to determine emulator size: {size}")
     width, height = map(int, resolution.groups())
