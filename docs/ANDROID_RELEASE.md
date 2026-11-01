@@ -36,9 +36,10 @@ Legacy manually created `vMAJOR.MINOR.PATCH` tags are still supported.
    **No Actions variable is required** for the default endpoint. To override,
    set `ANDROID_PRODUCTION_API_ORIGIN` in
    GitHub Settings → Secrets and variables → Actions → Variables.
-   Release CI verifies real, fresh, nonempty `GET /api/v1/tickets/prices`
-   before **publishing the GitHub Release**, not before creating the signed
-   workflow artifact. The endpoint is public and must NEVER contain a bot token.
+   Release CI probes `GET /api/v1/tickets/prices` as a monitored,
+   **advisory** check. HTTP 403, timeouts and stale data produce visible
+   warnings without blocking verified signed binaries. The public endpoint
+   must NEVER contain a bot token.
    Run the Cloudflare Publisher on Ubuntu to populate the D1 feed.
 6. Allow the trusted Android workflow's `GITHUB_TOKEN` to create its
    automatically numbered `v*` tags and publish GitHub Releases with scoped
@@ -89,9 +90,9 @@ AAB, keystore, or signed test artifact. On error, correct the local
 credentials and rerun setup; **do not create a release tag to test signing**.
 
 This preflight proves the Actions secrets can unlock the upload key. It does
-not validate Google Play upload-key enrollment, tag-protection rules, a fresh
-ticket API, a signed production APK/AAB, or Play approval. Those are separate
-publication gates.
+not validate Google Play upload-key enrollment, tag-protection rules,
+operational ticket API health, a signed production APK/AAB, or Play approval.
+Those require independent verification.
 
 ## Automatic builds and versions
 
@@ -111,12 +112,13 @@ The version is computed without editing Gradle properties.
   with the existing private GitHub Actions secrets. Upload
   `android-release-v1.0.N` containing `FlightIranBot24-v1.0.N.apk`,
   `.aab` and `SHA256SUMS.txt` (retained 90 days).
-- **Automatic publication:** if the live prices API has usable fresh data,
-  create the `v1.0.N` Git tag at the verified `main` commit and publish the
-  corresponding GitHub Release with the same signed assets.
-- **API unavailable or stale:** signed artifacts remain available in the
-  successful upload step of the Actions run; public GitHub Release publication
-  is blocked until the real-data gate succeeds. Never use synthetic prices.
+- **Automatic publication:** after Android QA, signatures, HTTPS origin
+  checks and current-`main` verification pass, create the `v1.0.N` tag
+  and public GitHub Release with the same signed assets.
+- **API unavailable or stale:** a failed **advisory** step and explicit
+  GitHub Actions warnings are emitted, but signed release publication is
+  not blocked by an unrelated service outage. The app must show that
+  prices are unavailable or stale. Never generate synthetic ticket prices.
 - **Manual `vMAJOR.MINOR.PATCH` tag (optional):** still supports the
   original signed-release workflow, but no longer required for standard
   `main` builds.
@@ -151,10 +153,10 @@ so Debug APKs no longer report an unconfigured server. If a different
 origin is intentionally deployed, override it with
 `ANDROID_PRODUCTION_API_ORIGIN` or Gradle property `apiOrigin`.
 Overrides must be bare HTTPS origins ending in `/`, without
-username/password/query/path. Release CI validates that
-`GET /api/v1/tickets/prices` serves fresh saved fares before **public
-GitHub Release publication**; signing and uploading the workflow Artifact
-do not depend on data freshness.
+username/password/query/path. Release CI strictly validates the HTTPS
+origin and separately probes `GET /api/v1/tickets/prices` as an advisory
+health check. Signing and GitHub Release publication do not depend on
+operational data freshness.
 If the Worker has no published ticket snapshots, the UI shows a real
 retrieval error rather than fabricated prices.
 
@@ -180,16 +182,18 @@ and `android/app/build/outputs/bundle/release/app-release.aab`.
   above. The workflow automatically creates `v1.0.N` on the current
   reviewed `main` HEAD after validating signatures and the HTTPS API configuration.
   A separately supplied manual tag must also refer to current `main`.
-- The release job builds both APK and AAB using the owner upload key, runs
-  `apksigner verify`, validates the signed-AAB success result from
-  `jarsigner`, saves signed artifacts with SHA-256 digests, and checks the
-  live API before attaching these assets to a public GitHub Release.
+- The release job builds both APK and AAB with the owner upload key, runs
+  `apksigner verify`, checks the AAB with `jarsigner`, saves signed assets
+  and SHA-256 checksums, and probes the ticket API as an advisory check.
 - Automatic generation is not Google Play approval or publication. Complete
   physical-device checks, privacy review and Play Console requirements before
   distributing the release to production users.
 
-The automatic **public publication gate** requires
-`GET /api/v1/tickets/prices` on the configured Cloudflare HTTPS origin to
-return a nonempty `routes` array, `currency: TOMAN`, `observed_at` and
-`stale: false`. If it does not, fix data publishing rather than bypassing
-the gate. The signed build is still downloadable from its Actions artifact.
+The automatic **public publication gate** requires signed APK/AAB files,
+signature verification, a valid HTTPS production API origin and the verified
+current `main` HEAD. `GET /api/v1/tickets/prices` is still checked for
+`currency: TOMAN`, a nonempty `routes` array, a recent `observed_at` and
+`stale: false`, but its failure is an **operational advisory**, never silent
+success. A Cloudflare HTTP 403 warrants checking Access/WAF rules, account
+restrictions, and Worker logs from a trusted external network. Do not claim
+live price data is healthy without verifying the source.
