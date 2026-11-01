@@ -3,8 +3,8 @@ package com.abolfazl260.flightiranbot24
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -35,8 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.abolfazl260.flightiranbot24.domain.HomeDestination
@@ -260,35 +259,24 @@ internal fun PremiumTravelServices(
                 Text("←", fontSize = 16.sp)
             }
         }
-        // The pictured hotel/car/insurance products have not been implemented.
-        // Only present actual supported app/Telegram destinations to users.
-        BoxWithConstraints {
-            if (maxWidth < 350.dp) {
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        PremiumServiceTile("قیمت بلیت", R.drawable.home_tickets,
-                            Modifier.weight(1f)) { onSelect(HomeDestination.TICKET_PRICES) }
-                        PremiumServiceTile("راهنمای ویزا", R.drawable.home_visa,
-                            Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_VISA) }
-                    }
-                    Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                        PremiumServiceTile("اطلاعات سفر", R.drawable.home_travel,
-                            Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_USEFUL) }
-                        PremiumServiceTile("پشتیبانی", R.drawable.home_support,
-                            Modifier.weight(1f)) { onSelect(HomeDestination.SUPPORT) }
-                    }
-                }
-            } else {
-                Row(horizontalArrangement = Arrangement.spacedBy(9.dp)) {
-                    PremiumServiceTile("قیمت بلیت", R.drawable.home_tickets,
-                        Modifier.weight(1f)) { onSelect(HomeDestination.TICKET_PRICES) }
-                    PremiumServiceTile("راهنمای ویزا", R.drawable.home_visa,
-                        Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_VISA) }
-                    PremiumServiceTile("اطلاعات سفر", R.drawable.home_travel,
-                        Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_USEFUL) }
-                    PremiumServiceTile("پشتیبانی", R.drawable.home_support,
-                        Modifier.weight(1f)) { onSelect(HomeDestination.SUPPORT) }
-                }
+        // The four bundled WebP images include their own Persian titles.
+        // Two columns keep the artwork legible, including on narrow phones.
+        Column(
+            modifier = Modifier.fillMaxWidth().widthIn(max = 560.dp)
+                .align(Alignment.CenterHorizontally),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                PremiumServiceTile("قیمت بلیت", R.drawable.home_tickets,
+                    Modifier.weight(1f)) { onSelect(HomeDestination.TICKET_PRICES) }
+                PremiumServiceTile("راهنمای ویزا", R.drawable.home_visa,
+                    Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_VISA) }
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                PremiumServiceTile("اطلاعات سفر", R.drawable.home_travel,
+                    Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_USEFUL) }
+                PremiumServiceTile("پشتیبانی", R.drawable.home_support,
+                    Modifier.weight(1f)) { onSelect(HomeDestination.SUPPORT) }
             }
         }
     }
@@ -303,37 +291,20 @@ private fun PremiumServiceTile(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier,
+        // Keep a screen-reader label even though the visible title is baked
+        // into the image; the entire artwork stays a tappable target.
+        modifier = modifier.semantics { contentDescription = title },
         shape = RoundedCornerShape(19.dp),
         border = androidx.compose.foundation.BorderStroke(1.dp, Outline),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 5.dp, vertical = 13.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            Image(
-                painter = painterResource(imageRes),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(66.dp)
-                    .clip(RoundedCornerShape(16.dp)),
-                contentScale = ContentScale.Crop,
-            )
-            Text(
-                title,
-                fontSize = 11.sp,
-                lineHeight = 17.sp,
-                textAlign = TextAlign.Center,
-                fontWeight = FontWeight.SemiBold,
-                color = Ink,
-                maxLines = 2,
-                minLines = 2,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        Image(
+            painter = painterResource(imageRes),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth().aspectRatio(1f),
+        )
     }
 }
 
