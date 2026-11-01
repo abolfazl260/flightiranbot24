@@ -1,76 +1,42 @@
 # Flight Iran Bot 24 — Android privacy notice
 
-**Reviewed:** 2026-10-10
-**Contact:** https://t.me/Advertio_support
-**Package:** com.abolfazl260.flightiranbot24
+**Reviewed for app UI:** 2026-11-01  
+**Contact:** https://t.me/Advertio_support  
+**Package:** `com.abolfazl260.flightiranbot24`  
+**In-app location:** Services → Privacy (native offline screen, no GitHub redirect)
 
 ## English
 
-The Android application has two offline features: an airport directory bundled
-with the application and a local travel checklist. The Android application
-declares only the normal Android INTERNET permission in preparation for a
-future, versioned first-party HTTPS API. It requests no contact, location,
-camera, microphone, external storage or notification permissions. At this
-stage no server API endpoint is configured by default or contacted at app launch,
-and no
-account credentials are created or transmitted. It does not integrate
-advertising or analytics SDKs.
+### Local data
+The Android app does not create a user account. Travel checklist selections are stored on the device in local app preferences. Non-sensitive travel preferences may be held locally using DataStore; the app also includes a local airport-cache foundation. These are not synced to a user account. Use **Clear my checklist** to erase checklist selections, or clear app data / uninstall to erase the app's local data.
 
-Travel checklist selections are kept only in the original local Android app
-preferences on the device; the new DataStore is intended for non-sensitive
-language and passport-country defaults, and the new Room database is reserved
-for a separate public airport cache. These new stores are not connected to an
-account or server in this build. You can erase the checklist with the Clear my
-checklist button, by clearing app data, or by uninstalling. Airport data shown
-by the current Java screen still comes from the packaged offline dataset and
-may be outdated.
+### Network services
+The application requests the normal Android **INTERNET** permission. Opening the ticket price list retrieves public ticket data from the project's HTTPS API, currently configured by default at `https://flightiran-public-api.abolfazl260.workers.dev/`. The Iranian flight information screen opens a third-party FIDS website *inside* the application in a WebView. Those servers may receive connection metadata (for example an IP address) when you use those features. The application does not automatically query these services simply by launching its home screen.
 
-Opening an online service or support link launches an external browser or
-Telegram. This Android application does not transmit Telegram account data.
-The **separate Telegram bot** may process Telegram account IDs, usernames,
-names, messages, language, service preferences and service usage to provide
-features and administrator reporting. Telegram applies its own privacy terms.
+The application does not request permissions for contacts, location, camera, microphone, external storage or notifications. No advertising or analytics SDK is integrated into the Android app.
 
-For questions about server-side bot data or deletion requests, contact the
-support channel above. The operator must verify identity and relevant retention
-requirements; this notice makes no unconditional deletion-time promise.
-There is no account system inside the Android app. Development and staging
-variants have distinct application IDs and visible test labels; their live
-Telegram/support entry points are disabled. Optional HTTPS API origins are
-public build configuration (not secrets), and no account endpoint is invoked.
+### Telegram and other services
+Choosing a Telegram service or support launches Telegram or an external browser. The Android app does not directly collect Telegram account details. The **separate Telegram bot** may process Telegram user IDs, usernames, names, messages, language/service preferences and service activity for functionality and administrator reports. Telegram and third-party websites have their own privacy practices.
 
-Travel or visa details must be confirmed using official sources.
+### Questions, deletion and limitations
+Contact [@Advertio_support](https://t.me/Advertio_support) to ask about bot-side records or request deletion. The operator must verify the requester and applicable retention obligations. This notice does **not** promise immediate or unconditional deletion of server-side bot records.
+
+Flight, travel and visa details must be confirmed with official sources.
 
 ## فارسی
 
-نسخه اندروید Flight Iran Bot 24 فهرست آفلاین فرودگاه‌ها و چک‌لیست سفر
-را ارائه می‌کند. برنامه تنها مجوز عادی اینترنت اندروید را برای اتصال
-آینده به API امن اختصاصی درخواست می‌کند؛ در این نسخه هیچ نشانی API
-پیش‌فرض فعال نیست و هنگام شروع برنامه اطلاعاتی به سرور ارسال نمی‌شود.
-نسخه‌های توسعه و آزمایش شناسه جدا دارند و ورود به ربات و پشتیبانی
-عملیاتی در آن‌ها غیرفعال است؛ تنظیم آدرس عمومی HTTPS به‌تنهایی
-به‌معنای ارتباط خودکار برنامه با سرور نیست.
-برنامه مجوز مخاطبین، موقعیت مکانی، دوربین، میکروفون، حافظه خارجی یا
-اعلان‌ها درخواست نمی‌کند و ابزار تبلیغات یا تحلیل رفتار ندارد.
+### داده‌های محلی
+اپ اندروید حساب کاربری ایجاد نمی‌کند. انتخاب‌های چک‌لیست و تنظیمات عمومی سفر روی خود گوشی ذخیره می‌شوند و به حساب آنلاین متصل نیستند. برای پاک‌کردن انتخاب‌های چک‌لیست از دکمه «پاک‌کردن چک‌لیست من» استفاده کنید. پاک‌کردن داده‌های اپ یا حذف برنامه نیز اطلاعات محلی آن را پاک می‌کند.
 
-وضعیت چک‌لیست فقط در تنظیمات محلی برنامه روی گوشی ذخیره می‌شود و
-با دکمه پاک‌کردن چک‌لیست، پاک‌کردن داده‌های برنامه یا حذف برنامه
-قابل حذف است. DataStore جدید صرفاً برای تنظیمات غیرحساس مانند زبان و
-کشور پاسپورت پیش‌فرض و Room برای کش عمومی فرودگاه‌ها طراحی شده‌اند؛
-این دو در نسخه فعلی به حساب یا سرور متصل نیستند. داده فرودگاه‌های قابل
-نمایش همچنان از فایل آفلاین موجود خوانده می‌شود و ممکن است قدیمی باشد.
+### ارتباطات اینترنتی
+برنامه تنها مجوز عادی اینترنت را درخواست می‌کند. در صفحه قیمت بلیت، داده‌های عمومی قیمت از API امن HTTPS پروژه دریافت می‌شود (نشانی پیش‌فرض فعلی: `https://flightiran-public-api.abolfazl260.workers.dev/`). بخش اطلاعات پرواز ایران، وب‌سایت مربوط را در صفحه داخلی WebView نمایش می‌دهد. سرویس‌های آنلاین ممکن است داده‌های فنی اتصال، از جمله نشانی IP، را دریافت کنند. صرف باز کردن صفحه اصلی اپ باعث فراخوانی خودکار این سرویس‌ها نمی‌شود.
 
-با انتخاب خدمات آنلاین، صفحه تلگرام یا مرورگر جداگانه باز می‌شود.
-نسخه اندروید داده‌های حساب تلگرام را برای سرور ارسال نمی‌کند.
-ربات مستقل تلگرام ممکن است شناسه و نام کاربری تلگرام، نام، پیام‌ها،
-زبان، تنظیمات و داده‌های استفاده از خدمات را برای انجام عملیات و
-ارسال گزارش به مدیر پردازش کند. تلگرام نیز شرایط حریم خصوصی خودش را دارد.
+برنامه مجوز مخاطبین، موقعیت مکانی، دوربین، میکروفون، حافظه خارجی یا اعلان‌ها درخواست نمی‌کند. در نسخه اندروید SDK تبلیغاتی یا تحلیل رفتار کاربر تعبیه نشده است.
 
-برای پرسش درباره اطلاعات سمت سرور ربات یا درخواست حذف اطلاعات،
-از طریق https://t.me/Advertio_support تماس بگیرید. مسئول سرویس
-باید هویت و محدودیت‌های نگهداری اطلاعات را بررسی کند؛
-این اطلاعیه وعده حذف فوری اطلاعات سمت سرور نمی‌دهد.
+### خدمات تلگرام
+با انتخاب خدمات تلگرام یا پشتیبانی، تلگرام یا مرورگر باز می‌شود. اپ اندروید مستقیماً اطلاعات حساب تلگرام را دریافت نمی‌کند. ربات مستقل تلگرام ممکن است شناسه، نام، نام کاربری، پیام‌ها، زبان، تنظیمات خدمات و فعالیت‌های کاربر را برای ارائه سرویس و گزارش مدیریتی پردازش کند. خدمات شخص ثالث سیاست‌های مستقل دارند.
 
-**Publication gate:** The operator must audit the actual bot retention,
-deletion workflow, support commitments and Play Data safety declarations
-before treating this text as a final approved production privacy policy.
+### درخواست حذف داده و پشتیبانی
+برای پرسش درباره داده‌های ربات یا درخواست حذف اطلاعات با [@Advertio_support](https://t.me/Advertio_support) تماس بگیرید. بررسی هویت و الزامات نگهداری اطلاعات پیش از تصمیم‌گیری لازم است. این متن وعده حذف فوری داده‌های سمت سرور نمی‌دهد. اطلاعات سفر و ویزا را با منابع رسمی بررسی کنید.
+
+**Publication gate:** Before store publication, the operator must audit actual bot/server retention, access logging, deletion procedures, third-party service disclosures and app-store Data Safety requirements. The in-app text reflects the implementation as reviewed here; it is not a substitute for legal/privacy approval.
