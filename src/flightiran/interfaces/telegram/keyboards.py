@@ -3,7 +3,6 @@
 from urllib.parse import urlsplit
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-# from telegram import WebAppInfo  # TEMPORARILY DISABLED: Mini App launch button
 
 from .localization import safe_text
 from .support import support_url
