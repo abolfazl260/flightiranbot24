@@ -1,0 +1,61 @@
+name: Prune merged and ancestor branches (one-time)
+
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/prune-merged-branches.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Delete verified redundant branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY}"
+          gh api --paginate "repos/${repo}/pulls?state=closed&per_page=100" \
+            --jq '.[] | select(.merged_at != null and .head.repo.full_name == .base.repo.full_name) | [.head.ref, .head.sha] | @tsv' \
+            > /tmp/merged-pr-heads.tsv
+          gh api --paginate "repos/${repo}/pulls?state=open&per_page=100" \
+            --jq '.[].head.ref' > /tmp/open-pr-branches.txt
+          gh api --paginate "repos/${repo}/branches?per_page=100" \
+            --jq '.[].name' > /tmp/branches.txt
+          deleted=0
+          skipped=0
+          while IFS= read -r branch; do
+            # Exclude default, work-in-progress and release branches.
+            case "$branch" in
+              main|master|work|develop|development|staging|production|release/*)
+                skipped=$((skipped+1)); continue ;;
+            esac
+            if grep -Fxq -- "$branch" /tmp/open-pr-branches.txt; then
+              skipped=$((skipped+1)); continue
+            fi
+            current_sha=$(gh api "repos/${repo}/branches/${branch}" --jq '.commit.sha')
+            ahead=$(gh api "repos/${repo}/compare/main...${branch}" --jq '.ahead_by')
+            redundant=false
+            if [ "$ahead" = "0" ]; then
+              redundant=true
+            elif awk -F '\t' -v b="$branch" -v h="$current_sha" \
+                '$1 == b && $2 == h {found=1} END {exit !found}' \
+                /tmp/merged-pr-heads.tsv; then
+              redundant=true
+            fi
+            if [ "$redundant" = true ]; then
+              echo "Deleting verified redundant branch: $branch"
+              gh api -X DELETE "repos/${repo}/git/refs/heads/${branch}" >/dev/null
+              deleted=$((deleted+1))
+            else
+              echo "Preserving potentially unmerged branch: $branch"
+              skipped=$((skipped+1))
+            fi
+          done < /tmp/branches.txt
+          echo "Deleted $deleted redundant branches; preserved $skipped."
