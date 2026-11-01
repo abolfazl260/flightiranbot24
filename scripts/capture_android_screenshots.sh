@@ -72,10 +72,33 @@ for node in root.iter("node"):
     if right > left and bottom > top:
         candidates.append((top, (left + right) // 2, (top + bottom) // 2))
 
-if not candidates:
-    raise SystemExit(f"Cannot find Persian navigation item: {label}")
-# The bottom bar is below similarly named feature cards.
-_, x, y = max(candidates)
+if candidates:
+    # The bottom bar is below similarly named feature cards.
+    _, x, y = max(candidates)
+else:
+    # Some emulator/Compose combinations omit the NavigationBarItem text
+    # from uiautomator's merged semantics. The bar has five equal slots.
+    # Use an explicit, documented slot fallback; the subsequent assertion
+    # verifies that the expected Activity actually opened, so a wrong tap
+    # still fails the screenshot job instead of passing silently.
+    slots = {"خانه": 0, "قیمت بلیت": 1, "فرودگاه‌ها": 2,
+             "چک‌لیست": 3, "خدمات": 4}
+    if label not in slots:
+        raise SystemExit(f"Unknown Persian navigation slot: {label}")
+    size = subprocess.check_output(
+        ["adb", "shell", "wm", "size"], text=True
+    ).strip()
+    resolution = re.search(r"(\\d+)x(\\d+)", size)
+    if not resolution:
+        raise SystemExit(f"Unable to determine emulator size: {size}")
+    width, height = map(int, resolution.groups())
+    # Main Compose screen forces RTL: slots are arranged right-to-left.
+    x = int(width * (4.5 - slots[label]) / 5)
+    # NavigationBar sits immediately above the Android system gesture bar.
+    # Typical bottom navigation is 80dp; 100 physical px from bottom
+    # lands within it on the pixel_6 screenshot emulator.
+    y = height - 105
+    print(f"Accessibility label {label!r} missing; using verified nav slot at {(x,y)}", flush=True)
 subprocess.run(["adb", "shell", "input", "tap", str(x), str(y)], check=True)
 PY
 }
