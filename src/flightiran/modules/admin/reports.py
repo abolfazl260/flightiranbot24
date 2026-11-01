@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timedelta, timezone
 
-from sqlalchemy import distinct, func, select
+from sqlalchemy import case, distinct, func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from flightiran.db.engine import Database
@@ -20,7 +20,23 @@ from flightiran.db.models import (
     SavedRoute,
     User,
     UserPreference,
+    VisaWatch,
 )
+
+
+@dataclass(frozen=True)
+class UserActivityRow:
+    """Private admin-only snapshot. Event totals count tracked user actions."""
+
+    telegram_id: int
+    username: str | None
+    first_name: str | None
+    last_name: str | None
+    events_total: int
+    events_7d: int
+    active_price_alerts: int
+    active_visa_watches: int
+    last_active_at: datetime | None
 
 
 @dataclass(frozen=True)
@@ -34,10 +50,11 @@ class BotReport:
     provider_status: tuple[tuple[str, str, int], ...]
     job_status: tuple[tuple[str, str, int], ...]
     last_price_capture: datetime | None
+    user_activity: tuple[UserActivityRow, ...] = ()
 
 
 class BotReportRepository:
-    """Collect comprehensive aggregate statistics without exposing user records."""
+    """Collect aggregate metrics and private administrator-only per-user stats."""
 
     def __init__(self, database: Database) -> None:
         self.database = database
@@ -193,6 +210,70 @@ class BotReportRepository:
                 session, PriceAlert, PriceAlert.status
             )
 
+            # Aggregate each source before joining to avoid event/alert
+            # multiplication for users owning multiple subscriptions.
+            # A tracked interaction is an attributable audit event, excluding
+            # registration bookkeeping and internal error records.
+            user_events = (
+                select(
+                    AuditLog.user_id.label("user_id"),
+                    func.count().label("total"),
+                    func.sum(
+                        case((AuditLog.created_at >= windows["7d"], 1), else_=0)
+                    ).label("recent"),
+                    func.max(AuditLog.created_at).label("last_event"),
+                )
+                .where(
+                    AuditLog.user_id.is_not(None),
+                    AuditLog.event_type.notin_(("system.error", "user.registered")),
+                )
+                .group_by(AuditLog.user_id)
+                .subquery()
+            )
+            active_prices = (
+                select(PriceAlert.user_id.label("user_id"), func.count().label("total"))
+                .where(PriceAlert.status == "active")
+                .group_by(PriceAlert.user_id)
+                .subquery()
+            )
+            active_visas = (
+                select(VisaWatch.user_id.label("user_id"), func.count().label("total"))
+                .where(VisaWatch.active.is_(True))
+                .group_by(VisaWatch.user_id)
+                .subquery()
+            )
+            activity_rows = await session.execute(
+                select(
+                    User.telegram_id, User.username, User.first_name, User.last_name,
+                    User.last_active_at, user_events.c.last_event,
+                    func.coalesce(user_events.c.total, 0),
+                    func.coalesce(user_events.c.recent, 0),
+                    func.coalesce(active_prices.c.total, 0),
+                    func.coalesce(active_visas.c.total, 0),
+                )
+                .outerjoin(user_events, user_events.c.user_id == User.id)
+                .outerjoin(active_prices, active_prices.c.user_id == User.id)
+                .outerjoin(active_visas, active_visas.c.user_id == User.id)
+                .order_by(func.coalesce(user_events.c.total, 0).desc(), User.id.asc())
+            )
+            user_activity = []
+            for (tg_id, username, first_name, last_name, active_at, last_event,
+                 events_total, events_7d, price_count, visa_count) in activity_rows.all():
+                # Datetimes can be naive after SQLite round-tripping; treat them
+                # as UTC consistently with the existing _timestamp renderer.
+                recorded = [value.replace(tzinfo=timezone.utc)
+                            if value.tzinfo is None else value.astimezone(timezone.utc)
+                            for value in (active_at, last_event) if value is not None]
+                user_activity.append(UserActivityRow(
+                    telegram_id=int(tg_id),
+                    username=username, first_name=first_name, last_name=last_name,
+                    events_total=int(events_total),
+                    events_7d=int(events_7d),
+                    active_price_alerts=int(price_count),
+                    active_visa_watches=int(visa_count),
+                    last_active_at=max(recorded) if recorded else None,
+                ))
+
         return BotReport(
             generated_at=now,
             counts=counts,
@@ -203,4 +284,5 @@ class BotReportRepository:
             provider_status=provider_status,
             job_status=job_status,
             last_price_capture=last_price_capture,
+            user_activity=tuple(user_activity),
         )

@@ -18,11 +18,14 @@ from flightiran.db.models import (
     SavedRoute,
     User,
     UserPreference,
+    VisaWatch,
 )
 from flightiran.interfaces.telegram.admin_report import render_admin_report
 from flightiran.interfaces.telegram.admin_report_rich import (
     render_admin_report_fallback,
     render_rich_admin_report,
+    render_rich_user_activity_reports,
+    render_user_activity_fallback,
 )
 from flightiran.interfaces.telegram.handlers import (
     TelegramDependencies,
@@ -30,7 +33,7 @@ from flightiran.interfaces.telegram.handlers import (
     start_handler,
 )
 from flightiran.interfaces.telegram.keyboards import main_menu
-from flightiran.modules.admin.reports import BotReportRepository
+from flightiran.modules.admin.reports import BotReportRepository, UserActivityRow
 
 
 @pytest.mark.asyncio
@@ -109,6 +112,21 @@ async def test_full_admin_report_aggregates_persisted_metrics_without_personal_d
     assert ("تهران", 1) in report.top_origins
     assert ("ticket.origin.selected", 1) in report.top_events
     assert report.last_price_capture is not None
+    first_user = next(u for u in report.user_activity if u.telegram_id == 700123)
+    second_user = next(u for u in report.user_activity if u.telegram_id == 800456)
+    assert first_user.username == "sensitive_user_name"
+    assert first_user.events_total == 1  # system.error is not an interaction.
+    assert first_user.active_price_alerts == 1
+    assert first_user.active_visa_watches == 0
+    assert first_user.last_active_at is not None
+    assert second_user.events_total == second_user.active_price_alerts == 0
+    assert second_user.last_active_at is None
+    private_pages = render_rich_user_activity_reports(report)
+    assert len(private_pages) == 1
+    assert "sensitive_user_name" in private_pages[0]["html"]
+    assert "700123" in private_pages[0]["html"]
+    assert "آخرین استفاده" in private_pages[0]["html"]
+    assert render_user_activity_fallback(report)
 
     rich = render_rich_admin_report(report)
     assert rich["is_rtl"] is True
@@ -348,3 +366,122 @@ def test_rich_admin_report_escapes_database_labels():
     assert "تهران &amp; مشهد" in rich["html"]
     assert "api&lt;provider&gt;" in rich["html"]
     assert "هنوز ثبت نشده" in rich["html"]
+
+
+
+@pytest.mark.asyncio
+async def test_per_user_counts_track_active_price_and_visa_bells_without_duplication(tmp_path):
+    db = await initialize_database(f"sqlite+aiosqlite:///{tmp_path / 'users.db'}")
+    now = datetime.now(timezone.utc)
+    async with db.session() as session:
+        first = User(
+            telegram_id=45001, username="<bad&handle>",
+            first_name="<Ali>", last_active_at=now - timedelta(hours=1),
+        )
+        idle = User(telegram_id=45002, first_name="Idle")
+        session.add_all([first, idle])
+        await session.flush()
+        route = SavedRoute(user_id=first.id, origin="IKA", destination="MHD")
+        session.add(route)
+        await session.flush()
+        session.add_all([
+            AuditLog(user_id=first.id, event_type="user.start",
+                     created_at=now - timedelta(days=1)),
+            AuditLog(user_id=first.id, event_type="menu.back",
+                     created_at=now - timedelta(days=12)),
+            AuditLog(user_id=first.id, event_type="user.registered"),
+            AuditLog(user_id=first.id, event_type="system.error"),
+            PriceAlert(user_id=first.id, route_id=route.id, status="active",
+                       target_price=2000, currency="IRR"),
+            PriceAlert(user_id=first.id, route_id=route.id, status="active",
+                       target_price=4000, currency="IRR"),
+            PriceAlert(user_id=first.id, route_id=route.id, status="paused",
+                       target_price=5000, currency="IRR"),
+            VisaWatch(user_id=first.id, passport="IR", destination="TR", active=True),
+            VisaWatch(user_id=first.id, passport="IR", destination="FR", active=False),
+        ])
+    report = await BotReportRepository(db).collect(now)
+    first_user = next(u for u in report.user_activity if u.telegram_id == 45001)
+    idle_user = next(u for u in report.user_activity if u.telegram_id == 45002)
+    assert (first_user.events_total, first_user.events_7d) == (2, 1)
+    assert (first_user.active_price_alerts, first_user.active_visa_watches) == (2, 1)
+    assert first_user.last_active_at is not None
+    assert first_user.last_active_at.hour == (now - timedelta(hours=1)).hour
+    assert (idle_user.events_total, idle_user.events_7d) == (0, 0)
+    assert (idle_user.active_price_alerts, idle_user.active_visa_watches) == (0, 0)
+    assert idle_user.last_active_at is None
+    html = render_rich_user_activity_reports(report)[0]["html"]
+    assert "&lt;Ali&gt;" in html
+    assert "&lt;bad&amp;handle&gt;" in html
+    assert "<Ali>" not in html
+    assert "45002" in html
+    await db.close()
+
+
+@pytest.mark.asyncio
+async def test_admin_report_delivers_individual_rich_pages_only_to_private_admin(monkeypatch):
+    from flightiran.interfaces.telegram import handlers
+
+    now = datetime.now(timezone.utc)
+    fake = SimpleNamespace(
+        generated_at=now,
+        user_activity=(UserActivityRow(
+            telegram_id=77, username="tester", first_name="Test", last_name=None,
+            events_total=5, events_7d=3, active_price_alerts=2,
+            active_visa_watches=1, last_active_at=now,
+        ),),
+    )
+
+    class FakeReports:
+        async def collect(self):
+            return fake
+
+    sent = []
+
+    async def fake_send(bot, chat_id, message):
+        sent.append((chat_id, message))
+
+    monkeypatch.setattr(
+        handlers, "render_rich_admin_report",
+        lambda report: {"html": "<h3>گزارش جامع</h3>", "is_rtl": True},
+    )
+    monkeypatch.setattr(handlers, "send_rich_price_table", fake_send)
+    deps = TelegramDependencies(
+        users=MemoryUsers(), audit=MemoryAudit(), admin_chat_id=42,
+        admin_reports=FakeReports(),
+    )
+    query = Query()
+    query.data = "menu:admin_reports"
+    query.message = Message()
+    await callback_handler(
+        _update(42, 42, query=query),
+        SimpleNamespace(bot=SimpleNamespace(token="fake")), deps,
+    )
+    assert len(sent) == 2
+    assert all(chat_id == 42 for chat_id, _ in sent)
+    assert "گزارش جامع" in sent[0][1]["html"]
+    assert "tester" in sent[1][1]["html"]
+    assert query.message.calls == []
+
+
+def test_user_activity_pages_have_size_limits_and_no_missing_users():
+    from flightiran.modules.admin.reports import BotReport
+
+    now = datetime.now(timezone.utc)
+    users = tuple(UserActivityRow(
+        telegram_id=1000 + i, username=f"user{i}", first_name="Test",
+        last_name=None, events_total=i, events_7d=i // 2,
+        active_price_alerts=1, active_visa_watches=0,
+        last_active_at=now,
+    ) for i in range(27))
+    report = BotReport(
+        generated_at=now, counts={}, language_counts=(), top_events=(),
+        top_origins=(), price_alert_status=(), provider_status=(),
+        job_status=(), last_price_capture=None, user_activity=users,
+    )
+    rich_pages = render_rich_user_activity_reports(report)
+    fallback_pages = render_user_activity_fallback(report)
+    assert len(rich_pages) == len(fallback_pages) == 3
+    for i in range(27):
+        assert sum(str(1000+i) in p["html"] for p in rich_pages) == 1
+    assert all(len(page) < 4096 for page in fallback_pages)

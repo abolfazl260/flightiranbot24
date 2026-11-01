@@ -117,3 +117,83 @@ def render_admin_report_fallback(report: BotReport) -> tuple[str, ...]:
         return (combined,)
     # Never truncate metrics when native rich transport is unavailable.
     return sections
+
+
+
+USER_ACTIVITY_PAGE_SIZE = 10
+
+
+def _user_label(user) -> str:
+    """Include stable Telegram ID so duplicate/renamed accounts are identifiable."""
+    name = " ".join(part.strip() for part in (user.first_name, user.last_name) if part)
+    handle = f"@{user.username}" if user.username else ""
+    identity = " / ".join(part for part in (name, handle) if part)[:80]
+    return f"{identity or 'بدون نام'} | ID: {user.telegram_id}"
+
+
+def _user_pages(report: BotReport):
+    users = report.user_activity
+    for offset in range(0, len(users), USER_ACTIVITY_PAGE_SIZE):
+        yield offset, users[offset:offset + USER_ACTIVITY_PAGE_SIZE]
+
+
+def render_rich_user_activity_reports(report: BotReport) -> tuple[dict, ...]:
+    """Separate private Rich Messages keep the full report below platform limits."""
+    total = len(report.user_activity)
+    pages = (total + USER_ACTIVITY_PAGE_SIZE - 1) // USER_ACTIVITY_PAGE_SIZE
+    rendered = []
+    for offset, users in _user_pages(report):
+        page = offset // USER_ACTIVITY_PAGE_SIZE + 1
+        rows = [
+            (
+                _user_label(user),
+                _count(user.events_total),
+                _count(user.events_7d),
+                _count(user.active_price_alerts),
+                _count(user.active_visa_watches),
+                _timestamp(user.last_active_at),
+            )
+            for user in users
+        ]
+        html = "".join([
+            f"<h3>👤 گزارش فعالیت کاربران | {page}/{pages}</h3>",
+            f"<p>کل کاربران: {_count(total)} | زمان: "
+            f"{escape(_timestamp(report.generated_at))}</p>",
+            _table(("کاربر", "کل فعالیت", "۷ روز", "قیمت فعال",
+                    "ویزای فعال", "آخرین استفاده"), rows),
+            "<p>فعالیت = رویدادهای ثبت‌شده منتسب به کاربر، به‌جز ثبت‌نام "
+            "و خطاهای سیستمی. آخرین استفاده از داده فعالیت کاربر یا "
+            "آخرین رویداد ثبت‌شده محاسبه شده است. "
+            "زمان‌ها UTC هستند؛ صفر یعنی رویداد ثبت نشده.</p>",
+        ])
+        if _plain_text_length(html) > MAX_RICH_TEXT_CHARS:
+            raise ValueError("User activity rich page exceeds Telegram text limit")
+        rendered.append({"html": html, "is_rtl": True})
+    return tuple(rendered)
+
+
+def render_user_activity_fallback(report: BotReport) -> tuple[str, ...]:
+    """Plain Telegram HTML pages if sendRichMessage is not available."""
+    total = len(report.user_activity)
+    pages = (total + USER_ACTIVITY_PAGE_SIZE - 1) // USER_ACTIVITY_PAGE_SIZE
+    rendered = []
+    for offset, users in _user_pages(report):
+        page = offset // USER_ACTIVITY_PAGE_SIZE + 1
+        lines = [f"👤 <b>گزارش فعالیت کاربران ({page}/{pages})</b>"]
+        for user in users:
+            lines.append(
+                f"• <b>{escape(_user_label(user))}</b>\n"
+                f"فعالیت: {user.events_total:,} کل / {user.events_7d:,} در ۷ روز | "
+                f"زنگوله فعال: {user.active_price_alerts:,} قیمت + "
+                f"{user.active_visa_watches:,} ویزا\n"
+                f"آخرین استفاده: {escape(_timestamp(user.last_active_at))}"
+            )
+        lines.append(
+            "فعالیت یعنی رویدادهای ثبت‌شده به‌جز ثبت‌نام و خطاهای سیستمی؛ "
+            "زمان‌ها UTC هستند."
+        )
+        message = "\n\n".join(lines)
+        if len(message) > MAX_TELEGRAM_HTML_CHARS:
+            raise ValueError("User activity fallback page exceeds Telegram HTML limit")
+        rendered.append(message)
+    return tuple(rendered)

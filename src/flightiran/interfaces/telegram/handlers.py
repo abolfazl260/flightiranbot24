@@ -37,7 +37,12 @@ from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.visa.watch import VisaWatchService
 
-from .admin_report_rich import render_admin_report_fallback, render_rich_admin_report
+from .admin_report_rich import (
+    render_admin_report_fallback,
+    render_rich_admin_report,
+    render_rich_user_activity_reports,
+    render_user_activity_fallback,
+)
 from .keyboards import (
     back_menu,
     language_menu,
@@ -662,6 +667,34 @@ async def callback_handler(
                     "خطا در ارسال گزارش. جزئیات فنی برای مدیر ارسال شد."
                 )
                 return
+        # User identities are available only after the private-admin gate above.
+        # Send the extra report separately so the existing aggregate Rich
+        # Message stays complete and small even with many registered users.
+        if getattr(report, "user_activity", ()):
+            rich_pages = render_rich_user_activity_reports(report)
+            fallback_pages = render_user_activity_fallback(report)
+            for rich_page, fallback_page in zip(rich_pages, fallback_pages, strict=True):
+                try:
+                    await send_rich_price_table(
+                        context.bot, update.effective_chat.id, rich_page
+                    )
+                except Exception as exc:
+                    LOGGER.warning(
+                        "admin_user_activity_rich_failed error_type=%s",
+                        type(exc).__name__,
+                    )
+                    try:
+                        await query.message.reply_text(
+                            fallback_page, parse_mode="HTML",
+                            disable_web_page_preview=True,
+                        )
+                    except Exception as fallback_exc:
+                        LOGGER.exception("admin_user_activity_fallback_failed")
+                        await _notify_admin(context, fallback_exc, update, dependencies)
+                        await query.message.reply_text(
+                            "خطا در ارسال گزارش کاربران؛ جزئیات برای مدیر ارسال شد."
+                        )
+                        break
         await dependencies.audit.record("admin.report.viewed", user_id=user_id)
     elif data == "menu:support":
         await dependencies.audit.record("support.opened", user_id=user_id)
