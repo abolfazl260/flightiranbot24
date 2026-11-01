@@ -104,6 +104,9 @@ internal fun RowScope.TravelNavigationItem(
     NavigationBarItem(
         selected = selected,
         onClick = onClick,
+        // Stable Persian accessibility label for TalkBack and UIAutomator.
+        // Some Compose/emulator combinations omit nested Text in the merged tree.
+        modifier = Modifier.semantics { contentDescription = label },
         icon = { Text(symbol, modifier = Modifier.clearAndSetSemantics { }) },
         label = { Text(label) },
         alwaysShowLabel = true,
