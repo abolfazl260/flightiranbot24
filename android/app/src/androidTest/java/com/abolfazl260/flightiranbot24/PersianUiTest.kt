@@ -22,7 +22,7 @@ class PersianUiTest {
             val appLocale = it.resources.configuration.locales[0]
             assertEquals("fa", appLocale.language)
         }
-        rule.onNodeWithText("سفر، ساده‌تر از همیشه").assertExists()
+        rule.onNodeWithContentDescription("سفر، ساده‌تر از همیشه. قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان. مشاهده قیمت بلیت").assertHasClickAction()
         rule.onNodeWithContentDescription("خانه").assertExists()
         rule.onNodeWithContentDescription("قیمت بلیت").assertHasClickAction()
         // Airports remain available from the home card, not from bottom nav.
@@ -35,7 +35,7 @@ class PersianUiTest {
         rule.onNodeWithText("خدمات بیشتر").assertExists()
         rule.onNodeWithText("اطلاعات فرودگاه‌ها").assertDoesNotExist()
         rule.onNodeWithContentDescription("خانه").performClick()
-        rule.onNodeWithText("سفر، ساده‌تر از همیشه").assertExists()
+        rule.onNodeWithContentDescription("سفر، ساده‌تر از همیشه. قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان. مشاهده قیمت بلیت").assertHasClickAction()
         rule.onNodeWithContentDescription("خدمات").performClick()
         rule.onNodeWithText("خدمات بیشتر").assertExists()
     }
