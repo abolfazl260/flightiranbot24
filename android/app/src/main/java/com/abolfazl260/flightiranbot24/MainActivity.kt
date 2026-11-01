@@ -9,6 +9,12 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -159,6 +165,7 @@ internal fun TravelHomeScreen(
             verticalArrangement = Arrangement.spacedBy(26.dp),
         ) {
             if (!showServices) {
+                HomeBrandBar()
                 PremiumHomeHero(onPrices = { onSelect(HomeDestination.TICKET_PRICES) })
                 when (state) {
                     HomeUiState.Loading -> TravelLoadingState()
@@ -208,6 +215,35 @@ internal fun TravelHomeScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Start,
                 modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
+            )
+        }
+    }
+}
+
+@Composable
+private fun HomeBrandBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    ) {
+        Image(
+            painter = painterResource(R.drawable.advertio_brand),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.size(42.dp),
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                "ADVERTIO",
+                color = Color(0xFF0D2C44),
+                fontWeight = FontWeight.ExtraBold,
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                "دستیار هوشمند سفر",
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.labelSmall,
             )
         }
     }
