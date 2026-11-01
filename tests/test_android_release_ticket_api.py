@@ -3,15 +3,22 @@ import io
 import json
 from datetime import datetime, timedelta, timezone
 from email.message import Message
+from importlib.util import module_from_spec, spec_from_file_location
+from pathlib import Path
 from urllib.error import HTTPError, URLError
 
 import pytest
 
-from scripts.check_android_release_ticket_api import (
-    _fresh_snapshot,
-    probe_ticket_api,
-    validate_origin,
-)
+# The scripts/ directory is not an installed Python package in the project.
+# Import the checked-in executable by its exact path without modifying sys.path.
+source = Path(__file__).resolve().parents[1] / "scripts" / "check_android_release_ticket_api.py"
+spec = spec_from_file_location("check_android_release_ticket_api", source)
+assert spec and spec.loader
+module = module_from_spec(spec)
+spec.loader.exec_module(module)
+_fresh_snapshot = module._fresh_snapshot
+probe_ticket_api = module.probe_ticket_api
+validate_origin = module.validate_origin
 
 
 def snapshot(minutes_old=10, stale=False):
