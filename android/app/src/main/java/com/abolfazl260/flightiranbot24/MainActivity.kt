@@ -28,9 +28,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -50,7 +48,8 @@ import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.domain.HomeDestination
 import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
 import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingState
-import com.abolfazl260.flightiranbot24.presentation.components.TravelNavigationItem
+import com.abolfazl260.flightiranbot24.presentation.components.TravelBottomNavigation
+import com.abolfazl260.flightiranbot24.presentation.components.TravelTab
 import com.abolfazl260.flightiranbot24.presentation.home.HomeUiState
 import com.abolfazl260.flightiranbot24.presentation.home.HomeViewModel
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
@@ -62,9 +61,12 @@ class MainActivity : ComponentActivity() {
     }
 
     private val container by lazy { AppContainer(applicationContext) }
+    private var servicesSelected by mutableStateOf(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        servicesSelected = savedInstanceState?.getBoolean(STATE_SERVICES)
+            ?: (intent.getStringExtra(EXTRA_TAB) == TravelTab.SERVICES.name)
         setContent {
             val model: HomeViewModel = viewModel(factory = container.homeViewModelFactory)
             val screenState by model.state.collectAsStateWithLifecycle()
@@ -73,9 +75,30 @@ class MainActivity : ComponentActivity() {
                     state = screenState,
                     onSelect = ::navigateTo,
                     onRetry = model::refresh,
+                    selectedServices = servicesSelected,
+                    onServiceTabChange = { servicesSelected = it },
                 )
             }
         }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        when (intent.getStringExtra(EXTRA_TAB)) {
+            TravelTab.HOME.name -> servicesSelected = false
+            TravelTab.SERVICES.name -> servicesSelected = true
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putBoolean(STATE_SERVICES, servicesSelected)
+        super.onSaveInstanceState(outState)
+    }
+
+    companion object {
+        const val EXTRA_TAB = "com.abolfazl260.flightiranbot24.extra.MAIN_TAB"
+        private const val STATE_SERVICES = "main_services_selected"
     }
 
     private fun navigateTo(destination: HomeDestination) {
@@ -110,8 +133,15 @@ internal fun TravelHomeScreen(
     state: HomeUiState,
     onSelect: (HomeDestination) -> Unit,
     onRetry: () -> Unit,
+    selectedServices: Boolean? = null,
+    onServiceTabChange: (Boolean) -> Unit = {},
 ) {
-    var showServices by rememberSaveable { mutableStateOf(false) }
+    var localShowServices by rememberSaveable { mutableStateOf(false) }
+    val showServices = selectedServices ?: localShowServices
+    val changeTab: (Boolean) -> Unit = { show ->
+        localShowServices = show
+        onServiceTabChange(show)
+    }
     // Separate scroll offsets: opening Services from a home card must start at
     // the top rather than inheriting the user's previous home scroll position.
     val homeScroll = rememberScrollState()
@@ -119,41 +149,13 @@ internal fun TravelHomeScreen(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            Surface(
-                shape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp),
-                color = Color.White,
-                shadowElevation = 8.dp,
-            ) {
-                NavigationBar(
-                    containerColor = Color.White,
-                    tonalElevation = 0.dp,
-                ) {
-                    TravelNavigationItem(
-                        selected = !showServices,
-                        onClick = { showServices = false },
-                        symbol = "⌂",
-                        label = stringResource(R.string.navigation_home),
-                    )
-                    TravelNavigationItem(
-                        selected = false,
-                        onClick = { onSelect(HomeDestination.TICKET_PRICES) },
-                        symbol = "↗",
-                        label = stringResource(R.string.navigation_prices),
-                    )
-                    TravelNavigationItem(
-                        selected = false,
-                        onClick = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
-                        symbol = "☑",
-                        label = stringResource(R.string.navigation_checklist),
-                    )
-                    TravelNavigationItem(
-                        selected = showServices,
-                        onClick = { showServices = true },
-                        symbol = "☷",
-                        label = stringResource(R.string.navigation_services),
-                    )
-                }
-            }
+            TravelBottomNavigation(
+                selectedTab = if (showServices) TravelTab.SERVICES else TravelTab.HOME,
+                onHome = { changeTab(false) },
+                onPrices = { onSelect(HomeDestination.TICKET_PRICES) },
+                onChecklist = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
+                onServices = { changeTab(true) },
+            )
         },
     ) { padding ->
         Column(
@@ -179,10 +181,10 @@ internal fun TravelHomeScreen(
                             onChecklist = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
                             // Airports are still unavailable; this card opens
                             // the existing Services tab, never AirportDirectoryActivity.
-                            onAirportServices = { showServices = true },
+                            onAirportServices = { changeTab(true) },
                         )
                         PremiumTravelServices(
-                            onAllServices = { showServices = true },
+                            onAllServices = { changeTab(true) },
                             onSelect = onSelect,
                         )
                     }
