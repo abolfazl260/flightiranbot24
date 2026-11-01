@@ -1,4 +1,5 @@
 import { miniRoute } from "./mini.mjs";
+import { getIranFidsBoard } from "./iran_fids.mjs";
 import { publicVisaList, publicVisaRule } from "./visa_snapshot.mjs";
 
 // Public, read-only Android API. The only writes are protected, fixed-shape imports.
@@ -120,6 +121,7 @@ export async function handleRequest(request, env) {
   const url = new URL(request.url), path = url.pathname;
   const mini = await miniRoute(request, env, authorized);
   if (mini) return mini;
+  if (path.startsWith("/api/v1/iran/fids/")) return getIranFidsBoard(request, env);
   if (request.method === "GET" && path === "/healthz") return good({ status: "ok" }, 0);
   if (request.method === "GET" && path === "/api/v1/tickets/prices") {
     if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
