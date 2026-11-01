@@ -10,7 +10,7 @@ adb install -r "$apk"
 mkdir -p android/screenshots
 
 # Only the launcher is exported. Never make private screens exported
-# just for test automation: navigate via the same Persian tabs as users.
+# just for test automation: navigate via visible Persian controls as users do.
 package="com.abolfazl260.flightiranbot24.debug"
 activity_prefix="com.abolfazl260.flightiranbot24"
 
@@ -44,7 +44,7 @@ wait_for_activity() {
   return 1
 }
 
-tap_persian_navigation() {
+tap_persian_control() {
   local label="$1"
   python3 - "$label" <<'PY'
 import re
@@ -65,7 +65,7 @@ candidates = []
 for node in root.iter("node"):
     desc = node.attrib.get("content-desc", "")
     text = node.attrib.get("text", "")
-    # Compose NavigationBarItem can expose either text or contentDescription.
+    # Compose clickable cards and navigation items expose semantics labels.
     if label != text and label not in desc:
         continue
     match = re.fullmatch(
@@ -78,16 +78,17 @@ for node in root.iter("node"):
         candidates.append((top, (left + right) // 2, (top + bottom) // 2))
 
 if candidates:
-    # The bottom bar is below similarly named feature cards.
+    # Prefer the lowest matching node if a label appears in more than one area.
     _, x, y = max(candidates)
 else:
-    # Some emulator/Compose combinations omit the NavigationBarItem text
-    # from uiautomator's merged semantics. The bar has five equal slots.
+    # Some emulator/Compose combinations omit NavigationBarItem labels
+    # from uiautomator's merged semantics. The bar has four equal slots.
+    # Feature-card labels must be present; no coordinate fallback for cards.
     # Use an explicit, documented slot fallback; the subsequent assertion
     # verifies that the expected Activity actually opened, so a wrong tap
     # still fails the screenshot job instead of passing silently.
-    slots = {"خانه": 0, "قیمت بلیت": 1, "فرودگاه‌ها": 2,
-             "چک‌لیست": 3, "خدمات": 4}
+    slots = {"خانه": 0, "قیمت بلیت": 1,
+             "چک‌لیست": 2, "خدمات": 3}
     if label not in slots:
         raise SystemExit(f"Unknown Persian navigation slot: {label}")
     size = subprocess.check_output(
@@ -98,7 +99,7 @@ else:
         raise SystemExit(f"Unable to determine emulator size: {size}")
     width, height = map(int, resolution.groups())
     # Main Compose screen forces RTL: slots are arranged right-to-left.
-    x = int(width * (4.5 - slots[label]) / 5)
+    x = int(width * (3.5 - slots[label]) / 4)
     # Android window bounds are *physical pixels*, not density-independent
     # pixels. The previous fallback (height - 105 pixels) struck the system
     # gesture area on the Pixel 6 emulator and never triggered navigation.
@@ -133,13 +134,13 @@ capture 01-home.png
 
 open_launcher
 wait_for_activity MainActivity
-tap_persian_navigation "فرودگاه‌ها"
+tap_persian_control "راهنمای فرودگاه‌ها"
 wait_for_activity AirportDirectoryActivity
 capture 02-airports.png
 
 open_launcher
 wait_for_activity MainActivity
-tap_persian_navigation "چک‌لیست"
+tap_persian_control "چک‌لیست"
 wait_for_activity ChecklistActivity
 capture 03-checklist.png
 

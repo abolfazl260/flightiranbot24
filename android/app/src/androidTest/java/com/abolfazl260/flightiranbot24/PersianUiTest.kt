@@ -1,6 +1,7 @@
 package com.abolfazl260.flightiranbot24
 
 import androidx.compose.ui.test.assertHasClickAction
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -24,7 +25,9 @@ class PersianUiTest {
         rule.onNodeWithText("سفر، ساده‌تر از همیشه").assertExists()
         rule.onNodeWithText("خانه").assertExists()
         rule.onNodeWithText("قیمت بلیت").assertHasClickAction()
-        rule.onNodeWithText("فرودگاه‌ها").assertHasClickAction()
+        // Airports remain available from the home card, not from bottom nav.
+        rule.onNodeWithText("فرودگاه‌ها").assertDoesNotExist()
+        rule.onNodeWithContentDescription("راهنمای فرودگاه‌ها").assertHasClickAction()
         rule.onNodeWithText("چک‌لیست").assertHasClickAction()
         rule.onNodeWithText("خدمات").performClick()
         rule.onNodeWithText("خدمات بیشتر").assertExists()
