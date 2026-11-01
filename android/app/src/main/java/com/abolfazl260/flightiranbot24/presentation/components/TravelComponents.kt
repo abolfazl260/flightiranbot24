@@ -15,6 +15,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.OutlinedTextField
@@ -37,11 +38,58 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import com.abolfazl260.flightiranbot24.R
 import androidx.compose.ui.unit.dp
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTokens
 
 /** Shared Compose building blocks. Labels are always supplied in Persian. */
+internal enum class TravelTab { HOME, PRICES, CHECKLIST, SERVICES }
+
+/** Identical persistent bottom navigation on home, services and the fare list. */
+@Composable
+internal fun TravelBottomNavigation(
+    selectedTab: TravelTab,
+    onHome: () -> Unit,
+    onPrices: () -> Unit,
+    onChecklist: () -> Unit,
+    onServices: () -> Unit,
+) {
+    Surface(
+        shape = RoundedCornerShape(topStart = 26.dp, topEnd = 26.dp),
+        color = Color.White,
+        shadowElevation = 8.dp,
+    ) {
+        NavigationBar(containerColor = Color.White, tonalElevation = 0.dp) {
+            TravelNavigationItem(
+                selected = selectedTab == TravelTab.HOME,
+                onClick = onHome,
+                symbol = "⌂",
+                label = stringResource(R.string.navigation_home),
+            )
+            TravelNavigationItem(
+                selected = selectedTab == TravelTab.PRICES,
+                onClick = onPrices,
+                symbol = "↗",
+                label = stringResource(R.string.navigation_prices),
+            )
+            TravelNavigationItem(
+                selected = selectedTab == TravelTab.CHECKLIST,
+                onClick = onChecklist,
+                symbol = "☑",
+                label = stringResource(R.string.navigation_checklist),
+            )
+            TravelNavigationItem(
+                selected = selectedTab == TravelTab.SERVICES,
+                onClick = onServices,
+                symbol = "☷",
+                label = stringResource(R.string.navigation_services),
+            )
+        }
+    }
+}
+
 @Composable
 internal fun TravelSectionHeading(title: String, description: String) {
     Column(verticalArrangement = Arrangement.spacedBy(TravelTokens.spacingSm)) {
