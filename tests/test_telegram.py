@@ -147,7 +147,9 @@ async def test_unknown_callback_has_safe_fallback():
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("language", ("fa", "en", "ar"))
-@pytest.mark.parametrize("action", ("menu:airports", "airports:page:1", "airport:IKA", "menu:rules"))
+@pytest.mark.parametrize(
+    "action", ("menu:airports", "airports:page:1", "airport:IKA", "menu:rules")
+)
 async def test_hidden_feature_legacy_callbacks_return_main_menu(language, action):
     deps = dependencies()
     deps.users.languages[42] = language
