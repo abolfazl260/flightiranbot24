@@ -2,7 +2,7 @@
 
 ## Scope and status
 
-The Android app now offers **«اطلاعات پرواز ایران»** as a native Compose screen. Selecting an airport/direction triggers a request to our first-party HTTPS Cloudflare Worker. **No WebView, browser, or website frame** is used. The app provides native search, official source label, provider and retrieval timestamps, manual refresh, missing-data notices and explicit API error states.
+The Android app now offers **«اطلاعات پرواز ایران»** as a native Compose screen. In addition, the existing **iran-fids** item in the Telegram Mini App useful-websites directory now opens an internal FIDS page rather than invoking the Telegram external-link action. This internal page uses the same first-party Worker API and does not embed or open the website. Selecting an airport/direction triggers a request to our first-party HTTPS Cloudflare Worker. **No WebView, browser, or website frame** is used. The app provides native search, official source label, provider and retrieval timestamps, manual refresh, missing-data notices and explicit API error states.
 
 **Blocker on 2026-11-01:** The cited official URL https://fids.airport.ir/ timed out from our research environment. We did not verify any public JSON API, its precise fields, licensing or authorized automated-use policy. Hence **the live upstream is deliberately NOT enabled**; without valid configuration the Worker returns 503. This code does not yet prove end-to-end live FIDS delivery.
 
@@ -10,7 +10,7 @@ The similarly named Cirium/FlightStats commercial FIDS API is a separate service
 
 ## Safe architecture
 
-Native Android → Retrofit first-party Worker endpoint → verified source on fids.airport.ir (server side only).
+Native Android (Retrofit) / Telegram Mini App (same-origin fetch) → first-party Worker endpoint → verified source on fids.airport.ir (server side only).
 
 Public GET endpoint: /api/v1/iran/fids/THR/departures (also arrivals).
 Other currently allowlisted candidate airports: MHD, SYZ, IFN, TBZ, AWZ, BND, KER, ZAH, OMH.
