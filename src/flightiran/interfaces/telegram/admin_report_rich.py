@@ -182,17 +182,17 @@ def render_user_activity_fallback(report: BotReport) -> tuple[str, ...]:
         lines = [f"👤 <b>گزارش فعالیت کاربران ({page}/{pages})</b>"]
         for user in users:
             lines.append(
-                f"• <b>{escape(_user_label(user))}</b>\\n"
+                f"• <b>{escape(_user_label(user))}</b>\n"
                 f"فعالیت: {user.events_total:,} کل / {user.events_7d:,} در ۷ روز | "
                 f"زنگوله فعال: {user.active_price_alerts:,} قیمت + "
-                f"{user.active_visa_watches:,} ویزا\\n"
+                f"{user.active_visa_watches:,} ویزا\n"
                 f"آخرین استفاده: {escape(_timestamp(user.last_active_at))}"
             )
         lines.append(
             "فعالیت یعنی رویدادهای ثبت‌شده به‌جز ثبت‌نام و خطاهای سیستمی؛ "
             "زمان‌ها UTC هستند."
         )
-        message = "\\n\\n".join(lines)
+        message = "\n\n".join(lines)
         if len(message) > MAX_TELEGRAM_HTML_CHARS:
             raise ValueError("User activity fallback page exceeds Telegram HTML limit")
         rendered.append(message)
