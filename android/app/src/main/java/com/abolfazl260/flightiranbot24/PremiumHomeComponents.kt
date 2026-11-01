@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -122,7 +123,7 @@ internal fun PremiumHomeHero(onPrices: () -> Unit) {
 }
 
 @Composable
-private fun HeroIllustration() {
+private fun BoxScope.HeroIllustration() {
     Canvas(modifier = Modifier.matchParentSize()) {
         // Layered sky, ambient light and cloud banks on the left side.
         drawCircle(
@@ -312,7 +313,7 @@ private fun PremiumFeatureCard(
 }
 
 @Composable
-private fun FeatureArtwork(isAirport: Boolean) {
+private fun BoxScope.FeatureArtwork(isAirport: Boolean) {
     Canvas(modifier = Modifier.matchParentSize()) {
         val w = size.width
         val h = size.height
