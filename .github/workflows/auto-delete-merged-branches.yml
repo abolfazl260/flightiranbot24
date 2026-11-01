@@ -1,0 +1,35 @@
+# Keep repository branch lists clean after a same-repository pull request is merged.
+# This compensates for delete_branch_on_merge=false in repository settings.
+name: Delete merged pull request branches
+on:
+  pull_request:
+    types: [closed]
+permissions:
+  contents: write
+jobs:
+  delete-merged-branch:
+    if: ${{ github.event.pull_request.merged == true && github.event.pull_request.head.repo.full_name == github.repository }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Delete only the merged head branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_BRANCH: ${{ github.event.pull_request.head.ref }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          if [[ -z "$HEAD_BRANCH" || "$HEAD_BRANCH" == "main" ]]; then
+            echo "Refusing to delete main or empty branch."
+            exit 1
+          fi
+          # Same-repo merged PR only; branch data is environment-bound, not embedded in shell source.
+          path="repos/${GITHUB_REPOSITORY}/git/refs/heads/${HEAD_BRANCH}"
+          if gh api --silent -X DELETE "$path"; then
+            echo "Deleted merged PR head: $HEAD_BRANCH"
+          elif ! gh api --silent "repos/${GITHUB_REPOSITORY}/git/ref/heads/${HEAD_BRANCH}" >/dev/null 2>&1; then
+            echo "Branch already deleted: $HEAD_BRANCH"
+          else
+            echo "Could not delete merged PR head: $HEAD_BRANCH" >&2
+            exit 1
+          fi
