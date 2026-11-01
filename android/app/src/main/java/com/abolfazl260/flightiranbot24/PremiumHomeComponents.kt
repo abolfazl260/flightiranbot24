@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -52,75 +54,25 @@ private val Sky = Color(0xFFDFEFFB)
 
 @Composable
 internal fun PremiumHomeHero(onPrices: () -> Unit) {
-    Box(
+    val bannerDescription = stringResource(R.string.hero_banner_accessibility)
+    // Artwork includes the copy and call-to-action. Render the entire image at
+    // its native aspect ratio: no crop, stretching, or duplicated Compose text.
+    // The whole card remains an accessible, native click target.
+    Card(
+        onClick = onPrices,
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(9.dp, RoundedCornerShape(29.dp))
-            .clip(RoundedCornerShape(29.dp))
-            .background(
-                Brush.linearGradient(
-                    listOf(Color(0xFF0D527D), Midnight, Color(0xFF02233E)),
-                ),
-            )
-            .height(262.dp),
+            .aspectRatio(1672f / 941f)
+            .semantics { contentDescription = bannerDescription },
+        shape = RoundedCornerShape(29.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 9.dp),
     ) {
-        // Local WebP art overlays the gradient; Persian copy stays accessible UI text.
         Image(
             painter = painterResource(R.drawable.home_hero_plane),
             contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .fillMaxWidth(0.74f)
-                .height(142.dp),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxSize(),
         )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 19.dp),
-            horizontalAlignment = Alignment.Start,
-        ) {
-            Text(
-                text = stringResource(R.string.hero_eyebrow),
-                color = Mint,
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Bold,
-            )
-            Spacer(Modifier.height(11.dp))
-            Text(
-                text = stringResource(R.string.welcome_title),
-                color = Color.White,
-                style = MaterialTheme.typography.headlineSmall,
-                fontSize = 26.sp,
-                lineHeight = 38.sp,
-                fontWeight = FontWeight.ExtraBold,
-            )
-            Spacer(Modifier.height(7.dp))
-            Text(
-                text = stringResource(R.string.welcome_description),
-                color = Color(0xFFE2EFF8),
-                fontSize = 13.sp,
-                lineHeight = 23.sp,
-                maxLines = 3,
-            )
-            Spacer(Modifier.weight(1f))
-            Button(
-                onClick = onPrices,
-                shape = RoundedCornerShape(24.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.White,
-                    contentColor = Midnight,
-                ),
-                contentPadding = androidx.compose.foundation.layout.PaddingValues(
-                    horizontal = 17.dp, vertical = 12.dp,
-                ),
-                modifier = Modifier.align(Alignment.Start),
-            ) {
-                Text(stringResource(R.string.hero_action), fontSize = 13.sp, fontWeight = FontWeight.Bold)
-                Spacer(Modifier.width(7.dp))
-                Text("←", fontWeight = FontWeight.Bold, fontSize = 18.sp)
-            }
-        }
     }
 }
 
