@@ -92,7 +92,8 @@ class MainActivity : ComponentActivity() {
             HomeDestination.TELEGRAM_USEFUL -> openUrl(BotLinks.USEFUL)
             HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)
             HomeDestination.SUPPORT -> openUrl(BotLinks.SUPPORT)
-            HomeDestination.PRIVACY -> openUrl(BotLinks.PRIVACY)
+            HomeDestination.PRIVACY ->
+                startActivity(Intent(this, PrivacyPolicyActivity::class.java))
         }
     }
 
