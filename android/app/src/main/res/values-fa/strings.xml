@@ -85,6 +85,7 @@
     <string name="ticket_prices_toman">%1$s تومان</string>
     <string name="hero_eyebrow">ADVERTIO · همراه سفر</string>
     <string name="hero_action">مشاهده قیمت بلیت</string>
+    <string name="hero_banner_accessibility">سفر، ساده‌تر از همیشه. قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان. مشاهده قیمت بلیت</string>
     <string name="premium_prep_subtitle">همه ابزارهای لازم برای یک سفر راحت و بدون دغدغه</string>
     <string name="premium_checklist_description">۱۲ گام ضروری برای آمادگی کامل سفر</string>
     <string name="premium_airport_description">راهنمای فرودگاه‌ها هنوز فعال نیست؛ مشاهده خدمات سفر</string>
