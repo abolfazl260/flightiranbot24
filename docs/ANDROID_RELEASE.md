@@ -114,9 +114,12 @@ The version is computed without editing Gradle properties.
 - **Automatic publication:** if the live prices API has usable fresh data,
   create the `v1.0.N` Git tag at the verified `main` commit and publish the
   corresponding GitHub Release with the same signed assets.
-- **API unavailable or stale:** signed artifacts remain available in the
-  successful upload step of the Actions run; public GitHub Release publication
-  is blocked until the real-data gate succeeds. Never use synthetic prices.
+- **API unavailable, forbidden (403) or stale:** signed artifacts remain
+  available in the successful Actions upload. The readiness probe reports a
+  warning and **skips public GitHub Release publication**, without failing the
+  signing/build job. Investigate the public Cloudflare endpoint or publisher,
+  then use a subsequent successful main build for the next public release.
+  Never use synthetic prices.
 - **Manual `vMAJOR.MINOR.PATCH` tag (optional):** still supports the
   original signed-release workflow, but no longer required for standard
   `main` builds.
