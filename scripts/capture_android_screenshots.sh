@@ -36,6 +36,11 @@ wait_for_activity() {
   done
   echo "Expected $expected to be foreground after navigation" >&2
   adb shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' >&2 || true
+  # Persist useful diagnostics instead of hiding the failing UI behind a
+  # transient emulator window. Artifacts are uploaded even if this job fails.
+  adb exec-out screencap -p > "android/screenshots/failed-navigation.png" || true
+  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
+  adb exec-out cat /sdcard/flightiran-failed-window.xml > "android/screenshots/failed-window.xml" || true
   return 1
 }
 
@@ -94,11 +99,24 @@ else:
     width, height = map(int, resolution.groups())
     # Main Compose screen forces RTL: slots are arranged right-to-left.
     x = int(width * (4.5 - slots[label]) / 5)
-    # NavigationBar sits immediately above the Android system gesture bar.
-    # Typical bottom navigation is 80dp; 100 physical px from bottom
-    # lands within it on the pixel_6 screenshot emulator.
-    y = height - 105
-    print(f"Accessibility label {label!r} missing; using verified nav slot at {(x,y)}", flush=True)
+    # Android window bounds are *physical pixels*, not density-independent
+    # pixels. The previous fallback (height - 105 pixels) struck the system
+    # gesture area on the Pixel 6 emulator and never triggered navigation.
+    # Compose Material3 NavigationBar is 80dp high, above a roughly 24dp
+    # system navigation inset. Tap its center: 24dp + 40dp from bottom.
+    density_output = subprocess.check_output(
+        ["adb", "shell", "wm", "density"], text=True
+    )
+    density_match = re.search(r"(?:Override|Physical) density:\\s*(\\d+)", density_output)
+    if not density_match:
+        raise SystemExit(f"Cannot determine device density: {density_output!r}")
+    pixels_per_dp = int(density_match.group(1)) / 160.0
+    y = height - round(64 * pixels_per_dp)
+    print(
+        f"Accessibility label {label!r} missing; using RTL nav slot at "
+        f"{(x,y)}, display={width}x{height}, px_per_dp={pixels_per_dp:.3f}",
+        flush=True,
+    )
 subprocess.run(["adb", "shell", "input", "tap", str(x), str(y)], check=True)
 PY
 }
