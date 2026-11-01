@@ -17,6 +17,7 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
     initData: "", bootstrap: null, prices: null, origin: "",
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
     websites: null, websitesFetchedAt: 0, websitesRequest: null,
+    fids: null, fidsRequest: 0,
     toastTimer: null, visaRequest: 0,
     checklist: new Set(), checklistKey: null, checklistPersistent: false,
   };
@@ -141,6 +142,7 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
     if (screen === "alerts") loadAlerts();
     if (screen === "useful") loadUseful();
     if (screen === "websites") loadWebsites();
+    if (screen === "fids") loadFids();
     if (screen === "visa" && !state.visa) loadVisa();
     if (screen === "checklist") renderChecklist();
     telegram?.HapticFeedback?.selectionChanged?.();
@@ -569,10 +571,12 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
           el("p",{text:site.description}))),
       el("button",{type:"button",className:"website-open",
         onClick:()=>{
+          if (site.id === "iran-fids") { go("fids"); return; }
           const url=approvedExternalUrl(site.url);
           if (url) openUrl(url);
           else toast("نشانی این وب‌سایت معتبر نیست.");
-        }},"مشاهده وب‌سایت",icon("external")));
+        }},site.id === "iran-fids" ? "مشاهده داخل مینی‌اپ" : "مشاهده وب‌سایت",
+        icon(site.id === "iran-fids" ? "arrow" : "external")));
   }
   function renderWebsites() {
     if (!state.websites) return;
@@ -586,6 +590,86 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
       return;
     }
     fill("website-results",sites.map(websiteCard));
+  }
+
+  // Native Mini App flight board for the already-listed "iran-fids" website card.
+  // Requests the same public, read-only Worker endpoint as native Android.
+  // Never embeds/opens the upstream FIDS website or displays fabricated rows.
+  function fidsDate(value) {
+    if (!value) return "اعلام نشده";
+    const time=new Date(value);
+    if (!Number.isFinite(time.getTime())) return "نامشخص";
+    return new Intl.DateTimeFormat("fa-IR",{
+      dateStyle:"short",timeStyle:"short",timeZone:"Asia/Tehran"
+    }).format(time);
+  }
+  function renderFids() {
+    const board=state.fids;
+    if (!board) return;
+    const query=$("fids-search").value.trim().toLocaleLowerCase("fa");
+    const filtered=board.flights.filter(row=>
+      [row.flight_number,row.city,row.airline].some(value=>
+        String(value || "").toLocaleLowerCase("fa").includes(query)));
+    const sourceOld=!board.source_updated_at ||
+      Date.now()-Date.parse(board.source_updated_at)>15*60*1000;
+    fill("fids-status",
+      el("div",{},
+        el("strong",{text:"منبع: سامانه رسمی اطلاعات پرواز فرودگاه‌ها (FIDS)"}),
+        el("p",{text:"زمان دریافت توسط سامانه: "+fidsDate(board.fetched_at)}),
+        el("p",{text:"آخرین بروزرسانی اعلام‌شده توسط منبع: "+
+          fidsDate(board.source_updated_at)}),
+        ...(sourceOld?[el("p",{text:
+          "تازگی داده‌ها تأیید نشده است؛ وضعیت را پیش از عزیمت بررسی کنید."})]:[])
+      ));
+    if (!filtered.length) {
+      fill("fids-results",empty("پروازی برای نمایش موجود نیست",
+        query ? "عبارت جست‌وجو را تغییر دهید." :
+          "در پاسخ دریافتی منبع، پروازی ثبت نشده است."));
+      return;
+    }
+    fill("fids-results",filtered.map(row=>
+      el("article",{className:"panel"},
+        el("strong",{text:row.flight_number+" · "+row.city}),
+        el("p",{text:row.airline || "ایرلاین اعلام نشده"}),
+        el("p",{text:"زمان برنامه‌ای: "+row.scheduled_time}),
+        el("p",{text:"وضعیت: "+(row.status || "اعلام نشده")}),
+        ...(row.estimated_time?[el("p",{text:"زمان تخمینی: "+row.estimated_time})]:[]),
+        ...(row.actual_time?[el("p",{text:"زمان واقعی: "+row.actual_time})]:[]),
+        ...(row.terminal?[el("p",{text:"ترمینال: "+row.terminal})]:[]),
+        ...(row.gate?[el("p",{text:"گیت: "+row.gate})]:[])
+      )));
+  }
+  async function loadFids() {
+    const airport=$("fids-airport").value;
+    const direction=$("fids-direction").value;
+    if (!/^[A-Z]{3}$/.test(airport) ||
+        !["arrivals","departures"].includes(direction)) return;
+    const current=++state.fidsRequest;
+    state.fids=null;
+    fill("fids-results");
+    $("fids-status").textContent="در حال دریافت اطلاعات از منبع رسمی…";
+    const abort=new AbortController();
+    const timer=setTimeout(()=>abort.abort(),10000);
+    try {
+      const response=await fetch("/api/v1/iran/fids/"+airport+"/"+direction,{
+        method:"GET",cache:"no-store",credentials:"omit",signal:abort.signal,
+        headers:{Accept:"application/json"}
+      });
+      if (!response.ok) throw new Error("اطلاعات معتبر FIDS در دسترس نیست؛ اتصال رسمی یا پوشش فرودگاه ممکن است تأیید نشده باشد.");
+      const board=await response.json();
+      if (board.airport!==airport || board.direction!==direction ||
+          board.source!=="Iran Airports and Air Navigation Company FIDS" ||
+          !Array.isArray(board.flights) || board.flights.length>250 ||
+          !board.fetched_at) throw new Error("پاسخ اطلاعات پرواز معتبر نیست.");
+      if (current!==state.fidsRequest) return;
+      state.fids=board;
+      renderFids();
+    } catch(error) {
+      if (current!==state.fidsRequest) return;
+      $("fids-status").textContent=error?.message || "دریافت اطلاعات پرواز ناموفق بود.";
+      fill("fids-results",empty("داده‌ای برای نمایش وجود ندارد",
+        "پاسخ رسمی تأییدشده‌ای دریافت نشده است؛ دوباره تلاش کنید."));
+    } finally { clearTimeout(timer); }
   }
 
   // Keep the Mini App checklist in step with the 12 native Android tasks.
@@ -726,6 +810,7 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
     if (state.active === "alerts") await loadAlerts();
     if (state.active === "useful") { state.useful=null; await loadUseful(); }
     if (state.active === "websites") await loadWebsites(true);
+    if (state.active === "fids") await loadFids();
     toast("اطلاعات دریافت شد.");
   });
   $("origin-select").addEventListener("change",event=>{
@@ -735,6 +820,10 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
   $("visa-search").addEventListener("input",renderVisa);
   $("website-search").addEventListener("input",renderWebsites);
   $("website-category").addEventListener("change",renderWebsites);
+  $("fids-airport").addEventListener("change",loadFids);
+  $("fids-direction").addEventListener("change",loadFids);
+  $("fids-search").addEventListener("input",renderFids);
+  $("fids-reload").addEventListener("click",loadFids);
   $("passport-select").addEventListener("change",async event=>{
     const previous=state.passport;
     const selected=event.target.value;
