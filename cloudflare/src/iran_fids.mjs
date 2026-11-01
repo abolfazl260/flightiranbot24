@@ -123,8 +123,26 @@ export async function getIranFidsBoard(request, env, upstreamFetch = fetch) {
       return fail(503, "Unexpected upstream format");
     if (Number(response.headers.get("content-length") || 0) > MAX_RESPONSE_BYTES)
       return fail(503, "Official response too large");
-    const bytes = await response.arrayBuffer();
-    if (bytes.byteLength > MAX_RESPONSE_BYTES) return fail(503, "Official response too large");
+    // Bound the stream even when upstream omits or lies about Content-Length.
+    const reader = response.body?.getReader();
+    if (!reader) return fail(503, "Empty official response");
+    let size = 0;
+    const chunks = [];
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        size += value.byteLength;
+        if (size > MAX_RESPONSE_BYTES) {
+          await reader.cancel();
+          return fail(503, "Official response too large");
+        }
+        chunks.push(value);
+      }
+    } finally { reader.releaseLock(); }
+    const bytes = new Uint8Array(size);
+    let offset = 0;
+    for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
     const payload = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(bytes));
     const snapshot = normalizeFidsPayload(payload, airport, direction, new Date().toISOString());
     if (!snapshot) return fail(503, "Unverified FIDS response format");
