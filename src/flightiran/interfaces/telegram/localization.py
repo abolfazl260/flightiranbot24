@@ -116,7 +116,7 @@ MESSAGES["fa"].update({
     "welcome_items": [
         "🎫 جست‌وجوی بلیط هواپیما",
         "🛂 اطلاعات ویزا و شرایط سفر",
-        "🛬 اطلاعات فرودگاه‌ها و مسیرهای پروازی",
+        # TEMPORARILY DISABLED (Telegram): "🛬 اطلاعات فرودگاه‌ها و مسیرهای پروازی",
         "📉 پایش قیمت بلیط هواپیما",
         "📚 اطلاعات کاربردی سفر",
     ],
@@ -129,12 +129,12 @@ MESSAGES["fa"].update({
     "help_language": "انتخاب زبان فارسی، انگلیسی یا عربی",
     "help_menu": "بخش‌های منوی اصلی",
     "help_menu_body": (
-        "🛬 فرودگاه‌ها: فهرست و مشخصات فرودگاه‌ها\n"
+        # TEMPORARILY DISABLED (Telegram): "🛬 فرودگاه‌ها: فهرست و مشخصات فرودگاه‌ها\n"
         "🎫 بلیط: مشاهده مسیرها و قیمت‌های موجود، در صورت فعال بودن "
         "سرویس\n"
         "📚 اطلاعات کاربردی: راهنماهای سفر\n"
         "⚙️ تنظیمات: تغییر زبان\n"
-        "🛂 ویزا: استعلام پاسپورت و مقصد با منابع رسمی؛ قوانین مسافر جداگانه\n"
+        "🛂 ویزا: استعلام پاسپورت و مقصد با منابع رسمی\n"
         "📦 حمل بار: ورود مستقیم به کانال @advertio_cargo\n"
         "📩 پشتیبانی: پرسش درباره رزرو، قیمت‌ها و استفاده از ربات"
     ),
@@ -156,7 +156,7 @@ MESSAGES["en"].update({
     "welcome_items": [
         "🎫 Search airline tickets",
         "🛂 Visa and travel requirements",
-        "🛬 Airports and flight routes",
+        # TEMPORARILY DISABLED (Telegram): "🛬 Airports and flight routes",
         "📉 Airfare price monitoring",
         "📚 Useful travel information",
     ],
@@ -169,12 +169,12 @@ MESSAGES["en"].update({
     "help_language": "Choose Persian, English or Arabic",
     "help_menu": "Main menu sections",
     "help_menu_body": (
-        "🛬 Airports: browse airports and details\n"
+        # TEMPORARILY DISABLED (Telegram): "🛬 Airports: browse airports and details\n"
         "🎫 Tickets: available routes and fares when the service is "
         "enabled\n"
         "📚 Useful information: travel guides\n"
         "⚙️ Settings: change language\n"
-        "🛂 Visa: passport/destination guidance with sources; traveler rules separate\n"
+        "🛂 Visa: passport/destination guidance with sources\n"
         "📦 Cargo marketplace: open the @advertio_cargo channel\n"
         "📩 Support: questions about bookings, prices and using the bot"
     ),
@@ -196,7 +196,7 @@ MESSAGES["ar"].update({
     "welcome_items": [
         "🎫 البحث عن تذاكر الطيران",
         "🛂 التأشيرات ومتطلبات السفر",
-        "🛬 المطارات ومسارات الرحلات",
+        # TEMPORARILY DISABLED (Telegram): "🛬 المطارات ومسارات الرحلات",
         "📉 متابعة أسعار التذاكر",
         "📚 معلومات السفر المفيدة",
     ],
@@ -209,7 +209,7 @@ MESSAGES["ar"].update({
     "help_language": "اختيار العربية أو الفارسية أو الإنجليزية",
     "help_menu": "أقسام القائمة الرئيسية",
     "help_menu_body": (
-        "🛬 المطارات: تصفح المطارات وتفاصيلها\n"
+        # TEMPORARILY DISABLED (Telegram): "🛬 المطارات: تصفح المطارات وتفاصيلها\n"
         "🎫 التذاكر: المسارات والأسعار المتاحة عند تفعيل الخدمة\n"
         "📚 معلومات مفيدة: أدلة السفر\n"
         "⚙️ الإعدادات: تغيير اللغة\n"

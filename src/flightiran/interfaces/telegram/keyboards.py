@@ -40,9 +40,11 @@ def main_menu(
     is_admin: bool = False,
 ) -> InlineKeyboardMarkup:
     rows = [
-        [("airports", "menu:airports"), ("tickets", "menu:tickets")],
-        [("visa", "menu:visa"), ("price_alerts", "menu:price_alerts")],
-        [("rules", "menu:rules"), ("cargo", "menu:cargo")],
+        # Temporarily hidden until ready for public use (see root README.md).
+        # ("airports", "menu:airports"),
+        # ("rules", "menu:rules"),
+        [("tickets", "menu:tickets"), ("visa", "menu:visa")],
+        [("price_alerts", "menu:price_alerts"), ("cargo", "menu:cargo")],
         [("useful", "menu:useful"), ("support", "menu:support")],
         [("settings", "menu:settings")],
     ]
