@@ -12,7 +12,7 @@ GitHub Actions automatically increments the build number and tests the Android
 app on relevant changes. Pull requests produce a debug APK and **unsigned QA AAB**.
 After a successful push to `main`, the workflow automatically generates a signed
 APK and AAB with SHA-256 checksums, and publishes a versioned GitHub Release
-when the live public API passes its freshness checks. No manual Git tag is needed.
+after signing, integrity and HTTPS configuration checks pass. A temporary ticket API outage is reported as an operational warning, not a publishing blocker. No manual Git tag is needed.
 Legacy manually created `vMAJOR.MINOR.PATCH` tags are still supported.
 
 ## Owner actions (private signing key)
@@ -178,7 +178,7 @@ and `android/app/build/outputs/bundle/release/app-release.aab`.
   pictures in a public store listing.
 - A signed release requires the four owner-controlled signing secrets listed
   above. The workflow automatically creates `v1.0.N` on the current
-  reviewed `main` HEAD after validating signatures and the live API.
+  reviewed `main` HEAD after validating signatures and the HTTPS API configuration.
   A separately supplied manual tag must also refer to current `main`.
 - The release job builds both APK and AAB using the owner upload key, runs
   `apksigner verify`, validates the signed-AAB success result from
