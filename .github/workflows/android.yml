@@ -111,9 +111,9 @@ jobs:
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
-      # An unsigned build for QA only; never upload this AAB to Google Play.
-      # Tagged release builds below are signed with the private upload key.
+      # Unsigned AABs are for pull-request QA only; main uploads signed AABs.
       - name: Preserve unsigned release AAB for QA
+        if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
           name: android-unsigned-release-aab
@@ -124,7 +124,7 @@ jobs:
   release:
     name: Signed APK, AAB and GitHub Release
     needs: verify
-    if: startsWith(github.ref, 'refs/tags/v')
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 35
     permissions:
@@ -133,19 +133,35 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Verify release tag and main ancestry without Gradle version edits
+      - name: Derive automatic release tag and verify current main HEAD
+        id: version
         shell: bash
         run: |
-          set -euo pipefail
-          [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
-            echo "::error::Release tags must match vMAJOR.MINOR.PATCH"
-            exit 1
-          }
+          set -Eeuo pipefail
           git fetch --no-tags origin main
+          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+              echo "::error::Release tags must match vMAJOR.MINOR.PATCH"
+              exit 1
+            }
+            release_tag="$GITHUB_REF_NAME"
+          else
+            [[ "$GITHUB_REF" == "refs/heads/main" ]] || exit 1
+            # Gradle's appVersionBase is the version name prefix used for main builds.
+            base_version="$(sed -n 's/^appVersionBase=//p' android/gradle.properties | tr -d '\r')"
+            [[ "$base_version" =~ ^[0-9]+\.[0-9]+$ ]] || {
+              echo "::error::Invalid or missing appVersionBase in gradle.properties"
+              exit 1
+            }
+            release_tag="v${base_version}.${GITHUB_RUN_NUMBER}"
+          fi
           [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] || {
-            echo "::error::Release tag must point to the current reviewed main HEAD"
+            echo "::error::Only the current reviewed main HEAD may be published"
             exit 1
           }
+          echo "RELEASE_TAG=$release_tag" >> "$GITHUB_ENV"
+          echo "tag=$release_tag" >> "$GITHUB_OUTPUT"
+          echo "Release version: $release_tag"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -169,14 +185,61 @@ jobs:
           set -euo pipefail
           for required in KEYSTORE_BASE64 STORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
             [[ -n "${!required}" ]] || {
-              echo "::error::Android signing secrets are required before a tagged release."
+              echo "::error::Android signing secrets are required for automatic signed releases."
               exit 1
             }
           done
           umask 077
           printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/flightiran-upload.jks"
           [[ -s "$RUNNER_TEMP/flightiran-upload.jks" ]]
-      - name: Verify live ticket API for release
+      - name: Build signed release APK and AAB
+        env:
+          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN || 'https://flightiran-public-api.abolfazl260.workers.dev/' }}
+          ANDROID_KEYSTORE_FILE: ${{ runner.temp }}/flightiran-upload.jks
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: gradle --no-daemon -p android :app:assembleRelease :app:bundleRelease
+      - name: Verify signed release APK identity and version
+        run: |
+          python scripts/check_android_environments.py --release \
+            --app-dir android/app/build/outputs \
+            --version-code "$GITHUB_RUN_NUMBER" --version-name "${RELEASE_TAG#v}"
+      - name: Verify artifact signatures
+        shell: bash
+        run: |
+          set -euo pipefail
+          apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
+          test -x "$apksigner"
+          "$apksigner" verify --verbose --print-certs android/app/build/outputs/apk/release/*.apk
+          # Self-signed Android upload certificates trigger false -strict failures.
+          # Non-strict mode also accepts unsigned archives; explicitly require
+          # the exact success marker from jarsigner's signature verification.
+          aab_verification="$(jarsigner -verify android/app/build/outputs/bundle/release/*.aab)"
+          printf '%s\n' "$aab_verification"
+          if ! grep -Fxq 'jar verified.' <<< "$aab_verification"; then
+            echo "::error::Release AAB is unsigned or has an invalid JAR signature"
+            exit 1
+          fi
+      - name: Stage signed artifacts with verifiable SHA-256
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p android/dist
+          cp android/app/build/outputs/apk/release/*.apk "android/dist/FlightIranBot24-$RELEASE_TAG.apk"
+          cp android/app/build/outputs/bundle/release/*.aab "android/dist/FlightIranBot24-$RELEASE_TAG.aab"
+          (cd android/dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
+      - name: Store signed files as workflow artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-${{ steps.version.outputs.tag }}
+          path: |
+            android/dist/*.apk
+            android/dist/*.aab
+            android/dist/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 90
+      - name: Verify live ticket API before publishing GitHub Release
         env:
           ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN || 'https://flightiran-public-api.abolfazl260.workers.dev/' }}
         shell: bash
@@ -219,65 +282,29 @@ jobs:
               raise SystemExit("Deployed API has no usable fresh ticket price data")
           print("Production ticket API reachable and returning recorded prices")
           PY
-      - name: Build signed release APK and AAB
-        env:
-          ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN || 'https://flightiran-public-api.abolfazl260.workers.dev/' }}
-          ANDROID_KEYSTORE_FILE: ${{ runner.temp }}/flightiran-upload.jks
-          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
-        run: gradle --no-daemon -p android :app:assembleRelease :app:bundleRelease
-      - name: Verify signed release APK identity and version
-        run: |
-          python scripts/check_android_environments.py --release \
-            --app-dir android/app/build/outputs \
-            --version-code "$GITHUB_RUN_NUMBER" --version-name "${GITHUB_REF_NAME#v}"
-      - name: Verify artifact signatures
-        shell: bash
-        run: |
-          set -euo pipefail
-          apksigner="$ANDROID_HOME/build-tools/35.0.0/apksigner"
-          test -x "$apksigner"
-          "$apksigner" verify --verbose --print-certs android/app/build/outputs/apk/release/*.apk
-          # Self-signed Android upload certificates trigger false -strict failures.
-          # Non-strict mode also accepts unsigned archives; explicitly require
-          # the exact success marker from jarsigner's signature verification.
-          aab_verification="$(jarsigner -verify android/app/build/outputs/bundle/release/*.aab)"
-          printf '%s\n' "$aab_verification"
-          if ! grep -Fxq 'jar verified.' <<< "$aab_verification"; then
-            echo "::error::Release AAB is unsigned or has an invalid JAR signature"
-            exit 1
-          fi
-      - name: Stage signed artifacts with verifiable SHA-256
-        shell: bash
-        run: |
-          set -euo pipefail
-          mkdir -p android/dist
-          cp android/app/build/outputs/apk/release/*.apk "android/dist/FlightIranBot24-$GITHUB_REF_NAME.apk"
-          cp android/app/build/outputs/bundle/release/*.aab "android/dist/FlightIranBot24-$GITHUB_REF_NAME.aab"
-          (cd android/dist && sha256sum *.apk *.aab > SHA256SUMS.txt)
-      - name: Store signed files as workflow artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-release-${{ github.ref_name }}
-          path: |
-            android/dist/*.apk
-            android/dist/*.aab
-            android/dist/SHA256SUMS.txt
-          if-no-files-found: error
-          retention-days: 90
       - name: Publish assets to GitHub Release
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          set -euo pipefail
+          set -Eeuo pipefail
           files=(android/dist/*.apk android/dist/*.aab android/dist/SHA256SUMS.txt)
-          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" "${files[@]}" --clobber
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            # Idempotent on a re-run of this exact GitHub Actions release.
+            gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
+          elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
+            # Preserve the existing trusted manual-tag route.
+            gh release create "$RELEASE_TAG" "${files[@]}" \
+              --title "Flight Iran Bot 24 $RELEASE_TAG" --generate-notes --verify-tag
           else
-            gh release create "$GITHUB_REF_NAME" "${files[@]}" \
-              --title "Flight Iran Bot 24 $GITHUB_REF_NAME" --generate-notes --verify-tag
+            # Auto-create the version tag only after QA, signing and fresh API checks.
+            # Never reuse an existing tag or overwrite a different published version.
+            if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+              echo "::error::Auto-version tag already exists without a GitHub Release"
+              exit 1
+            fi
+            gh release create "$RELEASE_TAG" "${files[@]}" \
+              --target "$GITHUB_SHA" --title "Flight Iran Bot 24 $RELEASE_TAG" --generate-notes
           fi
       - name: Remove signing material
         if: always()
