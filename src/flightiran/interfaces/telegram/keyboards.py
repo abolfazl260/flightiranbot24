@@ -2,7 +2,7 @@
 
 from urllib.parse import urlsplit
 
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from .localization import safe_text
 from .support import support_url
@@ -50,14 +50,19 @@ def main_menu(
     ]
     if is_admin:
         rows.append([("admin_reports", "menu:admin_reports")])
-    secure_url = telegram_web_app_url(web_app_url)
-    if secure_url:
-        label = {
-            "fa": "🚀 ورود به مینی‌اپ سفر",
-            "en": "🚀 Travel Mini App (فارسی)",
-            "ar": "🚀 تطبيق السفر المصغر (فارسی)",
-        }.get(language, "🚀 ورود به مینی‌اپ سفر")
-        rows.append([InlineKeyboardButton(label, web_app=WebAppInfo(secure_url))])
+    # TEMPORARILY DISABLED (2026-11-01): Hide the Mini App launch button
+    # from /start and all Telegram main-menu variants. Backend/API stay intact.
+    # Keep web_app_url in the function signature for existing callers.
+    # To re-enable: restore WebAppInfo import and uncomment this block.
+    # secure_url = telegram_web_app_url(web_app_url)
+    # if secure_url:
+    #     label = {
+    #         "fa": "🚀 ورود به مینی‌اپ سفر",
+    #         "en": "🚀 Travel Mini App (فارسی)",
+    #         "ar": "🚀 تطبيق السفر المصغر (فارسی)",
+    #     }.get(language, "🚀 ورود به مینی‌اپ سفر")
+    #     rows.append([InlineKeyboardButton(label, web_app=WebAppInfo(secure_url))])
+
     def button_for(item: tuple[str, str] | InlineKeyboardButton) -> InlineKeyboardButton:
         if isinstance(item, InlineKeyboardButton):
             return item

@@ -160,7 +160,7 @@ PUBLIC_DB          D1 Database
 The Worker name and URL are unchanged. The upload now includes HTML, CSS and
 JavaScript static assets. `PUBLISH_TOKEN` remains a separate Worker secret.
 
-## 3. Enable the Telegram bot's Mini App menu and outbound bridge
+## 3. Configure the Mini App backend and outbound bridge (launch button hidden)
 
 In the existing server `/opt/Flightiran/flightiranbot24/.env`:
 
@@ -236,10 +236,16 @@ intentional and secure.
    confirm real job completions. The existing Telegram bot continues to
    deliver alerts on the scheduled capture/change notifications.
 
-**Optional persistent launch icon:** use `@BotFather` `/setmenubutton`
-for `@Flightiranbot` and paste the same URL
-`https://flightiran-public-api.abolfazl260.workers.dev/mini/`.
-The inline button works without configuring BotFather.
+**Temporary public-entry restriction (2026-11-01):** The Telegram bot's
+`🚀 ورود به مینی‌اپ سفر` inline launch button is intentionally commented
+out in `src/flightiran/interfaces/telegram/keyboards.py`, including
+`/start`. The Mini App server, Cloudflare integration, and direct URL remain
+available for development and future reactivation; see the root README.
+
+**BotFather is managed separately:** If a persistent Mini App launch icon
+was previously configured through `@BotFather` `/setmenubutton`, remove
+it there separately. Removing the inline bot button does not change BotFather
+settings or invalidate old Mini App links.
 
 ## Security, accuracy and free-tier behavior
 
