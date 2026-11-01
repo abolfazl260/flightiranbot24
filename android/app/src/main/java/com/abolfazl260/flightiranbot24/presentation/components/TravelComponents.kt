@@ -1,12 +1,14 @@
 package com.abolfazl260.flightiranbot24.presentation.components
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -29,6 +31,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -39,6 +42,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import com.abolfazl260.flightiranbot24.R
 import androidx.compose.ui.unit.dp
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
@@ -65,25 +69,25 @@ internal fun TravelBottomNavigation(
             TravelNavigationItem(
                 selected = selectedTab == TravelTab.HOME,
                 onClick = onHome,
-                symbol = "⌂",
+                iconRes = R.drawable.nav_home,
                 label = stringResource(R.string.navigation_home),
             )
             TravelNavigationItem(
                 selected = selectedTab == TravelTab.PRICES,
                 onClick = onPrices,
-                symbol = "↗",
+                iconRes = R.drawable.nav_prices,
                 label = stringResource(R.string.navigation_prices),
             )
             TravelNavigationItem(
                 selected = selectedTab == TravelTab.CHECKLIST,
                 onClick = onChecklist,
-                symbol = "☑",
+                iconRes = R.drawable.nav_checklist,
                 label = stringResource(R.string.navigation_checklist),
             )
             TravelNavigationItem(
                 selected = selectedTab == TravelTab.SERVICES,
                 onClick = onServices,
-                symbol = "☷",
+                iconRes = R.drawable.nav_services,
                 label = stringResource(R.string.navigation_services),
             )
         }
@@ -147,7 +151,7 @@ internal fun TravelServiceCard(
 @Composable
 internal fun RowScope.TravelNavigationItem(
     label: String,
-    symbol: String,
+    iconRes: Int,
     selected: Boolean,
     onClick: () -> Unit,
 ) {
@@ -157,7 +161,16 @@ internal fun RowScope.TravelNavigationItem(
         // Stable Persian accessibility label for TalkBack and UIAutomator.
         // Some Compose/emulator combinations omit nested Text in the merged tree.
         modifier = Modifier.semantics { contentDescription = label },
-        icon = { Text(symbol, modifier = Modifier.clearAndSetSemantics { }) },
+        icon = {
+            Image(
+                painter = painterResource(iconRes),
+                contentDescription = null,
+                modifier = Modifier.size(30.dp),
+                colorFilter = ColorFilter.tint(
+                    if (selected) Color.White else Color(0xFF586979),
+                ),
+            )
+        },
         label = { Text(label) },
         alwaysShowLabel = true,
         colors = NavigationBarItemDefaults.colors(
