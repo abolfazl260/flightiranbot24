@@ -1,0 +1,121 @@
+# One-time cleanup of 28 audited obsolete branches, preserving active FIDS PR #114.
+# This workflow safeguards every deletion with the audited SHA and uploads a Git bundle first.
+name: One-time obsolete branch cleanup (2026-11-01)
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/cleanup-obsolete-branches-20261101.yml
+  workflow_dispatch:
+    inputs:
+      execute:
+        description: "Enter DELETE to delete audited branches, otherwise verify and back up only"
+        required: true
+        default: "DRY_RUN"
+permissions:
+  contents: write
+jobs:
+  cleanup:
+    if: ${{ github.repository == 'abolfazl260/flightiranbot24' && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - name: Validate branch SHAs and create full repository bundle
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
+          git merge-base --is-ancestor d60464d93c08357e18291f78d5870438424870f8 refs/remotes/origin/main
+          count=0
+          while read -r branch expected; do
+            [[ -n "$branch" ]] || continue
+            [[ "$branch" != "main" && "$branch" != "feat/native-iran-fids-board" ]] || exit 1
+            current="$(git ls-remote --heads origin "refs/heads/$branch" | cut -f1)"
+            [[ "$current" == "$expected" ]] || { echo "Ref changed or missing: $branch"; exit 1; }
+            echo "Verified: $branch @ $expected"
+            count=$((count + 1))
+          done <<'AUDITED_BRANCHES'
+            chore/android-signing-credentials-preflight 5fb21ebb10d1d0af65a4dd8c1c5f45266e4628c8
+            chore/remove-flight-tracking b622bdde8c350ff881fec9f0b6590254837cd99e
+            docs/android-ux-rtl-review-backlog 1602ab75157d04b5b22821320b9ceafad958e4b1
+            feat/advertio-brand-mini-android-home 697f93efd63c7d1400ea11c60d93e54d98becfcf
+            feat/android-in-app-ticket-prices-navigation-20261011 7618778251548147cfedf9866ad4669d6fbda682
+            feat/android-launcher-travel-icon-20261011 9e71836e44db8c1324989e1b9f313bf09ce83a8b
+            feat/android-modern-ui-live-prices-checklist ed48bc08d0b8b83561d90eb2cb5aa22068311b4d
+            feat/android-persian-rtl-ui-ci 1807ae97f5a345957ff49f117e8fb1de8fcc53d4
+            feat/android-production-readiness c0fec31f6b63492e158e25449b05ff51c5bcfdf0
+            feat/cloudflare-d1-only-public-feed 5deab5a9402a1924c54cb423194e6f75e371ff0e
+            feat/cloudflare-public-readonly-data 9900227e96982256a4f89989962135348416cadf
+            feat/issue-64-advertio-ui-components 96e22b5f79decab57f09c0ab06a39d873f072e66
+            feat/telegram-mini-app-v1 883d0862045617426c9e7dc085f9881bf493edd6
+            feat/worker-hosted-telegram-miniapp 7c93f3fbc7888023c446f0c34ab13a4cc80e160d
+            feature/airport-coming-soon-mini-checklist-20261013 851dae40b9527db26ba37b1ea870e57657f653d3
+            fix/airports-coming-soon-rich-admin-report-20261011 f0da4b7fc2265c603303eb8c8d4b26e1e333fbd3
+            fix/android-prices-read-database-20261011 12e0a4be31ce3dbb8945cabf7057d5cdc031e7ea
+            fix/cloudflare-d1-free-write-budget 01fc77dda92f2a854800695af682ddf9a37fe2c4
+            fix/free-text-ok-fallback-20261011 a90d2fbcc647bc9ba429d80655a0f91f15df2b06
+            fix/remove-visa-destination-json-links 9a77b13f994a984e66d55cded2007f757682a611
+            fix/telegram-webapp-http-url-fallback-20261012 fd4d8d99476f5dc32ab96ff7d65eea98bd2ed7dc
+            fix/ticket-price-units-and-alert-repeat c1334949b32599f66b2087a174a40f2e9552af46
+            fix/visa-policy-safety-and-sync-validation 5fcf4ebc2b4af285543b4e4165ebf21e8e00006d
+            fix/visa-unchanged-message-20261011 8cd7973e95e1b677d77b364a11b831cb64cd75d9
+            refactor/android-single-app-auto-version-20261011 04fa3d85d05db956c0f2d27325ff9acebc725a22
+            refactor/cloudflare-visa-passport-json-snapshots 75aa215e065b284135b90758dbc778d9eea5f672
+            release/android-production-readiness-20261013 a0de8c54a11b49f786dc775683e68577ad7dd736
+            work d1936cddc98f1ac9e633958a50a04b268e8a02db
+          AUDITED_BRANCHES
+          [[ "$count" -eq 28 ]] || { echo "Expected 28 obsolete refs, got $count"; exit 1; }
+          git bundle create "$RUNNER_TEMP/flightiran-branches-before-cleanup.bundle" --all
+          git bundle verify "$RUNNER_TEMP/flightiran-branches-before-cleanup.bundle"
+      - name: Upload recovery bundle before any deletion
+        uses: actions/upload-artifact@v4
+        with:
+          name: flightiran-branches-backup-20261101
+          path: ${{ runner.temp }}/flightiran-branches-before-cleanup.bundle
+          retention-days: 90
+          if-no-files-found: error
+      - name: Delete audited refs with force-with-lease
+        if: ${{ github.event_name == 'push' || inputs.execute == 'DELETE' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          while read -r branch expected; do
+            [[ -n "$branch" ]] || continue
+            git push --force-with-lease="refs/heads/$branch:$expected" origin ":refs/heads/$branch"
+            echo "Deleted: $branch"
+          done <<'AUDITED_BRANCHES'
+            chore/android-signing-credentials-preflight 5fb21ebb10d1d0af65a4dd8c1c5f45266e4628c8
+            chore/remove-flight-tracking b622bdde8c350ff881fec9f0b6590254837cd99e
+            docs/android-ux-rtl-review-backlog 1602ab75157d04b5b22821320b9ceafad958e4b1
+            feat/advertio-brand-mini-android-home 697f93efd63c7d1400ea11c60d93e54d98becfcf
+            feat/android-in-app-ticket-prices-navigation-20261011 7618778251548147cfedf9866ad4669d6fbda682
+            feat/android-launcher-travel-icon-20261011 9e71836e44db8c1324989e1b9f313bf09ce83a8b
+            feat/android-modern-ui-live-prices-checklist ed48bc08d0b8b83561d90eb2cb5aa22068311b4d
+            feat/android-persian-rtl-ui-ci 1807ae97f5a345957ff49f117e8fb1de8fcc53d4
+            feat/android-production-readiness c0fec31f6b63492e158e25449b05ff51c5bcfdf0
+            feat/cloudflare-d1-only-public-feed 5deab5a9402a1924c54cb423194e6f75e371ff0e
+            feat/cloudflare-public-readonly-data 9900227e96982256a4f89989962135348416cadf
+            feat/issue-64-advertio-ui-components 96e22b5f79decab57f09c0ab06a39d873f072e66
+            feat/telegram-mini-app-v1 883d0862045617426c9e7dc085f9881bf493edd6
+            feat/worker-hosted-telegram-miniapp 7c93f3fbc7888023c446f0c34ab13a4cc80e160d
+            feature/airport-coming-soon-mini-checklist-20261013 851dae40b9527db26ba37b1ea870e57657f653d3
+            fix/airports-coming-soon-rich-admin-report-20261011 f0da4b7fc2265c603303eb8c8d4b26e1e333fbd3
+            fix/android-prices-read-database-20261011 12e0a4be31ce3dbb8945cabf7057d5cdc031e7ea
+            fix/cloudflare-d1-free-write-budget 01fc77dda92f2a854800695af682ddf9a37fe2c4
+            fix/free-text-ok-fallback-20261011 a90d2fbcc647bc9ba429d80655a0f91f15df2b06
+            fix/remove-visa-destination-json-links 9a77b13f994a984e66d55cded2007f757682a611
+            fix/telegram-webapp-http-url-fallback-20261012 fd4d8d99476f5dc32ab96ff7d65eea98bd2ed7dc
+            fix/ticket-price-units-and-alert-repeat c1334949b32599f66b2087a174a40f2e9552af46
+            fix/visa-policy-safety-and-sync-validation 5fcf4ebc2b4af285543b4e4165ebf21e8e00006d
+            fix/visa-unchanged-message-20261011 8cd7973e95e1b677d77b364a11b831cb64cd75d9
+            refactor/android-single-app-auto-version-20261011 04fa3d85d05db956c0f2d27325ff9acebc725a22
+            refactor/cloudflare-visa-passport-json-snapshots 75aa215e065b284135b90758dbc778d9eea5f672
+            release/android-production-readiness-20261013 a0de8c54a11b49f786dc775683e68577ad7dd736
+            work d1936cddc98f1ac9e633958a50a04b268e8a02db
+          AUDITED_BRANCHES
+          git ls-remote --heads origin
+          echo 'Completed cleanup; main and active FIDS branch must remain.'
