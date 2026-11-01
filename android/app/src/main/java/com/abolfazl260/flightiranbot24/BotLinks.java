@@ -8,8 +8,6 @@ public final class BotLinks {
     public static final String AIRPORTS = BOT + "?start=airports";
     public static final String USEFUL = BOT + "?start=useful";
     public static final String SUPPORT = "https://t.me/Advertio_support";
-    public static final String PRIVACY =
-            "https://github.com/abolfazl260/flightiranbot24/blob/main/docs/ANDROID_PRIVACY.md";
 
     private BotLinks() {
     }

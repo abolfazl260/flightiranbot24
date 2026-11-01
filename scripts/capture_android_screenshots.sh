@@ -134,9 +134,9 @@ capture 01-home.png
 
 open_launcher
 wait_for_activity MainActivity
-tap_persian_control "راهنمای فرودگاه‌ها"
+tap_persian_control "خدمات"
 wait_for_activity MainActivity
-# Airport guide is intentionally disabled: show Services within MainActivity.
+# Open Services through its always-visible bottom navigation instead of\n# relying on the airport card being visible on every emulator viewport.
 # Assert that the new view is visible before producing a screenshot.
 adb shell uiautomator dump /sdcard/flightiran-services.xml >/dev/null
 adb exec-out cat /sdcard/flightiran-services.xml | grep -Fq "خدمات بیشتر"
