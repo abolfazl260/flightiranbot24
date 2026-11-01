@@ -46,6 +46,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -138,12 +140,6 @@ internal fun TravelHomeScreen(
                     onClick = { onSelect(HomeDestination.TICKET_PRICES) },
                     symbol = "↗",
                     label = stringResource(R.string.navigation_prices),
-                )
-                TravelNavigationItem(
-                    selected = false,
-                    onClick = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
-                    symbol = "✈",
-                    label = stringResource(R.string.navigation_airports),
                 )
                 TravelNavigationItem(
                     selected = false,
@@ -361,7 +357,7 @@ private fun HomeFeatureCard(
 ) {
     Card(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.semantics { contentDescription = title },
         shape = RoundedCornerShape(19.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
