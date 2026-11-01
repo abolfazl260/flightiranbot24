@@ -147,19 +147,41 @@ async def test_unknown_callback_has_safe_fallback():
 
 @pytest.mark.asyncio
 @pytest.mark.parametrize("language", ("fa", "en", "ar"))
-async def test_airport_menu_only_shows_coming_soon(language):
+@pytest.mark.parametrize("action", ("menu:airports", "airports:page:1", "airport:IKA", "menu:rules"))
+async def test_hidden_feature_legacy_callbacks_return_main_menu(language, action):
     deps = dependencies()
     deps.users.languages[42] = language
-    for action in ("menu:airports", "airports:page:1", "airport:IKA"):
-        query = Query()
-        query.data = action
-        await callback_handler(update(query=query), None, deps)
-        assert len(query.calls) == 1
-        rendered = query.calls[0][0][0]
-        assert "فرودگاه" in rendered or "Airport" in rendered or "المطارات" in rendered
-        buttons = query.calls[0][1]["reply_markup"].inline_keyboard
-        assert len(buttons) == 1
-        assert [button.callback_data for button in buttons[0]] == ["back"]
+    query = Query()
+    query.data = action
+    await callback_handler(update(query=query), None, deps)
+    assert len(query.calls) == 1
+    assert query.calls[0][1]["parse_mode"] == "HTML"
+    buttons = query.calls[0][1]["reply_markup"].inline_keyboard
+    callbacks = {button.callback_data for row in buttons for button in row}
+    assert "menu:airports" not in callbacks
+    assert "menu:rules" not in callbacks
+
+
+@pytest.mark.parametrize("language", ("fa", "en", "ar"))
+def test_hidden_airports_and_traveler_rules_not_advertised(language):
+    from flightiran.interfaces.telegram.keyboards import main_menu
+    from flightiran.interfaces.telegram.renderers import render_help, render_main_menu
+
+    callbacks = {
+        button.callback_data
+        for row in main_menu(language).inline_keyboard
+        for button in row
+    }
+    assert "menu:airports" not in callbacks
+    assert "menu:rules" not in callbacks
+    hidden_phrases = {
+        "fa": ("فرودگاه‌ها", "قوانین مسافر"),
+        "en": ("Airports", "traveler rules"),
+        "ar": ("المطارات", "قواعد المسافر"),
+    }
+    for phrase in hidden_phrases[language]:
+        assert phrase not in render_main_menu(language)
+        assert phrase not in render_help(language)
 
 
 
@@ -574,7 +596,9 @@ async def test_android_telegram_deep_links_open_specific_service(entrypoint):
     if entrypoint == "visa":
         assert "دیتاست" in rendered  # Catalog unavailable in this isolated test
     elif entrypoint == "airports":
-        assert "فرودگاه" in rendered
+        # Legacy deep links now lead to the ordinary main menu.
+        assert "سلام" in rendered
+        assert "فرودگاه‌ها" not in rendered
     else:
         assert "راهنمای سفر" in rendered
     assert message.calls[0][1]["reply_markup"].inline_keyboard

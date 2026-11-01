@@ -259,11 +259,8 @@ async def start_handler(
                     parse_mode="HTML",
                     reply_markup=menu_keyboard(language),
                 )
-        elif entrypoint == "airports":
-            await update.message.reply_text(
-                text(language, "airports_coming_soon"),
-                reply_markup=back_menu(language),
-            )
+        # /start airports is intentionally not routed while the airport
+        # feature is hidden. Old links fall through to the normal main menu.
         elif entrypoint == "useful":
             catalog = dependencies.useful_catalog or default_catalog()
             await update.message.reply_text(
@@ -396,14 +393,24 @@ async def callback_handler(
                 is_admin=_is_private_admin(update, dependencies),
             ),
         )
-    elif data == "menu:airports" or data.startswith(("airports:page:", "airport:")):
-        if data == "menu:airports":
-            await dependencies.audit.record(
-                "menu.callback", user_id=user_id, payload={"action": "airports"}
-            )
+    elif (
+        data in ("menu:airports", "menu:rules")
+        or data.startswith(("airports:page:", "airport:"))
+    ):
+        # Buttons in existing chat history remain clickable after removal from
+        # the menu. Route legacy actions to supported services without exposing
+        # the hidden features or a "coming soon" placeholder.
         await query.edit_message_text(
-            text(language, "airports_coming_soon"),
-            reply_markup=back_menu(language),
+            render_main_menu(
+                language,
+                update.effective_user.first_name if update.effective_user else None,
+            ),
+            parse_mode="HTML",
+            reply_markup=main_menu(
+                language,
+                dependencies.web_app_url,
+                is_admin=_is_private_admin(update, dependencies),
+            ),
         )
     elif data == "menu:useful":
         catalog = dependencies.useful_catalog or default_catalog()
@@ -611,11 +618,7 @@ async def callback_handler(
                 for message in render_price_drop_fallback_chunks([route], language=language):
                     await query.message.reply_text(message, parse_mode="HTML")
 
-    elif data == "menu:rules":
-        await query.edit_message_text(
-            "این بخش به منبع رسمی نیاز دارد و از طریق منوی ربات قابل جستجو است.",
-            reply_markup=back_menu(language),
-        )
+    # menu:rules is also disabled by the legacy-callback fallback above.
     elif data == "menu:admin_reports":
         # Reports contain private business data: authorize before collection or transport.
         if not _is_private_admin(update, dependencies):

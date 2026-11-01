@@ -3,6 +3,7 @@
 import hashlib
 import hmac
 import json
+import re
 import time
 from datetime import datetime, timezone
 from urllib.parse import urlencode
@@ -58,7 +59,11 @@ def test_rtl_shell_and_static_assets_have_safe_browser_headers():
             assert 'lang="fa" dir="rtl"' in response.text
             assert "https://telegram.org/js/telegram-web-app.js" in response.text
             assert 'id="screen-visa"' in response.text
-            assert 'id="screen-airports"' in response.text
+            # Airport HTML is intentionally preserved in comments for later
+            # reactivation, but no link or screen may exist in the actual DOM.
+            visible_html = re.sub(r"<!--[\s\S]*?-->", "", response.text)
+            assert 'id="screen-airports"' not in visible_html
+            assert 'data-go="airports"' not in visible_html
             assert response.headers["cache-control"] == "no-store"
             assert "object-src 'none'" in response.headers["content-security-policy"]
             assert "unsafe-inline" not in response.headers["content-security-policy"]
