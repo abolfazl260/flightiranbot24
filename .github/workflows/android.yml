@@ -240,6 +240,8 @@ jobs:
           if-no-files-found: error
           retention-days: 90
       - name: Verify live ticket API before publishing GitHub Release
+        id: live_api
+        continue-on-error: true
         env:
           ANDROID_PRODUCTION_API_ORIGIN: ${{ vars.ANDROID_PRODUCTION_API_ORIGIN || 'https://flightiran-public-api.abolfazl260.workers.dev/' }}
         shell: bash
@@ -282,7 +284,16 @@ jobs:
               raise SystemExit("Deployed API has no usable fresh ticket price data")
           print("Production ticket API reachable and returning recorded prices")
           PY
+      - name: Report deferred GitHub Release (signed files are ready)
+        if: steps.live_api.outcome != 'success'
+        shell: bash
+        run: |
+          echo '::warning::Signed APK/AAB are available in the android-release artifact, but the public GitHub Release is deferred because the live flight-price API readiness check failed.'
+          echo '### Signed Android files are ready' >> "$GITHUB_STEP_SUMMARY"
+          echo "Artifact: android-release-${RELEASE_TAG}" >> "$GITHUB_STEP_SUMMARY"
+          echo 'GitHub Release publication was skipped: ticket-price API is unavailable, forbidden, or stale. Restore the public API to enable later automatic releases.' >> "$GITHUB_STEP_SUMMARY"
       - name: Publish assets to GitHub Release
+        if: steps.live_api.outcome == 'success'
         shell: bash
         env:
           GH_TOKEN: ${{ github.token }}
