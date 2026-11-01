@@ -54,6 +54,7 @@
     <string name="checklist_reset_cancel">انصراف</string>
     <string name="checklist_reset_done">چک‌لیست پاک شد.</string>
 
+    <string name="iran_fids_title">اطلاعات پرواز ایران</string>
     <string name="ticket_prices_title">قیمت پروازها</string>
     <string name="ticket_prices_explanation">آخرین قیمت‌های ثبت‌شده را ببین و مسیر مناسب را پیدا کن.</string>
     <string name="ticket_prices_unconfigured">سرویس قیمت‌ها در این نسخه در دسترس نیست. لطفاً نسخه جدید را نصب کنید.</string>

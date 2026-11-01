@@ -16,6 +16,7 @@ internal class LocalHomeRepository : HomeRepository {
         ),
         online = listOf(
             HomeDestination.TICKET_PRICES,
+            HomeDestination.IRAN_FLIGHTS,
             HomeDestination.TELEGRAM_BOT,
             HomeDestination.TELEGRAM_VISA,
             HomeDestination.TELEGRAM_AIRPORTS,

@@ -92,6 +92,8 @@ class MainActivity : ComponentActivity() {
                 startActivity(Intent(this, ChecklistActivity::class.java))
             HomeDestination.TICKET_PRICES ->
                 startActivity(Intent(this, TicketPricesActivity::class.java))
+            HomeDestination.IRAN_FLIGHTS ->
+                startActivity(Intent(this, IranFlightsActivity::class.java))
             HomeDestination.TELEGRAM_BOT -> openUrl(BotLinks.BOT)
             HomeDestination.TELEGRAM_AIRPORTS ->
                 startActivity(Intent(this, AirportDirectoryActivity::class.java))
@@ -323,6 +325,13 @@ private fun HomeFeatureGrid(onSelect: (HomeDestination) -> Unit) {
                 onClick = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
             )
         }
+        HomeFeatureCard(
+            title = stringResource(R.string.iran_fids_title),
+            subtitle = "اطلاعات ورودی و خروجی فرودگاه‌های ایران",
+            symbol = "◷",
+            modifier = Modifier.fillMaxWidth(),
+            onClick = { onSelect(HomeDestination.IRAN_FLIGHTS) },
+        )
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             HomeFeatureCard(
                 title = stringResource(R.string.open_visa),
@@ -482,6 +491,7 @@ private fun HomeDestination.symbol(): String = when (this) {
     HomeDestination.OFFLINE_AIRPORTS -> "✈"
     HomeDestination.OFFLINE_CHECKLIST -> "☑"
     HomeDestination.TICKET_PRICES -> "↗"
+    HomeDestination.IRAN_FLIGHTS -> "◷"
     HomeDestination.TELEGRAM_BOT -> "✦"
     HomeDestination.TELEGRAM_VISA -> "▣"
     HomeDestination.TELEGRAM_AIRPORTS -> "⌖"
@@ -494,6 +504,7 @@ private fun HomeDestination.labelResource(): Int = when (this) {
     HomeDestination.OFFLINE_AIRPORTS -> R.string.offline_airports
     HomeDestination.OFFLINE_CHECKLIST -> R.string.checklist_title
     HomeDestination.TICKET_PRICES -> R.string.ticket_prices_title
+    HomeDestination.IRAN_FLIGHTS -> R.string.iran_fids_title
     HomeDestination.TELEGRAM_BOT -> R.string.open_bot
     HomeDestination.TELEGRAM_VISA -> R.string.open_visa
     HomeDestination.TELEGRAM_AIRPORTS -> R.string.open_airports

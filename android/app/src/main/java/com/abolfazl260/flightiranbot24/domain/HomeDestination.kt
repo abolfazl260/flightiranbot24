@@ -8,6 +8,7 @@ internal enum class HomeDestination {
     OFFLINE_AIRPORTS,
     OFFLINE_CHECKLIST,
     TICKET_PRICES,
+    IRAN_FLIGHTS,
     TELEGRAM_BOT,
     TELEGRAM_VISA,
     TELEGRAM_AIRPORTS,

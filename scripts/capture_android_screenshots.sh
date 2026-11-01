@@ -36,6 +36,11 @@ wait_for_activity() {
   done
   echo "Expected $expected to be foreground after navigation" >&2
   adb shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' >&2 || true
+  # Persist useful diagnostics instead of hiding the failing UI behind a
+  # transient emulator window. Artifacts are uploaded even if this job fails.
+  adb exec-out screencap -p > "android/screenshots/failed-navigation.png" || true
+  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
+  adb exec-out cat /sdcard/flightiran-failed-window.xml > "android/screenshots/failed-window.xml" || true
   return 1
 }
 
@@ -72,10 +77,46 @@ for node in root.iter("node"):
     if right > left and bottom > top:
         candidates.append((top, (left + right) // 2, (top + bottom) // 2))
 
-if not candidates:
-    raise SystemExit(f"Cannot find Persian navigation item: {label}")
-# The bottom bar is below similarly named feature cards.
-_, x, y = max(candidates)
+if candidates:
+    # The bottom bar is below similarly named feature cards.
+    _, x, y = max(candidates)
+else:
+    # Some emulator/Compose combinations omit the NavigationBarItem text
+    # from uiautomator's merged semantics. The bar has five equal slots.
+    # Use an explicit, documented slot fallback; the subsequent assertion
+    # verifies that the expected Activity actually opened, so a wrong tap
+    # still fails the screenshot job instead of passing silently.
+    slots = {"خانه": 0, "قیمت بلیت": 1, "فرودگاه‌ها": 2,
+             "چک‌لیست": 3, "خدمات": 4}
+    if label not in slots:
+        raise SystemExit(f"Unknown Persian navigation slot: {label}")
+    size = subprocess.check_output(
+        ["adb", "shell", "wm", "size"], text=True
+    ).strip()
+    resolution = re.search(r"(\d+)x(\d+)", size)
+    if not resolution:
+        raise SystemExit(f"Unable to determine emulator size: {size}")
+    width, height = map(int, resolution.groups())
+    # Main Compose screen forces RTL: slots are arranged right-to-left.
+    x = int(width * (4.5 - slots[label]) / 5)
+    # Android window bounds are *physical pixels*, not density-independent
+    # pixels. The previous fallback (height - 105 pixels) struck the system
+    # gesture area on the Pixel 6 emulator and never triggered navigation.
+    # Compose Material3 NavigationBar is 80dp high, above a roughly 24dp
+    # system navigation inset. Tap its center: 24dp + 40dp from bottom.
+    density_output = subprocess.check_output(
+        ["adb", "shell", "wm", "density"], text=True
+    )
+    density_match = re.search(r"(?:Override|Physical) density:\s*(\d+)", density_output)
+    if not density_match:
+        raise SystemExit(f"Cannot determine device density: {density_output!r}")
+    pixels_per_dp = int(density_match.group(1)) / 160.0
+    y = height - round(64 * pixels_per_dp)
+    print(
+        f"Accessibility label {label!r} missing; using RTL nav slot at "
+        f"{(x,y)}, display={width}x{height}, px_per_dp={pixels_per_dp:.3f}",
+        flush=True,
+    )
 subprocess.run(["adb", "shell", "input", "tap", str(x), str(y)], check=True)
 PY
 }

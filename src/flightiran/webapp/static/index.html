@@ -119,6 +119,31 @@
         <p class="footnote">پیش از استفاده از خدمات یا ارائه اطلاعات شخصی، نشانی و اعتبار وب‌سایت مقصد را بررسی کنید.</p>
       </section>
 
+      <section class="screen" id="screen-fids" data-screen="fids" aria-labelledby="fids-heading" hidden>
+        <div class="page-title"><span class="page-icon sky"><svg class="symbol"><use href="#i-plane"></use></svg></span><div><h1 id="fids-heading">اطلاعات پرواز ایران</h1><p>پروازهای ورودی و خروجی از منبع رسمی FIDS، داخل مینی‌اپ</p></div></div>
+        <div class="field"><label for="fids-airport">فرودگاه</label><select id="fids-airport">
+          <option value="THR">تهران مهرآباد (THR)</option>
+          <option value="MHD">مشهد (MHD)</option>
+          <option value="SYZ">شیراز (SYZ)</option>
+          <option value="IFN">اصفهان (IFN)</option>
+          <option value="TBZ">تبریز (TBZ)</option>
+          <option value="AWZ">اهواز (AWZ)</option>
+          <option value="BND">بندرعباس (BND)</option>
+          <option value="KER">کرمان (KER)</option>
+          <option value="ZAH">زاهدان (ZAH)</option>
+          <option value="OMH">ارومیه (OMH)</option>
+        </select></div>
+        <div class="field"><label for="fids-direction">نوع پرواز</label><select id="fids-direction">
+          <option value="departures">خروجی</option>
+          <option value="arrivals">ورودی</option>
+        </select></div>
+        <div class="field search-field"><label for="fids-search">جست‌وجو در پروازها</label><span class="search-wrap"><svg class="symbol"><use href="#i-search"></use></svg><input id="fids-search" type="search" placeholder="شماره پرواز، مسیر یا ایرلاین" autocomplete="off"></span></div>
+        <div class="status-strip" id="fids-status" role="status" aria-live="polite">فرودگاه و نوع پرواز را انتخاب کنید.</div>
+        <div class="list-stack" id="fids-results" aria-live="polite"></div>
+        <button type="button" class="secondary-cta" id="fids-reload">دریافت مجدد اطلاعات</button>
+        <p class="footnote">زمان دریافت داده با زمان به‌روزرسانی منبع یکسان نیست. پیش از مراجعه، وضعیت پرواز را با فرودگاه یا ایرلاین تأیید کنید. در صورت تأیید نشدن اتصال FIDS، اطلاعاتی نمایش داده نمی‌شود.</p>
+      </section>
+
       <section class="screen" id="screen-checklist" data-screen="checklist" aria-labelledby="checklist-heading" hidden>
         <div class="page-title"><span class="page-icon aqua"><svg class="symbol"><use href="#i-list-check"></use></svg></span><div><h1 id="checklist-heading">چک‌لیست سفر من</h1><p>کارهای سفر را مرحله‌به‌مرحله انجام بده.</p></div></div>
         <div class="checklist-summary" aria-label="پیشرفت برنامه سفر">
