@@ -149,7 +149,7 @@ def test_report_button_visible_only_with_explicit_admin_flag():
         ) == 1
 
 
-def test_admin_reports_appear_alongside_optional_webapp_button():
+def test_admin_reports_remain_visible_while_mini_app_launch_is_hidden():
     keyboard = main_menu(
         "fa", web_app_url="https://flightiran.example.com", is_admin=True
     )
@@ -157,7 +157,7 @@ def test_admin_reports_appear_alongside_optional_webapp_button():
         button.callback_data == "menu:admin_reports"
         for row in keyboard.inline_keyboard for button in row
     )
-    assert any(
+    assert not any(
         button.web_app is not None
         for row in keyboard.inline_keyboard for button in row
     )
