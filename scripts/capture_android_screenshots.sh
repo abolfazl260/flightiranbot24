@@ -135,8 +135,12 @@ capture 01-home.png
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "راهنمای فرودگاه‌ها"
-wait_for_activity AirportDirectoryActivity
-capture 02-airports.png
+wait_for_activity MainActivity
+# Airport guide is intentionally disabled: show Services within MainActivity.
+# Assert that the new view is visible before producing a screenshot.
+adb shell uiautomator dump /sdcard/flightiran-services.xml >/dev/null
+adb exec-out cat /sdcard/flightiran-services.xml | grep -Fq "خدمات بیشتر"
+capture 02-services.png
 
 open_launcher
 wait_for_activity MainActivity
