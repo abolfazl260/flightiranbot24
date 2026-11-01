@@ -26,6 +26,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,6 +49,8 @@ import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.presentation.components.TravelEmptyState
 import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
 import com.abolfazl260.flightiranbot24.presentation.components.TravelLoadingState
+import com.abolfazl260.flightiranbot24.presentation.components.TravelBottomNavigation
+import com.abolfazl260.flightiranbot24.presentation.components.TravelTab
 import com.abolfazl260.flightiranbot24.presentation.components.TravelToolbar
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
 import com.abolfazl260.flightiranbot24.presentation.tickets.TicketPricesUiState
@@ -76,12 +79,24 @@ class TicketPricesActivity : ComponentActivity() {
                 TicketPricesScreen(
                     state = state,
                     onBack = ::finish,
+                    onHome = { openMainTab(TravelTab.HOME) },
+                    onChecklist = { startActivity(Intent(this, ChecklistActivity::class.java)) },
+                    onServices = { openMainTab(TravelTab.SERVICES) },
                     onRefresh = model::refresh,
                     onSupport = { openUrl(BotLinks.SUPPORT) },
                     allowSupport = true,
                 )
             }
         }
+    }
+
+    private fun openMainTab(tab: TravelTab) {
+        startActivity(
+            Intent(this, MainActivity::class.java)
+                .putExtra(MainActivity.EXTRA_TAB, tab.name)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        )
+        finish()
     }
 
     private fun openUrl(url: String) {
@@ -100,121 +115,137 @@ internal fun TicketPricesScreen(
     onRefresh: () -> Unit,
     onSupport: () -> Unit,
     allowSupport: Boolean,
+    onHome: () -> Unit = onBack,
+    onChecklist: () -> Unit = {},
+    onServices: () -> Unit = {},
 ) {
     var selectedOrigin by rememberSaveable { mutableStateOf("") }
     var search by rememberSaveable { mutableStateOf("") }
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        item {
-            Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
-                TravelToolbar(
-                    title = stringResource(R.string.ticket_prices_title),
-                    onBack = onBack,
-                )
-                Text(
-                    stringResource(R.string.ticket_prices_explanation),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodySmall,
-                )
-            }
-        }
-        when (state) {
-            TicketPricesUiState.Loading -> item { TravelLoadingState("در حال دریافت قیمت‌های ثبت‌شده…") }
-            TicketPricesUiState.Unconfigured -> item {
-                TravelErrorState(stringResource(R.string.ticket_prices_unconfigured), onRefresh)
-            }
-            TicketPricesUiState.Error -> item {
-                TravelErrorState(stringResource(R.string.ticket_prices_error), onRefresh)
-            }
-            is TicketPricesUiState.Ready -> {
-                val snapshot = state.snapshot
-                val active = snapshot.origins.firstOrNull { it.city == selectedOrigin }
-                    ?: snapshot.origins.first()
-
-                item {
-                    FareSummaryCard(
-                        stale = snapshot.stale,
-                        observedAt = snapshot.observedAt,
-                        routeCount = active.fares.size,
-                        onRefresh = onRefresh,
+    Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
+        bottomBar = {
+            TravelBottomNavigation(
+                selectedTab = TravelTab.PRICES,
+                onHome = onHome,
+                onPrices = {},
+                onChecklist = onChecklist,
+                onServices = onServices,
+            )
+        },
+    ) { scaffoldPadding ->
+        LazyColumn(
+            modifier = Modifier.fillMaxSize().padding(scaffoldPadding),
+            contentPadding = PaddingValues(horizontal = 20.dp, vertical = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                    TravelToolbar(
+                        title = stringResource(R.string.ticket_prices_title),
+                        onBack = onBack,
+                    )
+                    Text(
+                        stringResource(R.string.ticket_prices_explanation),
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = MaterialTheme.typography.bodySmall,
                     )
                 }
-                item {
-                    Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
-                        Text(
-                            stringResource(R.string.ticket_prices_origin),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
+            }
+            when (state) {
+                TicketPricesUiState.Loading -> item { TravelLoadingState("در حال دریافت قیمت‌های ثبت‌شده…") }
+                TicketPricesUiState.Unconfigured -> item {
+                    TravelErrorState(stringResource(R.string.ticket_prices_unconfigured), onRefresh)
+                }
+                TicketPricesUiState.Error -> item {
+                    TravelErrorState(stringResource(R.string.ticket_prices_error), onRefresh)
+                }
+                is TicketPricesUiState.Ready -> {
+                    val snapshot = state.snapshot
+                    val active = snapshot.origins.firstOrNull { it.city == selectedOrigin }
+                        ?: snapshot.origins.first()
+    
+                    item {
+                        FareSummaryCard(
+                            stale = snapshot.stale,
+                            observedAt = snapshot.observedAt,
+                            routeCount = active.fares.size,
+                            onRefresh = onRefresh,
                         )
-                        LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            items(snapshot.origins, key = { it.city }) { route ->
-                                FilterChip(
-                                    selected = route.city == active.city,
-                                    onClick = { selectedOrigin = route.city; search = "" },
-                                    label = { Text(route.city) },
-                                )
+                    }
+                    item {
+                        Column(verticalArrangement = Arrangement.spacedBy(9.dp)) {
+                            Text(
+                                stringResource(R.string.ticket_prices_origin),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                items(snapshot.origins, key = { it.city }) { route ->
+                                    FilterChip(
+                                        selected = route.city == active.city,
+                                        onClick = { selectedOrigin = route.city; search = "" },
+                                        label = { Text(route.city) },
+                                    )
+                                }
                             }
                         }
                     }
-                }
-                item {
-                    OutlinedTextField(
-                        value = search,
-                        onValueChange = { search = it },
-                        label = { Text(stringResource(R.string.ticket_prices_search)) },
-                        leadingIcon = { Text("⌕", fontSize = 26.sp) },
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = RoundedCornerShape(16.dp),
-                        singleLine = true,
-                    )
-                }
-                val fares = active.fares.filter {
-                    it.destination.contains(search.trim(), ignoreCase = true)
-                }.sortedBy { it.currentToman }
-                item {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            stringResource(R.string.ticket_prices_live_label),
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Text(
-                            stringResource(R.string.ticket_prices_fares_count, fares.size),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            style = MaterialTheme.typography.labelMedium,
+                    item {
+                        OutlinedTextField(
+                            value = search,
+                            onValueChange = { search = it },
+                            label = { Text(stringResource(R.string.ticket_prices_search)) },
+                            leadingIcon = { Text("⌕", fontSize = 26.sp) },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(16.dp),
+                            singleLine = true,
                         )
                     }
-                }
-                if (fares.isEmpty()) {
-                    item { TravelEmptyState(stringResource(R.string.ticket_prices_empty)) }
-                } else {
-                    items(fares) { fare -> FareCard(fare) }
-                }
-                if (allowSupport) {
+                    val fares = active.fares.filter {
+                        it.destination.contains(search.trim(), ignoreCase = true)
+                    }.sortedBy { it.currentToman }
                     item {
-                        Button(
-                            onClick = onSupport,
+                        Row(
                             modifier = Modifier.fillMaxWidth(),
-                            contentPadding = PaddingValues(vertical = 14.dp),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
-                            Text(stringResource(R.string.ticket_prices_support), fontWeight = FontWeight.Bold)
+                            Text(
+                                stringResource(R.string.ticket_prices_live_label),
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            Text(
+                                stringResource(R.string.ticket_prices_fares_count, fares.size),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                style = MaterialTheme.typography.labelMedium,
+                            )
                         }
                     }
-                }
-                item {
-                    Text(
-                        "قیمت‌های بلیت ممکن است تا هنگام رزرو تغییر کنند.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        textAlign = TextAlign.Start,
-                    )
+                    if (fares.isEmpty()) {
+                        item { TravelEmptyState(stringResource(R.string.ticket_prices_empty)) }
+                    } else {
+                        items(fares) { fare -> FareCard(fare) }
+                    }
+                    if (allowSupport) {
+                        item {
+                            Button(
+                                onClick = onSupport,
+                                modifier = Modifier.fillMaxWidth(),
+                                contentPadding = PaddingValues(vertical = 14.dp),
+                            ) {
+                                Text(stringResource(R.string.ticket_prices_support), fontWeight = FontWeight.Bold)
+                            }
+                        }
+                    }
+                    item {
+                        Text(
+                            "قیمت‌های بلیت ممکن است تا هنگام رزرو تغییر کنند.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Start,
+                        )
+                    }
                 }
             }
         }
