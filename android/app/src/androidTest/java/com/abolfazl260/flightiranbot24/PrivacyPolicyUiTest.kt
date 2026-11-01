@@ -1,7 +1,6 @@
 package com.abolfazl260.flightiranbot24
 
 import androidx.compose.ui.test.assertHasClickAction
-import androidx.compose.ui.test.assertExists
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
