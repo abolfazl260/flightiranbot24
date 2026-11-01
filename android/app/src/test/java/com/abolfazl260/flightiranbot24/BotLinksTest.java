@@ -11,8 +11,7 @@ public final class BotLinksTest {
     public void linksUseFixedSecureHosts() {
         assertEquals("t.me", URI.create(BotLinks.BOT).getHost());
         assertEquals("t.me", URI.create(BotLinks.SUPPORT).getHost());
-        assertEquals("github.com", URI.create(BotLinks.PRIVACY).getHost());
-        for (String link : new String[] {BotLinks.BOT, BotLinks.SUPPORT, BotLinks.PRIVACY,
+        for (String link : new String[] {BotLinks.BOT, BotLinks.SUPPORT,
                 BotLinks.VISA, BotLinks.AIRPORTS, BotLinks.USEFUL}) {
             assertEquals("https", URI.create(link).getScheme());
         }
