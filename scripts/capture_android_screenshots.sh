@@ -107,7 +107,7 @@ else:
     density_output = subprocess.check_output(
         ["adb", "shell", "wm", "density"], text=True
     )
-    density_match = re.search(r"(?:Override|Physical) density:\\s*(\\d+)", density_output)
+    density_match = re.search(r"(?:Override|Physical) density:\s*(\d+)", density_output)
     if not density_match:
         raise SystemExit(f"Cannot determine device density: {density_output!r}")
     pixels_per_dp = int(density_match.group(1)) / 160.0
