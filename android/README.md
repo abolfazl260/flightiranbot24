@@ -129,14 +129,16 @@ shipping a misleading in-app price screen. CI pull-request debug builds
 use the same secure public Worker endpoint.
 
 ### Android launcher artwork
-The previous generic vector globe/plane launcher icon has been replaced by the
-user-approved transparent airplane, passport, and globe emblem. The PNG source
-is in `app/src/main/res/drawable-nodpi/ic_launcher_art.png`; the unframed
-legacy launcher drawable and Android 8+ adaptive foreground both reference it.
-The adaptive foreground has an 18dp inset within the 108dp design canvas, so
-Android launchers can apply their own circular/squircle masks. No additional
-rounded-square image background is baked into the emblem. The Play Store
-artwork generator uses this same icon, avoiding visual brand divergence.
+The Android launcher uses the approved Advertio-inspired **A + flight trail**
+mark, with blue/navy, turquoise/green and a minimal aircraft symbol. The
+optimized, opaque 512 × 512 WebP source is
+`app/src/main/res/drawable-nodpi/ic_launcher_brand.webp`, with a plain white
+background and no pre-rendered rounded-square frame, globe or passport.
+Legacy Android uses a white-backed bitmap drawable. On Android 8+ an adaptive
+icon supplies a white background and a foreground inset of 12dp inside its
+108dp canvas; the launcher applies its own circular/squircle mask. The
+deterministic Play Store image generator reads the same WebP source so branding
+remains consistent across Android and store graphics.
 
 
 ## Real screenshots attached to every Android build
