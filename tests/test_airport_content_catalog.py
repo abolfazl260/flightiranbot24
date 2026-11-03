@@ -1,4 +1,4 @@
-"""Contracts for editable airport-specific content (no invented live flight data)."""
+"""Per-airport JSON fixtures remain independently editable in GitHub."""
 
 import copy
 import json
@@ -9,7 +9,9 @@ from runpy import run_path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[1]
-validate_dataset = run_path(str(ROOT / "scripts/validate_airport_content.py"))["validate_dataset"]
+validate_dataset = run_path(str(ROOT / "scripts/validate_airport_content.py"))[
+    "validate_dataset"
+]
 
 
 def copy_catalog(tmp_path: Path) -> Path:
@@ -32,39 +34,38 @@ def save(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def test_third_party_content_is_draft_and_extensible():
+def test_each_existing_airport_has_an_independent_unpublished_content_file():
     validate_dataset()
     root = ROOT / "data" / "airports"
+    canonical = load(ROOT / "src/flightiran/modules/airport/data/airports.json")
     index = load(root / "airport-index.v1.json")
-    detail = load(root / "details/THR.v1.json")
-    assert index["airports"] == [
-        {"iata": "THR", "detail_path": "details/THR.v1.json", "enabled": False}
-    ]
-    assert [section["id"] for section in detail["sections"]] == [
-        "baggage-rules", "flight-status", "traveler-experiences",
-        "airport-map", "airport-videos",
-    ]
-    assert all(
-        section["status"] == "draft" and not section["blocks"]
-        for section in detail["sections"]
-    )
+    expected = {a["code"] for a in canonical}
+    assert len(expected) == 28
+    assert {e["iata"] for e in index["airports"]} == expected
+    assert all(not e["enabled"] for e in index["airports"])
+    for entry in index["airports"]:
+        detail = load(root / entry["detail_path"])
+        assert detail["iata"] == entry["iata"]
+        assert [s["id"] for s in detail["sections"]] == [
+            "baggage-rules", "flight-status", "traveler-experiences",
+            "airport-map", "airport-videos",
+        ]
+        assert all(s["status"] == "draft" and not s["blocks"] for s in detail["sections"])
 
 
-def test_new_airport_and_new_section_need_no_schema_change(tmp_path):
+def test_add_section_to_one_airport_does_not_affect_other_airports(tmp_path):
     base = copy_catalog(tmp_path)
-    index = load(base / "airport-index.v1.json")
-    index["airports"].append({
-        "iata": "MHD", "detail_path": "details/MHD.v1.json", "enabled": False,
+    thr = base / "details/THR.v1.json"
+    mhd = base / "details/MHD.v1.json"
+    original_mhd = load(mhd)
+    airport = load(thr)
+    airport["sections"].append({
+        "id": "parking", "title_fa": "پارکینگ", "icon": "car", "order": 60,
+        "status": "draft", "reviewed_at": None, "source_urls": [], "blocks": [],
     })
-    save(base / "airport-index.v1.json", index)
-    save(base / "details/MHD.v1.json", {
-        "schema_version": 1, "iata": "MHD",
-        "sections": [{
-            "id": "parking", "title_fa": "پارکینگ", "icon": "car", "order": 60,
-            "status": "draft", "reviewed_at": None, "source_urls": [], "blocks": [],
-        }],
-    })
+    save(thr, airport)
     validate_dataset(tmp_path)
+    assert load(mhd) == original_mhd
 
 
 def test_published_section_requires_review_and_evidence(tmp_path):
