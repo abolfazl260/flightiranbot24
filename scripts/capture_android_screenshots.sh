@@ -293,7 +293,19 @@ capture 06-privacy.png
 scroll_down 2
 capture 06-privacy-bottom.png
 
-# All six reachable in-app screens, plus scrolled variants for longer screens.
+# Navigate via the existing Services row, then capture the native directory.
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "خدمات"
+wait_for_text "خدمات بیشتر"
+tap_service_row "اطلاعات کاربردی سفر"
+wait_for_activity TravelWebsitesActivity
+wait_for_text "جست‌وجوی نام یا توضیحات وب‌سایت"
+capture 07-travel-websites.png
+scroll_down 2
+capture 07-travel-websites-bottom.png
+
+# All seven reachable in-app screens, plus scrolled variants for longer screens.
 # Offline airport directory is intentionally excluded: it is currently disabled.
 python3 - <<'PY'
 from pathlib import Path
@@ -307,6 +319,7 @@ expected = {
     "04-checklist.png", "04-checklist-bottom.png",
     "05-iran-flights.png",
     "06-privacy.png", "06-privacy-bottom.png",
+    "07-travel-websites.png", "07-travel-websites-bottom.png",
 }
 actual = {p.name for p in folder.glob("*.png")}
 assert actual == expected, f"Missing: {expected - actual}; unexpected: {actual - expected}"
