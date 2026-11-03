@@ -64,6 +64,39 @@ public final class ChecklistActivity extends Activity {
     private void applyChecklistArtwork() {
         Bitmap atlas = BitmapFactory.decodeResource(getResources(), R.drawable.checklist_icons_atlas);
         if (atlas == null || atlas.getWidth() % 5 != 0 || atlas.getHeight() % 3 != 0) {
+            // Robolectric and some host-side decoders cannot decode bundled WebP.
+            // Keep the checklist fully usable with its existing vector assets.
+            final int[] fallbackIcons = {
+                    R.drawable.checklist_icon_passport,
+                    R.drawable.checklist_icon_visa,
+                    R.drawable.checklist_icon_tickets,
+                    R.drawable.checklist_icon_boarding,
+                    R.drawable.checklist_icon_stay,
+                    R.drawable.checklist_icon_insurance,
+                    R.drawable.checklist_icon_essentials,
+                    R.drawable.checklist_icon_emergency,
+                    R.drawable.checklist_icon_money,
+                    R.drawable.checklist_icon_connectivity,
+                    R.drawable.checklist_icon_luggage,
+                    R.drawable.checklist_icon_transfers
+            };
+            for (int i = 0; i < VIEW_IDS.length; i++) {
+                CheckBox box = findViewById(VIEW_IDS[i]);
+                Drawable icon = getDrawable(fallbackIcons[i]);
+                if (icon != null) {
+                    int px = Math.round(52 * getResources().getDisplayMetrics().density);
+                    icon.setBounds(0, 0, px, px);
+                    box.setCompoundDrawablesRelative(null, null, icon, null);
+                }
+            }
+            ((ImageView) findViewById(R.id.checklistHeaderIcon))
+                    .setImageResource(R.drawable.checklist_icon_suitcase);
+            ((ImageView) findViewById(R.id.checklistDocumentsIcon))
+                    .setImageResource(R.drawable.checklist_icon_passport);
+            ((ImageView) findViewById(R.id.checklistHealthIcon))
+                    .setImageResource(R.drawable.checklist_icon_insurance);
+            ((ImageView) findViewById(R.id.checklistEssentialsIcon))
+                    .setImageResource(R.drawable.checklist_icon_suitcase);
             return;
         }
         final int[] cells = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
