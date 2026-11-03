@@ -21,10 +21,13 @@ class PrivacyPolicyUiTest {
         rule.onNodeWithText("بازگشت").assertHasClickAction()
         rule.onNodeWithText("خلاصه حریم خصوصی").assertExists()
         rule.onNodeWithText("اطلاعات ذخیره‌شده در گوشی").assertExists()
-        rule.onNodeWithText("ارتباط با اینترنت و سرویس‌های آنلاین").assertExists()
-        rule.onNodeWithText("مجوزهای دستگاه").assertExists()
-        rule.onNodeWithText("تلگرام و خدمات بیرونی").assertExists()
-        rule.onNodeWithText("پاک‌کردن داده‌ها و ارتباط با پشتیبانی").assertExists()
+        rule.onNodeWithText("ارتباط با اینترنت").assertExists()
+        rule.onNodeWithText("دسترسی‌های برنامه").assertExists()
+        rule.onNodeWithText("تلگرام و سرویس‌های خارجی").assertExists()
+        rule.onNodeWithText("مدیریت و حذف اطلاعات").assertExists()
+        rule.onNodeWithText("نگهداری و امنیت اطلاعات").assertExists()
+        rule.onNodeWithText("تغییرات سیاست حریم خصوصی").assertExists()
+        rule.onNodeWithText("آخرین بازبینی: ۱۲ آبان ۱۴۰۵").assertExists()
         rule.onNodeWithText("مدیریت و پاک‌کردن چک‌لیست").assertHasClickAction()
         rule.onNodeWithText("تنظیمات برنامه در اندروید").assertHasClickAction()
         rule.onNodeWithText("ارتباط با پشتیبانی").assertHasClickAction()
@@ -35,19 +38,19 @@ class PrivacyPolicyUiTest {
         val section = rule.onNodeWithTag("privacy-section-0")
         section.assertHasClickAction()
         rule.onNodeWithText(
-            "برای استفاده از این امکانات حساب کاربری",
+            "برای استفاده از این قابلیت‌ها نیازی به ساخت حساب کاربری",
             substring = true,
         ).assertDoesNotExist()
 
         section.performClick()
         rule.onNodeWithText(
-            "برای استفاده از این امکانات حساب کاربری",
+            "برای استفاده از این قابلیت‌ها نیازی به ساخت حساب کاربری",
             substring = true,
         ).assertExists()
 
         section.performClick()
         rule.onNodeWithText(
-            "برای استفاده از این امکانات حساب کاربری",
+            "برای استفاده از این قابلیت‌ها نیازی به ساخت حساب کاربری",
             substring = true,
         ).assertDoesNotExist()
     }
