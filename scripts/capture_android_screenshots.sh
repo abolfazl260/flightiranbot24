@@ -250,8 +250,9 @@ capture 01-home-details.png
 
 open_launcher
 wait_for_activity MainActivity
+# Verify a Services-only row, not a heading also present on the Home tab.
 tap_persian_control "خدمات"
-wait_for_text "خدمات بیشتر"
+wait_for_text "اطلاعات پرواز ایران"
 capture 02-services.png
 scroll_down 2
 capture 02-services-bottom.png
@@ -274,7 +275,7 @@ capture 04-checklist-bottom.png
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "خدمات"
-wait_for_text "خدمات بیشتر"
+wait_for_text "اطلاعات پرواز ایران"
 tap_service_row "اطلاعات پرواز ایران"
 wait_for_activity IranFlightsActivity
 wait_for_text "وب‌سایت رسمی FIDS در داخل برنامه"
@@ -285,7 +286,7 @@ capture 05-iran-flights.png
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "خدمات"
-wait_for_text "خدمات بیشتر"
+wait_for_text "اطلاعات پرواز ایران"
 tap_service_row "حریم خصوصی"
 wait_for_activity PrivacyPolicyActivity
 wait_for_text "اطلاعات ذخیره‌شده در گوشی"
@@ -297,7 +298,7 @@ capture 06-privacy-bottom.png
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "خدمات"
-wait_for_text "خدمات بیشتر"
+wait_for_text "اطلاعات پرواز ایران"
 tap_service_row "اطلاعات کاربردی سفر"
 wait_for_activity TravelWebsitesActivity
 wait_for_text "جست‌وجوی نام یا توضیحات وب‌سایت"
