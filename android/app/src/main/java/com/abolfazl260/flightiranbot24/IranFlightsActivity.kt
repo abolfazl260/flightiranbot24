@@ -159,10 +159,10 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                     if (request?.isForMainFrame == true) {
                         isLoading = false
                         errorMessage = when (error?.errorCode) {
-                            ERROR_TIMEOUT -> "زمان اتصال به سامانه اطلاعات پرواز به پایان رسید. اتصال اینترنت یا دسترسی به سایت را بررسی کنید."
-                            ERROR_HOST_LOOKUP -> "آدرس سامانه اطلاعات پرواز پیدا نشد. احتمال اختلال DNS یا محدودیت دسترسی وجود دارد."
-                            ERROR_CONNECT, ERROR_IO -> "ارتباط با سامانه اطلاعات پرواز برقرار نشد. ممکن است اینترنت یا سرور سایت دچار اختلال باشد."
-                            ERROR_FAILED_SSL_HANDSHAKE -> "اتصال امن به سامانه اطلاعات پرواز برقرار نشد. لطفاً بعداً دوباره تلاش کنید."
+                            WebViewClient.ERROR_TIMEOUT -> "زمان اتصال به سامانه اطلاعات پرواز به پایان رسید. اتصال اینترنت یا دسترسی به سایت را بررسی کنید."
+                            WebViewClient.ERROR_HOST_LOOKUP -> "آدرس سامانه اطلاعات پرواز پیدا نشد. احتمال اختلال DNS یا محدودیت دسترسی وجود دارد."
+                            WebViewClient.ERROR_CONNECT, WebViewClient.ERROR_IO -> "ارتباط با سامانه اطلاعات پرواز برقرار نشد. ممکن است اینترنت یا سرور سایت دچار اختلال باشد."
+                            WebViewClient.ERROR_FAILED_SSL_HANDSHAKE -> "اتصال امن به سامانه اطلاعات پرواز برقرار نشد. لطفاً بعداً دوباره تلاش کنید."
                             else -> "بارگذاری سامانه اطلاعات پرواز ناموفق بود. اتصال اینترنت و دسترسی به سایت را بررسی کنید."
                         }
                     }
