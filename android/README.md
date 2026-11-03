@@ -177,24 +177,24 @@ apps are not presented as working in-app screens. Visa discovery and detail are 
 
 ## Native visa guide (VISA-NATIVE-001)
 
-The visa entry on Home/Services launches \`VisaGuideActivity\` rather than Telegram. This
+The visa entry on Home/Services launches `VisaGuideActivity` rather than Telegram. This
 Persian-only RTL Compose screen uses the previously published passport-specific
-JSON projection from the existing Cloudflare D1 Worker: \`GET /api/v1/visa/list?passport=IR\`
-for discovery and \`GET /api/v1/visa/rule?passport=IR&destination=TR\` for one detail.
+JSON projection from the existing Cloudflare D1 Worker: `GET /api/v1/visa/list?passport=IR`
+for discovery and `GET /api/v1/visa/rule?passport=IR&destination=TR` for one detail.
 The API is public/read-only; there is no Android Telegram login or bot token.
 
-- Passport defaults to IR via the existing \`TravelerPreferencesRepository\`/DataStore;
+- Passport defaults to IR via the existing `TravelerPreferencesRepository`/DataStore;
   user selections persist, and changes invalidate earlier passport results.
 - Persian destination search normalizes Arabic/Persian letter variants. Popular
   country shortcuts are navigational only and contain no hardcoded visa result.
 - Status labels cover the nine published visa requirement states; unknown does
   **not** mean visa-free. The actual JSON supplies notes and optional stay days.
 - Details show a validated HTTPS source, the citation granularity, **source
-  verification date** (\`verified_on\`) and **publication date** (\`published_at\`)
+  verification date** (`verified_on`) and **publication date** (`published_at`)
   separately. The app never invents official citations, 90/180 rules or fees.
 - Offline/API failures show explicit retry states and no automatic Telegram
   fallback. No persistent visa-rule cache is enabled.
-- The explicit Telegram CTA opens \`/start visa_IR_TR\` (country pair varies);
+- The explicit Telegram CTA opens `/start visa_IR_TR` (country pair varies);
   the bot displays the corresponding existing visa result and offers its
   **separate confirmation** to subscribe to changes. This does not create an
   Android-side subscription or automatically subscribe in Telegram.
