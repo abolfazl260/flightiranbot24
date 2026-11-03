@@ -114,6 +114,14 @@ and a publish-to-catalog workflow. Live status requires a separately verified
 first-party service with clear `fetched_at`, source time and unavailable/stale
 states. Keep dynamic flight observations out of this static JSON.
 
-For fast editing at larger scale, add an authenticated admin UI in a later
-phase. It should save reviewed changes through a PR or validated publishing
-pipeline, not expose the GitHub write token in the Android app.
+A **local-only Persian content editor** has been added at
+`tools/airport-content-editor/index.html`. Run
+`python -m http.server 8787 --bind 127.0.0.1` from the repository root, then
+visit `http://127.0.0.1:8787/tools/airport-content-editor/`. Edit and export
+the detail JSON and (if needed) airport index, then commit the JSON changes
+through a reviewed pull request. No token or secret is exposed to the browser.
+See `tools/airport-content-editor/README.md`.
+
+For online, multi-admin editing at larger scale, add an **authenticated**
+admin UI in a later phase. It should submit reviewed content via protected
+server-side publishing, not expose any GitHub write token in the Android app.

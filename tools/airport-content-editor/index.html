@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+  <title>مدیریت محتوای فرودگاه‌ها | FlightIranBot24</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./editor.mjs"></script>
+</head>
+<body>
+ <header class="topbar">
+  <div><div class="eyebrow">FlightIranBot24 / Airport CMS</div><h1>مدیریت اطلاعات فرودگاه‌ها</h1>
+   <p>ویرایشگر فارسی برای ساخت محتوای هر فرودگاه، پیش‌نویس‌ها و خروجی استاندارد JSON</p></div>
+  <div class="top-actions"><button id="download-detail" class="primary" disabled>دریافت فایل فرودگاه</button>
+   <button id="download-index" disabled>دریافت کاتالوگ</button></div>
+ </header>
+ <main>
+  <div id="notice" class="notice" role="status" aria-live="polite">در حال بارگذاری اطلاعات محلی پروژه…</div>
+  <div class="layout">
+   <aside class="panel sidebar">
+    <label for="airport-choice">فرودگاه</label><select id="airport-choice" disabled></select>
+    <p class="hint">نام و کد فرودگاه از کاتالوگ اصلی پروژه خوانده می‌شوند.</p>
+    <div id="airport-state" class="airport-state"></div>
+    <label class="checkrow"><input type="checkbox" id="airport-enabled" disabled> فعال برای دریافت در اپ</label>
+    <div class="divider"></div>
+    <div class="sideheader"><h2>بخش‌های این فرودگاه</h2><button id="add-section" disabled>افزودن +</button></div>
+    <div id="section-list" class="section-list"></div>
+    <div id="section-create"></div>
+   </aside>
+   <section class="panel workspace" aria-label="ویرایش بخش">
+    <div id="editor-empty" class="empty">برای ویرایش اطلاعات، ابتدا یک بخش انتخاب کنید.</div>
+    <div id="section-editor" hidden></div>
+   </section>
+   <aside class="panel preview" aria-label="پیش‌نمایش">
+    <h2>پیش‌نمایش اطلاعات</h2><p class="hint">پیش‌نمایش فقط برای مدیر است؛ بخش‌های پیش‌نویس در اپ نمایش داده نمی‌شوند.</p>
+    <div id="preview-body" class="preview-body"></div>
+    <div class="divider"></div>
+    <p class="hint">این ابزار محلی است؛ هیچ کلید یا توکنی نمی‌گیرد و به GitHub نمی‌نویسد. فایل خروجی را در یک Pull Request جایگزین کنید تا CI اعتبارسنجی کند.</p>
+   </aside>
+  </div>
+ </main>
+</body>
+</html>
