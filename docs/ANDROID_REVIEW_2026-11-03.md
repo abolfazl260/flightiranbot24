@@ -27,7 +27,7 @@ visual inspection of captured PNGs is made until Actions completes.
 | P1 | Different screen-navigation models | `TicketPricesScreen` has persistent four-item bottom navigation, but `ChecklistActivity`, `PrivacyPolicyScreen`, and `IranFlightsWebScreen` do not. Moving between core destinations requires backing out to home. | Offer consistent native home/back navigation or a shared bottom bar on every first-party screen; verify back stack. |
 | P1 | Significant services are external handoffs | `MainActivity.navigateTo` opens Telegram for visa, useful content and support; it has no in-app state or offline alternative. | Mark each row as an external handoff before launch; native features should have separately tested first-party screens. |
 | P1 | Image-embedded Persian text cannot scale | `PremiumHomeHero` and `PremiumServiceTile` render WebP images containing visible text. Semantics exist, but magnification, font scaling and content edits cannot reflow the baked-in lettering. | Test 200% font / narrow screens and either move critical words to native `Text` or supply approved accessible large-text variants. |
-| P1 | Visual regression coverage was incomplete | Original screenshot script captured home/services/checklist only and was not invoked from the main build/release workflow. | **Addressed in this PR:** capture all six reachable in-app views, verify navigation, and attach 10 authentic PNGs to Android builds. |
+| P1 | Visual regression coverage was incomplete | Original screenshot script captured home/services/checklist only and was not invoked automatically. | **Addressed:** capture all six reachable in-app views, verify navigation, and attach 10 authentic PNGs to an independent screenshot workflow triggered by pushes to `main`. |
 | P1 | Limited connected UI tests | The instrumentation suite currently includes `PersianUiTest` and `PrivacyPolicyUiTest`, but no end-to-end assertions of ticket filter/search, checklist persistence/reset, FIDS error/retry, or bar navigation across Activities. | Add deterministic connected tests for each critical interaction using a mock API, including large-font and small-screen configurations. |
 | P1 | Ticket screenshot is environment-dependent | `TicketPricesViewModel` fetches the live price API; when unavailable, it correctly shows an error instead of sample fares. A screenshot may therefore depict an error state. | Keep error-state images in QA artifacts, but publish store listing screenshots only after confirming real populated prices and verified freshness. |
 | P2 | FIDS screenshot is environment-dependent | The `IranFlightsActivity` WebView loads `fids.airport.ir`; without internet or third-party availability, the real screen shows an error. | Validate actual FIDS content before publishing store artwork; preserve SSL-error cancellation and host restrictions. |
@@ -38,8 +38,9 @@ visual inspection of captured PNGs is made until Actions completes.
 
 ## Release screenshot contract
 
-The Android Build and Release workflow calls `.github/workflows/android-screenshots.yml`
-after verification. It captures:
+The independent `Android Store Screenshots` workflow runs on every push to `main`
+(and can be manually rerun on `main`). It is not called by the Android Build
+and Release workflow and does not run for PRs or other branches. It captures:
 
 - Home (initial and scrolled)
 - Services (initial and scrolled)
@@ -50,9 +51,10 @@ after verification. It captures:
 
 Exactly ten PNGs are required in `android-real-screenshots`. Image presence,
 PNG dimensions, user-visible navigation and the existing Android instrumented
-tests are checked. A screenshot failure prevents the signed release job from
-proceeding. CI artefacts are *not* an automatic approval for app-store
-publication: dynamic feeds and external WebViews require human review.
+tests are checked. A screenshot failure does **not** prevent signed releases;
+the screenshot artifact and workflow status are checked separately. CI artefacts
+are *not* an automatic approval for app-store publication: dynamic feeds and
+external WebViews require human review.
 
 ## Further QA still needed
 
