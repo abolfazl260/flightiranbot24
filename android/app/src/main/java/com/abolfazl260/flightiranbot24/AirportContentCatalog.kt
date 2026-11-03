@@ -20,6 +20,7 @@ internal data class AirportContentPage(
 internal data class AirportContentSection(
     val id: String,
     val title: String,
+    val subtitle: String?,
     val icon: String,
     val order: Int,
     val reviewedAt: String,
@@ -104,6 +105,7 @@ internal object AirportContentParser {
             AirportContentSection(
                 id = id,
                 title = entry.text("title_fa"),
+                subtitle = entry.optionalText("subtitle_fa"),
                 icon = entry.text("icon"),
                 order = entry.get("order").asInt,
                 reviewedAt = reviewed,
