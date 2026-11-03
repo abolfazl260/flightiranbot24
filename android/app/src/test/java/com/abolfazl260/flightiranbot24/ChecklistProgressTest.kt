@@ -82,4 +82,30 @@ class ChecklistProgressTest {
         assertEquals(12, ChecklistActivity.VIEW_IDS.size)
         activity.finish()
     }
+
+    @Test
+    fun checklistRowsHaveMinimalIconsAndSpaciousTouchTargets() {
+        val activity = Robolectric.buildActivity(ChecklistActivity::class.java).setup().get()
+        val density = activity.resources.displayMetrics.density
+        for (id in ChecklistActivity.VIEW_IDS) {
+            val item = activity.findViewById<CheckBox>(id)
+            assertTrue(item.minimumHeight >= (76 * density).toInt())
+            assertTrue((item.layoutParams as android.widget.LinearLayout.LayoutParams).topMargin >= (12 * density).toInt())
+            assertTrue(item.compoundDrawablesRelative[2] != null)
+        }
+        activity.finish()
+    }
+
+    @Test
+    fun progressShowsTwentyFivePercentAfterThreeSelections() {
+        val activity = Robolectric.buildActivity(ChecklistActivity::class.java).setup().get()
+        for (id in ChecklistActivity.VIEW_IDS.take(3)) {
+            activity.findViewById<CheckBox>(id).isChecked = true
+        }
+        assertEquals(
+            activity.getString(R.string.checklist_progress_percent, 25),
+            activity.findViewById<TextView>(R.id.checklistPercent).text
+        )
+        activity.finish()
+    }
 }
