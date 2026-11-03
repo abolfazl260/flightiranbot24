@@ -89,9 +89,10 @@ class ChecklistProgressTest {
         val density = activity.resources.displayMetrics.density
         for (id in ChecklistActivity.VIEW_IDS) {
             val item = activity.findViewById<CheckBox>(id)
-            assertTrue(item.minimumHeight >= (76 * density).toInt())
-            assertTrue((item.layoutParams as android.widget.LinearLayout.LayoutParams).topMargin >= (12 * density).toInt())
+            assertTrue(item.minimumHeight >= (86 * density).toInt())
+            assertTrue((item.layoutParams as android.widget.LinearLayout.LayoutParams).topMargin >= (16 * density).toInt())
             assertTrue(item.compoundDrawablesRelative[2] != null)
+            assertTrue(item.compoundDrawablesRelative[2].bounds.width() >= (52 * density).toInt() - 1)
         }
         activity.finish()
     }
