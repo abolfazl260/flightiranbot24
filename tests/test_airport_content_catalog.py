@@ -17,7 +17,8 @@ def copy_catalog(tmp_path: Path) -> Path:
     shutil.copytree(src, dst)
     canonical = tmp_path / "src/flightiran/modules/airport/data"
     canonical.mkdir(parents=True)
-    shutil.copy(ROOT / "src/flightiran/modules/airport/data/airports.json", canonical / "airports.json")
+    identity = ROOT / "src/flightiran/modules/airport/data/airports.json"
+    shutil.copy(identity, canonical / "airports.json")
     return dst
 
 
@@ -41,7 +42,10 @@ def test_third_party_content_is_draft_and_extensible():
         "baggage-rules", "flight-status", "traveler-experiences",
         "airport-map", "airport-videos",
     ]
-    assert all(section["status"] == "draft" and not section["blocks"] for section in detail["sections"])
+    assert all(
+        section["status"] == "draft" and not section["blocks"]
+        for section in detail["sections"]
+    )
 
 
 def test_new_airport_and_new_section_need_no_schema_change(tmp_path):

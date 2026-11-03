@@ -1,6 +1,7 @@
 package com.abolfazl260.flightiranbot24
 
 import android.content.Context
+import java.io.ByteArrayOutputStream
 import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
@@ -52,9 +53,17 @@ internal class AirportContentRepository(private val context: Context) {
                 check(response.isSuccessful) { "Airport catalog HTTP " + response.code }
                 val body = requireNotNull(response.body)
                 require(body.contentLength() in -1L..maxBytes.toLong())
-                val bytes = body.bytes()
-                require(bytes.size <= maxBytes) { "Airport catalog too large" }
-                return AirportContentLoad(parser(bytes.toString(Charsets.UTF_8)), false)
+                val output = ByteArrayOutputStream()
+                val buffer = ByteArray(8192)
+                body.byteStream().use { stream ->
+                    while (true) {
+                        val count = stream.read(buffer)
+                        if (count < 0) break
+                        require(output.size() + count <= maxBytes) { "Airport catalog too large" }
+                        output.write(buffer, 0, count)
+                    }
+                }
+                return AirportContentLoad(parser(output.toByteArray().toString(Charsets.UTF_8)), false)
             }
         } catch (cancel: CancellationException) {
             throw cancel
