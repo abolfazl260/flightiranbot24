@@ -100,6 +100,8 @@ android {
         main {
             // Preserve the offline airport catalogue bundled in the Java version.
             assets.srcDir('../../src/flightiran/modules/airport/data')
+            // Bundle the same catalog and artwork used by Telegram as an offline fallback.
+            assets.srcDir('../../data/travel-websites')
         }
     }
 
