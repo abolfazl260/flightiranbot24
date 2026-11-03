@@ -147,4 +147,12 @@
     <string name="privacy_open_app_settings">تنظیمات برنامه در اندروید</string>
     <string name="privacy_help_heading">برای پرسش یا درخواست حذف اطلاعات ربات تلگرام</string>
     <string name="privacy_contact_support">ارتباط با پشتیبانی</string>
+    <string name="services_page_subtitle">ابزارها و اطلاعات کاربردی برای سفرهای هوایی</string>
+    <string name="service_fares_description">جست‌وجو و مقایسه قیمت بلیت مسیرهای مختلف</string>
+    <string name="service_iran_flights_description">وضعیت پروازها و اطلاعات فرودگاه‌های ایران</string>
+    <string name="service_assistant_description">برنامه‌ریزی و پیشنهادهای هوشمند سفر</string>
+    <string name="service_visa_description">شرایط ورود و مدارک موردنیاز کشورها</string>
+    <string name="service_travel_info_description">نکات مهم، قوانین و توصیه‌های سفر</string>
+    <string name="service_support_description">دریافت کمک و ارتباط با تیم پشتیبانی</string>
+    <string name="service_privacy_description">شیوه نگهداری و استفاده از اطلاعات شما</string>
 </resources>

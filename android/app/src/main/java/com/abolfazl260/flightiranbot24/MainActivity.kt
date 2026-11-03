@@ -9,17 +9,20 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
@@ -38,10 +41,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.abolfazl260.flightiranbot24.di.AppContainer
@@ -167,7 +176,7 @@ internal fun TravelHomeScreen(
                 .windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.safeDrawing)
                 .verticalScroll(if (showServices) servicesScroll else homeScroll)
                 .padding(horizontal = 16.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(26.dp),
+            verticalArrangement = Arrangement.spacedBy(if (showServices) 12.dp else 26.dp),
         ) {
             if (!showServices) {
                 HomeBrandBar()
@@ -193,12 +202,12 @@ internal fun TravelHomeScreen(
                 }
             } else {
                 Text(
-                    stringResource(R.string.home_online_heading),
+                    stringResource(R.string.premium_services_title),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.ExtraBold,
                 )
                 Text(
-                    stringResource(R.string.home_services_hint),
+                    stringResource(R.string.services_page_subtitle),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -254,34 +263,84 @@ private fun HomeBrandBar() {
     }
 }
 
+/**
+ * One transparent PNG atlas keeps seven colorful 3D icons consistent and
+ * avoids repeated resource decodes. Each horizontal 80px slot holds one icon;
+ * no colored backing, frame, or text is baked into the artwork.
+ */
 @Composable
 private fun HomeServiceRow(destination: HomeDestination, onClick: () -> Unit) {
+    val icons = ImageBitmap.imageResource(R.drawable.service_icons_atlas)
+    val slot = destination.serviceIconSlot()
+    val slotWidth = icons.width / 7
     Card(
         onClick = onClick,
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        modifier = Modifier.fillMaxWidth().heightIn(min = 76.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.45f)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 15.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
+            Canvas(modifier = Modifier.size(52.dp)) {
+                drawImage(
+                    image = icons,
+                    srcOffset = IntOffset(slot * slotWidth, 0),
+                    srcSize = IntSize(slotWidth, icons.height),
+                    dstSize = IntSize(size.width.toInt(), size.height.toInt()),
+                    filterQuality = FilterQuality.High,
+                )
+            }
+            Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    stringResource(destination.labelResource()),
+                    fontWeight = FontWeight.Bold,
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    stringResource(destination.serviceDescriptionResource()),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
             Text(
-                destination.symbol(),
+                "‹",
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Text(
-                stringResource(destination.labelResource()),
-                modifier = Modifier.weight(1f),
-                fontWeight = FontWeight.Medium,
-                style = MaterialTheme.typography.bodyMedium,
-            )
-            Text("‹", color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
+}
+
+private fun HomeDestination.serviceIconSlot(): Int = when (this) {
+    HomeDestination.TICKET_PRICES -> 0
+    HomeDestination.IRAN_FLIGHTS, HomeDestination.TELEGRAM_AIRPORTS,
+    HomeDestination.OFFLINE_AIRPORTS -> 1
+    HomeDestination.TELEGRAM_BOT, HomeDestination.OFFLINE_CHECKLIST -> 2
+    HomeDestination.TELEGRAM_VISA -> 3
+    HomeDestination.TELEGRAM_USEFUL -> 4
+    HomeDestination.SUPPORT -> 5
+    HomeDestination.PRIVACY -> 6
+}
+
+private fun HomeDestination.serviceDescriptionResource(): Int = when (this) {
+    HomeDestination.TICKET_PRICES -> R.string.service_fares_description
+    HomeDestination.IRAN_FLIGHTS, HomeDestination.TELEGRAM_AIRPORTS,
+    HomeDestination.OFFLINE_AIRPORTS -> R.string.service_iran_flights_description
+    HomeDestination.TELEGRAM_BOT, HomeDestination.OFFLINE_CHECKLIST ->
+        R.string.service_assistant_description
+    HomeDestination.TELEGRAM_VISA -> R.string.service_visa_description
+    HomeDestination.TELEGRAM_USEFUL -> R.string.service_travel_info_description
+    HomeDestination.SUPPORT -> R.string.service_support_description
+    HomeDestination.PRIVACY -> R.string.service_privacy_description
 }
 
 @Composable
@@ -294,19 +353,6 @@ private fun HomeSectionHeading(title: String, subtitle: String) {
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
     }
-}
-
-private fun HomeDestination.symbol(): String = when (this) {
-    HomeDestination.OFFLINE_AIRPORTS -> "✈"
-    HomeDestination.OFFLINE_CHECKLIST -> "☑"
-    HomeDestination.TICKET_PRICES -> "↗"
-    HomeDestination.IRAN_FLIGHTS -> "◷"
-    HomeDestination.TELEGRAM_BOT -> "✦"
-    HomeDestination.TELEGRAM_VISA -> "▣"
-    HomeDestination.TELEGRAM_AIRPORTS -> "⌖"
-    HomeDestination.TELEGRAM_USEFUL -> "✧"
-    HomeDestination.SUPPORT -> "✉"
-    HomeDestination.PRIVACY -> "◈"
 }
 
 private fun HomeDestination.labelResource(): Int = when (this) {
