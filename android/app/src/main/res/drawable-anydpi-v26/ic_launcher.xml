@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Android 8+: let the system mask the icon; keep the source artwork transparent. -->
+<!-- System launcher applies its own circular/squircle mask. Do not bake a frame into the art. -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-    <background android:drawable="@android:color/transparent" />
+    <background android:drawable="@color/white" />
     <foreground android:drawable="@drawable/ic_launcher_foreground" />
 </adaptive-icon>
