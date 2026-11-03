@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pre-Android 8: display the approved transparent travel emblem without a square frame. -->
-<bitmap xmlns:android="http://schemas.android.com/apk/res/android"
-    android:src="@drawable/ic_launcher_art"
-    android:gravity="fill" />
+<!-- Legacy launcher icon: edge-to-edge white background, no baked-in rounded corners. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@color/white" />
+    <item>
+        <bitmap
+            android:src="@drawable/ic_launcher_brand"
+            android:gravity="fill" />
+    </item>
+</layer-list>
