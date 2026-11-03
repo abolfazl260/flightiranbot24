@@ -97,7 +97,7 @@ internal class VisaRepository(private val api: PublicJsonRepository<JsonObject>?
         return try {
             when (val response = client.fetch(path)) {
                 is NetworkResult.Success ->
-                    parser(response.value)?.let(VisaFetch<T>::Ready)
+                    parser(response.value)?.let { VisaFetch.Ready(it) }
                         ?: VisaFetch.Error(VisaFailure.INVALID)
                 is NetworkResult.HttpFailure -> when (response.statusCode) {
                     404 -> VisaFetch.Error(VisaFailure.NOT_FOUND)
