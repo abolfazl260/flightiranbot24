@@ -358,7 +358,7 @@ private fun TravelWebsiteThumbnail(imagePath: String) {
         Image(
             bitmap = thumbnail!!,
             contentDescription = null,
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Fit,
             modifier = Modifier.size(70.dp).clip(shape),
         )
     } else {
