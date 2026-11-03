@@ -10,6 +10,17 @@
     <string name="open_visa">راهنمای ویزا و ورود</string>
     <string name="open_airports">اطلاعات فرودگاه‌ها</string>
     <string name="open_useful">اطلاعات کاربردی سفر</string>
+    <string name="travel_websites_title">اطلاعات کاربردی سفر</string>
+    <string name="travel_websites_intro">وب‌سایت‌های معتبر برای جست‌وجوی پرواز، ویزا، رهگیری پرواز، حقوق مسافر و برنامه‌ریزی سفر.</string>
+    <string name="travel_websites_search">جست‌وجوی نام یا توضیحات وب‌سایت</string>
+    <string name="travel_websites_all">همه</string>
+    <string name="travel_websites_count">%1$d وب‌سایت کاربردی</string>
+    <string name="travel_websites_refresh">به‌روزرسانی</string>
+    <string name="travel_websites_offline">دریافت فهرست آنلاین ممکن نشد؛ اطلاعات همراه برنامه نمایش داده می‌شود.</string>
+    <string name="travel_websites_error">دریافت فهرست وب‌سایت‌ها ممکن نشد. دوباره تلاش کنید.</string>
+    <string name="travel_websites_empty">وب‌سایتی با این مشخصات پیدا نشد.</string>
+    <string name="travel_websites_open">مشاهده وب‌سایت</string>
+    <string name="travel_websites_disclaimer">با انتخاب هر وب‌سایت، مرورگر دستگاه باز می‌شود. شرایط و اعتبار اطلاعات سفر را در منبع اصلی بررسی کنید.</string>
     <string name="open_support">پشتیبانی</string>
     <string name="open_privacy">حریم خصوصی</string>
     <string name="privacy_back">بازگشت</string>
@@ -17,7 +28,7 @@
     <string name="privacy_local_title">اطلاعات ذخیره‌شده در گوشی</string>
     <string name="privacy_local_body">انتخاب‌های چک‌لیست سفر و برخی تنظیمات عمومی روی همین دستگاه ذخیره می‌شوند. برای استفاده از این امکانات حساب کاربری در اپ ساخته نمی‌شود و این اطلاعات به حساب آنلاین متصل نیستند.</string>
     <string name="privacy_network_title">ارتباط با اینترنت و سرویس‌های آنلاین</string>
-    <string name="privacy_network_body">هنگام مشاهده قیمت بلیت، برنامه اطلاعات عمومی قیمت را از سرویس امن HTTPS پروژه دریافت می‌کند. در بخش اطلاعات پرواز ایران، وب‌سایت مربوط درون اپ نمایش داده می‌شود. سرویس‌های آنلاین ممکن است اطلاعات فنی اتصال، مانند نشانی IP، را دریافت کنند.</string>
+    <string name="privacy_network_body">هنگام مشاهده قیمت بلیت، برنامه اطلاعات عمومی قیمت را از سرویس امن HTTPS پروژه دریافت می‌کند. در بخش اطلاعات پرواز ایران، وب‌سایت مربوط درون اپ نمایش داده می‌شود. فهرست اطلاعات کاربردی سفر از کاتالوگ عمومی گیت‌هاب به‌روزرسانی می‌شود و در صورت قطع اتصال، نسخه همراه برنامه نمایش داده می‌شود. سرویس‌های آنلاین ممکن است اطلاعات فنی اتصال، مانند نشانی IP، را دریافت کنند.</string>
     <string name="privacy_permissions_title">مجوزهای دستگاه</string>
     <string name="privacy_permissions_body">برنامه تنها مجوز اینترنت را درخواست می‌کند و به مخاطبین، موقعیت مکانی، دوربین، میکروفون، حافظه خارجی یا اعلان‌ها دسترسی نمی‌خواهد. در نسخه فعلی ابزار تبلیغاتی یا تحلیل رفتار کاربر در اپ تعبیه نشده است.</string>
     <string name="privacy_telegram_title">تلگرام و خدمات بیرونی</string>
@@ -57,7 +68,7 @@
     <string name="navigation_services">خدمات</string>
     <string name="home_offline_hint">ابزارهای کاربردی برای یک سفر آسوده</string>
     <string name="home_quick_services">خدمات پرکاربرد</string>
-    <string name="online_service_hint">فهرست قیمت در اپ نمایش داده می‌شود؛ سایر خدمات از طریق تلگرام باز می‌شوند.</string>
+    <string name="online_service_hint">فهرست قیمت و اطلاعات کاربردی سفر در اپ نمایش داده می‌شوند؛ برخی خدمات دیگر از طریق تلگرام باز می‌شوند.</string>
     <string name="home_local_badge">درون اپ</string>
     <string name="home_external_badge">ورود به خدمات</string>
     <string name="checklist_progress">%1$d مورد از %2$d انجام شده</string>
