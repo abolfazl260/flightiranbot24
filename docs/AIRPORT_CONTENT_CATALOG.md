@@ -8,12 +8,14 @@ The canonical airport identity list remains
 This new `data/airports/` directory contains independent *content*
 documents, keyed by IATA code, without duplicating airport identity data.
 
-All **28 existing airports** have a separate JSON content file in `details/`.
-Every airport starts with five unpublished, empty sections. No airport claims,
-flight times, videos, maps, passenger testimonials or baggage allowances have
-been invented. These are authoring placeholders, **not published content**.
-Android and Telegram airport navigation remains disabled until separately
-implemented and vetted.
+All **28 existing airports** have independent JSON content files in `details/`.
+The **Imam Khomeini (IKA)** page now has **14 source-backed published sections**
+and **two empty drafts** (traveler experiences and airport videos). Other
+airports retain five unpublished starter drafts. The IKA location-map entry
+links to the location supplied on the official website; no unverified
+terminal floor plans, passenger reviews, videos or live flight values are
+published. Android and Telegram airport navigation remains disabled until
+separately implemented and vetted.
 
 ## Repository layout
 
@@ -104,7 +106,7 @@ copied verbatim into production as real information.
 | `airport-map` | نقشه فرودگاه | Verified terminal map links/coordinates and attributed screenshots where licensed. |
 | `airport-videos` | ویدیو فرودگاه | Verified HTTPS video links, description, thumbnails and attribution with reuse rights. |
 
-These five are **starter drafts**, not a hardcoded app menu. Each airport may
+These five are **starter section definitions**, not a hardcoded app menu. Each airport may
 have a different subset, title, number of sections, order, or set of blocks.
 
 ### Supported content block shapes
