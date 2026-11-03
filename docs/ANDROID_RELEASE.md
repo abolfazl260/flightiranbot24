@@ -15,6 +15,13 @@ APK and AAB with SHA-256 checksums, and publishes a versioned GitHub Release
 when the live public API passes its freshness checks. No manual Git tag is needed.
 Legacy manually created `vMAJOR.MINOR.PATCH` tags are still supported.
 
+Android screenshots run **independently** in `.github/workflows/android-screenshots.yml`
+on **every push to `main`**, including merges that change only non-Android files.
+They do not run for pull requests or other branches. A manual rerun is possible
+only on `main`. Screenshots are uploaded separately as the
+`android-real-screenshots` artifact (30-day retention); screenshot failures
+never block APK/AAB verification, signing, or GitHub Releases.
+
 ## Owner actions (private signing key)
 
 1. Confirm the permanent package ID com.abolfazl260.flightiranbot24.
@@ -175,10 +182,11 @@ and `android/app/build/outputs/bundle/release/app-release.aab`.
   `main` automatically produces a separately named signed APK/AAB artifact
   after passing Android CI; use `android-release-v1.0.N`, **not**
   `android-unsigned-release-aab`, for signed files.
-- The `Android Store Screenshots` workflow must boot an accelerated emulator,
-  run the instrumented tests, and upload authentic PNG screenshots. KVM access
-  is configured in the workflow; review the actual artifact before using the
-  pictures in a public store listing.
+- The independent `Android Store Screenshots` workflow runs on each `main`
+  push, boots an accelerated emulator, runs instrumented tests, and uploads
+  authentic PNG screenshots. KVM access is configured in the workflow. It does
+  not run in pull-request builds and does not gate signed releases. Review its
+  separate artifact before using pictures in a public store listing.
 - A signed release requires the four owner-controlled signing secrets listed
   above. The workflow automatically creates `v1.0.N` on the current
   reviewed `main` HEAD after validating signatures and the live API.
