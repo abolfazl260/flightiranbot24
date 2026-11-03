@@ -646,26 +646,27 @@ def test_invalid_telegram_web_app_url_is_omitted_without_breaking_menu(url):
 
 @pytest.mark.parametrize("language", ("fa", "en", "ar"))
 @pytest.mark.parametrize("is_admin", (False, True))
-def test_valid_https_mini_app_url_does_not_show_launch_button(language, is_admin):
+def test_valid_https_mini_app_url_shows_launch_button(language, is_admin):
     from flightiran.interfaces.telegram.keyboards import main_menu, telegram_web_app_url
 
     url = "https://example.com:8443/travel?lang=fa"
-    # URL validation is retained for eventual re-enablement.
     assert telegram_web_app_url(url) == url
-    buttons = [
-        button
-        for row in main_menu(language, web_app_url=url, is_admin=is_admin).inline_keyboard
-        for button in row
-    ]
-    assert not any(button.web_app for button in buttons)
+    keyboard = main_menu(language, web_app_url=url, is_admin=is_admin)
+    buttons = [button for row in keyboard.inline_keyboard for button in row]
+    launch_buttons = [button for button in buttons if button.web_app]
+    assert len(launch_buttons) == 1
+    assert launch_buttons[0].web_app.url == url
+    assert launch_buttons[0].text
+    assert keyboard.inline_keyboard[-1] == (launch_buttons[0],)
     assert any(button.callback_data == "menu:tickets" for button in buttons)
     assert any(button.callback_data == "menu:visa" for button in buttons)
     assert ("menu:admin_reports" in {b.callback_data for b in buttons}) == is_admin
 
 
 @pytest.mark.asyncio
-async def test_start_with_https_mini_app_config_does_not_show_launch_button():
-    deps = dependencies(web_app_url="https://example.com/mini/")
+async def test_start_with_https_mini_app_config_shows_launch_button():
+    url = "https://example.com/mini/"
+    deps = dependencies(web_app_url=url)
     message = Message()
     await start_handler(update(message=message), None, deps)
     assert len(message.calls) == 1
@@ -674,7 +675,7 @@ async def test_start_with_https_mini_app_config_does_not_show_launch_button():
         for row in message.calls[0][1]["reply_markup"].inline_keyboard
         for button in row
     ]
-    assert not any(button.web_app for button in buttons)
+    assert [button.web_app.url for button in buttons if button.web_app] == [url]
     assert any(button.callback_data == "menu:tickets" for button in buttons)
 
 

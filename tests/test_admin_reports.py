@@ -167,18 +167,18 @@ def test_report_button_visible_only_with_explicit_admin_flag():
         ) == 1
 
 
-def test_admin_reports_remain_visible_while_mini_app_launch_is_hidden():
-    keyboard = main_menu(
-        "fa", web_app_url="https://flightiran.example.com", is_admin=True
-    )
+def test_admin_reports_remain_visible_with_mini_app_launch():
+    url = "https://flightiran.example.com"
+    keyboard = main_menu("fa", web_app_url=url, is_admin=True)
     assert any(
         button.callback_data == "menu:admin_reports"
         for row in keyboard.inline_keyboard for button in row
     )
-    assert not any(
-        button.web_app is not None
+    assert [
+        button.web_app.url
         for row in keyboard.inline_keyboard for button in row
-    )
+        if button.web_app is not None
+    ] == [url]
 
 
 def _update(user_id: int, chat_id: int, *, chat_type="private", query=None, message=None):
