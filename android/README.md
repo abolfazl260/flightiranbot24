@@ -26,8 +26,10 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   a Room snapshot when populated and falls back to bundled offline records.
   The **offline checklist** remains a Java screen, with a progress indicator,
   confirmation before reset, and its existing SharedPreferences preserved.
-- Online service links hand off to the Telegram bot via fixed `/start`
-  entrypoints for visa, airports and travel information. No Telegram auth,
+- Visa and support handoffs use their configured external links. The useful
+  travel information card now opens a native Persian directory sourced from the
+  same GitHub JSON catalog used by Telegram, with a bundled offline fallback,
+  search, category filters and explicit HTTPS website links. No Telegram auth,
   bot token, fake Mini App session or server-side account is embedded.
 
 ## AND-003: secure networking and local persistence
