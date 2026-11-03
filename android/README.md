@@ -26,7 +26,7 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   a Room snapshot when populated and falls back to bundled offline records.
   The **offline checklist** remains a Java screen, with a progress indicator,
   confirmation before reset, and its existing SharedPreferences preserved.
-- Visa and support handoffs use their configured external links. The useful
+- Visa browsing now uses a native Persian RTL Compose screen backed by the existing public Cloudflare visa JSON projection; only visa-change alert enrollment and support deliberately hand off to Telegram. The useful
   travel information card now opens a native Persian directory sourced from the
   same GitHub JSON catalog used by Telegram, with a bundled offline fallback,
   search, category filters and explicit HTTPS website links. No Telegram auth,
@@ -80,7 +80,7 @@ A signed release still requires fresh prices from the live HTTPS endpoint
 and the owner's private keystore. See [release instructions](../docs/ANDROID_RELEASE.md).
 
 Room v1 schema is stored in `android/app/schemas`; do not perform destructive
-migrations. Remaining alert, visa, offline sync, auth and push work is tracked
+migrations. Remaining native alert management, extended visa details, offline sync, auth and push work is tracked
 separately and is not completed by this build-system change.
 
 ## Native ticket prices
@@ -92,7 +92,7 @@ sorting work locally. Booking opens verified Advertio support.
 The single app embeds the existing, public Cloudflare Workers HTTPS base
 URL by default. It reports network/API failures if D1 has not yet received
 verified prices; no fake prices or Telegram fallback are used.
-User-owned alerts, push, visa data and authentication remain separate tasks.
+User-owned alert management, push and authentication remain separate tasks; the read-only public native visa guide consumes the existing visa endpoints.
 
 
 ### Database-first fare contract (October 2026)
@@ -146,8 +146,8 @@ reusable **Android Store Screenshots** emulator workflow after verification on
 Android-related pull requests, main pushes, release tags, and manual builds.
 It installs the debug APK built from the same commit as the signed release,
 navigates through **real Persian UI controls** (not direct intents to private
-Activities), and uploads the `android-real-screenshots` artifact with **12
-PNG screenshots** from all **seven currently reachable native/in-app views**:
+Activities), and uploads the `android-real-screenshots` artifact with **14
+PNG screenshots** from all **eight currently reachable native/in-app views**:
 
 | Screen | Artifact files |
 | --- | --- |
@@ -158,6 +158,7 @@ PNG screenshots** from all **seven currently reachable native/in-app views**:
 | Iran FIDS in-app WebView | `05-iran-flights.png` |
 | In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
 | Native useful travel directory | `07-travel-websites.png`, `07-travel-websites-bottom.png` |
+| Native visa discovery and detail | `08-visa-discovery.png`, `08-visa-detail.png` |
 
 The screenshot job checks the foreground Activity for navigated screens,
 verifies visible native text where available, validates the exact image
@@ -171,4 +172,32 @@ prices image may show the real network error rather than fake sample fares.
 The FIDS page similarly depends on its third-party website. Review these
 images before submitting any of them to an app store. The intentionally
 disabled airport directory and screens launched in external Telegram/browser
-apps are not presented as working in-app screens.
+apps are not presented as working in-app screens. Visa discovery and detail are native; only the explicit alert subscription CTA opens Telegram.
+
+
+## Native visa guide (VISA-NATIVE-001)
+
+The visa entry on Home/Services launches \`VisaGuideActivity\` rather than Telegram. This
+Persian-only RTL Compose screen uses the previously published passport-specific
+JSON projection from the existing Cloudflare D1 Worker: \`GET /api/v1/visa/list?passport=IR\`
+for discovery and \`GET /api/v1/visa/rule?passport=IR&destination=TR\` for one detail.
+The API is public/read-only; there is no Android Telegram login or bot token.
+
+- Passport defaults to IR via the existing \`TravelerPreferencesRepository\`/DataStore;
+  user selections persist, and changes invalidate earlier passport results.
+- Persian destination search normalizes Arabic/Persian letter variants. Popular
+  country shortcuts are navigational only and contain no hardcoded visa result.
+- Status labels cover the nine published visa requirement states; unknown does
+  **not** mean visa-free. The actual JSON supplies notes and optional stay days.
+- Details show a validated HTTPS source, the citation granularity, **source
+  verification date** (\`verified_on\`) and **publication date** (\`published_at\`)
+  separately. The app never invents official citations, 90/180 rules or fees.
+- Offline/API failures show explicit retry states and no automatic Telegram
+  fallback. No persistent visa-rule cache is enabled.
+- The explicit Telegram CTA opens \`/start visa_IR_TR\` (country pair varies);
+  the bot displays the corresponding existing visa result and offers its
+  **separate confirmation** to subscribe to changes. This does not create an
+  Android-side subscription or automatically subscribe in Telegram.
+
+This is Phase 1 of #152; native watch management, push, comparisons and richer
+source fields need separate authenticated/API follow-up work.
