@@ -352,7 +352,7 @@ private fun TravelComponentGallery() {
         ) {
             TravelSectionHeading("امکانات سفر", "راهنمای سفر با نمایش فارسی")
             TravelServiceCard("فهرست فرودگاه‌ها", "قابل استفاده در اپ", "✈", {})
-            TravelServiceCard("راهنمای ویزا", "ورود به تلگرام", "▣", {})
+            TravelServiceCard("راهنمای ویزا", "نمایش اطلاعات در اپ", "▣", {})
             TravelToolbar("فرودگاه‌ها", {})
             TravelFormField("", "نام فرودگاه یا کد IATA", {})
             TravelEmptyState("فرودگاهی با این مشخصات پیدا نشد.")
