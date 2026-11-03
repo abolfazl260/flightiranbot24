@@ -32,9 +32,9 @@
     <style name="ChecklistSectionBand">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">76dp</item>
-        <item name="android:layout_marginTop">32dp</item>
-        <item name="android:layout_marginBottom">6dp</item>
+        <item name="android:minHeight">86dp</item>
+        <item name="android:layout_marginTop">36dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
         <item name="android:paddingStart">18dp</item>
         <item name="android:paddingEnd">18dp</item>
         <item name="android:paddingTop">16dp</item>
@@ -68,8 +68,8 @@
     <style name="ChecklistItem" parent="@android:style/Widget.CompoundButton.CheckBox">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">76dp</item>
-        <item name="android:layout_marginTop">12dp</item>
+        <item name="android:minHeight">86dp</item>
+        <item name="android:layout_marginTop">16dp</item>
         <item name="android:paddingStart">16dp</item>
         <item name="android:paddingEnd">16dp</item>
         <item name="android:paddingTop">18dp</item>
@@ -77,8 +77,8 @@
         <item name="android:gravity">center_vertical</item>
         <item name="android:background">@drawable/checklist_task_background</item>
         <item name="android:buttonTint">@color/teal</item>
-        <item name="android:drawablePadding">12dp</item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:drawablePadding">16dp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:textColor">@color/navy</item>
     </style>
 </resources>

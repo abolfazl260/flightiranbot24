@@ -5,9 +5,14 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,11 +51,55 @@ public final class ChecklistActivity extends Activity {
         return Math.round(100f * completed / total);
     }
 
+
+    /**
+     * The transparent WebP atlas is a 5 x 3 grid of the artwork approved for
+     * the travel checklist. Cropping in memory keeps the APK small and avoids
+     * repeated copies of the same images in different density folders.
+     *
+     * Cell order: passport, visa, tickets, boarding pass, hotel;
+     * insurance, medication, emergency call, money, SIM;
+     * luggage, airport transfer, calendar, security, luggage settings.
+     */
+    private void applyChecklistArtwork() {
+        Bitmap atlas = BitmapFactory.decodeResource(getResources(), R.drawable.checklist_icons_atlas);
+        if (atlas == null || atlas.getWidth() % 5 != 0 || atlas.getHeight() % 3 != 0) {
+            return;
+        }
+        final int[] cells = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+        for (int i = 0; i < VIEW_IDS.length; i++) {
+            CheckBox box = findViewById(VIEW_IDS[i]);
+            Drawable icon = iconFromAtlas(atlas, cells[i], 52);
+            box.setCompoundDrawablesRelative(null, null, icon, null);
+        }
+        setArtwork(findViewById(R.id.checklistHeaderIcon), atlas, 14);
+        setArtwork(findViewById(R.id.checklistDocumentsIcon), atlas, 0);
+        setArtwork(findViewById(R.id.checklistHealthIcon), atlas, 5);
+        setArtwork(findViewById(R.id.checklistEssentialsIcon), atlas, 10);
+    }
+
+    private void setArtwork(ImageView view, Bitmap atlas, int cell) {
+        view.setImageDrawable(iconFromAtlas(atlas, cell, 56));
+    }
+
+    private Drawable iconFromAtlas(Bitmap atlas, int cell, int sizeDp) {
+        int width = atlas.getWidth() / 5;
+        int height = atlas.getHeight() / 3;
+        Bitmap cropped = Bitmap.createBitmap(
+                atlas, (cell % 5) * width, (cell / 5) * height, width, height);
+        BitmapDrawable drawable = new BitmapDrawable(getResources(), cropped);
+        drawable.setFilterBitmap(true);
+        int px = Math.round(sizeDp * getResources().getDisplayMetrics().density);
+        drawable.setBounds(0, 0, px, px);
+        return drawable;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checklist);
         UiInsets.apply(this, findViewById(R.id.root));
+        applyChecklistArtwork();
 
         SharedPreferences preferences = getSharedPreferences(PREFS, MODE_PRIVATE);
         TextView progress = findViewById(R.id.checklistProgress);

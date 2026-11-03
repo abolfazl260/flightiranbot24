@@ -15,7 +15,7 @@
         android:orientation="vertical"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:paddingTop="28dp"
+        android:paddingTop="32dp"
         android:paddingBottom="44dp">
 
         <LinearLayout
@@ -42,10 +42,10 @@
                     android:text="@string/checklist_note" />
             </LinearLayout>
             <ImageView
-                android:layout_width="66dp"
-                android:layout_height="66dp"
+                android:id="@+id/checklistHeaderIcon"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="16dp"
-                android:src="@drawable/checklist_icon_suitcase"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no" />
         </LinearLayout>
@@ -115,10 +115,10 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_marginEnd="14dp"
-                android:src="@drawable/checklist_icon_passport"
+                android:id="@+id/checklistDocumentsIcon"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no" />
 
@@ -138,27 +138,22 @@
         <CheckBox
             android:id="@+id/checkPassport"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_passport"
             android:text="@string/check_passport" />
         <CheckBox
             android:id="@+id/checkVisa"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_visa"
             android:text="@string/check_visa" />
         <CheckBox
             android:id="@+id/checkTickets"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_tickets"
             android:text="@string/check_tickets" />
         <CheckBox
             android:id="@+id/checkBoarding"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_boarding"
             android:text="@string/check_boarding" />
         <CheckBox
             android:id="@+id/checkStay"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_stay"
             android:text="@string/check_stay" />
 
         <LinearLayout
@@ -170,7 +165,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="14dp"
-                android:src="@drawable/checklist_icon_insurance"
+                android:id="@+id/checklistHealthIcon"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no" />
 
@@ -190,17 +185,14 @@
         <CheckBox
             android:id="@+id/checkInsurance"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_insurance"
             android:text="@string/check_insurance" />
         <CheckBox
             android:id="@+id/checkEssentials"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_essentials"
             android:text="@string/check_essentials" />
         <CheckBox
             android:id="@+id/checkEmergency"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_emergency"
             android:text="@string/check_emergency" />
 
         <LinearLayout
@@ -212,7 +204,7 @@
                 android:layout_width="28dp"
                 android:layout_height="28dp"
                 android:layout_marginEnd="14dp"
-                android:src="@drawable/checklist_icon_suitcase"
+                android:id="@+id/checklistEssentialsIcon"
                 android:contentDescription="@null"
                 android:importantForAccessibility="no" />
 
@@ -232,22 +224,18 @@
         <CheckBox
             android:id="@+id/checkMoney"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_money"
             android:text="@string/check_money" />
         <CheckBox
             android:id="@+id/checkConnectivity"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_connectivity"
             android:text="@string/check_connectivity" />
         <CheckBox
             android:id="@+id/checkLuggage"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_luggage"
             android:text="@string/check_luggage" />
         <CheckBox
             android:id="@+id/checkTransfers"
             style="@style/ChecklistItem"
-            android:drawableEnd="@drawable/checklist_icon_transfers"
             android:text="@string/check_transfers" />
 
         <Button
