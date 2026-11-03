@@ -25,6 +25,23 @@ public final class BotLinksTest {
     }
 
     @Test
+    public void visaWatchRouteIsBoundedToKnownBotAndCountryPair() {
+        assertEquals("https://t.me/Flightiranbot?start=visa_IR_TR", BotLinks.visaWatch("IR", "TR"));
+        try {
+            BotLinks.visaWatch("IR", "TR&token=x");
+            throw new AssertionError("Must reject malformed destination");
+        } catch (IllegalArgumentException expected) {
+            // Nothing untrusted is copied into Telegram deep links.
+        }
+        try {
+            BotLinks.visaWatch("ir", "TR");
+            throw new AssertionError("Must reject lowercase country code");
+        } catch (IllegalArgumentException expected) {
+            // Only uppercase ISO-3166 alpha-2 codes are accepted.
+        }
+    }
+
+    @Test
     public void supportPointsToCurrentAccount() {
         assertTrue(BotLinks.SUPPORT.endsWith("/Advertio_support"));
     }

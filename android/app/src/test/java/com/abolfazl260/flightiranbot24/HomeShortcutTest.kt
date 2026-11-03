@@ -18,7 +18,7 @@ class HomeShortcutTest {
     }
 
     @Test
-    fun onlineLinksRemainExplicitHandOffUntilBackendApiExists() = runBlocking {
+    fun visaShortcutUsesNativeGuideWhileSupportRemainsExternal() = runBlocking {
         val destinations = LocalHomeRepository().loadHomeSections().online
         assertEquals(8, destinations.size)
         assertTrue(destinations.contains(HomeDestination.TICKET_PRICES))

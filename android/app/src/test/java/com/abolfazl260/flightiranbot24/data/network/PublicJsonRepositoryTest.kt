@@ -100,6 +100,31 @@ class PublicJsonRepositoryTest {
     }
 
     @Test
+    fun permitsOnlyBoundedVisaQueryParametersOnPublicApi() = runBlocking {
+        MockWebServer().use { server ->
+            server.start()
+            server.enqueue(MockResponse().setHeader("Content-Type", "application/json").setBody("{}"))
+            server.enqueue(MockResponse().setHeader("Content-Type", "application/json").setBody("{}"))
+            val client = PublicHttpClientFactory.create(
+                server.url("/").toString(), allowLoopbackHttpForTests = true
+            )
+            assertTrue(client.fetch("api/v1/visa/list?passport=IR") is NetworkResult.Success)
+            assertTrue(client.fetch("api/v1/visa/rule?passport=IR&destination=TR") is NetworkResult.Success)
+            assertEquals("/api/v1/visa/list?passport=IR", server.takeRequest().path)
+            assertEquals("/api/v1/visa/rule?passport=IR&destination=TR", server.takeRequest().path)
+            for (bad in listOf(
+                "api/v1/visa/list?passport=ir", "api/v1/visa/list?passport=IR&token=bad",
+                "api/v1/visa/rule?passport=IR&destination=../",
+                "api/v1/visa/rule?destination=TR&passport=IR",
+                "api/v1/visa/rule?passport=IR&destination=TR#frag",
+            )) {
+                assertEquals(NetworkResult.InvalidEndpoint, client.fetch(bad))
+            }
+            assertEquals(2, server.requestCount)
+        }
+    }
+
+    @Test
     fun timeoutReturnsRetryableTypedFailureWithoutLeakingTransportText() = runBlocking {
         MockWebServer().use { server ->
             server.start()

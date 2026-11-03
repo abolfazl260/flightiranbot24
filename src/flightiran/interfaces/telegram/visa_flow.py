@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import re
 from html import escape
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -379,6 +380,40 @@ async def handle_visa_callback(
             reply_markup=section_keyboard(language),
             disable_web_page_preview=True,
         )
+
+
+def parse_visa_start_payload(value: str) -> tuple[str, str] | None:
+    """Strict Android /start route; never triggers a subscription by itself."""
+    matched = re.fullmatch(r"visa_([A-Z]{2})_([A-Z]{2})", value)
+    return (matched.group(1), matched.group(2)) if matched else None
+
+
+async def open_visa_route(
+    update: Update,
+    context: ContextTypes.DEFAULT_TYPE,
+    service: VisaCatalogService | None,
+    language: str,
+    passport: str,
+    destination: str,
+) -> None:
+    """Render the existing route result + its explicit watch confirmation button."""
+    if update.message is None:
+        return
+    if service is None or not await service.ready():
+        await update.message.reply_text(tr(language, "empty"))
+        return
+    countries = await service.countries()
+    if _find_country(countries, passport) is None or _find_country(countries, destination) is None:
+        await update.message.reply_text(tr(language, "no_search"))
+        return
+    data = _context_data(context)
+    data.update({
+        "visa_passport": passport,
+        "visa_destination": destination,
+        "visa_purpose": "tourism",
+    })
+    data.pop("visa_residence", None)
+    await _show_result(update, context, service, language, edit=False)
 
 
 async def visa_command(

@@ -70,10 +70,10 @@ The review follow-ups correspond to existing roadmap rows where applicable; they
 | ALERT-002 | Percentage price drop (5–50%) | Planned |
 | ALERT-003 | Manage alerts: pause/resume/remove | Planned |
 | ALERT-004 | Notification history and threshold explanation | Planned |
-| VISA-001 | Passport/destination picker, default IR | Planned |
-| VISA-002 | Full visa status taxonomy | Planned |
-| VISA-003 | Stay windows and entry conditions | Planned |
-| VISA-004 | Provenance and stale-data warnings | Planned |
+| VISA-001 | Passport/destination picker, default IR | Implemented in PR for #152 (pending CI) |
+| VISA-002 | Full visa status taxonomy | Implemented in PR for #152 (pending CI) |
+| VISA-003 | Existing public notes and stay days only; structured rules deferred | Planned |
+| VISA-004 | Provenance/dates implemented in PR #152; persistent stale cache not in Phase 1 | In progress |
 | VISA-005 | Country filters and passport comparisons | Planned |
 
 ## Milestone C — Complete travel services

@@ -322,7 +322,20 @@ capture 08-airport-ika.png
 tap_service_row "بار مجاز و قوانین حمل بار"
 capture 08-airport-ika-baggage.png
 
-# All eight reachable native/in-app views and their scrolled/detail variants.
+# Native visa discovery and detail both read the APK-bundled JSON snapshot.
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "خدمات"
+wait_for_text "راهنمای ویزا و ورود"
+tap_service_row "راهنمای ویزا و ورود"
+wait_for_activity VisaGuideActivity
+wait_for_text "کشور صادرکننده پاسپورت"
+capture 09-visa-discovery.png
+tap_service_row "ترکیه"
+wait_for_text "جزئیات ویزا"
+capture 09-visa-detail.png
+
+# All nine reachable native/in-app views and their scrolled/detail variants.
 python3 - <<'PY'
 from pathlib import Path
 import struct
@@ -337,6 +350,7 @@ expected = {
     "06-privacy.png", "06-privacy-bottom.png",
     "07-travel-websites.png", "07-travel-websites-bottom.png",
     "08-airports.png", "08-airport-ika.png", "08-airport-ika-baggage.png",
+    "09-visa-discovery.png", "09-visa-detail.png",
 }
 actual = {p.name for p in folder.glob("*.png")}
 assert actual == expected, f"Missing: {expected - actual}; unexpected: {actual - expected}"

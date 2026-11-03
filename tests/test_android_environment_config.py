@@ -52,4 +52,6 @@ def test_single_app_keeps_native_prices_and_other_service_handoff():
     assert "BuildConfig.APP_ENVIRONMENT" not in activity
     assert "HomeDestination.TICKET_PRICES ->" in activity
     assert "startActivity(Intent(this, TicketPricesActivity::class.java))" in activity
-    assert "HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)" in activity
+    assert "HomeDestination.TELEGRAM_VISA ->" in activity
+    assert "startActivity(Intent(this, VisaGuideActivity::class.java))" in activity
+    assert "HomeDestination.SUPPORT -> openUrl(BotLinks.SUPPORT)" in activity

@@ -30,7 +30,7 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   from the content guide.
   The **offline checklist** remains a Java screen, with a progress indicator,
   confirmation before reset, and its existing SharedPreferences preserved.
-- Visa and support handoffs use their configured external links. The useful
+- Visa discovery reads bundled JSON assets without a network connection; only explicit visa-change alerts and support open Telegram. The useful
   travel information card now opens a native Persian directory sourced from the
   same GitHub JSON catalog used by Telegram, with a bundled offline fallback,
   search, category filters and explicit HTTPS website links. No Telegram auth,
@@ -84,7 +84,7 @@ A signed release still requires fresh prices from the live HTTPS endpoint
 and the owner's private keystore. See [release instructions](../docs/ANDROID_RELEASE.md).
 
 Room v1 schema is stored in `android/app/schemas`; do not perform destructive
-migrations. Remaining alert, visa, offline sync, auth and push work is tracked
+migrations. Remaining native alert management, offline sync, auth and push work is tracked
 separately and is not completed by this build-system change.
 
 ## Native ticket prices
@@ -96,7 +96,7 @@ sorting work locally. Booking opens verified Advertio support.
 The single app embeds the existing, public Cloudflare Workers HTTPS base
 URL by default. It reports network/API failures if D1 has not yet received
 verified prices; no fake prices or Telegram fallback are used.
-User-owned alerts, push, visa data and authentication remain separate tasks.
+User-owned alerts, push and authentication remain separate tasks. Native visa browsing reads only the bundled snapshot, never Cloudflare.
 
 
 ### Database-first fare contract (October 2026)
@@ -152,8 +152,8 @@ reusable **Android Store Screenshots** emulator workflow after verification on
 Android-related pull requests, main pushes, release tags, and manual builds.
 It installs the debug APK built from the same commit as the signed release,
 navigates through **real Persian UI controls** (not direct intents to private
-Activities), and uploads the `android-real-screenshots` artifact with **15
-PNG screenshots** from all **eight currently reachable native/in-app views**:
+Activities), and uploads the `android-real-screenshots` artifact with **17
+PNG screenshots** from all **nine currently reachable native/in-app views**:
 
 | Screen | Artifact files |
 | --- | --- |
@@ -165,6 +165,7 @@ PNG screenshots** from all **eight currently reachable native/in-app views**:
 | In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
 | Native useful travel directory | `07-travel-websites.png`, `07-travel-websites-bottom.png` |
 | Airport guide: index, IKA details, baggage section | `08-airports.png`, `08-airport-ika.png`, `08-airport-ika-baggage.png` |
+| Native visa discovery and detail | `09-visa-discovery.png`, `09-visa-detail.png` |
 
 The screenshot job checks the foreground Activity for navigated screens,
 verifies visible native text where available, validates the exact image
@@ -176,9 +177,9 @@ UI-XML diagnostics uploaded for investigation. You can also manually run
 **Honest captures only:** if the production fare API is unavailable, the
 prices image may show the real network error rather than fake sample fares.
 The FIDS page similarly depends on its third-party website. Review these
-images before submitting any of them to an app store. The intentionally
-disabled airport directory and screens launched in external Telegram/browser
-apps are not presented as working in-app screens.
+images before submitting any of them to an app store. External Telegram/browser
+apps are not presented as working in-app screens. The airport and visa guides
+are native app screens; only explicit links open external apps.
 
 
 ## Airport content guide
@@ -202,3 +203,36 @@ Run unit checks with
 The screenshot CI captures the airport index and IKA details from the
 real RTL app UI. Other airports can be enabled solely by changing their
 published JSON content after verification.
+
+## Native visa guide (VISA-NATIVE-001)
+
+Home and Services launch the native Persian RTL `VisaGuideActivity`. The installed
+APK bundles `app/src/main/assets/visa/manifest.v1.json` and 20 compact
+`shard-XX.json` files, containing 39,601 rules for 199 passports and 199
+destinations. Source: TravelRequirements.info Entry Requirements Dataset v1.3.0
+(CC BY 4.0), source data last modified 2026-10-22.
+
+- The entire visa catalog and every rule detail are read **only from APK assets**.
+  The visa guide never requests Cloudflare, bot SQLite or the upstream provider.
+- The data is **frozen at app-build time**. There is no in-app visa refresh,
+  download or runtime fallback; updating visa rules requires an app release.
+  Entry restrictions can change after the cited source dates, so users should
+  verify official requirements before travel.
+- Default passport is IR, persisted in existing `TravelerPreferencesRepository`
+  DataStore. Selecting another passport invalidates prior details immediately.
+- Persian and Arabic spelling normalization supports country search. Popular
+  destinations are navigation shortcuts, not fabricated visa results.
+- The nine published entry-status categories remain distinct; unknown or
+  unconfirmed never means visa-free. Optional stay days and notes come only
+  from the bundled rules.
+- Details retain the validated HTTPS citation, source scope, published
+  `verified_on` date and the destination dataset's update date. Missing fields
+  are disclosed, not inferred.
+- Missing or corrupt bundled assets produce an explicit error, without a
+  network fallback.
+- The optional Telegram CTA opens `/start visa_IR_TR` (codes vary) so the
+  traveler may separately choose whether to subscribe to visa-change alerts.
+  Browsing visa data never automatically subscribes anyone.
+
+The Telegram bot's online visa source remains separate. This Android Phase 1
+snapshot is versioned together with the app, not synchronized via Cloudflare.

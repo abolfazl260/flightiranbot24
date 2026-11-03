@@ -79,5 +79,7 @@ def test_android_no_longer_offers_dead_exchange_rate_button():
     for language in ("values", "values-fa"):
         strings = (ROOT / f"android/app/src/main/res/{language}/strings.xml").read_text()
         assert "open_currency" not in strings
-    # Visa deep-link/copy behavior survives.
-    assert 'HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)' in launcher
+    # Visa information is now native; only the explicit watch action opens Telegram.
+    assert "HomeDestination.TELEGRAM_VISA ->" in launcher
+    assert "startActivity(Intent(this, VisaGuideActivity::class.java))" in launcher
+    assert "openCurrency" not in launcher
