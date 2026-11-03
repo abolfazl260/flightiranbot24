@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -129,7 +128,9 @@ private fun PremiumFeatureCard(
                 painter = painterResource(imageRes),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxWidth().height(130.dp),
+                // The artwork has square corners. The Card's native rounded
+                // shape clips it; preserving the asset ratio avoids blur/crop.
+                modifier = Modifier.fillMaxWidth().aspectRatio(831f / 583f),
             )
             Column(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 13.dp),
