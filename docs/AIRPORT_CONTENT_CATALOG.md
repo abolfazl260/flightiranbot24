@@ -100,9 +100,10 @@ Canonical public raw URLs (after merge to main):
 - `https://raw.githubusercontent.com/abolfazl260/flightiranbot24/main/data/airports/airport-index.v1.json`
 - `https://raw.githubusercontent.com/abolfazl260/flightiranbot24/main/data/airports/details/THR.v1.json`
 
-Android can parse arbitrary section IDs and render its supported block types.
-The content may evolve without redeploying an APK as long as the existing
-schema/block types are used. Unknown future block types should be ignored,
+The Android data layer now parses arbitrary section IDs and typed content blocks.
+The actual airport UI remains deliberately disabled until a separate UI release.
+Once a generic renderer is connected, supported block types can be updated
+remotely without redeploying an APK. Unknown future block types should be ignored,
 never interpreted as HTML or JavaScript. Hide unsupported/empty sections;
 show source and review timestamps for factual content.
 

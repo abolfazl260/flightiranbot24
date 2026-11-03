@@ -4,10 +4,12 @@ import copy
 import json
 import shutil
 from pathlib import Path
+from runpy import run_path
 
 import pytest
 
-from scripts.validate_airport_content import ROOT, validate_dataset
+ROOT = Path(__file__).resolve().parents[1]
+validate_dataset = run_path(str(ROOT / "scripts/validate_airport_content.py"))["validate_dataset"]
 
 
 def copy_catalog(tmp_path: Path) -> Path:
