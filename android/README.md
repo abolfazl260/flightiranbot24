@@ -135,3 +135,37 @@ The adaptive foreground has an 18dp inset within the 108dp design canvas, so
 Android launchers can apply their own circular/squircle masks. No additional
 rounded-square image background is baked into the emblem. The Play Store
 artwork generator uses this same icon, avoiding visual brand divergence.
+
+
+## Real screenshots attached to every Android build
+
+The main **Android Build and Release** GitHub Actions workflow now invokes the
+reusable **Android Store Screenshots** emulator workflow after verification on
+Android-related pull requests, main pushes, release tags, and manual builds.
+It installs the debug APK built from the same commit as the signed release,
+navigates through **real Persian UI controls** (not direct intents to private
+Activities), and uploads the `android-real-screenshots` artifact with **10
+PNG screenshots** from all **six currently reachable native/in-app views**:
+
+| Screen | Artifact files |
+| --- | --- |
+| Home | `01-home.png`, `01-home-details.png` |
+| Services | `02-services.png`, `02-services-bottom.png` |
+| Ticket prices | `03-ticket-prices.png` |
+| Offline checklist | `04-checklist.png`, `04-checklist-bottom.png` |
+| Iran FIDS in-app WebView | `05-iran-flights.png` |
+| In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
+
+The screenshot job checks the foreground Activity for navigated screens,
+verifies visible native text where available, validates the exact image
+inventory and PNG dimensions, and runs existing connected instrumented tests.
+A capture/test failure blocks signed release publication, with screenshot and
+UI-XML diagnostics uploaded for investigation. You can also manually run
+**Android Store Screenshots** from the Actions tab without producing a release.
+
+**Honest captures only:** if the production fare API is unavailable, the
+prices image may show the real network error rather than fake sample fares.
+The FIDS page similarly depends on its third-party website. Review these
+images before submitting any of them to an app store. The intentionally
+disabled airport directory and screens launched in external Telegram/browser
+apps are not presented as working in-app screens.

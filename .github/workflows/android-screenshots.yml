@@ -1,15 +1,12 @@
 name: Android Store Screenshots
 
 on:
-  pull_request:
-    paths:
-      - "android/**"
-      - "scripts/capture_android_screenshots.sh"
-      - ".github/workflows/android-screenshots.yml"
+  # Invoked by the main Android build on PRs, main and release tags.
+  workflow_call:
   workflow_dispatch:
 
 concurrency:
-  group: android-emulator-${{ github.ref }}
+  group: android-emulator-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -71,8 +68,9 @@ jobs:
           if-no-files-found: error
           retention-days: 30
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: android-real-screenshots
           path: android/screenshots/*.png
-          if-no-files-found: error
+          if-no-files-found: warn
           retention-days: 30

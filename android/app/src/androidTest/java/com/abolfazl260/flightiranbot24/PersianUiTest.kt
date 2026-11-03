@@ -2,6 +2,8 @@ package com.abolfazl260.flightiranbot24
 
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onAllNodesWithContentDescription
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -24,7 +26,9 @@ class PersianUiTest {
         }
         rule.onNodeWithContentDescription("سفر، ساده‌تر از همیشه. قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان. مشاهده قیمت بلیت").assertHasClickAction()
         rule.onNodeWithContentDescription("خانه").assertExists()
-        rule.onNodeWithContentDescription("قیمت بلیت").assertHasClickAction()
+        // The bottom-navigation item and the home service tile legitimately
+        // share this accessibility label; do not require a unique node.
+        rule.onAllNodesWithContentDescription("قیمت بلیت").onFirst().assertHasClickAction()
         // Airports remain available from the home card, not from bottom nav.
         rule.onNodeWithText("فرودگاه‌ها").assertDoesNotExist()
         rule.onNodeWithContentDescription("راهنمای فرودگاه‌ها").assertHasClickAction()

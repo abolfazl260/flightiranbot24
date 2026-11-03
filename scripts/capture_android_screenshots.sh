@@ -8,6 +8,15 @@ apk="android/app/build/outputs/apk/debug/app-debug.apk"
 test -s "$apk"
 adb install -r "$apk"
 mkdir -p android/screenshots
+rm -f android/screenshots/*.png android/screenshots/failed-window.xml
+
+# Capture emulator diagnostics even when a UI assertion or instrumentation fails.
+on_capture_failure() {
+  adb exec-out screencap -p > android/screenshots/failed-navigation.png || true
+  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
+  adb exec-out cat /sdcard/flightiran-failed-window.xml > android/screenshots/failed-window.xml || true
+}
+trap on_capture_failure ERR
 
 # Only the launcher is exported. Never make private screens exported
 # just for test automation: navigate via visible Persian controls as users do.
@@ -27,9 +36,9 @@ open_launcher() {
 wait_for_activity() {
   local expected="$1"
   for _ in $(seq 1 30); do
-    if adb shell dumpsys activity activities |
-       grep -E '(topResumedActivity|mResumedActivity)' |
-       grep -Fq "$activity_prefix.$expected"; then
+    local resumed
+    resumed="$(adb shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' || true)"
+    if grep -Fq "$activity_prefix.$expected" <<< "$resumed"; then
       return 0
     fi
     sleep 1
@@ -128,37 +137,186 @@ capture() {
   adb exec-out screencap -p > "android/screenshots/$file"
 }
 
+
+# Service rows may be below the fold. Locate the ACTUAL visible Persian
+# control through UIAutomator, scrolling the page without guessed coordinates.
+tap_service_row() {
+  local label="$1"
+  python3 - "$label" <<'PY'
+import re
+import subprocess
+import sys
+import time
+import xml.etree.ElementTree as ET
+
+label = sys.argv[1]
+size = subprocess.check_output(["adb", "shell", "wm", "size"], text=True)
+match = re.search(r"(\d+)x(\d+)", size)
+if match is None:
+    raise SystemExit(f"Unknown emulator size: {size}")
+width, height = map(int, match.groups())
+for attempt in range(9):
+    subprocess.run(
+        ["adb", "shell", "uiautomator", "dump", "/sdcard/flightiran-service.xml"],
+        check=True, stdout=subprocess.DEVNULL,
+    )
+    data = subprocess.check_output(["adb", "exec-out", "cat", "/sdcard/flightiran-service.xml"])
+    root = ET.fromstring(data)
+    candidates = []
+    for node in root.iter("node"):
+        title = node.attrib.get("text", "")
+        description = node.attrib.get("content-desc", "")
+        if label != title and label not in description:
+            continue
+        match = re.fullmatch(
+            r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]", node.attrib.get("bounds", "")
+        )
+        if match is None:
+            continue
+        left, top, right, bottom = map(int, match.groups())
+        if right > left and bottom > top:
+            candidates.append(((left + right)//2, (top + bottom)//2))
+    if candidates:
+        x, y = candidates[-1]
+        print(f"Tapping service {label!r} at {(x, y)}, scrolls={attempt}", flush=True)
+        subprocess.run(["adb", "shell", "input", "tap", str(x), str(y)], check=True)
+        sys.exit(0)
+    if attempt < 8:
+        subprocess.run(
+            ["adb", "shell", "input", "swipe", str(width//2),
+             str(height*78//100), str(width//2), str(height*35//100), "430"],
+            check=True,
+        )
+        time.sleep(0.7)
+raise SystemExit(f"Service row not reachable through UI: {label}")
+PY
+}
+
+scroll_down() {
+  local count="$1"
+  local display width height
+  display="$(adb shell wm size | grep -Eo '[0-9]+x[0-9]+' | tail -1)"
+  width="$(cut -dx -f1 <<< "$display")"
+  height="$(cut -dx -f2 <<< "$display")"
+  for _ in $(seq 1 "$count"); do
+    adb shell input swipe "$((width / 2))" "$((height * 78 / 100))" \
+      "$((width / 2))" "$((height * 35 / 100))" 430
+    sleep 1
+  done
+}
+
+wait_for_text() {
+  local expected="$1"
+  for _ in $(seq 1 15); do
+    adb shell uiautomator dump /sdcard/flightiran-assert.xml >/dev/null 2>&1 || true
+    local xml
+    xml="$(adb exec-out cat /sdcard/flightiran-assert.xml || true)"
+    if grep -Fq "$expected" <<< "$xml"; then
+      return 0
+    fi
+    sleep 1
+  done
+  echo "Expected native Persian text not visible: $expected" >&2
+  return 1
+}
+
+wait_for_prices() {
+  # Both successful live data and the genuine API error state count as a
+  # rendered screen. Never photograph a loading spinner or invent fares.
+  for _ in $(seq 1 25); do
+    adb shell uiautomator dump /sdcard/flightiran-prices.xml >/dev/null 2>&1 || true
+    local xml
+    xml="$(adb exec-out cat /sdcard/flightiran-prices.xml || true)"
+    if grep -Fq "شهر مبدأ" <<< "$xml"; then
+      echo "Prices screen: real API prices rendered"
+      return 0
+    fi
+    if grep -Fq "دریافت اطلاعات ممکن نیست" <<< "$xml"; then
+      echo "::warning::Captured the authentic ticket API error state, not sample fares"
+      return 0
+    fi
+    sleep 1
+  done
+  echo "Ticket screen did not finish loading" >&2
+  return 1
+}
+
 open_launcher
 wait_for_activity MainActivity
+wait_for_text "دستیار هوشمند سفر"
 capture 01-home.png
+scroll_down 1
+capture 01-home-details.png
 
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "خدمات"
-wait_for_activity MainActivity
-# Open Services through its always-visible bottom navigation instead of\n# relying on the airport card being visible on every emulator viewport.
-# Assert that the new view is visible before producing a screenshot.
-adb shell uiautomator dump /sdcard/flightiran-services.xml >/dev/null
-adb exec-out cat /sdcard/flightiran-services.xml | grep -Fq "خدمات بیشتر"
+wait_for_text "خدمات بیشتر"
 capture 02-services.png
+scroll_down 2
+capture 02-services-bottom.png
+
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "قیمت بلیت"
+wait_for_activity TicketPricesActivity
+wait_for_prices
+capture 03-ticket-prices.png
 
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "چک‌لیست"
 wait_for_activity ChecklistActivity
-capture 03-checklist.png
+capture 04-checklist.png
+scroll_down 2
+capture 04-checklist-bottom.png
 
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "خدمات"
+wait_for_text "خدمات بیشتر"
+tap_service_row "اطلاعات پرواز ایران"
+wait_for_activity IranFlightsActivity
+wait_for_text "وب‌سایت رسمی FIDS در داخل برنامه"
+# Allow the third-party WebView to render (or display its genuine error).
+sleep 8
+capture 05-iran-flights.png
+
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "خدمات"
+wait_for_text "خدمات بیشتر"
+tap_service_row "حریم خصوصی"
+wait_for_activity PrivacyPolicyActivity
+wait_for_text "اطلاعات ذخیره‌شده در گوشی"
+capture 06-privacy.png
+scroll_down 2
+capture 06-privacy-bottom.png
+
+# All six reachable in-app screens, plus scrolled variants for longer screens.
+# Offline airport directory is intentionally excluded: it is currently disabled.
 python3 - <<'PY'
-import pathlib
+from pathlib import Path
 import struct
 
-shots = sorted(pathlib.Path("android/screenshots").glob("*.png"))
-assert len(shots) == 3, shots
-for path in shots:
-    data = path.read_bytes()
-    assert data.startswith(b"\x89PNG\r\n\x1a\n"), path
+folder = Path("android/screenshots")
+expected = {
+    "01-home.png", "01-home-details.png",
+    "02-services.png", "02-services-bottom.png",
+    "03-ticket-prices.png",
+    "04-checklist.png", "04-checklist-bottom.png",
+    "05-iran-flights.png",
+    "06-privacy.png", "06-privacy-bottom.png",
+}
+actual = {p.name for p in folder.glob("*.png")}
+assert actual == expected, f"Missing: {expected - actual}; unexpected: {actual - expected}"
+for name in sorted(expected):
+    data = (folder / name).read_bytes()
+    assert data.startswith(b"\x89PNG\r\n\x1a\n"), name
     width, height = struct.unpack(">II", data[16:24])
-    assert width >= 320 and height >= 480, (path, width, height)
+    assert width >= 320 and height >= 480, (name, width, height)
+    print(f"{name}: {width}x{height}")
 PY
 
 gradle --no-daemon -p android :app:connectedDebugAndroidTest
+trap - ERR
