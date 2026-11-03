@@ -164,6 +164,7 @@ internal fun VisaGuideScreen(
     if (showPassports) {
         VisaPassportDialog(
             selected = state.passport,
+            supportedCodes = state.passportCodes,
             onSelect = { country ->
                 onPassport(country)
                 search = ""
@@ -257,16 +258,21 @@ internal fun VisaGuideScreen(
                     }
                 }
                 when (val result = state.catalog) {
-                    VisaLoad.Loading -> item { TravelLoadingState("در حال دریافت فهرست کشورها…") }
+                    VisaLoad.Loading -> item { TravelLoadingState("در حال آماده‌سازی اطلاعات آفلاین…") }
                     VisaLoad.Idle -> item { TravelLoadingState() }
                     is VisaLoad.Error -> item {
                         TravelErrorState(visaErrorText(result.reason), onRetryCatalog)
                     }
                     is VisaLoad.Ready -> {
-                        val countries = result.data
+                        val countries = result.data.rules
+                        item {
+                            Text("تاریخ نسخه داده‌ها: " + (result.data.sourceDataModifiedOn ?: "نامشخص"),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
                         if (search.isBlank()) {
                             item {
-                                VisaInfoBox("کشور مقصد را جست‌وجو کنید یا از فهرست مقاصد پرطرفدار انتخاب کنید. اطلاعات ویزا ممکن است تغییر کند.")
+                                VisaInfoBox("اطلاعات ویزا همراه برنامه نصب شده و برای جست‌وجو نیازی به اینترنت ندارد. قوانین ممکن است پس از تاریخ این نسخه تغییر کرده باشند.")
                             }
                         } else {
                             val matches = countries.filter {
@@ -373,11 +379,11 @@ internal fun VisaGuideScreen(
                             }
                         }
                         item {
-                            VisaDetailCard("تاریخ اطلاعات") {
+                            VisaDetailCard("تاریخ اطلاعات آفلاین") {
                                 Text("آخرین بررسی منبع: " +
                                     (rule.verifiedOn ?: "تاریخ بررسی ثبت نشده"))
-                                Text("آخرین انتشار داده: " +
-                                    (rule.publishedAt ?: "تاریخ انتشار ثبت نشده"),
+                                Text("آخرین به‌روزرسانی فایل مقصد: " +
+                                    (rule.destinationUpdatedOn ?: "تاریخ به‌روزرسانی ثبت نشده"),
                                     style = MaterialTheme.typography.bodySmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
@@ -393,7 +399,9 @@ internal fun VisaGuideScreen(
                         }
                         item {
                             Text(
-                                "این راهنما صرفاً اطلاع‌رسانی است. شرایط ورود به نوع گذرنامه، هدف سفر و وضعیت مسافر بستگی دارد. پیش از سفر اطلاعات را با مرجع مسئول بررسی کنید.",
+                                "این داده‌ها آفلاین هستند و خودکار به‌روز نمی‌شوند. " +
+                                    "منبع داده: TravelRequirements.info — AXG Sp. z o.o. (CC BY 4.0). " +
+                                    "این راهنما صرفاً اطلاع‌رسانی است. شرایط ورود به نوع گذرنامه، هدف سفر و وضعیت مسافر بستگی دارد. پیش از سفر اطلاعات را با مرجع مسئول بررسی کنید.",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -548,12 +556,13 @@ private fun VisaInfoBox(message: String) {
 @Composable
 private fun VisaPassportDialog(
     selected: String,
+    supportedCodes: List<String>,
     onSelect: (String) -> Unit,
     onClose: () -> Unit,
 ) {
     var query by rememberSaveable { mutableStateOf("") }
     val passportCodes = remember(query) {
-        VisaCountries.allPassportCodes().filter {
+        (supportedCodes.ifEmpty { VisaCountries.allPassportCodes() }).filter {
             VisaCountries.matches(it, "", query)
         }
     }
@@ -593,15 +602,11 @@ private fun VisaPassportDialog(
 
 internal fun visaSourceScope(raw: String?): String = when (raw?.lowercase()) {
     "row", "passport" -> "مختص پاسپورت"
-    "shared", "default", "destination" -> "عمومی مقصد"
+    "shared", "default", "destination", "policy" -> "سیاست کلی مقصد"
     else -> "نامشخص"
 }
 
 internal fun visaErrorText(reason: VisaFailure): String = when (reason) {
-    VisaFailure.UNCONFIGURED -> "سرویس اطلاعات ویزا پیکربندی نشده است."
-    VisaFailure.OFFLINE -> "ارتباط اینترنت برقرار نشد. اتصال را بررسی و دوباره تلاش کنید."
-    VisaFailure.TIMEOUT -> "زمان پاسخ سرویس ویزا به پایان رسید."
-    VisaFailure.NOT_FOUND -> "اطلاعات این مسیر در فهرست فعلی موجود نیست."
-    VisaFailure.SERVER -> "سرویس ویزا در حال حاضر در دسترس نیست."
-    VisaFailure.INVALID -> "اطلاعات دریافت‌شده معتبر یا کامل نیست."
+    VisaFailure.NOT_FOUND -> "اطلاعات این گذرنامه یا مقصد در بسته آفلاین فعلی موجود نیست."
+    VisaFailure.INVALID -> "بسته اطلاعات ویزا در این نسخه ناقص یا آسیب‌دیده است."
 }
