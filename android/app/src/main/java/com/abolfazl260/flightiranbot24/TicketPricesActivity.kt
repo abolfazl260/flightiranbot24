@@ -460,6 +460,16 @@ internal fun fareCityIconName(city: String): String? {
         .replace("‌", "")
 
     return when (normalized) {
+        "مشهد" -> "price_city_mashhad"
+        "استانبول" -> "price_city_istanbul"
+        "نجف" -> "price_city_najaf"
+        "شیراز" -> "price_city_shiraz"
+        "اهواز" -> "price_city_ahvaz"
+        "کیش" -> "price_city_kish"
+        "تبریز" -> "price_city_tabriz"
+        "کرمان" -> "price_city_kerman"
+        "ایروان" -> "price_city_yerevan"
+        "بندرعباس" -> "price_city_bandarabbas"
         "زاهدان" -> "price_city_zahedan"
         "ارومیه" -> "price_city_urmia"
         "آبادان" -> "price_city_abadan"
