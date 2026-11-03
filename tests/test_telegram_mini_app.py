@@ -305,9 +305,12 @@ def test_android_and_mini_travel_checklist_parity():
 
     airport = (android / "java/com/abolfazl260/flightiranbot24/"
                "AirportDirectoryActivity.kt").read_text()
-    assert "AirportComingSoonScreen" in airport
+    # Android now renders vetted GitHub airport content; the Telegram Mini App
+    # still keeps its airport placeholder hidden pending a separate rollout.
+    assert "AirportContentRepository" in airport
+    assert "AirportGuideScreen" in airport
     assert "loadOfflineCatalog()" not in airport
     assert "TravelFormField" not in airport
-    assert "airports_coming_soon_message" in airport
+    assert "airports_coming_soon_message" not in airport
     assert 'id="screen-airports"' in html
     assert "اطلاعات فرودگاه‌ها به‌زودی" in html
