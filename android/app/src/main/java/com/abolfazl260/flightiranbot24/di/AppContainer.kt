@@ -6,6 +6,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.abolfazl260.flightiranbot24.data.LocalHomeRepository
 import com.abolfazl260.flightiranbot24.data.tickets.TicketPricesRepository
+import com.abolfazl260.flightiranbot24.data.visa.VisaRepository
+import com.abolfazl260.flightiranbot24.presentation.visa.VisaGuideViewModel
 import com.abolfazl260.flightiranbot24.data.fids.IranFidsRepository
 import com.abolfazl260.flightiranbot24.presentation.fids.IranFidsViewModel
 import com.abolfazl260.flightiranbot24.presentation.tickets.TicketPricesViewModel
@@ -42,6 +44,10 @@ internal class AppContainer(
 
     val ticketPricesViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
         initializer { TicketPricesViewModel(TicketPricesRepository(publicApi())) }
+    }
+
+    val visaGuideViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
+        initializer { VisaGuideViewModel(VisaRepository(publicApi()), travelerPreferencesRepository) }
     }
 
     val iranFidsViewModelFactory: ViewModelProvider.Factory = viewModelFactory {
