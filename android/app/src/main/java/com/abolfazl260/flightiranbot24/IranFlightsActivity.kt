@@ -67,7 +67,7 @@ private const val FIDS_BLANK_PAGE_SCRIPT = """
     var body = document.body;
     if (!body) return true;
     if ((body.innerText || '').trim().length > 0) return false;
-    return !body.querySelector('img,svg,canvas,video,iframe,input,select,button,table,[role="progressbar"]');
+    return !body.querySelector('canvas,video,iframe,input,select,button,table');
 })()
 """
 
