@@ -94,9 +94,9 @@ internal class TravelWebsiteCatalogRepository(private val context: Context) {
             check(response.isSuccessful) { "Catalog HTTP ${response.code}" }
             val body = requireNotNull(response.body) { "Empty catalog response" }
             require(body.contentLength() in -1L..MAX_BYTES.toLong()) { "Catalog too large" }
-            val bytes = body.byteStream().use { stream -> stream.readNBytes(MAX_BYTES + 1) }
-            require(bytes.size <= MAX_BYTES) { "Catalog too large" }
-            TravelWebsiteCatalogParser.parse(bytes.toString(Charsets.UTF_8))
+            val json = body.string()
+            require(json.toByteArray(Charsets.UTF_8).size <= MAX_BYTES) { "Catalog too large" }
+            TravelWebsiteCatalogParser.parse(json)
         }
     }
 
