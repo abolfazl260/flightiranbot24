@@ -64,7 +64,7 @@
     {
       "iata": "IKA",
       "detail_path": "details/IKA.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "IST",

@@ -34,7 +34,7 @@ def save(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def test_each_existing_airport_has_an_independent_unpublished_content_file():
+def test_each_existing_airport_has_independent_content_and_only_ika_enabled():
     validate_dataset()
     root = ROOT / "data" / "airports"
     canonical = load(ROOT / "src/flightiran/modules/airport/data/airports.json")
@@ -42,15 +42,30 @@ def test_each_existing_airport_has_an_independent_unpublished_content_file():
     expected = {a["code"] for a in canonical}
     assert len(expected) == 28
     assert {e["iata"] for e in index["airports"]} == expected
-    assert all(not e["enabled"] for e in index["airports"])
+    assert [e["iata"] for e in index["airports"] if e["enabled"]] == ["IKA"]
     for entry in index["airports"]:
         detail = load(root / entry["detail_path"])
         assert detail["iata"] == entry["iata"]
-        assert [s["id"] for s in detail["sections"]] == [
+        assert [s["id"] for s in detail["sections"][:5]] == [
             "baggage-rules", "flight-status", "traveler-experiences",
             "airport-map", "airport-videos",
         ]
-        assert all(s["status"] == "draft" and not s["blocks"] for s in detail["sections"])
+        if entry["iata"] == "IKA":
+            assert len(detail["sections"]) == 16
+            published = [s for s in detail["sections"] if s["status"] == "published"]
+            drafts = [s for s in detail["sections"] if s["status"] == "draft"]
+            assert len(published) == 14
+            assert {s["id"] for s in drafts} == {
+                "traveler-experiences", "airport-videos",
+            }
+            assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
+            assert all(s["status"] == "draft" and not s["blocks"] for s in drafts)
+        else:
+            assert len(detail["sections"]) == 5
+            assert all(
+                s["status"] == "draft" and not s["blocks"]
+                for s in detail["sections"]
+            )
 
 
 def test_add_section_to_one_airport_does_not_affect_other_airports(tmp_path):
