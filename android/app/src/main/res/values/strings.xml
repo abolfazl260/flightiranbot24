@@ -68,7 +68,7 @@
     <string name="navigation_services">خدمات</string>
     <string name="home_offline_hint">ابزارهای کاربردی برای یک سفر آسوده</string>
     <string name="home_quick_services">خدمات پرکاربرد</string>
-    <string name="online_service_hint">فهرست قیمت در اپ نمایش داده می‌شود؛ سایر خدمات از طریق تلگرام باز می‌شوند.</string>
+    <string name="online_service_hint">فهرست قیمت و اطلاعات کاربردی سفر در اپ نمایش داده می‌شوند؛ برخی خدمات دیگر از طریق تلگرام باز می‌شوند.</string>
     <string name="home_local_badge">درون اپ</string>
     <string name="home_external_badge">ورود به خدمات</string>
     <string name="checklist_progress">%1$d مورد از %2$d انجام شده</string>
