@@ -258,7 +258,7 @@ internal fun VisaGuideScreen(
                     }
                 }
                 when (val result = state.catalog) {
-                    VisaLoad.Loading -> item { TravelLoadingState("در حال آماده‌سازی اطلاعات آفلاین…") }
+                    VisaLoad.Loading -> item { TravelLoadingState("در حال آماده‌سازی اطلاعات ذخیره‌شده در برنامه…") }
                     VisaLoad.Idle -> item { TravelLoadingState() }
                     is VisaLoad.Error -> item {
                         TravelErrorState(visaErrorText(result.reason), onRetryCatalog)
@@ -379,7 +379,7 @@ internal fun VisaGuideScreen(
                             }
                         }
                         item {
-                            VisaDetailCard("تاریخ اطلاعات آفلاین") {
+                            VisaDetailCard("تاریخ اطلاعات ذخیره‌شده در برنامه") {
                                 Text("آخرین بررسی منبع: " +
                                     (rule.verifiedOn ?: "تاریخ بررسی ثبت نشده"))
                                 Text("آخرین به‌روزرسانی فایل مقصد: " +
@@ -399,7 +399,7 @@ internal fun VisaGuideScreen(
                         }
                         item {
                             Text(
-                                "این داده‌ها آفلاین هستند و خودکار به‌روز نمی‌شوند. " +
+                                "این داده‌ها ذخیره‌شده در برنامه هستند و خودکار به‌روز نمی‌شوند. " +
                                     "منبع داده: TravelRequirements.info — AXG Sp. z o.o. (CC BY 4.0). " +
                                     "این راهنما صرفاً اطلاع‌رسانی است. شرایط ورود به نوع گذرنامه، هدف سفر و وضعیت مسافر بستگی دارد. پیش از سفر اطلاعات را با مرجع مسئول بررسی کنید.",
                                 style = MaterialTheme.typography.bodySmall,
@@ -607,6 +607,6 @@ internal fun visaSourceScope(raw: String?): String = when (raw?.lowercase()) {
 }
 
 internal fun visaErrorText(reason: VisaFailure): String = when (reason) {
-    VisaFailure.NOT_FOUND -> "اطلاعات این گذرنامه یا مقصد در بسته آفلاین فعلی موجود نیست."
+    VisaFailure.NOT_FOUND -> "اطلاعات این گذرنامه یا مقصد در بسته ذخیره‌شده در برنامه فعلی موجود نیست."
     VisaFailure.INVALID -> "بسته اطلاعات ویزا در این نسخه ناقص یا آسیب‌دیده است."
 }
