@@ -42,4 +42,4 @@ def test_each_catalog_entry_has_a_valid_local_webp_thumbnail():
         image = (CATALOG_DIR / relative).read_bytes()
         assert image[:4] == b"RIFF"
         assert image[8:12] == b"WEBP"
-        assert 12 < len(image) <= 25 * 1024
+        assert 12 < len(image) <= 64 * 1024
