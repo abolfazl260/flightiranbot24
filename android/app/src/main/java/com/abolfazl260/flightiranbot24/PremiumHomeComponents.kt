@@ -99,7 +99,7 @@ internal fun PremiumPreparationSection(
                 title = stringResource(R.string.offline_airports),
                 detail = stringResource(R.string.premium_airport_description),
                 imageRes = R.drawable.home_airport,
-                badge = stringResource(R.string.airports_coming_soon_title),
+                badge = null,
                 onClick = onAirportServices,
             )
         }

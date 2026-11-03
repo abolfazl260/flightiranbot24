@@ -1,35 +1,31 @@
 package com.abolfazl260.flightiranbot24
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import com.abolfazl260.flightiranbot24.presentation.components.TravelToolbar
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.abolfazl260.flightiranbot24.presentation.components.TravelTab
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
+import com.google.gson.JsonParser
+import java.net.URI
 import java.util.Locale
+import kotlinx.coroutines.CancellationException
 
 /**
- * Match the Telegram Mini App: the airport search is not released yet.
- * No airport data or search UI is loaded while this feature is unavailable.
+ * Read-only, Persian-only airport entry point. Publication state and all
+ * section content come from GitHub JSON, never an administrator panel.
  */
 class AirportDirectoryActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
@@ -40,61 +36,139 @@ class AirportDirectoryActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             TravelTheme {
-                AirportComingSoonScreen(onBack = { finish() })
-            }
-        }
-    }
-}
+                val repository = remember { AirportContentRepository(applicationContext) }
+                val names = remember { readBundledAirportNames(applicationContext) }
+                var index by remember { mutableStateOf<AirportContentIndex?>(null) }
+                var indexLoading by remember { mutableStateOf(true) }
+                var indexOffline by remember { mutableStateOf(false) }
+                var indexError by remember { mutableStateOf(false) }
+                var selectedCode by rememberSaveable { mutableStateOf<String?>(null) }
+                var page by remember { mutableStateOf<AirportContentPage?>(null) }
+                var detailLoading by remember { mutableStateOf(false) }
+                var detailOffline by remember { mutableStateOf(false) }
+                var detailError by remember { mutableStateOf(false) }
+                var refreshKey by remember { mutableIntStateOf(0) }
 
-@Composable
-internal fun AirportComingSoonScreen(onBack: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .windowInsetsPadding(androidx.compose.foundation.layout.WindowInsets.safeDrawing)
-            .padding(horizontal = 20.dp, vertical = 18.dp),
-        verticalArrangement = Arrangement.spacedBy(24.dp),
-    ) {
-        TravelToolbar(
-            title = stringResource(R.string.navigation_airports),
-            onBack = onBack,
-        )
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        ) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(28.dp),
-                verticalArrangement = Arrangement.spacedBy(14.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = "✈",
-                    style = MaterialTheme.typography.headlineLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-                Text(
-                    text = stringResource(R.string.airports_coming_soon_title),
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                )
-                Text(
-                    text = stringResource(R.string.airports_coming_soon_message),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                )
-                TextButton(onClick = onBack) {
-                    Text(stringResource(R.string.airports_back_home))
+                LaunchedEffect(repository, refreshKey) {
+                    indexLoading = true
+                    indexError = false
+                    try {
+                        val loaded = repository.index()
+                        index = loaded.value
+                        indexOffline = loaded.usedBundledFallback
+                        if (selectedCode != null &&
+                            loaded.value.airports.none { it.iata == selectedCode }
+                        ) {
+                            selectedCode = null
+                            page = null
+                        }
+                    } catch (cancel: CancellationException) {
+                        throw cancel
+                    } catch (_: Exception) {
+                        indexError = true
+                    } finally {
+                        indexLoading = false
+                    }
                 }
+
+                LaunchedEffect(repository, index, selectedCode, refreshKey) {
+                    page = null
+                    detailError = false
+                    if (selectedCode == null || index == null) {
+                        detailLoading = false
+                    } else {
+                        val ref = index?.airports?.firstOrNull { it.iata == selectedCode }
+                        if (ref == null) {
+                            detailError = true
+                            detailLoading = false
+                        } else {
+                            detailLoading = true
+                            try {
+                                val loaded = repository.detail(ref)
+                                page = loaded.value
+                                detailOffline = loaded.usedBundledFallback
+                                if (loaded.value.sections.isEmpty()) detailError = true
+                            } catch (cancel: CancellationException) {
+                                throw cancel
+                            } catch (_: Exception) {
+                                detailError = true
+                            } finally {
+                                detailLoading = false
+                            }
+                        }
+                    }
+                }
+                BackHandler(enabled = selectedCode != null) {
+                    selectedCode = null
+                }
+
+                AirportGuideScreen(
+                    index = index,
+                    page = page,
+                    airportNames = names,
+                    selectedCode = selectedCode,
+                    indexLoading = indexLoading,
+                    detailLoading = detailLoading,
+                    indexError = indexError,
+                    detailError = detailError,
+                    offline = if (selectedCode == null) indexOffline else detailOffline,
+                    onSelectAirport = { selectedCode = it },
+                    onBack = {
+                        if (selectedCode != null) selectedCode = null else finish()
+                    },
+                    onRetry = { refreshKey++ },
+                    onLink = ::openHttps,
+                    onHome = { openMainTab(TravelTab.HOME) },
+                    onPrices = {
+                        startActivity(Intent(this, TicketPricesActivity::class.java))
+                        finish()
+                    },
+                    onChecklist = {
+                        startActivity(Intent(this, ChecklistActivity::class.java))
+                        finish()
+                    },
+                    onServices = { openMainTab(TravelTab.SERVICES) },
+                )
             }
+        }
+    }
+
+    private fun openMainTab(tab: TravelTab) {
+        startActivity(
+            Intent(this, MainActivity::class.java)
+                .putExtra(MainActivity.EXTRA_TAB, tab.name)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        )
+        finish()
+    }
+
+    private fun openHttps(url: String) {
+        val uri = runCatching { URI(url) }.getOrNull()
+        if (uri?.scheme != "https" || uri.host.isNullOrBlank() || uri.rawUserInfo != null) return
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(this, R.string.link_unavailable, Toast.LENGTH_LONG).show()
         }
     }
 }
 
-// Future airport-search domain helpers remain tested, but cannot be reached
-// from any current app entry point until this feature is explicitly launched.
+internal fun readBundledAirportNames(context: Context): Map<String, AirportRow> = runCatching {
+    val json = context.assets.open("airports.json").bufferedReader().use { it.readText() }
+    JsonParser.parseString(json).asJsonArray.associate { element ->
+        val record = element.asJsonObject
+        val names = record.getAsJsonObject("names")
+        val code = record.get("code").asString
+        code to AirportRow(
+            code = code,
+            name = names.get("fa").asString,
+            country = record.get("country").asString,
+            timezone = record.get("timezone").asString,
+            aliases = listOfNotNull(names.get("en")?.asString, names.get("ar")?.asString),
+        )
+    }
+}.getOrDefault(emptyMap())
+
 internal data class AirportRow(
     val code: String,
     val name: String,

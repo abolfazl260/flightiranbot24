@@ -105,7 +105,7 @@
     <string name="hero_banner_accessibility">سفر، ساده‌تر از همیشه. قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان. مشاهده قیمت بلیت</string>
     <string name="premium_prep_subtitle">همه ابزارهای لازم برای یک سفر راحت و بدون دغدغه</string>
     <string name="premium_checklist_description">۱۲ گام ضروری برای آمادگی کامل سفر</string>
-    <string name="premium_airport_description">راهنمای فرودگاه‌ها هنوز فعال نیست؛ مشاهده خدمات سفر</string>
+    <string name="premium_airport_description">ترمینال‌ها، مسیر دسترسی و راهنمای مسافر</string>
     <string name="premium_services_title">خدمات سفر</string>
     <string name="premium_all_services">مشاهده همه خدمات</string>
     <string name="premium_open">مشاهده</string>
@@ -156,6 +156,7 @@
     <string name="services_page_subtitle">ابزارها و اطلاعات کاربردی برای سفرهای هوایی</string>
     <string name="service_fares_description">جست‌وجو و مقایسه قیمت بلیت مسیرهای مختلف</string>
     <string name="service_iran_flights_description">وضعیت پروازها و اطلاعات فرودگاه‌های ایران</string>
+    <string name="service_airports_description">اطلاعات تأییدشده فرودگاه‌ها و راهنمای مسافر</string>
     <string name="service_assistant_description">برنامه‌ریزی و پیشنهادهای هوشمند سفر</string>
     <string name="service_visa_description">شرایط ورود و مدارک موردنیاز کشورها</string>
     <string name="service_travel_info_description">نکات مهم، قوانین و توصیه‌های سفر</string>
