@@ -112,7 +112,8 @@ class MainActivity : ComponentActivity() {
             HomeDestination.IRAN_FLIGHTS ->
                 startActivity(Intent(this, IranFlightsActivity::class.java))
             HomeDestination.TELEGRAM_BOT -> openUrl(BotLinks.BOT)
-            HomeDestination.TELEGRAM_USEFUL -> openUrl(BotLinks.USEFUL)
+            HomeDestination.TELEGRAM_USEFUL ->
+                startActivity(Intent(this, TravelWebsitesActivity::class.java))
             HomeDestination.TELEGRAM_VISA -> openUrl(BotLinks.VISA)
             HomeDestination.SUPPORT -> openUrl(BotLinks.SUPPORT)
             HomeDestination.PRIVACY ->

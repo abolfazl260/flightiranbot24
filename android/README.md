@@ -26,8 +26,10 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   a Room snapshot when populated and falls back to bundled offline records.
   The **offline checklist** remains a Java screen, with a progress indicator,
   confirmation before reset, and its existing SharedPreferences preserved.
-- Online service links hand off to the Telegram bot via fixed `/start`
-  entrypoints for visa, airports and travel information. No Telegram auth,
+- Visa and support handoffs use their configured external links. The useful
+  travel information card now opens a native Persian directory sourced from the
+  same GitHub JSON catalog used by Telegram, with a bundled offline fallback,
+  search, category filters and explicit HTTPS website links. No Telegram auth,
   bot token, fake Mini App session or server-side account is embedded.
 
 ## AND-003: secure networking and local persistence
@@ -144,8 +146,8 @@ reusable **Android Store Screenshots** emulator workflow after verification on
 Android-related pull requests, main pushes, release tags, and manual builds.
 It installs the debug APK built from the same commit as the signed release,
 navigates through **real Persian UI controls** (not direct intents to private
-Activities), and uploads the `android-real-screenshots` artifact with **10
-PNG screenshots** from all **six currently reachable native/in-app views**:
+Activities), and uploads the `android-real-screenshots` artifact with **12
+PNG screenshots** from all **seven currently reachable native/in-app views**:
 
 | Screen | Artifact files |
 | --- | --- |
@@ -155,6 +157,7 @@ PNG screenshots** from all **six currently reachable native/in-app views**:
 | Offline checklist | `04-checklist.png`, `04-checklist-bottom.png` |
 | Iran FIDS in-app WebView | `05-iran-flights.png` |
 | In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
+| Native useful travel directory | `07-travel-websites.png`, `07-travel-websites-bottom.png` |
 
 The screenshot job checks the foreground Activity for navigated screens,
 verifies visible native text where available, validates the exact image
