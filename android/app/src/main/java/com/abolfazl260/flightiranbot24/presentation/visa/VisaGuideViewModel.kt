@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.abolfazl260.flightiranbot24.data.visa.VisaFetch
 import com.abolfazl260.flightiranbot24.data.visa.VisaFailure
 import com.abolfazl260.flightiranbot24.data.visa.VisaRepository
+import com.abolfazl260.flightiranbot24.data.visa.OfflineVisaCatalog
 import com.abolfazl260.flightiranbot24.data.visa.VisaRule
 import com.abolfazl260.flightiranbot24.domain.settings.TravelerPreferencesRepository
 import kotlinx.coroutines.CancellationException
@@ -26,7 +27,8 @@ internal sealed interface VisaLoad<out T> {
 
 internal data class VisaGuideState(
     val passport: String = "IR",
-    val catalog: VisaLoad<List<VisaRule>> = VisaLoad.Loading,
+    val catalog: VisaLoad<OfflineVisaCatalog> = VisaLoad.Loading,
+    val passportCodes: List<String> = emptyList(),
     val selectedDestination: String? = null,
     val detail: VisaLoad<VisaRule> = VisaLoad.Idle,
 )
@@ -56,7 +58,7 @@ internal class VisaGuideViewModel(
         // Invalidate the previous rule immediately, before the preference flow emits.
         detailJob?.cancel()
         listJob?.cancel()
-        mutable.value = VisaGuideState(passport = code)
+        mutable.value = VisaGuideState(passport = code, passportCodes = mutable.value.passportCodes)
         viewModelScope.launch {
             try {
                 preferences.setDefaultPassportCountry(code)
@@ -64,7 +66,7 @@ internal class VisaGuideViewModel(
             } catch (cancel: CancellationException) {
                 throw cancel
             } catch (_: Exception) {
-                mutable.value = VisaGuideState(passport = code, catalog = VisaLoad.Error(VisaFailure.INVALID))
+                mutable.value = VisaGuideState(passport = code, passportCodes = mutable.value.passportCodes, catalog = VisaLoad.Error(VisaFailure.INVALID))
             }
         }
     }
@@ -72,11 +74,14 @@ internal class VisaGuideViewModel(
     private fun loadPassport(passport: String) {
         listJob?.cancel()
         detailJob?.cancel()
-        mutable.value = VisaGuideState(passport = passport)
+        mutable.value = VisaGuideState(passport = passport, passportCodes = mutable.value.passportCodes)
         listJob = viewModelScope.launch {
             val result = fetch { repository.list(passport) }
             if (mutable.value.passport == passport) {
-                mutable.value = mutable.value.copy(catalog = result)
+                mutable.value = mutable.value.copy(
+                    catalog = result,
+                    passportCodes = if (result is VisaLoad.Ready) result.data.passportCodes else mutable.value.passportCodes,
+                )
             }
         }
     }
