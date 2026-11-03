@@ -146,8 +146,8 @@ reusable **Android Store Screenshots** emulator workflow after verification on
 Android-related pull requests, main pushes, release tags, and manual builds.
 It installs the debug APK built from the same commit as the signed release,
 navigates through **real Persian UI controls** (not direct intents to private
-Activities), and uploads the `android-real-screenshots` artifact with **10
-PNG screenshots** from all **six currently reachable native/in-app views**:
+Activities), and uploads the `android-real-screenshots` artifact with **12
+PNG screenshots** from all **seven currently reachable native/in-app views**:
 
 | Screen | Artifact files |
 | --- | --- |
