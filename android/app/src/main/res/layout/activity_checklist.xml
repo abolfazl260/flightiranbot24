@@ -162,8 +162,8 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_marginEnd="14dp"
                 android:id="@+id/checklistHealthIcon"
                 android:contentDescription="@null"
@@ -201,8 +201,8 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
                 android:layout_marginEnd="14dp"
                 android:id="@+id/checklistEssentialsIcon"
                 android:contentDescription="@null"
