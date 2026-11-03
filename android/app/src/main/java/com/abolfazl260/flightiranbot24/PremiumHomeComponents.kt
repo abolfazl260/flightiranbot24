@@ -225,7 +225,7 @@ internal fun PremiumTravelServices(
                     Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_VISA) }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                PremiumServiceTile("اطلاعات سفر", R.drawable.home_travel,
+                PremiumServiceTile("خدمات سفر", R.drawable.home_travel,
                     Modifier.weight(1f)) { onSelect(HomeDestination.TELEGRAM_USEFUL) }
                 PremiumServiceTile("پشتیبانی", R.drawable.home_support,
                     Modifier.weight(1f)) { onSelect(HomeDestination.SUPPORT) }
@@ -247,7 +247,6 @@ private fun PremiumServiceTile(
         // into the image; the entire artwork stays a tappable target.
         modifier = modifier.semantics { contentDescription = title },
         shape = RoundedCornerShape(19.dp),
-        border = androidx.compose.foundation.BorderStroke(1.dp, Outline),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
