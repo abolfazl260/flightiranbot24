@@ -173,7 +173,7 @@ The release pipeline checks the endpoint for fresh real ticket data before
 creating the signed release. Do not put either Cloudflare token in the APK.
 
 The visa/airport routes are available for future native screens. At present,
-the Android airport list is bundled offline; visa uses Telegram handoff.
+the Android airport list is bundled offline; Android visa discovery/details read these public D1 endpoints in native Compose. Only the explicit visa-change alert CTA hands off to Telegram.
 
 ## Limits, operational notes and troubleshooting
 
