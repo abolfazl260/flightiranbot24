@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -16,6 +17,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -36,11 +38,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.runtime.remember
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -184,7 +191,15 @@ internal fun TicketPricesScreen(
                                     FilterChip(
                                         selected = route.city == active.city,
                                         onClick = { selectedOrigin = route.city; search = "" },
-                                        label = { Text(route.city) },
+                                        label = {
+                                            Row(
+                                                horizontalArrangement = Arrangement.spacedBy(6.dp),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                            ) {
+                                                FareCityIcon(city = route.city, size = 26.dp)
+                                                Text(route.city)
+                                            }
+                                        },
                                     )
                                 }
                             }
@@ -345,11 +360,17 @@ private fun FareCard(fare: TicketFare) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                Text(
-                    fare.destination,
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(10.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    FareCityIcon(city = fare.destination, size = 48.dp)
+                    Text(
+                        fare.destination,
+                        style = MaterialTheme.typography.titleMedium,
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
                 val change = when {
                     percent == null -> "بدون مقایسه"
                     percent < -0.05 -> "↓ " + number.format(abs(percent)) + "٪"
@@ -405,5 +426,50 @@ private fun FareCard(fare: TicketFare) {
                 )
             }
         }
+    }
+}
+
+/**
+ * One resource per city, shared by origin chips and destination fare cards.
+ * When the corresponding drawable-nodpi WebP asset has not been installed yet,
+ * it is deliberately omitted rather than showing a broken placeholder.
+ */
+@Composable
+private fun FareCityIcon(city: String, size: Dp) {
+    val resourceName = fareCityIconName(city) ?: return
+    val context = LocalContext.current
+    val drawableId = remember(context, resourceName) {
+        @Suppress("DiscouragedApi")
+        context.resources.getIdentifier(resourceName, "drawable", context.packageName)
+    }
+    if (drawableId != 0) {
+        Image(
+            painter = painterResource(drawableId),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.size(size),
+        )
+    }
+}
+
+internal fun fareCityIconName(city: String): String? {
+    val normalized = city.trim()
+        .replace('ي', 'ی')
+        .replace('ك', 'ک')
+        .replace(" ", "")
+        .replace("‌", "")
+
+    return when (normalized) {
+        "زاهدان" -> "price_city_zahedan"
+        "ارومیه" -> "price_city_urmia"
+        "آبادان" -> "price_city_abadan"
+        "عسلویه" -> "price_city_assaluyeh"
+        "بوشهر" -> "price_city_bushehr"
+        "یزد" -> "price_city_yazd"
+        "کرمانشاه" -> "price_city_kermanshah"
+        "گوانجو" -> "price_city_guangzhou"
+        "مسکو(شرمتیوو)", "مسکوشرمتیوو" -> "price_city_moscow_sheremetyevo"
+        "قشم" -> "price_city_qeshm"
+        else -> null
     }
 }
