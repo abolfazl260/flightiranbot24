@@ -38,8 +38,8 @@
     <string name="airport_item">%1$s · %2$s (%3$s)\nمنطقه زمانی: %4$s</string>
     <string name="airports_unavailable">فهرست فرودگاه‌ها در دسترس نیست.</string>
     <string name="no_airports">فرودگاهی با این مشخصات پیدا نشد.</string>
-    <string name="checklist_title">چک‌لیست سفر من</string>
-    <string name="checklist_note">کارهای سفر را مرحله‌به‌مرحله انجام بده؛ انتخاب‌های تو روی همین دستگاه حفظ می‌شوند.</string>
+    <string name="checklist_title">چک‌لیست سفر</string>
+    <string name="checklist_note">هیچ کار مهمی را قبل از سفر فراموش نکن؛ انتخاب‌ها روی همین دستگاه ذخیره می‌شوند.</string>
     <string name="check_passport">اعتبار گذرنامه و تاریخ انقضا</string>
     <string name="check_visa">ویزای مقصد و شرایط ورود</string>
     <string name="check_tickets">بلیت و شماره رزرو پرواز</string>
