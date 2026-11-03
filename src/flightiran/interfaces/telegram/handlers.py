@@ -71,6 +71,8 @@ from .useful_content import (
 from .visa_flow import (
     handle_visa_callback,
     open_visa_menu,
+    open_visa_route,
+    parse_visa_start_payload,
     visa_command,
     visa_search_text,
 )
@@ -245,12 +247,18 @@ async def start_handler(
     # Unknown payloads use the ordinary menu and never run privileged actions.
     args = getattr(context, "args", None) or ()
     entrypoint = args[0] if args else ""
+    visa_route = parse_visa_start_payload(entrypoint)
     if update.message:
         if entrypoint == "visa":
             await dependencies.audit.record("visa.opened", user_id=registered.id)
             await _load_visa_passport(context, registered.id, dependencies)
             await open_visa_menu(
                 update, context, dependencies.visa_catalog, language, edit=False
+            )
+        elif visa_route is not None:
+            await dependencies.audit.record("visa.opened", user_id=registered.id)
+            await open_visa_route(
+                update, context, dependencies.visa_catalog, language, *visa_route
             )
         elif entrypoint == "alerts":
             if dependencies.price_alert_service is None:
