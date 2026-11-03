@@ -84,13 +84,15 @@ class ChecklistProgressTest {
     }
 
     @Test
-    fun checklistRowsHaveMinimalIconsAndSpaciousTouchTargets() {
+    fun checklistRowsStayCompactWithoutShrinkingIcons() {
         val activity = Robolectric.buildActivity(ChecklistActivity::class.java).setup().get()
         val density = activity.resources.displayMetrics.density
         for (id in ChecklistActivity.VIEW_IDS) {
             val item = activity.findViewById<CheckBox>(id)
-            assertTrue(item.minimumHeight >= (86 * density).toInt())
-            assertTrue((item.layoutParams as android.widget.LinearLayout.LayoutParams).topMargin >= (16 * density).toInt())
+            assertTrue(item.minimumHeight >= (68 * density).toInt())
+            assertTrue(item.minimumHeight <= (72 * density).toInt())
+            assertTrue((item.layoutParams as android.widget.LinearLayout.LayoutParams).topMargin >= (8 * density).toInt())
+            assertTrue((item.layoutParams as android.widget.LinearLayout.LayoutParams).topMargin <= (10 * density).toInt())
             assertTrue(item.compoundDrawablesRelative[2] != null)
             assertTrue(item.compoundDrawablesRelative[2].bounds.width() >= (52 * density).toInt() - 1)
         }
