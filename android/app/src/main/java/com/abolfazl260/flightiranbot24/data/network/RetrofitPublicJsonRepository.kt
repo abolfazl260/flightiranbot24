@@ -48,6 +48,6 @@ internal class RetrofitPublicJsonRepository(
     private companion object {
         // A literal /api/v1 prefix provides a stable mount point while API-001
         // defines the actual endpoints. No app screen calls this yet.
-        val API_PATH = Regex("""api/v1/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+""")
+        val API_PATH = Regex("""(?:api/v1/(?:[A-Za-z0-9_-]+/)*[A-Za-z0-9_-]+|api/v1/visa/list\?passport=[A-Z]{2}|api/v1/visa/rule\?passport=[A-Z]{2}&destination=[A-Z]{2})""")
     }
 }
