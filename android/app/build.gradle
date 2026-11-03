@@ -123,6 +123,12 @@ android {
 
     testOptions {
         unitTests.includeAndroidResources = true
+        unitTests.all {
+            // Robolectric defaults to repo1.maven.org, which can return 429 in CI.
+            // Use Maven Central's canonical host for instrumented Android JARs.
+            systemProperty 'robolectric.dependency.repo.url', 'https://repo.maven.apache.org/maven2'
+            systemProperty 'robolectric.dependency.repo.id', 'mavenCentral'
+        }
     }
 }
 
