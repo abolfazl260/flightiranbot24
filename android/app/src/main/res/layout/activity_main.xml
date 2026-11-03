@@ -69,13 +69,5 @@
             android:textColor="@color/slate"
             android:textSize="14sp" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="@string/notice"
-            android:textColor="@color/slate"
-            android:textSize="13sp" />
     </LinearLayout>
 </ScrollView>
