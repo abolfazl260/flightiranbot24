@@ -157,6 +157,7 @@ PNG screenshots** from all **seven currently reachable native/in-app views**:
 | Offline checklist | `04-checklist.png`, `04-checklist-bottom.png` |
 | Iran FIDS in-app WebView | `05-iran-flights.png` |
 | In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
+| Native useful travel directory | `07-travel-websites.png`, `07-travel-websites-bottom.png` |
 
 The screenshot job checks the foreground Activity for navigated screens,
 verifies visible native text where available, validates the exact image
