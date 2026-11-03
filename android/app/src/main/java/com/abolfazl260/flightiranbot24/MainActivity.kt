@@ -256,9 +256,10 @@ private fun HomeBrandBar() {
 }
 
 /**
- * One transparent PNG atlas keeps seven colorful 3D icons consistent and
- * avoids repeated resource decodes. Each horizontal 80px slot holds one icon;
- * no colored backing, frame, or text is baked into the artwork.
+ * The transparent WebP atlas contains seven crisp 160px 3D icons
+ * downsampled from high-resolution originals. Render each at 52dp with
+ * high-quality filtering; never upscale the previous 80px sprite.
+ * No colored backing, frame, or text is baked into the artwork.
  */
 @Composable
 private fun HomeServiceRow(destination: HomeDestination, onClick: () -> Unit) {
