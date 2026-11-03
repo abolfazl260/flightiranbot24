@@ -306,8 +306,23 @@ capture 07-travel-websites.png
 scroll_down 2
 capture 07-travel-websites-bottom.png
 
-# All seven reachable in-app screens, plus scrolled variants for longer screens.
-# Offline airport directory is intentionally excluded: it is currently disabled.
+# Open the published airport guide via the native Services row, not a
+# test-only intent. Confirm the indexed IKA content is visible, then open it.
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "خدمات"
+wait_for_text "راهنمای فرودگاه‌ها"
+tap_service_row "راهنمای فرودگاه‌ها"
+wait_for_activity AirportDirectoryActivity
+wait_for_text "امام خمینی تهران"
+capture 08-airports.png
+tap_service_row "امام خمینی تهران"
+wait_for_text "بار مجاز و قوانین حمل بار"
+capture 08-airport-ika.png
+tap_service_row "بار مجاز و قوانین حمل بار"
+capture 08-airport-ika-baggage.png
+
+# All eight reachable native/in-app views and their scrolled/detail variants.
 python3 - <<'PY'
 from pathlib import Path
 import struct
@@ -321,6 +336,7 @@ expected = {
     "05-iran-flights.png",
     "06-privacy.png", "06-privacy-bottom.png",
     "07-travel-websites.png", "07-travel-websites-bottom.png",
+    "08-airports.png", "08-airport-ika.png", "08-airport-ika-baggage.png",
 }
 actual = {p.name for p in folder.glob("*.png")}
 assert actual == expected, f"Missing: {expected - actual}; unexpected: {actual - expected}"

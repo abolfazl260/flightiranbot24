@@ -22,8 +22,12 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   and cards, and a lifecycle-aware HomeViewModel with StateFlow states.
 - Pure Kotlin domain interfaces and an explicit, testable AppContainer
   dependency-injection root protect data and presentation boundaries.
-- The **offline airport directory** is now a Compose LazyColumn that prefers
-  a Room snapshot when populated and falls back to bundled offline records.
+- The **airport guide** is a native, Persian-only Compose directory.
+  It shows only IATA airports enabled in the versioned GitHub JSON index;
+  each airport displays only reviewed, published sections and uses on-demand
+  HTTPS with the bundled asset fallback. This does not constitute a live
+  flight-status provider. The existing Room airport cache remains separate
+  from the content guide.
   The **offline checklist** remains a Java screen, with a progress indicator,
   confirmation before reset, and its existing SharedPreferences preserved.
 - Visa and support handoffs use their configured external links. The useful
@@ -146,8 +150,8 @@ reusable **Android Store Screenshots** emulator workflow after verification on
 Android-related pull requests, main pushes, release tags, and manual builds.
 It installs the debug APK built from the same commit as the signed release,
 navigates through **real Persian UI controls** (not direct intents to private
-Activities), and uploads the `android-real-screenshots` artifact with **12
-PNG screenshots** from all **seven currently reachable native/in-app views**:
+Activities), and uploads the `android-real-screenshots` artifact with **15
+PNG screenshots** from all **eight currently reachable native/in-app views**:
 
 | Screen | Artifact files |
 | --- | --- |
@@ -158,6 +162,7 @@ PNG screenshots** from all **seven currently reachable native/in-app views**:
 | Iran FIDS in-app WebView | `05-iran-flights.png` |
 | In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
 | Native useful travel directory | `07-travel-websites.png`, `07-travel-websites-bottom.png` |
+| Airport guide: index, IKA details, baggage section | `08-airports.png`, `08-airport-ika.png`, `08-airport-ika-baggage.png` |
 
 The screenshot job checks the foreground Activity for navigated screens,
 verifies visible native text where available, validates the exact image
@@ -172,3 +177,26 @@ The FIDS page similarly depends on its third-party website. Review these
 images before submitting any of them to an app store. The intentionally
 disabled airport directory and screens launched in external Telegram/browser
 apps are not presented as working in-app screens.
+
+
+## Airport content guide
+
+The Home airport card and the Services airport row open the native
+`AirportDirectoryActivity`. The footer remains visible. A versioned
+`data/airports/airport-index.v1.json` enables only airports with published
+content. The detail page is fetched **only after tapping the airport**;
+unpublished draft sections are invisible. Android bundles the exact same
+GitHub JSON under `data/airports/` for offline fallback, with a visible
+notice when fallback is used.
+
+The initial verified airport is IKA. Its static flight-status card links to
+the official airport website: it is not a live feed. Images/videos have
+safe external HTTPS actions but no untrusted embedded HTML playback.
+An unsupported future block type requires a compatible app release.
+The catalog is edited **directly in GitHub**, never through a mobile admin UI.
+
+Run unit checks with
+`gradle --no-daemon -p android :app:testDebugUnitTest`.
+The screenshot CI captures the airport index and IKA details from the
+real RTL app UI. Other airports can be enabled solely by changing their
+published JSON content after verification.
