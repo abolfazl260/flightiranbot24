@@ -9,6 +9,15 @@ public final class BotLinks {
     public static final String USEFUL = BOT + "?start=useful";
     public static final String SUPPORT = "https://t.me/Advertio_support";
 
+    /** The route is encoded in a Telegram-approved, strictly bounded /start payload. */
+    public static String visaWatch(String passport, String destination) {
+        if (passport == null || destination == null ||
+                !passport.matches("[A-Z]{2}") || !destination.matches("[A-Z]{2}")) {
+            throw new IllegalArgumentException("Invalid visa country code");
+        }
+        return BOT + "?start=visa_" + passport + "_" + destination;
+    }
+
     private BotLinks() {
     }
 }
