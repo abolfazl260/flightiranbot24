@@ -36,9 +36,9 @@ open_launcher() {
 wait_for_activity() {
   local expected="$1"
   for _ in $(seq 1 30); do
-    if adb shell dumpsys activity activities |
-       grep -E '(topResumedActivity|mResumedActivity)' |
-       grep -Fq "$activity_prefix.$expected"; then
+    local resumed
+    resumed="$(adb shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' || true)"
+    if grep -Fq "$activity_prefix.$expected" <<< "$resumed"; then
       return 0
     fi
     sleep 1
@@ -209,7 +209,9 @@ wait_for_text() {
   local expected="$1"
   for _ in $(seq 1 15); do
     adb shell uiautomator dump /sdcard/flightiran-assert.xml >/dev/null 2>&1 || true
-    if adb exec-out cat /sdcard/flightiran-assert.xml | grep -Fq "$expected"; then
+    local xml
+    xml="$(adb exec-out cat /sdcard/flightiran-assert.xml || true)"
+    if grep -Fq "$expected" <<< "$xml"; then
       return 0
     fi
     sleep 1
@@ -276,6 +278,8 @@ wait_for_text "خدمات بیشتر"
 tap_service_row "اطلاعات پرواز ایران"
 wait_for_activity IranFlightsActivity
 wait_for_text "وب‌سایت رسمی FIDS در داخل برنامه"
+# Allow the third-party WebView to render (or display its genuine error).
+sleep 8
 capture 05-iran-flights.png
 
 open_launcher
