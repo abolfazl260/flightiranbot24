@@ -45,7 +45,6 @@ import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.IntOffset
@@ -223,13 +222,6 @@ internal fun TravelHomeScreen(
                         }
                 }
             }
-            Text(
-                stringResource(R.string.notice),
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Start,
-                modifier = Modifier.fillMaxWidth().padding(bottom = 12.dp),
-            )
         }
     }
 }

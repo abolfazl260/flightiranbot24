@@ -3,7 +3,6 @@
     <string name="app_name">Flight Iran Bot 24</string>
     <string name="welcome_title">سفر، ساده‌تر از همیشه</string>
     <string name="welcome_description">قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان.</string>
-    <string name="notice">قیمت‌های بلیت قطعی نیستند و پیش از رزرو باید تأیید شوند. برخی خدمات هنوز در تلگرام ارائه می‌شوند.</string>
     <string name="home_offline_heading">برای سفر آماده شو</string>
     <string name="home_online_heading">خدمات بیشتر</string>
     <string name="open_bot">ورود به دستیار سفر</string>
