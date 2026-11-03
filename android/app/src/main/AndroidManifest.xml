@@ -15,6 +15,7 @@
         <activity android:name=".IranFlightsActivity" android:exported="false" />
         <activity android:name=".ChecklistActivity" android:exported="false" />
         <activity android:name=".PrivacyPolicyActivity" android:exported="false" />
+        <activity android:name=".TravelWebsitesActivity" android:exported="false" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
