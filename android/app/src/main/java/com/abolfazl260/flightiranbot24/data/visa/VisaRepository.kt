@@ -1,14 +1,18 @@
 package com.abolfazl260.flightiranbot24.data.visa
 
-import com.abolfazl260.flightiranbot24.domain.network.NetworkResult
-import com.abolfazl260.flightiranbot24.domain.network.PublicJsonRepository
+import android.content.Context
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import java.net.URI
 import java.time.LocalDate
-import java.time.OffsetDateTime
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withContext
 
-/** Data from the existing passport-specific public JSON projection. No eligibility is inferred. */
+/** Frozen, source-attributed rules bundled in the APK; there is no visa network request. */
 internal data class VisaRule(
     val passport: String,
     val destination: String,
@@ -20,7 +24,14 @@ internal data class VisaRule(
     val sourceUrl: String?,
     val verifiedOn: String?,
     val sourceLevel: String?,
-    val publishedAt: String?,
+    val destinationUpdatedOn: String?,
+)
+
+internal data class OfflineVisaCatalog(
+    val rules: List<VisaRule>,
+    val passportCodes: List<String>,
+    val sourceDataModifiedOn: String?,
+    val attribution: String,
 )
 
 internal enum class VisaStatus(val persianLabel: String) {
@@ -51,62 +62,48 @@ internal enum class VisaStatus(val persianLabel: String) {
     }
 }
 
-internal enum class VisaFailure { UNCONFIGURED, OFFLINE, TIMEOUT, NOT_FOUND, SERVER, INVALID }
+internal enum class VisaFailure { NOT_FOUND, INVALID }
 internal sealed interface VisaFetch<out T> {
     data class Ready<T>(val value: T) : VisaFetch<T>
     data class Error(val reason: VisaFailure) : VisaFetch<Nothing>
 }
 
+/** Injected bundle reader lets JVM tests verify everything without a network or Android device. */
+internal fun interface VisaBundleReader {
+    fun read(file: String): String
+}
+
+internal class AndroidVisaBundleReader(private val context: Context) : VisaBundleReader {
+    override fun read(file: String): String {
+        require(file == "manifest.v1.json" || Regex("shard-[0-9]{2}\\.json").matches(file))
+        return context.assets.open("visa/$file").bufferedReader(Charsets.UTF_8).use { it.readText() }
+    }
+}
+
 /**
- * Consumes the same published JSON originally indexed from the visa destination data.
- * The generic network client's URL validator allows ONLY these two fixed, bounded query forms.
+ * Fixed 20-shard compact snapshot extracted from the upstream destination JSON files.
+ * We parse all shards on an IO dispatcher, retain only one passport's 199 rules, and
+ * cache that passport in memory. No Cloudflare, bot SQLite or runtime provider access.
  */
-internal class VisaRepository(private val api: PublicJsonRepository<JsonObject>?) {
+internal class VisaRepository(private val reader: VisaBundleReader) {
     private val code = Regex("[A-Z]{2}")
+    private val lock = Mutex()
+    private var cachedPassport: String? = null
+    private var cachedCatalog: OfflineVisaCatalog? = null
 
-    suspend fun list(passport: String): VisaFetch<List<VisaRule>> {
-        if (!code.matches(passport)) return VisaFetch.Error(VisaFailure.INVALID)
-        return request("api/v1/visa/list?passport=" + passport) { payload ->
-            if (payload.string("passport") != passport) return@request null
-            val entries = payload.get("rules")?.takeIf { it.isJsonArray }?.asJsonArray ?: return@request null
-            if (entries.size() == 0 || entries.size() > 250) return@request null
-            val parsed = entries.map { item ->
-                item.takeIf { it.isJsonObject }?.asJsonObject?.let {
-                    parseRule(it, passport, null)
-                } ?: return@request null
-            }
-            if (parsed.map { it.destination }.distinct().size != parsed.size) return@request null
-            parsed
-        }
-    }
-
-    suspend fun detail(passport: String, destination: String): VisaFetch<VisaRule> {
-        if (!code.matches(passport) || !code.matches(destination)) {
-            return VisaFetch.Error(VisaFailure.INVALID)
-        }
-        return request("api/v1/visa/rule?passport=" + passport + "&destination=" + destination) {
-            parseRule(it, passport, destination)
-        }
-    }
-
-    private suspend fun <T> request(
-        path: String,
-        parser: (JsonObject) -> T?,
-    ): VisaFetch<T> {
-        val client = api ?: return VisaFetch.Error(VisaFailure.UNCONFIGURED)
+    suspend fun list(passport: String): VisaFetch<OfflineVisaCatalog> {
+        if (!code.matches(passport)) return VisaFetch.Error(VisaFailure.NOT_FOUND)
         return try {
-            when (val response = client.fetch(path)) {
-                is NetworkResult.Success ->
-                    parser(response.value)?.let { VisaFetch.Ready(it) }
-                        ?: VisaFetch.Error(VisaFailure.INVALID)
-                is NetworkResult.HttpFailure -> when (response.statusCode) {
-                    404 -> VisaFetch.Error(VisaFailure.NOT_FOUND)
-                    503 -> VisaFetch.Error(VisaFailure.SERVER)
-                    else -> VisaFetch.Error(VisaFailure.SERVER)
+            withContext(Dispatchers.IO) {
+                lock.withLock {
+                    if (cachedPassport == passport && cachedCatalog != null) {
+                        return@withLock VisaFetch.Ready(cachedCatalog!!)
+                    }
+                    val catalog = readCatalog(passport) ?: return@withLock VisaFetch.Error(VisaFailure.NOT_FOUND)
+                    cachedPassport = passport
+                    cachedCatalog = catalog
+                    VisaFetch.Ready(catalog)
                 }
-                NetworkResult.Timeout -> VisaFetch.Error(VisaFailure.TIMEOUT)
-                NetworkResult.ConnectionFailure -> VisaFetch.Error(VisaFailure.OFFLINE)
-                else -> VisaFetch.Error(VisaFailure.INVALID)
             }
         } catch (cancel: CancellationException) {
             throw cancel
@@ -115,62 +112,135 @@ internal class VisaRepository(private val api: PublicJsonRepository<JsonObject>?
         }
     }
 
-    internal fun parseRule(
-        payload: JsonObject,
+    suspend fun detail(passport: String, destination: String): VisaFetch<VisaRule> {
+        if (!code.matches(destination)) return VisaFetch.Error(VisaFailure.NOT_FOUND)
+        return when (val result = list(passport)) {
+            is VisaFetch.Error -> result
+            is VisaFetch.Ready -> result.value.rules.find { it.destination == destination }
+                ?.let { VisaFetch.Ready(it) } ?: VisaFetch.Error(VisaFailure.NOT_FOUND)
+        }
+    }
+
+    private fun readCatalog(passport: String): OfflineVisaCatalog? {
+        val manifest = JsonParser.parseString(reader.read("manifest.v1.json")).asJsonObject
+        if (manifest.number("schema_version") != 1 ||
+            manifest.string("license") != "CC-BY-4.0") error("Unsupported offline visa bundle")
+        val passports = manifest.get("passport_codes")?.asJsonArray?.map { it.asString }
+            ?: error("Missing passport registry")
+        val expectedPassportCount = manifest.number("passports") ?: error("Missing passport count")
+        val expectedDestinations = manifest.number("destinations") ?: error("Missing destination count")
+        val expectedRows = manifest.number("rows") ?: error("Missing row count")
+        if (passports.size != expectedPassportCount || passports.toSet().size != passports.size ||
+            passports.any { !code.matches(it) } || expectedDestinations !in 1..250 ||
+            expectedPassportCount !in 1..250 || expectedRows != expectedDestinations * expectedPassportCount
+        ) error("Invalid offline visa coverage")
+        if (passport !in passports) return null
+        val shards = manifest.get("shards")?.asJsonArray?.map { it.asString }
+            ?: error("Missing offline shards")
+        if (shards.isEmpty() || shards.size > 40 || shards.size != shards.distinct().size ||
+            shards.any { !Regex("shard-[0-9]{2}\\.json").matches(it) }
+        ) error("Invalid bundle file list")
+
+        val results = ArrayList<VisaRule>(expectedDestinations)
+        val destinations = HashSet<String>()
+        var rowsSeen = 0
+        for (shard in shards) {
+            val payload = JsonParser.parseString(reader.read(shard)).asJsonObject
+            if (payload.number("version") != 1) error("Invalid offline shard version")
+            val entries = payload.get("destinations")?.asJsonArray ?: error("Missing destination rows")
+            for (entry in entries) {
+                if (!entry.isJsonObject) error("Malformed destination")
+                val destination = entry.asJsonObject
+                val destinationCode = destination.string("destination") ?: error("Missing destination ISO")
+                if (!code.matches(destinationCode) || !destinations.add(destinationCode)) {
+                    error("Duplicate/invalid visa destination")
+                }
+                val countryName = destination.string("country_name") ?: error("Missing country name")
+                val updatedOn = safeDate(destination.string("updated_on"))
+                val rules = destination.get("rules")?.asJsonArray ?: error("Missing passport matrix")
+                if (rules.size() != expectedPassportCount) error("Incomplete passport matrix")
+                rowsSeen += rules.size()
+                val matches = rules.mapNotNull {
+                    val row = it.takeIf { value -> value.isJsonArray }?.asJsonArray
+                        ?: error("Malformed visa row")
+                    if (row.size() != 7) error("Invalid visa rule tuple")
+                    val rowPassport = row.text(0) ?: error("Missing row passport")
+                    if (!code.matches(rowPassport)) error("Invalid row passport")
+                    if (rowPassport != passport) null else parseRow(
+                        row, passport, destinationCode, countryName, updatedOn
+                    )
+                }
+                if (matches.size != 1) error("Missing/duplicate passport entry")
+                results.add(matches.single())
+            }
+        }
+        if (results.size != expectedDestinations || rowsSeen != expectedRows) {
+            error("Incomplete offline visa snapshot")
+        }
+        return OfflineVisaCatalog(
+            rules = results.sortedBy { it.destination },
+            passportCodes = passports.sorted(),
+            sourceDataModifiedOn = safeDate(manifest.string("source_data_modified_on")),
+            attribution = manifest.string("attribution") ?: error("Missing attribution"),
+        )
+    }
+
+    private fun parseRow(
+        row: JsonArray,
         passport: String,
-        destination: String?,
-    ): VisaRule? {
-        val actualPassport = payload.string("passport") ?: return null
-        val actualDestination = payload.string("destination") ?: return null
-        if (actualPassport != passport || !code.matches(actualDestination) ||
-            (destination != null && actualDestination != destination)
-        ) return null
-        val country = payload.string("country_name") ?: return null
-        val rawStatus = payload.string("status") ?: return null
-        val stay = payload.get("stay_days")?.let {
-            if (it.isJsonNull) null
-            else if (it.isJsonPrimitive && it.asJsonPrimitive.isNumber) {
-                runCatching { it.asInt }.getOrNull()?.takeIf { n -> n in 1..36500 }
-                    ?: return null
-            } else return null
-        }
-        val verified = payload.string("verified_on")?.takeIf {
-            runCatching { LocalDate.parse(it) }.isSuccess
-        }
-        val published = payload.string("published_at")?.takeIf {
-            runCatching { OffsetDateTime.parse(it) }.isSuccess
+        destination: String,
+        countryName: String,
+        updatedOn: String?,
+    ): VisaRule {
+        val status = row.text(1) ?: "unknown"
+        val stay = row.get(2).takeUnless { it.isJsonNull }?.let {
+            if (!it.isJsonPrimitive || !it.asJsonPrimitive.isNumber) error("Invalid stay days")
+            it.asInt.takeIf { value -> value in 1..36500 }
+                ?: error("Invalid stay days")
         }
         return VisaRule(
-            passport = actualPassport,
-            destination = actualDestination,
-            upstreamCountryName = country,
-            status = VisaStatus.from(rawStatus),
-            rawStatus = rawStatus,
+            passport = passport,
+            destination = destination,
+            upstreamCountryName = countryName,
+            status = VisaStatus.from(status),
+            rawStatus = status,
             stayDays = stay,
-            notes = payload.string("notes"),
-            sourceUrl = safeSource(payload.string("source_url")),
-            verifiedOn = verified,
-            sourceLevel = payload.string("source_level"),
-            publishedAt = published,
+            notes = row.text(3),
+            sourceUrl = safeSource(row.text(4)),
+            verifiedOn = safeDate(row.text(5)),
+            sourceLevel = row.text(6),
+            destinationUpdatedOn = updatedOn,
         )
     }
 
     companion object {
         private fun JsonObject.string(key: String): String? {
             val value = get(key) ?: return null
-            if (!value.isJsonPrimitive || !value.asJsonPrimitive.isString) return null
+            if (value.isJsonNull || !value.isJsonPrimitive || !value.asJsonPrimitive.isString) return null
             return value.asString.trim().takeIf { it.isNotBlank() }
         }
 
+        private fun JsonObject.number(key: String): Int? {
+            val value = get(key) ?: return null
+            if (!value.isJsonPrimitive || !value.asJsonPrimitive.isNumber) return null
+            return runCatching { value.asInt }.getOrNull()
+        }
+
+        private fun JsonArray.text(index: Int): String? {
+            val value = get(index)
+            if (value.isJsonNull || !value.isJsonPrimitive || !value.asJsonPrimitive.isString) return null
+            return value.asString.trim().takeIf { it.isNotBlank() }
+        }
+
+        private fun safeDate(value: String?): String? =
+            value?.takeIf { runCatching { LocalDate.parse(it) }.isSuccess }
+
         fun safeSource(value: String?): String? {
-            if (value.isNullOrBlank() || value.length > 900 ||
-                value.any { it.code < 32 }
-            ) return null
+            if (value.isNullOrBlank() || value.length > 900 || value.any { it.code < 32 }) return null
             return runCatching {
                 val uri = URI(value)
                 value.takeIf {
-                    uri.scheme.equals("https", ignoreCase = false) &&
-                        !uri.host.isNullOrBlank() && uri.rawUserInfo == null
+                    uri.scheme == "https" && !uri.host.isNullOrBlank() && uri.rawUserInfo == null
                 }
             }.getOrNull()
         }
