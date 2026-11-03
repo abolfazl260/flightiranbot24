@@ -234,6 +234,28 @@ internal fun VisaGuideScreen(
                         }
                     }
                 }
+                if (search.isBlank()) {
+                    item {
+                        Text("مقاصد پرطرفدار", style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold)
+                    }
+                    item {
+                        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            VisaCountries.popular.chunked(3).forEach { row ->
+                                Row(modifier = Modifier.fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                                    row.forEach { code ->
+                                        VisaDestinationCard(
+                                            code = code,
+                                            onClick = { onDestination(code) },
+                                            modifier = Modifier.weight(1f),
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 when (val result = state.catalog) {
                     VisaLoad.Loading -> item { TravelLoadingState("در حال دریافت فهرست کشورها…") }
                     VisaLoad.Idle -> item { TravelLoadingState() }
@@ -242,35 +264,7 @@ internal fun VisaGuideScreen(
                     }
                     is VisaLoad.Ready -> {
                         val countries = result.data
-                        val indexed = countries.associateBy { it.destination }
                         if (search.isBlank()) {
-                            item {
-                                Text(
-                                    "مقاصد پرطرفدار",
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontWeight = FontWeight.Bold,
-                                )
-                            }
-                            item {
-                                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                                    VisaCountries.popular.filter(indexed::containsKey)
-                                        .chunked(3).forEach { row ->
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                horizontalArrangement = Arrangement.spacedBy(10.dp),
-                                            ) {
-                                                row.forEach { code ->
-                                                    VisaDestinationCard(
-                                                        rule = indexed.getValue(code),
-                                                        onClick = { onDestination(code) },
-                                                        modifier = Modifier.weight(1f),
-                                                    )
-                                                }
-                                                repeat(3 - row.size) { Spacer(Modifier.weight(1f)) }
-                                            }
-                                        }
-                                }
-                            }
                             item {
                                 VisaInfoBox("کشور مقصد را جست‌وجو کنید یا از فهرست مقاصد پرطرفدار انتخاب کنید. اطلاعات ویزا ممکن است تغییر کند.")
                             }
@@ -443,7 +437,7 @@ private fun VisaHero(title: String, subtitle: String) {
 }
 
 @Composable
-private fun VisaDestinationCard(rule: VisaRule, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun VisaDestinationCard(code: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         onClick = onClick,
         modifier = modifier.heightIn(min = 112.dp),
@@ -456,9 +450,9 @@ private fun VisaDestinationCard(rule: VisaRule, onClick: () -> Unit, modifier: M
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Text(VisaCountries.flag(rule.destination), style = MaterialTheme.typography.headlineSmall)
+            Text(VisaCountries.flag(code), style = MaterialTheme.typography.headlineSmall)
             Text(
-                VisaCountries.name(rule.destination),
+                VisaCountries.name(code),
                 style = MaterialTheme.typography.bodyMedium,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
