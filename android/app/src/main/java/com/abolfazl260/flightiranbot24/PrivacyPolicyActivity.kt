@@ -132,9 +132,19 @@ internal fun PrivacyPolicyScreen(
             stringResource(R.string.privacy_telegram_body),
         ),
         PrivacySection(
+            stringResource(R.string.privacy_security_title),
+            stringResource(R.string.privacy_security_subtitle),
+            stringResource(R.string.privacy_security_body),
+        ),
+        PrivacySection(
             stringResource(R.string.privacy_deletion_title),
             stringResource(R.string.privacy_deletion_subtitle),
             stringResource(R.string.privacy_deletion_body),
+        ),
+        PrivacySection(
+            stringResource(R.string.privacy_changes_title),
+            stringResource(R.string.privacy_changes_subtitle),
+            stringResource(R.string.privacy_changes_body),
         ),
     )
 
@@ -198,6 +208,13 @@ internal fun PrivacyPolicyScreen(
                 onOpenAppSettings = onOpenAppSettings,
             )
             PrivacySupportCard(onSupport)
+            Text(
+                text = stringResource(R.string.privacy_last_updated),
+                modifier = Modifier.fillMaxWidth().padding(top = 6.dp),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+                textAlign = TextAlign.Start,
+            )
             Text(
                 text = stringResource(R.string.privacy_disclaimer),
                 modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
@@ -324,7 +341,7 @@ private fun PrivacyExpandableCard(
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
-                        text = listOf("۱", "۲", "۳", "۴", "۵")[index],
+                        text = listOf("۱", "۲", "۳", "۴", "۵", "۶", "۷")[index],
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Bold,
                     )
