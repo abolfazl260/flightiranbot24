@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "iata": "DEL",
+  "sections": [
+    {
+      "id": "baggage-rules",
+      "title_fa": "بار مجاز و قوانین حمل بار",
+      "icon": "luggage",
+      "order": 10,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پروازها",
+      "icon": "plane-takeoff",
+      "order": 20,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "traveler-experiences",
+      "title_fa": "تجربه کاربران",
+      "icon": "message-square",
+      "order": 30,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "airport-map",
+      "title_fa": "نقشه فرودگاه",
+      "icon": "map",
+      "order": 40,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "airport-videos",
+      "title_fa": "ویدیو فرودگاه",
+      "icon": "video",
+      "order": 50,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    }
+  ]
+}

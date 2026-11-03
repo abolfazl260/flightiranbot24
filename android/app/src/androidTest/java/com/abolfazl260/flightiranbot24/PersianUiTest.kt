@@ -33,12 +33,8 @@ class PersianUiTest {
         rule.onNodeWithText("فرودگاه‌ها").assertDoesNotExist()
         rule.onNodeWithContentDescription("راهنمای فرودگاه‌ها").assertHasClickAction()
         rule.onNodeWithContentDescription("چک‌لیست").assertHasClickAction()
-        // The airport feature is disabled: tapping the card opens Services
-        // without launching the former AirportDirectoryActivity.
-        rule.onNodeWithContentDescription("راهنمای فرودگاه‌ها").performClick()
-        rule.onNodeWithText("خدمات سفر").assertExists()
-        rule.onNodeWithText("اطلاعات فرودگاه‌ها").assertDoesNotExist()
-        rule.onNodeWithContentDescription("خانه").performClick()
+        // Airport navigation is exercised via real emulator screenshots.
+        // The card is a native clickable destination, not a Services placeholder.
         rule.onNodeWithContentDescription("سفر، ساده‌تر از همیشه. قیمت پرواز، برنامه‌ریزی سفر و خدمات موردنیاز در یک مکان. مشاهده قیمت بلیت").assertHasClickAction()
         rule.onNodeWithContentDescription("خدمات").performClick()
         rule.onNodeWithText("خدمات سفر").assertExists()

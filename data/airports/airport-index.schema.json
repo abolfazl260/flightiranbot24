@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/abolfazl260/flightiranbot24/main/data/airports/airport-index.schema.json",
+  "title": "FlightIran Airport Content Index v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "airports"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "airports": {
+      "type": "array",
+      "maxItems": 1000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "iata",
+          "detail_path",
+          "enabled"
+        ],
+        "properties": {
+          "iata": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$"
+          },
+          "detail_path": {
+            "type": "string",
+            "pattern": "^details/[A-Z]{3}\\.v1\\.json$"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  }
+}
