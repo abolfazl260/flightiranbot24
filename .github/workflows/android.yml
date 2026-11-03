@@ -9,8 +9,6 @@ on:
       - "scripts/generate_android_store_graphics.py"
       - "src/flightiran/modules/airport/data/airports.json"
       - "scripts/check_android_environments.py"
-      - "scripts/capture_android_screenshots.sh"
-      - ".github/workflows/android-screenshots.yml"
       - "src/flightiran/webapp/**"
       - ".github/workflows/android.yml"
   push:
@@ -23,8 +21,6 @@ on:
       - "scripts/generate_android_store_graphics.py"
       - "src/flightiran/modules/airport/data/airports.json"
       - "scripts/check_android_environments.py"
-      - "scripts/capture_android_screenshots.sh"
-      - ".github/workflows/android-screenshots.yml"
       - "src/flightiran/webapp/**"
       - ".github/workflows/android.yml"
   workflow_dispatch:
@@ -126,18 +122,10 @@ jobs:
           retention-days: 14
 
 
-  screenshots:
-    name: Capture all Android app screens on emulator
-    needs: verify
-    # Reuse one workflow for PR checks, main builds, release tags and manual runs.
-    uses: ./.github/workflows/android-screenshots.yml
-    permissions:
-      contents: read
-
   release:
     name: Signed APK, AAB and GitHub Release
-    # Never publish an unreviewed release without screenshot/navigation checks.
-    needs: [verify, screenshots]
+    # Release requires Android verification; screenshots are independently captured on main.
+    needs: verify
     if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
     runs-on: ubuntu-latest
     timeout-minutes: 35

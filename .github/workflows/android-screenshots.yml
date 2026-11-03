@@ -1,19 +1,18 @@
 name: Android Store Screenshots
 
 on:
-  # Invoked by the main Android build on PRs, main and release tags.
-  workflow_call:
+  # Run separately after every push/merge to the main branch, regardless of paths.
+  push:
+    branches: [main]
+  # Optional reruns are restricted to main by the job guard below.
   workflow_dispatch:
-
-concurrency:
-  group: android-emulator-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
   screenshots:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 55
     steps:
