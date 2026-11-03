@@ -192,7 +192,7 @@ internal fun AirportGuideScreen(
 @Composable
 private fun AirportOfflineNotice() {
     Text(
-        "نسخه آفلاین نمایش داده می‌شود و ممکن است تازه‌ترین تغییرات را شامل نشود.",
+        "نسخه ذخیره‌شده روی گوشی نمایش داده می‌شود و ممکن است تازه‌ترین تغییرات را شامل نشود.",
         style = MaterialTheme.typography.bodySmall,
         color = MaterialTheme.colorScheme.error,
     )
