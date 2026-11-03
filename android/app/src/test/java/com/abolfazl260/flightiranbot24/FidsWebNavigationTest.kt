@@ -1,7 +1,7 @@
 package com.abolfazl260.flightiranbot24
 
-import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
+import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class FidsWebNavigationTest {
@@ -26,5 +26,13 @@ class FidsWebNavigationTest {
             "https://fids.airport.ir\\@evil.example/",
             "not a url",
         ).forEach { assertFalse("Unsafe page allowed: $it", isAllowedFidsNavigation(it)) }
+    }
+
+    @Test fun serverAndAccessFailuresHaveDistinctUserMessages() {
+        assertTrue(fidsHttpStatusMessage(403).contains("دسترسی"))
+        assertTrue(fidsHttpStatusMessage(404).contains("پیدا نشد"))
+        assertTrue(fidsHttpStatusMessage(429).contains("درخواست"))
+        assertTrue(fidsHttpStatusMessage(500).contains("سرور"))
+        assertTrue(fidsHttpStatusMessage(504).contains("تأخیر"))
     }
 }

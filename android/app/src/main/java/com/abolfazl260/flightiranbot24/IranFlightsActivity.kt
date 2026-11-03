@@ -1,8 +1,13 @@
 package com.abolfazl260.flightiranbot24
 
 import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
 import android.net.http.SslError
 import android.os.Bundle
 import android.webkit.SslErrorHandler
@@ -13,6 +18,7 @@ import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
@@ -33,7 +39,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -46,10 +54,26 @@ import androidx.compose.ui.viewinterop.AndroidView
 import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
 import com.abolfazl260.flightiranbot24.presentation.components.TravelToolbar
 import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
+import kotlinx.coroutines.delay
+
+private const val FIDS_LOAD_TIMEOUT_MS = 20_000L
+private const val FIDS_BLANK_PAGE_DELAY_MS = 7_000L
+
+// Check for an actually empty rendered document, not merely a page-finished
+// callback. JS-heavy sites can finish their initial HTML and still render
+// nothing because their scripts or API are unavailable.
+private const val FIDS_BLANK_PAGE_SCRIPT = """
+(function () {
+    var body = document.body;
+    if (!body) return true;
+    if ((body.innerText || '').trim().length > 0) return false;
+    return !body.querySelector('canvas,video,iframe,input,select,button,table');
+})()
+"""
 
 /**
- * Displays the original Iranian FIDS website inside the Android application.
- * This is a WebView, NOT the first-party JSON Worker (which has no verified live feed).
+ * Shows the original official FIDS website inside the app.
+ * No first-party FIDS JSON feed is assumed to exist.
  */
 class IranFlightsActivity : ComponentActivity() {
     override fun attachBaseContext(newBase: Context) {
@@ -66,16 +90,26 @@ class IranFlightsActivity : ComponentActivity() {
     }
 }
 
+/** A missing network can be identified without attempting a remote connection. */
+private fun hasInternetNetwork(context: Context): Boolean {
+    val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        ?: return true // Unknown connectivity state must not block a valid connection.
+    val network = manager.activeNetwork ?: return false
+    val capabilities = manager.getNetworkCapabilities(network) ?: return false
+    return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+}
+
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 internal fun IranFlightsWebScreen(onClose: () -> Unit) {
     val context = LocalContext.current
     var isLoading by remember { mutableStateOf(true) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-    var blockedExternalLink by remember { mutableStateOf(false) }
+    var navigationGeneration by remember { mutableIntStateOf(0) }
+    var completedGeneration by remember { mutableIntStateOf(-1) }
 
-    // Keep one WebView while this screen is composed; retain the site's own
-    // airport/direction controls and in-page navigation instead of duplicating them.
+    // Keep a single WebView for the lifetime of this screen. Do not silently
+    // open other sites, downgrade HTTPS or bypass certificate validation.
     val webView = remember(context) {
         WebView(context).apply {
             settings.apply {
@@ -96,20 +130,25 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                 ): Boolean {
                     val allowed = request?.url?.toString()?.let(::isAllowedFidsNavigation) == true
                     if (!allowed && request?.isForMainFrame == true) {
-                        blockedExternalLink = true
+                        isLoading = false
+                        errorMessage = "وب‌سایت رسمی به آدرس دیگری هدایت شد که برای نمایش امن در برنامه مجاز نیست. می‌توانید سایت را در مرورگر بررسی کنید."
                     }
-                    // Do not launch Chrome or allow non-HTTPS / unrelated-site navigation.
                     return !allowed
                 }
 
                 override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                    isLoading = true
-                    errorMessage = null
-                    blockedExternalLink = false
+                    if (errorMessage == null) {
+                        navigationGeneration++
+                        completedGeneration = -1
+                        isLoading = true
+                    }
                 }
 
                 override fun onPageFinished(view: WebView?, url: String?) {
-                    isLoading = false
+                    if (errorMessage == null) {
+                        isLoading = false
+                        completedGeneration = navigationGeneration
+                    }
                 }
 
                 override fun onReceivedError(
@@ -119,8 +158,13 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                 ) {
                     if (request?.isForMainFrame == true) {
                         isLoading = false
-                        errorMessage = "اتصال به وب‌سایت رسمی FIDS برقرار نشد. " +
-                            "اتصال اینترنت و دسترسی به سایت را بررسی کنید و دوباره تلاش کنید."
+                        errorMessage = when (error?.errorCode) {
+                            WebViewClient.ERROR_TIMEOUT -> "زمان اتصال به سامانه اطلاعات پرواز به پایان رسید. اتصال اینترنت یا دسترسی به سایت را بررسی کنید."
+                            WebViewClient.ERROR_HOST_LOOKUP -> "آدرس سامانه اطلاعات پرواز پیدا نشد. احتمال اختلال DNS یا محدودیت دسترسی وجود دارد."
+                            WebViewClient.ERROR_CONNECT, WebViewClient.ERROR_IO -> "ارتباط با سامانه اطلاعات پرواز برقرار نشد. ممکن است اینترنت یا سرور سایت دچار اختلال باشد."
+                            WebViewClient.ERROR_FAILED_SSL_HANDSHAKE -> "اتصال امن به سامانه اطلاعات پرواز برقرار نشد. لطفاً بعداً دوباره تلاش کنید."
+                            else -> "بارگذاری سامانه اطلاعات پرواز ناموفق بود. اتصال اینترنت و دسترسی به سایت را بررسی کنید."
+                        }
                     }
                 }
 
@@ -133,8 +177,7 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                         errorResponse.statusCode >= 400
                     ) {
                         isLoading = false
-                        errorMessage = "وب‌سایت رسمی FIDS خطای " +
-                            errorResponse.statusCode + " برگرداند. لطفاً بعداً تلاش کنید."
+                        errorMessage = fidsHttpStatusMessage(errorResponse.statusCode)
                     }
                 }
 
@@ -143,14 +186,11 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                     handler: SslErrorHandler?,
                     error: SslError?
                 ) {
-                    // Never ignore a certificate error on a flight information site.
                     handler?.cancel()
                     isLoading = false
-                    errorMessage = "اتصال امن به وب‌سایت FIDS تأیید نشد. " +
-                        "برای حفاظت از اطلاعات، صفحه بارگذاری نشد."
+                    errorMessage = "گواهی امنیتی سامانه اطلاعات پرواز معتبر نیست. برای امنیت شما صفحه باز نشد."
                 }
             }
-            loadUrl(FIDS_OFFICIAL_HOME)
         }
     }
 
@@ -161,15 +201,71 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
         }
     }
 
-    BackHandler {
-        if (webView.canGoBack()) webView.goBack() else onClose()
+    val retry: () -> Unit = {
+        webView.stopLoading()
+        errorMessage = null
+        completedGeneration = -1
+        navigationGeneration++
+        if (!hasInternetNetwork(context)) {
+            isLoading = false
+            errorMessage = "دستگاه به شبکه اینترنت متصل نیست. اینترنت یا وای‌فای را فعال کنید و دوباره تلاش کنید."
+        } else {
+            isLoading = true
+            webView.loadUrl(FIDS_OFFICIAL_HOME)
+        }
     }
 
-    val retry: () -> Unit = {
-        errorMessage = null
-        blockedExternalLink = false
-        isLoading = true
-        webView.loadUrl(FIDS_OFFICIAL_HOME)
+    // Start only after the WebView has been composed and attached.
+    LaunchedEffect(webView) {
+        retry()
+    }
+
+    // WebView callbacks are not guaranteed if a DNS, proxy, CDN or remote
+    // website stalls. Every attempt must have a finite loading state.
+    LaunchedEffect(webView, navigationGeneration, isLoading, errorMessage) {
+        if (isLoading && errorMessage == null) {
+            delay(FIDS_LOAD_TIMEOUT_MS)
+            if (isLoading && errorMessage == null) {
+                webView.stopLoading()
+                isLoading = false
+                errorMessage = "پاسخی از سامانه اطلاعات پرواز دریافت نشد. ممکن است سایت موقتاً قطع یا از شبکه شما غیرقابل دسترس باشد."
+            }
+        }
+    }
+
+    // Some sites return HTTP 200 and onPageFinished yet leave an entirely
+    // white page. Detect this after a grace period for client-side rendering.
+    LaunchedEffect(webView, completedGeneration, isLoading, errorMessage) {
+        if (completedGeneration >= 0 && !isLoading && errorMessage == null) {
+            val expectedGeneration = completedGeneration
+            delay(FIDS_BLANK_PAGE_DELAY_MS)
+            if (completedGeneration == expectedGeneration && !isLoading && errorMessage == null) {
+                webView.evaluateJavascript(FIDS_BLANK_PAGE_SCRIPT) { isBlank ->
+                    if (completedGeneration == expectedGeneration && errorMessage == null &&
+                        !isLoading && isBlank == "true"
+                    ) {
+                        errorMessage = "وب‌سایت باز شد اما اطلاعات پرواز را نمایش نداد. ممکن است بخش‌های داخلی سایت بارگذاری نشده باشند."
+                    }
+                }
+            }
+        }
+    }
+
+    BackHandler {
+        if (errorMessage == null && webView.canGoBack()) webView.goBack() else onClose()
+    }
+
+    val openInBrowser: () -> Unit = {
+        try {
+            context.startActivity(
+                Intent(Intent.ACTION_VIEW, Uri.parse(FIDS_OFFICIAL_HOME))
+                    .addCategory(Intent.CATEGORY_BROWSABLE)
+            )
+        } catch (_: ActivityNotFoundException) {
+            Toast.makeText(context, R.string.link_unavailable, Toast.LENGTH_LONG).show()
+        } catch (_: SecurityException) {
+            Toast.makeText(context, R.string.link_unavailable, Toast.LENGTH_LONG).show()
+        }
     }
 
     Column(
@@ -195,14 +291,7 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
-                TextButton(onClick = retry) { Text("↻ تازه‌سازی") }
-            }
-            if (blockedExternalLink) {
-                Text(
-                    "پیوند خارج از دامنه رسمی FIDS داخل این صفحه باز نمی‌شود.",
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                TextButton(onClick = retry) { Text("تازه‌سازی") }
             }
         }
 
@@ -216,6 +305,12 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth().align(Alignment.TopCenter),
                 )
+                Text(
+                    "در حال دریافت اطلاعات از وب‌سایت رسمی فرودگاه‌ها…",
+                    modifier = Modifier.align(Alignment.Center).padding(24.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
 
             if (errorMessage != null) {
@@ -223,10 +318,22 @@ internal fun IranFlightsWebScreen(onClose: () -> Unit) {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                 ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    Column(
+                        modifier = Modifier.padding(20.dp),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
                         TravelErrorState(
                             message = errorMessage ?: "",
                             onRetry = retry,
+                        )
+                        TextButton(onClick = openInBrowser) {
+                            Text("باز کردن سایت رسمی در مرورگر")
+                        }
+                        Text(
+                            "نمایش ندادن اطلاعات به معنی لغو پروازها نیست. برای پیگیری می‌توانید با اطلاعات پرواز فرودگاه (۱۹۹) تماس بگیرید.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }

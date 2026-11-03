@@ -8,7 +8,7 @@ The **«اطلاعات پرواز ایران»** card opens \`IranFlightsActivit
 - This is **not an external Chrome/Custom Tab handoff** and **not a copy/scrape of official flight data**.
 - JavaScript and DOM storage are enabled for the website. WebView loads over HTTPS only; mixed HTTP content and file/content access are disabled.
 - Top-level navigation stays on the exact HTTPS host \`fids.airport.ir\`. Cross-domain/unsafe navigations are blocked rather than launching another app. SSL errors are never ignored.
-- Refresh and in-page Android Back navigation work. Main-frame network/HTTP/SSL failures show a Persian retry state instead of an empty flight board. On exit the WebView is destroyed.
+- Refresh and in-page Android Back navigation work. Offline mode is detected with Android's normal network-state permission; main-frame DNS/network/HTTP/SSL failures, blocked redirects, 20-second loading stalls and successfully loaded but blank documents show a Persian explanation and retry action instead of an indefinite white screen. The error view also offers an optional external-browser handoff and the flight information number 199. On exit the WebView is destroyed.
 - Android already has \`android.permission.INTERNET\`, so this change does not add new permissions or change signing configuration.
 
 **Network availability is not guaranteed.** On 2026-11-01, the official website did not respond from the research environment; the WebView directly accesses it from the user's device/network. A timeout, site policy restricting embedded browsing, TLS error or regional block may still prevent loading. Do not claim the board is verified live until tested on a physical Android device using a network that can open the official site.
