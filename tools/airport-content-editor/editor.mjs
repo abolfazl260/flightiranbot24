@@ -38,7 +38,7 @@ function field(parent,title,value,change,kind="text",choices=[]){
   input.value=value;
  }else if(kind==="checkbox") input=ui("input",{type:"checkbox",checked:value});
  else input=ui("input",{type:kind==="number"?"number":kind==="date"?"date":kind==="url"?"url":"text",value:value??""});
- input.addEventListener(kind==="checkbox"||kind==="select"?"change":"input",()=>{
+ input.addEventListener(["checkbox","select","source","direction"].includes(kind)?"change":"input",()=>{
   change(kind==="checkbox"?input.checked:input.value);
  });
  wrap.append(label,input);parent.append(wrap);
@@ -110,7 +110,8 @@ function renderEditor(){
  box.append(top);
  const grid=ui("div",{className:"edit-grid"});
  field(grid,"عنوان بخش",section.title_fa,v=>{section.title_fa=v;renderSections();renderPreview()});
- field(grid,"شناسه تغییرناپذیر",section.id,()=>{});
+ const idInput=field(grid,"شناسه تغییرناپذیر",section.id,()=>{});
+ idInput.disabled=true;
  field(grid,"آیکون (Lucide)",section.icon,v=>{section.icon=v;});
  field(grid,"ترتیب نمایش",section.order,v=>{section.order=Number(v);renderSections()},"number");
  box.append(grid);
