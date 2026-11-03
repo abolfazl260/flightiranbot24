@@ -6,8 +6,18 @@ import org.junit.Test
 
 class TicketCityIconMappingTest {
     @Test
-    fun mapsSecondBatchCitiesToStableResourceNames() {
+    fun mapsTwentyCitiesToStableResourceNames() {
         val expected = mapOf(
+            "مشهد" to "price_city_mashhad",
+            "استانبول" to "price_city_istanbul",
+            "نجف" to "price_city_najaf",
+            "شیراز" to "price_city_shiraz",
+            "اهواز" to "price_city_ahvaz",
+            "کیش" to "price_city_kish",
+            "تبریز" to "price_city_tabriz",
+            "کرمان" to "price_city_kerman",
+            "ایروان" to "price_city_yerevan",
+            "بندرعباس" to "price_city_bandarabbas",
             "زاهدان" to "price_city_zahedan",
             "ارومیه" to "price_city_urmia",
             "آبادان" to "price_city_abadan",
