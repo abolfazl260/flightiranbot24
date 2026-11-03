@@ -22,11 +22,15 @@ review tasks are tracked in [docs/ANDROID_TASK_BOARD.md](../docs/ANDROID_TASK_BO
   and cards, and a lifecycle-aware HomeViewModel with StateFlow states.
 - Pure Kotlin domain interfaces and an explicit, testable AppContainer
   dependency-injection root protect data and presentation boundaries.
-- The **offline airport directory** is now a Compose LazyColumn that prefers
-  a Room snapshot when populated and falls back to bundled offline records.
+- The **airport guide** is a native, Persian-only Compose directory.
+  It shows only IATA airports enabled in the versioned GitHub JSON index;
+  each airport displays only reviewed, published sections and uses on-demand
+  HTTPS with the bundled asset fallback. This does not constitute a live
+  flight-status provider. The existing Room airport cache remains separate
+  from the content guide.
   The **offline checklist** remains a Java screen, with a progress indicator,
   confirmation before reset, and its existing SharedPreferences preserved.
-- Visa browsing now uses a native Persian RTL Compose screen backed by the existing public Cloudflare visa JSON projection; only visa-change alert enrollment and support deliberately hand off to Telegram. The useful
+- Visa discovery reads bundled JSON assets without a network connection; only explicit visa-change alerts and support open Telegram. The useful
   travel information card now opens a native Persian directory sourced from the
   same GitHub JSON catalog used by Telegram, with a bundled offline fallback,
   search, category filters and explicit HTTPS website links. No Telegram auth,
@@ -80,7 +84,7 @@ A signed release still requires fresh prices from the live HTTPS endpoint
 and the owner's private keystore. See [release instructions](../docs/ANDROID_RELEASE.md).
 
 Room v1 schema is stored in `android/app/schemas`; do not perform destructive
-migrations. Remaining native alert management, extended visa details, offline sync, auth and push work is tracked
+migrations. Remaining native alert management, offline sync, auth and push work is tracked
 separately and is not completed by this build-system change.
 
 ## Native ticket prices
@@ -92,7 +96,7 @@ sorting work locally. Booking opens verified Advertio support.
 The single app embeds the existing, public Cloudflare Workers HTTPS base
 URL by default. It reports network/API failures if D1 has not yet received
 verified prices; no fake prices or Telegram fallback are used.
-User-owned alert management, push and authentication remain separate tasks; the read-only public native visa guide consumes the existing visa endpoints.
+User-owned alerts, push and authentication remain separate tasks. Native visa browsing reads only the bundled snapshot, never Cloudflare.
 
 
 ### Database-first fare contract (October 2026)
@@ -129,14 +133,16 @@ shipping a misleading in-app price screen. CI pull-request debug builds
 use the same secure public Worker endpoint.
 
 ### Android launcher artwork
-The previous generic vector globe/plane launcher icon has been replaced by the
-user-approved transparent airplane, passport, and globe emblem. The PNG source
-is in `app/src/main/res/drawable-nodpi/ic_launcher_art.png`; the unframed
-legacy launcher drawable and Android 8+ adaptive foreground both reference it.
-The adaptive foreground has an 18dp inset within the 108dp design canvas, so
-Android launchers can apply their own circular/squircle masks. No additional
-rounded-square image background is baked into the emblem. The Play Store
-artwork generator uses this same icon, avoiding visual brand divergence.
+The Android launcher uses the approved Advertio-inspired **A + flight trail**
+mark, with blue/navy, turquoise/green and a minimal aircraft symbol. The
+optimized, opaque 512 × 512 WebP source is
+`app/src/main/res/drawable-nodpi/ic_launcher_brand.webp`, with a plain white
+background and no pre-rendered rounded-square frame, globe or passport.
+Legacy Android uses a white-backed bitmap drawable. On Android 8+ an adaptive
+icon supplies a white background and a foreground inset of 12dp inside its
+108dp canvas; the launcher applies its own circular/squircle mask. The
+deterministic Play Store image generator reads the same WebP source so branding
+remains consistent across Android and store graphics.
 
 
 ## Real screenshots attached to every Android build
@@ -146,8 +152,8 @@ reusable **Android Store Screenshots** emulator workflow after verification on
 Android-related pull requests, main pushes, release tags, and manual builds.
 It installs the debug APK built from the same commit as the signed release,
 navigates through **real Persian UI controls** (not direct intents to private
-Activities), and uploads the `android-real-screenshots` artifact with **14
-PNG screenshots** from all **eight currently reachable native/in-app views**:
+Activities), and uploads the `android-real-screenshots` artifact with **17
+PNG screenshots** from all **nine currently reachable native/in-app views**:
 
 | Screen | Artifact files |
 | --- | --- |
@@ -158,7 +164,8 @@ PNG screenshots** from all **eight currently reachable native/in-app views**:
 | Iran FIDS in-app WebView | `05-iran-flights.png` |
 | In-app privacy policy | `06-privacy.png`, `06-privacy-bottom.png` |
 | Native useful travel directory | `07-travel-websites.png`, `07-travel-websites-bottom.png` |
-| Native visa discovery and detail | `08-visa-discovery.png`, `08-visa-detail.png` |
+| Airport guide: index, IKA details, baggage section | `08-airports.png`, `08-airport-ika.png`, `08-airport-ika-baggage.png` |
+| Native visa discovery and detail | `09-visa-discovery.png`, `09-visa-detail.png` |
 
 The screenshot job checks the foreground Activity for navigated screens,
 verifies visible native text where available, validates the exact image
@@ -170,34 +177,62 @@ UI-XML diagnostics uploaded for investigation. You can also manually run
 **Honest captures only:** if the production fare API is unavailable, the
 prices image may show the real network error rather than fake sample fares.
 The FIDS page similarly depends on its third-party website. Review these
-images before submitting any of them to an app store. The intentionally
-disabled airport directory and screens launched in external Telegram/browser
-apps are not presented as working in-app screens. Visa discovery and detail are native; only the explicit alert subscription CTA opens Telegram.
+images before submitting any of them to an app store. External Telegram/browser
+apps are not presented as working in-app screens. The airport and visa guides
+are native app screens; only explicit links open external apps.
 
+
+## Airport content guide
+
+The Home airport card and the Services airport row open the native
+`AirportDirectoryActivity`. The footer remains visible. A versioned
+`data/airports/airport-index.v1.json` enables only airports with published
+content. The detail page is fetched **only after tapping the airport**;
+unpublished draft sections are invisible. Android bundles the exact same
+GitHub JSON under `data/airports/` for offline fallback, with a visible
+notice when fallback is used.
+
+The initial verified airport is IKA. Its static flight-status card links to
+the official airport website: it is not a live feed. Images/videos have
+safe external HTTPS actions but no untrusted embedded HTML playback.
+An unsupported future block type requires a compatible app release.
+The catalog is edited **directly in GitHub**, never through a mobile admin UI.
+
+Run unit checks with
+`gradle --no-daemon -p android :app:testDebugUnitTest`.
+The screenshot CI captures the airport index and IKA details from the
+real RTL app UI. Other airports can be enabled solely by changing their
+published JSON content after verification.
 
 ## Native visa guide (VISA-NATIVE-001)
 
-The visa entry on Home/Services launches `VisaGuideActivity` rather than Telegram. This
-Persian-only RTL Compose screen uses the previously published passport-specific
-JSON projection from the existing Cloudflare D1 Worker: `GET /api/v1/visa/list?passport=IR`
-for discovery and `GET /api/v1/visa/rule?passport=IR&destination=TR` for one detail.
-The API is public/read-only; there is no Android Telegram login or bot token.
+Home and Services launch the native Persian RTL `VisaGuideActivity`. The installed
+APK bundles `app/src/main/assets/visa/manifest.v1.json` and 20 compact
+`shard-XX.json` files, containing 39,601 rules for 199 passports and 199
+destinations. Source: TravelRequirements.info Entry Requirements Dataset v1.3.0
+(CC BY 4.0), source data last modified 2026-10-22.
 
-- Passport defaults to IR via the existing `TravelerPreferencesRepository`/DataStore;
-  user selections persist, and changes invalidate earlier passport results.
-- Persian destination search normalizes Arabic/Persian letter variants. Popular
-  country shortcuts are navigational only and contain no hardcoded visa result.
-- Status labels cover the nine published visa requirement states; unknown does
-  **not** mean visa-free. The actual JSON supplies notes and optional stay days.
-- Details show a validated HTTPS source, the citation granularity, **source
-  verification date** (`verified_on`) and **publication date** (`published_at`)
-  separately. The app never invents official citations, 90/180 rules or fees.
-- Offline/API failures show explicit retry states and no automatic Telegram
-  fallback. No persistent visa-rule cache is enabled.
-- The explicit Telegram CTA opens `/start visa_IR_TR` (country pair varies);
-  the bot displays the corresponding existing visa result and offers its
-  **separate confirmation** to subscribe to changes. This does not create an
-  Android-side subscription or automatically subscribe in Telegram.
+- The entire visa catalog and every rule detail are read **only from APK assets**.
+  The visa guide never requests Cloudflare, bot SQLite or the upstream provider.
+- The data is **frozen at app-build time**. There is no in-app visa refresh,
+  download or runtime fallback; updating visa rules requires an app release.
+  Entry restrictions can change after the cited source dates, so users should
+  verify official requirements before travel.
+- Default passport is IR, persisted in existing `TravelerPreferencesRepository`
+  DataStore. Selecting another passport invalidates prior details immediately.
+- Persian and Arabic spelling normalization supports country search. Popular
+  destinations are navigation shortcuts, not fabricated visa results.
+- The nine published entry-status categories remain distinct; unknown or
+  unconfirmed never means visa-free. Optional stay days and notes come only
+  from the bundled rules.
+- Details retain the validated HTTPS citation, source scope, published
+  `verified_on` date and the destination dataset's update date. Missing fields
+  are disclosed, not inferred.
+- Missing or corrupt bundled assets produce an explicit error, without a
+  network fallback.
+- The optional Telegram CTA opens `/start visa_IR_TR` (codes vary) so the
+  traveler may separately choose whether to subscribe to visa-change alerts.
+  Browsing visa data never automatically subscribes anyone.
 
-This is Phase 1 of #152; native watch management, push, comparisons and richer
-source fields need separate authenticated/API follow-up work.
+The Telegram bot's online visa source remains separate. This Android Phase 1
+snapshot is versioned together with the app, not synchronized via Cloudflare.

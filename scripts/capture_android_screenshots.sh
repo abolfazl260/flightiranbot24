@@ -306,23 +306,36 @@ capture 07-travel-websites.png
 scroll_down 2
 capture 07-travel-websites-bottom.png
 
-# Native visa discovery and real source-backed detail, entered through Services.
-# The destination card stays navigable during catalog outages; details then
-# honestly display a real API error rather than fictional visa eligibility.
+# Open the published airport guide via the native Services row, not a
+# test-only intent. Confirm the indexed IKA content is visible, then open it.
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "خدمات"
-wait_for_text "اطلاعات پرواز ایران"
+wait_for_text "راهنمای فرودگاه‌ها"
+tap_service_row "راهنمای فرودگاه‌ها"
+wait_for_activity AirportDirectoryActivity
+wait_for_text "امام خمینی تهران"
+capture 08-airports.png
+tap_service_row "امام خمینی تهران"
+wait_for_text "بار مجاز و قوانین حمل بار"
+capture 08-airport-ika.png
+tap_service_row "بار مجاز و قوانین حمل بار"
+capture 08-airport-ika-baggage.png
+
+# Native visa discovery and detail both read the APK-bundled JSON snapshot.
+open_launcher
+wait_for_activity MainActivity
+tap_persian_control "خدمات"
+wait_for_text "راهنمای ویزا و ورود"
 tap_service_row "راهنمای ویزا و ورود"
 wait_for_activity VisaGuideActivity
 wait_for_text "کشور صادرکننده پاسپورت"
-capture 08-visa-discovery.png
+capture 09-visa-discovery.png
 tap_service_row "ترکیه"
 wait_for_text "جزئیات ویزا"
-capture 08-visa-detail.png
+capture 09-visa-detail.png
 
-# All eight reachable in-app screens, plus scrolled variants for longer screens.
-# Offline airport directory is intentionally excluded: it is currently disabled.
+# All nine reachable native/in-app views and their scrolled/detail variants.
 python3 - <<'PY'
 from pathlib import Path
 import struct
@@ -336,7 +349,8 @@ expected = {
     "05-iran-flights.png",
     "06-privacy.png", "06-privacy-bottom.png",
     "07-travel-websites.png", "07-travel-websites-bottom.png",
-    "08-visa-discovery.png", "08-visa-detail.png",
+    "08-airports.png", "08-airport-ika.png", "08-airport-ika-baggage.png",
+    "09-visa-discovery.png", "09-visa-detail.png",
 }
 actual = {p.name for p in folder.glob("*.png")}
 assert actual == expected, f"Missing: {expected - actual}; unexpected: {actual - expected}"

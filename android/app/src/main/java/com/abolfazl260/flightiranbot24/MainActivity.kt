@@ -112,7 +112,7 @@ class MainActivity : ComponentActivity() {
     private fun navigateTo(destination: HomeDestination) {
         when (destination) {
             HomeDestination.OFFLINE_AIRPORTS, HomeDestination.TELEGRAM_AIRPORTS ->
-                Toast.makeText(this, R.string.airports_coming_soon_message, Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, AirportDirectoryActivity::class.java))
             HomeDestination.OFFLINE_CHECKLIST ->
                 startActivity(Intent(this, ChecklistActivity::class.java))
             HomeDestination.TICKET_PRICES ->
@@ -190,9 +190,7 @@ internal fun TravelHomeScreen(
                     is HomeUiState.Ready -> {
                         PremiumPreparationSection(
                             onChecklist = { onSelect(HomeDestination.OFFLINE_CHECKLIST) },
-                            // Airports are still unavailable; this card opens
-                            // the existing Services tab, never AirportDirectoryActivity.
-                            onAirportServices = { changeTab(true) },
+                            onAirportServices = { onSelect(HomeDestination.OFFLINE_AIRPORTS) },
                         )
                         PremiumTravelServices(
                             onAllServices = { changeTab(true) },
@@ -327,8 +325,9 @@ private fun HomeDestination.serviceIconSlot(): Int = when (this) {
 
 private fun HomeDestination.serviceDescriptionResource(): Int = when (this) {
     HomeDestination.TICKET_PRICES -> R.string.service_fares_description
-    HomeDestination.IRAN_FLIGHTS, HomeDestination.TELEGRAM_AIRPORTS,
-    HomeDestination.OFFLINE_AIRPORTS -> R.string.service_iran_flights_description
+    HomeDestination.IRAN_FLIGHTS -> R.string.service_iran_flights_description
+    HomeDestination.TELEGRAM_AIRPORTS, HomeDestination.OFFLINE_AIRPORTS ->
+        R.string.service_airports_description
     HomeDestination.TELEGRAM_BOT, HomeDestination.OFFLINE_CHECKLIST ->
         R.string.service_assistant_description
     HomeDestination.TELEGRAM_VISA -> R.string.service_visa_description
