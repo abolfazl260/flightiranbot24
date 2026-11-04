@@ -4,11 +4,11 @@
 
 **GitHub is the content management interface. There is no airport admin panel.**
 The canonical airport identity list remains
-`src/flightiran/modules/airport/data/airports.json` (28 airports).
+`src/flightiran/modules/airport/data/airports.json` (29 airports).
 This new `data/airports/` directory contains independent *content*
 documents, keyed by IATA code, without duplicating airport identity data.
 
-All **28 existing airports** have independent JSON content files in `details/`.
+All **29 existing airports** have independent JSON content files in `details/`.
 The **Imam Khomeini (IKA)** page has **14 source-backed published sections** and **two empty drafts**. The **Mashhad (MHD)** page has **17 source-backed published sections** and **two empty drafts** (traveler experiences and airport videos). The **Kerman (KER)** page has **13 source-backed published sections** and **two unpublished drafts**; see `docs/airports/KER_CONTENT_NOTES.md`. Other airport pages are published independently; consult `airport-index.v1.json` for the current enabled set rather than assuming a fixed allowlist. The IKA location-map entry links to the location supplied on the official website. The MHD map uses a referenced airport point, not a terminal floor plan. No unverified terminal plans, passenger reviews, videos or live flight values are published. Android and Telegram airport navigation remains disabled until
 separately implemented and vetted.
 
@@ -24,7 +24,7 @@ data/airports/
     THR.v1.json                                   # Mehrabad
     IKA.v1.json                                   # Imam Khomeini
     MHD.v1.json                                   # Mashhad
-    ...                                           # One file for each of 28 airports
+    ...                                           # One file for each of 29 airports
 ```
 
 There is no predefined fixed feature menu. Each document contains its own
@@ -176,3 +176,7 @@ The airport location map uses an approximate reference coordinate, not an indoor
 floor plan. Current flight status, bus timetables, fares and terminal assignments
 are **not** hardcoded. See [Tabriz verification notes](airports/TBZ_CONTENT_NOTES.md)
 for official links and source limitations.
+
+## GSM — Qeshm Airport
+
+GSM (ICAO OIKQ) has an independently enabled passenger guide with 11 documented sections and two empty drafts. See [GSM editorial and provenance notes](airports/GSM_CONTENT_NOTES.md). Flight statuses and schedules are not stored as live values in GitHub.

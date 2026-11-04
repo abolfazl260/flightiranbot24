@@ -57,6 +57,11 @@
       "enabled": false
     },
     {
+      "iata": "GSM",
+      "detail_path": "details/GSM.v1.json",
+      "enabled": true
+    },
+    {
       "iata": "IFN",
       "detail_path": "details/IFN.v1.json",
       "enabled": false

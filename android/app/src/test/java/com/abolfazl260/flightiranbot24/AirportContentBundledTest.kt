@@ -22,9 +22,10 @@ class AirportContentBundledTest {
 
     @Test fun reviewedAirportsIncludeIkaAndTabriz() {
         val index = AirportContentParser.parseIndex(bundled("airport-index.v1.json"))
-        assertTrue(index.airports.map { it.iata }.containsAll(listOf("IKA", "TBZ")) )
+        assertTrue(index.airports.map { it.iata }.containsAll(listOf("IKA", "TBZ", "GSM")) )
         val names = readBundledAirportNames(context)
         assertEquals("امام خمینی تهران", names["IKA"]?.name)
+        assertEquals("قشم", names["GSM"]?.name)
         assertTrue(filterAirports(listOf(names.getValue("IKA")), "امام").isNotEmpty())
     }
 

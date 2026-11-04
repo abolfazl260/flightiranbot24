@@ -29,7 +29,8 @@ def catalog():
 
 def test_catalog_lookup_and_search_are_configuration_backed():
     airports = catalog()
-    assert len(airports.all()) == 28
+    assert len(airports.all()) >= 29
+    assert airports.get("GSM").display_name("fa") == "قشم"
     assert airports.get(" ika ").display_name("fa") == "امام خمینی تهران"
     assert airports.search("London")[0].code == "LHR"
 

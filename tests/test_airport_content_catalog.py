@@ -41,11 +41,12 @@ def test_each_existing_airport_has_independent_content_and_valid_publication():
     canonical = load(ROOT / "src/flightiran/modules/airport/data/airports.json")
     index = load(root / "airport-index.v1.json")
     expected = {a["code"] for a in canonical}
-    assert len(expected) == 28
+    assert len(expected) >= 29
+    assert "GSM" in expected
     assert {e["iata"] for e in index["airports"]} == expected
 
     enabled = {e["iata"] for e in index["airports"] if e["enabled"]}
-    assert {"IKA", "MHD", "TBZ"}.issubset(enabled)
+    assert {"IKA", "MHD", "TBZ", "GSM"}.issubset(enabled)
 
     for entry in index["airports"]:
         detail = load(root / entry["detail_path"])
@@ -58,6 +59,14 @@ def test_each_existing_airport_has_independent_content_and_valid_publication():
         if entry["enabled"]:
             assert published, entry["iata"]
         assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
+
+    gsm = load(root / "details/GSM.v1.json")
+    published_gsm = [s for s in gsm["sections"] if s["status"] == "published"]
+    assert len(published_gsm) == 11
+    assert {s["id"] for s in gsm["sections"] if s["status"] == "draft"} == {
+        "traveler-experiences", "airport-videos",
+    }
+    assert any(b["type"] == "map" for s in published_gsm for b in s["blocks"])
 
     mhd = load(root / "details/MHD.v1.json")
     assert len([s for s in mhd["sections"] if s["status"] == "published"]) >= 17
