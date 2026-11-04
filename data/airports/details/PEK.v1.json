@@ -4,23 +4,65 @@
   "sections": [
     {
       "id": "baggage-rules",
-      "title_fa": "بار مجاز و قوانین حمل بار",
+      "title_fa": "بار مجاز و اقلام ممنوعه",
+      "subtitle_fa": "قوانین نهایی با ایرلاین، مسیر و نوع بلیت است",
       "icon": "luggage",
       "order": 10,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules",
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای پرواز از پکن کپیتال مقدار مجاز بار کابین و بار تحویلی را از بلیت و مقررات ایرلاین مجری بررسی کنید. فرودگاه نمی‌تواند یک سقف وزن یکسان برای همه پروازها تعیین کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی لیتیومی را در چمدان تحویلی قرار ندهید؛ محدودیت ظرفیت و تعداد را از ایرلاین بررسی کنید.",
+            "اجسام تیز و مواد خطرناک را مطابق فهرست ممنوعه بسته‌بندی کنید. قوانین مایعات در مسیرهای داخلی و خارجی ممکن است متفاوت باشد.",
+            "برچسب بار و کارت پرواز را تا دریافت چمدان نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین مسافری بار در IATA",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        }
+      ]
     },
     {
       "id": "flight-status",
-      "title_fa": "وضعیت پروازها",
+      "title_fa": "پیگیری وضعیت پروازها",
+      "subtitle_fa": "وضعیت لحظه‌ای در فایل ثابت ذخیره نمی‌شود",
       "icon": "plane-takeoff",
       "order": 20,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای ورود یا خروج از پکن کپیتال، شماره پرواز و تاریخ را در سامانه اطلاع‌رسانی رسمی یا از شرکت هواپیمایی مجری بررسی کنید. زمان، تأخیر، لغو و تغییر گیت پویا هستند و در این JSON ذخیره نشده‌اند."
+        },
+        {
+          "type": "link",
+          "title_fa": "وبگاه مرجع فرودگاه برای جست‌وجوی پرواز",
+          "url": "https://www.bcia.com.cn/"
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "از روی بلیت نام ایرلاین مجری و شماره پرواز را با تابلو فرودگاه مطابقت دهید.",
+            "در شرایط تغییر برنامه، اطلاعیه ایرلاین و کارکنان فرودگاه از راهنمای ثابت اولویت دارد."
+          ]
+        }
+      ]
     },
     {
       "id": "traveler-experiences",
@@ -34,13 +76,26 @@
     },
     {
       "id": "airport-map",
-      "title_fa": "نقشه فرودگاه",
+      "title_fa": "موقعیت و نقشه فرودگاه",
+      "subtitle_fa": "نقشه جغرافیایی با نقشه داخلی سالن متفاوت است",
       "icon": "map",
       "order": 40,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این بخش موقعیت جغرافیایی پکن کپیتال (PEK/ZBAA) را نشان می‌دهد. شمال‌شرق مرکز شهر پکن، چین. نقشه جغرافیایی، نقشه داخلی سالن‌ها یا مسیر قطعی ورودی و گیت نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "بازکردن موقعیت فرودگاه در نقشه",
+          "url": "https://www.google.com/maps/search/?api=1&query=%D9%BE%DA%A9%D9%86%20%DA%A9%D9%BE%DB%8C%D8%AA%D8%A7%D9%84%20PEK%20airport"
+        }
+      ]
     },
     {
       "id": "airport-videos",
@@ -51,6 +106,370 @@
       "reviewed_at": null,
       "source_urls": [],
       "blocks": []
+    },
+    {
+      "id": "airport-identity",
+      "title_fa": "مشخصات فرودگاه و کدها",
+      "subtitle_fa": "PEK / ZBAA",
+      "icon": "info",
+      "order": 55,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پکن کپیتال، کد یاتا PEK و کد ایکائو ZBAA دارد. موقعیت: شمال‌شرق مرکز شهر پکن، چین. برای برنامه‌ریزی سفر این شناسه را با اطلاعات پرواز و بلیت تطبیق دهید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع شناسایی فرودگاه",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "terminals",
+      "title_fa": "ترمینال‌ها، سالن‌ها و گیت‌ها",
+      "subtitle_fa": "کانتر و گیت روز پرواز را تأیید کنید",
+      "icon": "building-2",
+      "order": 60,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه پکن کپیتال ترمینال‌های ۲ و ۳ را برای سفرهای مسافری به‌کار می‌گیرد؛ در T3 جابه‌جایی بین بخش‌ها و گیت‌های دوردست ممکن است زمان بگیرد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پذیرش، شماره ترمینال و کانتر همان پرواز را از ایرلاین یا نمایشگرهای فرودگاه دریافت کنید.",
+            "اگر پرواز اتصال دارید، مسیر جابه‌جایی و کنترل‌های امنیتی یا مرزی را پیش از سفر بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات ترمینال و خدمات",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "ground-transport",
+      "title_fa": "دسترسی شهری، تاکسی و حمل‌ونقل عمومی",
+      "subtitle_fa": "زمان‌بندی و کرایه‌ها ثابت نیستند",
+      "icon": "car-taxi-front",
+      "order": 70,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/dtjcx.html"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "خط ریلی Capital Airport Express به T2 و T3 متصل است و به ایستگاه‌های شهری می‌رود؛ پیش از سفر نخستین و آخرین حرکت را بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از سوارشدن، مقصد دقیق و کرایه را تأیید کنید.",
+            "ساعت آخرین سرویس و محل سوارشدن را برای تاریخ و ساعت فرود دوباره بررسی کنید.",
+            "برای سفر شبانه، گزینه جایگزین حمل‌ونقل را پیش‌بینی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات حمل‌ونقل",
+          "url": "https://www.bcia.com.cn/dtjcx.html"
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "title_fa": "پارکینگ و توقف خودرو",
+      "icon": "car-front",
+      "order": 80,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "facilities",
+      "title_fa": "امکانات رفاهی، غذا، فروشگاه و خدمات",
+      "subtitle_fa": "موجودی و ساعت کار خدمات متغیر است",
+      "icon": "coffee",
+      "order": 90,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی هشدارهای تغییر مسیر گیت و اطلاعات خدمات فرودگاهی را منتشر می‌کند؛ در پروازهای T3 توصیه‌های روز را بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "محل خودپرداز، خدمات بانکی، غذا و فروشگاه را در ترمینال واقعی خود جست‌وجو کنید؛ وجود هر خدمت در همه سالن‌ها تضمین نیست.",
+            "برای اینترنت، خدمات درمانی، عبادتگاه یا نیاز غذایی خاص پیش از سفر از فرودگاه پرس‌وجو کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای خدمات فرودگاه",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title_fa": "ویلچر و خدمات دسترس‌پذیری",
+      "subtitle_fa": "درخواست همراهی را پیشاپیش ثبت کنید",
+      "icon": "accessibility",
+      "order": 100,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای همراهی یا ویلچر در پکن کپیتال، هنگام رزرو یا پیش از پرواز نیاز خود را به ایرلاین اعلام کنید؛ در فرودگاه از نقطه کمک‌رسانی یا کانتر راهنمای مسافران پیگیری کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر وسیله کمک‌حرکتی یا تجهیزات پزشکی دارید، شرایط حمل و باتری آن را از ایرلاین بپرسید.",
+            "برای زمان ورود به ترمینال، جابه‌جایی بین گیت‌ها و همراهی در اتصال پرواز از قبل هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع درخواست خدمات فرودگاهی",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "CIP، VIP و سالن‌های استراحت",
+      "icon": "armchair",
+      "order": 110,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "baggage-claims",
+      "title_fa": "بار نرسیده یا آسیب‌دیده",
+      "subtitle_fa": "گزارش را پیش از ترک سالن بار ثبت کنید",
+      "icon": "luggage",
+      "order": 120,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر چمدان نرسیده یا آسیب دیده، در محدوده تحویل بار به نماینده ایرلاین یا عامل هندلینگ مراجعه و گزارش مغایرت بار (PIR) درخواست کنید.",
+            "کارت پرواز، شماره برچسب بار، عکس آسیب و کد پیگیری را نگه دارید.",
+            "شرایط غرامت و مهلت اعلام خسارت را از ایرلاین مسئول بپرسید؛ این راهنما جایگزین مقررات قرارداد حمل نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA برای بار مسافری",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        }
+      ]
+    },
+    {
+      "id": "lost-property",
+      "title_fa": "اشیای جامانده و گمشده",
+      "subtitle_fa": "اشیای سالن با بار تحویلی متفاوت است",
+      "icon": "search",
+      "order": 130,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای وسایلی که در هواپیما جا گذاشته‌اید، ابتدا به شرکت هواپیمایی مراجعه کنید؛ برای وسیله جا‌مانده در ترمینال، با بخش اشیای پیداشده یا اطلاعات فرودگاه مکاتبه کنید. چمدان تحویلیِ نرسیده را از ایرلاین پیگیری کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شرح، رنگ و محل تقریبی جاماندن وسیله و تاریخ پرواز را آماده کنید.",
+            "گذرنامه و مدارک هویتی را با روش اعلام‌شده از مراجع فرودگاهی یا پلیس پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای تماس و خدمات اشیای جامانده",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "official-contacts",
+      "title_fa": "راه‌های تماس و اطلاع‌رسانی رسمی",
+      "subtitle_fa": "شماره‌های تأییدنشده ثبت نشده‌اند",
+      "icon": "phone",
+      "order": 140,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای اطلاعات ثابت پکن کپیتال به درگاه منبع درج‌شده مراجعه کنید. شماره تماس عمومی معتبر برای این نسخه به‌صورت مستقل احراز نشده است؛ از اطلاعات تماس در وبگاه رسمی استفاده کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "درگاه اطلاعات و ارتباط با فرودگاه",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "passenger-guide",
+      "title_fa": "چک‌لیست پذیرش مسافر",
+      "subtitle_fa": "مدارک، زمان حضور و کانتر وابسته به پرواز است",
+      "icon": "clipboard-check",
+      "order": 150,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules",
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام و شماره پرواز، روز سفر، فرودگاه مبدأ و مقصد و ترمینال را از بلیت و پیام ایرلاین تطبیق دهید.",
+            "کارت شناسایی معتبر؛ برای پرواز بین‌المللی گذرنامه و مدارک ورود و ترانزیت کشور مقصد را آماده کنید.",
+            "مقدار بار و زمان بسته‌شدن کانتر را از ایرلاین مجری تأیید کنید؛ برای همه فرودگاه‌ها یک زمان قطعی وجود ندارد.",
+            "به تغییر احتمالی گیت، توقف عملیات یا هشدارهای امنیتی در روز سفر توجه کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات حمل بار و ایمنی مسافر در IATA",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        }
+      ]
+    },
+    {
+      "id": "connections",
+      "title_fa": "ترانزیت و اتصال پروازها",
+      "subtitle_fa": "نوع بلیت و کنترل گذرنامه مهم است",
+      "icon": "route",
+      "order": 160,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/dtjcx.html"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق اطلاعیه رسمی اکتبر ۲۰۲۶ مسیر بعضی گیت‌های D01 تا D58 در T3 تغییر کرده است؛ برای گیت‌های دوردست زمان اضافی لحاظ کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر بلیت‌ها مستقل‌اند، درباره تحویل بار و پذیرش مجدد سؤال کنید.",
+            "برای خروج از محدوده ترانزیت، وضعیت ویزا و اجازه ورود را با مرجع رسمی کشور کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات اتصال و ترمینال",
+          "url": "https://www.bcia.com.cn/dtjcx.html"
+        }
+      ]
+    },
+    {
+      "id": "international-travel",
+      "title_fa": "گذرنامه، ویزا و کنترل مرزی",
+      "subtitle_fa": "تابعیت و مسیر سفر تعیین‌کننده هستند",
+      "icon": "shield-check",
+      "order": 170,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در سفر بین‌المللی از طریق پکن کپیتال، شرایط گذرنامه، ویزای ورود یا ترانزیت، اعتبار مدارک و مقررات گمرکی با تابعیت، مقصد و بلیت تغییر می‌کند. اطلاعات ثابت این صفحه تعیین‌کننده مجوز ورود نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از خرید یا سفر، مدارک لازم را از سفارت/مرجع دولتی مقصد و ایرلاین استعلام کنید.",
+            "برای پروازهای دارای توقف، نیاز به تغییر ترمینال و عبور از مرز را جداگانه بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای فرودگاه برای خدمات ورود و سفر",
+          "url": "https://www.bcia.com.cn/"
+        }
+      ]
+    },
+    {
+      "id": "security-notices",
+      "title_fa": "اطلاعیه‌ها و نکات امنیت سفر",
+      "subtitle_fa": "قواعد جدید بر راهنمای ثابت مقدم‌اند",
+      "icon": "shield-alert",
+      "order": 180,
+      "status": "published",
+      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules",
+        "https://www.bcia.com.cn/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پکن کپیتال قواعد غربالگری امنیتی، حمل باتری و مایعات، دسترسی به بعضی مناطق و وضعیت عملیاتی ممکن است تغییر کنند؛ در این فایل قیمت، زمان‌بندی یا اعلان زنده منتشر نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای وسایل پزشکی یا باتری‌های خاص، پیش از حرکت مجوز موردنیاز را از ایرلاین بررسی کنید.",
+            "منابع رسمی فرودگاه و اعلام‌های کارکنان در روز سفر در اولویت‌اند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای محدودیت‌های بار IATA",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        }
+      ]
     }
   ]
 }
