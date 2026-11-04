@@ -480,6 +480,16 @@ internal fun fareCityIconName(city: String): String? {
         "گوانجو" -> "price_city_guangzhou"
         "مسکو(شرمتیوو)", "مسکوشرمتیوو" -> "price_city_moscow_sheremetyevo"
         "قشم" -> "price_city_qeshm"
+        "تهران" -> "price_city_tehran"
+        "اصفهان" -> "price_city_isfahan"
+        "رشت" -> "price_city_rasht"
+        "همدان" -> "price_city_hamedan"
+        "قم" -> "price_city_qom"
+        "گرگان" -> "price_city_gorgan"
+        "دبی" -> "price_city_dubai"
+        "دوحه" -> "price_city_doha"
+        "آنکارا" -> "price_city_ankara"
+        "آنتالیا" -> "price_city_antalya"
         else -> null
     }
 }
