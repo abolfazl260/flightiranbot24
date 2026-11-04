@@ -4,12 +4,16 @@
 
 ## Editorial policy
 
-- No additional identity, admin, database or API is introduced; all 20 pre-existing detail JSON files are populated and indexed.
+- No additional identity, admin, database or API is introduced. 19 previously disabled airport detail JSON files are populated in this PR; IFN was independently published on main during work and is preserved unchanged. The complete set of 29 is indexed.
 - Published facts and passenger guidance are attributed by per-section HTTPS `source_urls` and `reviewed_at`. Routes, terminal allocations, fees, parking capacity, flight status, visa eligibility and service hours are not fixed as live claims.
 - Official airport/operator links are preferred. Some Iranian airport official services and the Minsk airport website were unavailable for independent live retrieval; the content explicitly discloses these limitations.
 - Maps based on OurAirports/OIBK are approximate geographic references, not official terminal plans; the Delhi terminal-map link is the airport's official interactive guide.
 - Traveler experiences and passenger-guide videos remain unpublished drafts throughout this batch. Existing approved videos elsewhere in the repository are unaffected.
 - An absent or uncertain section remains an empty draft, not an unsubstantiated published claim.
+
+## Concurrent main changes
+
+- IFN: existing main guide retained rather than overwritten by this batch.
 
 ## Sources and coverage by airport
 
@@ -25,7 +29,7 @@
 | DOH | OTHH | [source](https://dohahamadairport.com/) · [source](https://aim.gov.qa/eaip/2026-01-22-AIRAC/html/eAIP/AD-2.OTHH-en-GB.html) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | DXB | OMDB | [source](https://dubaiairports.ae/) · [source](https://www.dubai.ae/arriving-to-dubai) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | FRA | EDDF | [source](https://www.frankfurt-airport.com/en.html) · [source](https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
-| IFN | OIFM | [source](https://oibk.ir/fa/airports/oifm) · [source](https://blog.flysepehran.com/fa/airports/isfahan-airport/) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 14 | 5 |
+| IFN | OIFM | [source](https://oibk.ir/fa/airports/oifm) · [source](https://blog.flysepehran.com/fa/airports/isfahan-airport/) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 20 | 2 |
 | KIH | OIBK | [source](https://blog.flysepehran.com/fa/airports/kish-airport/) · [source](https://blog.flysepehran.com/fa/airports/kish-airport/) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 13 | 6 |
 | KUL | WMKK | [source](https://www.malaysiaairports.com.my/) · [source](https://www.mot.gov.my/en/aviation/infrastructure/list-of-airports/KLIA) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | LHR | EGLL | [source](https://www.heathrow.com/) · [source](https://tfl.gov.uk/modes/elizabeth-line/getting-to-and-from-heathrow-on-the-elizabeth-line) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
