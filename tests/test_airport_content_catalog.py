@@ -151,3 +151,26 @@ def test_unapproved_experiences_never_publish(tmp_path):
     save(path, detail)
     with pytest.raises(ValueError, match="Unapproved experience"):
         validate_dataset(tmp_path)
+
+def test_istanbul_airport_guide_is_enabled_and_uses_evidence():
+    """Istanbul guide has published source-backed data but no fabricated experiences."""
+    validate_dataset()
+    base = ROOT / "data" / "airports"
+    index = load(base / "airport-index.v1.json")
+    ist_entry = next(e for e in index["airports"] if e["iata"] == "IST")
+    assert ist_entry["enabled"] is True
+    detail = load(base / ist_entry["detail_path"])
+    assert detail["iata"] == "IST"
+    sections = detail["sections"]
+    assert len({s["id"] for s in sections}) == len(sections)
+    published = [s for s in sections if s["status"] == "published"]
+    assert len(published) >= 18
+    assert all(s["source_urls"] and s["blocks"] and s["reviewed_at"] for s in published)
+    experiences = next(s for s in sections if s["id"] == "traveler-experiences")
+    assert experiences["status"] == "draft"
+    assert not experiences["blocks"]
+    assert not any(
+        block["type"] == "flight_board"
+        for section in published
+        for block in section["blocks"]
+    )
