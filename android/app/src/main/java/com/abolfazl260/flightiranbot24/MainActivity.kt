@@ -111,6 +111,8 @@ class MainActivity : ComponentActivity() {
 
     private fun navigateTo(destination: HomeDestination) {
         when (destination) {
+            HomeDestination.AIRLINES ->
+                startActivity(Intent(this, AirlineDirectoryActivity::class.java))
             HomeDestination.OFFLINE_AIRPORTS, HomeDestination.TELEGRAM_AIRPORTS ->
                 startActivity(Intent(this, AirportDirectoryActivity::class.java))
             HomeDestination.OFFLINE_CHECKLIST ->
@@ -313,6 +315,7 @@ private fun HomeServiceRow(destination: HomeDestination, onClick: () -> Unit) {
 }
 
 private fun HomeDestination.serviceIconSlot(): Int = when (this) {
+    HomeDestination.AIRLINES -> 1
     HomeDestination.TICKET_PRICES -> 0
     HomeDestination.IRAN_FLIGHTS, HomeDestination.TELEGRAM_AIRPORTS,
     HomeDestination.OFFLINE_AIRPORTS -> 1
@@ -324,6 +327,7 @@ private fun HomeDestination.serviceIconSlot(): Int = when (this) {
 }
 
 private fun HomeDestination.serviceDescriptionResource(): Int = when (this) {
+    HomeDestination.AIRLINES -> R.string.service_airlines_description
     HomeDestination.TICKET_PRICES -> R.string.service_fares_description
     HomeDestination.IRAN_FLIGHTS -> R.string.service_iran_flights_description
     HomeDestination.TELEGRAM_AIRPORTS, HomeDestination.OFFLINE_AIRPORTS ->
@@ -349,6 +353,7 @@ private fun HomeSectionHeading(title: String, subtitle: String) {
 }
 
 private fun HomeDestination.labelResource(): Int = when (this) {
+    HomeDestination.AIRLINES -> R.string.airlines_title
     HomeDestination.OFFLINE_AIRPORTS -> R.string.offline_airports
     HomeDestination.OFFLINE_CHECKLIST -> R.string.checklist_title
     HomeDestination.TICKET_PRICES -> R.string.ticket_prices_title

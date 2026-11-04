@@ -17,6 +17,7 @@ internal class LocalHomeRepository : HomeRepository {
             HomeDestination.TICKET_PRICES,
             HomeDestination.IRAN_FLIGHTS,
             HomeDestination.OFFLINE_AIRPORTS,
+            HomeDestination.AIRLINES,
             HomeDestination.TELEGRAM_BOT,
             HomeDestination.TELEGRAM_VISA,
             HomeDestination.TELEGRAM_USEFUL,

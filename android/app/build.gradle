@@ -104,6 +104,7 @@ android {
             assets.srcDir('../../data/travel-websites')
             // Airport content is per-IATA, independently published and fetched on demand.
             assets.srcDir('../../data/airports')
+            assets.srcDir('../../data/airlines')
         }
     }
 
