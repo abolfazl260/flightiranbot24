@@ -69,7 +69,7 @@
     {
       "iata": "IST",
       "detail_path": "details/IST.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "KER",
