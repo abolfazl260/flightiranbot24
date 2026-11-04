@@ -490,6 +490,16 @@ internal fun fareCityIconName(city: String): String? {
         "دوحه" -> "price_city_doha"
         "آنکارا" -> "price_city_ankara"
         "آنتالیا" -> "price_city_antalya"
+        "سنندج" -> "price_city_sanandaj"
+        "ساری" -> "price_city_sari"
+        "اردبیل" -> "price_city_ardabil"
+        "کاشان" -> "price_city_kashan"
+        "خرمآباد" -> "price_city_khorramabad"
+        "زنجان" -> "price_city_zanjan"
+        "اراک" -> "price_city_arak"
+        "یاسوج" -> "price_city_yasuj"
+        "چابهار" -> "price_city_chabahar"
+        "بندرانزلی" -> "price_city_bandaranzali"
         else -> null
     }
 }

@@ -6,7 +6,7 @@ import org.junit.Test
 
 class TicketCityIconMappingTest {
     @Test
-    fun mapsTwentyCitiesToStableResourceNames() {
+    fun mapsFortyCitiesToStableResourceNames() {
         val expected = mapOf(
             "مشهد" to "price_city_mashhad",
             "استانبول" to "price_city_istanbul",
@@ -28,6 +28,26 @@ class TicketCityIconMappingTest {
             "گوانجو" to "price_city_guangzhou",
             "مسکو(شرمتیوو)" to "price_city_moscow_sheremetyevo",
             "قشم" to "price_city_qeshm",
+            "تهران" to "price_city_tehran",
+            "اصفهان" to "price_city_isfahan",
+            "رشت" to "price_city_rasht",
+            "همدان" to "price_city_hamedan",
+            "قم" to "price_city_qom",
+            "گرگان" to "price_city_gorgan",
+            "دبی" to "price_city_dubai",
+            "دوحه" to "price_city_doha",
+            "آنکارا" to "price_city_ankara",
+            "آنتالیا" to "price_city_antalya",
+            "سنندج" to "price_city_sanandaj",
+            "ساری" to "price_city_sari",
+            "اردبیل" to "price_city_ardabil",
+            "کاشان" to "price_city_kashan",
+            "خرم‌آباد" to "price_city_khorramabad",
+            "زنجان" to "price_city_zanjan",
+            "اراک" to "price_city_arak",
+            "یاسوج" to "price_city_yasuj",
+            "چابهار" to "price_city_chabahar",
+            "بندر انزلی" to "price_city_bandaranzali",
         )
         expected.forEach { (city, resourceName) ->
             assertEquals(city, resourceName, fareCityIconName(city))
@@ -38,6 +58,8 @@ class TicketCityIconMappingTest {
     fun supportsWhitespaceAndArabicLetterVariants() {
         assertEquals("price_city_moscow_sheremetyevo", fareCityIconName("مسکو (شرمتیوو)"))
         assertEquals("price_city_kermanshah", fareCityIconName("كرمانشاه"))
+        assertEquals("price_city_khorramabad", fareCityIconName("خرم آباد"))
+        assertEquals("price_city_bandaranzali", fareCityIconName("بندرانزلی"))
     }
 
     @Test
