@@ -463,6 +463,7 @@ private fun FareCard(fare: TicketFare) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Row(
+                        modifier = Modifier.weight(1f),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
                     ) {
@@ -471,6 +472,8 @@ private fun FareCard(fare: TicketFare) {
                             fare.destination,
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.Bold,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                     FareChangeBadge(change, changeColor, badgeBackground)
@@ -481,7 +484,7 @@ private fun FareCard(fare: TicketFare) {
                     fontWeight = FontWeight.Bold,
                 )
                 Text(
-                    average + " تومان".takeIf { fare.averageToman != null }.orEmpty(),
+                    if (fare.averageToman != null) average + " تومان" else average,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     style = MaterialTheme.typography.bodySmall,
                 )
