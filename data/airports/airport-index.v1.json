@@ -99,7 +99,7 @@
     {
       "iata": "MHD",
       "detail_path": "details/MHD.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "MSQ",
@@ -124,7 +124,7 @@
     {
       "iata": "SYZ",
       "detail_path": "details/SYZ.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "TBZ",
@@ -134,7 +134,7 @@
     {
       "iata": "THR",
       "detail_path": "details/THR.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "ZAH",
