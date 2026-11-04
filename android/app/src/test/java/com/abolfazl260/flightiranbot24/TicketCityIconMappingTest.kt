@@ -6,7 +6,7 @@ import org.junit.Test
 
 class TicketCityIconMappingTest {
     @Test
-    fun mapsFiftyCitiesToStableResourceNames() {
+    fun mapsFiftySixCitiesToStableResourceNames() {
         val expected = mapOf(
             "مشهد" to "price_city_mashhad",
             "استانبول" to "price_city_istanbul",
@@ -58,6 +58,12 @@ class TicketCityIconMappingTest {
             "آلانیا" to "price_city_alanya",
             "پکن" to "price_city_beijing",
             "جیروفت" to "price_city_jiroft",
+            "بجنورد" to "price_city_bojnord",
+            "ماهشهر" to "price_city_mahshahr",
+            "رفسنجان" to "price_city_rafsanjan",
+            "طبس" to "price_city_tabas",
+            "لار" to "price_city_lar",
+            "سراوان" to "price_city_saravan",
         )
         expected.forEach { (city, resourceName) ->
             assertEquals(city, resourceName, fareCityIconName(city))
@@ -71,6 +77,9 @@ class TicketCityIconMappingTest {
         assertEquals("price_city_khorramabad", fareCityIconName("خرم آباد"))
         assertEquals("price_city_bandaranzali", fareCityIconName("بندرانزلی"))
         assertEquals("price_city_mazar_sharif", fareCityIconName("مزار شریف"))
+        assertEquals("price_city_jiroft", fareCityIconName("جیرفت"))
+        assertEquals("price_city_jiroft", fareCityIconName("جیروفت"))
+        assertEquals("price_city_mahshahr", fareCityIconName("ماه شهر"))
     }
 
     @Test
