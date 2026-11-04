@@ -84,7 +84,7 @@
     {
       "iata": "KIH",
       "detail_path": "details/KIH.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "KUL",
