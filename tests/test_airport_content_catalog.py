@@ -78,7 +78,7 @@ def test_add_section_to_one_airport_does_not_affect_other_airports(tmp_path):
     original_mhd = load(mhd)
     airport = load(thr)
     airport["sections"].append({
-        "id": "parking", "title_fa": "پارکینگ", "icon": "car", "order": 60,
+        "id": "test-extra-section", "title_fa": "بخش آزمون", "icon": "car", "order": 60,
         "status": "draft", "reviewed_at": None, "source_urls": [], "blocks": [],
     })
     save(thr, airport)
@@ -90,6 +90,8 @@ def test_published_section_requires_review_and_evidence(tmp_path):
     base = copy_catalog(tmp_path)
     content = load(base / "details/THR.v1.json")
     first = content["sections"][0]
+    first["reviewed_at"] = None
+    first["source_urls"] = []
     first["status"] = "published"
     first["blocks"] = [{"type": "text", "text_fa": "قوانین بر اساس ایرلاین متفاوت است."}]
     save(base / "details/THR.v1.json", content)
