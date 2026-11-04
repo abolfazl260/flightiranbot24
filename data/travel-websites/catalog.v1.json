@@ -168,7 +168,7 @@
       "name_fa": "Travel Requirements",
       "description_fa": "راهنمای آنلاین شرایط ورود و الزامات مقصد بر اساس کشور و گذرنامه؛ تاریخ اعتبار و منبع هر داده را در صفحه مقصد بررسی کنید.",
       "category_id": "visa-entry",
-      "url": "https://travelrequirements.info/",
+      "url": "https://travelrequirements.info/en/",
       "image": "images/travel-requirements-info.webp",
       "order": 12,
       "enabled": true
@@ -188,7 +188,7 @@
       "name_fa": "هشدارهای سفر وزارت خارجه آمریکا",
       "description_fa": "سطح هشدار سفر، نکات امنیتی و اطلاعات کنسولی کشورها؛ برای تصمیم‌گیری، هشدارهای رسمی کشور مقصد را نیز ببینید.",
       "category_id": "visa-entry",
-      "url": "https://travel.state.gov/content/travel/en/traveladvisories/traveladvisories.html",
+      "url": "https://travel.state.gov/en/international-travel/travel-advisories.html",
       "image": "images/us-travel-advisories.webp",
       "order": 14,
       "enabled": true
@@ -248,7 +248,7 @@
       "name_fa": "راهنمای بار یاتا (IATA Baggage)",
       "description_fa": "اطلاعات عمومی درباره حمل بار و مقررات مرتبط؛ میزان مجاز بار و هزینه‌ها را حتماً در قوانین شرکت هواپیمایی خود تأیید کنید.",
       "category_id": "airport-services",
-      "url": "https://www.iata.org/en/programs/ops-infra/baggage/",
+      "url": "https://www.iata.org/bags/index",
       "image": "images/iata-baggage.webp",
       "order": 20,
       "enabled": true
@@ -278,7 +278,7 @@
       "name_fa": "حقوق مسافر هوایی اتحادیه اروپا",
       "description_fa": "توضیحات رسمی اتحادیه اروپا درباره حقوق مسافر در برخی موارد تأخیر، لغو پرواز و رد سوارشدن؛ شمول مقررات به مسیر بستگی دارد.",
       "category_id": "passenger-rights",
-      "url": "https://transport.ec.europa.eu/transport-themes/passenger-rights/air_en",
+      "url": "https://europa.eu/youreurope/citizens/travel/passenger-rights/air/",
       "image": "images/eu-air-passenger-rights.webp",
       "order": 23,
       "enabled": true
@@ -288,7 +288,7 @@
       "name_fa": "راهنمای مسافران سازمان هواپیمایی کشوری بریتانیا",
       "description_fa": "راهنمای رسمی حقوق مسافر و راه‌های پیگیری مشکلات پرواز در بریتانیا؛ شرایط کاربرد به مسیر و شرکت مربوط است.",
       "category_id": "passenger-rights",
-      "url": "https://www.caa.co.uk/passengers/",
+      "url": "https://www.caa.co.uk/air-passengers/",
       "image": "images/uk-caa-passengers.webp",
       "order": 24,
       "enabled": true

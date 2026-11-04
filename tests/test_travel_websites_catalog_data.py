@@ -43,3 +43,23 @@ def test_each_catalog_entry_has_a_valid_local_webp_thumbnail():
         assert image[:4] == b"RIFF"
         assert image[8:12] == b"WEBP"
         assert 12 < len(image) <= 64 * 1024
+
+
+def test_passenger_facing_website_urls_point_to_canonical_pages():
+    """Guard reviewed passenger links against outdated redirects or generic landing pages."""
+    catalog = json.loads((CATALOG_DIR / "catalog.v1.json").read_text(encoding="utf-8"))
+    urls = {item["id"]: item["url"] for item in catalog["websites"]}
+    expected = {
+        "iata-baggage": "https://www.iata.org/bags/index",
+        "eu-air-passenger-rights": "https://europa.eu/youreurope/citizens/travel/passenger-rights/air/",
+        "us-travel-advisories": "https://travel.state.gov/en/international-travel/travel-advisories.html",
+        "uk-caa-passengers": "https://www.caa.co.uk/air-passengers/",
+        "travel-requirements-info": "https://travelrequirements.info/en/",
+    }
+    for website_id, target_url in expected.items():
+        assert urls[website_id] == target_url
+
+    # Iran-specific endpoints have not been proven dead; retain them for local testing.
+    assert urls["iran-civil-aviation"] == "https://farasa.cao.ir/"
+    assert urls["iran-fids"] == "https://fids.airport.ir/"
+    assert urls["iran-airports-company"] == "https://www.airport.ir/"
