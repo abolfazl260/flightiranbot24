@@ -1,10 +1,7 @@
 name: Android Store Screenshots
 
+# Emulator screenshots build an APK, so run only when explicitly requested.
 on:
-  # Run separately after every push/merge to the main branch, regardless of paths.
-  push:
-    branches: [main]
-  # Optional reruns are restricted to main by the job guard below.
   workflow_dispatch:
 
 permissions:
@@ -12,7 +9,7 @@ permissions:
 
 jobs:
   screenshots:
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 55
     steps:
