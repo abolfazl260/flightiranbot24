@@ -133,30 +133,32 @@
     {
       "id": "terminals",
       "title_fa": "ترمینال‌ها، سالن‌ها و گیت‌ها",
-      "subtitle_fa": "کانتر و گیت روز پرواز را تأیید کنید",
+      "subtitle_fa": "ترمینال ۳ فعال است؛ ایرلاین‌های پیشین ترمینال ۲ منتقل شده‌اند",
       "icon": "building-2",
       "order": 60,
       "status": "published",
-      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "reviewed_at": "2026-11-04T11:17:57.564Z",
       "source_urls": [
-        "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html"
+        "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html",
+        "https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html"
       ],
       "blocks": [
         {
           "type": "text",
-          "text_fa": "بخش‌های مسافری با ترمینال‌های ۱، ۲ و ۳ و جابه‌جایی بین آنها وجود دارد؛ راهنمای حمل‌ونقل رسمی مسیر SkyLine تا ترمینال ۳ را توضیح می‌دهد."
+          "text_fa": "طبق اطلاعیه رسمی فرودگاه فرانکفورت در نوامبر ۲۰۲۶، ترمینال ۳ با گیت‌های G، H و J فعال است. ایرلاین‌های پیشین ترمینال ۲ به ترمینال ۳ منتقل شده‌اند. برای پذیرش مسافر، ترمینال ۱ یا ۳ و کانتر دقیق را از فهرست روزِ ایرلاین در وب‌سایت فرودگاه و بلیت کنترل کنید؛ اطلاعات قدیمی ترمینال ۲ نباید مبنای حرکت باشد."
         },
         {
           "type": "bullets",
           "items_fa": [
-            "برای پذیرش، شماره ترمینال و کانتر همان پرواز را از ایرلاین یا نمایشگرهای فرودگاه دریافت کنید.",
-            "اگر پرواز اتصال دارید، مسیر جابه‌جایی و کنترل‌های امنیتی یا مرزی را پیش از سفر بررسی کنید."
+            "ترمینال ۳ در حال خدمت‌رسانی است و فهرست ایرلاین‌ها و گیت‌ها ممکن است تغییر کند.",
+            "برای انتقال بین ترمینال ۱ و ترمینال ۳ از قطار داخلی SkyLine استفاده کنید و ساعات فعالیت یا شاتل جایگزین را بررسی کنید.",
+            "در پرواز اتصالی برای کنترل مرزی، بازرسی امنیتی و تغییر ساختمان زمان کافی در نظر بگیرید."
           ]
         },
         {
           "type": "link",
-          "title_fa": "اطلاعات ترمینال و خدمات",
-          "url": "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html"
+          "title_fa": "راهنمای رسمی ترمینال ۳ و جابه‌جایی ایرلاین‌ها",
+          "url": "https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html"
         }
       ]
     },
@@ -167,14 +169,15 @@
       "icon": "car-taxi-front",
       "order": 70,
       "status": "published",
-      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "reviewed_at": "2026-11-04T11:17:57.564Z",
       "source_urls": [
-        "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html"
+        "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html",
+        "https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html"
       ],
       "blocks": [
         {
           "type": "text",
-          "text_fa": "ایستگاه منطقه‌ای زیر ترمینال ۱ است و قطارهای S8 و S9 و سرویس‌های منطقه‌ای دارد. ایستگاه راه‌آهن راه‌دور برای ICE/IC نیز موجود است؛ برای ترمینال ۳ مسیر SkyLine را بررسی کنید."
+          "text_fa": "فرودگاه فرانکفورت ایستگاه قطار منطقه‌ای نزدیک ترمینال ۱ (از جمله خطوط S8 و S9) و ایستگاه قطارهای دوربرد ICE/IC دارد. برای رفت‌وآمد به ترمینال ۳، SkyLine رایگان به کار می‌رود؛ مطابق راهنمای فعلی فرودگاه خارج از ساعات فعالیت قطار، شاتل اتوبوسی جایگزین ارائه می‌شود. زمان حرکت و سکو را همان روز بررسی کنید."
         },
         {
           "type": "bullets",
@@ -188,6 +191,11 @@
           "type": "link",
           "title_fa": "منبع و اطلاعات حمل‌ونقل",
           "url": "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "دسترسی رسمی به ترمینال ۳ با SkyLine",
+          "url": "https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html"
         }
       ]
     },
@@ -387,14 +395,15 @@
       "icon": "route",
       "order": 160,
       "status": "published",
-      "reviewed_at": "2026-11-04T11:05:45.686Z",
+      "reviewed_at": "2026-11-04T11:17:57.564Z",
       "source_urls": [
-        "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html"
+        "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html",
+        "https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html"
       ],
       "blocks": [
         {
           "type": "text",
-          "text_fa": "در تغییر ترمینال یا پرواز شنگن/غیرشنگن، زمان عبور کنترل مرزی و جابه‌جایی را لحاظ کنید."
+          "text_fa": "اگر پرواز اتصال دارید، ترمینال ایرلاین مجری را دوباره بررسی کنید: با آغاز فعالیت ترمینال ۳، ایرلاین‌های پیشین ترمینال ۲ به ترمینال ۳ منتقل شده‌اند. برای جابه‌جایی با SkyLine، کنترل امنیتی و عبور مرزی (مسیر شنگن/غیرشنگن) زمان کافی در نظر بگیرید."
         },
         {
           "type": "bullets",
@@ -407,6 +416,11 @@
           "type": "link",
           "title_fa": "اطلاعات اتصال و ترمینال",
           "url": "https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه رسمی جابه‌جایی ترمینال‌ها",
+          "url": "https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html"
         }
       ]
     },

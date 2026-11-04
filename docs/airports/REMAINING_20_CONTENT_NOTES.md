@@ -40,6 +40,11 @@
 | PEK | ZBAA | [source](https://www.bcia.com.cn/) · [source](https://www.bcia.com.cn/dtjcx.html) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | ZAH | OIZH | [source](https://oibk.ir/fa/airports/oizh) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 9 | 10 |
 
+
+## November 2026 operational correction — FRA
+
+The airport operator confirms **Terminal 3 is operational** and that **all airlines formerly operating from Terminal 2 have moved to Terminal 3**. Terminal 3 serves gates G, H and J; passengers must verify their operating airline and current terminal before departure. The guide's `terminals`, `ground-transport` and `connections` sections cite the operator's current terminal page: https://www.frankfurt-airport.com/en/flights-and-transfer/terminal-3.html. This corrects obsolete wording that presented Terminal 2 as an active alternative.
+
 ## Recheck triggers
 
 Re-verify each airport on airline/terminal changes, service disruptions, new transport/parking tariffs, government entry requirement changes, and airport notices. Do not advance `reviewed_at` without a real review.
