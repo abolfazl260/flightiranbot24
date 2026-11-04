@@ -5,22 +5,84 @@
     {
       "id": "baggage-rules",
       "title_fa": "بار مجاز و قوانین حمل بار",
+      "subtitle_fa": "مقدار بار با ایرلاین تعیین می‌شود؛ قوانین امنیتی ترکیه را هم ببینید",
       "icon": "luggage",
       "order": 10,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.dhmi.gov.tr/Sayfalar/EN/LiquidLimitations.aspx",
+        "https://www.turkishairlines.com/en-int/any-questions/baggage-information/",
+        "https://www.turkishairlines.com/en-gb/any-questions/restrictions/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "حد مجاز بار تحویلی و بار کابین در فرودگاه استانبول برای همه پروازها یکسان نیست. وزن، تعداد چمدان و هزینه اضافه‌بار تابع ایرلاین، کلاس پروازی، مسیر و شرایط بلیت است؛ اعداد روی بلیت و مقررات شرکت برگزارکننده پرواز ملاک‌اند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بر اساس راهنمای سازمان فرودگاه‌های ترکیه (DHMİ)، مایعات، ژل‌ها و اسپری‌های داخل کابین باید در ظروف با ظرفیت حداکثر ۱۰۰ میلی‌لیتر و در کیسه پلاستیکی شفاف حداکثر یک‌لیتری قرار گیرند؛ درباره استثناهای دارو و غذای کودک در کنترل امنیتی پرس‌وجو کنید.",
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی نگذارید؛ محدودیت ظرفیت و تعداد را از ایرلاین خود بررسی کنید. محدودیت‌های اعلام‌شده برای ترکیش ایرلاینز ممکن است برای شرکت‌های دیگر متفاوت باشد.",
+            "بار غیرمعمول مثل کالسکه، تجهیزات ورزشی، لوازم پزشکی یا حیوان خانگی را پیش از سفر با شرکت هواپیمایی هماهنگ کنید.",
+            "مدارک، پول و وسایل ضروری را در کیف همراه نگه دارید؛ برچسب بار و رسید تحویل چمدان را تا رسیدن به مقصد حفظ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "محدودیت مایعات در راهنمای رسمی DHMİ",
+          "url": "https://www.dhmi.gov.tr/Sayfalar/EN/LiquidLimitations.aspx"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای بار شرکت هواپیمایی ترکیش ایرلاینز",
+          "url": "https://www.turkishairlines.com/en-int/any-questions/baggage-information/"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست اقلام ممنوع یا مشروط در پرواز",
+          "url": "https://www.turkishairlines.com/en-gb/any-questions/restrictions/"
+        }
+      ]
     },
     {
       "id": "flight-status",
       "title_fa": "وضعیت پروازها",
+      "subtitle_fa": "لینک مراجع رسمی؛ بدون ادعای داده لحظه‌ای",
       "icon": "plane-takeoff",
       "order": 20,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.turkishairlines.com/en-be/flights/flight-status/",
+        "https://www.istairport.com/tr"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این کاتالوگ، جدول زنده پروازها نیست. برای مشاهده آخرین وضعیت پرواز، زمان واقعی، تأخیر، لغو، شماره گیت و تغییرات احتمالی به وب‌سایت رسمی فرودگاه، نمایشگرهای ترمینال یا سامانه شرکت هواپیمایی مراجعه کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ و جهت پرواز (ورودی یا خروجی) را دقیق بررسی کنید.",
+            "برای پروازهای ترکیش ایرلاینز از سامانه رسمی Flight Status این شرکت استفاده کنید؛ برای سایر ایرلاین‌ها وب‌سایت همان شرکت مرجع تکمیلی است.",
+            "شماره گیت، کانتر و ساعت سوارشدن ممکن است در روز سفر تغییر کند؛ فقط به اطلاعات ذخیره‌شده در اپ تکیه نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وضعیت پرواز در وب‌سایت فرودگاه استانبول",
+          "url": "https://www.istairport.com/tr"
+        },
+        {
+          "type": "link",
+          "title_fa": "بررسی وضعیت پرواز ترکیش ایرلاینز",
+          "url": "https://www.turkishairlines.com/en-be/flights/flight-status/"
+        }
+      ]
     },
     {
       "id": "traveler-experiences",
@@ -34,23 +96,604 @@
     },
     {
       "id": "airport-map",
-      "title_fa": "نقشه فرودگاه",
+      "title_fa": "نقشه فرودگاه و مسیریابی ترمینال",
+      "subtitle_fa": "موقعیت جغرافیایی و نقشه تعاملی گیت‌ها و امکانات",
       "icon": "map",
       "order": 40,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-be/istanbul-airport/terminal-maps/",
+        "https://maps.istairport.com/",
+        "https://dhmi.gov.tr/sayfalar/havalimani/istanbul/GenelBilgiler.aspx"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه استانبول (IST) در بخش اروپایی استانبول، محدوده آرناووت‌کوی قرار دارد. نقشه تعاملی رسمی به مسافر کمک می‌کند کانتر چک‌این، گیت، فروشگاه‌ها، خودپرداز و خدمات داخل ساختمان را پیدا کند؛ شماره گیت را از کارت پرواز و نمایشگر تأیید کنید."
+        },
+        {
+          "type": "map",
+          "title_fa": "موقعیت فرودگاه استانبول (IST) روی نقشه",
+          "latitude": 41.27528,
+          "longitude": 28.75194,
+          "external_url": "https://www.google.com/maps/search/?api=1&query=41.27528%2C28.75194"
+        },
+        {
+          "type": "link",
+          "title_fa": "نقشه تعاملی داخل ترمینال (مرجع فرودگاه)",
+          "url": "https://maps.istairport.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای نقشه فرودگاه در سایت ترکیش ایرلاینز",
+          "url": "https://www.turkishairlines.com/en-be/istanbul-airport/terminal-maps/"
+        }
+      ]
     },
     {
       "id": "airport-videos",
-      "title_fa": "ویدیو فرودگاه",
+      "title_fa": "ویدیو فرودگاه و راهنمای ترانزیت",
+      "subtitle_fa": "ویدیوهای رسمی ترکیش ایرلاینز برای مسیرهای اتصال پرواز",
       "icon": "video",
       "order": 50,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-lb/any-questions/transfer-transit-passengers/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سه ویدیوی آموزشی معرفی‌شده در صفحه رسمی ترکیش ایرلاینز، مسیر ترانزیت بین پروازهای داخلی و بین‌المللی فرودگاه استانبول را توضیح می‌دهند. این ویدیوها راهنمای کلی‌اند؛ برای تغییر احتمالی مسیر و گیت، تابلوهای روز سفر را ملاک قرار دهید."
+        },
+        {
+          "type": "video",
+          "title_fa": "ویدیو ترانزیت از پرواز داخلی به بین‌المللی",
+          "url": "https://www.youtube.com/watch?v=--q4f1X3ABE",
+          "attribution_fa": "ترکیش ایرلاینز؛ ویدیوی آموزشی رسمی مسیر ترانزیت"
+        },
+        {
+          "type": "video",
+          "title_fa": "ویدیو ترانزیت از پرواز بین‌المللی به داخلی",
+          "url": "https://www.youtube.com/watch?v=FBOfiRjIoxc",
+          "attribution_fa": "ترکیش ایرلاینز؛ ویدیوی آموزشی رسمی مسیر ترانزیت"
+        },
+        {
+          "type": "video",
+          "title_fa": "ویدیو ترانزیت از پرواز بین‌المللی به بین‌المللی",
+          "url": "https://www.youtube.com/watch?v=sijf1ZuKfvI",
+          "attribution_fa": "ترکیش ایرلاینز؛ ویدیوی آموزشی رسمی مسیر ترانزیت"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع ویدیوها و مراحل ترانزیت در سایت ایرلاین",
+          "url": "https://www.turkishairlines.com/en-lb/any-questions/transfer-transit-passengers/"
+        }
+      ]
+    },
+    {
+      "id": "terminals",
+      "title_fa": "ترمینال‌ها و سالن‌های پرواز",
+      "subtitle_fa": "یک ترمینال اصلی برای پرواز داخلی و بین‌المللی",
+      "icon": "building-2",
+      "order": 60,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.turkishairlines.com/en-be/istanbul-airport/terminal-maps/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه استانبول برای پروازهای داخلی و بین‌المللی یک ساختمان ترمینال اصلی زیر یک سقف دارد؛ بخش داخلی و بین‌المللی، مسیرهای کنترل و گیت‌های متفاوت دارند. نباید بخش‌های داخلی و بین‌المللی را دو فرودگاه یا دو ساختمان مستقل فرض کرد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پس از ورود به بخش خروجی، کانتر شرکت هواپیمایی و محدوده چک‌این را از تابلوها و نقشه رسمی پیدا کنید.",
+            "برای پرواز خارجی به کنترل گذرنامه و امنیت و برای پرواز داخلی به مسیر داخلی بروید؛ علائم International / Dış Hatlar و Domestic / İç Hatlar را دنبال کنید.",
+            "مسافت بعضی گیت‌ها تا سالن مرکزی زیاد است؛ برای پیاده‌روی و بررسی گیت زمان کافی در نظر بگیرید.",
+            "فرودگاه صبیحه گوکچن (SAW) فرودگاهی جداگانه است؛ کد IST را در بلیت و برنامه مسیر تأیید کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پاسخ رسمی به پرسش‌های مربوط به ترمینال‌ها",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمایش نقشه گیت‌ها و سالن‌ها",
+          "url": "https://maps.istairport.com/"
+        }
+      ]
+    },
+    {
+      "id": "metro-access",
+      "title_fa": "دسترسی با مترو M11",
+      "subtitle_fa": "خط M11؛ بررسی ساعت و اتصال‌ها در روز سفر",
+      "icon": "train-front",
+      "order": 70,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.dhmi.gov.tr/Sayfalar/Havalimani/Istanbul/Ulasim.aspx",
+        "https://www.metro.istanbul/en/Hatlarimiz/HatDetay?hat=M2"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "دسترسی ریلی فرودگاه با خط M11 امکان‌پذیر است. طبق راهنمای رسمی DHMİ، ایستگاه İstanbul Havalimanı در مسیر این خط قرار دارد و ایستگاه‌هایی مانند Gayrettepe، Kağıthane و Arnavutköy-Hastane در فهرست مسیر دیده می‌شوند. برای اتصال به شبکه شهری، در Gayrettepe امکان تعویض به خط M2 وجود دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در انتخاب مسیر، ایستگاه «İstanbul Havalimanı» را با «Atatürk Havalimanı» روی خط M1A اشتباه نگیرید.",
+            "برای دسترسی به میدان تکسیم می‌توان مسیر مترو و تعویض خط در شبکه شهری را بررسی کرد؛ تعداد تعویض‌ها و زمان کل را با برنامه به‌روز بسنجید.",
+            "ساعت اولین و آخرین قطار، کرایه، فاصله حرکت قطارها و زمان پیاده‌روی تا ترمینال ممکن است تغییر کند؛ آنها را قبل از حرکت از اپراتور رسمی کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست ایستگاه‌های متروی فرودگاه در DHMİ",
+          "url": "https://www.dhmi.gov.tr/Sayfalar/Havalimani/Istanbul/Ulasim.aspx"
+        },
+        {
+          "type": "link",
+          "title_fa": "نقشه خطوط و اتصال M11 به M2 در سایت متروی استانبول",
+          "url": "https://www.metro.istanbul/en/Hatlarimiz/HatDetay?hat=M2"
+        }
+      ]
+    },
+    {
+      "id": "airport-buses",
+      "title_fa": "اتوبوس‌های Havaist و IETT",
+      "subtitle_fa": "اتوبوس فرودگاهی و شهری؛ بدون ذخیره کرایه و زمان متغیر",
+      "icon": "bus-front",
+      "order": 80,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.dhmi.gov.tr/Sayfalar/Havalimani/Istanbul/Ulasim.aspx",
+        "https://web.hava.ist/",
+        "https://www.hava.ist/sefer-saatleri.php",
+        "https://iett.istanbul/icerik/Access-to-Airports"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اتوبوس‌های فرودگاهی Havaist و خطوط شهری IETT دو گزینه متفاوت هستند. خطوط و ایستگاه‌های این خدمات قابل‌تغییرند؛ مسیر را با نام مقصد و ایستگاه توقف انتخاب کنید، نه صرفاً شماره قدیمی یک خط."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سایت رسمی DHMİ نمونه‌هایی از مسیرهای Havaist به تکسیم، آکسارای، اسنلر، باکرکوی، کادیکوی و فرودگاه صبیحه گوکچن را معرفی کرده است.",
+            "در شبکه IETT مسیرهایی از جمله H-1، H-2، H-3، H-6 و H-8 برای دسترسی به IST معرفی شده‌اند؛ ایستگاه‌های فعال را در سایت IETT کنترل کنید.",
+            "ساعت حرکت، محل سوارشدن، قیمت بلیت و شیوه پرداخت را مستقیماً در Havaist یا IETT بررسی کنید؛ برنامه ثابت یا قیمت قطعی در این فایل نگهداری نمی‌شود.",
+            "اگر از IST به فرودگاه SAW پرواز دیگری دارید، زمان انتقال زمینی و ترافیک شهر را جداگانه در برنامه سفر لحاظ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "برنامه و خرید بلیت Havaist",
+          "url": "https://web.hava.ist/"
+        },
+        {
+          "type": "link",
+          "title_fa": "ساعت حرکت و اطلاعیه تغییر مسیر Havaist",
+          "url": "https://www.hava.ist/sefer-saatleri.php"
+        },
+        {
+          "type": "link",
+          "title_fa": "مسیرهای اتوبوس شهری فرودگاه در IETT",
+          "url": "https://iett.istanbul/icerik/Access-to-Airports"
+        }
+      ]
+    },
+    {
+      "id": "airport-taxi",
+      "title_fa": "تاکسی و حمل‌ونقل شخصی",
+      "subtitle_fa": "تاکسی از طبقه ورودی؛ کرایه و مدت مسیر متغیر است",
+      "icon": "car-taxi-front",
+      "order": 90,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.istairport.com/en/airport/airport-transportation/urban-transportation/other?locale=en"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق راهنمای ترکیش ایرلاینز، تاکسی از طبقه ورودی مسافران (Arrivals) فرودگاه استانبول در تمام ساعات شبانه‌روز در دسترس است. نرخ کرایه تابع مقررات تاکسیرانی و مسیر است؛ قیمت ثابت، زمان رسیدن به شهر یا نرخ تاکسی در این کاتالوگ اعلام نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "از صف و محل رسمی تاکسی در طبقه ورودی استفاده کنید و پیش از سوارشدن مقصد، مسیر و نحوه محاسبه کرایه را روشن کنید.",
+            "زمان سفر به مرکز شهر با ترافیک تغییر می‌کند؛ برای اتصال به پرواز بعدی حاشیه زمانی کافی لحاظ کنید.",
+            "برای محل دقیق تاکسی، خودروهای کرایه‌ای و جابه‌جایی، تابلوهای راهنما و نقشه تعاملی ترمینال را دنبال کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای تاکسی و دسترسی در پرسش‌های رسمی",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه حمل‌ونقل شهری در وب‌سایت فرودگاه",
+          "url": "https://www.istairport.com/en/airport/airport-transportation/urban-transportation/other?locale=en"
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "title_fa": "پارکینگ و توقف خودرو",
+      "subtitle_fa": "پارکینگ مسقف و روباز؛ تعرفه روز را از بهره‌بردار بگیرید",
+      "icon": "car-front",
+      "order": 100,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.istairport.com/en/airport/airport-transportation/airport-carpark?locale=en"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فرودگاه استانبول پارکینگ مسقف و روباز و خدمات مرتبط با توقف خودرو ارائه می‌شود. بخش پرسش‌های رسمی ترکیش ایرلاینز دسترسی شبانه‌روزی و تعیین تعرفه توسط بهره‌بردار فرودگاه را تأیید می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای توقف کوتاه‌مدت، بلندمدت، خدمات پارکبان یا محل تحویل خودرو به راهنمای به‌روز مجموعه مراجعه کنید.",
+            "نرخ‌ها، روش پرداخت، ظرفیت و بسته‌های اشتراکی ممکن است تغییر کند؛ مبلغ ثابت وارد نشده است.",
+            "قبل از خروج از خودرو، موقعیت پارکینگ و شماره محل توقف را ثبت کنید تا در بازگشت راحت‌تر پیدایش کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی پارکینگ فرودگاه استانبول",
+          "url": "https://www.istairport.com/en/airport/airport-transportation/airport-carpark?locale=en"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات پارکینگ و پاسخ به پرسش‌های متداول",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        }
+      ]
+    },
+    {
+      "id": "check-in",
+      "title_fa": "چک‌این و زمان حضور در فرودگاه",
+      "subtitle_fa": "راهنمای آماده‌شدن برای پرواز و مراجعه به کانتر",
+      "icon": "clipboard-check",
+      "order": 110,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.istairport.com/ucuslar/havalimani-rehberleri/yolcu-rehberi"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای پروازهای ترکیش ایرلاینز، توصیه رسمی حضور دست‌کم ۲ ساعت پیش از پرواز داخلی و ۳ ساعت پیش از پرواز بین‌المللی در فرودگاه است. این یک توصیه عمومی همان ایرلاین است، نه تضمین امکان پذیرش برای همه شرکت‌ها و همه پروازها."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "ترمینال بزرگ است؛ زمان رفتن از ورودی به کانتر، کنترل امنیتی/گذرنامه و گیت را در نظر بگیرید.",
+            "برای پرواز ترکیش ایرلاینز، راهنمای این شرکت کانترها و کیوسک‌های سلف‌چک‌این را توضیح داده است؛ محل کانتر ممکن است بسته به نوع پرواز و روز سفر تغییر کند.",
+            "مدارک سفر، گذرنامه، اعتبار آن و الزامات مقصد یا کشور ترانزیت را از قبل بررسی کنید.",
+            "ساعت بسته‌شدن کانتر و تحویل بار را از شرکت برگزارکننده پرواز و بلیت خود تأیید کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های متداول چک‌این و ساعت حضور ترکیش ایرلاینز",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای مسافر در وب‌سایت اپراتور فرودگاه",
+          "url": "https://www.istairport.com/ucuslar/havalimani-rehberleri/yolcu-rehberi"
+        }
+      ]
+    },
+    {
+      "id": "transfers",
+      "title_fa": "پرواز ترانزیت و اتصال به پرواز بعدی",
+      "subtitle_fa": "تفاوت بلیت یکپارچه، بلیت جداگانه و تغییر فرودگاه",
+      "icon": "route",
+      "order": 120,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-lb/any-questions/transfer-transit-passengers/",
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در IST نحوه ترانزیت به نوع مسیر (خارجی به خارجی، خارجی به داخلی یا داخلی به خارجی)، یکپارچه بودن بلیت، توافق بین ایرلاین‌ها و مقررات کشور بستگی دارد. همه مسافران لزوماً بار خود را در استانبول دریافت نمی‌کنند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در اتصال بین‌المللی به بین‌المللی روی بلیت یکپارچه با ترکیش ایرلاینز یا شرکای واجد شرایط، معمولاً مسافر در محدوده ترانزیت می‌ماند و بار تحویلی تا مقصد نهایی انتقال می‌یابد؛ شرایط را با ایرلاین تأیید کنید.",
+            "در بلیت‌های جداگانه ممکن است نیاز به دریافت چمدان، ورود به ترکیه، تحویل مجدد بار و چک‌این جدید باشد؛ شرایط ورود و ویزای لازم را پیشاپیش بررسی کنید.",
+            "در مسیر خارجی به داخلی احتمال کنترل گذرنامه و تشریفات ورود وجود دارد؛ رویه بار تحویلی با توجه به مقصد و ایرلاین متفاوت است.",
+            "اگر فرودگاه پرواز بعدی SAW است، تغییر فرودگاه با انتقال داخل ترمینال IST متفاوت است و به سفر زمینی در شهر نیاز دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی ترانزیت و انتقال چمدان",
+          "url": "https://www.turkishairlines.com/en-lb/any-questions/transfer-transit-passengers/"
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های متداول مسافران کانکشن در IST",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        }
+      ]
+    },
+    {
+      "id": "passport-visas",
+      "title_fa": "گذرنامه، ویزا و ورود به ترکیه",
+      "subtitle_fa": "راهنمای عمومی؛ مقررات دقیق با تابعیت و نوع سفر تعیین می‌شود",
+      "icon": "book-open-check",
+      "order": 130,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.evisa.gov.tr/en/",
+        "https://www.turkishairlines.com/en-lb/any-questions/transfer-transit-passengers/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نیاز به روادید ترکیه به تابعیت، نوع گذرنامه، هدف سفر و اینکه از محدوده ترانزیت خارج می‌شوید یا نه بستگی دارد. قوانین مربوط به یک تابعیت را نمی‌توان به تمام مسافران تعمیم داد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از سفر شرایط ورود به ترکیه و امکان دریافت e-Visa را فقط از سامانه رسمی دولت ترکیه بررسی کنید؛ سامانه‌های واسطه ممکن است کارمزد داشته باشند.",
+            "اگر برنامه دارید از محدوده ترانزیت خارج شوید، در هتل شهر اقامت کنید یا چمدان بلیت جداگانه را دوباره تحویل دهید، شرایط ورود را از قبل بررسی کنید.",
+            "ترانزیت بدون عبور از کنترل گذرنامه ممکن است شرایط متفاوتی داشته باشد؛ مسئولیت تأیید مدارک با مسافر و شرکت هواپیمایی است.",
+            "فهرست مدارک، شرایط ویزا و مقررات ورود ممکن است تغییر کنند؛ این بخش حکم تأیید ویزا ندارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه رسمی ویزای الکترونیکی ترکیه",
+          "url": "https://www.evisa.gov.tr/en/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای ترکیش ایرلاینز درباره ویزا و ترانزیت",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        }
+      ]
+    },
+    {
+      "id": "airport-facilities",
+      "title_fa": "امکانات و خدمات فرودگاه",
+      "subtitle_fa": "اینترنت، غذا، خدمات بانکی، داروخانه، امانت بار و سالن استراحت",
+      "icon": "coffee",
+      "order": 140,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://maps.istairport.com/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "طبق راهنمای رسمی، فرودگاه دارای رستوران و کافه، صرافی و خدمات بانکی، خودپرداز، داروخانه و خدمات پزشکی است.",
+            "خدمات امانت بار و کمد نگهداری چمدان، بسته‌بندی چمدان، فروشگاه، دفتر اجاره خودرو و بخش‌های استراحت نیز معرفی شده‌اند.",
+            "برای مسافر دارای نوزاد، اتاق‌های مراقبت کودک و امکانات خانوادگی وجود دارد.",
+            "سالن‌های استراحت (Lounge) شرکت‌های هواپیمایی و اپراتورهای مختلف شرایط ورود یکسانی ندارند؛ قبل از خرید یا مراجعه واجد شرایط بودن را بررسی کنید.",
+            "برای موقعیت دقیق هر خدمت، از نقشه تعاملی ترمینال و تابلوهای راهنما استفاده کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی خدمات و امکانات فرودگاه",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        },
+        {
+          "type": "link",
+          "title_fa": "پیدا کردن خدمات روی نقشه تعاملی",
+          "url": "https://maps.istairport.com/"
+        }
+      ]
+    },
+    {
+      "id": "wifi",
+      "title_fa": "اینترنت و وای‌فای فرودگاه",
+      "subtitle_fa": "سرویس İGA WiFi؛ شرایط استفاده را در محل بررسی کنید",
+      "icon": "wifi",
+      "order": 150,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فرودگاه استانبول سرویس Wi-Fi با نام İGA WiFi معرفی شده است. مدت زمان استفاده رایگان، روش فعال‌سازی، احراز هویت و شرایط اتصال ممکن است تغییر کند؛ به تابلوهای رسمی و دستورالعمل اتصال در فرودگاه مراجعه کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از ورود به صفحه‌های ورود و واردکردن شماره تلفن یا اطلاعات گذرنامه، اصالت شبکه را از علائم رسمی تأیید کنید.",
+            "برای اتصال به اطلاعات حساس، به توصیه‌های امنیتی شبکه عمومی توجه کنید.",
+            "در بسیاری از کافه‌های فرودگاه نیز دسترسی اینترنت وجود دارد؛ شرایط استفاده یکسان نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات وای‌فای در پرسش‌های متداول رسمی",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title_fa": "خدمات مسافران نیازمند کمک ویژه",
+      "subtitle_fa": "ویلچر، راهنمایی، امکانات قابل‌دسترسی و کمک پزشکی",
+      "icon": "accessibility",
+      "order": 160,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه استانبول خدمات دسترس‌پذیری، کمک به مسافران کم‌توان و سالمندان، مسیرهای مناسب و امکان درخواست همراهی در ترمینال ارائه می‌کند. ارائه ویلچر و همراهی تا گیت را پیشاپیش با ایرلاین یا خدمات زمینی هماهنگ کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بر اساس راهنمای ایرلاین، نقاط درخواست کمک در بخش ورودی و خروجی ترمینال وجود دارد.",
+            "برای مسافران کم‌توان یا دارای نیاز پزشکی، خدماتی مانند باجه مناسب، سرویس بهداشتی قابل‌دسترسی و راهنمایی کارکنان معرفی شده است.",
+            "نیاز به ویلچر، تجهیزات پزشکی، اکسیژن یا همراهی ویژه را هنگام رزرو و پیش از پرواز اعلام کنید.",
+            "محل دقیق نقاط کمک و شرایط خدمات را از نقشه و کارکنان رسمی فرودگاه بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های رسمی درباره کمک ویژه و دسترس‌پذیری",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        }
+      ]
+    },
+    {
+      "id": "baggage-claims",
+      "title_fa": "چمدان تأخیردار، مفقود یا آسیب‌دیده",
+      "subtitle_fa": "پیگیری از ایرلاین/خدمات زمینی، نه دفتر اشیای جامانده",
+      "icon": "luggage",
+      "order": 170,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/",
+        "https://www.turkishairlines.com/en-int/legal-notice/other-regulations/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اگر چمدان تحویلی نرسید یا آسیب دید، ابتدا به کانتر خدمات بار شرکت هواپیمایی یا نماینده هندلینگ همان پرواز مراجعه کنید. موضوعِ گم‌شدن چمدان تحویلی با «اشیای جامانده در سالن» تفاوت دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بهتر است پیش از ترک منطقه تحویل بار، گزارش مشکل بار (PIR یا مدرک معادل شرکت) ثبت و شماره پرونده دریافت کنید.",
+            "رسید بار، شماره پرواز، برچسب چمدان و عکس آسیب احتمالی را برای پیگیری نگه دارید.",
+            "مطابق راهنمای حقوقی ترکیش ایرلاینز، مهلت‌های شکایت کتبی برای آسیب و تأخیر بار وجود دارد؛ مقررات ایرلاین و قرارداد حمل را دقیق بخوانید.",
+            "اگر پروازتان با ایرلاین دیگری بوده است، مسیر ثبت ادعا و پشتیبانی همان ایرلاین ملاک است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات و مهلت‌های رسیدگی به شکایت بار در ترکیش ایرلاینز",
+          "url": "https://www.turkishairlines.com/en-int/legal-notice/other-regulations/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عملی بار در پرسش‌های متداول فرودگاه",
+          "url": "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+        }
+      ]
+    },
+    {
+      "id": "lost-property",
+      "title_fa": "اشیای جامانده در فرودگاه",
+      "subtitle_fa": "فرم رسمی Lost & Found ویژه وسایل جا‌مانده در محوطه فرودگاه",
+      "icon": "search",
+      "order": 180,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://www.dhmi.gov.tr/sayfalar/havalimani/istanbul/IletisimBilgileri.aspx",
+        "https://www.istairport.com/hizmetler/kesfet/kayip-ve-buluntu-esya-hizmeti",
+        "https://www.turkishairlines.com/en-sg/istanbul-airport/faq/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وسایلی که در سالن فرودگاه، بازرسی امنیتی یا فضاهای عمومی جا می‌مانند معمولاً از مسیر Lost & Found اپراتور فرودگاه پیگیری می‌شوند. برای اقلام جا‌مانده داخل هواپیما ابتدا با شرکت هواپیمایی مربوطه تماس بگیرید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سازمان رسمی DHMİ برای پیگیری اشیای جامانده، صفحه درخواست و استعلام اپراتور فرودگاه IST را معرفی کرده است.",
+            "تاریخ، شماره پرواز، محل تقریبی جا ماندن، رنگ و ویژگی‌های وسیله را برای درخواست آماده کنید.",
+            "برای تحویل وسیله ممکن است احراز هویت و اثبات مالکیت لازم باشد؛ محل و ساعت تحویل را قبل از مراجعه تأیید کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فرم رسمی ثبت و پیگیری اشیای جامانده",
+          "url": "https://www.istairport.com/hizmetler/kesfet/kayip-ve-buluntu-esya-hizmeti"
+        },
+        {
+          "type": "link",
+          "title_fa": "تأیید لینک مرجع Lost & Found در سایت DHMİ",
+          "url": "https://www.dhmi.gov.tr/sayfalar/havalimani/istanbul/IletisimBilgileri.aspx"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "نشانی و اطلاعات تماس فرودگاه",
+      "subtitle_fa": "کدهای IST / LTFM، موقعیت و تماس منتشرشده از DHMİ",
+      "icon": "phone",
+      "order": 190,
+      "status": "published",
+      "reviewed_at": "2026-11-04T00:00:00Z",
+      "source_urls": [
+        "https://dhmi.gov.tr/sayfalar/havalimani/istanbul/GenelBilgiler.aspx",
+        "https://www.dhmi.gov.tr/sayfalar/havalimani/istanbul/IletisimBilgileri.aspx",
+        "https://www.istairport.com/tr"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام رسمی: İstanbul Havalimanı (فرودگاه استانبول)؛ کد یاتا: IST؛ کد ایکائو: LTFM.",
+            "محدوده فرودگاه: منطقه Arnavutköy در بخش اروپایی استانبول، ترکیه؛ کد IST را با SAW یا فرودگاه قدیمی آتاتورک اشتباه نگیرید.",
+            "شماره منتشرشده برای دفتر DHMİ فرودگاه استانبول: ‎+90 212 891 91 91. این شماره لزوماً خط اطلاعات پرواز شرکت‌ها نیست.",
+            "برای وضعیت پرواز، گیت، رزرو، بار و استرداد هزینه با ایرلاین یا مرجع اختصاصی همان خدمت ارتباط بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات عمومی و کدهای فرودگاه در DHMİ",
+          "url": "https://dhmi.gov.tr/sayfalar/havalimani/istanbul/GenelBilgiler.aspx"
+        },
+        {
+          "type": "link",
+          "title_fa": "نشانی و شماره دفتر فرودگاهی DHMİ",
+          "url": "https://www.dhmi.gov.tr/sayfalar/havalimani/istanbul/IletisimBilgileri.aspx"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی فرودگاه استانبول",
+          "url": "https://www.istairport.com/tr"
+        }
+      ]
     }
   ]
 }
