@@ -9,12 +9,7 @@ This new `data/airports/` directory contains independent *content*
 documents, keyed by IATA code, without duplicating airport identity data.
 
 All **28 existing airports** have independent JSON content files in `details/`.
-The **Imam Khomeini (IKA)** page now has **14 source-backed published sections**
-and **two empty drafts** (traveler experiences and airport videos). Other
-airports retain five unpublished starter drafts. The IKA location-map entry
-links to the location supplied on the official website; no unverified
-terminal floor plans, passenger reviews, videos or live flight values are
-published. Android and Telegram airport navigation remains disabled until
+The **Imam Khomeini (IKA)** page has **14 source-backed published sections** and **two empty drafts**. The **Mashhad (MHD)** page has **17 source-backed published sections** and **two empty drafts** (traveler experiences and airport videos). Other airports retain five unpublished starter drafts. The IKA location-map entry links to the location supplied on the official website. The MHD map uses a referenced airport point, not a terminal floor plan. No unverified terminal plans, passenger reviews, videos or live flight values are published. Android and Telegram airport navigation remains disabled until
 separately implemented and vetted.
 
 ## Repository layout

@@ -99,7 +99,7 @@
     {
       "iata": "MHD",
       "detail_path": "details/MHD.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "MSQ",
