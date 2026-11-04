@@ -34,7 +34,7 @@ def save(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def test_each_existing_airport_has_independent_content_and_only_ika_enabled():
+def test_each_existing_airport_has_independent_content_and_published_guides():
     validate_dataset()
     root = ROOT / "data" / "airports"
     canonical = load(ROOT / "src/flightiran/modules/airport/data/airports.json")
@@ -42,7 +42,7 @@ def test_each_existing_airport_has_independent_content_and_only_ika_enabled():
     expected = {a["code"] for a in canonical}
     assert len(expected) == 28
     assert {e["iata"] for e in index["airports"]} == expected
-    assert [e["iata"] for e in index["airports"] if e["enabled"]] == ["IKA"]
+    assert {e["iata"] for e in index["airports"] if e["enabled"]} == {"IKA", "IST"}
     for entry in index["airports"]:
         detail = load(root / entry["detail_path"])
         assert detail["iata"] == entry["iata"]
@@ -60,6 +60,19 @@ def test_each_existing_airport_has_independent_content_and_only_ika_enabled():
             }
             assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
             assert all(s["status"] == "draft" and not s["blocks"] for s in drafts)
+        elif entry["iata"] == "IST":
+            assert len(detail["sections"]) == 19
+            published = [s for s in detail["sections"] if s["status"] == "published"]
+            drafts = [s for s in detail["sections"] if s["status"] == "draft"]
+            assert len(published) == 18
+            assert {s["id"] for s in drafts} == {"traveler-experiences"}
+            assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
+            assert all(s["status"] == "draft" and not s["blocks"] for s in drafts)
+            assert not any(
+                block["type"] == "flight_board"
+                for section in published
+                for block in section["blocks"]
+            )
         else:
             assert len(detail["sections"]) == 5
             assert all(
