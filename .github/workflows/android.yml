@@ -103,7 +103,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Derive automatic release tag and verify current main HEAD
+      - name: Derive requested release tag and verify current main HEAD
         id: version
         shell: bash
         run: |
@@ -265,9 +265,7 @@ jobs:
             # Idempotent on a re-run of this exact GitHub Actions release.
             gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
           else
-            # Only this manually triggered build can create a version tag after QA and signing.
-          else
-            # Auto-create the version tag only after QA, signing and fresh API checks.
+            # Only a manually dispatched main build may create this version tag.
             # Never reuse an existing tag or overwrite a different published version.
             if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" >/dev/null 2>&1; then
               echo "::error::Release version tag already exists without a GitHub Release"
