@@ -637,7 +637,13 @@ internal fun fareCityIconName(city: String): String? {
         "بانکوک" -> "price_city_bangkok"
         "آلانیا" -> "price_city_alanya"
         "پکن" -> "price_city_beijing"
-        "جیروفت" -> "price_city_jiroft"
+        "جیروفت", "جیرفت" -> "price_city_jiroft"
+        "بجنورد" -> "price_city_bojnord"
+        "ماهشهر" -> "price_city_mahshahr"
+        "رفسنجان" -> "price_city_rafsanjan"
+        "طبس" -> "price_city_tabas"
+        "لار" -> "price_city_lar"
+        "سراوان" -> "price_city_saravan"
         else -> null
     }
 }
