@@ -183,3 +183,27 @@ def test_istanbul_airport_guide_is_enabled_and_uses_evidence():
         for section in published
         for block in section["blocks"]
     )
+
+def test_kish_guide_is_enabled_with_verified_sections_and_reserved_drafts():
+    """Kish has source-backed sections without unlicensed media or live flight data."""
+    validate_dataset()
+    base = ROOT / "data" / "airports"
+    index = load(base / "airport-index.v1.json")
+    entry = next(e for e in index["airports"] if e["iata"] == "KIH")
+    assert entry["enabled"] is True
+    detail = load(base / entry["detail_path"])
+    assert detail["iata"] == "KIH"
+    sections = detail["sections"]
+    assert len(sections) == 19
+    assert len({s["id"] for s in sections}) == len(sections)
+    published = [s for s in sections if s["status"] == "published"]
+    drafts = [s for s in sections if s["status"] == "draft"]
+    assert len(published) == 17
+    assert {s["id"] for s in drafts} == {"traveler-experiences", "airport-videos"}
+    assert all(not s["blocks"] and not s["source_urls"] for s in drafts)
+    assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
+    assert any(b["type"] == "map" for s in published for b in s["blocks"])
+    assert all(
+        b["type"] not in {"video", "experience", "flight_board"}
+        for s in published for b in s["blocks"]
+    )

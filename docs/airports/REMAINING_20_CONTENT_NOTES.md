@@ -30,7 +30,7 @@
 | DXB | OMDB | [source](https://dubaiairports.ae/) · [source](https://www.dubai.ae/arriving-to-dubai) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | FRA | EDDF | [source](https://www.frankfurt-airport.com/en.html) · [source](https://www.frankfurt-airport.com/en/transport-and-parking/to-from-the-airport/travel-by-train.html) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | IFN | OIFM | [source](https://oibk.ir/fa/airports/oifm) · [source](https://blog.flysepehran.com/fa/airports/isfahan-airport/) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 20 | 2 |
-| KIH | OIBK | [source](https://blog.flysepehran.com/fa/airports/kish-airport/) · [source](https://blog.flysepehran.com/fa/airports/kish-airport/) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 13 | 6 |
+| KIH | OIBK | [source](https://blog.flysepehran.com/fa/airports/kish-airport/) · [source](https://blog.flysepehran.com/fa/airports/kish-airport/) | Operational facilities, ground transport or parking may be undetermined; FIDS was inaccessible. | 17 | 2 |
 | KUL | WMKK | [source](https://www.malaysiaairports.com.my/) · [source](https://www.mot.gov.my/en/aviation/infrastructure/list-of-airports/KLIA) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | LHR | EGLL | [source](https://www.heathrow.com/) · [source](https://tfl.gov.uk/modes/elizabeth-line/getting-to-and-from-heathrow-on-the-elizabeth-line) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
 | MAD | LEMD | [source](https://www.aena.es/en/adolfo-suarez-madrid-barajas.html) · [source](https://gestionesytramites.madrid.org/en/plan-your-trip-to-madrid/plan-your-trip/itineraries/adolfo-suarez-madrid-barajas-airport) | Prices, assignments and timetables change; official latest notices supersede. | 15 | 4 |
@@ -55,3 +55,7 @@ Re-verify each airport on airline/terminal changes, service disruptions, new tra
 python scripts/validate_airport_content.py
 pytest tests/test_airport_content_catalog.py tests/test_airport_remaining_guides.py
 ```
+
+## Kish guide follow-up
+
+KIH is improved independently with 17 published source-backed sections and two empty drafts in PR #167. It adds a dated operator-contact source, recent terminal caveats, annotated geographic location and special-service guidance. See `docs/airports/KIH_CONTENT_NOTES.md`. No new airport identity was created.
