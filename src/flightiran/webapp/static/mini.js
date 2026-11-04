@@ -4,6 +4,7 @@
 import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
 
 import {createGuideView} from "./guide-view.mjs";
+import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from "./mobile-parity.mjs";
 
 (() => {
   "use strict";
@@ -18,9 +19,10 @@ import {createGuideView} from "./guide-view.mjs";
   const state = {
     initData: "", bootstrap: null, prices: null, origin: "",
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
+    visaMode: "live", snapshot: null,
     websites: null, websitesFetchedAt: 0, websitesRequest: null,
     fids: null, fidsRequest: 0,
-    toastTimer: null, visaRequest: 0,
+    toastTimer: null, visaRequest: 0, visaDetailRequest: 0,
     checklist: new Set(), checklistKey: null, checklistPersistent: false,
   };
 
@@ -122,6 +124,8 @@ import {createGuideView} from "./guide-view.mjs";
     return data;
   }
   function go(screen) {
+    if (screen === "privacy") $("startup").hidden=true;
+    else if (!state.bootstrap) { showStartup("برای استفاده از خدمات، مینی‌اپ را از ربات تلگرام باز کنید."); return; }
     const page = $("screen-" + screen);
     if (!page) return;
     document.querySelectorAll(".screen").forEach(item => {
@@ -182,7 +186,7 @@ import {createGuideView} from "./guide-view.mjs";
     if (!dlg.open) dlg.showModal();
     telegram?.HapticFeedback?.impactOccurred?.("light");
   }
-  function closeModal() { if ($("mini-dialog").open) $("mini-dialog").close(); }
+  function closeModal() { state.visaDetailRequest++; if ($("mini-dialog").open) $("mini-dialog").close(); }
   function act(label, click, type = "primary-cta") {
     return el("button",{type:"button",className:type,onClick:click},label);
   }
@@ -354,11 +358,25 @@ import {createGuideView} from "./guide-view.mjs";
     if (![...select.options].some(x => x.value === state.passport)) state.passport = "IR";
     select.value = state.passport;
   }
+  function populatePassportOptions(countries) {
+    const matches=filterCountries(countries,$("passport-search").value);
+    const current=countries.find(c=>c.code===state.passport);
+    if(current&&!matches.some(c=>c.code===current.code))matches.unshift(current);
+    $("passport-select").replaceChildren(...matches.map(c=>el("option",{value:c.code,text:c.name+" ("+c.code+")"})));
+    $("passport-select").value=state.passport;
+  }
+  const snapshotReader=createVisaSnapshotReader();
   async function loadVisa() {
     const id=++state.visaRequest;
     fill("visa-results",el("div",{className:"panel muted",text:"در حال دریافت اطلاعات ویزا…"}));
     try {
-      const data = await request("/api/mini/visa?passport="+encodeURIComponent(state.passport));
+      const data = state.visaMode === "snapshot" ? await snapshotReader.get(state.passport) :
+        await request("/api/mini/visa?passport="+encodeURIComponent(state.passport));
+      if (state.visaRequest !== id) return;
+      if (state.visaMode === "snapshot") {
+        state.snapshot=data;
+        populatePassportOptions(data.passportCodes.map(code=>({code,name:persianCountry(code)})));
+      }
       if (state.visaRequest !== id) return;
       state.visa=data;
       renderVisa();
@@ -371,6 +389,7 @@ import {createGuideView} from "./guide-view.mjs";
   }
   function renderVisa() {
     const term = $("visa-search").value.trim().toLocaleLowerCase("fa-IR");
+    fill("visa-popular",term ? [] : POPULAR_VISA.filter(code=>state.visa?.rules?.some(r=>r.destination===code)).map(code=>act(persianCountry(code),()=>visaDialog(code),"tiny-button")));
     const all = (state.visa?.rules || []).map(rule => ({
       ...rule, country_name:persianCountry(rule.destination,rule.country_name)
     }));
@@ -378,6 +397,10 @@ import {createGuideView} from "./guide-view.mjs";
       || x.destination.toLocaleLowerCase().includes(term));
     $("visa-summary").textContent=fmt(all.length)+" مقصد برای گذرنامه "+
       (state.bootstrap?.countries?.find(x=>x.code===state.passport)?.name || state.passport);
+    $("visa-source-note").textContent=state.visaMode === "snapshot" && state.snapshot
+      ? "نسخهٔ همراه اندروید؛ تاریخ مجموعه: "+(state.snapshot.sourceDataModifiedOn||"نامشخص")+" · "+state.snapshot.attribution+
+        (state.snapshot.cached ? " · نسخهٔ ذخیره‌شده؛ دریافت داده تازه ممکن نشد." : " · این مجموعه اطلاعات زنده نیست.")
+      : "دادهٔ سرویس آنلاین؛ تاریخ بررسی هر منبع در جزئیات نمایش داده می‌شود.";
     if (!items.length) {
       fill("visa-results",empty("مقصدی پیدا نشد","نام یا کد کشور را بررسی کنید."));
       return;
@@ -395,19 +418,25 @@ import {createGuideView} from "./guide-view.mjs";
     }));
   }
   async function visaDialog(destination) {
+    const detailRequest=++state.visaDetailRequest;
+    const passport=state.passport;
     modal("شرایط ورود",el("p",{className:"dialog-text",text:"در حال دریافت جزئیات…"}),[]);
     try {
-      const data = await request("/api/mini/visa/rule?passport="+
-        encodeURIComponent(state.passport)+"&destination="+encodeURIComponent(destination));
+      const data = state.visaMode === "snapshot"
+        ? state.snapshot?.rules.find(r=>r.destination===destination)
+        : await request("/api/mini/visa/rule?passport="+encodeURIComponent(passport)+"&destination="+encodeURIComponent(destination));
+      if(detailRequest!==state.visaDetailRequest)return;
+      if (!data) throw new Error("اطلاعات این مقصد در دسترس نیست.");
       const [status,tone]=visaStatus(data.status);
       const country=state.bootstrap?.countries?.find(x=>x.code===destination)?.name ||
         persianCountry(destination,data.country_name);
       const body=el("div",{},
-        el("p",{className:"dialog-text",text:country+" · گذرنامه "+state.passport}),
+        el("p",{className:"dialog-text",text:country+" · گذرنامه "+passport}),
         el("span",{className:"visa-tag "+tone,text:status}),
         detail("مدت اقامت",data.stay_days?fmt(data.stay_days)+" روز":"براساس نوع ویزا"),
         detail("آخرین بررسی منبع",data.verified_on || "ثبت نشده"),
-        detail("سطح منبع",({official:"رسمی",secondary:"ثانویه",aggregated:"تجمیعی"})[data.source_level] || "نامشخص"),
+        detail("به‌روزرسانی فایل مقصد",data.destination_updated_on || "ثبت نشده"),
+        detail("سطح منبع",({official:"رسمی",secondary:"ثانویه",aggregated:"تجمیعی",row:"مختص پاسپورت",passport:"مختص پاسپورت",shared:"سیاست کلی مقصد",default:"سیاست کلی مقصد",destination:"سیاست کلی مقصد",policy:"سیاست کلی مقصد"})[data.source_level] || "نامشخص"),
         ...(data.notes?[el("h3",{className:"page-subhead",text:"توضیحات"}),el("p",{className:"detail-notes",text:data.notes})]:[]),
         el("p",{className:"footnote",text:"برای تصمیم‌گیری نهایی، منابع رسمی کشور مقصد را کنترل کنید."})
       );
@@ -415,7 +444,7 @@ import {createGuideView} from "./guide-view.mjs";
         act("دنبال‌کردن تغییرات این ویزا",async()=>{
           try {
             await request("/api/mini/alerts/visa",{method:"POST",
-              body:{passport:state.passport,destination}});
+              body:{passport,destination}});
             closeModal();state.alerts=null;toast("هشدار تغییرات ویزا فعال شد.");
           } catch(e) { toast(e.message); }
         })
@@ -424,6 +453,7 @@ import {createGuideView} from "./guide-view.mjs";
       actions.push(act("بستن",closeModal,"secondary-cta"));
       if ($("mini-dialog").open) modal("شرایط ویزای "+country,body,actions);
     } catch (e) {
+      if(detailRequest!==state.visaDetailRequest)return;
       if ($("mini-dialog").open)
         modal("اطلاعات موجود نیست",el("p",{className:"dialog-text",text:e.message}),
           [act("بستن",closeModal,"secondary-cta")]);
@@ -555,8 +585,10 @@ import {createGuideView} from "./guide-view.mjs";
         select.value=catalog.categories.some(item=>item.id===previous) ? previous : "all";
         renderWebsites();
       } catch(error) {
-        state.websites=null;
-        websiteFailure(error?.message || "دریافت اطلاعات با خطا مواجه شد.");
+        if(state.websites) {
+          renderWebsites();
+          fill("website-status",el("p",{className:"website-warning",text:"داده تازه دریافت نشد؛ فهرست همین نشست نمایش داده می‌شود. آخرین دریافت: "+dateLabel(state.websitesFetchedAt)}));
+        } else websiteFailure(error?.message || "دریافت اطلاعات با خطا مواجه شد.");
       } finally {
         state.websitesRequest=null;
       }
@@ -835,11 +867,19 @@ import {createGuideView} from "./guide-view.mjs";
   $("fids-direction").addEventListener("change",loadFids);
   $("fids-search").addEventListener("input",renderFids);
   $("fids-reload").addEventListener("click",loadFids);
+  $("passport-search").addEventListener("input",()=>populatePassportOptions(state.visaMode === "snapshot" && state.snapshot
+    ? state.snapshot.passportCodes.map(code=>({code,name:persianCountry(code)})) : state.bootstrap?.countries||[]));
+  $("visa-snapshot").addEventListener("click",()=>{state.visaMode="snapshot";state.visa=null;loadVisa();});
+  $("visa-live").addEventListener("click",()=>{state.visaMode="live";state.visa=null;$("passport-search").value="";populatePassport();loadVisa();});
+  $("fids-official").addEventListener("click",()=>openUrl(FIDS_HOME));
+  $("privacy-checklist").addEventListener("click",()=>go("checklist"));
+  $("privacy-clear-visa").addEventListener("click",()=>modal("حذف نسخهٔ ذخیره‌شدهٔ ویزا",el("p",{text:"نسخهٔ عمومی ذخیره‌شده پاک شود؟ هشدارهای سرور و چک‌لیست تغییر نمی‌کنند."}),[
+    act("پاک شود",async()=>{try{await snapshotReader.clear();state.snapshot=null;if(state.visaMode==="snapshot"){state.visa=null;fill("visa-results",empty("نسخه پاک شد","برای دریافت دوباره، نسخهٔ همراه اندروید را انتخاب کنید."));}closeModal();toast("نسخهٔ ذخیره‌شده پاک شد.");}catch{toast("پاک‌کردن داده در این مرورگر ممکن نشد.");}}),act("انصراف",closeModal,"secondary-cta")]));
   $("passport-select").addEventListener("change",async event=>{
     const previous=state.passport;
     const selected=event.target.value;
     try {
-      await request("/api/mini/passport",{method:"POST",body:{passport:selected}});
+      if(state.visaMode!=="snapshot")await request("/api/mini/passport",{method:"POST",body:{passport:selected}});
       state.passport=selected;state.visa=null;
       await loadVisa();
     } catch(e) {

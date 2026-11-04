@@ -101,12 +101,12 @@ export function parseGuideDetail(raw, kind, id, now=Date.now()) {
   return {id,sections,reviewCount,counts,average:null};
 }
 export async function fetchGuideJson(path, fetcher=fetch) {
-  need(/^(data\/(airlines|airports)\/(airline-index|airport-index)\.v1\.json|data\/(airlines|airports)\/details\/[A-Za-z0-9-]+\.v1\.json|src\/flightiran\/modules\/airport\/data\/airports\.json)$/.test(path));
+  need(/^(data\/(airlines|airports)\/(airline-index|airport-index)\.v1\.json|data\/(airlines|airports)\/details\/[A-Za-z0-9-]+\.v1\.json|src\/flightiran\/modules\/airport\/data\/airports\.json|android\/app\/src\/main\/assets\/visa\/(?:manifest\.v1|shard-[0-9]{2})\.json)$/.test(path));
   const abort=new AbortController(),timer=setTimeout(()=>abort.abort(),10000);
   try {
     const r=await fetcher(BASE+path,{credentials:'omit',redirect:'error',referrerPolicy:'no-referrer',
       headers:{Accept:'application/json'},signal:abort.signal});
-    need(r.ok);const max=path.includes('/details/')?512000:64000;
+    need(r.ok);const max=(path.includes('/details/')||path.includes('/visa/shard-'))?512000:64000;
     const reader=r.body?.getReader();need(reader);let size=0;const chunks=[];
     try {while(true){const {done,value}=await reader.read();if(done)break;size+=value.byteLength;need(size<=max);chunks.push(value);}}
     finally {await reader.cancel();}

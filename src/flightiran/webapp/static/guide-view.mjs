@@ -69,13 +69,14 @@ export function createGuideView({kind,root,el,openUrl,onAirport,onFids,fetcher=f
       select.value=root.dataset.region||'all';const results=el('div',{className:'guide-results'});
       const update=()=>{
         root.dataset.query=search.value;root.dataset.region=select.value;
-        const visible=filterGuides(rows||[],search.value,select.value);
+        let visible=filterGuides(rows||[],search.value,select.value);
+        if(kind==='airports')visible=visible.slice().sort((a,b)=>root.dataset.order==='alpha'?a.name.localeCompare(b.name,'fa'):(['MHD','KIH','THR'].indexOf(a.id)<0?99:['MHD','KIH','THR'].indexOf(a.id))-(['MHD','KIH','THR'].indexOf(b.id)<0?99:['MHD','KIH','THR'].indexOf(b.id))||a.name.localeCompare(b.name,'fa'));
         results.replaceChildren(...visible.map(r=>el('button',{type:'button',className:'panel guide-card',onClick:()=>open(r.id)},
           el('strong',{text:r.name}),p(r.codes.join(' / ')),kind==='airlines'?p('راهنما در حال تکمیل'):null,
           r.reviewedAt?p('آخرین بررسی هویت: '+date(r.reviewedAt)):null)));
         if(!visible.length)results.append(p('موردی پیدا نشد.'));
       };
-      search.addEventListener('input',update);select.addEventListener('change',update);update();nodes.push(search,select,results);
+      search.addEventListener('input',update);select.addEventListener('change',update);update();nodes.push(search,select);if(kind==='airports')nodes.push(button(root.dataset.order==='alpha'?'مرتب‌سازی: الفبایی':'مرتب‌سازی: پرطرفدار',()=>{save();root.dataset.order=root.dataset.order==='alpha'?'popular':'alpha';render();}));nodes.push(results);
     } else {
       nodes.push(button('بازگشت',back));const ref=rows?.find(r=>r.id===selected);
       if(!ref||!page)nodes.push(p('این راهنما هنوز منتشر نشده یا فعلاً در دسترس نیست.'));

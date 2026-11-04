@@ -278,3 +278,8 @@ dialog::backdrop { background: #0717279c; }
 .guide-card p {margin:6px 0;font-size:.85rem}
 .guide-fleet {display:grid;gap:8px}
 .guide-content button:focus-visible {outline:3px solid #116b90;outline-offset:3px}
+.field > input {width:100%;min-height:50px;padding:10px 15px;border:1px solid var(--line);border-radius:13px;background:var(--paper);color:var(--ink)}
+#visa-popular {grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+#visa-popular button {min-height:44px;white-space:normal}
+#screen-privacy {overflow-wrap:anywhere}
+#screen-privacy > button {margin-top:12px}

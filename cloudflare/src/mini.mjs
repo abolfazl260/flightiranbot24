@@ -274,6 +274,7 @@ async function serveAsset(request,env,path) {
     "/assets/travel-catalog.mjs":"/travel-catalog.mjs",
     "/assets/guide-catalog.mjs":"/guide-catalog.mjs",
     "/assets/guide-view.mjs":"/guide-view.mjs",
+    "/assets/mobile-parity.mjs":"/mobile-parity.mjs",
     "/assets/advertio-brand.webp":"/advertio-brand.webp"
   }[path];
   if (!target) return error(404,"Not found");
@@ -316,7 +317,7 @@ export async function miniRoute(request,env,authorized) {
     return enqueue(request,user,env,path);
   }
   if (["/","/mini","/mini/","/assets/mini.js","/assets/mini.css",
-    "/assets/travel-catalog.mjs","/assets/guide-catalog.mjs","/assets/guide-view.mjs","/assets/advertio-brand.webp"].includes(path))
+    "/assets/travel-catalog.mjs","/assets/guide-catalog.mjs","/assets/guide-view.mjs","/assets/mobile-parity.mjs","/assets/advertio-brand.webp"].includes(path))
     return serveAsset(request,env,path);
   return null;
 }

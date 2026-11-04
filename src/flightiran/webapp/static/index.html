@@ -7,9 +7,9 @@
   <meta name="color-scheme" content="light dark">
   <meta name="description" content="دستیار سفر ادورتیو؛ قیمت پرواز، ویزا، هشدارها و راهنمای سفر">
   <title>ادورتیو | دستیار سفر</title>
-  <link rel="stylesheet" href="/assets/mini.css?v=4">
+  <link rel="stylesheet" href="/assets/mini.css?v=5">
   <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script type="module" src="/assets/mini.js?v=4"></script>
+  <script type="module" src="/assets/mini.js?v=5"></script>
 </head>
 <body>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -67,6 +67,9 @@
         <div class="panel" id="home-price-preview"><p class="muted">در حال دریافت آخرین قیمت‌های ثبت‌شده…</p></div>
         <button type="button" class="notice-card" data-go="airports"><strong>راهنمای فرودگاه‌ها</strong><small>اطلاعات اختصاصی و منابع رسمی</small></button>
         <button type="button" class="notice-card" data-go="airlines"><strong>ایرلاین‌ها</strong><small>خدمات، قوانین و ناوگان</small></button>
+        <button type="button" class="notice-card" data-go="fids"><strong>اطلاعات پرواز ایران</strong><small>ورودی، خروجی و سایت رسمی</small></button>
+        <button type="button" class="notice-card" data-link="bot"><strong>دستیار تلگرام</strong><small>باز کردن گفت‌وگوی ربات</small></button>
+        <button type="button" class="notice-card" data-go="privacy"><strong>حریم خصوصی و مدیریت داده</strong></button>
         <div class="home-help"><span>برای رزرو یا پیگیری سفر کمک می‌خواهید؟</span><button type="button" class="inline-link" data-link="support">ارتباط با پشتیبانی <svg class="symbol"><use href="#i-external"></use></svg></button></div>
       </section>
 
@@ -82,8 +85,11 @@
 
       <section class="screen" id="screen-visa" data-screen="visa" aria-labelledby="visa-heading" hidden>
         <div class="page-title"><span class="page-icon aqua"><svg class="symbol"><use href="#i-passport"></use></svg></span><div><h1 id="visa-heading">راهنمای ویزا و ورود</h1><p>بر اساس گذرنامه و کشور مقصد</p></div></div>
+        <div class="field"><label for="passport-search">جست‌وجوی کشور گذرنامه</label><input id="passport-search" type="search" placeholder="نام کشور یا کد" autocomplete="off"></div>
         <div class="field"><label for="passport-select">کشور صادرکننده گذرنامه</label><select id="passport-select"><option value="IR">ایران (IR)</option></select></div>
         <div class="field search-field"><label for="visa-search">جست‌وجوی کشور مقصد</label><span class="search-wrap"><svg class="symbol"><use href="#i-search"></use></svg><input id="visa-search" type="search" autocomplete="off" placeholder="مثلاً ترکیه یا TR"></span></div>
+        <div class="guide-results"><button type="button" class="secondary-cta" id="visa-snapshot">نسخهٔ همراه اندروید</button><button type="button" class="secondary-cta" id="visa-live">دادهٔ آنلاین</button></div>
+        <p class="footnote">نسخهٔ همراه برای دریافت اولیه به اینترنت نیاز دارد؛ پس از دریافت کامل، در مرورگرهای پشتیبان برای مراجعهٔ بعدی نگهداری می‌شود. ممکن است قوانین رسمی از تاریخ این نسخه تغییر کرده باشند.</p><p class="footnote" id="visa-source-note" role="status"></p><div id="visa-popular" class="guide-results" aria-label="مقاصد پرطرفدار"></div>
         <div class="status-strip subtle" id="visa-summary">شرایط هر مقصد را بررسی کنید.</div>
         <div class="list-stack" id="visa-results"><div class="panel muted">برای دیدن اطلاعات، گذرنامه را انتخاب کنید.</div></div>
         <p class="footnote">این اطلاعات راهنمای اولیه است و تضمین صدور ویزا یا اجازه ورود نیست. پیش از سفر شرایط رسمی را بررسی کنید.</p>
@@ -120,6 +126,7 @@
 
       <section class="screen" id="screen-fids" data-screen="fids" aria-labelledby="fids-heading" hidden>
         <div class="page-title"><span class="page-icon sky"><svg class="symbol"><use href="#i-plane"></use></svg></span><div><h1 id="fids-heading">اطلاعات پرواز ایران</h1><p>پروازهای ورودی و خروجی از منبع رسمی FIDS، داخل مینی‌اپ</p></div></div>
+        <button type="button" class="secondary-cta" id="fids-official">باز کردن سایت رسمی اطلاعات پرواز</button>
         <div class="field"><label for="fids-airport">فرودگاه</label><select id="fids-airport">
           <option value="THR">تهران مهرآباد (THR)</option>
           <option value="MHD">مشهد (MHD)</option>
@@ -163,6 +170,7 @@
         <h1 id="airlines-heading">ایرلاین‌ها</h1><div id="airlines-guide" class="guide-content" aria-live="polite"></div>
       </section>
 
+      <section class="screen" id="screen-privacy" data-screen="privacy" aria-labelledby="privacy-heading" hidden><h1 id="privacy-heading">حریم خصوصی و مدیریت داده</h1><button type="button" class="secondary-cta" data-go="home">بازگشت</button><details class="useful-group"><summary>ذخیره‌سازی در مرورگر</summary><p class="panel">تیک‌های چک‌لیست با شناسهٔ حساب تلگرام روی همین مرورگر نگهداری می‌شوند و با اندروید همگام نیستند. نسخهٔ عمومی ویزا در صورت پشتیبانی مرورگر قابل ذخیره است؛ محدودیت فضای مرورگر ممکن است باعث حذف آن شود.</p></details><details class="useful-group"><summary>ارتباط با اینترنت</summary><p class="panel">قیمت‌ها، اطلاعات ویزا و هشدارها از سرویس برنامه دریافت می‌شوند. فهرست راهنماها و نسخهٔ همراه ویزا از GitHub عمومی خوانده می‌شوند؛ اطلاعات ورود تلگرام به GitHub ارسال نمی‌شود. سرویس‌های مقصد ممکن است نشانی IP و اطلاعات فنی اتصال را دریافت کنند.</p></details><details class="useful-group"><summary>تلگرام و اطلاعات حساب</summary><p class="panel">ورود مینی‌اپ از طریق تلگرام است. سرویس برای احراز هویت و اجرای درخواست‌های شما، دادهٔ امضاشدهٔ تلگرام و شناسهٔ حساب را بررسی می‌کند. نام، نام کاربری، گذرنامهٔ منتخب و هشدارها ممکن است سمت سرور ذخیره شوند.</p></details><details class="useful-group"><summary>دسترسی‌های دستگاه</summary><p class="panel">مینی‌اپ در نسخهٔ فعلی درخواست موقعیت مکانی، دوربین، میکروفون یا مخاطبان ندارد. رفتار میزبان تلگرام و مرورگر تابع تنظیمات و سیاست‌های همان برنامه است؛ تنظیمات مجوز اندروید از این صفحه قابل تغییر نیست.</p></details><details class="useful-group"><summary>نگهداری و امنیت</summary><p class="panel">داده‌های سمت سرور برای عملکرد سرویس و پشتیبانی پردازش می‌شوند. مدت نگهداری دقیق از این رابط مشخص نیست؛ برای بررسی یا درخواست حذف با پشتیبانی تماس بگیرید. ارسال درخواست به پشتیبانی به معنی حذف فوری داده نیست.</p></details><details class="useful-group"><summary>مدیریت و حذف داده</summary><p class="panel">از صفحهٔ چک‌لیست می‌توانید تیک‌های حساب فعلی را پاک کنید. حذف نسخهٔ ذخیره‌شدهٔ ویزا فقط دادهٔ عمومی مرورگر را پاک می‌کند و هشدارهای سرور را حذف نمی‌کند. هشدارهای خود را در بخش هشدارها مدیریت کنید و برای سایر اطلاعات به پشتیبانی درخواست بدهید.</p></details><details class="useful-group"><summary>تغییرات و منابع بیرونی</summary><p class="panel">این اطلاعیه مخصوص مینی‌اپ است. تلگرام و سایت‌های بیرونی سیاست مستقل دارند. تاریخ بازبینی این متن: ۱۳ آبان ۱۴۰۵. پیش از سفر مقررات را با مرجع رسمی تطبیق دهید.</p></details><button type="button" class="secondary-cta" id="privacy-checklist">مدیریت چک‌لیست</button><button type="button" class="secondary-cta" id="privacy-clear-visa">حذف نسخهٔ ذخیره‌شدهٔ ویزا</button><button type="button" class="secondary-cta" data-go="alerts">مدیریت هشدارها</button><button type="button" class="secondary-cta" data-link="support">درخواست بررسی یا حذف اطلاعات از پشتیبانی</button></section>
     </main>
   </div>
 
@@ -185,6 +193,6 @@
   </dialog>
 
   <div role="status" aria-live="polite" id="toast" class="toast" hidden></div>
-  <div id="startup" class="startup" hidden><div class="startup-card"><span class="startup-icon"><svg class="symbol"><use href="#i-shield"></use></svg></span><h2>ورود از تلگرام</h2><p id="startup-message">برای استفاده از دستیار سفر، از دکمه «مینی‌اپ» داخل ربات وارد شوید.</p><a href="https://t.me/Flightiranbot" class="primary-cta">باز کردن ربات</a></div></div>
+  <div id="startup" class="startup" hidden><div class="startup-card"><span class="startup-icon"><svg class="symbol"><use href="#i-shield"></use></svg></span><h2>ورود از تلگرام</h2><p id="startup-message">برای استفاده از دستیار سفر، از دکمه «مینی‌اپ» داخل ربات وارد شوید.</p><a href="https://t.me/Flightiranbot" class="primary-cta">باز کردن ربات</a><button type="button" class="secondary-cta" data-go="privacy">حریم خصوصی</button></div></div>
 </body>
 </html>
