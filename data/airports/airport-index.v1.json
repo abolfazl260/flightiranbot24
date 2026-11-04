@@ -134,7 +134,7 @@
     {
       "iata": "THR",
       "detail_path": "details/THR.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "ZAH",
