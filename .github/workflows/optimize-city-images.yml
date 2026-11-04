@@ -1,0 +1,63 @@
+name: Optimize archived city artwork
+
+# One-time branch automation for the initial migration. Future runs can use
+# workflow_dispatch. This workflow does NOT build an Android APK or AAB.
+on:
+  push:
+    branches:
+      - chore/optimize-city-images-20261104
+    paths:
+      - scripts/optimize_city_images.py
+      - .github/workflows/optimize-city-images.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  optimize:
+    if: github.repository == 'abolfazl260/flightiranbot24' && (github.ref == 'refs/heads/chore/optimize-city-images-20261104' || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install reproducible WebP encoder
+        run: python -m pip install --disable-pip-version-check Pillow==11.3.0
+      - name: Build and verify lightweight WebPs
+        run: |
+          python scripts/optimize_city_images.py
+          python scripts/optimize_city_images.py --check
+      - name: Confirm archive is untouched
+        run: git diff --exit-code -- design-assets/cities/original/
+      - name: Commit only optimized images to non-main branch
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -Eeuo pipefail
+          if [[ "$GITHUB_EVENT_NAME" == 'workflow_dispatch' ]]; then
+            branch="chore/optimized-city-images-${GITHUB_RUN_ID}"
+            git switch -c "$branch"
+          else
+            branch="$GITHUB_REF_NAME"
+          fi
+          git add android/app/src/main/res/drawable-nodpi/price_city_*.webp
+          if git diff --cached --quiet; then
+            echo "No changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "perf(android): use lightweight 512px WebP city artwork"
+          git push origin "HEAD:refs/heads/$branch"
+          if [[ "$GITHUB_EVENT_NAME" == 'workflow_dispatch' ]]; then
+            gh pr create --base main --head "$branch" \
+              --title "Optimize Android city WebP assets" \
+              --body "Keep full-size source images in design-assets/cities/original; Android uses 512px WebPs. No Android release is triggered."
+          fi
