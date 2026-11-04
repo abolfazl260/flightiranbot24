@@ -124,7 +124,7 @@
     {
       "iata": "SYZ",
       "detail_path": "details/SYZ.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "TBZ",
