@@ -4,27 +4,27 @@
     {
       "iata": "AMS",
       "detail_path": "details/AMS.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "ATH",
       "detail_path": "details/ATH.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "AUH",
       "detail_path": "details/AUH.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "AWZ",
       "detail_path": "details/AWZ.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "BKK",
       "detail_path": "details/BKK.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "BND",
@@ -34,27 +34,27 @@
     {
       "iata": "CDG",
       "detail_path": "details/CDG.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "DEL",
       "detail_path": "details/DEL.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "DOH",
       "detail_path": "details/DOH.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "DXB",
       "detail_path": "details/DXB.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "FRA",
       "detail_path": "details/FRA.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "GSM",
@@ -64,7 +64,7 @@
     {
       "iata": "IFN",
       "detail_path": "details/IFN.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "IKA",
@@ -89,17 +89,17 @@
     {
       "iata": "KUL",
       "detail_path": "details/KUL.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "LHR",
       "detail_path": "details/LHR.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "MAD",
       "detail_path": "details/MAD.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "MHD",
@@ -109,22 +109,22 @@
     {
       "iata": "MSQ",
       "detail_path": "details/MSQ.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "MUC",
       "detail_path": "details/MUC.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "OMH",
       "detail_path": "details/OMH.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "PEK",
       "detail_path": "details/PEK.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "SYZ",
@@ -144,7 +144,7 @@
     {
       "iata": "ZAH",
       "detail_path": "details/ZAH.v1.json",
-      "enabled": false
+      "enabled": true
     }
   ]
 }

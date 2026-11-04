@@ -42,6 +42,7 @@ class TicketCityIconMappingTest {
 
     @Test
     fun leavesCitiesWithoutDedicatedImagesUnchanged() {
-        assertNull(fareCityIconName("تهران"))
+        assertNull(fareCityIconName("قزوین"))
+        assertEquals("price_city_tehran", fareCityIconName("تهران"))
     }
 }
