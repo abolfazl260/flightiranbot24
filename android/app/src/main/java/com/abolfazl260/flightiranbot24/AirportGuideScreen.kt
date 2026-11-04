@@ -26,6 +26,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.abolfazl260.flightiranbot24.presentation.components.TravelBottomNavigation
 import com.abolfazl260.flightiranbot24.presentation.components.TravelEmptyState
@@ -79,8 +80,8 @@ internal fun AirportGuideScreen(
     ) { insets ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(insets),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 18.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             item {
                 TravelToolbar(
@@ -92,7 +93,7 @@ internal fun AirportGuideScreen(
             if (selectedCode == null) {
                 item {
                     Text(
-                        "راهنمای مسافر بر اساس اطلاعات تأییدشده هر فرودگاه",
+                        "اطلاعات کاربردی فرودگاه برای برنامه‌ریزی سفر",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -114,7 +115,7 @@ internal fun AirportGuideScreen(
                     }
                     item {
                         Text(
-                            available.size.toString() + " فرودگاه دارای اطلاعات منتشرشده",
+                            available.size.toString() + " فرودگاه با راهنمای منتشرشده",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -134,7 +135,7 @@ internal fun AirportGuideScreen(
                     }
                     item {
                         Text(
-                            "فرودگاه‌های فاقد داده تأییدشده تا زمان انتشار اطلاعات نمایش داده نمی‌شوند.",
+                            "با انتشار راهنمای فرودگاه‌های دیگر، آن‌ها نیز به فهرست اضافه می‌شوند.",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -160,7 +161,7 @@ internal fun AirportGuideScreen(
                     if (offline) item { AirportOfflineNotice() }
                     item {
                         Text(
-                            page.sections.size.toString() + " بخش اطلاعات تأییدشده",
+                            page.sections.size.toString() + " موضوع راهنمای سفر",
                             style = MaterialTheme.typography.labelMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
@@ -203,13 +204,13 @@ private fun AirportSelectionCard(name: String, code: String, onClick: () -> Unit
     Card(
         onClick = onClick,
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(19.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.45f)),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(18.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 13.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
@@ -243,8 +244,8 @@ private fun AirportSectionCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 1.dp),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(modifier = Modifier.weight(1f)) {
@@ -253,9 +254,16 @@ private fun AirportSectionCard(
                         style = MaterialTheme.typography.titleMedium,
                         fontWeight = FontWeight.Bold,
                     )
-                    section.subtitle?.let {
-                        Text(it, style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    if (!isExpanded) {
+                        section.subtitle?.let {
+                            Text(
+                                it,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                            )
+                        }
                     }
                 }
                 Text(if (isExpanded) "⌃" else "‹",
