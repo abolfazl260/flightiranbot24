@@ -143,3 +143,20 @@ def test_public_archive_association_cannot_bypass_archive_integration(dataset):
          lambda d: d["experience_links"][0].update(moderation_status="approved"))
     with pytest.raises(ValueError, match="archive integration"):
         module.validate_dataset(dataset, NOW)
+
+
+def test_historical_code_reuse_and_duplicate_assignment(dataset):
+    def historical(d):
+        code = copy.deepcopy(d["airlines"][1]["identity"]["codes"][0])
+        code["valid_to"] = "2020-01-01T00:00:00Z"
+        d["airlines"][0]["identity"]["codes"] = [code]
+        d["airlines"][1]["identity"]["codes"][0]["valid_from"] = "2020-01-02T00:00:00Z"
+    edit(dataset, "airline-index.v1.json", historical)
+    module.validate_dataset(dataset, NOW)
+    def duplicate(d):
+        codes = d["airlines"][1]["identity"]["codes"]
+        codes[0]["shared"] = True
+        codes.append(copy.deepcopy(codes[0]))
+    edit(dataset, "airline-index.v1.json", duplicate)
+    with pytest.raises(ValueError, match="Duplicate code"):
+        module.validate_dataset(dataset, NOW)

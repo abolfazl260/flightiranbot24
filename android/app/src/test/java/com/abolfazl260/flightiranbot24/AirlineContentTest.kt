@@ -86,6 +86,21 @@ class AirlineContentTest {
         rejected { parse(media) }
     }
 
+    @Test fun policyScopesPreserveRouteFareCabinAndOperatingCarrier() {
+        val root = page()
+        val scope = root.getAsJsonArray("sections")[0].asJsonObject.getAsJsonObject("scope")
+        scope.addProperty("route", "DXB-LHR")
+        scope.addProperty("fare_brand", "fixture-fare")
+        scope.addProperty("cabin_class", "fixture-cabin")
+        scope.addProperty("seller", "agency")
+        val parsed = parse(root).sections.first().scope!!
+        assertEquals("DXB-LHR", parsed.route)
+        assertEquals("fixture-fare", parsed.fare)
+        assertEquals("fixture-cabin", parsed.cabin)
+        assertEquals("emirates", parsed.operatingCarrier)
+        assertEquals("agency", parsed.seller)
+    }
+
     private fun review() = JsonParser.parseString("""
         {"review_id":"fixture-review","airline_id":"emirates","experience_id":null,
          "visit_date":null,"publication_timestamp":"2026-11-04T00:00:00Z",

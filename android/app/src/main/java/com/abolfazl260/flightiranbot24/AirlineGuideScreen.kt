@@ -55,114 +55,123 @@ internal fun AirlineGuideScreen(
     Scaffold(bottomBar = {
         TravelBottomNavigation(TravelTab.SERVICES, onHome, onPrices, onChecklist, onServices)
     }) { padding ->
-        holder.SaveableStateProvider((selected ?: "directory") + "/" + (sectionId ?: "overview")) {
-            val scroll = rememberLazyListState()
-            LazyColumn(
-                state = scroll, modifier = Modifier.fillMaxSize().padding(padding),
-                contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp),
-            ) {
-                item { TravelToolbar(section?.title ?: ref?.name ?: "ایرلاین‌ها", onBack) }
-                when {
-                    loading -> item { TravelLoadingState() }
-                    error -> item { TravelErrorState("راهنمای ایرلاین دریافت نشد.", onRetry) }
-                    selected == null -> {
-                        if (offline) item { OfflineAirlineNotice() }
-                        item {
-                            OutlinedTextField(query, { query = it }, Modifier.fillMaxWidth(),
-                                label = { Text("جست‌وجوی نام، نام پیشین یا کد ایرلاین") }, singleLine = true)
-                        }
-                        item {
-                            Row(Modifier.horizontalScroll(rememberScrollState()),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                                listOf("all" to "همه", "iran" to "ایرانی", "foreign" to "خارجی").forEach { (key, title) ->
-                                    FilterChip(region == key, { region = key }, label = { Text(title) })
+        // Keep saved list state untouched until real content is ready. Rendering
+        // a one-row loading list here would clamp restored scroll positions.
+        if (loading || error) {
+            Column(Modifier.fillMaxSize().padding(padding).padding(16.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                TravelToolbar(ref?.name ?: "ایرلاین‌ها", onBack)
+                if (loading) TravelLoadingState()
+                else TravelErrorState("راهنمای ایرلاین دریافت نشد.", onRetry)
+            }
+        } else {
+            holder.SaveableStateProvider((selected ?: "directory") + "/" + (sectionId ?: "overview")) {
+                val scroll = rememberLazyListState()
+                LazyColumn(
+                    state = scroll, modifier = Modifier.fillMaxSize().padding(padding),
+                    contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    item { TravelToolbar(section?.title ?: ref?.name ?: "ایرلاین‌ها", onBack) }
+                    when {
+                        selected == null -> {
+                            if (offline) item { OfflineAirlineNotice() }
+                            item {
+                                OutlinedTextField(query, { query = it }, Modifier.fillMaxWidth(),
+                                    label = { Text("جست‌وجوی نام، نام پیشین یا کد ایرلاین") }, singleLine = true)
+                            }
+                            item {
+                                Row(Modifier.horizontalScroll(rememberScrollState()),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                    listOf("all" to "همه", "iran" to "ایرانی", "foreign" to "خارجی").forEach { (key, title) ->
+                                        FilterChip(region == key, { region = key }, label = { Text(title) })
+                                    }
+                                }
+                            }
+                            val visible = filterAirlines(index.orEmpty(), query, region)
+                            if (visible.isEmpty()) item { TravelEmptyState("ایرلاینی برای نمایش پیدا نشد.") }
+                            items(visible, key = { it.id }) { airline ->
+                                Card(onClick = { onSelect(airline.id) }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
+                                    Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                                        Text(airline.name, fontWeight = FontWeight.Bold)
+                                        Text(airline.nameEn + " · " + airline.codes.joinToString(" / "))
+                                        Text(airline.countryName)
+                                        Text("راهنما در حال تکمیل", style = MaterialTheme.typography.labelMedium)
+                                        Text("آخرین بررسی هویت: " + airline.reviewedAt.take(10), style = MaterialTheme.typography.labelSmall)
+                                    }
                                 }
                             }
                         }
-                        val visible = filterAirlines(index.orEmpty(), query, region)
-                        if (visible.isEmpty()) item { TravelEmptyState("ایرلاینی برای نمایش پیدا نشد.") }
-                        items(visible, key = { it.id }) { airline ->
-                            Card(onClick = { onSelect(airline.id) }, modifier = Modifier.fillMaxWidth().heightIn(min = 72.dp)) {
-                                Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                                    Text(airline.name, fontWeight = FontWeight.Bold)
-                                    Text(airline.nameEn + " · " + airline.codes.joinToString(" / "))
-                                    Text(airline.countryName)
-                                    Text("راهنما در حال تکمیل", style = MaterialTheme.typography.labelMedium)
-                                    Text("آخرین بررسی هویت: " + airline.reviewedAt.take(10), style = MaterialTheme.typography.labelSmall)
+                        ref == null || page == null -> item {
+                            TravelEmptyState("این راهنما هنوز منتشر نشده یا فعلاً در دسترس نیست.")
+                        }
+                        sectionId != null -> {
+                            if (offline) item { OfflineAirlineNotice() }
+                            if (section == null) item { TravelEmptyState("این بخش هنوز منتشر نشده یا نیازمند بررسی دوباره است.") }
+                            else {
+                                item { Text("آخرین بررسی: " + section.reviewedAt.take(10)) }
+                                section.scope?.let { scope -> item {
+                                    Text(scope.note)
+                                    Text("سهمیه و شرایط دقیق از روی بلیت و شرکت اجراکننده تعیین می‌شود.")
+                                    scope.route?.let { Text("مسیر: " + it) }
+                                    scope.fare?.let { Text("نوع نرخ: " + it) }
+                                    scope.cabin?.let { Text("کلاس کابین: " + it) }
+                                    scope.operatingCarrier?.let { id ->
+                                        val carrier = index?.firstOrNull { it.id == id }
+                                        Text("شرکت اجراکننده: " + (carrier?.name ?: "نیازمند تأیید"))
+                                    }
+                                    val seller = mapOf("airline" to "خرید مستقیم از ایرلاین",
+                                        "agency" to "خرید از آژانس", "third_party" to "خرید از واسطه",
+                                        "unknown" to "طبق فروشنده درج‌شده در بلیت")
+                                    Text("دامنه فروش: " + (seller[scope.seller] ?: "نیازمند تأیید"))
+                                    when (scope.journeyType) {
+                                        "domestic" -> Text("مخصوص پرواز داخلی")
+                                        "international" -> Text("مخصوص پرواز خارجی")
+                                    }
+                                } }
+                                items(section.blocks) { block -> AirlineBlockView(block, onLink, onAirport) }
+                                item { AirlineHeading("منابع و آخرین قوانین") }
+                                items(section.sources) { source ->
+                                    TextButton(onClick = { onLink(source) }) { Text("بررسی مرجع · " + java.net.URI(source).host) }
                                 }
+                            }
+                        }
+                        else -> {
+                            if (offline) item { OfflineAirlineNotice() }
+                            item {
+                                Text(ref.nameEn + " · " + ref.countryName + " · " + ref.codes.joinToString(" / "))
+                                Text("آخرین بررسی راهنما: " + page.reviewedAt.take(10))
+                                Text("راهنما در حال تکمیل؛ فقط بخش‌های بررسی‌شده نمایش داده می‌شوند.")
+                            }
+                            item {
+                                TextButton(onClick = { onLink(ref.website) }) { Text("وب‌سایت رسمی ایرلاین") }
+                                TextButton(onClick = { onShare(ref) }) { Text("اشتراک‌گذاری") }
+                            }
+                            if (page.sections.isEmpty()) item {
+                                TravelEmptyState("بخش منتشرشده و معتبر برای این راهنما در دسترس نیست.")
+                            }
+                            items(page.sections, key = { it.id }) { item ->
+                                Card(onClick = { onSection(item.id) }, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
+                                    Column(Modifier.padding(16.dp)) {
+                                        Text(item.title, fontWeight = FontWeight.Bold)
+                                        Text("آخرین بررسی: " + item.reviewedAt.take(10), style = MaterialTheme.typography.labelSmall)
+                                    }
+                                }
+                            }
+                            item { AirlineHeading("تجربه‌های مسافران و امتیازها") }
+                            item {
+                                Text("تجربهٔ شخصی کاربر، نه مقررات رسمی شرکت هواپیمایی یا ارزیابی ایمنی.")
+                                Text("تجربهٔ دارای مجوز انتشار برای این ایرلاین هنوز متصل نشده است.")
+                                Text("تعداد رأی معتبر: " + page.ratingCount)
+                                Text("میانگین و مقایسه تا تعیین حداقل نمونهٔ معتبر نمایش داده نمی‌شود.")
+                                if (page.ratingCount > 0) page.criterionCounts.forEach { (key, count) ->
+                                    Text(AirlineContentParser.criteria.getValue(key) + ": " + count + " رأی")
+                                }
+                                TextButton(onClick = { onLink(BotLinks.SUPPORT) }) { Text("گزارش یا درخواست اصلاح محتوا") }
                             }
                         }
                     }
-                    ref == null || page == null -> item {
-                        TravelEmptyState("این راهنما هنوز منتشر نشده یا فعلاً در دسترس نیست.")
-                    }
-                    sectionId != null -> {
-                        if (offline) item { OfflineAirlineNotice() }
-                        if (section == null) item { TravelEmptyState("این بخش هنوز منتشر نشده یا نیازمند بررسی دوباره است.") }
-                        else {
-                            item { Text("آخرین بررسی: " + section.reviewedAt.take(10)) }
-                            section.scope?.let { scope -> item {
-                                Text(scope.note)
-                                Text("سهمیه و شرایط دقیق از روی بلیت و شرکت اجراکننده تعیین می‌شود.")
-                                scope.route?.let { Text("مسیر: " + it) }
-                                scope.fare?.let { Text("نوع نرخ: " + it) }
-                                scope.cabin?.let { Text("کلاس کابین: " + it) }
-                                scope.operatingCarrier?.let { id ->
-                                    val carrier = index?.firstOrNull { it.id == id }
-                                    Text("شرکت اجراکننده: " + (carrier?.name ?: "نیازمند تأیید"))
-                                }
-                                val seller = mapOf("airline" to "خرید مستقیم از ایرلاین",
-                                    "agency" to "خرید از آژانس", "third_party" to "خرید از واسطه",
-                                    "unknown" to "طبق فروشنده درج‌شده در بلیت")
-                                Text("دامنه فروش: " + (seller[scope.seller] ?: "نیازمند تأیید"))
-                                when (scope.journeyType) {
-                                    "domestic" -> Text("مخصوص پرواز داخلی")
-                                    "international" -> Text("مخصوص پرواز خارجی")
-                                }
-                            } }
-                            items(section.blocks) { block -> AirlineBlockView(block, onLink, onAirport) }
-                            item { AirlineHeading("منابع و آخرین قوانین") }
-                            items(section.sources) { source ->
-                                TextButton(onClick = { onLink(source) }) { Text("بررسی مرجع · " + java.net.URI(source).host) }
-                            }
-                        }
-                    }
-                    else -> {
-                        if (offline) item { OfflineAirlineNotice() }
-                        item {
-                            Text(ref.nameEn + " · " + ref.countryName + " · " + ref.codes.joinToString(" / "))
-                            Text("آخرین بررسی راهنما: " + page.reviewedAt.take(10))
-                            Text("راهنما در حال تکمیل؛ فقط بخش‌های بررسی‌شده نمایش داده می‌شوند.")
-                        }
-                        item {
-                            TextButton(onClick = { onLink(ref.website) }) { Text("وب‌سایت رسمی ایرلاین") }
-                            TextButton(onClick = { onShare(ref) }) { Text("اشتراک‌گذاری") }
-                        }
-                        if (page.sections.isEmpty()) item {
-                            TravelEmptyState("بخش منتشرشده و معتبر برای این راهنما در دسترس نیست.")
-                        }
-                        items(page.sections, key = { it.id }) { item ->
-                            Card(onClick = { onSection(item.id) }, modifier = Modifier.fillMaxWidth().heightIn(min = 64.dp)) {
-                                Column(Modifier.padding(16.dp)) {
-                                    Text(item.title, fontWeight = FontWeight.Bold)
-                                    Text("آخرین بررسی: " + item.reviewedAt.take(10), style = MaterialTheme.typography.labelSmall)
-                                }
-                            }
-                        }
-                        item { AirlineHeading("تجربه‌های مسافران و امتیازها") }
-                        item {
-                            Text("تجربهٔ شخصی کاربر، نه مقررات رسمی شرکت هواپیمایی یا ارزیابی ایمنی.")
-                            Text("تجربهٔ دارای مجوز انتشار برای این ایرلاین هنوز متصل نشده است.")
-                            Text("تعداد رأی معتبر: " + page.ratingCount)
-                            Text("میانگین و مقایسه تا تعیین حداقل نمونهٔ معتبر نمایش داده نمی‌شود.")
-                            if (page.ratingCount > 0) page.criterionCounts.forEach { (key, count) ->
-                                Text(AirlineContentParser.criteria.getValue(key) + ": " + count + " رأی")
-                            }
-                            TextButton(onClick = { onLink(BotLinks.SUPPORT) }) { Text("گزارش یا درخواست اصلاح محتوا") }
-                        }
-                    }
+                    item { TextButton(onClick = onRetry) { Text("بررسی دوباره اطلاعات") } }
                 }
-                item { TextButton(onClick = onRetry) { Text("بررسی دوباره اطلاعات") } }
             }
         }
     }

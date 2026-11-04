@@ -72,7 +72,7 @@ class AirlineDirectoryActivity : ComponentActivity() {
                     index = index, page = page, selected = selected, sectionId = section,
                     loading = loading, error = error,
                     offline = indexOffline || (selected != null && detailOffline),
-                    onSelect = { selected = it; section = null }, onSection = { section = it },
+                    onSelect = { loading = true; selected = it; section = null }, onSection = { section = it },
                     onBack = back, onRetry = { refresh++ }, onLink = ::openHttps,
                     onAirport = {
                         startActivity(Intent(this, AirportDirectoryActivity::class.java)
