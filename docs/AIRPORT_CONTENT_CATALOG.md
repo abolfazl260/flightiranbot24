@@ -167,3 +167,12 @@ screen, publish fake flight data or activate hidden Telegram menus.
 Versioned JSON changes should preserve compatibility for mobile clients;
 new block *types* need a compatible client release. Data-backed changes to
 existing supported block types do not require an APK rebuild.
+
+## Tabriz (TBZ) source review
+
+The TBZ page has 13 reviewed published passenger-guidance sections and two drafts
+(unapproved traveler experiences and unverified passenger-guide videos).
+The airport location map uses an approximate reference coordinate, not an indoor
+floor plan. Current flight status, bus timetables, fares and terminal assignments
+are **not** hardcoded. See [Tabriz verification notes](airports/TBZ_CONTENT_NOTES.md)
+for official links and source limitations.

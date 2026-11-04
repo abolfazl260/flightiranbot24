@@ -5,22 +5,76 @@
     {
       "id": "baggage-rules",
       "title_fa": "بار مجاز و قوانین حمل بار",
+      "subtitle_fa": "مقدار بار با ایرلاین و نوع بلیت تعیین می‌شود",
       "icon": "luggage",
       "order": 10,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules",
+        "https://www.iata.org/en/youandiata/travelers/batteries"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سهمیه ثابتی برای همه پروازهای تبریز وجود ندارد. وزن و تعداد بار تحویلی، بار دستی و هزینه اضافه‌بار تابع شرکت هواپیمایی، مسیر و کلاس بلیت است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در چمدان تحویلی نگذارید و مقررات ایرلاین را بررسی کنید.",
+            "اقلام تیز، آتش‌زا و خطرناک ممکن است ممنوع باشند؛ فهرست مجاز را پیش از سفر کنترل کنید.",
+            "مدارک و اشیای ارزشمند را در کیف همراه نگه دارید و رسید بار را حفظ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات IATA درباره بار مسافر",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای حمل باتری و پاوربانک",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries"
+        }
+      ]
     },
     {
       "id": "flight-status",
       "title_fa": "وضعیت پروازها",
+      "subtitle_fa": "ارجاع به اطلاعات پرواز؛ بدون داده لحظه‌ای ذخیره‌شده",
       "icon": "plane-takeoff",
       "order": 20,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://fids.airport.ir/",
+        "https://tabriz.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای استعلام پرواز ورودی یا خروجی تبریز، شماره پرواز و تاریخ را در سامانه اطلاعات پرواز کشور کنترل کنید. این داده ثابت، تأخیر، لغو، گیت و ساعت زنده را نشان نمی‌دهد؛ دسترس‌پذیری سایت نیز تضمین نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در FIDS فرودگاه تبریز را انتخاب کنید.",
+            "در صورت اختلال، با شرکت هواپیمایی یا اطلاعات پرواز ۱۹۹ تماس بگیرید.",
+            "به‌خصوص هنگام شرایط نامساعد جوی، وضعیت را پیش از حرکت دوباره بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه اطلاعات پرواز فرودگاه‌ها",
+          "url": "https://fids.airport.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی فرودگاه تبریز",
+          "url": "https://tabriz.airport.ir/"
+        }
+      ]
     },
     {
       "id": "traveler-experiences",
@@ -34,13 +88,37 @@
     },
     {
       "id": "airport-map",
-      "title_fa": "نقشه فرودگاه",
+      "title_fa": "نقشه و موقعیت فرودگاه",
+      "subtitle_fa": "مختصات تقریبی؛ نه نقشه سالن‌ها",
       "icon": "map",
       "order": 40,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oitt"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه شهید مدنی در شمال‌غرب تبریز است. این نقطه مرجع جغرافیایی تقریبی از داده‌های جامعه‌محور است؛ محل ورودی ترمینال، پارکینگ و گیت‌ها را مشخص نمی‌کند."
+        },
+        {
+          "type": "map",
+          "title_fa": "محدوده تقریبی فرودگاه تبریز",
+          "latitude": 38.133833,
+          "longitude": 46.235,
+          "external_url": "https://www.openstreetmap.org/?mlat=38.133833&mlon=46.235#map=14/38.133833/46.235"
+        },
+        {
+          "type": "text",
+          "text_fa": "نقشه رسمی و تأییدشده طبقات و گیت‌ها در منابع بررسی‌شده در دسترس نبود."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع نقطه مرجع TBZ/OITT",
+          "url": "https://oibk.ir/fa/airports/oitt"
+        }
+      ]
     },
     {
       "id": "airport-videos",
@@ -51,6 +129,333 @@
       "reviewed_at": null,
       "source_urls": [],
       "blocks": []
+    },
+    {
+      "id": "terminals",
+      "title_fa": "پایانه‌های مسافری",
+      "subtitle_fa": "سالن‌های داخلی، خارجی و حج؛ محل استفاده را تأیید کنید",
+      "icon": "building-2",
+      "order": 60,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://www.bitaseirtravel.com/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2/",
+        "https://www.tasnimnews.ir/fa/news/1405/06/18/3692475/%D8%AF%D8%B1-%D8%A7%D9%86%D8%AA%D8%B8%D8%A7%D8%B1-%D8%AA%D8%B5%D9%85%DB%8C%D9%85-%D8%B1%D8%A6%DB%8C%D8%B3-%D8%AC%D9%85%D9%87%D9%88%D8%B1-%D8%AA%D8%B1%D9%85%DB%8C%D9%86%D8%A7%D9%84-%D8%AE%D8%A7%D8%B1%D8%AC%DB%8C-%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2-%D8%B3%D8%A7%D8%AE%D8%AA%D9%87-%D9%85%DB%8C-%D8%B4%D9%88%D8%AF/amp"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنماهای مسافری قدیمی از سالن‌های داخلی، خارجی و حجاج نام برده‌اند؛ تقسیم‌بندی کنونی، ورودی‌ها و محل پذیرش ممکن است تغییر کرده باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سالن پرواز خود را از بلیت و ایرلاین استعلام کنید.",
+            "گزارش ساخت پایانه خارجی جدید به معنی افتتاح و بهره‌برداری آن نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی منتشرشده سالن‌ها",
+          "url": "https://www.bitaseirtravel.com/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2/"
+        },
+        {
+          "type": "link",
+          "title_fa": "گزارش ۱۴۰۵ درباره طرح ترمینال جدید",
+          "url": "https://www.tasnimnews.ir/fa/news/1405/06/18/3692475/%D8%AF%D8%B1-%D8%A7%D9%86%D8%AA%D8%B8%D8%A7%D8%B1-%D8%AA%D8%B5%D9%85%DB%8C%D9%85-%D8%B1%D8%A6%DB%8C%D8%B3-%D8%AC%D9%85%D9%87%D9%88%D8%B1-%D8%AA%D8%B1%D9%85%DB%8C%D9%86%D8%A7%D9%84-%D8%AE%D8%A7%D8%B1%D8%AC%DB%8C-%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2-%D8%B3%D8%A7%D8%AE%D8%AA%D9%87-%D9%85%DB%8C-%D8%B4%D9%88%D8%AF/amp"
+        }
+      ]
+    },
+    {
+      "id": "airport-taxi",
+      "title_fa": "تاکسی فرودگاه",
+      "subtitle_fa": "محل استقرار و تعرفه را در روز سفر بررسی کنید",
+      "icon": "car-taxi-front",
+      "order": 70,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://fa.wikivoyage.org/wiki/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87_%D8%A8%DB%8C%D9%86%E2%80%8C%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C_%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2",
+        "https://tabriz.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای مسافری، جایگاه تاکسی فرودگاه را در محدوده خروجی سالن داخلی معرفی کرده است؛ محل و نحوه خدمت‌رسانی فعلی تأیید مستقل نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "از جایگاه رسمی سوار شوید و پیش از حرکت مقصد و کرایه را تأیید کنید.",
+            "برای ون و بار زیاد امکان خودرو مناسب را استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات رسمی خدمات فرودگاه",
+          "url": "https://tabriz.airport.ir/"
+        }
+      ]
+    },
+    {
+      "id": "airport-bus",
+      "title_fa": "دسترسی با اتوبوس شهری",
+      "subtitle_fa": "مسیر معرفی‌شده تاریخی است؛ برنامه فعلی بررسی شود",
+      "icon": "bus-front",
+      "order": 80,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://fa.wikivoyage.org/wiki/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87_%D8%A8%DB%8C%D9%86%E2%80%8C%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C_%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در راهنمای سفر، اتوبوس فرودگاه به محدوده بازار تبریز (راسته‌کوچه) معرفی شده است؛ فعالیت فعلی خط، محل ایستگاه، کرایه و ساعت حرکت تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از استفاده، فعال بودن سرویس و ساعت آن را از اتوبوسرانی یا اطلاعات فرودگاه بپرسید.",
+            "برای رسیدن به پرواز نزدیک، بدون تأیید برنامه حرکت تنها به اتوبوس تکیه نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع معرفی مسیر قدیمی اتوبوس",
+          "url": "https://fa.wikivoyage.org/wiki/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87_%D8%A8%DB%8C%D9%86%E2%80%8C%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C_%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2"
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "title_fa": "پارکینگ فرودگاه",
+      "subtitle_fa": "ظرفیت و تعرفه در زمان مراجعه تأیید شود",
+      "icon": "car-front",
+      "order": 90,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://fa.wikivoyage.org/wiki/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87_%D8%A8%DB%8C%D9%86%E2%80%8C%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C_%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2",
+        "https://tabriz.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وجود پارکینگ در راهنماهای مسافری ذکر شده است، ولی تعرفه، ظرفیت، شرایط توقف شبانه و وضعیت بخش‌های مسقف یا روباز از مرجع رسمی به‌روز تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از ورود نرخ و شرایط توقف بلندمدت را بپرسید.",
+            "رسید و محل پارک خودرو را تا بازگشت حفظ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پیگیری اطلاعات روز پارکینگ از فرودگاه",
+          "url": "https://tabriz.airport.ir/"
+        }
+      ]
+    },
+    {
+      "id": "passenger-guide",
+      "title_fa": "راهنمای مسافر پیش از پرواز",
+      "subtitle_fa": "مدارک، بار و زمان پذیرش را کنترل کنید",
+      "icon": "clipboard-check",
+      "order": 100,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules",
+        "https://fids.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ، ساعت و سالن پذیرش را در بلیت و نزد ایرلاین کنترل کنید.",
+            "مدارک شناسایی و برای پرواز خارجی گذرنامه، ویزا و مدارک لازم مقصد را همراه ببرید.",
+            "وزن بار، اقلام ممنوعه و الزامات وسایل خاص را بررسی کنید.",
+            "با درنظرگرفتن ترافیک، بازرسی و مهلت بسته‌شدن پذیرش زودتر برسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "استعلام وضعیت پرواز",
+          "url": "https://fids.airport.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات عمومی بار مسافر",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        }
+      ]
+    },
+    {
+      "id": "airport-facilities",
+      "title_fa": "امکانات و خدمات رفاهی",
+      "subtitle_fa": "امکانات ذکرشده در راهنماها؛ فعال بودن تأیید نشده",
+      "icon": "coffee",
+      "order": 110,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://fa.wikivoyage.org/wiki/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87_%D8%A8%DB%8C%D9%86%E2%80%8C%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C_%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2",
+        "https://tabriz.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "منابع راهنمای سفر از غذاخوری، کافی‌شاپ، فروشگاه، خودپرداز، خدمات بانکی و بسته‌بندی بار نام برده‌اند؛ این فهرست به معنای بازبودن فعلی همه خدمات نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "ساعت و موقعیت خدمات ضروری را پیش از سفر استعلام کنید.",
+            "برای خدمات پزشکی و نیازهای خاص از کارکنان اطلاعات فرودگاه کمک بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تاریخی امکانات فرودگاه",
+          "url": "https://fa.wikivoyage.org/wiki/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87_%D8%A8%DB%8C%D9%86%E2%80%8C%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C_%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع رسمی برای اطلاعات به‌روز",
+          "url": "https://tabriz.airport.ir/"
+        }
+      ]
+    },
+    {
+      "id": "airport-contacts",
+      "title_fa": "اطلاعات تماس و نشانی",
+      "subtitle_fa": "شماره‌های منتشرشده؛ پاسخگویی آزمایش نشده",
+      "icon": "phone",
+      "order": 120,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://www.tasnimnews.ir/fa/news/1403/10/15/3231830/%D8%B4%D9%85%D8%A7%D8%B1%D9%87-%D8%AA%D9%85%D8%A7%D8%B3-%D8%AA%D9%85%D8%A7%D9%85-%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1/amp",
+        "https://www.flightgate.ir/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%AA%D8%A8%D8%B1%DB%8C%D8%B2/",
+        "https://tabriz.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نشانی: تبریز، بلوار شهید خلبان بابایی، فرودگاه شهید مدنی.",
+            "شماره گزارش‌شده مرکز تلفن: ۰۴۱-۳۵۲۶۰۴۰۵؛ پیش از اتکا صحت آن را بررسی کنید.",
+            "سامانه عمومی اطلاعات پرواز: ۱۹۹. شماره‌های محلی معرفی‌شده: ۰۴۱-۳۵۲۳۴۷۰۱ تا ۰۴۱-۳۵۲۳۴۷۰۴؛ دسترس‌پذیری کنونی آزمایش نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی فرودگاه",
+          "url": "https://tabriz.airport.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست خبری شماره تلفن فرودگاه‌ها",
+          "url": "https://www.tasnimnews.ir/fa/news/1403/10/15/3231830/%D8%B4%D9%85%D8%A7%D8%B1%D9%87-%D8%AA%D9%85%D8%A7%D8%B3-%D8%AA%D9%85%D8%A7%D9%85-%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D9%87%D8%A7%DB%8C-%DA%A9%D8%B4%D9%88%D8%B1/amp"
+        }
+      ]
+    },
+    {
+      "id": "baggage-claims",
+      "title_fa": "پیگیری بار مفقود یا آسیب‌دیده",
+      "subtitle_fa": "گزارش به ایرلاین پیش از خروج از سالن بار",
+      "icon": "briefcase-business",
+      "order": 130,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules",
+        "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اگر چمدان تحویل نشد یا آسیب دید، پیش از ترک سالن تحویل بار به ایرلاین عامل یا خدمات زمینی مراجعه و گزارش کتبی ثبت کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، کارت پرواز و شماره پرونده پیگیری را نگه دارید.",
+            "برای خسارت، مهلت و مدارک لازم را از شرکت هواپیمایی استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA درباره بار گمشده",
+          "url": "https://www.iata.org/en/programs/ops-infra/baggage/passenger-baggage-rules"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات کلی حقوق مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات ویژه مسافران",
+      "subtitle_fa": "پیش از سفر با شرکت هواپیمایی هماهنگ شود",
+      "icon": "accessibility",
+      "order": 140,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://www.iata.org/contentassets/7b3762815ac44a10b83ccf5560c1b308/best-practices-on-the-application-of-ssr-codes-and-assistance-service.pdf"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نیاز به ویلچر، کمک در سوارشدن یا حمل وسایل کمک‌حرکتی را پیشاپیش به ایرلاین اطلاع دهید. ارائه یا ظرفیت خدمت معین در تبریز با این راهنما تضمین نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع نیاز، محل مراجعه و ساعت حضور را با ایرلاین مشخص کنید.",
+            "برای ویلچر باتری‌دار مشخصات باتری و ابعاد را به ایرلاین بدهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA برای درخواست کمک ویژه",
+          "url": "https://www.iata.org/contentassets/7b3762815ac44a10b83ccf5560c1b308/best-practices-on-the-application-of-ssr-codes-and-assistance-service.pdf"
+        }
+      ]
+    },
+    {
+      "id": "official-updates",
+      "title_fa": "اطلاعیه‌های رسمی فرودگاه",
+      "subtitle_fa": "کانال خبری؛ جایگزین استعلام پرواز نیست",
+      "icon": "megaphone",
+      "order": 150,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:20:00Z",
+      "source_urls": [
+        "https://t.me/s/newsaviationtabriz",
+        "https://tabriz.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال معرفی‌شده با عنوان رسمی فرودگاه شهید مدنی تبریز اخبار و محتوای تصویری منتشر می‌کند؛ اخبار عمومی جایگزین استعلام پرواز مشخص نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی فرودگاه تبریز",
+          "url": "https://t.me/s/newsaviationtabriz"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی فرودگاه",
+          "url": "https://tabriz.airport.ir/"
+        }
+      ]
     }
   ]
 }

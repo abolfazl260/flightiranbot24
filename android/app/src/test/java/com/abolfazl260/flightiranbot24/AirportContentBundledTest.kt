@@ -20,9 +20,9 @@ class AirportContentBundledTest {
     private fun bundled(path: String): String =
         context.assets.open(path).bufferedReader().use { it.readText() }
 
-    @Test fun onlySourceBackedIkaIsListed() {
+    @Test fun reviewedAirportsIncludeIkaAndTabriz() {
         val index = AirportContentParser.parseIndex(bundled("airport-index.v1.json"))
-        assertEquals(listOf("IKA"), index.airports.map { it.iata })
+        assertTrue(index.airports.map { it.iata }.containsAll(listOf("IKA", "TBZ")) )
         val names = readBundledAirportNames(context)
         assertEquals("امام خمینی تهران", names["IKA"]?.name)
         assertTrue(filterAirports(listOf(names.getValue("IKA")), "امام").isNotEmpty())
@@ -40,4 +40,15 @@ class AirportContentBundledTest {
         assertTrue(page.sections.all { it.sources.isNotEmpty() && it.blocks.isNotEmpty() })
         assertTrue(page.sections.any { it.subtitle != null })
     }
+    @Test fun tbzHasThirteenPublishedSectionsAndHidesDraftReviewsAndVideo() {
+        val page = AirportContentParser.parseDetail(bundled("details/TBZ.v1.json"), "TBZ")
+        assertEquals(13, page.sections.size)
+        assertTrue(page.sections.any { it.id == "airport-map" })
+        assertTrue(page.sections.any { it.id == "flight-status" })
+        assertTrue(page.sections.any { it.id == "airport-contacts" })
+        assertFalse(page.sections.any { it.id == "traveler-experiences" })
+        assertFalse(page.sections.any { it.id == "airport-videos" })
+        assertTrue(page.sections.all { it.sources.isNotEmpty() && it.blocks.isNotEmpty() })
+    }
+
 }
