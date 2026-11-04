@@ -7,20 +7,73 @@
       "title_fa": "بار مجاز و قوانین حمل بار",
       "icon": "luggage",
       "order": 10,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://www.iata.org/bags/index",
+        "https://www.iata.org/en/youandiata/travelers/batteries"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "میزان بار رایگان، تعداد چمدان، بار دستی و هزینه اضافه‌بار، به شرکت هواپیمایی، مسیر، کلاس و نوع بلیت بستگی دارد؛ برای کل فرودگاه بندرعباس سهمیه یکسان وجود ندارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی نگذارید؛ در کیف دستی و محافظت‌شده حمل کنید.",
+            "اقلام تیز، مایعات، دارو و تجهیزات خاص تحت محدودیت‌های بازرسی و ایرلاین هستند؛ مقررات مسیر خارجی را جداگانه بررسی کنید.",
+            "رسید و برچسب تحویل بار را تا دریافت چمدان نگه دارید؛ مدارک و وسایل ضروری را همراه خود ببرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای قوانین بار IATA",
+          "url": "https://www.iata.org/bags/index"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی باتری و پاوربانک",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries"
+        }
+      ],
+      "subtitle_fa": "محدودیت هر بلیت را از ایرلاین بررسی کنید"
     },
     {
       "id": "flight-status",
       "title_fa": "وضعیت پروازها",
       "icon": "plane-takeoff",
       "order": 20,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/",
+        "https://fids.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این داده‌ها زمان، گیت، لغو یا تأخیر زنده را نشان نمی‌دهند. سامانه FIDS ممکن است در دسترس نباشد و منبع API معتبر آن در پروژه هنوز پیکربندی نشده است؛ وضعیت قطعی را فقط از ایرلاین یا تابلوهای روز پرواز دریافت کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز و تاریخ سفر را آماده کنید و با شرکت هواپیمایی یا مرکز فرودگاهی کنترل کنید.",
+            "شماره سراسری اطلاعات پرواز ۱۹۹ و شماره تماس منتشرشده فرودگاه ۰۷۶-۳۳۶۱۱۰۲۰ است؛ امکان پاسخگویی در همه شرایط تضمین نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه اطلاعات پرواز FIDS (ممکن است در دسترس نباشد)",
+          "url": "https://fids.airport.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای تماس فرودگاه از سپهران",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "اطلاعات پرواز ممکن است سریع تغییر کنند"
     },
     {
       "id": "traveler-experiences",
@@ -34,23 +87,397 @@
     },
     {
       "id": "airport-map",
-      "title_fa": "نقشه فرودگاه",
+      "title_fa": "نقشه و موقعیت فرودگاه",
       "icon": "map",
       "order": 40,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/",
+        "https://ourairports.com/airports/OIKB/runways.html"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "موقعیت مجموعه در بندرعباس، مسیر بلوار امام خمینی و بلوار ۱۵ خرداد است. نقطه زیر، مختصات فرودگاه است نه پلان داخلی سالن‌ها و گیت‌ها."
+        },
+        {
+          "type": "map",
+          "title_fa": "موقعیت فرودگاه بین‌المللی بندرعباس",
+          "latitude": 27.2183,
+          "longitude": 56.3778,
+          "external_url": "https://www.openstreetmap.org/?mlat=27.2183&mlon=56.3778#map=15/27.2183/56.3778"
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای انتخاب ورودی صحیح، ترمینال پرواز خود را از ایرلاین و تابلوهای روز بررسی کنید.",
+            "زمان رسیدن از شهر را با نقشه و ترافیک روز محاسبه کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مختصات و اطلاعات باند از OurAirports",
+          "url": "https://ourairports.com/airports/OIKB/runways.html"
+        }
+      ],
+      "subtitle_fa": "نقشه موقعیت؛ پلان داخلی تأیید نشده است"
     },
     {
       "id": "airport-videos",
       "title_fa": "ویدیو فرودگاه",
       "icon": "video",
       "order": 50,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ویدیوی منتشرشده در وبلاگ شرکت هواپیمایی سپهران نمای ترمینال داخلی، پذیرش و گیت‌ها را معرفی می‌کند. تصاویر ممکن است قدیمی باشند و برای تشخیص گیت امروز نباید به آن‌ها اتکا کرد."
+        },
+        {
+          "type": "video",
+          "title_fa": "معرفی ترمینال فرودگاه بندرعباس",
+          "url": "https://blog.flysepehran.com/wp-content/uploads/2023/12/bandar-abbas-airport720.mp4",
+          "attribution_fa": "ناشر: وبلاگ شرکت هواپیمایی سپهران؛ لینک مستقیم به محتوای میزبان، بدون ذخیره دوباره در مخزن"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه توضیحات ویدیو",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "نمای آشنایی؛ نه نقشه عملیاتی روز"
+    },
+    {
+      "id": "terminals",
+      "title_fa": "ترمینال‌های داخلی و خارجی",
+      "icon": "building-2",
+      "order": 60,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "راهنمای شرکت هواپیمایی سپهران از دو ترمینال مجزا برای پروازهای داخلی و خارجی خبر می‌دهد.",
+            "در آن راهنما، ترمینال شماره ۱ برای پروازهای خارجی و شماره ۲ برای پروازهای داخلی معرفی شده است.",
+            "نام ترمینال، کانتر و گیت می‌توانند تغییر کنند؛ اطلاعات پرواز همان روز مرجع نهایی است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی ترمینال‌ها",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "پیش از حرکت شماره سالن را تأیید کنید"
+    },
+    {
+      "id": "city-access",
+      "title_fa": "دسترسی شهری و تاکسی",
+      "icon": "car-taxi-front",
+      "order": 70,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نشانی دسترسی: بندرعباس، بلوار امام خمینی، بلوار ۱۵ خرداد.",
+            "در راهنمای سپهران، تاکسی فرودگاهی، تاکسی اینترنتی و روش‌های حمل‌ونقل شهری مطرح شده‌اند؛ موجودبودن در زمان پرواز قطعی نیست.",
+            "کرایه و زمان حرکت ثابت درج نشده‌اند؛ هزینه را پیش از سوارشدن و مدت مسیر را با توجه به ترافیک روز بررسی کنید.",
+            "برای سفر نیمه‌شب یا صبح زود وسیله رفت‌وآمد را از قبل هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای حمل‌ونقل فرودگاه",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "کرایه، سرویس و زمان مسیر متغیرند"
+    },
+    {
+      "id": "parking",
+      "title_fa": "پارکینگ فرودگاه",
+      "icon": "car-front",
+      "order": 80,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پارکینگ در انتهای بلوار ۱۵ خرداد معرفی شده و در راهنمای سپهران فعالیت ۲۴ساعته برای آن ذکر شده است. ظرفیت، ساعت واقعی و تعرفه در تاریخ سفر مستقیماً استعلام شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای استعلام تعرفه و ظرفیت، شماره منتشرشده ۰۷۶-۳۳۶۱۱۰۱۱ را بررسی کنید.",
+            "محل توقف خودرو و رسید پارکینگ را نگه دارید و زمان پیاده‌روی تا ترمینال را لحاظ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع اطلاعات پارکینگ",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "تعرفه و ظرفیت لحظه‌ای منتشر نشده‌اند"
+    },
+    {
+      "id": "airport-facilities",
+      "title_fa": "امکانات و خدمات فرودگاه",
+      "icon": "coffee",
+      "order": 90,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در راهنمای سپهران سالن انتظار، رستوران یا کافه، فروشگاه، سرویس بهداشتی، پارکینگ و خودپرداز یا خدمات بانکی معرفی شده‌اند.",
+            "نمازخانه، خدمات پزشکی و برخی امکانات موردنیاز مسافران نیز ذکر شده‌اند؛ محل و ساعت ارائه بسته به سالن تغییر می‌کند.",
+            "درباره وای‌فای، CIP، صرافی و امکانات ویژه بدون تأیید روزانه فرض قطعی نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست امکانات در راهنمای فرودگاه",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "برای خدمات خاص، موقعیت و ساعت را استعلام کنید"
+    },
+    {
+      "id": "passenger-guide",
+      "title_fa": "راهنمای مسافر پیش از پرواز",
+      "icon": "clipboard-check",
+      "order": 100,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/",
+        "https://www.iata.org/bags/index"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تاریخ، کد پرواز، نام ایرلاین، مقصد و نام مسافر را با بلیت تطبیق دهید.",
+            "برای مسیر داخلی کارت شناسایی و برای مسیر خارجی گذرنامه معتبر و مدارک ورود به مقصد را بررسی کنید.",
+            "ساعت حضور لازم را از ایرلاین دریافت کنید؛ یک زمان ثابت برای همه پروازها معتبر نیست.",
+            "قوانین بار و باتری را رعایت کنید و پس از ورود به فرودگاه از تابلوها، کانتر و تغییر احتمالی گیت مطلع شوید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی فرودگاه بندرعباس",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "اطلاعات بلیت و ایرلاین اولویت دارند"
+    },
+    {
+      "id": "baggage-claims",
+      "title_fa": "پیگیری بار آسیب‌دیده یا مفقود",
+      "icon": "luggage",
+      "order": 110,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://www.iata.org/bags/index"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای چمدان نرسیده یا آسیب‌دیده، پیش از ترک سالن تحویل بار به نماینده ایرلاین یا خدمات زمینی مراجعه کنید و گزارش بگیرید.",
+            "کارت پرواز، برچسب بار، مشخصات چمدان و شماره پیگیری را نگه دارید.",
+            "شرایط خسارت و مهلت پیگیری را از شرکت هواپیمایی مربوط به همان پرواز بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای مشکلات بار IATA",
+          "url": "https://www.iata.org/bags/index"
+        }
+      ],
+      "subtitle_fa": "ثبت گزارش در محل تحویل بار اهمیت دارد"
+    },
+    {
+      "id": "lost-property",
+      "title_fa": "اشیای جامانده",
+      "icon": "search",
+      "order": 120,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وسایل جامانده داخل هواپیما را از ایرلاین و اشیای جا‌مانده در سالن یا محوطه را از اطلاعات فرودگاه پیگیری کنید. شماره مستقل دفتر اشیای گمشده در منابع قابل اتکا تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "زمان، محل احتمالی گم‌شدن، شرح شیء و شماره پرواز را آماده کنید.",
+            "برای معرفی واحد مسئول با شماره منتشرشده فرودگاه ۰۷۶-۳۳۶۱۱۰۲۰ تماس بگیرید.",
+            "مدارک مالکیت و نحوه تحویل را پیش از مراجعه هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات تماس در راهنمای سپهران",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "شماره مستقل دفتر اشیای گمشده تأیید نشده است"
+    },
+    {
+      "id": "contact",
+      "title_fa": "آدرس و شماره‌های ضروری",
+      "icon": "phone",
+      "order": 130,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/",
+        "https://ourairports.com/airports/OIKB/runways.html"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام: فرودگاه بین‌المللی بندرعباس؛ با نام شهدای پرواز ۶۵۵ نیز معرفی می‌شود. IATA: BND؛ ICAO: OIKB.",
+            "نشانی: بندرعباس، بلوار امام خمینی، بلوار ۱۵ خرداد، فرودگاه بین‌المللی بندرعباس.",
+            "تلفن منتشرشده: ۰۷۶-۳۳۶۱۱۰۲۰؛ تلفن دیگر درج‌شده در راهنمای سپهران: ۰۷۶-۳۳۶۱۱۰۱۱.",
+            "شماره عمومی اطلاعات پرواز معرفی‌شده: ۱۹۹.",
+            "دامنه وب‌سایت معرفی‌شده: bandarabbas.airport.ir؛ پاسخ‌گویی وب‌سایت در این بررسی مستقیماً تأیید نشد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده فرودگاه",
+          "url": "https://bandarabbas.airport.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع نشانی و شماره‌ها",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "شماره‌ها را پیش از اتکا مجدداً تأیید کنید"
+    },
+    {
+      "id": "complaints",
+      "title_fa": "شکایات و حقوق مسافر",
+      "icon": "message-square-warning",
+      "order": 140,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://www.caa.gov.ir/",
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای تأخیر، لغو، استرداد وجه و مشکلات بلیت ابتدا با ایرلاین یا فروشنده مجاز تماس بگیرید و شماره پیگیری بخواهید.",
+            "برای مسائل حقوق مسافر می‌توان از مسیر معرفی‌شده توسط سازمان هواپیمایی کشوری درخواست ثبت کرد.",
+            "برای خدمات داخل مجموعه فرودگاه از واحد پاسخگویی فرودگاهی پیگیری کنید؛ مسئولیت ایرلاین، فرودگاه و گمرک متفاوت است.",
+            "رسیدها، مکاتبات، شماره پرواز و تاریخ را نگهداری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت سازمان هواپیمایی کشوری",
+          "url": "https://www.caa.gov.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه حقوق مسافر (ممکن است در دسترس نباشد)",
+          "url": "https://farasa.cao.ir"
+        }
+      ],
+      "subtitle_fa": "ابتدا مرجع مسئول همان مشکل را شناسایی کنید"
+    },
+    {
+      "id": "airport-overview",
+      "title_fa": "مشخصات عمومی و فنی",
+      "icon": "plane",
+      "order": 150,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://ourairports.com/airports/OIKB/runways.html"
+      ],
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "فرودگاه بندرعباس در استان هرمزگان با کدهای BND و OIKB شناسایی می‌شود.",
+            "مختصات مرجع: ۲۷٫۲۱۸۳ شمالی و ۵۶٫۳۷۷۸ شرقی؛ ارتفاع حدود ۷ متر از سطح دریا.",
+            "باند آسفالته 03R/21L با طول ۳۶۶۰ متر و عرض ۴۵ متر و باند 03L/21R با طول ۳۴۵۷ متر و عرض ۳۰ متر در OurAirports ثبت شده‌اند.",
+            "اطلاعات باند جامعه‌محور و مرجع عمومی است؛ برای هوانوردی عملیاتی باید به AIP و NOTAM معتبر مراجعه شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "داده مرجع OurAirports",
+          "url": "https://ourairports.com/airports/OIKB/runways.html"
+        }
+      ],
+      "subtitle_fa": "داده‌های فنی عمومی جایگزین AIP نیستند"
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "مسافران نیازمند کمک و خانواده‌ها",
+      "icon": "accessibility",
+      "order": 160,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:28:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در معرفی عمومی فرودگاه به امکانات مسافران نیازمند کمک و اتاق مادر و کودک اشاره شده، اما موجودبودن و مکان دقیق در هر روز به‌صورت مستقل تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای ویلچر، همراهی سالمند و نیاز پزشکی، قبل از سفر درخواست را به ایرلاین اعلام کنید.",
+            "درباره کالسکه، وسایل کودک، غذای خاص یا دارو، قوانین پرواز را بررسی کنید.",
+            "ورودی بدون پله و دسترسی خدمات ویژه را پیش از مراجعه از فرودگاه بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی عمومی امکانات",
+          "url": "https://blog.flysepehran.com/fa/airports/bandar-abbas-international-airport/"
+        }
+      ],
+      "subtitle_fa": "خدمات ویژه نیازمند هماهنگی قبلی هستند"
     }
   ]
 }

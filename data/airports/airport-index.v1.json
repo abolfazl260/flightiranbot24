@@ -29,7 +29,7 @@
     {
       "iata": "BND",
       "detail_path": "details/BND.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "CDG",
