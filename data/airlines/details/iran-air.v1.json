@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "airline_id": "iran-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+    ],
+    "verified_at": "2026-11-04T14:30:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و هویت",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ایران‌ایر با کد IATA برابر IR و کد ICAO برابر IRA در فهرست IATA برای ایران ثبت شده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع هویت در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی ایران‌ایر",
+          "url": "https://www.iranair.com/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز",
+      "icon": "baggage",
+      "order": 50,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اطلاعات این بخش هنوز تأیید و منتشر نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "قوانین بلیت",
+      "icon": "ticket-rules",
+      "order": 50,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اطلاعات این بخش هنوز تأیید و منتشر نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و چک‌این",
+      "icon": "checkin",
+      "order": 50,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اطلاعات این بخش هنوز تأیید و منتشر نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان هواپیما",
+      "icon": "fleet",
+      "order": 50,
+      "kind": "fleet",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": []
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}

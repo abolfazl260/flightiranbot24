@@ -1,0 +1,347 @@
+{
+  "schema_version": 1,
+  "airline_id": "emirates",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.iata.org/en/about/members/airline-list/emirates/73/"
+    ],
+    "verified_at": "2026-11-04T14:30:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اقلام خاص",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/",
+          "https://www.emirates.com/us/english/before-you-fly/travel/dangerous-goods-policy/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "emirates",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "این بخش سهمیه عددی عمومی اعلام نمی‌کند؛ مخصوص نرخ، کلاس و مسیر درج‌شده روی بلیت شماست."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سهمیه بار امارات به مسیر، نوع نرخ و کلاس سفر بستگی دارد. برای سهمیه دقیق و هزینه اضافه‌بار، بلیت و مدیریت رزرو را بررسی کنید. در سفر با شرکت همکار، قوانین بار ممکن است متفاوت باشد."
+        },
+        {
+          "type": "link",
+          "title_fa": "بررسی آخرین قوانین بار در سایت ایرلاین",
+          "url": "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اقلام خطرناک، باتری و پاوربانک",
+          "url": "https://www.emirates.com/us/english/before-you-fly/travel/dangerous-goods-policy/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "قوانین بلیت و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/uk/english/help/forms/refund-request/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "emirates",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "خرید مستقیم و آژانسی روند یکسان ندارند؛ مبلغ و امکان استرداد از شرایط نرخ تعیین می‌شود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "امارات درخواست استرداد را طبق شرایط نرخ هنگام خرید بررسی می‌کند. برای خرید مستقیم، فرم رسمی را بررسی کنید. برای بلیت و خدمات خریداری‌شده از آژانس، با همان آژانس تماس بگیرید. برای خرید از کانال ثالث، ابتدا فروشنده صادرکننده را مشخص کنید. خدماتی که مستقیماً از امارات خریده‌اید می‌تواند مسیر درخواست جداگانه داشته باشد. ارسال درخواست استرداد ممکن است رزرو را لغو کند."
+        },
+        {
+          "type": "link",
+          "title_fa": "شرایط و فرم رسمی استرداد",
+          "url": "https://www.emirates.com/uk/english/help/forms/refund-request/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و چک‌این",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/manage-booking/online-check-in/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "emirates",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مهلت و امکان چک‌این را برای فرودگاه و شرکت اجراکننده پرواز خود بررسی کنید."
+      },
+      "blocks": [
+        {
+          "type": "link",
+          "title_fa": "چک‌این آنلاین و محدودیت‌های مسیر",
+          "url": "https://www.emirates.com/us/english/manage-booking/online-check-in/"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "link",
+          "title_fa": "وضعیت پرواز در سایت رسمی",
+          "url": "https://www.emirates.com/us/english/manage-booking/flight-status/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "پیگیری چمدان و پشتیبانی",
+      "icon": "lost-baggage",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/before-you-fly/baggage/delayed-damaged-baggage/",
+          "https://www.emirates.com/us/english/help/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "link",
+          "title_fa": "گزارش و پیگیری بار نرسیده یا آسیب‌دیده",
+          "url": "https://www.emirates.com/us/english/before-you-fly/baggage/delayed-damaged-baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راه‌های رسمی تماس و پشتیبانی",
+          "url": "https://www.emirates.com/us/english/help/"
+        }
+      ]
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان هواپیما",
+      "icon": "fleet",
+      "order": 80,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/experience/our-fleet/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مدل هواپیما و چیدمان کابین ممکن است در روز سفر تغییر کند. فهرست زیر خانواده‌های معرفی‌شده در سایت امارات است؛ تعداد و مالکیت هر خانواده تأیید نشده و از روی کدشر استنباط نمی‌شود."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A350",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-04T14:30:00Z",
+          "status": "unknown",
+          "relationship": "operated",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.emirates.com/us/english/experience/our-fleet/"
+            ],
+            "verified_at": "2026-11-04T14:30:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A380",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-04T14:30:00Z",
+          "status": "unknown",
+          "relationship": "operated",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.emirates.com/us/english/experience/our-fleet/"
+            ],
+            "verified_at": "2026-11-04T14:30:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "777",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-04T14:30:00Z",
+          "status": "unknown",
+          "relationship": "operated",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.emirates.com/us/english/experience/our-fleet/"
+            ],
+            "verified_at": "2026-11-04T14:30:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و هویت",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/emirates/73/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "امارات با کد IATA برابر EK و کد ICAO برابر UAE در فهرست IATA برای امارات متحده عربی ثبت شده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع هویت در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/emirates/73/"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و صندلی",
+      "icon": "cabin",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی",
+      "icon": "catering",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": []
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}

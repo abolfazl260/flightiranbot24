@@ -162,4 +162,6 @@
     <string name="service_travel_info_description">نکات مهم، قوانین و توصیه‌های سفر</string>
     <string name="service_support_description">دریافت کمک و ارتباط با تیم پشتیبانی</string>
     <string name="service_privacy_description">شیوه نگهداری و استفاده از اطلاعات شما</string>
+    <string name="airlines_title">ایرلاین‌ها</string>
+    <string name="service_airlines_description">راهنمای شرکت‌های هواپیمایی، خدمات و ناوگان</string>
 </resources>

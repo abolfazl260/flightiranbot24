@@ -42,7 +42,11 @@ class AirportDirectoryActivity : ComponentActivity() {
                 var indexLoading by remember { mutableStateOf(true) }
                 var indexOffline by remember { mutableStateOf(false) }
                 var indexError by remember { mutableStateOf(false) }
-                var selectedCode by rememberSaveable { mutableStateOf<String?>(null) }
+                var selectedCode by rememberSaveable {
+                    mutableStateOf(intent.getStringExtra("airport_iata")?.takeIf {
+                        it.matches(Regex("[A-Z]{3}"))
+                    })
+                }
                 var page by remember { mutableStateOf<AirportContentPage?>(null) }
                 var detailLoading by remember { mutableStateOf(false) }
                 var detailOffline by remember { mutableStateOf(false) }

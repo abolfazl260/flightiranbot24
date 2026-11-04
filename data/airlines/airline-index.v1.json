@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "airlines": [
+    {
+      "airline_id": "iran-air",
+      "detail_path": "details/iran-air.v1.json",
+      "identity": {
+        "name_fa": "ایران‌ایر",
+        "name_en": "Iran Air",
+        "legal_name": "Iran Air, The Airline of the Islamic Republic of Iran",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هما",
+          "IranAir"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "IR",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "IRA",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.iranair.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "emirates",
+      "detail_path": "details/emirates.v1.json",
+      "identity": {
+        "name_fa": "امارات",
+        "name_en": "Emirates",
+        "legal_name": "Emirates",
+        "country": "AE",
+        "country_fa": "امارات متحده عربی",
+        "aliases": [
+          "Emirates Airlines"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "EK",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "UAE",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.emirates.com/us/english/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/emirates/73/"
+        ],
+        "verified_at": "2026-11-04T14:30:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+name: Airline content validation
+on:
+  pull_request:
+    paths:
+      - 'data/airlines/**'
+      - 'data/airports/airport-index.v1.json'
+      - 'scripts/validate_airline_content.py'
+      - 'tests/test_airline_content_catalog.py'
+      - '.github/workflows/airline-content.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'data/airlines/**'
+      - 'data/airports/airport-index.v1.json'
+      - 'scripts/validate_airline_content.py'
+      - '.github/workflows/airline-content.yml'
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install 'jsonschema>=4.23,<5' 'pytest>=8,<9'
+      - run: python scripts/validate_airline_content.py
+      - run: python -m pytest tests/test_airline_content_catalog.py
