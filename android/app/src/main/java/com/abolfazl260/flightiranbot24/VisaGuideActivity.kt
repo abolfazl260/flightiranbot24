@@ -187,8 +187,8 @@ internal fun VisaGuideScreen(
     ) { insets ->
         LazyColumn(
             modifier = Modifier.fillMaxSize().padding(insets),
-            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(14.dp),
+            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             item {
                 TravelToolbar(
@@ -197,7 +197,13 @@ internal fun VisaGuideScreen(
                 )
             }
             if (state.selectedDestination == null) {
-                item { VisaHero("راهنمای ویزای کشورها", "بررسی وضعیت ویزا، شرایط ورود و اقامت") }
+                item {
+                    Text(
+                        "کشور صادرکننده گذرنامه و مقصد سفر را انتخاب کنید.",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
                 item {
                     Card(
                         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
@@ -357,7 +363,7 @@ internal fun VisaGuideScreen(
                         }
                         item {
                             VisaDetailCard("شرایط و نکات مهم ورود") {
-                                Text(rule.notes ?: "شرایط تکمیلی در داده منتشرشده ثبت نشده است.",
+                                Text(rule.notes ?: "شرایط تکمیلی برای این مقصد ثبت نشده است. پیش از سفر، مقررات ورود را از مرجع رسمی مقصد بررسی کنید.",
                                     style = MaterialTheme.typography.bodyMedium)
                             }
                         }
@@ -374,7 +380,12 @@ internal fun VisaGuideScreen(
                                         modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                                     ) { Text("مشاهده منبع اطلاعات ↗") }
                                 } else {
-                                    Text("پیوند منبع برای این قانون منتشر نشده است.")
+                                    Text(
+                                        "پیوند منبع مستقیم برای این قانون ثبت نشده است. پیش از سفر، " +
+                                            "اطلاعات را از مرجع رسمی کشور مقصد یا شرکت هواپیمایی تأیید کنید.",
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    )
                                 }
                             }
                         }
@@ -416,7 +427,7 @@ internal fun VisaGuideScreen(
 @Composable
 private fun VisaHero(title: String, subtitle: String) {
     Box(
-        modifier = Modifier.fillMaxWidth().height(154.dp)
+        modifier = Modifier.fillMaxWidth().height(112.dp)
             .clip(RoundedCornerShape(24.dp))
             .background(
                 Brush.linearGradient(
@@ -448,13 +459,13 @@ private fun VisaHero(title: String, subtitle: String) {
 private fun VisaDestinationCard(code: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
         onClick = onClick,
-        modifier = modifier.heightIn(min = 112.dp),
+        modifier = modifier.heightIn(min = 92.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 13.dp, horizontal = 6.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 11.dp, horizontal = 6.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
@@ -505,15 +516,15 @@ private fun VisaStatusPanel(rule: VisaRule) {
 @Composable
 private fun VisaFact(label: String, value: String, modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier.heightIn(min = 114.dp),
+        modifier = modifier.heightIn(min = 82.dp),
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(9.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 10.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(5.dp),
         ) {
             Text(label, textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.labelSmall,
@@ -533,8 +544,8 @@ private fun VisaDetailCard(title: String, content: @Composable () -> Unit) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.5f)),
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(17.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.fillMaxWidth().padding(15.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             content()
