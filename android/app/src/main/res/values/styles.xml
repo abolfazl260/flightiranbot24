@@ -3,9 +3,9 @@
     <style name="Theme.FlightIran" parent="android:style/Theme.Material.Light.NoActionBar">
         <item name="android:colorAccent">@color/teal</item>
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:statusBarColor">@color/navy</item>
+        <item name="android:statusBarColor">@color/pale</item>
         <item name="android:navigationBarColor">@color/navy</item>
-        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightStatusBar">true</item>
         <item name="android:windowBackground">@color/pale</item>
     </style>
     <style name="AdvertioHeadline">
