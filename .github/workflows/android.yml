@@ -1,32 +1,7 @@
 name: Android Build and Release
 
+# No automatic APK/AAB on pull requests, merges, pushes or tags.
 on:
-  pull_request:
-    paths:
-      - "android/**"
-      - "docs/ANDROID_*.md"
-      - "docs/PLAY_STORE_LISTING.md"
-      - "scripts/generate_android_store_graphics.py"
-      - "src/flightiran/modules/airport/data/airports.json"
-      - "data/travel-websites/**"
-      - "data/airports/**"
-      - "scripts/check_android_environments.py"
-      - "src/flightiran/webapp/**"
-      - ".github/workflows/android.yml"
-  push:
-    branches: [main]
-    tags: ["v*"]
-    paths:
-      - "android/**"
-      - "docs/ANDROID_*.md"
-      - "docs/PLAY_STORE_LISTING.md"
-      - "scripts/generate_android_store_graphics.py"
-      - "src/flightiran/modules/airport/data/airports.json"
-      - "data/travel-websites/**"
-      - "data/airports/**"
-      - "scripts/check_android_environments.py"
-      - "src/flightiran/webapp/**"
-      - ".github/workflows/android.yml"
   workflow_dispatch:
 
 permissions:
@@ -39,6 +14,7 @@ concurrency:
 jobs:
   verify:
     name: Android checks and debug APK
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -83,9 +59,6 @@ jobs:
         run: |
           set -euo pipefail
           version="1.0.$GITHUB_RUN_NUMBER"
-          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-            version="${GITHUB_REF_NAME#v}"
-          fi
           python scripts/check_android_environments.py \
             --app-dir android/app/build/outputs \
             --version-code "$GITHUB_RUN_NUMBER" --version-name "$version"
@@ -115,22 +88,13 @@ jobs:
           path: android/app/build/outputs/apk/debug/*.apk
           if-no-files-found: error
           retention-days: 14
-      # Unsigned AABs are for pull-request QA only; main uploads signed AABs.
-      - name: Preserve unsigned release AAB for QA
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: android-unsigned-release-aab
-          path: android/app/build/outputs/bundle/release/*.aab
-          if-no-files-found: error
-          retention-days: 14
 
 
   release:
     name: Signed APK, AAB and GitHub Release
-    # Release requires Android verification; screenshots are independently captured on main.
+    # Release only a user-requested build from the current main commit.
     needs: verify
-    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     timeout-minutes: 35
     permissions:
@@ -145,22 +109,13 @@ jobs:
         run: |
           set -Eeuo pipefail
           git fetch --no-tags origin main
-          if [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-            [[ "$GITHUB_REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
-              echo "::error::Release tags must match vMAJOR.MINOR.PATCH"
-              exit 1
-            }
-            release_tag="$GITHUB_REF_NAME"
-          else
-            [[ "$GITHUB_REF" == "refs/heads/main" ]] || exit 1
-            # Gradle's appVersionBase is the version name prefix used for main builds.
-            base_version="$(sed -n 's/^appVersionBase=//p' android/gradle.properties | tr -d '\r')"
-            [[ "$base_version" =~ ^[0-9]+\.[0-9]+$ ]] || {
-              echo "::error::Invalid or missing appVersionBase in gradle.properties"
-              exit 1
-            }
-            release_tag="v${base_version}.${GITHUB_RUN_NUMBER}"
-          fi
+          [[ "$GITHUB_REF" == "refs/heads/main" ]] || exit 1
+          base_version="$(sed -n 's/^appVersionBase=//p' android/gradle.properties | tr -d '\r')"
+          [[ "$base_version" =~ ^[0-9]+\.[0-9]+$ ]] || {
+            echo "::error::Invalid or missing appVersionBase in gradle.properties"
+            exit 1
+          }
+          release_tag="v${base_version}.${GITHUB_RUN_NUMBER}"
           [[ "$(git rev-parse HEAD)" == "$(git rev-parse origin/main)" ]] || {
             echo "::error::Only the current reviewed main HEAD may be published"
             exit 1
@@ -191,7 +146,7 @@ jobs:
           set -euo pipefail
           for required in KEYSTORE_BASE64 STORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
             [[ -n "${!required}" ]] || {
-              echo "::error::Android signing secrets are required for automatic signed releases."
+              echo "::error::Android signing secrets are required for manually requested signed releases."
               exit 1
             }
           done
@@ -309,15 +264,13 @@ jobs:
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             # Idempotent on a re-run of this exact GitHub Actions release.
             gh release upload "$RELEASE_TAG" "${files[@]}" --clobber
-          elif [[ "$GITHUB_REF_TYPE" == "tag" ]]; then
-            # Preserve the existing trusted manual-tag route.
-            gh release create "$RELEASE_TAG" "${files[@]}" \
-              --title "Flight Iran Bot 24 $RELEASE_TAG" --generate-notes --verify-tag
+          else
+            # Only this manually triggered build can create a version tag after QA and signing.
           else
             # Auto-create the version tag only after QA, signing and fresh API checks.
             # Never reuse an existing tag or overwrite a different published version.
             if gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG" >/dev/null 2>&1; then
-              echo "::error::Auto-version tag already exists without a GitHub Release"
+              echo "::error::Release version tag already exists without a GitHub Release"
               exit 1
             fi
             gh release create "$RELEASE_TAG" "${files[@]}" \

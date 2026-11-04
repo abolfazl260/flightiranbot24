@@ -8,19 +8,14 @@ Ticket fares display natively through the database-backed HTTPS API; only
 separate services such as support may intentionally hand off to Telegram.
 No bot token is embedded in the APK.
 
-GitHub Actions automatically increments the build number and tests the Android
-app on relevant changes. Pull requests produce a debug APK and **unsigned QA AAB**.
-After a successful push to `main`, the workflow automatically generates a signed
-APK and AAB with SHA-256 checksums, and publishes a versioned GitHub Release
-when the live public API passes its freshness checks. No manual Git tag is needed.
-Legacy manually created `vMAJOR.MINOR.PATCH` tags are still supported.
+APK/AAB builds are **manual only**. Go to Actions → **Android Build and Release** →
+**Run workflow**, select `main`, then start the run. Pushes, pull requests,
+merges and tags never trigger the build workflow. Both build jobs are guarded
+to accept only a manual `workflow_dispatch` on `main`.
 
-Android screenshots run **independently** in `.github/workflows/android-screenshots.yml`
-on **every push to `main`**, including merges that change only non-Android files.
-They do not run for pull requests or other branches. A manual rerun is possible
-only on `main`. Screenshots are uploaded separately as the
-`android-real-screenshots` artifact (30-day retention); screenshot failures
-never block APK/AAB verification, signing, or GitHub Releases.
+**Android Store Screenshots** is also manual-only on `main`; its emulator
+builds the app and must not run after every merge. The standard Python and
+Cloudflare CI checks remain automatic and do not build Android packages.
 
 ## Owner actions (private signing key)
 
@@ -48,13 +43,13 @@ never block APK/AAB verification, signing, or GitHub Releases.
    workflow artifact. The endpoint is public and must NEVER contain a bot token.
    Run the Cloudflare Publisher on Ubuntu to populate the D1 feed.
 6. Allow the trusted Android workflow's `GITHUB_TOKEN` to create its
-   automatically numbered `v*` tags and publish GitHub Releases with scoped
+   manually requested build's numbered `v*` tags and publish GitHub Releases with scoped
    `contents: write` permissions. If repository tag rulesets block Actions,
    adjust the authorized workflow policy; do not disable signing checks.
 7. Enroll with Google Play Console and Play App Signing if Play publication
    is intended. This requires the owner's developer account and verification.
 
-## Verify upload signing before relying on automatic releases
+## Verify upload signing before manually requested releases
 
 The local upload keystore must remain outside the Git repository. If the
 maintainer has already created `~/Desktop/flightiran-upload.jks`, reuse
@@ -100,41 +95,29 @@ not validate Google Play upload-key enrollment, tag-protection rules, a fresh
 ticket API, a signed production APK/AAB, or Play approval. Those are separate
 publication gates.
 
-## Automatic builds and versions
+## On-demand builds and versions
 
-Android now has exactly **one application ID**,
-`com.abolfazl260.flightiranbot24`. The `debug` build has the standard
-`.debug` suffix solely to permit concurrent installation during testing;
-there are no development/staging/production product flavors.
+Android has one application ID, `com.abolfazl260.flightiranbot24`.
+The debug variant uses the `.debug` suffix for side-by-side installation.
+Each manually started Android workflow uses `GITHUB_RUN_NUMBER` as the
+`versionCode` and derives `versionName` from `appVersionBase` (e.g. `1.0.N`).
 
-For every Android workflow run, `versionCode=GITHUB_RUN_NUMBER` and
-`versionName=<appVersionBase>.<run number>` (currently `1.0.N`).
-The version is computed without editing Gradle properties.
+1. Open [Android Build and Release](https://github.com/abolfazl260/flightiranbot24/actions/workflows/android.yml).
+2. Select **Run workflow** on branch **main**.
+3. The verification job runs Android unit tests, lint and builds a debug APK.
+4. After verification passes, the release job creates signed APK/AAB artifacts,
+   verifies their signatures, and uploads `android-release-v1.0.N` with checksums.
+5. Only for this user-initiated build, a GitHub Release is published if the
+   deployed ticket API freshness check passes; otherwise signed files remain
+   available as GitHub Actions artifacts (90-day retention).
 
-- **Pull request:** Android tests, debug APK and unsigned AAB for QA;
-  untrusted PRs never get signing credentials.
-- **Push to `main` touching the Android build inputs:** after the
-  `verify` job passes, build and cryptographically verify the signed APK/AAB
-  with the existing private GitHub Actions secrets. Upload
-  `android-release-v1.0.N` containing `FlightIranBot24-v1.0.N.apk`,
-  `.aab` and `SHA256SUMS.txt` (retained 90 days).
-- **Automatic publication:** if the live prices API has usable fresh data,
-  create the `v1.0.N` Git tag at the verified `main` commit and publish the
-  corresponding GitHub Release with the same signed assets.
-- **API unavailable, forbidden (403) or stale:** signed artifacts remain
-  available in the successful Actions upload. The readiness probe reports a
-  warning and **skips public GitHub Release publication**, without failing the
-  signing/build job. Investigate the public Cloudflare endpoint or publisher,
-  then use a subsequent successful main build for the next public release.
-  Never use synthetic prices.
-- **Manual `vMAJOR.MINOR.PATCH` tag (optional):** still supports the
-  original signed-release workflow, but no longer required for standard
-  `main` builds.
+The workflow refuses to publish an outdated `main` commit. A manual run on
+another branch skips the jobs. Neither pushes, pull requests, merges nor
+`v*` tag creation launch a build; standard CI remains separate.
 
-The workflow refuses to release an outdated `main` commit, reuse a conflicting
-release tag, or skip signature verification. Automatic GitHub Releases do
-**not** automatically upload to Google Play Console. Do not upload a build with
-a lower/equal `versionCode` than a version already uploaded to Play.
+To capture emulator screenshots separately, open [Android Store Screenshots](https://github.com/abolfazl260/flightiranbot24/actions/workflows/android-screenshots.yml),
+select `main`, and choose **Run workflow**. This workflow is never triggered
+by a push to `main`.
 
 ## Store publication requirements
 
@@ -178,29 +161,10 @@ and `android/app/build/outputs/bundle/release/app-release.aab`.
 
 ## Current production release gates (November 2026)
 
-- Pull request CI produces a debug APK and an **unsigned AAB** for QA.
-  `main` automatically produces a separately named signed APK/AAB artifact
-  after passing Android CI; use `android-release-v1.0.N`, **not**
-  `android-unsigned-release-aab`, for signed files.
-- The independent `Android Store Screenshots` workflow runs on each `main`
-  push, boots an accelerated emulator, runs instrumented tests, and uploads
-  authentic PNG screenshots. KVM access is configured in the workflow. It does
-  not run in pull-request builds and does not gate signed releases. Review its
-  separate artifact before using pictures in a public store listing.
-- A signed release requires the four owner-controlled signing secrets listed
-  above. The workflow automatically creates `v1.0.N` on the current
-  reviewed `main` HEAD after validating signatures and the live API.
-  A separately supplied manual tag must also refer to current `main`.
-- The release job builds both APK and AAB using the owner upload key, runs
-  `apksigner verify`, validates the signed-AAB success result from
-  `jarsigner`, saves signed artifacts with SHA-256 digests, and checks the
-  live API before attaching these assets to a public GitHub Release.
-- Automatic generation is not Google Play approval or publication. Complete
-  physical-device checks, privacy review and Play Console requirements before
-  distributing the release to production users.
-
-The automatic **public publication gate** requires
-`GET /api/v1/tickets/prices` on the configured Cloudflare HTTPS origin to
-return a nonempty `routes` array, `currency: TOMAN`, `observed_at` and
-`stale: false`. If it does not, fix data publishing rather than bypassing
-the gate. The signed build is still downloadable from its Actions artifact.
+- Standard Python/Cloudflare CI continues on pull requests and pushes without Android APK/AAB creation.
+- Android packages and emulator screenshots require a manual Run workflow on `main`.
+- The Android build verifies tests, lint, the version, signed artifacts, and SHA-256 digests.
+- The signing secrets are required for signed APK/AAB creation.
+- Public GitHub Release publication also requires fresh data from the ticket API; if unavailable,
+  signed APK/AAB files remain available in the manually started workflow's artifacts.
+- Google Play upload, real-device testing and store review remain separate owner actions.
