@@ -45,7 +45,7 @@ def test_each_existing_airport_has_independent_content_and_valid_publication():
     assert {e["iata"] for e in index["airports"]} == expected
 
     enabled = {e["iata"] for e in index["airports"] if e["enabled"]}
-    assert {"IKA", "MHD"}.issubset(enabled)
+    assert {"IKA", "MHD", "TBZ"}.issubset(enabled)
 
     for entry in index["airports"]:
         detail = load(root / entry["detail_path"])
@@ -64,6 +64,18 @@ def test_each_existing_airport_has_independent_content_and_valid_publication():
     assert {
         s["id"] for s in mhd["sections"] if s["status"] == "draft"
     } == {"traveler-experiences", "airport-videos"}
+
+
+def test_tabrix_bundled_catalog_has_source_backed_sections():
+    airport = load(ROOT / "data/airports/details/TBZ.v1.json")
+    assert airport["iata"] == "TBZ"
+    assert len(airport["sections"]) == 15
+    published = [s for s in airport["sections"] if s["status"] == "published"]
+    drafts = [s for s in airport["sections"] if s["status"] == "draft"]
+    assert len(published) == 13
+    assert {s["id"] for s in drafts} == {"traveler-experiences", "airport-videos"}
+    assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
+    assert all(not s["blocks"] and not s["source_urls"] for s in drafts)
 
 
 def test_add_section_to_one_airport_does_not_affect_other_airports(tmp_path):

@@ -129,7 +129,7 @@
     {
       "iata": "TBZ",
       "detail_path": "details/TBZ.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "THR",
