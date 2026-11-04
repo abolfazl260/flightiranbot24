@@ -207,3 +207,26 @@ def test_kish_guide_is_enabled_with_verified_sections_and_reserved_drafts():
         b["type"] not in {"video", "experience", "flight_board"}
         for s in published for b in s["blocks"]
     )
+
+def test_ahvaz_airport_guide_has_sourced_content_and_safe_drafts():
+    """AWZ is individually enabled without fabricated experiences or media."""
+    validate_dataset()
+    root = ROOT / "data/airports"
+    index = load(root / "airport-index.v1.json")
+    awz_entry = next(e for e in index["airports"] if e["iata"] == "AWZ")
+    assert awz_entry["enabled"] is True
+    data = load(root / awz_entry["detail_path"])
+    assert data["iata"] == "AWZ"
+    assert len(data["sections"]) == 19
+    published = [s for s in data["sections"] if s["status"] == "published"]
+    drafts = [s for s in data["sections"] if s["status"] == "draft"]
+    assert len(published) == 17
+    assert {s["id"] for s in drafts} == {"traveler-experiences", "airport-videos"}
+    assert all(s["source_urls"] and s["reviewed_at"] and s["blocks"] for s in published)
+    assert all(not s["source_urls"] and not s["blocks"] for s in drafts)
+    assert any(b["type"] == "map" for s in published for b in s["blocks"])
+    assert not any(
+        b["type"] in {"experience", "video", "flight_board"}
+        for s in published
+        for b in s["blocks"]
+    )
