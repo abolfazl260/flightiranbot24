@@ -87,6 +87,8 @@ def test_published_section_requires_review_and_evidence(tmp_path):
     content = load(base / "details/THR.v1.json")
     first = next(s for s in content["sections"] if s["id"] == "airport-videos")
     first["status"] = "published"
+    first["reviewed_at"] = None
+    first["source_urls"] = []
     first["blocks"] = [{"type": "text", "text_fa": "قوانین بر اساس ایرلاین متفاوت است."}]
     save(base / "details/THR.v1.json", content)
     with pytest.raises(ValueError, match="reviewed content"):
