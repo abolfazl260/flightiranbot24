@@ -2,10 +2,12 @@
 
 import json
 from pathlib import Path
-
-from scripts.validate_airport_content import validate_dataset
+from runpy import run_path
 
 ROOT = Path(__file__).resolve().parents[1]
+validate_dataset = run_path(str(ROOT / "scripts/validate_airport_content.py"))[
+    "validate_dataset"
+]
 CODES = (
     "AMS", "ATH", "AUH", "AWZ", "BKK", "CDG", "DEL", "DOH", "DXB", "FRA",
     "IFN", "KIH", "KUL", "LHR", "MAD", "MSQ", "MUC", "OMH", "PEK", "ZAH",
