@@ -64,7 +64,7 @@
     {
       "iata": "IFN",
       "detail_path": "details/IFN.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "IKA",
