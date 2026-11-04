@@ -9,7 +9,7 @@
   <title>ادورتیو | دستیار سفر</title>
   <link rel="stylesheet" href="/assets/mini.css?v=3">
   <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script type="module" src="/assets/mini.js?v=3"></script>
+  <script type="module" src="/assets/mini.js?v=4"></script>
 </head>
 <body>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -65,9 +65,8 @@
 
         <div class="section-heading"><h2>نگاهی به بازار پرواز</h2><button type="button" class="text-action" data-go="tickets">همه مسیرها <svg class="symbol"><use href="#i-arrow"></use></svg></button></div>
         <div class="panel" id="home-price-preview"><p class="muted">در حال دریافت آخرین قیمت‌های ثبت‌شده…</p></div>
-        <!-- TEMPORARILY DISABLED: airport link is hidden until this feature is ready.
-        <button type="button" class="notice-card" data-go="airports"><span class="notice-icon"><svg class="symbol"><use href="#i-plane"></use></svg></span><span><strong>اطلاعات فرودگاه‌ها</strong><small>این بخش به‌زودی فعال می‌شود.</small></span><svg class="symbol"><use href="#i-arrow"></use></svg></button>
-        -->
+        <button type="button" class="notice-card" data-go="airports"><strong>راهنمای فرودگاه‌ها</strong><small>اطلاعات اختصاصی و منابع رسمی</small></button>
+        <button type="button" class="notice-card" data-go="airlines"><strong>ایرلاین‌ها</strong><small>خدمات، قوانین و ناوگان</small></button>
         <div class="home-help"><span>برای رزرو یا پیگیری سفر کمک می‌خواهید؟</span><button type="button" class="inline-link" data-link="support">ارتباط با پشتیبانی <svg class="symbol"><use href="#i-external"></use></svg></button></div>
       </section>
 
@@ -157,11 +156,13 @@
         <p id="checklist-storage-note" class="footnote">انتخاب‌ها روی همین دستگاه و برای حساب تلگرام شما ذخیره می‌شوند و با چک‌لیست اپ اندروید همگام نیستند.</p>
       </section>
 
-      <!-- TEMPORARILY DISABLED: airport placeholder screen is hidden until this feature is ready.
       <section class="screen" id="screen-airports" data-screen="airports" aria-labelledby="airports-heading" hidden>
-        <div class="empty-hero"><span class="huge-icon"><svg class="symbol"><use href="#i-plane"></use></svg></span><h1 id="airports-heading">فرودگاه‌ها</h1><p>اطلاعات فرودگاه‌ها به‌زودی به دستیار سفر اضافه می‌شود.</p><button type="button" class="primary-cta" data-go="home">بازگشت به خانه</button></div>
+        <h1 id="airports-heading">راهنمای فرودگاه‌ها</h1><div id="airports-guide" class="guide-content" aria-live="polite"></div>
       </section>
-      -->
+      <section class="screen" id="screen-airlines" data-screen="airlines" aria-labelledby="airlines-heading" hidden>
+        <h1 id="airlines-heading">ایرلاین‌ها</h1><div id="airlines-guide" class="guide-content" aria-live="polite"></div>
+      </section>
+
     </main>
   </div>
 

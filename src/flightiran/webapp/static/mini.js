@@ -3,6 +3,8 @@
  */
 import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
 
+import {createGuideView} from "./guide-view.mjs";
+
 (() => {
   "use strict";
   const $ = id => document.getElementById(id);
@@ -139,6 +141,7 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
       if (screen === "home") telegram.BackButton.hide();
       else telegram.BackButton.show();
     }
+    if (guides[screen]) guides[screen].load();
     if (screen === "alerts") loadAlerts();
     if (screen === "useful") loadUseful();
     if (screen === "websites") loadWebsites();
@@ -163,6 +166,13 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
   }
   function openUrl(url) {
     link(null,url);
+  }
+  const guides = Object.fromEntries(['airports','airlines'].map(kind => [kind,
+    createGuideView({kind, root:$(kind+'-guide'), el, openUrl,
+      onAirport:id=>{go('airports');guides.airports.open(id);}, onFids:()=>go('fids')})
+  ]));
+  function guideBack() {
+    if (!guides[state.active]?.back()) go('home');
   }
   function modal(title, body, actions) {
     $("dialog-title").textContent = title;
@@ -787,7 +797,7 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
     try {
       telegram.ready();
       telegram.expand();
-      telegram.BackButton?.onClick?.(()=>go("home"));
+      telegram.BackButton?.onClick?.(guideBack);
     } catch { /* Telegram webview version without optional methods */ }
     try {
       state.bootstrap=await request("/api/mini/bootstrap");
@@ -807,6 +817,7 @@ import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalo
   });
   $("refresh-button").addEventListener("click",async()=>{
     await Promise.all([loadPrices(),loadVisa()]);
+    if (guides[state.active]) await guides[state.active].load(true);
     if (state.active === "alerts") await loadAlerts();
     if (state.active === "useful") { state.useful=null; await loadUseful(); }
     if (state.active === "websites") await loadWebsites(true);
