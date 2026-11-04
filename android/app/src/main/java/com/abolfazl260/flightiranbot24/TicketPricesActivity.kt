@@ -500,6 +500,16 @@ internal fun fareCityIconName(city: String): String? {
         "یاسوج" -> "price_city_yasuj"
         "چابهار" -> "price_city_chabahar"
         "بندرانزلی" -> "price_city_bandaranzali"
+        "سیرجان" -> "price_city_sirjan"
+        "شانگهای" -> "price_city_shanghai"
+        "بیرجند" -> "price_city_birjand"
+        "کابل" -> "price_city_kabul"
+        "ایلام" -> "price_city_ilam"
+        "مزارشریف" -> "price_city_mazar_sharif"
+        "بانکوک" -> "price_city_bangkok"
+        "آلانیا" -> "price_city_alanya"
+        "پکن" -> "price_city_beijing"
+        "جیروفت" -> "price_city_jiroft"
         else -> null
     }
 }
