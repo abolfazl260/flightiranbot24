@@ -306,15 +306,18 @@ capture 07-travel-websites.png
 scroll_down 2
 capture 07-travel-websites-bottom.png
 
-# Open the published airport guide via the native Services row, not a
-# test-only intent. Confirm the indexed IKA content is visible, then open it.
+# Open the published airport guide through the visible Services card.
+# The directory is a LazyColumn sorted by IATA; IKA is below the initial
+# viewport when all 29 airports are published. Wait for the visible search
+# field to confirm index loading, capture the directory, then scroll via
+# UIAutomator to the actual IKA card instead of asserting off-screen text.
 open_launcher
 wait_for_activity MainActivity
 tap_persian_control "خدمات"
 wait_for_text "راهنمای فرودگاه‌ها"
 tap_service_row "راهنمای فرودگاه‌ها"
 wait_for_activity AirportDirectoryActivity
-wait_for_text "امام خمینی تهران"
+wait_for_text "جست‌وجوی نام فرودگاه یا کد IATA"
 capture 08-airports.png
 tap_service_row "امام خمینی تهران"
 wait_for_text "بار مجاز و قوانین حمل بار"
