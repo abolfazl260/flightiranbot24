@@ -1,0 +1,372 @@
+{
+  "schema_version": 1,
+  "iata": "GSM",
+  "sections": [
+    {
+      "id": "baggage-rules",
+      "title_fa": "بار مجاز و قوانین حمل بار",
+      "subtitle_fa": "میزان مجاز بار را ایرلاین و نوع بلیت تعیین می‌کند",
+      "icon": "luggage",
+      "order": 10,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/",
+        "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سقف بار تحویلی و کابین به ایرلاین، مسیر، کلاس پروازی و نوع بلیت بستگی دارد. هیچ وزن ثابتی را نمی‌توان برای تمام مسافران فرودگاه قشم اعلام کرد؛ مقدار مجاز و هزینه اضافه‌بار را از شرکت مجری پرواز و بلیت بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی لیتیومی را در بار تحویلی قرار ندهید. طبق مقررات اعلامی ایکائو در ۲۰۲۶، تعداد پاوربانک برای هر مسافر به دو عدد محدود شده است؛ ظرفیت و جزئیات را با ایرلاین کنترل کنید.",
+            "اقلام خطرناک، آتش‌زا، برنده و برخی مایعات در بازرسی محدودیت دارند. درباره دارو، وسایل پزشکی و غذای کودک از ایرلاین سؤال کنید.",
+            "رسید تحویل بار و برچسب چمدان را تا دریافت بار نزد خود نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه ایمنی پاوربانک ایکائو",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پروازها",
+      "subtitle_fa": "اطلاع‌رسانی تاریخ‌دار؛ نه نمایش زنده پرواز",
+      "icon": "plane-takeoff",
+      "order": 20,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/",
+        "https://qeshmoff.com/news/qfz-39111",
+        "https://tasnimnews.ir/fa/news/1405/04/14/3640210/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برنامه پروازهای قشم در سال ۱۴۰۵ چند بار تغییر کرده است. ساعت حرکت، تأخیر، لغو، گیت و برقرار بودن مسیر را از این راهنمای ثابت نتیجه نگیرید؛ شماره پرواز و تاریخ سفر را همان روز از ایرلاین مجری و اطلاعات فرودگاه تأیید کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در راهنمای منتشرشده سپهران شماره ۰۷۶-۳۵۳۳۵۰۴۰ برای فرودگاه و ۱۹۹ برای اطلاعات پرواز درج شده است؛ فعال بودن شماره‌ها را در روز سفر کنترل کنید.",
+            "اطلاعیه‌های هفتگی فقط مربوط به همان بازه تاریخی هستند؛ در این فایل داده زنده یا جدول قطعی پرواز نگهداری نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "آخرین اخبار و اطلاعیه‌های پرواز قشم",
+          "url": "https://qeshmoff.com/news/category/flight"
+        }
+      ]
+    },
+    {
+      "id": "traveler-experiences",
+      "title_fa": "تجربه کاربران",
+      "icon": "message-square",
+      "order": 30,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "airport-map",
+      "title_fa": "نقشه و موقعیت فرودگاه",
+      "subtitle_fa": "نقشه موقعیت؛ نقشه داخلی تأییدشده در دسترس نیست",
+      "icon": "map",
+      "order": 40,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oikq",
+        "https://qeshmgeopark.ir/index.php/fa/pages/visitqeshm/getting-here"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه بین‌المللی قشم با کد یاتا GSM و ایکائو OIKQ در محدوده دیرستان جزیره قشم قرار دارد. طبق راهنمای ژئوپارک جهانی قشم، فاصله فرودگاه تا مرکز شهر حدود ۵۰ کیلومتر است."
+        },
+        {
+          "type": "map",
+          "title_fa": "موقعیت فرودگاه بین‌المللی قشم",
+          "latitude": 26.754639,
+          "longitude": 55.902353,
+          "external_url": "https://www.google.com/maps/search/?api=1&query=26.754639%2C55.902353"
+        },
+        {
+          "type": "text",
+          "text_fa": "مختصات بر اساس مرجع هوانوردیِ متکی بر داده‌های جامعه‌محور است. این نقشه موقعیت مجموعه را نشان می‌دهد، نه سالن‌ها، درهای ورودی یا نقشه داخلی ترمینال."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع کد و مختصات فرودگاه",
+          "url": "https://oibk.ir/fa/airports/oikq"
+        }
+      ]
+    },
+    {
+      "id": "airport-videos",
+      "title_fa": "ویدیو فرودگاه",
+      "icon": "video",
+      "order": 50,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "terminals",
+      "title_fa": "ترمینال‌ها و سالن‌ها",
+      "subtitle_fa": "پایانه پرواز باید برای تاریخ سفر تأیید شود",
+      "icon": "building-2",
+      "order": 60,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/",
+        "https://tasnimnews.ir/fa/news/1405/04/14/3640210/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای شرکت هواپیمایی سپهران در سال ۱۴۰۳ از ترمینال اصلی مسافری و ترمینال ویژه حجاج نام می‌برد. با توجه به تغییرات عملیاتی فرودگاه در سال ۱۴۰۵، نمی‌توان تخصیص فعلی هر پرواز به یک سالن را با اتکا به این منبع قدیمی قطعی دانست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "محل کانتر، سالن، درِ ورود و هرگونه تغییر پایانه را برای پرواز خود از ایرلاین و تابلوهای فرودگاه تأیید کنید.",
+            "برای پرواز حج یا بین‌المللی، پایانه و مسیر ورود را جداگانه بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "شرح پایانه‌ها در راهنمای شرکت هواپیمایی",
+          "url": "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+        }
+      ]
+    },
+    {
+      "id": "ground-transport",
+      "title_fa": "تاکسی، ترانسفر و دسترسی",
+      "subtitle_fa": "تقریباً ۵۰ کیلومتر تا شهر قشم؛ بدون نرخ ثابت",
+      "icon": "car",
+      "order": 70,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://qeshmgeopark.ir/index.php/fa/pages/visitqeshm/getting-here",
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه تا مرکز شهر قشم حدود ۵۰ کیلومتر فاصله دارد. در راهنمای سپهران، تاکسی، ون و ترانسفر هتل به‌عنوان روش‌های جابه‌جایی معرفی شده‌اند؛ در دسترس‌بودن سرویس و نرخ کرایه را برای زمان فرود کنترل کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از سوارشدن درباره مقصد دقیق، نوع خودرو و مبلغ کرایه توافق کنید.",
+            "اگر هتل ترانسفر دارد، شماره و زمان پرواز را پیشاپیش اعلام کنید.",
+            "برای سفر به درگهان یا غرب جزیره، مسیر و مدت حرکت را روی نقشه بررسی کنید؛ زمان سفر ثابت نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای دسترسی در ژئوپارک جهانی قشم",
+          "url": "https://qeshmgeopark.ir/index.php/fa/pages/visitqeshm/getting-here"
+        }
+      ]
+    },
+    {
+      "id": "facilities",
+      "title_fa": "امکانات رفاهی و خدمات",
+      "subtitle_fa": "شرح امکانات منتشرشده؛ دسترسی فعلی تضمین نشده است",
+      "icon": "coffee",
+      "order": 80,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در راهنمای منتشرشده سپهران در سال ۱۴۰۳، امکاناتی مانند کافی‌شاپ، فروشگاه، خدمات بانکی، خدمات درمانی، اینترنت و حمل‌ونقل برای فرودگاه قشم توصیف شده‌اند. این فهرست به معنی فعالیت قطعی همه واحدها در هر ساعت یا پس از وقفه‌های عملیاتی ۱۴۰۵ نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در صورت نیاز ضروری به خدمات درمانی، اینترنت، وجه نقد یا خرید، پیش از سفر از فعال‌بودن خدمت در زمان پرواز مطمئن شوید.",
+            "ساعات بازگشایی واحدهای رفاهی به‌صورت قطعی در این فایل درج نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست امکانات در راهنمای فرودگاه قشم",
+          "url": "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "title_fa": "پارکینگ",
+      "subtitle_fa": "ظرفیت و تعرفه فعلی تأیید نشده است",
+      "icon": "car-front",
+      "order": 90,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وجود پارکینگ در فهرست امکانات منتشرشده فرودگاه ذکر شده است؛ با این حال نرخ، ظرفیت، مدت مجاز توقف و وضعیت فعلی پارکینگ از منبع رسمی روزآمد احراز نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای توقف شبانه یا بلندمدت و اطلاع از تعرفه از فرودگاه استعلام بگیرید.",
+            "در صورت نیاز به تحویل خودرو یا راننده، پیشاپیش هماهنگی انجام دهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع معرفی پارکینگ",
+          "url": "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+        }
+      ]
+    },
+    {
+      "id": "baggage-issues",
+      "title_fa": "بار آسیب‌دیده یا نرسیده",
+      "subtitle_fa": "راهنمای عمومی پیگیری؛ بدون ادعای دفتر اختصاصی",
+      "icon": "briefcase-business",
+      "order": 100,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اگر بار تحویلی شما پیدا نشد یا آسیب داشت، ترجیحاً پیش از ترک سالن تحویل بار موضوع را به نماینده شرکت هواپیمایی یا خدمات زمینی گزارش کنید و رسید بار، کارت پرواز و شماره پیگیری را نگه دارید. روند جبران خسارت و مهلت‌ها وابسته به شرکت و مسیر است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای لوازم جا‌مانده در هواپیما با ایرلاین و برای اشیای مفقودشده در محوطه فرودگاه با اطلاعات فرودگاه تماس بگیرید.",
+            "شماره اختصاصی واحد اشیای گمشده قشم از منبع معتبر تأیید نشده؛ هیچ شماره‌ای برای این واحد درج نشده است."
+          ]
+        }
+      ]
+    },
+    {
+      "id": "passenger-preparation",
+      "title_fa": "مدارک و آمادگی پیش از پرواز",
+      "subtitle_fa": "جزئیات مدارک و زمان پذیرش وابسته به پرواز است",
+      "icon": "clipboard-check",
+      "order": 110,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/",
+        "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پذیرش مسافر، مهلت بسته‌شدن کانتر و مدارک لازم به مسیر و ایرلاین بستگی دارد. پیش از خروج از محل اقامت، بلیت، مدرک هویتی معتبر، میزان بار مجاز و وضعیت پرواز خود را بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پرواز خارجی، گذرنامه و مقررات ورود، خروج و ترانزیت را از منابع رسمی مقصد و ایرلاین کنترل کنید.",
+            "قواعد منطقه آزاد، معافیت خودکار از شرایط سفر بین‌المللی ایجاد نمی‌کند.",
+            "تجهیزات دارای باتری لیتیومی را مطابق مقررات ایرلاین و راهنمای ایکائو حمل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای ایمنی باتری در سفر هوایی",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
+    },
+    {
+      "id": "airport-contacts",
+      "title_fa": "شماره تماس و راهنمای استعلام",
+      "subtitle_fa": "شماره‌های منتشرشده؛ نیاز به تأیید هنگام سفر",
+      "icon": "phone",
+      "order": 120,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "شماره ۰۷۶-۳۵۳۳۵۰۴۰ برای فرودگاه قشم و ۱۹۹ برای اطلاعات پرواز در راهنمای سپهران مورخ ۱۴۰۳ ذکر شده‌اند. فعال بودن و پاسخ‌گویی این شماره‌ها در زمان تدوین از منبع رسمی فرودگاه دوباره تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای تأخیر، لغو، تغییر پرواز یا استرداد ابتدا با ایرلاین یا صادرکننده بلیت تماس بگیرید.",
+            "برای سالن، خدمات و پارکینگ از اطلاعات فرودگاه استعلام بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع تماس‌های اعلام‌شده فرودگاه",
+          "url": "https://blog.flysepehran.com/fa/airports/qeshm-airport/"
+        }
+      ]
+    },
+    {
+      "id": "routes-and-updates",
+      "title_fa": "مسیرها و تغییرات اخیر پروازی",
+      "subtitle_fa": "اطلاعیه‌های زمان‌دار؛ بدون جدول ثابت یا قیمت",
+      "icon": "plane",
+      "order": 130,
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:23:00Z",
+      "source_urls": [
+        "https://qeshmoff.com/news/qfz-39111",
+        "https://tasnimnews.ir/fa/news/1405/04/14/3640210/",
+        "https://www.tasnimnews.ir/fa/news/1405/06/13/3688529/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در خبر ۸ آبان ۱۴۰۵، برنامه ۹ تا ۱۵ آبان شامل ۲۶ پرواز ورودی و خروجی در مسیر تهران، مشهد و اصفهان اعلام شده است. در گزارش‌های تیر و شهریور ۱۴۰۵ نیز از بازگشت تدریجی پروازها و ازسرگیری مسیر دبی سخن رفته است. این‌ها گزارش‌های تاریخ‌دار هستند، نه برنامه همیشگی یا تضمین پرواز امروز."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مسیر و روز پرواز را در سامانه فروش بلیت و نزد ایرلاین مجری تأیید کنید.",
+            "از تعداد پروازهای اعلام‌شده برای یک هفته به‌عنوان تعداد ثابت استفاده نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه برنامه ۹ تا ۱۵ آبان ۱۴۰۵",
+          "url": "https://qeshmoff.com/news/qfz-39111"
+        },
+        {
+          "type": "link",
+          "title_fa": "گزارش ازسرگیری مسیر دبی در شهریور ۱۴۰۵",
+          "url": "https://www.tasnimnews.ir/fa/news/1405/06/13/3688529/"
+        }
+      ]
+    }
+  ]
+}
