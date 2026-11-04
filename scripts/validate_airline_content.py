@@ -5,6 +5,7 @@ Run: python scripts/validate_airline_content.py
 from __future__ import annotations
 
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -19,6 +20,11 @@ def read_json(path: Path) -> dict:
 
 
 def timestamp(value: str) -> datetime:
+    # jsonschema format plugins are optional; enforce RFC3339 without them.
+    if not re.fullmatch(
+        r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})", value
+    ):
+        raise ValueError("Invalid timezone-aware timestamp")
     return datetime.fromisoformat(value.replace("Z", "+00:00"))
 
 
@@ -82,6 +88,9 @@ def validate_dataset(root: Path = ROOT, now: datetime | None = None) -> None:
             ):
                 raise ValueError("Invalid IATA/ICAO code")
             start, end = code["valid_from"], code["valid_to"]
+            for assigned_date in (start, end):
+                if assigned_date:
+                    timestamp(assigned_date)
             if start and end and timestamp(start) > timestamp(end):
                 raise ValueError("Inverted code validity")
             claims = code_claims.setdefault((code["system"], code["value"]), [])
@@ -161,7 +170,10 @@ def validate_dataset(root: Path = ROOT, now: datetime | None = None) -> None:
 def check_url(url: str) -> None:
     parsed = urlsplit(url)
     if (parsed.scheme != "https" or not parsed.hostname or parsed.username is not None
-            or parsed.password is not None or parsed.port == 0):
+            or parsed.password is not None or parsed.port == 0
+            or any(c.isspace() for c in url)
+            or not all(re.fullmatch(r"[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?", label)
+                       for label in parsed.hostname.split("."))):
         raise ValueError("Invalid public HTTPS URL")
 
 

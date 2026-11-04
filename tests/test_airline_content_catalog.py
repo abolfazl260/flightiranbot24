@@ -60,6 +60,8 @@ def edit(root, path, mutation):
     lambda d: d["metadata"].update(source_urls=[]),
     lambda d: d["metadata"].update(verified_at=None),
     lambda d: d["metadata"].update(verified_at="not-a-date"),
+    lambda d: d["metadata"].update(verified_at="2026-11-04T00:00:00"),
+    lambda d: d["metadata"].update(source_urls=["https://not a host/"]),
     lambda d: d["metadata"].update(verified_at="2099-01-01T00:00:00Z"),
     lambda d: d["metadata"].update(source_urls=["http://example.com/"]),
     lambda d: d["metadata"].update(source_urls=["https://user:secret@example.com/"]),
@@ -159,4 +161,11 @@ def test_historical_code_reuse_and_duplicate_assignment(dataset):
         codes.append(copy.deepcopy(codes[0]))
     edit(dataset, "airline-index.v1.json", duplicate)
     with pytest.raises(ValueError, match="Duplicate code"):
+        module.validate_dataset(dataset, NOW)
+
+
+def test_code_assignment_dates_do_not_need_optional_format_plugins(dataset):
+    edit(dataset, "airline-index.v1.json", lambda d:
+         d["airlines"][0]["identity"]["codes"][0].update(valid_from="invalid"))
+    with pytest.raises((ValueError, ValidationError)):
         module.validate_dataset(dataset, NOW)
