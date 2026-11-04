@@ -5,22 +5,70 @@
     {
       "id": "baggage-rules",
       "title_fa": "بار مجاز و قوانین حمل بار",
+      "subtitle_fa": "قوانین وابسته به شرکت هواپیمایی و بلیت است",
       "icon": "luggage",
       "order": 10,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:50:00Z",
+      "source_urls": [
+        "https://blog.flysepehran.com/fa/airports/kish-airport/",
+        "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "بار کابین، بار تحویلی و اضافه‌بار برای همه مسافران کیش عدد ثابتی ندارد؛ میزان مجاز را از بلیت و شرکت مجری پرواز بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی نگذارید. مطابق اطلاعیه ایکائو در مارس ۲۰۲۶، حداکثر دو پاوربانک برای هر مسافر پیش‌بینی شده و شارژکردن پاوربانک در طول پرواز ممنوع است؛ جزئیات ظرفیت را با ایرلاین کنترل کنید.",
+            "مواد خطرناک، اشتعال‌زا، انفجاری و اقلام تیز در بازرسی هوایی محدودیت دارند؛ درباره دارو و تجهیزات پزشکی سؤال کنید.",
+            "برچسب بار و رسید تحویل چمدان را تا دریافت بار نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه رسمی محدودیت پاوربانک ایکائو",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
     },
     {
       "id": "flight-status",
-      "title_fa": "وضعیت پروازها",
+      "title_fa": "وضعیت پروازهای ورودی و خروجی",
+      "subtitle_fa": "پروازهای زنده در فایل ثابت ذخیره نمی‌شود",
       "icon": "plane-takeoff",
       "order": 20,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:50:00Z",
+      "source_urls": [
+        "https://kishports.com/",
+        "https://blog.flysepehran.com/fa/airports/kish-airport/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تأخیر، لغو، محل کانتر و گیت ممکن است در روز سفر تغییر کند. برای آخرین وضعیت، شماره پرواز را از ایرلاین و اطلاعات فرودگاه بررسی کنید؛ اطلاعیه‌های خبری جدول قطعی پرواز نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره ۱۹۹ در راهنمای سپهران برای اطلاعات پرواز درج شده ولی دسترس‌پذیری فعلی آن مستقلاً تأیید نشده است.",
+            "برای تغییر یا استرداد ابتدا با شرکت مجری یا فروشنده بلیت تماس بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت فرودگاه کیش",
+          "url": "https://kishairport.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اخبار رسمی بهره‌بردار",
+          "url": "https://kishports.com/"
+        }
+      ]
     },
     {
       "id": "traveler-experiences",
@@ -34,17 +82,41 @@
     },
     {
       "id": "airport-map",
-      "title_fa": "نقشه فرودگاه",
+      "title_fa": "نقشه و موقعیت فرودگاه",
+      "subtitle_fa": "موقعیت جغرافیایی؛ نقشه رسمی طبقات تأیید نشده",
       "icon": "map",
       "order": 40,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-04T10:50:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oibk"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه بین‌المللی کیش با کدهای KIH و OIBK در جزیره کیش قرار دارد. مختصات زیر نقطه مرجع تقریبی فرودگاه است و مسیر ورودی سالن‌ها را تعیین نمی‌کند."
+        },
+        {
+          "type": "map",
+          "title_fa": "موقعیت فرودگاه کیش",
+          "latitude": 26.5255,
+          "longitude": 53.9805,
+          "external_url": "https://www.google.com/maps/search/?api=1&query=26.5255%2C53.9805"
+        },
+        {
+          "type": "text",
+          "text_fa": "چارت‌های عملیاتی هوانوردی معادل نقشه داخلی مسافران نیستند. نقشه طبقات تأییدشده برای انتشار یافت نشد."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع فرودگاهی و مختصات",
+          "url": "https://oibk.ir/fa/airports/oibk"
+        }
+      ]
     },
     {
       "id": "airport-videos",
-      "title_fa": "ویدیو فرودگاه",
+      "title_fa": "ویدیوهای فرودگاه",
       "icon": "video",
       "order": 50,
       "status": "draft",
