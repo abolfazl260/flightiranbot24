@@ -169,3 +169,21 @@ def test_code_assignment_dates_do_not_need_optional_format_plugins(dataset):
          d["airlines"][0]["identity"]["codes"][0].update(valid_from="invalid"))
     with pytest.raises((ValueError, ValidationError)):
         module.validate_dataset(dataset, NOW)
+
+
+def test_draft_fleet_can_hold_unverified_counts_without_publishing(dataset):
+    def mutate(d):
+        section = next(s for s in d["sections"] if s["id"] == "fleet")
+        section["metadata"]["status"] = "draft"
+        block = section["blocks"][1]
+        block["count"] = 19
+        block["configuration_fa"] = "پیش‌نویس نیازمند بررسی"
+        block["metadata"].update(status="draft", source_urls=[], verified_at=None,
+                                 confidence="unverified")
+    edit(dataset, "details/emirates.v1.json", mutate)
+    module.validate_dataset(dataset, NOW)
+    edit(dataset, "details/emirates.v1.json",
+         lambda d: next(s for s in d["sections"] if s["id"] == "fleet")[
+             "metadata"].update(status="published"))
+    with pytest.raises(ValueError, match="published sources"):
+        module.validate_dataset(dataset, NOW)

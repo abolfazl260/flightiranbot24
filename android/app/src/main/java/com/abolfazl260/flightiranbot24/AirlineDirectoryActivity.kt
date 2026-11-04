@@ -38,17 +38,21 @@ class AirlineDirectoryActivity : ComponentActivity() {
                 var indexOffline by remember { mutableStateOf(false) }
                 var detailOffline by remember { mutableStateOf(false) }
                 var refresh by remember { mutableIntStateOf(0) }
+                var loadedRefresh by remember { mutableIntStateOf(-1) }
                 LaunchedEffect(selected, refresh) {
                     loading = true
                     error = false
                     page = null
                     try {
-                        // Refresh identity/publication before fetching detail. Archived entries
-                        // returned successfully by the server never fall back to bundled pages.
-                        val result = repository.index()
-                        index = result.value
-                        indexOffline = result.usedBundledFallback
-                        val reference = result.value.firstOrNull { it.id == selected }
+                        // Reuse the directory on navigation; retry explicitly refreshes it.
+                        // Detail responses still enforce their own publication state.
+                        if (index == null || loadedRefresh != refresh) {
+                            val result = repository.index()
+                            index = result.value
+                            indexOffline = result.usedBundledFallback
+                            loadedRefresh = refresh
+                        }
+                        val reference = index?.firstOrNull { it.id == selected }
                         if (reference != null) {
                             val detail = repository.detail(reference)
                             page = detail.value

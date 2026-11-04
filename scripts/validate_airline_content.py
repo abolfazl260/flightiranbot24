@@ -139,7 +139,9 @@ def validate_dataset(root: Path = ROOT, now: datetime | None = None) -> None:
                         raise ValueError("Fleet block outside fleet section")
                     if timestamp(block["observed_at"]) > now:
                         raise ValueError("Future fleet observation")
-                    if block["count"] is not None or block["configuration_fa"] is not None:
+                    if section["metadata"]["status"] == "published" and (
+                        block["count"] is not None or block["configuration_fa"] is not None
+                    ):
                         check_metadata(block["metadata"], now)
                         if (block["metadata"]["status"] != "published"
                                 or not block["metadata"]["source_urls"]):
