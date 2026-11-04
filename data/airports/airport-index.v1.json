@@ -74,7 +74,7 @@
     {
       "iata": "KER",
       "detail_path": "details/KER.v1.json",
-      "enabled": false
+      "enabled": true
     },
     {
       "iata": "KIH",
