@@ -59,11 +59,10 @@ def test_rtl_shell_and_static_assets_have_safe_browser_headers():
             assert 'lang="fa" dir="rtl"' in response.text
             assert "https://telegram.org/js/telegram-web-app.js" in response.text
             assert 'id="screen-visa"' in response.text
-            # Airport HTML is intentionally preserved in comments for later
-            # reactivation, but no link or screen may exist in the actual DOM.
+            # Native web guides are now reachable in the visible DOM.
             visible_html = re.sub(r"<!--[\s\S]*?-->", "", response.text)
-            assert 'id="screen-airports"' not in visible_html
-            assert 'data-go="airports"' not in visible_html
+            assert 'id="screen-airports"' in visible_html
+            assert 'data-go="airports"' in visible_html
             assert response.headers["cache-control"] == "no-store"
             assert "object-src 'none'" in response.headers["content-security-policy"]
             assert "unsafe-inline" not in response.headers["content-security-policy"]
@@ -305,12 +304,12 @@ def test_android_and_mini_travel_checklist_parity():
 
     airport = (android / "java/com/abolfazl260/flightiranbot24/"
                "AirportDirectoryActivity.kt").read_text()
-    # Android now renders vetted GitHub airport content; the Telegram Mini App
-    # still keeps its airport placeholder hidden pending a separate rollout.
+    # Android and Mini App both read the vetted GitHub airport catalog.
     assert "AirportContentRepository" in airport
     assert "AirportGuideScreen" in airport
     assert "loadOfflineCatalog()" not in airport
     assert "TravelFormField" not in airport
     assert "airports_coming_soon_message" not in airport
     assert 'id="screen-airports"' in html
-    assert "اطلاعات فرودگاه‌ها به‌زودی" in html
+    assert "اطلاعات فرودگاه‌ها به‌زودی" not in html
+    assert 'id="screen-airlines"' in html

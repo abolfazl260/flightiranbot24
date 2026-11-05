@@ -270,3 +270,16 @@ dialog::backdrop { background: #0717279c; }
   .website-image-wrap,.website-skeleton-image { flex-basis: 86px; width: 86px; height: 78px; }
   .website-card-top { gap: 10px; }
 }
+
+.guide-content {display:grid;gap:14px;overflow-wrap:anywhere}
+.guide-content input,.guide-content select {width:100%;min-height:48px;padding:12px;border:1px solid #bdcbd4;border-radius:12px;font:inherit;background:white;color:#15334a}
+.guide-results {display:grid;gap:12px}
+.guide-card {display:block;width:100%;text-align:start;font:inherit;min-height:64px;cursor:pointer;color:inherit}
+.guide-card p {margin:6px 0;font-size:.85rem}
+.guide-fleet {display:grid;gap:8px}
+.guide-content button:focus-visible {outline:3px solid #116b90;outline-offset:3px}
+.field > input {width:100%;min-height:50px;padding:10px 15px;border:1px solid var(--line);border-radius:13px;background:var(--paper);color:var(--ink)}
+#visa-popular {grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0}
+#visa-popular button {min-height:44px;white-space:normal}
+#screen-privacy {overflow-wrap:anywhere}
+#screen-privacy > button {margin-top:12px}

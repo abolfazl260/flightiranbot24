@@ -108,6 +108,7 @@ function fixture() {
       const path=new URL(request.url).pathname;
       if(path==="/index.html") return new Response("<!doctype html><html lang='fa'>Mini</html>",{
         headers:{"Content-Type":"text/html"}});
+      if(["/guide-catalog.mjs","/guide-view.mjs","/mobile-parity.mjs"].includes(path)) return new Response("export const guide = true",{headers:{"Content-Type":"text/javascript"}});
       if(path==="/travel-catalog.mjs") return new Response("export const catalog = true",{headers:{"Content-Type":"text/javascript"}});
       if(path==="/mini.js") return new Response("console.log('mini')",{
         headers:{"Content-Type":"text/javascript"}});
@@ -131,6 +132,11 @@ test("Worker static-asset binding serves the existing Mini App at / and /mini/",
   const script=await handleRequest(req("/assets/mini.js"),env);
   assert.equal(script.status,200);
   assert.match(await script.text(),/mini/);
+  for(const name of ["guide-catalog","guide-view","mobile-parity"]) {
+    const module=await handleRequest(req("/assets/"+name+".mjs"),env);
+    assert.equal(module.status,200);
+    assert.match(await module.text(),/guide/);
+  }
   const catalogModule=await handleRequest(req("/assets/travel-catalog.mjs"),env);
   assert.equal(catalogModule.status,200);
   assert.match(await catalogModule.text(),/catalog/);
