@@ -1,7 +1,5 @@
 """Contract tests for the additive Bale transport; no real network/token needed."""
 
-from types import SimpleNamespace
-
 import pytest
 from telegram.ext import CommandHandler, ExtBot
 
