@@ -21,6 +21,7 @@ from flightiran.db.repositories import (
     SQLiteUserRepository,
 )
 from flightiran.infrastructure.http import ProviderHttpClient, ProviderHttpConfig
+from flightiran.interfaces.bale import BaleBot
 from flightiran.interfaces.telegram import TelegramDependencies, register_handlers
 from flightiran.interfaces.telegram.keyboards import telegram_web_app_url
 from flightiran.interfaces.telegram.price_notifications import render_ticket_alert
@@ -107,10 +108,24 @@ def create_application(
     visa_sync_service: VisaSyncService | None = None,
     price_alert_service: PriceAlertService | None = None,
     visa_watch_service: VisaWatchService | None = None,
+    platform: str = "telegram",
 ) -> Application:
-    """Build the Telegram application without starting network polling."""
+    """Build a Telegram or Bale application with the same business handlers."""
 
-    builder = ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value())
+    if platform == "bale":
+        if settings.bale_bot_token is None or not settings.bale_bot_token.get_secret_value():
+            raise ConfigurationError("BALE_BOT_TOKEN must be set to run the Bale bot")
+        builder = ApplicationBuilder().bot(
+            BaleBot(token=settings.bale_bot_token.get_secret_value())
+        )
+    elif platform == "telegram":
+        builder = ApplicationBuilder().token(settings.telegram_bot_token.get_secret_value())
+    else:
+        raise ValueError("Unsupported messaging platform")
+
+    admin_destination = (
+        settings.bale_admin_id if platform == "bale" else settings.telegram_admin_id
+    )
     if (
         cheap_ticket_service is not None or visa_sync_service is not None
         or visa_watch_service is not None
@@ -118,8 +133,16 @@ def create_application(
     ):
 
         async def post_init(application: Application) -> None:
-            await _sync_telegram_commands(application)
+            if platform == "telegram":
+                await _sync_telegram_commands(application)
+            # Bale does not document setMyCommands; avoid calling unsupported API.
             scheduler = AsyncIOScheduler(timezone="UTC")
+
+            async def send_admin_message(**kwargs) -> None:
+                if admin_destination is not None:
+                    await application.bot.send_message(
+                        chat_id=admin_destination, **kwargs
+                    )
 
             async def store_job_status(
                 status: str, job_name: str = "mz724-hourly-price-history"
@@ -174,8 +197,8 @@ def create_application(
                     except Exception:
                         LOGGER.exception("failed_to_store_job_run")
                     try:
-                        await application.bot.send_message(
-                            chat_id=settings.telegram_admin_id,
+                        await send_admin_message(
+                            
                             text=(
                                 "FlightIranBot24 scheduled price capture failed\n"
                                 f"Type: {type(exc).__name__}\n"
@@ -202,8 +225,8 @@ def create_application(
                     try:
                         result = await visa_sync_service.sync()
                         if result.status == "updated":
-                            await application.bot.send_message(
-                                chat_id=settings.telegram_admin_id,
+                            await send_admin_message(
+                                
                                 text=result.render(manual=False, html=True),
                                 parse_mode="HTML",
                                 disable_web_page_preview=True,
@@ -215,8 +238,8 @@ def create_application(
                     except Exception as exc:
                         LOGGER.exception("scheduled_visa_sync_failed")
                         try:
-                            await application.bot.send_message(
-                                chat_id=settings.telegram_admin_id,
+                            await send_admin_message(
+                                
                                 text=(
                                     "خطا در همگام‌سازی خودکار ویزا؛ آخرین داده سالم حفظ شد.\n"
                                     f"{type(exc).__name__}: {str(exc)[:250]}\n"
@@ -268,8 +291,8 @@ def create_application(
                             report_timezone=settings.active_users_report_timezone,
                         )
                         for page in pages:
-                            await application.bot.send_message(
-                                chat_id=settings.telegram_admin_id,
+                            await send_admin_message(
+                                
                                 text=page, parse_mode="HTML",
                                 disable_web_page_preview=True,
                             )
@@ -304,17 +327,24 @@ def create_application(
                 scheduler.shutdown(wait=False)
 
         builder = builder.post_init(post_init).post_shutdown(post_shutdown)
-    else:
+    elif platform == "telegram":
         builder = builder.post_init(_sync_telegram_commands)
     return builder.build()
 
 
-def run() -> None:
-    """Load configuration, build the application and start polling."""
+def run(*, platform: str = "telegram") -> None:
+    """Load configuration and start the selected messaging process."""
 
     settings = load_settings()
+    if platform == "bale" and (
+        settings.bale_bot_token is None or not settings.bale_bot_token.get_secret_value()
+    ):
+        raise ConfigurationError("Missing required configuration: BALE_BOT_TOKEN")
     configure_logging(settings.log_level)
-    database = asyncio.run(_initialize_database(settings.database_url))
+    database_url = (
+        settings.bale_database_url if platform == "bale" else settings.database_url
+    )
+    database = asyncio.run(_initialize_database(database_url))
     ticket_http = ProviderHttpClient(
         ProviderHttpConfig(
             timeout_seconds=12,
@@ -338,12 +368,14 @@ def run() -> None:
         visa_sync_service=visa_sync_service,
         price_alert_service=price_alert_service,
         visa_watch_service=visa_watch_service,
+        platform=platform,
     )
     # Bad Web App URLs must never take down /start: Telegram allows HTTPS only.
     web_app_url = (
-        telegram_web_app_url(settings.web_app_url) if settings.web_app_enabled else None
+        telegram_web_app_url(settings.web_app_url)
+        if platform == "telegram" and settings.web_app_enabled else None
     )
-    if settings.web_app_enabled and web_app_url is None:
+    if platform == "telegram" and settings.web_app_enabled and web_app_url is None:
         LOGGER.warning(
             "Telegram Web App button skipped: WEB_APP_URL must be a valid HTTPS URL; "
             "bot menus and public price API remain available"
@@ -360,7 +392,9 @@ def run() -> None:
             cheap_ticket_service=cheap_ticket_service,
             price_alert_service=price_alert_service,
             ticket_support_username=settings.ticket_support_username,
-            admin_chat_id=settings.telegram_admin_id,
+            admin_chat_id=(
+                settings.bale_admin_id if platform == "bale" else settings.telegram_admin_id
+            ),
             admin_reports=BotReportRepository(database),
             visa_sync_service=visa_sync_service,
             visa_watch_service=visa_watch_service,
@@ -370,7 +404,7 @@ def run() -> None:
             useful_catalog=default_catalog(),
         ),
     )
-    LOGGER.info("Flight Iran Bot 24 started")
+    LOGGER.info("Flight Iran Bot 24 started platform=%s", platform)
     application.run_polling()
 
 
@@ -385,6 +419,17 @@ def main() -> None:
 
     try:
         run()
+    except ConfigurationError as exc:
+        logging.basicConfig(level=logging.ERROR, format="%(levelname)s %(message)s")
+        logging.getLogger("flightiran").error("Startup configuration error: %s", exc)
+        raise SystemExit(2) from None
+
+
+def bale_main() -> None:
+    """Separate entry point so both services can poll concurrently."""
+
+    try:
+        run(platform="bale")
     except ConfigurationError as exc:
         logging.basicConfig(level=logging.ERROR, format="%(levelname)s %(message)s")
         logging.getLogger("flightiran").error("Startup configuration error: %s", exc)

@@ -30,6 +30,11 @@ class Settings(BaseSettings):
         default=106056586,
         validation_alias=AliasChoices("TELEGRAM_ADMIN_ID", "ADMIN_ID"),
     )
+    # Optional second transport: separate credentials and database prevent user
+    # ID collisions between Telegram and Bale, even if both ID ranges overlap.
+    bale_bot_token: SecretStr | None = Field(default=None, validation_alias="BALE_BOT_TOKEN")
+    bale_admin_id: int | None = None
+    bale_database_url: str = "sqlite+aiosqlite:///./flightiran-bale.db"
     database_url: str = "sqlite+aiosqlite:///./flightiran.db"
     log_level: str = "INFO"
     ticket_provider_url: str = "https://mz724.ir/"

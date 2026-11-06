@@ -92,7 +92,7 @@ class TelegramDependencies:
     cheap_ticket_service: CheapTicketService | None = None
     price_alert_service: PriceAlertService | None = None
     ticket_support_username: str = DEFAULT_SUPPORT_USERNAME
-    admin_chat_id: int = 106056586
+    admin_chat_id: int | None = 106056586
     admin_reports: BotReportRepository | None = None
     visa_sync_service: VisaSyncService | None = None
     visa_catalog: VisaCatalogService | None = None
@@ -119,7 +119,10 @@ async def _notify_admin(
     update: object,
     dependencies: TelegramDependencies,
 ) -> None:
-    """Send a compact runtime error report to the configured Telegram admin."""
+    """Send a compact runtime error report to the configured platform admin."""
+
+    if dependencies.admin_chat_id is None:
+        return
 
     user_id = None
     chat_id = None
@@ -294,7 +297,8 @@ async def start_handler(
             )
     if is_new:
         await dependencies.audit.record("user.registered", user_id=registered.id)
-        if context is not None and getattr(context, "bot", None) is not None:
+        if (context is not None and getattr(context, "bot", None) is not None
+                and dependencies.admin_chat_id is not None):
             try:
                 await context.bot.send_message(
                     chat_id=dependencies.admin_chat_id,

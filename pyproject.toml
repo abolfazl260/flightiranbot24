@@ -32,6 +32,7 @@ dev = [
 
 [project.scripts]
 flightiran = "flightiran.main:main"
+flightiran-bale = "flightiran.main:bale_main"
 flightiran-web = "flightiran.webapp.app:main"
 flightiran-cloudflare-publish = "flightiran.cloudflare_publish:main"
 flightiran-cloudflare-mini-bridge = "flightiran.cloudflare_mini_bridge:main"

@@ -1,6 +1,8 @@
 # FlightIranBot24
 
-FlightIranBot24 is a Telegram travel assistant with a Telegram Mini App and a separate Android application. It provides ticket-price information, visa guidance, alerts, and travel resources.
+FlightIranBot24 is a Telegram travel assistant with an optional Bale bot, a Telegram Mini App and a separate Android application. It provides ticket-price information, visa guidance, alerts, and travel resources.
+
+Bale uses the same bot handlers and travel services through a separate polling process. To enable it, see [Bale Bot setup](docs/BALE_BOT.md). Telegram deployment remains unchanged by default.
 
 ## Telegram main-menu availability
 
@@ -35,7 +37,8 @@ details are included in publicly visible aggregate reports.
 
 ## Project components
 
-- Telegram bot: `src/flightiran/interfaces/telegram/`
+- Shared Telegram/Bale bot handlers: `src/flightiran/interfaces/telegram/`
+- Bale transport: `src/flightiran/interfaces/bale.py`
 - Telegram Mini App: `src/flightiran/webapp/static/` (see [Mini App documentation](docs/TELEGRAM_MINI_APP.md))
 - Android app: `android/` (see [Android README](android/README.md))
 - Automated tests: `tests/`

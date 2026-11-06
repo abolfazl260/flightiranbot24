@@ -26,6 +26,37 @@ services:
         condition: service_completed_successfully
     command: ["flightiran"]
 
+  # Optional second bot. A separate SQLite database prevents collisions between
+  # Telegram and Bale user/chat IDs while sharing the same Python services.
+  migrate-bale:
+    profiles: ["bale"]
+    build: .
+    image: flightiranbot24:latest
+    env_file:
+      - .env
+    environment:
+      DATABASE_URL: sqlite+aiosqlite:////data/flightiran-bale.db
+    volumes:
+      - flightiran-data:/data
+    command: ["python", "-m", "flightiran.db.migrate"]
+    restart: "no"
+
+  bot-bale:
+    profiles: ["bale"]
+    image: flightiranbot24:latest
+    build: .
+    env_file:
+      - .env
+    environment:
+      BALE_DATABASE_URL: sqlite+aiosqlite:////data/flightiran-bale.db
+    volumes:
+      - flightiran-data:/data
+    restart: unless-stopped
+    depends_on:
+      migrate-bale:
+        condition: service_completed_successfully
+    command: ["flightiran-bale"]
+
   web:
     image: flightiranbot24:latest
     env_file:

@@ -469,8 +469,11 @@ async def send_rich_price_table_with_badge_fallback(
 
 
 async def send_rich_price_table(bot, chat_id: int, rich_message: dict) -> None:
-    """Call sendRichMessage directly until python-telegram-bot exposes the method."""
+    """Call Telegram-only Rich Messages; Bale callers use existing text fallbacks."""
 
+    if getattr(bot, "platform", "telegram") == "bale":
+        # Never send the Bale token to api.telegram.org.
+        raise NotImplementedError("Bale does not support Telegram Rich Messages")
     url = f"https://api.telegram.org/bot{bot.token}/sendRichMessage"
     async with httpx.AsyncClient(timeout=20.0) as client:
         response = await client.post(
