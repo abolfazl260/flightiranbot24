@@ -349,3 +349,21 @@ async def test_fares_deep_link_on_bale_falls_back_to_original_main_menu():
     assert not bot.calls
     msg.reply_text.assert_awaited_once()
     assert "سلام" in msg.reply_text.await_args.args[0]
+
+
+def test_fare_tabs_have_clear_selected_and_unselected_states():
+    """Tabs need a persistent label, contrast and an explicit selected marker."""
+    assert "مرتب‌سازی بلیت‌ها بر اساس:" in FARE_WIDGET_HTML
+    assert 'role="tablist"' in FARE_WIDGET_HTML
+    assert 'role="tabpanel"' in FARE_WIDGET_HTML
+    assert 'aria-selected="true"' in FARE_WIDGET_HTML
+    assert 'aria-selected="false"' in FARE_WIDGET_HTML
+    assert "✓ ارزان‌ترین بلیت‌ها" in FARE_WIDGET_HTML
+    assert "✓ بیشترین کاهش قیمت" in FARE_WIDGET_HTML
+    assert "cheap.setAttribute('aria-selected'" in FARE_WIDGET_HTML
+    assert "drops.setAttribute('aria-selected'" in FARE_WIDGET_HTML
+    assert "fares.setAttribute('aria-labelledby',which)" in FARE_WIDGET_HTML
+    assert ".tabs button.active" in FARE_WIDGET_HTML
+    assert "var(--tg-theme-button-color" in FARE_WIDGET_HTML
+    assert "var(--tg-theme-button-text-color" in FARE_WIDGET_HTML
+    assert "var(--tg-theme-bg-color" in FARE_WIDGET_HTML
