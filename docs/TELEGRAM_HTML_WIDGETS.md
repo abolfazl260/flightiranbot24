@@ -29,6 +29,38 @@ ticket-search flow are unchanged.
 - This is an informational price feed, not a booking checkout. Prices are
   unconfirmed until validated at reservation.
 
+## Route-specific historical chart and booking
+
+Above the existing price ranking tabs, the widget offers two button-based
+pickers: **مبدأ** and **مقصد**. Telegram widget sandboxes currently do not
+support text inputs or native select controls. Each picker requests a
+server-validated page of cities; destinations are restricted to routes
+actually present in the current provider feed. The user's route selection
+remains in the widget's private message state.
+
+After choosing a destination, the widget draws an **SVG price chart** based
+on actual hourly SQLite `mz724_price_snapshots` for the route, restricted
+to the last 21 days. Each plotted point is the **lowest observed price on
+that date**; unobserved days are left blank, not interpolated. A price
+history may be empty, and that is shown explicitly. The widget also shows
+the current published price, the historical average when sufficiently
+sampled, its percentage difference, historical observation count, and
+the last price-feed check timestamp.
+
+**درخواست رزرو این مسیر** sends a widget query, which the bot validates
+against the current feed before calling the existing route-specific
+`send_ticket_reservation_request` presentation. The button opens a
+booking enquiry with the currently configured support account; it
+does **not** confirm availability, charge the traveler or book a seat.
+
+The picker and chart interactions use `chat_data` updates from
+`editMessageWidgetData`; public cheapest and discount tabs continue to
+use `public_data`. A ten-digit deterministic route key keeps query
+actions below Telegram's 64-byte limit. Every state remains below the
+1024-byte constraint and the entire self-contained HTML below the
+32-KB/4-KB zlib limits. No new secrets, migration, web endpoint, or external
+payment provider are needed. Bale is unchanged.
+
 ## Technical design
 
 - `src/flightiran/interfaces/telegram/widgets.py` owns the self-contained
