@@ -82,7 +82,9 @@ async def test_start_never_sends_unsupported_web_app_button(
     user = SimpleNamespace(id=42, username="traveler", first_name="Test", last_name=None)
     update = SimpleNamespace(
         effective_user=user,
-        effective_chat=SimpleNamespace(type=chat_type, id=-100123 if chat_type != "private" else 42),
+        effective_chat=SimpleNamespace(
+            type=chat_type, id=-100123 if chat_type != "private" else 42
+        ),
         message=message,
     )
     context = SimpleNamespace(
