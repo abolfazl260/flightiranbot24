@@ -159,3 +159,120 @@ async def test_failed_refresh_keeps_existing_fares_and_sets_error():
     ]
     assert bot.calls[1][1]["chat_data"] == '{"status":"error"}'
     assert "public_data" not in bot.calls[1][1]
+
+
+def test_widget_contains_two_in_place_tabs_and_persian_percentages():
+    assert 'id="cheap"' in FARE_WIDGET_HTML
+    assert 'id="drops"' in FARE_WIDGET_HTML
+    assert "switchTab('drops')" in FARE_WIDGET_HTML
+    assert "fa(fare.x)+'٪ کاهش نسبت به میانگین'" in FARE_WIDGET_HTML
+    assert "var active='cheap'" in FARE_WIDGET_HTML
+    assert "W.request('fare:refresh')" in FARE_WIDGET_HTML
+    # No duplicated disclaimer below refresh button.
+    assert "قیمت‌ها پیش از رزرو باید تأیید شوند" not in FARE_WIDGET_HTML
+
+
+def test_price_drop_tab_sorts_by_percent_not_absolute_price():
+    rows = [
+        CheapTicketRoute(
+            origin="تهران",
+            source_url="https://example.org",
+            destinations=(
+                CheapTicketDestination(
+                    "مشهد", "۴۰۰۰۰۰۰ تومان",
+                    average_price_toman=5_000_000, average_sample_count=4,
+                ),
+                CheapTicketDestination(
+                    "کیش", "۱۰۰۰۰۰۰ تومان",
+                    average_price_toman=1_100_000, average_sample_count=5,
+                ),
+            ),
+        ),
+    ]
+    data = json.loads(fare_widget_data(rows))
+    assert [item["d"] for item in data["items"]] == ["کیش", "مشهد"]
+    assert [item["d"] for item in data["drops"]] == ["مشهد", "کیش"]
+    assert [item["x"] for item in data["drops"]] == [20.0, 9.1]
+    assert data["items"][0]["x"] == 9.1
+
+
+def test_discounts_require_enough_real_history_and_positive_decrease():
+    row = CheapTicketRoute(
+        origin="تهران",
+        source_url="https://example.org",
+        destinations=(
+            CheapTicketDestination("الف", "۱۰۰۰۰۰۰ تومان"),
+            CheapTicketDestination(
+                "ب", "۱۵۰۰۰۰۰ تومان",
+                average_price_toman=2_000_000, average_sample_count=2,
+            ),
+            CheapTicketDestination(
+                "ج", "۲۵۰۰۰۰۰ تومان",
+                average_price_toman=2_000_000, average_sample_count=9,
+            ),
+            CheapTicketDestination(
+                "د", "۸۰۰۰۰۰ تومان",
+                average_price_toman=float("nan"), average_sample_count=8,
+            ),
+        ),
+    )
+    data = json.loads(fare_widget_data([row]))
+    assert len(data["items"]) == 4
+    assert data["drops"] == []
+    assert all("x" not in item for item in data["items"])
+
+
+def test_large_persian_data_stays_within_widget_payload_limit():
+    rows = [
+        CheapTicketRoute(
+            origin="مبدأ بسیار طولانی با نام فارسی برای آزمون محدودیت اندازه",
+            source_url="https://example.org",
+            destinations=tuple(
+                CheapTicketDestination(
+                    "مقصد بسیار طولانی با نام فارسی شماره" + str(i),
+                    f"{i+1}۰۰۰۰۰۰ تومان",
+                    average_price_toman=(i + 2) * 1_000_000,
+                    average_sample_count=10,
+                )
+                for i in range(20)
+            ),
+        )
+    ]
+    state = fare_widget_data(rows)
+    assert len(state.encode("utf-8")) <= 1024
+    result = json.loads(state)
+    assert result["items"]
+    assert result["drops"]
+    assert all(item["x"] > 0 for item in result["drops"])
+
+
+@pytest.mark.asyncio
+async def test_refresh_updates_both_tab_datasets_at_once():
+    bot = FakeBot()
+    service = SimpleNamespace(routes=AsyncMock(return_value=[
+        CheapTicketRoute(
+            origin="تهران",
+            source_url="https://example.org",
+            destinations=(CheapTicketDestination(
+                "مشهد", "۲۰۰۰۰۰۰ تومان",
+                average_price_toman=4_000_000, average_sample_count=6,
+            ),),
+        )
+    ]))
+    query = {
+        "id": "query-tab-refresh",
+        "data": "fare:refresh",
+        "type": {"type": "data"},
+        "from": {"id": 123},
+        "chat": {"id": 123, "type": "private"},
+        "message_id": 321,
+    }
+    await widget_query_handler(
+        Update(11, api_kwargs={"widget_query": query}),
+        SimpleNamespace(bot=bot),
+        service,
+    )
+    payload = json.loads(bot.calls[1][1]["public_data"])
+    assert payload["items"][0]["p"] == 2_000_000
+    assert payload["drops"][0]["x"] == 50.0
+    assert len(bot.calls) == 2
