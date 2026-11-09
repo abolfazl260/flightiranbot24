@@ -9,7 +9,19 @@ ticket-search flow are unchanged.
 
 - Start a private conversation with the Telegram bot and send `/start`.
 - Choose **📊 کارت تعاملی قیمت بلیت** in the Telegram menu, or send `/fares`.
-- The widget displays up to five of the cheapest **actual source-feed prices**.
+- The widget has two locally switchable tabs inside the same Telegram message:
+  **ارزان‌ترین بلیت‌ها** (five lowest actual prices) and
+  **بیشترین کاهش قیمت** (five largest verified percentage reductions).
+- Historical reductions use the existing hourly price history and are
+  calculated as `(historical_average - current_price) / historical_average * 100`,
+  rounded to one decimal. The route must have at least **three historical
+  samples**, a finite positive average, and a current price lower than that
+  average. No estimate is fabricated when history is missing.
+- Eligible discounts are shown alongside the current ticket price in both
+  tabs. Prices and percentages are displayed using Persian numerals.
+- Switching tabs is client-side only, preserving the current message and
+  requiring no API call. An empty discount tab explains that no validated
+  decreases are currently available.
 - Tap **تازه‌سازی قیمت‌ها** to request updated data in the same chat bubble.
   The bot acknowledges the interaction immediately, then silently updates the
   message's widget state. It never invents prices.
@@ -31,6 +43,9 @@ ticket-search flow are unchanged.
   but **no shared widget ID**. The state is `public_data` with current fare
   information and `chat_data` for the last refresh status. No database table
   or new secret is needed.
+- Both tab lists share one compact `public_data` payload. If it would exceed
+  Telegram's 1024-byte limit, it shortens the two lists instead of dropping
+  all discounts or sending invalid JSON.
 - The widget uses Telegram-native theme tokens and embeds all resources in
   the HTML. It does not attempt to contact any network from QuickJS.
 - Telegram enforces 32,768 bytes of HTML, 4,096 compressed bytes and 1,024
@@ -62,8 +77,9 @@ ruff check src/flightiran/interfaces/telegram tests/test_telegram_fare_widgets.p
 pytest tests/test_telegram_fare_widgets.py
 ```
 
-Manually test in Telegram: `/start`, tap the new card, refresh it, and
-confirm that no extra chat message is sent by the refresh. Disconnect the fare
+Manually test in Telegram: `/start`, tap the new card, switch both tabs,
+verify the percentage badges against the source history, refresh it, and
+confirm that no extra chat message is sent by changing tabs or refreshing. Disconnect the fare
 provider and verify that the last prices remain visible with an error message.
 Check the same `/start` menu in Bale: it must not show the widget option.
 
