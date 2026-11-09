@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import zlib
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from html import escape
 from typing import Protocol
 
@@ -34,7 +34,8 @@ def _toman(value: int) -> str:
 
 
 def render_route_chart_html(
-    origin: str, destination: str, samples: list[RouteDailyMinimum]
+    origin: str, destination: str, samples: list[RouteDailyMinimum],
+    *, as_of: date | None = None,
 ) -> str:
     """Render one SVG point per real daily minimum, without interpolating gaps."""
     if not samples:
@@ -47,7 +48,10 @@ def render_route_chart_html(
 
     # Dates retain true calendar spacing over a 21-day period ending on the
     # newest observed day. Missing days are not represented as chart points.
-    start_day: date = samples[-1].day - timedelta(days=CHART_DAYS - 1)
+    end_day = as_of or datetime.now(timezone.utc).date()
+    start_day: date = end_day - timedelta(days=CHART_DAYS - 1)
+    if samples[0].day < start_day or samples[-1].day > end_day:
+        raise ValueError("Chart observations are outside the selected period")
     lo = min(entry.min_price_toman for entry in samples)
     hi = max(entry.min_price_toman for entry in samples)
     spread = hi - lo
@@ -95,7 +99,7 @@ stroke-opacity=".13" stroke-dasharray="3,4" fill="none"/>
 <text x="22" y="122" fill="currentColor" font-size="11">{escape(_toman(lo))}</text>
 <text x="22" y="140" fill="currentColor" font-size="10">{_fa(start_day.strftime('%m/%d'))}</text>
 <text x="294" y="140" text-anchor="end" fill="currentColor" font-size="10">
-{_fa(last.strftime('%m/%d'))}</text></svg>
+{_fa(end_day.strftime('%m/%d'))}</text></svg>
 <div class="stats">
 <div class="stat">کمترین قیمت<strong>{_toman(lo)}</strong></div>
 <div class="stat">بیشترین قیمت<strong>{_toman(hi)}</strong></div></div>
