@@ -12,7 +12,6 @@ import logging
 import math
 import re
 from datetime import datetime, timezone
-from types import SimpleNamespace
 from typing import Awaitable, Callable
 
 from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
