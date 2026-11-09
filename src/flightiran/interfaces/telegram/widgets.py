@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+import math
 import zlib
 from datetime import datetime, timezone
 
@@ -26,16 +27,26 @@ body{margin:0;padding:12px;color:var(--tg-theme-text-color);font-family:Arial,sa
 h3{font-size:17px;margin:0 0 5px}
 p{margin:0}
 .sub{font-size:12px;color:var(--tg-theme-hint-color)}
-#fares{margin:10px 0}
+.tabs{display:flex;gap:6px;margin:12px 0}
+.tabs button{flex:1;font-size:12px;padding:9px 4px;margin:0;border:0;border-radius:8px;
+background:var(--tg-theme-secondary-bg-color);color:var(--tg-theme-text-color)}
+.tabs button.active{background:var(--tg-theme-button-color);color:var(--tg-theme-button-text-color)}
+#fares{margin:6px 0 10px}
 .fare{display:flex;justify-content:space-between;align-items:center;gap:8px;
-padding:10px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
-.route{font-size:13px;max-width:60%}
-.price{font-size:13px;font-weight:bold;direction:ltr;text-align:left}
-button{width:100%;margin-top:10px;padding:10px}
+padding:9px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
+.route{font-size:13px;max-width:55%}
+.right{text-align:left}
+.price{font-size:13px;font-weight:bold;direction:ltr}
+.drop{font-size:11px;color:var(--tg-theme-link-color);margin-top:3px}
+#refresh{width:100%;margin-top:10px;padding:10px}
 </style></head>
 <body>
 <h3>قیمت‌های منتخب بلیت</h3>
-<p class="sub">از داده‌های فعلی سرویس بلیت • قیمت به تومان</p>
+<p class="sub">قیمت‌ها به تومان</p>
+<div class="tabs">
+<button id="cheap" class="active" aria-pressed="true">ارزان‌ترین بلیت‌ها</button>
+<button id="drops" aria-pressed="false">بیشترین کاهش قیمت</button>
+</div>
 <div id="fares"></div>
 <p class="sub" id="updated"></p>
 <button id="refresh">تازه‌سازی قیمت‌ها</button>
@@ -45,27 +56,57 @@ button{width:100%;margin-top:10px;padding:10px}
   var fares=document.getElementById('fares');
   var updated=document.getElementById('updated');
   var button=document.getElementById('refresh');
+  var cheap=document.getElementById('cheap');
+  var drops=document.getElementById('drops');
+  var active='cheap';
   function parse(value){try{return JSON.parse(value||'{}');}catch(e){return {};}}
-  function format(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
+  function fa(value){
+    return String(value).replace(/[0-9]/g,function(c){
+      return '۰۱۲۳۴۵۶۷۸۹'.charAt(c.charCodeAt(0)-48);
+    });
+  }
+  function format(n){return fa(String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));}
   function render(){
     var data=parse(W.publicData), state=parse(W.chatData);
     fares.textContent='';
-    var items=Array.isArray(data.items)?data.items:[];
-    if(!items.length){fares.textContent='در حال حاضر قیمت قابل نمایشی موجود نیست.';}
+    var items=active==='cheap'?data.items:data.drops;
+    items=Array.isArray(items)?items:[];
+    if(!items.length){
+      fares.textContent=active==='cheap'
+        ? 'در حال حاضر قیمتی برای نمایش وجود ندارد.'
+        : 'هنوز کاهش قیمت با سابقه معتبر ثبت نشده است.';
+    }
     for(var i=0;i<items.length;i++){
       var fare=items[i];
       var row=document.createElement('div');row.className='fare';
       var route=document.createElement('span');route.className='route';
-      route.textContent=fare.o+' ← '+fare.d;
-      var price=document.createElement('span');price.className='price';
+      route.textContent='از '+fare.o+' به '+fare.d;
+      var right=document.createElement('div');right.className='right';
+      var price=document.createElement('div');price.className='price';
       price.textContent=format(fare.p);
-      row.appendChild(route);row.appendChild(price);fares.appendChild(row);
+      right.appendChild(price);
+      if(typeof fare.x==='number'&&fare.x>0){
+        var drop=document.createElement('div');drop.className='drop';
+        drop.textContent=fa(fare.x)+'٪ کاهش نسبت به میانگین';
+        right.appendChild(drop);
+      }
+      row.appendChild(route);row.appendChild(right);fares.appendChild(row);
     }
     updated.textContent=data.updated?'آخرین بررسی: '+data.updated:'';
     button.textContent=state.status==='error'
       ? 'به‌روزرسانی ناموفق بود • تلاش مجدد' : 'تازه‌سازی قیمت‌ها';
     button.disabled=false;
   }
+  function switchTab(which){
+    active=which;
+    cheap.className=which==='cheap'?'active':'';
+    drops.className=which==='drops'?'active':'';
+    cheap.setAttribute('aria-pressed',which==='cheap'?'true':'false');
+    drops.setAttribute('aria-pressed',which==='drops'?'true':'false');
+    render();
+  }
+  cheap.addEventListener('click',function(){switchTab('cheap');});
+  drops.addEventListener('click',function(){switchTab('drops');});
   button.addEventListener('click',function(){
     button.disabled=true;
     button.textContent='در حال تازه‌سازی...';
@@ -91,8 +132,13 @@ assert len(zlib.compress(FARE_WIDGET_HTML.encode("utf-8"), level=9)) <= 4096
 
 
 def fare_widget_data(routes: list, *, now: datetime | None = None) -> str:
-    """Build a compact state from real provider results, without guessed fares."""
-    values: list[tuple[int, str, str]] = []
+    """Build cheapest and largest genuine percentage drops from the same feed.
+
+    A reduction requires at least three history samples and a current price
+    below a positive finite historical mean. Other routes remain eligible for
+    the cheapest-price tab but never receive invented discount percentages.
+    """
+    values: list[dict[str, str | int | float]] = []
     for route in routes:
         for destination in route.destinations:
             try:
@@ -101,26 +147,56 @@ def fare_widget_data(routes: list, *, now: datetime | None = None) -> str:
                     if destination.price_value_toman is not None
                     else parse_toman_price(destination.price_toman)
                 )
-                if price <= 0:
+                if not isinstance(price, int) or price <= 0:
                     continue
-                values.append((price, route.origin[:30], destination.name[:30]))
+                item: dict[str, str | int | float] = {
+                    "o": route.origin[:30],
+                    "d": destination.name[:30],
+                    "p": price,
+                }
+                average = destination.average_price_toman
+                count = destination.average_sample_count
+                if (
+                    isinstance(average, (float, int))
+                    and math.isfinite(average)
+                    and average > price
+                    and isinstance(count, int)
+                    and count >= 3
+                ):
+                    percentage = round((average - price) * 100 / average, 1)
+                    if percentage > 0:
+                        item["x"] = percentage
+                values.append(item)
             except (ValueError, TypeError, AttributeError):
                 continue
 
-    values.sort(key=lambda row: row[0])
+    cheapest = sorted(values, key=lambda item: item["p"])[:5]
+    reductions = sorted(
+        (item for item in values if "x" in item),
+        key=lambda item: (-item["x"], item["p"]),
+    )[:5]
     data = {
-        "items": [{"o": origin, "d": destination, "p": price}
-                  for price, origin, destination in values[:5]],
+        "items": cheapest,
+        "drops": reductions,
         "updated": (now or datetime.now(timezone.utc)).astimezone(timezone.utc).strftime(
             "%Y-%m-%d %H:%M UTC"
         ),
     }
-    # Telegram permits only 1024 UTF-8 bytes for each widget state field.
+
+    # Both lists are included in one state so changing tabs needs no API call.
+    # Telegram limits each state field to 1024 UTF-8 bytes.
     while True:
         serialized = json.dumps(data, ensure_ascii=False, separators=(",", ":"))
         if len(serialized.encode("utf-8")) <= 1024:
             return serialized
-        data["items"].pop()
+        if data["drops"] and len(data["drops"]) >= len(data["items"]):
+            data["drops"].pop()
+        elif data["items"]:
+            data["items"].pop()
+        elif data["drops"]:
+            data["drops"].pop()
+        else:
+            raise ValueError("Fare widget metadata exceeds Telegram size limit")
 
 
 async def _widget_api(bot: object, method: str, data: dict) -> object:
