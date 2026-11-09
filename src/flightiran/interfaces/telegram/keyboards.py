@@ -58,6 +58,9 @@ def main_menu(
         rows.append([
             InlineKeyboardButton("🧳 چک‌لیست تعاملی سفر", callback_data="menu:checklist")
         ])
+        rows.append([
+            InlineKeyboardButton("📈 نمودار قیمت مسیر", callback_data="menu:route_chart")
+        ])
     # Show the Mini App launch button when a valid HTTPS URL is configured.
     # This shared keyboard is used by /start and returning main-menu navigation.
     secure_url = telegram_web_app_url(web_app_url)

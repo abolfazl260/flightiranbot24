@@ -63,6 +63,7 @@ from .price_alerts import (
     word,
 )
 from .renderers import render_help, render_language_prompt, render_main_menu
+from .route_chart import handle_chart_callback, open_chart_picker
 from .support import render_support_message
 from .useful_content import (
     USEFUL_CATEGORY_IDS,
@@ -286,6 +287,13 @@ async def start_handler(
             await send_fare_widget(
                 update.message, context.bot, dependencies.cheap_ticket_service
             )
+        elif entrypoint == "chart" and _widget_menu_enabled(update, context):
+            await dependencies.audit.record("ticket.chart.opened", user_id=registered.id)
+            await open_chart_picker(
+                update.message, context.bot,
+                getattr(dependencies.cheap_ticket_service, "price_history", None),
+                context.user_data,
+            )
         elif entrypoint == "checklist" and _widget_menu_enabled(update, context):
             # Private deep link: https://t.me/Flightiranbot?start=checklist
             await dependencies.audit.record("checklist.opened", user_id=registered.id)
@@ -380,6 +388,14 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:route_chart" or data.startswith("chart:"):
+        history = getattr(dependencies.cheap_ticket_service, "price_history", None)
+        if data == "menu:route_chart":
+            await dependencies.audit.record("ticket.chart.opened", user_id=user_id)
+            await open_chart_picker(query, context.bot, history, context.user_data)
+        else:
+            await handle_chart_callback(query, context, history)
+        return
     if data == "menu:checklist":
         if getattr(context.bot, "platform", "telegram") == "bale":
             await query.message.reply_text("چک‌لیست تعاملی فقط در تلگرام فعال است.")
@@ -992,6 +1008,24 @@ async def alerts_command_handler(
         )
 
 
+async def chart_command_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    """Choose a recorded origin/destination and send its actual price chart."""
+    if update.message is None:
+        return
+    if not _widget_menu_enabled(update, context):
+        await update.message.reply_text("نمودار فقط در چت خصوصی تلگرام فعال است.")
+        return
+    user_id, _language = await _user_language(update, dependencies)
+    await dependencies.audit.record("ticket.chart.opened", user_id=user_id)
+    await open_chart_picker(
+        update.message, context.bot,
+        getattr(dependencies.cheap_ticket_service, "price_history", None),
+        context.user_data,
+    )
+
+
 async def fare_widget_command_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
@@ -1056,6 +1090,9 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     if getattr(application.bot, "platform", "telegram") != "bale":
         application.add_handler(
             CommandHandler("fares", lambda u, c: fare_widget_command_handler(u, c, dependencies))
+        )
+        application.add_handler(
+            CommandHandler("chart", lambda u, c: chart_command_handler(u, c, dependencies))
         )
         application.add_handler(
             CommandHandler(
