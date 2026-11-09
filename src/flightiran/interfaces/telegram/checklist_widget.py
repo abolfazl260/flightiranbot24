@@ -29,20 +29,24 @@ CHECKLIST_WIDGET_HTML = r"""<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head><meta charset="utf-8"><style>
 *{box-sizing:border-box}
-body{margin:0;padding:12px 12px 8px;color:var(--tg-theme-text-color);font-family:Arial,sans-serif;font-size:13px}
+body{margin:0;padding:12px 12px 8px;color:var(--tg-theme-text-color);
+font-family:Arial,sans-serif;font-size:13px}
 header{display:flex;justify-content:space-between;align-items:start;gap:9px}
 h3{font-size:18px;line-height:1.5;margin:0;font-weight:800}
 .eyebrow{color:var(--tg-theme-hint-color);font-size:11px;margin:0 0 2px}
 .logo{background:var(--tg-theme-secondary-bg-color);border-radius:12px;padding:10px;font-size:23px}
 .mode{display:flex;gap:6px;margin:12px 0}
 .mode button{width:50%;padding:9px 4px;border-radius:10px;font-size:12px;margin:0;
-background:var(--tg-theme-secondary-bg-color);color:var(--tg-theme-text-color);border:1px solid transparent}
-.mode button.sel{background:var(--tg-theme-button-color);color:var(--tg-theme-button-text-color);font-weight:bold}
+background:var(--tg-theme-secondary-bg-color);color:var(--tg-theme-text-color);
+border:1px solid transparent}
+.mode button.sel{background:var(--tg-theme-button-color);
+color:var(--tg-theme-button-text-color);font-weight:bold}
 .hero{padding:12px;background:var(--tg-theme-secondary-bg-color);border-radius:15px}
 .headline{display:flex;justify-content:space-between;align-items:center}
 .count{font-size:20px;font-weight:800;direction:ltr}
 .muted{color:var(--tg-theme-hint-color);font-size:11px}
-.track{background:var(--tg-theme-bg-color);height:9px;border-radius:20px;overflow:hidden;margin:10px 0 6px}
+.track{background:var(--tg-theme-bg-color);height:9px;border-radius:20px;
+overflow:hidden;margin:10px 0 6px}
 .fill{height:100%;background:var(--tg-theme-button-color);border-radius:20px;width:0}
 #motivate{font-size:11px;color:var(--tg-theme-hint-color);margin:0}
 .section-title{font-weight:700;margin:13px 0 9px}
@@ -79,7 +83,9 @@ button:disabled{opacity:.55}
 <button id="international" aria-pressed="false">سفر خارجی</button></div>
 <section class="hero"><div class="headline"><strong>میزان آمادگی سفر</strong>
 <div class="count" id="count">۰ / ۱۱</div></div>
-<div class="track" role="progressbar" aria-label="پیشرفت سفر" id="track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="fill" id="fill"></div></div>
+<div class="track" role="progressbar" aria-label="پیشرفت سفر"
+ id="track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+<div class="fill" id="fill"></div></div>
 <p id="motivate">هر قدم کوچک، یک سفر آسوده‌تر.</p></section>
 <p class="section-title" id="section">کارهای سفر</p>
 <nav class="tabs" aria-label="دسته‌های چک‌لیست">
