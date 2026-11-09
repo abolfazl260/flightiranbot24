@@ -45,135 +45,97 @@ _SELECTOR_HTML = """
 """
 
 _SELECTOR_JS = """
-  var origButton=document.getElementById('route-origin');
-  var destButton=document.getElementById('route-destination');
-  var choiceArea=document.getElementById('route-options');
-  var plotArea=document.getElementById('route-chart');
-  var plot=document.getElementById('route-plot');
-  var metrics=document.getElementById('route-metrics');
-  var booking=document.getElementById('route-book');
-  var hint=document.getElementById('route-hint');
-  var routeState={};
-  function askRoute(action){
-    W.request(action).then(function(reply){
-      if(reply.result!=='accepted')hint.textContent='امکان انجام درخواست نیست؛ دوباره تلاش کنید.';
-    },function(){hint.textContent='ارتباط با ربات برقرار نشد.';});
+  var ro=document.getElementById('route-origin'),
+    rd=document.getElementById('route-destination'),
+    opts=document.getElementById('route-options'),
+    area=document.getElementById('route-chart'),
+    plot=document.getElementById('route-plot'),
+    info=document.getElementById('route-metrics'),
+    book=document.getElementById('route-book'),
+    hint=document.getElementById('route-hint'),selection={};
+  function ask(a){
+    W.request(a).then(function(x){
+      if(x.result!=='accepted')hint.textContent='درخواست انجام نشد';
+    },function(){hint.textContent='خطای ارتباط';});
   }
-  function makeButton(text,action,where){
-    var btn=document.createElement('button');
-    btn.type='button';btn.textContent=text;
-    btn.addEventListener('click',function(){askRoute(action);});
-    where.appendChild(btn);
+  function opt(text,action,where){
+    var b=document.createElement('button');
+    b.type='button';b.textContent=text;
+    b.addEventListener('click',function(){ask(action);});
+    where.appendChild(b);
   }
-  function svgTag(tag,attrs){
-    var node=document.createElementNS('http://www.w3.org/2000/svg',tag);
-    for(var k in attrs){node.setAttribute(k,String(attrs[k]));}
-    plot.appendChild(node);
+  function svg(name,attrs){
+    var n=document.createElementNS('http://www.w3.org/2000/svg',name);
+    for(var a in attrs)n.setAttribute(a,attrs[a]);
+    plot.appendChild(n);
   }
   function renderRoute(){
-    var d=parse(W.chatData);routeState=d;
-    var view=d.view||'';
-    origButton.textContent='مبدأ: '+(d.o||'انتخاب کنید');
-    destButton.textContent='مقصد: '+(d.d||'انتخاب کنید');
-    destButton.disabled=!(d.ok&&view!=='origins');
-    choiceArea.textContent='';
-    plotArea.style.display=view==='chart'?'block':'none';
-    hint.textContent=view==='error'?(d.message||'خطا در دریافت اطلاعات'):
-      view==='chart'?'نرخ‌ها صرفاً اطلاع‌رسانی هستند؛ رزرو باید تأیید شود.':
-      view==='origins'?'مبدأ موردنظر را انتخاب کنید.':
-      view==='destinations'?'مقصد موردنظر را انتخاب کنید.':
-      'برای مشاهده نمودار، مبدأ و مقصد را انتخاب کنید.';
-    if(view==='origins'||view==='destinations'){
-      var opts=Array.isArray(d.options)?d.options:[];
-      for(var i=0;i<opts.length;i++){
-        var opt=opts[i];
-        var action=view==='origins'?'fare:origin:'+opt.k:
-          'fare:route:'+d.ok+':'+opt.k;
-        makeButton(opt.n,action,choiceArea);
-      }
-      if(d.pages>1){
-        var pager=document.createElement('div');pager.className='route-pagination';
-        var prefix=view==='origins'?'fare:origins:':'fare:destinations:'+d.ok+':';
-        if(d.page>0)makeButton('صفحه قبل',prefix+(d.page-1),pager);
-        if(d.page<d.pages-1)makeButton('صفحه بعد',prefix+(d.page+1),pager);
-        choiceArea.appendChild(pager);
-      }
+    var d=parse(W.chatData);selection=d;var v=d.view||'';
+    ro.textContent='مبدأ: '+(d.o||'انتخاب');
+    rd.textContent='مقصد: '+(d.d||'انتخاب');
+    rd.disabled=!d.ok||v==='origins';
+    opts.textContent='';area.style.display=v==='chart'?'block':'none';
+    hint.textContent=v==='error'?d.message:
+      v==='origins'?'مبدأ را انتخاب کنید':
+      v==='destinations'?'مقصد را انتخاب کنید':
+      'قیمت‌ها قطعی نیستند و پیش از رزرو باید تأیید شوند.';
+    if(v==='origins'||v==='destinations'){
+      var list=d.options||[],prefix=v==='origins'?'fare:origins:':
+        'fare:destinations:'+d.ok+':';
+      for(var i=0;i<list.length;i++)
+        opt(list[i].n,v==='origins'?'fare:origin:'+list[i].k:
+            'fare:route:'+d.ok+':'+list[i].k,opts);
+      if(d.page>0)opt('قبلی',prefix+(d.page-1),opts);
+      if(d.page+1<d.pages)opt('بعدی',prefix+(d.page+1),opts);
     }
-    if(view!=='chart')return;
-    destButton.disabled=false;
-    destButton.textContent='مقصد: '+d.d;
-    origButton.textContent='مبدأ: '+d.o;
-    var points=Array.isArray(d.series)?d.series:[];
-    plot.textContent='';metrics.textContent='';
-    var clean=[];
-    for(var k=0;k<points.length;k++){
-      if(Array.isArray(points[k])&&typeof points[k][0]==='number'
-         &&typeof points[k][1]==='number')clean.push(points[k]);
-    }
-    var price=document.createElement('p');
-    price.textContent='قیمت فعلی: '+format(d.p)+' تومان';
-    metrics.appendChild(price);
+    if(v!=='chart')return;
+    plot.textContent='';info.textContent='';
+    var rows=d.series||[],valid=[];
+    for(var i=0;i<rows.length;i++)
+      if(typeof rows[i][0]==='number'&&typeof rows[i][1]==='number')
+        valid.push(rows[i]);
+    var lines=['قیمت فعلی: '+format(d.p)+' تومان'];
     if(typeof d.a==='number'){
-      var average=document.createElement('p');
-      average.textContent='میانگین تاریخی: '+format(d.a)+' تومان';
-      metrics.appendChild(average);
-      if(typeof d.pct==='number'){
-        var diff=document.createElement('p');
-        diff.textContent=fa(Math.abs(d.pct))+'٪ '+
-          (d.pct<0?'کمتر از':d.pct>0?'بیشتر از':'برابر با')+' میانگین';
-        if(d.pct<0)diff.style.color='var(--tg-theme-link-color)';
-        metrics.appendChild(diff);
-      }
+      lines.push('میانگین تاریخی: '+format(d.a)+' تومان');
+      if(typeof d.pct==='number')
+        lines.push(fa(Math.abs(d.pct))+'٪ '+
+          (d.pct<0?'کمتر از':d.pct>0?'بیشتر از':'برابر با')+' میانگین');
     }
-    var sampled=document.createElement('p');
-    sampled.textContent='تعداد مشاهده تاریخی: '+fa(d.n||0)+
-      ' • بررسی: '+fa(d.updated||'—');
-    metrics.appendChild(sampled);
-    if(!clean.length){
-      svgTag('text',{x:150,y:65,'text-anchor':'middle',
-        fill:'var(--tg-theme-hint-color)','font-size':13})
-        .textContent='داده تاریخی کافی ثبت نشده است';
-    }else{
-      var minDay=clean[0][0],maxDay=clean[clean.length-1][0];
-      var minPrice=clean[0][1],maxPrice=minPrice;
-      for(var j=1;j<clean.length;j++){
-        minPrice=Math.min(minPrice,clean[j][1]);
-        maxPrice=Math.max(maxPrice,clean[j][1]);
+    lines.push('مشاهدات: '+fa(d.n||0)+' • '+fa(d.updated||''));
+    if(!valid.length)lines.push('برای این مسیر هنوز تاریخچه قیمت ثبت نشده است.');
+    else{
+      var lo=valid[0][1],hi=lo;
+      for(var j=0;j<valid.length;j++){
+        lo=Math.min(lo,valid[j][1]);hi=Math.max(hi,valid[j][1]);
       }
-      var range=maxPrice-minPrice||1,span=maxDay-minDay||1;
-      svgTag('path',{d:'M12 15H288 M12 65H288 M12 115H288',
-        stroke:'var(--tg-theme-hint-color)',opacity:.22,fill:'none',
-        'stroke-dasharray':'3 4'});
-      var last=null;
-      for(var p=0;p<clean.length;p++){
-        var cx=12+(clean[p][0]-minDay)*276/span;
-        var cy=105-(clean[p][1]-minPrice)*82/range;
-        if(last&&clean[p][0]-last[0]===1){
-          svgTag('line',{x1:last[2],y1:last[3],x2:cx,y2:cy,
-            stroke:'var(--tg-theme-link-color,#168a79)','stroke-width':2});
-        }
-        svgTag('circle',{cx:cx,cy:cy,r:3.3,fill:'var(--tg-theme-link-color,#168a79)'});
-        last=[clean[p][0],clean[p][1],cx,cy];
+      var first=valid[0][0],span=valid[valid.length-1][0]-first||1,
+        range=hi-lo||1,last=null;
+      svg('path',{d:'M8 25H292 M8 75H292 M8 125H292',
+        stroke:'currentColor',opacity:'.12',fill:'none'});
+      for(var k=0;k<valid.length;k++){
+        var x=8+284*(valid[k][0]-first)/span,
+          y=110-84*(valid[k][1]-lo)/range;
+        if(last&&valid[k][0]===last[0]+1)
+          svg('line',{x1:last[1],y1:last[2],x2:x,y2:y,
+            stroke:'#14877d','stroke-width':'2'});
+        svg('circle',{cx:x,cy:y,r:'3',fill:'#14877d'});
+        last=[valid[k][0],x,y];
       }
-      var rangeLine=document.createElement('p');
-      rangeLine.textContent='کمینه ثبت‌شده: '+format(minPrice)+
-        ' • بیشینه: '+format(maxPrice)+' تومان';
-      metrics.appendChild(rangeLine);
+      lines.push('کمینه ثبت‌شده: '+format(lo)+' • بیشینه: '+format(hi)+' تومان');
     }
-    booking.disabled=false;
+    for(var q=0;q<lines.length;q++){
+      var p=document.createElement('p');p.textContent=lines[q];info.appendChild(p);
+    }
   }
-  origButton.addEventListener('click',function(){askRoute('fare:origins:0');});
-  destButton.addEventListener('click',function(){
-    if(routeState.ok)askRoute('fare:destinations:'+routeState.ok+':0');
+  ro.addEventListener('click',function(){ask('fare:origins:0');});
+  rd.addEventListener('click',function(){
+    if(selection.ok)ask('fare:destinations:'+selection.ok+':0');
   });
-  booking.addEventListener('click',function(){
-    if(routeState.view==='chart'&&routeState.ok&&routeState.dk){
-      hint.textContent='در حال آماده‌سازی درخواست رزرو در گفتگو...';
-      askRoute('fare:book:'+routeState.ok+':'+routeState.dk);
-    }
+  book.addEventListener('click',function(){
+    if(selection.view==='chart'&&selection.ok&&selection.dk)
+      ask('fare:book:'+selection.ok+':'+selection.dk);
   });
-  W.onEvent('chatDataChanged',renderRoute);
-  renderRoute();
+  W.onEvent('chatDataChanged',renderRoute);renderRoute();
 """
 
 
