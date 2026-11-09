@@ -12,7 +12,7 @@ from alembic import command
 from alembic.config import Config
 from sqlalchemy import create_engine, inspect
 
-from flightiran.db.models import Base
+from flightiran.db.models import Base, TravelChecklist
 
 
 def main() -> None:
@@ -51,6 +51,9 @@ def main() -> None:
             command.stamp(alembic, "head")
         else:
             command.upgrade(alembic, "head")
+        # A new independent user-state table is safe to bootstrap idempotently.
+        # Keep the existing Alembic history and every previously saved row intact.
+        Base.metadata.create_all(engine, tables=[TravelChecklist.__table__], checkfirst=True)
     finally:
         engine.dispose()
 
