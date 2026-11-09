@@ -1116,9 +1116,17 @@ async def _open_help_service(
     """Launch existing bot flows only after a validated private help query."""
     bot = context.bot
     msg = PrivateChatMessage(bot, user_id)
-    language = normalize_language(await dependencies.users.get_language(user_id))
+    # widget_query supplies the Telegram account ID, not the internal users.id.
+    # Preferences and audit events must use the internal database primary key.
+    registered = await dependencies.users.get_by_telegram_id(user_id)
+    if registered is None:
+        raise ValueError("Help widget user is not registered")
+    database_user_id = registered.id
+    language = normalize_language(
+        await dependencies.users.get_language(database_user_id)
+    )
     await dependencies.audit.record(
-        "user.help.service", user_id=user_id, payload={"service": service},
+        "user.help.service", user_id=database_user_id, payload={"service": service},
     )
 
     if service == "fares":
@@ -1154,7 +1162,7 @@ async def _open_help_service(
             user_data,
         )
     elif service == "visa":
-        await _load_visa_passport(private_context, user_id, dependencies)
+        await _load_visa_passport(private_context, database_user_id, dependencies)
         await open_visa_menu(
             message_update, private_context, dependencies.visa_catalog, language,
             edit=False,
