@@ -55,8 +55,11 @@ def render_route_chart_html(
     lo = min(entry.min_price_toman for entry in samples)
     hi = max(entry.min_price_toman for entry in samples)
     spread = hi - lo
-    x = lambda entry: 22 + (entry.day - start_day).days * 13.6
-    y = lambda entry: 103 - ((entry.min_price_toman - lo) * 66 / spread) if spread else 70
+    def x(entry: RouteDailyMinimum) -> float:
+        return 22 + (entry.day - start_day).days * 13.6
+
+    def y(entry: RouteDailyMinimum) -> float:
+        return 103 - ((entry.min_price_toman - lo) * 66 / spread) if spread else 70
     paths: list[str] = []
     dots: list[str] = []
     for idx, entry in enumerate(samples):
@@ -107,7 +110,7 @@ stroke-opacity=".13" stroke-dasharray="3,4" fill="none"/>
 <div class="note">اولین روز ثبت: {_fa(first.isoformat())}
 • آخرین ثبت: {_fa(last_updated)} UTC</div>
 <div class="note">روزهای بدون ثبت، نقطه یا خط تخمینی ندارند.
-${"تنها یک روز داده موجود است؛ هنوز روند قابل محاسبه نیست. " if len(samples) < 2 else ""}این نمودار قیمت لحظه‌ای رزرو نیست.</div>
+{"تنها یک روز داده موجود است؛ هنوز روند قابل محاسبه نیست. " if len(samples) < 2 else ""}\nاین نمودار قیمت لحظه‌ای رزرو نیست.</div>
 </body></html>"""
     raw = html.encode("utf-8")
     if len(raw) > 32768 or len(zlib.compress(raw, level=9)) > 4096:
