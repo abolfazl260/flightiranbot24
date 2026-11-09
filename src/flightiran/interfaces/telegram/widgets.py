@@ -27,10 +27,16 @@ body{margin:0;padding:12px;color:var(--tg-theme-text-color);font-family:Arial,sa
 h3{font-size:17px;margin:0 0 5px}
 p{margin:0}
 .sub{font-size:12px;color:var(--tg-theme-hint-color)}
-.tabs{display:flex;gap:6px;margin:12px 0}
-.tabs button{flex:1;font-size:12px;padding:9px 4px;margin:0;border:0;border-radius:8px;
-background:var(--tg-theme-secondary-bg-color);color:var(--tg-theme-text-color)}
-.tabs button.active{background:var(--tg-theme-button-color);color:var(--tg-theme-button-text-color)}
+.sort-label{font-size:12px;font-weight:bold;margin-top:13px;color:var(--tg-theme-text-color)}
+.tabs{display:flex;gap:7px;margin:7px 0 12px;padding:4px;border-radius:12px;
+background:var(--tg-theme-secondary-bg-color,#f1f3f5)}
+.tabs button{flex:1;min-width:0;min-height:47px;font-size:12px;font-weight:bold;
+line-height:1.5;padding:8px 4px;margin:0;border:1px solid
+var(--tg-theme-section-separator-color,#b6bdc5);border-radius:9px;
+background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#222)}
+.tabs button.active{background:var(--tg-theme-button-color,#3390ec);
+color:var(--tg-theme-button-text-color,#fff);
+border:2px solid var(--tg-theme-button-color,#3390ec)}
 #fares{margin:6px 0 10px}
 .fare{display:flex;justify-content:space-between;align-items:center;gap:8px;
 padding:9px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
@@ -43,11 +49,14 @@ padding:9px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
 <body>
 <h3>قیمت‌های منتخب بلیت</h3>
 <p class="sub">قیمت‌ها به تومان</p>
-<div class="tabs">
-<button id="cheap" class="active" aria-pressed="true">ارزان‌ترین بلیت‌ها</button>
-<button id="drops" aria-pressed="false">بیشترین کاهش قیمت</button>
+<p class="sort-label">مرتب‌سازی بلیت‌ها بر اساس:</p>
+<div class="tabs" role="tablist" aria-label="انتخاب نوع مرتب‌سازی">
+<button id="cheap" type="button" role="tab" class="active"
+aria-selected="true" aria-pressed="true">✓ ارزان‌ترین بلیت‌ها</button>
+<button id="drops" type="button" role="tab" aria-selected="false"
+aria-pressed="false">بیشترین کاهش قیمت</button>
 </div>
-<div id="fares"></div>
+<div id="fares" role="tabpanel" aria-labelledby="cheap"></div>
 <p class="sub" id="updated"></p>
 <button id="refresh">تازه‌سازی قیمت‌ها</button>
 <script>
@@ -101,8 +110,13 @@ padding:9px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
     active=which;
     cheap.className=which==='cheap'?'active':'';
     drops.className=which==='drops'?'active':'';
+    cheap.textContent=which==='cheap'?'✓ ارزان‌ترین بلیت‌ها':'ارزان‌ترین بلیت‌ها';
+    drops.textContent=which==='drops'?'✓ بیشترین کاهش قیمت':'بیشترین کاهش قیمت';
+    cheap.setAttribute('aria-selected',which==='cheap'?'true':'false');
+    drops.setAttribute('aria-selected',which==='drops'?'true':'false');
     cheap.setAttribute('aria-pressed',which==='cheap'?'true':'false');
     drops.setAttribute('aria-pressed',which==='drops'?'true':'false');
+    fares.setAttribute('aria-labelledby',which);
     render();
   }
   cheap.addEventListener('click',function(){switchTab('cheap');});
