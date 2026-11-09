@@ -65,7 +65,7 @@ from .price_alerts import (
     send_rich_alerts,
     word,
 )
-from .renderers import render_help, render_language_prompt, render_main_menu
+from .renderers import render_language_prompt, render_main_menu
 from .route_chart import handle_chart_callback, open_chart_picker
 from .support import render_support_message
 from .useful_content import (
