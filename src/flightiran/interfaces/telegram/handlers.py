@@ -286,6 +286,12 @@ async def start_handler(
             await send_fare_widget(
                 update.message, context.bot, dependencies.cheap_ticket_service
             )
+        elif entrypoint == "checklist" and _widget_menu_enabled(update, context):
+            # Private deep link: https://t.me/Flightiranbot?start=checklist
+            await dependencies.audit.record("checklist.opened", user_id=registered.id)
+            await send_checklist_widget(
+                update.message, context.bot, dependencies.checklist_service
+            )
         elif entrypoint == "alerts":
             if dependencies.price_alert_service is None:
                 await update.message.reply_text(
