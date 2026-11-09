@@ -82,7 +82,7 @@ button:disabled{opacity:.55}
 <button id="domestic" class="sel" aria-pressed="true">پرواز داخلی</button>
 <button id="international" aria-pressed="false">سفر خارجی</button></div>
 <section class="hero"><div class="headline"><strong>میزان آمادگی سفر</strong>
-<div class="count" id="count">۰ / ۱۱</div></div>
+<div class="count" id="count">۰ / ۱۳</div></div>
 <div class="track" role="progressbar" aria-label="پیشرفت سفر"
  id="track" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
 <div class="fill" id="fill"></div></div>
@@ -252,7 +252,7 @@ async def send_checklist_widget(message: object, bot: object,
 
 
 # The request is untrusted: only allow predefined, short data actions.
-ACTION = re.compile(r"^cl:(s|m:[di]|x:[di]|t:[di]:(?:[0-9]|1[0-4]))$")
+ACTION = re.compile(r"^cl:(s|m:[di]|x:[di]|t:[di]:(?:[0-9]|1[0-6]))$")
 
 
 async def handle_checklist_query(
