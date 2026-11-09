@@ -65,7 +65,7 @@ from .price_alerts import (
     send_rich_alerts,
     word,
 )
-from .renderers import render_language_prompt, render_main_menu
+from .renderers import render_help, render_language_prompt, render_main_menu
 from .route_chart import handle_chart_callback, open_chart_picker
 from .support import render_support_message
 from .useful_content import (
@@ -376,15 +376,24 @@ async def help_handler(
     user_id, language = await _user_language(update, dependencies)
     await dependencies.audit.record("user.help", user_id=user_id)
     if update.message:
-        await send_help_widget(
-            update.message, context.bot, language, dependencies.ticket_support_username,
-            fallback_markup=main_menu(
-                language,
-                dependencies.web_app_url,
-                is_admin=_is_private_admin(update, dependencies),
-                widgets_enabled=_widget_menu_enabled(update, context),
-            ),
+        can_widget = _widget_menu_enabled(update, context)
+        keyboard = main_menu(
+            language, dependencies.web_app_url,
+            is_admin=_is_private_admin(update, dependencies),
+            widgets_enabled=can_widget,
         )
+        if not can_widget:
+            # Preserve the original text help for Bale, groups and tests
+            # without a Telegram context.
+            await update.message.reply_text(
+                render_help(language, dependencies.ticket_support_username),
+                parse_mode="HTML", reply_markup=keyboard,
+            )
+        else:
+            await send_help_widget(
+                update.message, context.bot, language, dependencies.ticket_support_username,
+                fallback_markup=keyboard,
+            )
 
 
 async def language_handler(
