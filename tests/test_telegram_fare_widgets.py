@@ -71,7 +71,9 @@ def test_fare_widget_data_is_real_sorted_and_bounded():
 
 @pytest.mark.asyncio
 async def test_send_widget_and_fallback_when_telegram_rejects():
-    service = SimpleNamespace(routes=AsyncMock(return_value=[route("تهران", ("کیش", "۲,۸۰۰,۰۰۰ تومان"))]))
+    service = SimpleNamespace(
+        routes=AsyncMock(return_value=[route("تهران", ("کیش", "۲,۸۰۰,۰۰۰ تومان"))])
+    )
     message = FakeMessage()
     bot = FakeBot()
     assert await send_fare_widget(message, bot, service)
@@ -90,7 +92,9 @@ async def test_send_widget_and_fallback_when_telegram_rejects():
 @pytest.mark.asyncio
 async def test_widget_query_immediately_answers_then_edits_only_own_message():
     bot = FakeBot()
-    service = SimpleNamespace(routes=AsyncMock(return_value=[route("تهران", ("مشهد", "۳۰۰۰۰۰۰ تومان"))]))
+    service = SimpleNamespace(
+        routes=AsyncMock(return_value=[route("تهران", ("مشهد", "۳۰۰۰۰۰۰ تومان"))])
+    )
     query = {
         "id": "query-1", "data": "fare:refresh",
         "type": {"type": "data"},
