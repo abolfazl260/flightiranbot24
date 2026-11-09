@@ -10,12 +10,12 @@ import pytest
 from telegram import Update
 
 from flightiran.db.engine import initialize_database
-from flightiran.interfaces.telegram.handlers import TelegramDependencies, start_handler
 from flightiran.interfaces.telegram.checklist_widget import (
     CHECKLIST_WIDGET_HTML,
     handle_checklist_query,
     send_checklist_widget,
 )
+from flightiran.interfaces.telegram.handlers import TelegramDependencies, start_handler
 from flightiran.modules.travel_checklist import (
     TASKS,
     VALID_BITS,
