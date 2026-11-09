@@ -235,3 +235,19 @@ class VisaWatchEvent(TimestampedModel):
     sent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     attempts: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     last_attempt_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class TravelChecklist(Base):
+    """Per-Telegram-user domestic/international packing progress, independently saved."""
+
+    __tablename__ = "travel_checklists"
+
+    telegram_id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
+    mode: Mapped[str] = mapped_column(String(1), nullable=False, default="d")
+    domestic_bits: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    international_bits: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(),
+        onupdate=func.now(), nullable=False,
+    )
