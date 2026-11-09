@@ -651,7 +651,9 @@ def test_valid_https_mini_app_url_shows_launch_button(language, is_admin):
 
     url = "https://example.com:8443/travel?lang=fa"
     assert telegram_web_app_url(url) == url
-    keyboard = main_menu(language, web_app_url=url, is_admin=is_admin)
+    keyboard = main_menu(
+        language, web_app_url=url, is_admin=is_admin, widgets_enabled=True
+    )
     buttons = [button for row in keyboard.inline_keyboard for button in row]
     launch_buttons = [button for button in buttons if button.web_app]
     assert len(launch_buttons) == 1
@@ -664,10 +666,11 @@ def test_valid_https_mini_app_url_shows_launch_button(language, is_admin):
 
 
 @pytest.mark.asyncio
-async def test_start_with_https_mini_app_config_shows_launch_button():
+async def test_start_without_private_chat_context_uses_safe_mini_app_link():
     url = "https://example.com/mini/"
     deps = dependencies(web_app_url=url)
     message = Message()
+    # Without a chat/context, sending a native Web App button is not safe.
     await start_handler(update(message=message), None, deps)
     assert len(message.calls) == 1
     buttons = [
@@ -675,7 +678,8 @@ async def test_start_with_https_mini_app_config_shows_launch_button():
         for row in message.calls[0][1]["reply_markup"].inline_keyboard
         for button in row
     ]
-    assert [button.web_app.url for button in buttons if button.web_app] == [url]
+    assert not any(button.web_app for button in buttons)
+    assert [button.url for button in buttons if "مینی‌اپ" in button.text] == [url]
     assert any(button.callback_data == "menu:tickets" for button in buttons)
 
 

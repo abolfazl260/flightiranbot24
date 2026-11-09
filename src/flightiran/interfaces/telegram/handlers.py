@@ -769,7 +769,8 @@ async def callback_handler(
             await query.edit_message_text(
                 "گزارش مدیریتی به دیتابیس متصل نیست.",
                 reply_markup=main_menu(
-                    language, dependencies.web_app_url, is_admin=True
+                    language, dependencies.web_app_url, is_admin=True,
+                    widgets_enabled=_widget_menu_enabled(update, context),
                 ),
             )
             return
@@ -890,6 +891,7 @@ async def message_handler(
                 _is_private_admin(update, dependencies)
                 if dependencies is not None else False
             ),
+            widgets_enabled=_widget_menu_enabled(update, context),
         ),
     )
 
