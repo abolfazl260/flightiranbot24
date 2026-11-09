@@ -16,7 +16,6 @@ from typing import Awaitable, Callable
 from telegram import Update
 from telegram.ext import ContextTypes
 
-from .keyboards import main_menu
 from .localization import normalize_language
 from .renderers import render_help
 from .widgets import _widget_api
