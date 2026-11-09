@@ -25,89 +25,71 @@ LOGGER = logging.getLogger(__name__)
 
 # Self-contained QuickJS widget. No network, external images, or unsupported form controls.
 FARE_WIDGET_HTML = """<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head><style>
-body{margin:0;padding:12px;color:var(--tg-theme-text-color);font-family:Arial,sans-serif}
-h3{font-size:17px;margin:0 0 5px}
-p{margin:0}
+<html lang="fa" dir="rtl"><head><style>
+body{margin:0;padding:12px;font-family:Arial,sans-serif;color:var(--tg-theme-text-color)}
+h3{font-size:17px;margin:0 0 7px}
 .sub{font-size:12px;color:var(--tg-theme-hint-color)}
-.sort-label{font-size:12px;font-weight:bold;margin-top:13px;color:var(--tg-theme-text-color)}
-.tabs{display:flex;gap:7px;margin:7px 0 12px;padding:4px;border-radius:12px;
+.sort-label{font-size:12px;font-weight:bold;margin:10px 0 5px}
+.tabs{display:flex;gap:6px;padding:4px;border-radius:10px;
 background:var(--tg-theme-secondary-bg-color,#f1f3f5)}
-.tabs button{flex:1;min-width:0;min-height:47px;font-size:12px;font-weight:bold;
-line-height:1.5;padding:8px 4px;margin:0;border:1px solid
-var(--tg-theme-section-separator-color,#b6bdc5);border-radius:9px;
-background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#222)}
+.tabs button{flex:1;font-size:12px;font-weight:bold;padding:10px 5px;
+border:1px solid var(--tg-theme-section-separator-color);
+background:var(--tg-theme-bg-color,#fff);color:var(--tg-theme-text-color,#222);
+border-radius:8px}
 .tabs button.active{background:var(--tg-theme-button-color,#3390ec);
-color:var(--tg-theme-button-text-color,#fff);
-border:2px solid var(--tg-theme-button-color,#3390ec)}
-#fares{margin:6px 0 10px}
-.fare{display:flex;justify-content:space-between;align-items:center;gap:8px;
-padding:9px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
-.route{font-size:13px;max-width:55%}
-.right{text-align:left}
+color:var(--tg-theme-button-text-color,#fff);border:2px solid var(--tg-theme-button-color)}
+#fares{margin:6px 0}
+.fare{display:flex;justify-content:space-between;gap:7px;padding:9px 0;
+border-bottom:1px solid var(--tg-theme-section-separator-color)}
+.route{font-size:12px}
 .price{font-size:13px;font-weight:bold;direction:ltr}
-.drop{font-size:11px;color:var(--tg-theme-link-color);margin-top:3px}
-#refresh{width:100%;margin-top:10px;padding:10px}
-</style></head>
-<body>
+.drop{font-size:11px;color:var(--tg-theme-link-color)}
+#refresh{width:100%;margin-top:9px;padding:10px}
+</style></head><body>
 <h3>قیمت‌های منتخب بلیت</h3>
 <p class="sub">قیمت‌ها به تومان</p>
 <p class="sort-label">مرتب‌سازی بلیت‌ها بر اساس:</p>
-<div class="tabs" role="tablist" aria-label="انتخاب نوع مرتب‌سازی">
+<div class="tabs" role="tablist">
 <button id="cheap" type="button" role="tab" class="active"
-aria-selected="true" aria-pressed="true">✓ ارزان‌ترین بلیت‌ها</button>
-<button id="drops" type="button" role="tab" aria-selected="false"
-aria-pressed="false">بیشترین کاهش قیمت</button>
-</div>
+aria-selected="true">✓ ارزان‌ترین بلیت‌ها</button>
+<button id="drops" type="button" role="tab"
+aria-selected="false">بیشترین کاهش قیمت</button></div>
 <div id="fares" role="tabpanel" aria-labelledby="cheap"></div>
 <p class="sub" id="updated"></p>
 <button id="refresh">تازه‌سازی قیمت‌ها</button>
 <script>
 (function(){
-  var W=window.TelegramWidget;
-  var fares=document.getElementById('fares');
-  var updated=document.getElementById('updated');
-  var button=document.getElementById('refresh');
-  var cheap=document.getElementById('cheap');
-  var drops=document.getElementById('drops');
-  var active='cheap';
-  function parse(value){try{return JSON.parse(value||'{}');}catch(e){return {};}}
-  function fa(value){
-    return String(value).replace(/[0-9]/g,function(c){
-      return '۰۱۲۳۴۵۶۷۸۹'.charAt(c.charCodeAt(0)-48);
-    });
-  }
-  function format(n){return fa(String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'٬'));}
+  var W=window.TelegramWidget,fares=document.getElementById('fares'),
+    updated=document.getElementById('updated'),
+    button=document.getElementById('refresh'),
+    cheap=document.getElementById('cheap'),
+    drops=document.getElementById('drops'),active='cheap';
+  function parse(x){try{return JSON.parse(x||'{}');}catch(e){return {};}}
+  function fa(x){return String(x).replace(/[0-9]/g,function(c){
+    return '۰۱۲۳۴۵۶۷۸۹'.charAt(c.charCodeAt(0)-48);});}
+  function format(n){return fa(String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g,'٬'));}
   function render(){
-    var data=parse(W.publicData), state=parse(W.chatData);
-    fares.textContent='';
-    var items=active==='cheap'?data.items:data.drops;
+    var d=parse(W.publicData),s=parse(W.chatData);
+    var items=active==='cheap'?d.items:d.drops;
     items=Array.isArray(items)?items:[];
-    if(!items.length){
-      fares.textContent=active==='cheap'
-        ? 'در حال حاضر قیمتی برای نمایش وجود ندارد.'
-        : 'هنوز کاهش قیمت با سابقه معتبر ثبت نشده است.';
-    }
+    fares.textContent='';
+    if(!items.length)fares.textContent=active==='cheap'
+      ?'در حال حاضر قیمتی موجود نیست.':'کاهش قیمت معتبر ثبت نشده است.';
     for(var i=0;i<items.length;i++){
-      var fare=items[i];
-      var row=document.createElement('div');row.className='fare';
-      var route=document.createElement('span');route.className='route';
-      route.textContent='از '+fare.o+' به '+fare.d;
-      var right=document.createElement('div');right.className='right';
-      var price=document.createElement('div');price.className='price';
-      price.textContent=format(fare.p);
-      right.appendChild(price);
-      if(typeof fare.x==='number'&&fare.x>0){
+      var f=items[i],row=document.createElement('div');row.className='fare';
+      var name=document.createElement('span');name.className='route';
+      name.textContent='از '+f.o+' به '+f.d;
+      var right=document.createElement('div'),price=document.createElement('div');
+      price.className='price';price.textContent=format(f.p);right.appendChild(price);
+      if(typeof f.x==='number'&&f.x>0){
         var drop=document.createElement('div');drop.className='drop';
-        drop.textContent=fa(fare.x)+'٪ کاهش نسبت به میانگین';
+        drop.textContent=fa(f.x)+'٪ کاهش نسبت به میانگین';
         right.appendChild(drop);
       }
-      row.appendChild(route);row.appendChild(right);fares.appendChild(row);
+      row.appendChild(name);row.appendChild(right);fares.appendChild(row);
     }
-    updated.textContent=data.updated?'آخرین بررسی: '+data.updated:'';
-    button.textContent=state.status==='error'
-      ? 'به‌روزرسانی ناموفق بود • تلاش مجدد' : 'تازه‌سازی قیمت‌ها';
+    updated.textContent=d.updated?'آخرین بررسی: '+d.updated:'';
+    button.textContent=s.status==='error'?'تلاش مجدد':'تازه‌سازی قیمت‌ها';
     button.disabled=false;
   }
   function switchTab(which){
@@ -118,25 +100,15 @@ aria-pressed="false">بیشترین کاهش قیمت</button>
     drops.textContent=which==='drops'?'✓ بیشترین کاهش قیمت':'بیشترین کاهش قیمت';
     cheap.setAttribute('aria-selected',which==='cheap'?'true':'false');
     drops.setAttribute('aria-selected',which==='drops'?'true':'false');
-    cheap.setAttribute('aria-pressed',which==='cheap'?'true':'false');
-    drops.setAttribute('aria-pressed',which==='drops'?'true':'false');
-    fares.setAttribute('aria-labelledby',which);
-    render();
+    fares.setAttribute('aria-labelledby',which);render();
   }
   cheap.addEventListener('click',function(){switchTab('cheap');});
   drops.addEventListener('click',function(){switchTab('drops');});
   button.addEventListener('click',function(){
-    button.disabled=true;
-    button.textContent='در حال تازه‌سازی...';
-    W.request('fare:refresh').then(function(answer){
-      if(answer.result!=='accepted'){
-        button.textContent='درخواست انجام نشد • تلاش مجدد';
-        button.disabled=false;
-      }
-    },function(){
-      button.textContent='خطا در ارتباط • تلاش مجدد';
-      button.disabled=false;
-    });
+    button.disabled=true;button.textContent='در حال تازه‌سازی...';
+    W.request('fare:refresh').then(function(a){
+      if(a.result!=='accepted'){button.disabled=false;button.textContent='تلاش مجدد';}
+    },function(){button.disabled=false;button.textContent='تلاش مجدد';});
   });
   W.onEvent('publicDataChanged',render);
   W.onEvent('chatDataChanged',render);
@@ -144,6 +116,7 @@ aria-pressed="false">بیشترین کاهش قیمت</button>
   W.ready();
 })();
 </script></body></html>"""
+
 
 FARE_WIDGET_HTML = enhance_fare_html(FARE_WIDGET_HTML)
 
