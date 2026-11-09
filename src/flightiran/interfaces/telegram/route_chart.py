@@ -78,6 +78,7 @@ def render_route_chart_html(
     first = samples[0].day
     total_observations = sum(entry.sample_count for entry in samples)
     last_updated = samples[-1].last_captured_at.strftime("%Y-%m-%d %H:%M")
+    trend_note = "تنها یک روز داده موجود است؛ هنوز روند قابل محاسبه نیست. " if len(samples) < 2 else ""
     html = f"""<!DOCTYPE html>
 <html lang="fa" dir="rtl"><head><style>
 body{{margin:0;padding:12px;font-family:Arial,sans-serif;
@@ -110,7 +111,7 @@ stroke-opacity=".13" stroke-dasharray="3,4" fill="none"/>
 <div class="note">اولین روز ثبت: {_fa(first.isoformat())}
 • آخرین ثبت: {_fa(last_updated)} UTC</div>
 <div class="note">روزهای بدون ثبت، نقطه یا خط تخمینی ندارند.
-{"تنها یک روز داده موجود است؛ هنوز روند قابل محاسبه نیست. " if len(samples) < 2 else ""}\nاین نمودار قیمت لحظه‌ای رزرو نیست.</div>
+{trend_note}این نمودار قیمت لحظه‌ای رزرو نیست.</div>
 </body></html>"""
     raw = html.encode("utf-8")
     if len(raw) > 32768 or len(zlib.compress(raw, level=9)) > 4096:
