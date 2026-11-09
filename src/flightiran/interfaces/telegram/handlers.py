@@ -100,6 +100,18 @@ class TelegramDependencies:
     visa_watch_service: VisaWatchService | None = None
 
 
+def _widget_menu_enabled(update: Update, context: object | None) -> bool:
+    """Offer HTML widgets only for Telegram private chats, if context is present."""
+    if context is None:
+        return False
+    bot = getattr(context, "bot", None)
+    chat = getattr(update, "effective_chat", None)
+    return (
+        getattr(bot, "platform", "telegram") != "bale"
+        and getattr(chat, "type", None) == "private"
+    )
+
+
 def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> bool:
     """Require the configured admin's user ID and their private chat ID."""
 
@@ -294,10 +306,7 @@ async def start_handler(
                     language,
                     dependencies.web_app_url,
                     is_admin=_is_private_admin(update, dependencies),
-                    widgets_enabled=(
-                        getattr(context.bot, "platform", "telegram") != "bale"
-                        and getattr(update.effective_chat, "type", None) == "private"
-                    ),
+                    widgets_enabled=_widget_menu_enabled(update, context),
                 ),
             )
     if is_new:
@@ -331,10 +340,7 @@ async def help_handler(
                 language,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
-                    widgets_enabled=(
-                        getattr(context.bot, "platform", "telegram") != "bale"
-                        and getattr(update.effective_chat, "type", None) == "private"
-                    ),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
 
@@ -408,10 +414,7 @@ async def callback_handler(
                 selected,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
-                    widgets_enabled=(
-                        getattr(context.bot, "platform", "telegram") != "bale"
-                        and getattr(update.effective_chat, "type", None) == "private"
-                    ),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
     elif data == "back":
@@ -427,10 +430,7 @@ async def callback_handler(
                 language,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
-                    widgets_enabled=(
-                        getattr(context.bot, "platform", "telegram") != "bale"
-                        and getattr(update.effective_chat, "type", None) == "private"
-                    ),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
     elif (
@@ -450,10 +450,7 @@ async def callback_handler(
                 language,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
-                    widgets_enabled=(
-                        getattr(context.bot, "platform", "telegram") != "bale"
-                        and getattr(update.effective_chat, "type", None) == "private"
-                    ),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
     elif data == "menu:useful":
