@@ -25,6 +25,7 @@ from sqlalchemy import select
 from flightiran.db.engine import Database, create_database
 from flightiran.db.models import VisaRuleIndex
 from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository
+from flightiran.modules.experiences.persistent import SQLiteExperienceService
 from flightiran.webapp.ticket_history import public_history_documents
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
@@ -135,16 +136,19 @@ async def public_visa_passports(database: Database) -> dict[str, dict]:
         or any(len(rules) < 190 for rules in grouped.values())
     ):
         raise ValueError("Visa rules are not fully indexed; refusing partial publication")
-    return {
-        passport: {"passport": passport, "rules": rules}
-        for passport, rules in grouped.items()
-    }
+    return {passport: {"passport": passport, "rules": rules} for passport, rules in grouped.items()}
 
 
 class PublicPublisher:
     def __init__(
-        self, database: Database, origin: str, token: str, checkpoint: Path,
-        client: httpx.AsyncClient, *, max_visa_destinations_per_day: int = 220,
+        self,
+        database: Database,
+        origin: str,
+        token: str,
+        checkpoint: Path,
+        client: httpx.AsyncClient,
+        *,
+        max_visa_destinations_per_day: int = 220,
     ) -> None:
         self.database = database
         self.origin = validate_origin(origin)
@@ -185,7 +189,8 @@ class PublicPublisher:
                 if (
                     doc.get("visa_budget_model") == "passport-v1"
                     and doc.get("visa_budget_day") == self.visa_budget_day
-                    and type(count) is int and count >= 0
+                    and type(count) is int
+                    and count >= 0
                 ):
                     self.visa_published_today = count
                 return doc["fingerprints"]
@@ -197,20 +202,26 @@ class PublicPublisher:
         self.checkpoint.parent.mkdir(parents=True, exist_ok=True)
         staged = self.checkpoint.with_name(self.checkpoint.name + ".tmp")
         staged.write_text(
-            json.dumps({
-                "scope": self.scope,
-                "fingerprints": self.state,
-                "visa_budget_model": "passport-v1",
-                "visa_budget_day": self.visa_budget_day,
-                "visa_published_today": self.visa_published_today,
-            }, ensure_ascii=False, sort_keys=True),
+            json.dumps(
+                {
+                    "scope": self.scope,
+                    "fingerprints": self.state,
+                    "visa_budget_model": "passport-v1",
+                    "visa_budget_day": self.visa_budget_day,
+                    "visa_published_today": self.visa_published_today,
+                },
+                ensure_ascii=False,
+                sort_keys=True,
+            ),
             encoding="utf-8",
         )
         staged.replace(self.checkpoint)
 
-    async def publish(self, key: str, endpoint: str, payload: dict) -> bool:
+    async def publish(
+        self, key: str, endpoint: str, payload: dict, *, content_digest: str | None = None
+    ) -> bool:
         data = encode_public(payload)
-        digest = hashlib.sha256(data).hexdigest()
+        digest = content_digest or hashlib.sha256(data).hexdigest()
         if self.state.get(key) == digest:
             return False
         is_visa = key.startswith("visa:") or key.startswith("visa-passport:")
@@ -221,7 +232,8 @@ class PublicPublisher:
                     LOGGER.warning(
                         "cloudflare_visa_daily_budget_reached day=%s limit=%s; "
                         "remaining visa documents will resume after 00:00 UTC",
-                        self.visa_budget_day, self.max_visa_destinations_per_day,
+                        self.visa_budget_day,
+                        self.max_visa_destinations_per_day,
                     )
                     self._visa_limit_logged_day = self.visa_budget_day
                 return False
@@ -247,6 +259,24 @@ class PublicPublisher:
 
     async def sync_once(self) -> int:
         failed = 0
+        try:
+            generated = datetime.now(timezone.utc).isoformat()
+            records = await SQLiteExperienceService(self.database).public_all()
+            for record in records:
+                await self.publish(
+                    f"experience:{record['id']}",
+                    "internal/v1/experiences/record",
+                    {"generated_at": generated, "record": record},
+                    content_digest=hashlib.sha256(encode_public(record)).hexdigest(),
+                )
+            await self.publish(
+                "experiences-manifest",
+                "internal/v1/experiences/commit",
+                {"generated_at": generated, "ids": [r["id"] for r in records]},
+            )
+        except Exception:
+            LOGGER.exception("cloudflare_experiences_source_unavailable")
+            failed += 1
         jobs: list[tuple[str, str, dict]] = []
         try:
             prices = await PublicTicketPriceFeed(
@@ -261,9 +291,11 @@ class PublicPublisher:
                 SQLiteMz724PriceHistoryRepository(self.database)
             )
             for document in history:
-                route_id = hashlib.sha256(encode_public({
-                    "origin": document["origin"], "destination": document["destination"]
-                })).hexdigest()
+                route_id = hashlib.sha256(
+                    encode_public(
+                        {"origin": document["origin"], "destination": document["destination"]}
+                    )
+                ).hexdigest()
                 jobs.append((f"ticket-history:{route_id}", "internal/v1/tickets/history", document))
         except Exception:
             LOGGER.exception("cloudflare_history_source_unavailable")
@@ -280,11 +312,13 @@ class PublicPublisher:
             for passport, payload in sorted(
                 visa.items(), key=lambda item: (item[0] != "IR", item[0])
             ):
-                jobs.append((
-                    f"visa-passport:{passport}",
-                    f"internal/v1/visa/passport/{passport}",
-                    payload,
-                ))
+                jobs.append(
+                    (
+                        f"visa-passport:{passport}",
+                        f"internal/v1/visa/passport/{passport}",
+                        payload,
+                    )
+                )
         except Exception:
             LOGGER.exception("cloudflare_visa_source_unavailable")
             failed += 1
@@ -310,10 +344,15 @@ async def run(*, once: bool, interval_seconds: int) -> int:
     database = create_database(database_url)
     try:
         async with httpx.AsyncClient(
-            follow_redirects=False, timeout=httpx.Timeout(35),
+            follow_redirects=False,
+            timeout=httpx.Timeout(35),
         ) as client:
             publisher = PublicPublisher(
-                database, origin, token, checkpoint, client,
+                database,
+                origin,
+                token,
+                checkpoint,
+                client,
                 max_visa_destinations_per_day=daily_limit,
             )
             while True:

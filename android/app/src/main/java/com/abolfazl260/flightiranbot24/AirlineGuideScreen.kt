@@ -157,17 +157,7 @@ internal fun AirlineGuideScreen(
                                     }
                                 }
                             }
-                            item { AirlineHeading("تجربه‌های مسافران و امتیازها") }
-                            item {
-                                Text("تجربهٔ شخصی کاربر، نه مقررات رسمی شرکت هواپیمایی یا ارزیابی ایمنی.")
-                                Text("تجربهٔ دارای مجوز انتشار برای این ایرلاین هنوز متصل نشده است.")
-                                Text("تعداد رأی معتبر: " + page.ratingCount)
-                                Text("میانگین و مقایسه تا تعیین حداقل نمونهٔ معتبر نمایش داده نمی‌شود.")
-                                if (page.ratingCount > 0) page.criterionCounts.forEach { (key, count) ->
-                                    Text(AirlineContentParser.criteria.getValue(key) + ": " + count + " رأی")
-                                }
-                                TextButton(onClick = { onLink(BotLinks.SUPPORT) }) { Text("گزارش یا درخواست اصلاح محتوا") }
-                            }
+                            item { ExperiencesPanel("airline:"+ref.id) }
                         }
                     }
                     item { TextButton(onClick = onRetry) { Text("بررسی دوباره اطلاعات") } }

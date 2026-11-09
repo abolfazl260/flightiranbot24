@@ -101,3 +101,11 @@ Telegram `/chart`. The native Canvas and web SVG keep real date gaps; explicit
 empty/single/flat-series states and accessible daily values accompany the graph.
 A public, bounded history API is served directly from SQLite or via the existing
 server-to-D1 publisher. See `TICKET_HISTORY.md` for rollout and rollback.
+
+## Shared experiences and satisfaction (#202)
+Android airport/airline guide panels, Mini App and `/experiences` now read the same
+approved/consented public contract. Native writes use an explicit Telegram handoff;
+Mini App supplies signed identity for submission, status, edit/delete, reports and
+helpful votes. Ratings are actual approved integers; archives have no inferred
+stars. All 51 source reports are preserved separately and withheld by default.
+See `TRAVEL_EXPERIENCES.md` for moderation, permission, propagation and rollback.

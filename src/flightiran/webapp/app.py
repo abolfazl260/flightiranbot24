@@ -15,6 +15,7 @@ from flightiran.config import Settings, load_settings
 from flightiran.db.engine import Database, create_database
 from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository, SQLiteUserRepository
 from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
+from flightiran.webapp.experiences import public_router as experience_public_router
 from flightiran.webapp.mini_api import mini_router
 from flightiran.webapp.ticket_history import PublicTicketHistory
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
@@ -52,6 +53,7 @@ def create_app(
     )
     users = SQLiteUserRepository(activity_database) if activity_database else None
     app.include_router(mini_router(settings, activity_database, public_prices))
+    app.include_router(experience_public_router(activity_database))
     app.mount("/assets", StaticFiles(directory=STATIC_DIR), name="mini-assets")
 
     @app.middleware("http")

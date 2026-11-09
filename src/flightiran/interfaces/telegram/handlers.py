@@ -31,6 +31,7 @@ from flightiran.interfaces.telegram.rich_tickets import (
 )
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
+from flightiran.modules.experiences.persistent import SQLiteExperienceService
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.service import CheapTicketService
 from flightiran.modules.travel_checklist import SQLiteTravelChecklistService
@@ -47,6 +48,7 @@ from .admin_report_rich import (
 )
 from .airport_widget import AirportGuideStore, handle_airport_widget_query, send_airport_widget
 from .checklist_widget import handle_checklist_query, send_checklist_widget
+from .experiences import handle_experience_callback, review_id, show_experiences, start_target
 from .help_widget import PrivateChatMessage, handle_help_widget_query, send_help_widget
 from .keyboards import (
     back_menu,
@@ -106,6 +108,7 @@ class TelegramDependencies:
     visa_sync_service: VisaSyncService | None = None
     visa_catalog: VisaCatalogService | None = None
     visa_watch_service: VisaWatchService | None = None
+    experience_service: SQLiteExperienceService | None = None
 
 
 def _airport_store(dependencies: TelegramDependencies) -> AirportGuideStore | None:
@@ -280,7 +283,11 @@ async def start_handler(
     entrypoint = args[0] if args else ""
     visa_route = parse_visa_start_payload(entrypoint)
     if update.message:
-        if entrypoint == "visa_widget":
+        if start_target(entrypoint) is not None:
+            await show_experiences(update.message, dependencies.experience_service,
+                                   dependencies.web_app_url, target=start_target(entrypoint),
+                                   review=review_id(entrypoint))
+        elif entrypoint == "visa_widget":
             opened = False
             if _widget_menu_enabled(update, context):
                 opened = await send_visa_widget(
@@ -428,6 +435,13 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data.startswith("xp:"):
+        await handle_experience_callback(query, dependencies.experience_service)
+        return
+    if data == "menu:experiences":
+        await show_experiences(query.message, dependencies.experience_service,
+                               dependencies.web_app_url)
+        return
     if data == "menu:help_widget" and _widget_menu_enabled(update, context):
         await dependencies.audit.record("user.help", user_id=user_id)
         await send_help_widget(
@@ -1239,10 +1253,21 @@ async def _all_widget_queries(
         await widget_query_handler(update, context, dependencies.cheap_ticket_service)
 
 
+async def experiences_command_handler(update, context, dependencies):
+    if update.message is None:
+        return
+    args = getattr(context, "args", None) or []
+    await show_experiences(update.message, dependencies.experience_service,
+                           dependencies.web_app_url, target=args[0] if args else "")
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
         TypeHandler(Update, lambda u, c: user_activity_handler(u, c, dependencies)), group=1
+    )
+    application.add_handler(
+        CommandHandler("experiences", lambda u,c: experiences_command_handler(u,c,dependencies))
     )
     application.add_handler(
         CommandHandler("visa", lambda u, c: visa_handler(u, c, dependencies))

@@ -28,6 +28,7 @@ class Experience:
 
 
 class ExperienceRepository:
+    """Legacy in-memory adapter; production interfaces use SQLiteExperienceService."""
     def __init__(self) -> None:
         self._items: list[Experience] = []
         self._next_id = 1

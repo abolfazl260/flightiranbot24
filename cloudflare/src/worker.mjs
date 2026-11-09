@@ -1,3 +1,4 @@
+import {experienceRead, importExperience} from "./experiences.mjs";
 import {publicHistory, publishHistory} from "./ticket_history.mjs";
 import { miniRoute } from "./mini.mjs";
 import { getIranFidsBoard } from "./iran_fids.mjs";
@@ -123,6 +124,8 @@ function validatedVisaPassport(data, passport) {
 }
 export async function handleRequest(request, env) {
   const url = new URL(request.url), path = url.pathname;
+  const experiences = await experienceRead(request,env);
+  if (experiences) return experiences;
   const history = await publicHistory(request, env);
   if (history) return history;
   const mini = await miniRoute(request, env, authorized);
@@ -170,6 +173,10 @@ export async function handleRequest(request, env) {
     if (!await authorized(request, env)) return bad(401, "Unauthorized");
     let payload;
     try { payload = await bodyJson(request); } catch { return bad(400, "Invalid JSON payload"); }
+    if (["/internal/v1/experiences/record","/internal/v1/experiences/commit"].includes(path)) {
+      if (!env.PUBLIC_DB) return bad(503,"Public experiences unavailable");
+      return importExperience(payload,env.PUBLIC_DB,path.endsWith("/commit"));
+    }
     if (path === "/internal/v1/tickets/history") {
       if (!env.PUBLIC_DB) return bad(503,"History unavailable");
       return publishHistory(payload,env.PUBLIC_DB);

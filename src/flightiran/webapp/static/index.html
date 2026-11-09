@@ -9,7 +9,7 @@
   <title>ادورتیو | دستیار سفر</title>
   <link rel="stylesheet" href="/assets/mini.css?v=6">
   <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script type="module" src="/assets/mini.js?v=7"></script>
+  <script type="module" src="/assets/mini.js?v=8"></script>
 </head>
 <body>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -70,6 +70,7 @@
         <button type="button" class="notice-card" data-go="fids"><strong>اطلاعات پرواز ایران</strong><small>ورودی، خروجی و سایت رسمی</small></button>
         <button type="button" class="notice-card" data-link="bot"><strong>دستیار تلگرام</strong><small>باز کردن گفت‌وگوی ربات</small></button>
         <button type="button" class="notice-card" data-go="privacy"><strong>حریم خصوصی و مدیریت داده</strong></button>
+        <button type="button" class="notice-card" data-go="experiences"><strong>تجربه‌ها و رضایت مسافران</strong><small>متن‌های منتشرشده و امتیازهای واقعی</small></button>
         <div class="home-help"><span>برای رزرو یا پیگیری سفر کمک می‌خواهید؟</span><button type="button" class="inline-link" data-link="support">ارتباط با پشتیبانی <svg class="symbol"><use href="#i-external"></use></svg></button></div>
       </section>
 
@@ -89,6 +90,9 @@
         <p class="footnote">قیمت‌ها به‌معنای موجودی قطعی یا رزرو تضمین‌شده نیستند. نرخ را قبل از پرداخت با پشتیبانی بررسی کنید.</p>
       </section>
 
+      <section class="screen" id="screen-experiences" data-screen="experiences" hidden>
+        <h1>تجربه‌ها و رضایت مسافران</h1><div id="experiences-view"></div>
+      </section>
       <section class="screen" id="screen-visa" data-screen="visa" aria-labelledby="visa-heading" hidden>
         <div class="page-title"><span class="page-icon aqua"><svg class="symbol"><use href="#i-passport"></use></svg></span><div><h1 id="visa-heading">راهنمای ویزا و ورود</h1><p>بر اساس گذرنامه و کشور مقصد</p></div></div>
         <div class="field"><label for="passport-search">جست‌وجوی کشور گذرنامه</label><input id="passport-search" type="search" placeholder="نام کشور یا کد" autocomplete="off"></div>

@@ -279,6 +279,7 @@ internal fun AirportGuideScreen(
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
+                    item { ExperiencesPanel("airport:"+page.iata) }
                     items(page.sections, key = { it.id }) { section ->
                         AirportSectionCard(
                             section = section,
@@ -647,14 +648,7 @@ private fun AirportBlockView(block: AirportContentBlock, onLink: (String) -> Uni
             )
         }
         is AirportContentBlock.Experience -> {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(block.text, style = MaterialTheme.typography.bodyMedium)
-                Text(
-                    "امتیاز " + block.rating + " از ۵ · تاریخ مراجعه " + block.visitDate,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+            Text("تجربه‌های دارای مجوز انتشار در بخش مشترک تجربه‌ها قابل مشاهده‌اند.")
         }
     }
 }

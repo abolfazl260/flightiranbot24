@@ -12,7 +12,7 @@ const MAX_JOB_AGE_MS = 90_000;
 const MAX_RESULT_LENGTH = 131_072;
 // The result envelope adds only a small amount of JSON framing around the body.
 const MAX_RESULT_ENVELOPE_BYTES = MAX_RESULT_LENGTH + 1024;
-const READ_OPERATIONS = new Set(["bootstrap", "alerts", "useful"]);
+const READ_OPERATIONS = new Set(["bootstrap", "alerts", "useful", "xp_mine"]);
 const error = (status, message) => Response.json({error:message}, {
   status, headers: {"Cache-Control":"no-store", "X-Content-Type-Options":"nosniff"}
 });
@@ -100,9 +100,32 @@ async function miniJsonBody(request, maxBytes = MAX_JSON_REQUEST_BYTES) {
 }
 function validOperation(path,method,payload) {
   if (method==="GET") {
+    if (path==="/api/mini/experiences/mine") {
+      const offset=payload?.offset||0;
+      if(!Number.isInteger(offset)||offset<0||offset>10000)return null;
+      return {operation:"xp_mine",payload:{offset}};
+    }
     if (path==="/api/mini/bootstrap") return {operation:"bootstrap",payload:{}};
     if (path==="/api/mini/useful") return {operation:"useful",payload:{}};
     if (path==="/api/mini/alerts") return {operation:"alerts",payload:{}};
+    return null;
+  }
+  const xp=/^\/api\/mini\/experiences(?:\/(\d{1,12})(?:\/(vote|report))?)?$/.exec(path);
+  if(xp){
+    const id=xp[1]?Number(xp[1]):null;
+    if(method==='DELETE'&&id&&!xp[2])return {operation:'xp_delete',payload:{id}};
+    if(method==='POST'&&id&&xp[2]==='vote'&&typeof payload?.helpful==='boolean')return {operation:'xp_vote',payload:{id,helpful:payload.helpful}};
+    if(method==='POST'&&id&&xp[2]==='report'&&['spam','privacy','abuse','inaccurate','other'].includes(payload?.reason))return {operation:'xp_report',payload:{id,reason:payload.reason}};
+    if(((method==='POST'&&!id)||(method==='PATCH'&&id&&!xp[2]))&&
+       typeof payload?.body==='string'&&payload.body.length>=20&&payload.body.length<=1500&&
+       Array.isArray(payload.targets)&&payload.targets.length>=1&&payload.targets.length<=10&&
+       payload.targets.every(t=>typeof t==='string'&&t.length<=128)&&typeof payload.consent==='boolean'&&
+       (payload.rating==null||Number.isInteger(payload.rating)&&payload.rating>=1&&payload.rating<=5)){
+      return {operation:id?'xp_edit':'xp_create',payload:{...(id?{id}:{}),body:payload.body,
+        targets:payload.targets,consent:payload.consent,rating:payload.rating??null,
+        criteria:payload.criteria||{},display_name:safeText(payload.display_name,80)||'مسافر',
+        travel_date:payload.travel_date||null}};
+    }
     return null;
   }
   if (method==="POST" && path==="/api/mini/passport") {
@@ -194,6 +217,7 @@ async function enqueue(request,user,env,path) {
     payload=await miniJsonBody(request);
     if (!payload) return error(400,"Invalid JSON payload");
   }
+  if(request.method==="GET"&&path==="/api/mini/experiences/mine")payload={offset:Number(new URL(request.url).searchParams.get("offset")||0)};
   const spec=validOperation(path,request.method,payload);
   if (!spec) return error(422,"Invalid action or parameters");
   const now=Date.now();
@@ -223,7 +247,7 @@ async function internalMini(request,env,path,authorized) {
       "SELECT id,telegram_id,user_json,operation,payload_json,created_at_ms "+
       "FROM telegram_mini_jobs WHERE created_at_ms>? AND "+
       "(status='pending' OR (status='leased' AND lease_until_ms<? AND attempts<2 "+
-      "AND operation IN ('bootstrap','alerts','useful'))) "+
+      "AND operation IN ('bootstrap','alerts','useful','xp_mine'))) "+
       "ORDER BY created_at_ms LIMIT 8"
     ).bind(now-MAX_JOB_AGE_MS,now).all();
     const jobs=[];
@@ -231,7 +255,7 @@ async function internalMini(request,env,path,authorized) {
       const leased=await env.PUBLIC_DB.prepare(
         "UPDATE telegram_mini_jobs SET status='leased',lease_until_ms=?,attempts=attempts+1 "+
         "WHERE id=? AND (status='pending' OR (status='leased' AND lease_until_ms<? "+
-        "AND attempts<2 AND operation IN ('bootstrap','alerts','useful')))"
+        "AND attempts<2 AND operation IN ('bootstrap','alerts','useful','xp_mine')))"
       ).bind(now+25_000,row.id,now).run();
       if (leased?.meta?.changes===1) jobs.push({
         id:row.id,telegram_id:row.telegram_id,
@@ -251,6 +275,11 @@ async function internalMini(request,env,path,authorized) {
     const serialized=JSON.stringify(payload.body);
     if (encoder.encode(serialized).length>MAX_RESULT_LENGTH)
       return error(413,"Result too large");
+    if(status===200&&payload.body.experience_mutation===true){
+      const modified=Date.parse(payload.body.modified_at);
+      if(!Number.isFinite(modified)||modified>Date.now()+300000)return error(422,"Invalid mutation clock");
+      await env.PUBLIC_DB.prepare("INSERT INTO experience_projection_meta(id,generated_ms,invalid_after_ms,expires_ms) VALUES(1,0,?,0) ON CONFLICT(id) DO UPDATE SET invalid_after_ms=MAX(invalid_after_ms,excluded.invalid_after_ms),expires_ms=0").bind(modified).run();
+    }
     const updated=await env.PUBLIC_DB.prepare(
       "UPDATE telegram_mini_jobs SET status='complete',result_status=?,result_json=? "+
       "WHERE id=? AND status='leased' AND created_at_ms>?"
@@ -277,6 +306,7 @@ async function serveAsset(request,env,path) {
     "/assets/mobile-parity.mjs":"/mobile-parity.mjs",
     "/assets/ticket-ranking.mjs":"/ticket-ranking.mjs",
     "/assets/ticket-history.mjs":"/ticket-history.mjs",
+    "/assets/experience-view.mjs":"/experience-view.mjs",
     "/assets/advertio-brand.webp":"/advertio-brand.webp"
   }[path];
   if (!target) return error(404,"Not found");
@@ -319,7 +349,7 @@ export async function miniRoute(request,env,authorized) {
     return enqueue(request,user,env,path);
   }
   if (["/","/mini","/mini/","/assets/mini.js","/assets/mini.css",
-    "/assets/travel-catalog.mjs","/assets/guide-catalog.mjs","/assets/guide-view.mjs","/assets/mobile-parity.mjs","/assets/ticket-ranking.mjs","/assets/ticket-history.mjs","/assets/advertio-brand.webp"].includes(path))
+    "/assets/travel-catalog.mjs","/assets/guide-catalog.mjs","/assets/guide-view.mjs","/assets/mobile-parity.mjs","/assets/ticket-ranking.mjs","/assets/ticket-history.mjs","/assets/experience-view.mjs","/assets/advertio-brand.webp"].includes(path))
     return serveAsset(request,env,path);
   return null;
 }
