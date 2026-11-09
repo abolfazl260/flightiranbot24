@@ -32,11 +32,13 @@ from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.service import CheapTicketService
+from flightiran.modules.travel_checklist import SQLiteTravelChecklistService
 from flightiran.modules.useful_content import UsefulContentCatalog, default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.visa.watch import VisaWatchService
 
+from .checklist_widget import handle_checklist_query, send_checklist_widget
 from .admin_report_rich import (
     render_admin_report_fallback,
     render_rich_admin_report,
@@ -91,6 +93,7 @@ class TelegramDependencies:
     airport_catalog: AirportCatalog | None = None
     useful_catalog: UsefulContentCatalog | None = None
     cheap_ticket_service: CheapTicketService | None = None
+    checklist_service: SQLiteTravelChecklistService | None = None
     price_alert_service: PriceAlertService | None = None
     ticket_support_username: str = DEFAULT_SUPPORT_USERNAME
     admin_chat_id: int | None = 106056586
@@ -364,6 +367,15 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:checklist":
+        if getattr(context.bot, "platform", "telegram") == "bale":
+            await query.message.reply_text("چک‌لیست تعاملی فقط در تلگرام فعال است.")
+        else:
+            await dependencies.audit.record("checklist.opened", user_id=user_id)
+            await send_checklist_widget(
+                query.message, context.bot, dependencies.checklist_service
+            )
+        return
     if data == "menu:fare_widget":
         if getattr(context.bot, "platform", "telegram") == "bale":
             await query.message.reply_text("ویجت HTML فعلاً فقط در تلگرام فعال است.")
@@ -981,6 +993,31 @@ async def fare_widget_command_handler(
     await send_fare_widget(update.message, context.bot, dependencies.cheap_ticket_service)
 
 
+async def checklist_command_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    """Open the user's saved private travel checklist without a Mini App."""
+    if update.message is None:
+        return
+    if getattr(context.bot, "platform", "telegram") == "bale":
+        await update.message.reply_text("چک‌لیست تعاملی فقط در تلگرام فعال است.")
+        return
+    user_id, _language = await _user_language(update, dependencies)
+    await dependencies.audit.record("checklist.opened", user_id=user_id)
+    await send_checklist_widget(update.message, context.bot, dependencies.checklist_service)
+
+
+async def _all_widget_queries(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    raw = update.api_kwargs.get("widget_query")
+    action = raw.get("data") if isinstance(raw, dict) else None
+    if isinstance(action, str) and action.startswith("cl:"):
+        await handle_checklist_query(update, context, dependencies.checklist_service)
+    else:
+        await widget_query_handler(update, context, dependencies.cheap_ticket_service)
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
@@ -1007,11 +1044,16 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
         application.add_handler(
             CommandHandler("fares", lambda u, c: fare_widget_command_handler(u, c, dependencies))
         )
+        application.add_handler(
+            CommandHandler(
+                "checklist", lambda u, c: checklist_command_handler(u, c, dependencies)
+            )
+        )
         # PTB <=22 preserves unknown Bot API fields under Update.api_kwargs.
         application.add_handler(
             TypeHandler(
                 Update,
-                lambda u, c: widget_query_handler(u, c, dependencies.cheap_ticket_service),
+                lambda u, c: _all_widget_queries(u, c, dependencies),
             ),
             group=2,
         )
