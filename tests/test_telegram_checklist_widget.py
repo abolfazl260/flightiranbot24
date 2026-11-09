@@ -76,11 +76,11 @@ async def test_persistence_isolated_by_user_and_trip_mode_after_restart(tmp_path
     service = SQLiteTravelChecklistService(db)
     assert service is not None
     a = await service.get(123)
-    assert a.progress() == (0, 11)
+    assert a.progress() == (0, 13)
     first = await service.apply(123, "toggle", "d", 0)
-    assert first.progress() == (1, 11)
+    assert first.progress() == (1, 13)
     foreign = await service.apply(123, "toggle", "i", 3)
-    assert foreign.progress() == (1, 15)
+    assert foreign.progress() == (1, 17)
     assert foreign.domestic & 1
     await service.apply(456, "toggle", "i", 4)
     assert (await service.get(456)).progress() == (1, 15)
@@ -108,7 +108,7 @@ async def test_checklist_changes_are_atomic_across_concurrent_widget_taps(tmp_pa
         service.apply(88, "toggle", "d", 1),
     )
     state = await service.get(88)
-    assert state.progress() == (2, 11)
+    assert state.progress() == (2, 13)
     assert state.revision == 2
     await db.close()
 
