@@ -90,9 +90,17 @@ internal fun ExperiencesPanel(initialTarget: String,compact: Boolean=true){
                     TextButton(onClick={context.startActivity(Intent(Intent.ACTION_VIEW,Uri.parse(BotLinks.BOT+"?start=xp_review_"+row.id)))}){Text("رأی مفید بودن / گزارش با هویت تلگرام")}
                 }}
             }
-            if(!compact){Row{
-                if(offset>0)TextButton(onClick={offset=(offset-10).coerceAtLeast(0)}){Text("قبلی")}
-                data.next?.let{next->TextButton(onClick={offset=next}){Text("بعدی")}}
+            if (!compact) {
+                Row {
+                    if (offset > 0) {
+                        TextButton(onClick = { offset = (offset - 10).coerceAtLeast(0) }) {
+                            Text("قبلی")
+                        }
+                    }
+                    data.next?.let { next ->
+                        TextButton(onClick = { offset = next }) { Text("بعدی") }
+                    }
+                }
             }
         }
         TextButton(onClick={reload++}){Text("تازه‌سازی")}
