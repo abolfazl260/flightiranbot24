@@ -83,7 +83,7 @@ async def test_persistence_isolated_by_user_and_trip_mode_after_restart(tmp_path
     assert foreign.progress() == (1, 17)
     assert foreign.domestic & 1
     await service.apply(456, "toggle", "i", 4)
-    assert (await service.get(456)).progress() == (1, 15)
+    assert (await service.get(456)).progress() == (1, 17)
     assert foreign.revision == 2
     await db.close()
 
@@ -132,7 +132,7 @@ async def test_invalid_task_or_mode_does_not_mutate(tmp_path):
 @pytest.mark.asyncio
 async def test_open_widget_with_saved_state_and_graceful_unsupported_client():
     saved = SimpleNamespace(as_json=lambda: '{"m":"i","d":1,"i":8,"v":3}',
-                            progress=lambda: (1, 15))
+                            progress=lambda: (1, 17))
     service = SimpleNamespace(get=AsyncMock(return_value=saved))
     bot = FakeBot()
     message = FakeMessage()
@@ -146,7 +146,7 @@ async def test_open_widget_with_saved_state_and_graceful_unsupported_client():
     fail = FakeBot("sendWidget")
     assert not await send_checklist_widget(message, fail, service)
     message.reply_text.assert_awaited_once()
-    assert "1 از 15" in message.reply_text.await_args.args[0]
+    assert "1 از 17" in message.reply_text.await_args.args[0]
 
 
 @pytest.mark.asyncio
