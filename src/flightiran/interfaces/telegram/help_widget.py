@@ -108,10 +108,13 @@ WORDS = {
             "visa_list": "Countries by passport", "cancel": "Cancel current action",
         },
         "faqs": [
-            ["Are fares guaranteed?", "No. Final pricing and availability must be confirmed before booking."],
-            ["How can I find an airport?", "Open Airports or use /airports and choose the airport."],
+            ["Are fares guaranteed?",
+             "No. Final pricing and availability must be confirmed before booking."],
+            ["How can I find an airport?",
+             "Open Airports or use /airports and choose the airport."],
             ["How do I track a fare decrease?", "Open Price alerts or send /alerts."],
-            ["Is the Mini App required?", "No. Several guides and interactive tools work within a private Telegram chat."],
+            ["Is the Mini App required?",
+             "No. Several guides and interactive tools work within a private Telegram chat."],
         ],
     },
     "ar": {
