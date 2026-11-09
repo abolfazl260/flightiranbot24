@@ -3,7 +3,7 @@
  */
 import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
 
-import {rankTicketFares, validDropPercent} from "./ticket-ranking.mjs";
+import {rankTicketFares, validDropPercent, pricesAreStale} from "./ticket-ranking.mjs";
 import {createGuideView} from "./guide-view.mjs";
 import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from "./mobile-parity.mjs";
 
@@ -18,7 +18,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     return name && name !== code ? name : (fallback || code);
   }
   const state = {
-    initData: "", bootstrap: null, prices: null, origin: "", ticketSort: "cheap",
+    initData: "", bootstrap: null, prices: null, origin: "", ticketSort: "cheap", pricesRequest: 0,
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
     visaMode: "live", snapshot: null,
     websites: null, websitesFetchedAt: 0, websitesRequest: null,
@@ -213,9 +213,14 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
   }
 
   async function loadPrices() {
+    const sequence = ++state.pricesRequest;
     $("price-status").textContent = "در حال دریافت قیمت‌ها…";
     try {
-      state.prices = await request("/api/v1/tickets/prices");
+      const prices = await request("/api/v1/tickets/prices");
+      if (sequence !== state.pricesRequest) return;
+      if (prices.currency !== "TOMAN" || !Array.isArray(prices.routes) ||
+          !Number.isFinite(Date.parse(prices.observed_at))) throw new Error("invalid prices");
+      state.prices = {...prices, stale: pricesAreStale(prices)};
       const routes = state.prices.routes || [];
       if (!routes.some(r => r.origin === state.origin)) state.origin = routes[0]?.origin || "";
       const select = $("origin-select");
@@ -232,6 +237,14 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
       renderTickets();
       renderHomePrice();
     } catch {
+      if (sequence !== state.pricesRequest) return;
+      if (state.prices) {
+        state.prices.stale = true;
+        $("price-status").classList.add("warning");
+        $("price-status").textContent = "تازه‌سازی ناموفق؛ آخرین دادهٔ ذخیره‌شده از " +
+          dateLabel(state.prices.observed_at) + "؛ پیش از رزرو قیمت را تأیید کنید.";
+        renderTickets(); return;
+      }
       state.prices = null;
       $("price-status").classList.add("warning");
       $("price-status").textContent = "داده قیمت در حال حاضر در دسترس نیست.";

@@ -85,3 +85,12 @@ positive finite historical mean, at least three samples and a current price belo
 that mean; the displayed percentage is recomputed, never trusted from change_percent.
 Cards retain booking/support and Mini App price alerts. Recorded timestamps and
 stale labels remain visible; no inventory or booking guarantee is implied.
+
+## Shared ranking contract (#199)
+All three clients are covered by the same versioned JSON fixture, including
+invalid means, insufficient samples, price increases, ties and half-up decimals.
+See `TICKET_RANKING.md` for precision, filtering, source-cohort and freshness rules.
+The public API adds an exact mean alongside its compatible rounded field. Telegram
+reads the stored cohort; Android and Mini App keep stale last-good rates on failed
+refresh rather than presenting them as current. Result counts vary by interface,
+while the order of common routes is identical.

@@ -68,9 +68,10 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
                             ?.asDouble?.takeIf { it.isFinite() }
                     }.getOrNull()
                     val price = numeric("price_toman")
-                        ?.takeIf { it > 0.0 && it <= 9007199254740991.0 && it % 1.0 == 0.0 }
+                        ?.takeIf { it > 0.0 && it <= 1000000000000.0 && it % 1.0 == 0.0 }
                         ?.toLong() ?: return@runCatching null
-                    val average = numeric("average_price_toman")?.takeIf { it > 0.0 }
+                    val average = (if (item.has("historical_average_toman")) numeric("historical_average_toman")
+                        else numeric("average_price_toman"))?.takeIf { it > 0.0 && it <= 1e12 }
                     val samples = numeric("average_sample_count")
                         ?.takeIf { it >= 0 && it % 1.0 == 0.0 && it <= Int.MAX_VALUE }
                         ?.toInt() ?: 0

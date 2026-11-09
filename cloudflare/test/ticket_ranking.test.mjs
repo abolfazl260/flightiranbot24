@@ -1,5 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {pricesAreStale} from '../../src/flightiran/webapp/static/ticket-ranking.mjs';
 import {rankTicketFares,validDropPercent} from '../../src/flightiran/webapp/static/ticket-ranking.mjs';
 const fare=(name,p,a,n=3)=>({name,price_toman:p,average_price_toman:a,average_sample_count:n,change_percent:-99});
 test('verified drops reject missing, invalid, low sample and increasing prices',()=>{
@@ -17,4 +19,21 @@ test('tabs preserve all valid cheapest rates, filter first and break equal drops
  assert.deepEqual(ids(rankTicketFares(routes)),['B/Z','A/X','B/X','A/D','B/Y']);
  assert.deepEqual(ids(rankTicketFares(routes,{mode:'drops',origin:'B',search:'x'})),['B/X']);
  assert.deepEqual(rankTicketFares(routes,{mode:'drops',search:'missing'}),[]);
+});
+
+test('shared fixture matches all three platforms including top N, stable identities and half-up tenths',()=>{
+ const fixture=JSON.parse(fs.readFileSync(new URL('../../docs/fixtures/ticket-ranking-v1.json',import.meta.url)));
+ const ids=rows=>rows.map(f=>f.origin+'/'+f.name);
+ const drops=rankTicketFares(fixture.routes,{mode:'drops'});
+ assert.deepEqual(ids(drops),fixture.expected_drops);
+ assert.deepEqual(drops.map(validDropPercent),fixture.expected_percentages);
+ assert.deepEqual(ids(rankTicketFares(fixture.routes)),fixture.expected_cheap);
+ assert.equal(validDropPercent({...fare('a',79,80),historical_average_toman:80.25}),1.6);
+});
+test('freshness fails conservatively for expired, future, missing and explicit stale data',()=>{
+ const now=Date.now(),p={stale:false,observed_at:new Date(now).toISOString()};
+ assert.equal(pricesAreStale(p,now),false);
+ for(const q of [{...p,stale:true},{...p,observed_at:'bad'},
+  {...p,observed_at:new Date(now-10800001).toISOString()},
+  {...p,observed_at:new Date(now+300001).toISOString()}]) assert.equal(pricesAreStale(q,now),true);
 });

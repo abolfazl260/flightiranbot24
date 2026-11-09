@@ -97,6 +97,7 @@ android {
     }
 
     sourceSets {
+        test.resources.srcDir('../../docs/fixtures')
         main {
             // Preserve the offline airport catalogue bundled in the Java version.
             assets.srcDir('../../src/flightiran/modules/airport/data')
