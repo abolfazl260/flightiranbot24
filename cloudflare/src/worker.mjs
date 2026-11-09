@@ -66,10 +66,13 @@ function validatedPrices(data) {
       if (!name || !price) return null;
       const avg = fare.average_price_toman == null ? null : positive(fare.average_price_toman);
       if (fare.average_price_toman != null && avg == null) return null;
+      const exact = Object.hasOwn(fare,"historical_average_toman")
+        ? (fare.historical_average_toman == null ? null : positive(fare.historical_average_toman)) : avg;
+      if (fare.historical_average_toman != null && exact == null) return null;
       const samples = fare.average_sample_count == null ? 0 : fare.average_sample_count;
       if (!Number.isSafeInteger(samples) || samples < 0 || samples > 100000) return null;
       destinations.push({
-        name, price_toman: price, average_price_toman: avg,
+        name, price_toman: price, average_price_toman: avg, historical_average_toman: exact,
         change_percent: avg === null || samples === 0 ? null : Math.round(1000 * (price - avg) / avg) / 10,
         average_sample_count: samples
       });

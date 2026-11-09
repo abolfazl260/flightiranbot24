@@ -8,13 +8,14 @@ from __future__ import annotations
 
 import json
 import logging
-import math
 import zlib
 from datetime import datetime, timezone
 
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicketRoute
+from flightiran.modules.tickets.ranking import valid_drop_percent, valid_price
 from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
 
 LOGGER = logging.getLogger(__name__)
@@ -101,7 +102,7 @@ aria-pressed="false">بیشترین کاهش قیمت</button>
       }
       row.appendChild(route);row.appendChild(right);fares.appendChild(row);
     }
-    updated.textContent=data.updated?'آخرین بررسی: '+data.updated:'';
+    updated.textContent=data.updated?'زمان ثبت / بررسی: '+data.updated:'';
     button.textContent=state.status==='error'
       ? 'به‌روزرسانی ناموفق بود • تلاش مجدد' : 'تازه‌سازی قیمت‌ها';
     button.disabled=false;
@@ -161,34 +162,29 @@ def fare_widget_data(routes: list, *, now: datetime | None = None) -> str:
                     if destination.price_value_toman is not None
                     else parse_toman_price(destination.price_toman)
                 )
-                if not isinstance(price, int) or price <= 0:
+                if not valid_price(price):
                     continue
                 item: dict[str, str | int | float] = {
-                    "o": route.origin[:30],
-                    "d": destination.name[:30],
+                    "o": route.origin,
+                    "d": destination.name,
                     "p": price,
                 }
                 average = destination.average_price_toman
                 count = destination.average_sample_count
-                if (
-                    isinstance(average, (float, int))
-                    and math.isfinite(average)
-                    and average > price
-                    and isinstance(count, int)
-                    and count >= 3
-                ):
-                    percentage = round((average - price) * 100 / average, 1)
-                    if percentage > 0:
-                        item["x"] = percentage
+                percentage = valid_drop_percent(price, average, count)
+                if percentage is not None:
+                    item["x"] = percentage
                 values.append(item)
             except (ValueError, TypeError, AttributeError):
                 continue
 
-    cheapest = sorted(values, key=lambda item: item["p"])[:5]
+    cheapest = sorted(values, key=lambda item: (item["p"], item["o"], item["d"]))[:5]
     reductions = sorted(
         (item for item in values if "x" in item),
-        key=lambda item: (-item["x"], item["p"]),
+        key=lambda item: (-item["x"], item["p"], item["o"], item["d"]),
     )[:5]
+    for item in values:
+        item["o"], item["d"] = item["o"][:30], item["d"][:30]
     data = {
         "items": cheapest,
         "drops": reductions,
@@ -213,6 +209,38 @@ def fare_widget_data(routes: list, *, now: datetime | None = None) -> str:
             raise ValueError("Fare widget metadata exceeds Telegram size limit")
 
 
+async def _recorded_widget_data(service: CheapTicketService) -> str:
+    history = getattr(service, "price_history", None)
+    if history is None or not callable(getattr(history, "get_latest_prices", None)):
+        # Legacy adapters without a stored feed retain their existing behavior.
+        return fare_widget_data(await service.routes())
+    batch = await history.get_latest_prices()
+    if batch is None or not batch.quotes:
+        raise ValueError("No stored fare snapshot")
+    origins: dict[str, list[CheapTicketDestination]] = {}
+    for quote in batch.quotes:
+        origins.setdefault(quote.origin, []).append(CheapTicketDestination(
+            name=quote.destination, price_toman=f"{quote.price_toman} تومان",
+            price_value_toman=quote.price_toman,
+            average_price_toman=quote.average_price_toman,
+            average_sample_count=quote.sample_count,
+        ))
+    routes = [CheapTicketRoute(city, tuple(fares), "") for city, fares in origins.items()]
+    raw = json.loads(fare_widget_data(routes, now=batch.captured_at))
+    age = (datetime.now(timezone.utc) - batch.captured_at).total_seconds()
+    if age > 10800:
+        raw["updated"] += " • داده قدیمی؛ قیمت رزرو را تأیید کنید"
+    # Reapply the size limit after adding freshness text.
+    while True:
+        result = json.dumps(raw, ensure_ascii=False, separators=(",", ":"))
+        if len(result.encode()) <= 1024:
+            return result
+        key = "drops" if len(raw["drops"]) >= len(raw["items"]) else "items"
+        if not raw[key]:
+            raise ValueError("Oversized widget metadata")
+        raw[key].pop()
+
+
 async def _widget_api(bot: object, method: str, data: dict) -> object:
     """Use PTB's existing authenticated HTTP transport for new Bot API methods."""
     return await bot._post(method, data)
@@ -235,8 +263,7 @@ async def send_fare_widget(message: object, bot: object,
         await message.reply_text("سرویس قیمت بلیت در حال حاضر فعال نیست.")
         return False
     try:
-        routes = await service.routes()
-        state = fare_widget_data(routes)
+        state = await _recorded_widget_data(service)
     except Exception as exc:
         LOGGER.warning("widget_fares_fetch_failed type=%s", type(exc).__name__)
         await message.reply_text("دریافت قیمت‌ها فعلاً ممکن نیست؛ بعداً دوباره تلاش کنید.")
@@ -306,8 +333,7 @@ async def widget_query_handler(
     # Answer immediately. Slow provider requests must not block the 15s deadline.
     await answer("accepted")
     try:
-        routes = await service.routes()
-        data = fare_widget_data(routes)
+        data = await _recorded_widget_data(service)
     except Exception as exc:
         LOGGER.warning("widget_refresh_fetch_failed type=%s", type(exc).__name__)
         try:

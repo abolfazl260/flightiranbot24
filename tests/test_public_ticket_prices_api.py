@@ -54,6 +54,7 @@ async def test_api_reads_latest_hourly_database_prices_and_real_average(tmp_path
         "name": "کیش",
         "price_toman": 4_000_000,
         "average_price_toman": 4_500_000,
+        "historical_average_toman": 4_500_000,
         "change_percent": -11.1,
         "average_sample_count": 2,
     }

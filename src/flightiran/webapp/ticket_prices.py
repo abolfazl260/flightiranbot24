@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import math
 from datetime import datetime, timezone
 from time import monotonic
 from typing import Protocol
@@ -80,11 +81,14 @@ class PublicTicketPriceFeed:
             if len(destinations) >= 150:
                 continue
             avg = item.average_price_toman
-            valid_average = avg is not None and avg > 0 and item.sample_count > 0
+            valid_average = (
+                avg is not None and math.isfinite(avg) and avg > 0 and item.sample_count > 0
+            )
             destinations.append({
                 "name": item.destination,
                 "price_toman": item.price_toman,
                 "average_price_toman": round(avg) if valid_average else None,
+                "historical_average_toman": avg if valid_average else None,
                 "change_percent": (
                     round(100 * (item.price_toman - avg) / avg, 1)
                     if valid_average else None

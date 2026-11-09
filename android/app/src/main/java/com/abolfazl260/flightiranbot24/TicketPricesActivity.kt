@@ -170,6 +170,11 @@ internal fun TicketPricesScreen(
                 }
                 is TicketPricesUiState.Ready -> {
                     val snapshot = state.snapshot
+                    if (state.refreshError) item {
+                        Text("تازه‌سازی ناموفق؛ آخرین دادهٔ ثبت‌شده نمایش داده می‌شود.",
+                            color = MaterialTheme.colorScheme.error)
+                    }
+                    if (state.refreshing) item { Text("در حال تازه‌سازی…") }
                     val active = snapshot.origins.firstOrNull { it.city == selectedOrigin }
                         ?: snapshot.origins.first()
 

@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "routes": [
+    {
+      "origin": "B",
+      "destinations": [
+        {
+          "name": "d2",
+          "price_toman": 40,
+          "average_price_toman": 50,
+          "average_sample_count": 3
+        },
+        {
+          "name": "d3",
+          "price_toman": 80,
+          "average_price_toman": 100,
+          "average_sample_count": 5
+        },
+        {
+          "name": "half",
+          "price_toman": 79,
+          "average_price_toman": 80,
+          "average_sample_count": 3
+        }
+      ]
+    },
+    {
+      "origin": "A",
+      "destinations": [
+        {
+          "name": "d1",
+          "price_toman": 60,
+          "average_price_toman": 100,
+          "average_sample_count": 3
+        },
+        {
+          "name": "d2",
+          "price_toman": 40,
+          "average_price_toman": 50,
+          "average_sample_count": 3
+        },
+        {
+          "name": "none",
+          "price_toman": 5,
+          "average_price_toman": null,
+          "average_sample_count": 0
+        },
+        {
+          "name": "short",
+          "price_toman": 10,
+          "average_price_toman": 20,
+          "average_sample_count": 2
+        },
+        {
+          "name": "zero",
+          "price_toman": 10,
+          "average_price_toman": 0,
+          "average_sample_count": 3
+        },
+        {
+          "name": "negative",
+          "price_toman": 10,
+          "average_price_toman": -20,
+          "average_sample_count": 3
+        },
+        {
+          "name": "up",
+          "price_toman": 10,
+          "average_price_toman": 9,
+          "average_sample_count": 3
+        },
+        {
+          "name": "null",
+          "price_toman": 10,
+          "average_price_toman": null,
+          "average_sample_count": 3
+        },
+        {
+          "name": "equal",
+          "price_toman": 10,
+          "average_price_toman": 10,
+          "average_sample_count": 3
+        },
+        {
+          "name": "invalid",
+          "price_toman": 0,
+          "average_price_toman": 10,
+          "average_sample_count": 3
+        }
+      ]
+    }
+  ],
+  "expected_drops": [
+    "A/d1",
+    "A/d2",
+    "B/d2",
+    "B/d3",
+    "B/half"
+  ],
+  "expected_percentages": [
+    40,
+    20,
+    20,
+    20,
+    1.3
+  ],
+  "expected_cheap": [
+    "A/none",
+    "A/equal",
+    "A/negative",
+    "A/null",
+    "A/short",
+    "A/up",
+    "A/zero",
+    "A/d2",
+    "B/d2",
+    "A/d1",
+    "B/half",
+    "B/d3"
+  ]
+}
