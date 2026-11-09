@@ -1,6 +1,6 @@
 """A route chart must display only observed prices and real missing-day gaps."""
 
-from datetime import date, datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
@@ -124,7 +124,17 @@ class FakeQuery:
 @pytest.mark.asyncio
 async def test_user_selects_only_recorded_origin_and_destination():
     bot = FakeBot()
-    rows = [sample(7, 2_100_000), sample(9, 2_500_000)]
+    today = datetime.now(timezone.utc).date()
+    rows = [
+        RouteDailyMinimum(
+            day=today - timedelta(days=2), min_price_toman=2_100_000,
+            sample_count=2, last_captured_at=datetime.now(timezone.utc),
+        ),
+        RouteDailyMinimum(
+            day=today, min_price_toman=2_500_000,
+            sample_count=1, last_captured_at=datetime.now(timezone.utc),
+        ),
+    ]
     history = SimpleNamespace(
         list_chart_routes=AsyncMock(return_value=[
             ("تهران", "مشهد"), ("تهران", "کیش"), ("شیراز", "کیش")
@@ -137,7 +147,7 @@ async def test_user_selects_only_recorded_origin_and_destination():
     assert message.reply_text.await_count == 1
     await handle_chart_callback(FakeQuery("chart:origin:1"), context, history)
     assert context.user_data["route_chart_origin"] == "تهران"
-    destination_query = FakeQuery("chart:dest:1")  # مشهد, not کیش
+    destination_query = FakeQuery("chart:dest:0")  # Unicode-sorted: مشهد, then کیش
     await handle_chart_callback(destination_query, context, history)
 
     history.get_route_daily_minimums.assert_awaited_once_with(
