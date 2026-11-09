@@ -8,7 +8,7 @@ from typing import Final
 from zoneinfo import ZoneInfo
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-from telegram import BotCommand
+from telegram import BotCommand, Update
 from telegram.ext import Application, ApplicationBuilder
 
 from flightiran.config import ConfigurationError, Settings, load_settings
@@ -59,6 +59,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "help": "راهنمای استفاده از ربات",
         "language": "تغییر زبان",
         "alerts": "زنگوله قیمت بلیط",
+        "fares": "کارت تعاملی قیمت بلیت",
         "visa": "اطلاعات ویزا",
         "visa_watch": "هشدار تغییرات ویزا",
         "visa_list": "کشورها بر اساس پاسپورت",
@@ -69,6 +70,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "help": "Help and commands",
         "language": "Change language",
         "alerts": "Ticket price alerts",
+        "fares": "Interactive fare widget",
         "visa": "Visa requirements",
         "visa_watch": "Visa change alerts",
         "visa_list": "Countries by passport",
@@ -79,6 +81,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "help": "دليل الاستخدام",
         "language": "تغيير اللغة",
         "alerts": "تنبيهات أسعار التذاكر",
+        "fares": "بطاقة أسعار الرحلات التفاعلية",
         "visa": "متطلبات التأشيرة",
         "visa_watch": "تنبيهات تغييرات التأشيرات",
         "visa_list": "الدول حسب جواز السفر",
@@ -405,7 +408,12 @@ def run(*, platform: str = "telegram") -> None:
         ),
     )
     LOGGER.info("Flight Iran Bot 24 started platform=%s", platform)
-    application.run_polling()
+    if platform == "telegram":
+        # Include new updates even before python-telegram-bot exposes their constants.
+        allowed_updates = list(dict.fromkeys((*Update.ALL_TYPES, "widget_query")))
+        application.run_polling(allowed_updates=allowed_updates)
+    else:
+        application.run_polling()
 
 
 async def _initialize_database(database_url: str) -> Database:

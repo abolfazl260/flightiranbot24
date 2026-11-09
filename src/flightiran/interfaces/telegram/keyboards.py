@@ -38,6 +38,7 @@ def main_menu(
     web_app_url: str | None = None,
     *,
     is_admin: bool = False,
+    widgets_enabled: bool = False,
 ) -> InlineKeyboardMarkup:
     rows = [
         # Temporarily hidden until ready for public use (see root README.md).
@@ -50,6 +51,10 @@ def main_menu(
     ]
     if is_admin:
         rows.append([("admin_reports", "menu:admin_reports")])
+    if widgets_enabled:
+        rows.append([
+            InlineKeyboardButton("📊 کارت تعاملی قیمت بلیت", callback_data="menu:fare_widget")
+        ])
     # Show the Mini App launch button when a valid HTTPS URL is configured.
     # This shared keyboard is used by /start and returning main-menu navigation.
     secure_url = telegram_web_app_url(web_app_url)

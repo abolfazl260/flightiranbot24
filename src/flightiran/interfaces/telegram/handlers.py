@@ -78,6 +78,7 @@ from .visa_flow import (
 )
 from .visa_watches import deliver_watch_notifications, handle_watch_callback, show_watches
 from .visa_watches import word as visa_watch_text
+from .widgets import send_fare_widget, widget_query_handler
 
 LOGGER = logging.getLogger(__name__)
 
@@ -97,6 +98,18 @@ class TelegramDependencies:
     visa_sync_service: VisaSyncService | None = None
     visa_catalog: VisaCatalogService | None = None
     visa_watch_service: VisaWatchService | None = None
+
+
+def _widget_menu_enabled(update: Update, context: object | None) -> bool:
+    """Offer HTML widgets only for Telegram private chats, if context is present."""
+    if context is None:
+        return False
+    bot = getattr(context, "bot", None)
+    chat = getattr(update, "effective_chat", None)
+    return (
+        getattr(bot, "platform", "telegram") != "bale"
+        and getattr(chat, "type", None) == "private"
+    )
 
 
 def _is_private_admin(update: Update, dependencies: TelegramDependencies) -> bool:
@@ -293,6 +306,7 @@ async def start_handler(
                     language,
                     dependencies.web_app_url,
                     is_admin=_is_private_admin(update, dependencies),
+                    widgets_enabled=_widget_menu_enabled(update, context),
                 ),
             )
     if is_new:
@@ -326,6 +340,7 @@ async def help_handler(
                 language,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
 
@@ -349,6 +364,12 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:fare_widget":
+        if getattr(context.bot, "platform", "telegram") == "bale":
+            await query.message.reply_text("ویجت HTML فعلاً فقط در تلگرام فعال است.")
+        else:
+            await send_fare_widget(query.message, context.bot, dependencies.cheap_ticket_service)
+        return
     if (
         data == "menu:price_alerts"
         or data.startswith(("alerts:", "tickets:alert:"))
@@ -393,6 +414,7 @@ async def callback_handler(
                 selected,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
     elif data == "back":
@@ -408,6 +430,7 @@ async def callback_handler(
                 language,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
     elif (
@@ -427,6 +450,7 @@ async def callback_handler(
                 language,
                 dependencies.web_app_url,
                 is_admin=_is_private_admin(update, dependencies),
+                    widgets_enabled=_widget_menu_enabled(update, context),
             ),
         )
     elif data == "menu:useful":
@@ -943,6 +967,20 @@ async def alerts_command_handler(
         )
 
 
+async def fare_widget_command_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    """Show the same widget without needing the inline menu."""
+    if update.message is None:
+        return
+    if getattr(context.bot, "platform", "telegram") == "bale":
+        await update.message.reply_text("ویجت HTML فعلاً فقط در تلگرام فعال است.")
+        return
+    user_id, _language = await _user_language(update, dependencies)
+    await dependencies.audit.record("ticket.widget.opened", user_id=user_id)
+    await send_fare_widget(update.message, context.bot, dependencies.cheap_ticket_service)
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
@@ -965,6 +1003,18 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     )
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
+    if getattr(application.bot, "platform", "telegram") != "bale":
+        application.add_handler(
+            CommandHandler("fares", lambda u, c: fare_widget_command_handler(u, c, dependencies))
+        )
+        # PTB <=22 preserves unknown Bot API fields under Update.api_kwargs.
+        application.add_handler(
+            TypeHandler(
+                Update,
+                lambda u, c: widget_query_handler(u, c, dependencies.cheap_ticket_service),
+            ),
+            group=2,
+        )
     application.add_handler(
         CommandHandler("alerts", lambda u, c: alerts_command_handler(u, c, dependencies))
     )
