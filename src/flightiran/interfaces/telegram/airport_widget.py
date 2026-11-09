@@ -233,7 +233,8 @@ HTML_TEMPLATE = r"""<!DOCTYPE html><html lang="fa" dir="rtl">
 color:var(--tg-theme-text-color,#222)}h3{font-size:17px;margin:0 0 4px}
 h4{font-size:14px;margin:6px 0}.muted{color:var(--tg-theme-hint-color,#73808e);
 font-size:11px;line-height:1.7;margin:3px 0}
-.tabs{display:flex;gap:6px;margin:10px 0}.tabs button{flex:1;padding:9px 3px;
+.tabs{display:flex;gap:6px;margin:10px 0}.tabs[hidden]{display:none}
+.tabs button{flex:1;padding:9px 3px;
 font-size:12px;border:1px solid var(--tg-theme-section-separator-color,#aaa);
 border-radius:9px;color:var(--tg-theme-text-color,#222);
 background:var(--tg-theme-secondary-bg-color,#f2f3f5)}
