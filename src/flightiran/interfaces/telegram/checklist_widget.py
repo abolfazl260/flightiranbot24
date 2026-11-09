@@ -244,7 +244,7 @@ async def send_checklist_widget(message: object, bot: object,
         LOGGER.warning("checklist_widget_send_failed type=%s", type(exc).__name__)
         done, total = saved.progress()
         await message.reply_text(
-            f"چک‌لیست سفر من\\nپیشرفت فعلی: {done} از {total} مورد\\n"
+            f"چک‌لیست سفر من\nپیشرفت فعلی: {done} از {total} مورد\n"
             "برای استفاده از چک‌لیست تعاملی، تلگرام خود را به‌روز کنید "
             "و دستور /checklist را دوباره بفرستید."
         )
