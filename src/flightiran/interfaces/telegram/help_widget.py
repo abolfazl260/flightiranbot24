@@ -178,10 +178,10 @@ border:2px solid var(--tg-theme-button-color,#3390ec)}
 .card{display:flex;flex-direction:column;align-items:flex-start;min-height:80px;
 text-align:start;gap:5px;border-radius:11px;padding:10px 8px;
 background:var(--tg-theme-secondary-bg-color,#f1f3f5);
-color:var(--tg-theme-text-color,#202124);border:1px solid
+color:var(--tg-theme-text-color,#202124);font-weight:700;border:1px solid
 var(--tg-theme-section-separator-color,#c4cbd0)}
 .card.sel{border:2px solid var(--tg-theme-button-color,#3390ec)}
-.card strong{font-size:12px}.card span{font-size:11px;
+.card strong{font-size:12px}.card span{font-size:11px;font-weight:400;
 color:var(--tg-theme-hint-color,#778)}
 #detail{border:1px solid var(--tg-theme-section-separator-color,#ccc);
 border-radius:11px;padding:10px;margin:9px 0}
@@ -227,6 +227,7 @@ color:var(--tg-theme-hint-color,#78838e)}
 <p id="note" role="status"></p>
 <script>(function(){
 var D=__DATA__,W=window.TelegramWidget,tab='services',chosen='fares',opened=-1,busy=false;
+var ICON={fares:'🎫',airports:'🛫',checklist:'🧳',visa:'📖',chart:'📈',alerts:'🔔'};
 function el(x){return document.getElementById(x);}
 function node(tag,text,parent){var x=document.createElement(tag);x.textContent=text;
 if(parent)parent.appendChild(x);return x;}
@@ -242,7 +243,7 @@ function renderServices(){
 el('services').textContent='';
 for(var i=0;i<D.services.length;i++){
 (function(item){var selected=item[0]===chosen;
-var card=btn((selected?'✓  ':'')+item[1],function(){
+var card=btn((ICON[item[0]]||'•')+'  '+(selected?'✓ ':'')+item[1],function(){
 chosen=item[0];renderServices();},el('services'),'card'+(selected?' sel':''));
 node('span',item[2],card);card.setAttribute('aria-pressed',selected?'true':'false');
 })(D.services[i]);}
