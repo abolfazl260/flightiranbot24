@@ -198,13 +198,20 @@ async def test_help_service_dispatch_opens_real_fares_handler(monkeypatch):
     send = AsyncMock()
     monkeypatch.setattr(handlers, "send_fare_widget", send)
     dependencies = handlers.TelegramDependencies(
-        users=SimpleNamespace(get_language=AsyncMock(return_value="fa")),
+        users=SimpleNamespace(
+            get_by_telegram_id=AsyncMock(return_value=SimpleNamespace(id=55)),
+            get_language=AsyncMock(return_value="fa"),
+        ),
         audit=SimpleNamespace(record=AsyncMock()), cheap_ticket_service=service,
     )
     await handlers._open_help_service(
         "fares", 123, SimpleNamespace(bot=bot), dependencies,
     )
     send.assert_awaited_once()
+    dependencies.users.get_language.assert_awaited_once_with(55)
+    dependencies.audit.record.assert_awaited_once_with(
+        "user.help.service", user_id=55, payload={"service": "fares"},
+    )
     assert isinstance(send.await_args.args[0], PrivateChatMessage)
     assert send.await_args.args[1] is bot
     assert send.await_args.args[2] is service
@@ -222,7 +229,10 @@ async def test_help_dispatch_visa_uses_authenticated_user_storage(monkeypatch):
     open_visa = AsyncMock()
     monkeypatch.setattr(handlers, "open_visa_menu", open_visa)
     deps = handlers.TelegramDependencies(
-        users=SimpleNamespace(get_language=AsyncMock(return_value="fa")),
+        users=SimpleNamespace(
+            get_by_telegram_id=AsyncMock(return_value=SimpleNamespace(id=55)),
+            get_language=AsyncMock(return_value="fa"),
+        ),
         audit=SimpleNamespace(record=AsyncMock()),
         visa_catalog=object(),
     )
@@ -233,3 +243,25 @@ async def test_help_dispatch_visa_uses_authenticated_user_storage(monkeypatch):
     assert args[1].user_data is user_data[123]
     assert args[2] is deps.visa_catalog
     assert open_visa.await_args.kwargs == {"edit": False}
+    assert deps.users.get_language.await_args.args == (55,)
+
+
+
+@pytest.mark.asyncio
+async def test_unregistered_help_request_does_not_open_service():
+    from flightiran.interfaces.telegram import handlers
+
+    bot = FakeBot()
+    deps = handlers.TelegramDependencies(
+        users=SimpleNamespace(
+            get_by_telegram_id=AsyncMock(return_value=None),
+            get_language=AsyncMock(),
+        ),
+        audit=SimpleNamespace(record=AsyncMock()),
+    )
+    with pytest.raises(ValueError, match="not registered"):
+        await handlers._open_help_service(
+            "fares", 123, SimpleNamespace(bot=bot), deps,
+        )
+    deps.audit.record.assert_not_awaited()
+    deps.users.get_language.assert_not_awaited()
