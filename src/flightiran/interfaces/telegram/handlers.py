@@ -3,6 +3,7 @@
 import logging
 import traceback
 from dataclasses import dataclass
+from types import SimpleNamespace
 
 from telegram import Update
 from telegram.ext import (
@@ -46,6 +47,7 @@ from .admin_report_rich import (
 )
 from .airport_widget import AirportGuideStore, handle_airport_widget_query, send_airport_widget
 from .checklist_widget import handle_checklist_query, send_checklist_widget
+from .help_widget import PrivateChatMessage, handle_help_widget_query, send_help_widget
 from .keyboards import (
     back_menu,
     language_menu,
@@ -320,6 +322,11 @@ async def start_handler(
                     parse_mode="HTML",
                     reply_markup=menu_keyboard(language),
                 )
+        elif entrypoint == "help" and _widget_menu_enabled(update, context):
+            await dependencies.audit.record("user.help", user_id=registered.id)
+            await send_help_widget(
+                update.message, context.bot, language, dependencies.ticket_support_username,
+            )
         elif entrypoint == "airports" and _widget_menu_enabled(update, context):
             await dependencies.audit.record("airport.widget.opened", user_id=registered.id)
             await send_airport_widget(
@@ -369,16 +376,24 @@ async def help_handler(
     user_id, language = await _user_language(update, dependencies)
     await dependencies.audit.record("user.help", user_id=user_id)
     if update.message:
-        await update.message.reply_text(
-            render_help(language, dependencies.ticket_support_username),
-            parse_mode="HTML",
-            reply_markup=main_menu(
-                language,
-                dependencies.web_app_url,
-                is_admin=_is_private_admin(update, dependencies),
-                    widgets_enabled=_widget_menu_enabled(update, context),
-            ),
+        can_widget = _widget_menu_enabled(update, context)
+        keyboard = main_menu(
+            language, dependencies.web_app_url,
+            is_admin=_is_private_admin(update, dependencies),
+            widgets_enabled=can_widget,
         )
+        if not can_widget:
+            # Preserve the original text help for Bale, groups and tests
+            # without a Telegram context.
+            await update.message.reply_text(
+                render_help(language, dependencies.ticket_support_username),
+                parse_mode="HTML", reply_markup=keyboard,
+            )
+        else:
+            await send_help_widget(
+                update.message, context.bot, language, dependencies.ticket_support_username,
+                fallback_markup=keyboard,
+            )
 
 
 async def language_handler(
@@ -400,6 +415,12 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:help_widget" and _widget_menu_enabled(update, context):
+        await dependencies.audit.record("user.help", user_id=user_id)
+        await send_help_widget(
+            query.message, context.bot, language, dependencies.ticket_support_username,
+        )
+        return
     if data == "menu:airports" and _widget_menu_enabled(update, context):
         await dependencies.audit.record("airport.widget.opened", user_id=user_id)
         await send_airport_widget(
@@ -1088,12 +1109,101 @@ async def checklist_command_handler(
     await send_checklist_widget(update.message, context.bot, dependencies.checklist_service)
 
 
+async def _open_help_service(
+    service: str, user_id: int, context: ContextTypes.DEFAULT_TYPE,
+    dependencies: TelegramDependencies,
+) -> None:
+    """Launch existing bot flows only after a validated private help query."""
+    bot = context.bot
+    msg = PrivateChatMessage(bot, user_id)
+    # widget_query supplies the Telegram account ID, not the internal users.id.
+    # Preferences and audit events must use the internal database primary key.
+    registered = await dependencies.users.get_by_telegram_id(user_id)
+    if registered is None:
+        raise ValueError("Help widget user is not registered")
+    database_user_id = registered.id
+    language = normalize_language(
+        await dependencies.users.get_language(database_user_id)
+    )
+    await dependencies.audit.record(
+        "user.help.service", user_id=database_user_id, payload={"service": service},
+    )
+
+    if service == "fares":
+        await send_fare_widget(msg, bot, dependencies.cheap_ticket_service)
+        return
+    if service == "airports":
+        await send_airport_widget(
+            msg, bot, _airport_store(dependencies), dependencies.web_app_url,
+        )
+        return
+    if service == "checklist":
+        await send_checklist_widget(msg, bot, dependencies.checklist_service)
+        return
+
+    # Unknown widget updates in PTB <=22 lack effective_user, and consequently
+    # context.user_data. Resolve the verified sender's own per-user storage.
+    application = getattr(context, "application", None)
+    user_data = (
+        application.user_data[user_id]
+        if application is not None else {}
+    )
+    private_context = SimpleNamespace(bot=bot, user_data=user_data, args=[])
+    user = SimpleNamespace(
+        id=user_id, username=None, first_name="", last_name=None,
+    )
+    message_update = SimpleNamespace(
+        message=msg, effective_user=user, effective_chat=msg.chat,
+    )
+    if service == "chart":
+        await open_chart_picker(
+            msg, bot,
+            getattr(dependencies.cheap_ticket_service, "price_history", None),
+            user_data,
+        )
+    elif service == "visa":
+        await _load_visa_passport(private_context, database_user_id, dependencies)
+        await open_visa_menu(
+            message_update, private_context, dependencies.visa_catalog, language,
+            edit=False,
+        )
+    elif service == "alerts":
+        await alerts_command_handler(message_update, private_context, dependencies)
+    elif service == "visa_watch":
+        await visa_watch_handler(message_update, private_context, dependencies)
+    elif service == "visa_list":
+        await visa_list_handler(message_update, private_context, dependencies)
+    elif service == "language":
+        await msg.reply_text(
+            render_language_prompt(language), parse_mode="HTML",
+            reply_markup=language_menu(),
+        )
+    elif service == "start":
+        await msg.reply_text(
+            render_main_menu(language), parse_mode="HTML",
+            reply_markup=main_menu(
+                language, dependencies.web_app_url, widgets_enabled=True,
+            ),
+        )
+    elif service == "support":
+        await msg.reply_text(
+            render_support_message(language, dependencies.ticket_support_username),
+            parse_mode="HTML",
+            reply_markup=support_menu(language, dependencies.ticket_support_username),
+        )
+
+
 async def _all_widget_queries(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
     raw = update.api_kwargs.get("widget_query")
     action = raw.get("data") if isinstance(raw, dict) else None
-    if isinstance(action, str) and action.startswith("ap:"):
+    if isinstance(action, str) and action.startswith("hp:"):
+        await handle_help_widget_query(
+            update, context,
+            lambda service, user_id: _open_help_service(service, user_id, context, dependencies),
+        )
+    elif isinstance(action, str) and action.startswith("ap:"):
         await handle_airport_widget_query(update, context, _airport_store(dependencies))
     elif isinstance(action, str) and action.startswith("cl:"):
         await handle_checklist_query(update, context, dependencies.checklist_service)

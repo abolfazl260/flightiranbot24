@@ -53,6 +53,9 @@ def main_menu(
     if widgets_enabled:
         rows.insert(1, [("airports", "menu:airports")])
         rows.append([
+            InlineKeyboardButton("❔ راهنمای تعاملی ربات", callback_data="menu:help_widget")
+        ])
+        rows.append([
             InlineKeyboardButton("📊 کارت تعاملی قیمت بلیت", callback_data="menu:fare_widget")
         ])
         rows.append([
