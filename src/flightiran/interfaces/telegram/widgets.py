@@ -49,7 +49,7 @@ button{width:100%;margin-top:10px;padding:10px}
   var updated=document.getElementById('updated');
   var button=document.getElementById('refresh');
   function parse(value){try{return JSON.parse(value||'{}');}catch(e){return {};}}
-  function format(n){return String(n).replace(/\\B(?=(\\d{3})+(?!\\d))/g,',');}
+  function format(n){return String(n).replace(/\B(?=(\d{3})+(?!\d))/g,',');}
   function render(){
     var data=parse(W.publicData), state=parse(W.chatData);
     fares.textContent='';
