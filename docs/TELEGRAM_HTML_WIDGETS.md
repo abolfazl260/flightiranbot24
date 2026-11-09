@@ -7,7 +7,8 @@ ticket-search flow are unchanged.
 
 ## How users open it
 
-- Start a private conversation with the Telegram bot and send `/start`.
+- Open [the direct fare link](https://t.me/Flightiranbot?start=fares): pressing **Start** sends `/start fares` and opens the interactive card directly. Existing users can launch the link again.
+- Alternatively start a private conversation with the Telegram bot and send `/start`.
 - Choose **📊 کارت تعاملی قیمت بلیت** in the Telegram menu, or send `/fares`.
 - The widget has two locally switchable tabs inside the same Telegram message:
   **ارزان‌ترین بلیت‌ها** (five lowest actual prices) and
@@ -77,7 +78,7 @@ ruff check src/flightiran/interfaces/telegram tests/test_telegram_fare_widgets.p
 pytest tests/test_telegram_fare_widgets.py
 ```
 
-Manually test in Telegram: `/start`, tap the new card, switch both tabs,
+Manually test in Telegram: open `https://t.me/Flightiranbot?start=fares` (first-time and returning users), then switch both tabs,
 verify the percentage badges against the source history, refresh it, and
 confirm that no extra chat message is sent by changing tabs or refreshing. Disconnect the fare
 provider and verify that the last prices remain visible with an error message.

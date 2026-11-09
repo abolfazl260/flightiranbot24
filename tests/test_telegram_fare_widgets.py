@@ -8,6 +8,7 @@ from unittest.mock import AsyncMock
 import pytest
 from telegram import Update
 
+from flightiran.interfaces.telegram.handlers import TelegramDependencies, start_handler
 from flightiran.interfaces.telegram.widgets import (
     FARE_WIDGET_HTML,
     fare_widget_data,
@@ -276,3 +277,75 @@ async def test_refresh_updates_both_tab_datasets_at_once():
     assert payload["items"][0]["p"] == 2_000_000
     assert payload["drops"][0]["x"] == 50.0
     assert len(bot.calls) == 2
+
+
+class StartTestUsers:
+    async def get_or_create_with_status(self, user_id, **fields):
+        return SimpleNamespace(id=user_id), False
+
+    async def get_language(self, user_id):
+        return "fa"
+
+
+class StartTestAudit:
+    def __init__(self):
+        self.events = []
+
+    async def record(self, event, **kwargs):
+        self.events.append(event)
+
+
+@pytest.mark.asyncio
+async def test_fares_deep_link_opens_widget_without_main_menu():
+    service = SimpleNamespace(
+        routes=AsyncMock(return_value=[route("تهران", ("کیش", "۲,۸۰۰,۰۰۰ تومان"))])
+    )
+    bot = FakeBot()
+    msg = FakeMessage()
+    audit = StartTestAudit()
+    dependencies = TelegramDependencies(
+        users=StartTestUsers(), audit=audit,
+        cheap_ticket_service=service, admin_chat_id=None,
+    )
+    update = SimpleNamespace(
+        effective_user=SimpleNamespace(
+            id=123, username="traveler", first_name="Test", last_name=None
+        ),
+        effective_chat=SimpleNamespace(id=123, type="private"),
+        message=msg,
+    )
+    context = SimpleNamespace(args=["fares"], bot=bot, user_data={})
+
+    await start_handler(update, context, dependencies)
+
+    assert [method for method, _data in bot.calls] == ["sendWidget"]
+    service.routes.assert_awaited_once()
+    msg.reply_text.assert_not_awaited()
+    assert "ticket.widget.opened" in audit.events
+
+
+@pytest.mark.asyncio
+async def test_fares_deep_link_on_bale_falls_back_to_original_main_menu():
+    service = SimpleNamespace(routes=AsyncMock())
+    bot = FakeBot()
+    bot.platform = "bale"
+    msg = FakeMessage()
+    deps = TelegramDependencies(
+        users=StartTestUsers(), audit=StartTestAudit(),
+        cheap_ticket_service=service, admin_chat_id=None,
+    )
+    update = SimpleNamespace(
+        effective_user=SimpleNamespace(
+            id=123, username="traveler", first_name="Test", last_name=None
+        ),
+        effective_chat=SimpleNamespace(id=123, type="private"),
+        message=msg,
+    )
+    await start_handler(
+        update, SimpleNamespace(args=["fares"], bot=bot, user_data={}), deps
+    )
+
+    service.routes.assert_not_awaited()
+    assert not bot.calls
+    msg.reply_text.assert_awaited_once()
+    assert "سلام" in msg.reply_text.await_args.args[0]

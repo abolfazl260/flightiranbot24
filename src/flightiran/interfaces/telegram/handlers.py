@@ -276,6 +276,13 @@ async def start_handler(
             await open_visa_route(
                 update, context, dependencies.visa_catalog, language, *visa_route
             )
+        elif entrypoint == "fares" and _widget_menu_enabled(update, context):
+            # Telegram private-chat deep link: https://t.me/Flightiranbot?start=fares
+            # Reuse the same widget, provider and fallback as the /fares command.
+            await dependencies.audit.record("ticket.widget.opened", user_id=registered.id)
+            await send_fare_widget(
+                update.message, context.bot, dependencies.cheap_ticket_service
+            )
         elif entrypoint == "alerts":
             if dependencies.price_alert_service is None:
                 await update.message.reply_text(
