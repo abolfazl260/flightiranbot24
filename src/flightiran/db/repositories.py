@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from typing import Protocol
 
 from sqlalchemy import and_, case, delete, func, select
@@ -193,6 +193,16 @@ class RecordedTicketBatch:
     quotes: tuple[RecordedTicketQuote, ...]
 
 
+@dataclass(frozen=True)
+class RouteDailyMinimum:
+    """A real observed daily minimum; missing days are never synthesized."""
+
+    day: date
+    min_price_toman: int
+    sample_count: int
+    last_captured_at: datetime
+
+
 class SQLiteMz724PriceHistoryRepository:
     """Persist one mz724 sample per route/hour and maintain rolling averages."""
 
@@ -276,6 +286,84 @@ class SQLiteMz724PriceHistoryRepository:
                 for origin, destination, average, sample_count in result.all()
                 if (origin, destination) in requested
             }
+
+    @staticmethod
+    def _chart_bounds(days: int, now: datetime | None) -> tuple[datetime, datetime]:
+        if not 1 <= days <= 21:
+            raise ValueError("Chart period must be between 1 and 21 days")
+        instant = now or datetime.now(timezone.utc)
+        if instant.tzinfo is None:
+            raise ValueError("Chart timestamp must be timezone-aware")
+        instant = instant.astimezone(timezone.utc)
+        start = datetime.combine(
+            instant.date() - timedelta(days=days - 1), time.min, tzinfo=timezone.utc
+        )
+        return start, instant
+
+    async def list_chart_routes(
+        self, *, days: int = 21, now: datetime | None = None
+    ) -> list[tuple[str, str]]:
+        """Available origin/destination pairs from retained actual observations."""
+        start, end = self._chart_bounds(days, now)
+        async with self.database.session() as session:
+            result = await session.execute(
+                select(Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination)
+                .where(
+                    Mz724PriceSnapshot.captured_at >= start,
+                    Mz724PriceSnapshot.captured_at <= end,
+                    Mz724PriceSnapshot.price_toman > 0,
+                )
+                .distinct()
+                .order_by(Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination)
+                .limit(10000)
+            )
+            return [(origin, destination) for origin, destination in result.all()]
+
+    async def get_route_daily_minimums(
+        self, origin: str, destination: str, *,
+        days: int = 21, now: datetime | None = None,
+    ) -> list[RouteDailyMinimum]:
+        """Actual minimum price per UTC day, sampled from one exact route.
+
+        Missing dates remain absent. No interpolation or estimated prices.
+        """
+        start, end = self._chart_bounds(days, now)
+        if not origin or not destination:
+            return []
+        day_expr = func.date(Mz724PriceSnapshot.captured_at)
+        async with self.database.session() as session:
+            result = await session.execute(
+                select(
+                    day_expr,
+                    func.min(Mz724PriceSnapshot.price_toman),
+                    func.count(Mz724PriceSnapshot.id),
+                    func.max(Mz724PriceSnapshot.captured_at),
+                )
+                .where(
+                    Mz724PriceSnapshot.origin == origin,
+                    Mz724PriceSnapshot.destination == destination,
+                    Mz724PriceSnapshot.captured_at >= start,
+                    Mz724PriceSnapshot.captured_at <= end,
+                    Mz724PriceSnapshot.price_toman > 0,
+                )
+                .group_by(day_expr)
+                .order_by(day_expr)
+                .limit(21)
+            )
+            rows = result.all()
+        return [
+            RouteDailyMinimum(
+                day=date.fromisoformat(day),
+                min_price_toman=int(min_price),
+                sample_count=int(count),
+                last_captured_at=(
+                    captured.replace(tzinfo=timezone.utc)
+                    if captured.tzinfo is None
+                    else captured.astimezone(timezone.utc)
+                ),
+            )
+            for day, min_price, count, captured in rows
+        ]
 
     async def get_latest_prices(self) -> RecordedTicketBatch | None:
         """Read the latest captured cohort and its averages, never the upstream site.
