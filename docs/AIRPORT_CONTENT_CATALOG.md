@@ -9,8 +9,9 @@ This new `data/airports/` directory contains independent *content*
 documents, keyed by IATA code, without duplicating airport identity data.
 
 All **29 existing airports** have independent JSON content files in `details/`.
-The **Imam Khomeini (IKA)** page has **14 source-backed published sections** and **two empty drafts**. The **Mashhad (MHD)** page has **17 source-backed published sections** and **two empty drafts** (traveler experiences and airport videos). The **Kerman (KER)** page has **13 source-backed published sections** and **two unpublished drafts**; see `docs/airports/KER_CONTENT_NOTES.md`. Other airport pages are published independently; consult `airport-index.v1.json` for the current enabled set rather than assuming a fixed allowlist. The IKA location-map entry links to the location supplied on the official website. The MHD map uses a referenced airport point, not a terminal floor plan. No unverified terminal plans, passenger reviews, videos or live flight values are published. Android and Telegram airport navigation remains disabled until
-separately implemented and vetted.
+The **Imam Khomeini (IKA)** page has **14 source-backed published sections** and **two empty drafts**. The **Mashhad (MHD)** page has **17 source-backed published sections** and **two empty drafts** (traveler experiences and airport videos). The **Kerman (KER)** page has **13 source-backed published sections** and **two unpublished drafts**; see `docs/airports/KER_CONTENT_NOTES.md`. Other airport pages are published independently; consult `airport-index.v1.json` for the current enabled set rather than assuming a fixed allowlist. The IKA location-map entry links to the location supplied on the official website. The MHD map uses a referenced airport point, not a terminal floor plan. No unverified terminal plans, passenger reviews, videos or live flight values are published. Android and the Mini App have published airport readers. Telegram private chats
+now expose the same reviewed sections through a paginated HTML widget; see
+[Telegram airport widget](TELEGRAM_AIRPORT_WIDGET.md).
 
 ## Repository layout
 
@@ -139,7 +140,7 @@ python scripts/airport_content.py add-airport XYZ
 ```
 
 If the code already exists in `data/airports/airport-index.v1.json` (all
-current 28 do), do not call `add-airport`; edit its file directly.
+current 29 do), do not call `add-airport`; edit its file directly.
 
 ## Validation and deployment
 
@@ -160,9 +161,9 @@ After merging into main, production raw URLs have the form:
 - `https://raw.githubusercontent.com/abolfazl260/flightiranbot24/main/data/airports/details/THR.v1.json`
 
 The Android content reader can fetch these independently when a supported
-airport page is opened. **The Android airport UI is not yet enabled**; this
-change prepares data files and parsers only, and does not add a management
-screen, publish fake flight data or activate hidden Telegram menus.
+airport page is opened. The Android and Mini App readers are active. The Telegram private airport
+widget reads the same versioned content copied into the bot Docker image.
+This does not add a management screen or publish fake live flight data.
 
 Versioned JSON changes should preserve compatibility for mobile clients;
 new block *types* need a compatible client release. Data-backed changes to

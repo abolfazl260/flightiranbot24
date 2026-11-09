@@ -44,6 +44,7 @@ from .admin_report_rich import (
     render_rich_user_activity_reports,
     render_user_activity_fallback,
 )
+from .airport_widget import AirportGuideStore, handle_airport_widget_query, send_airport_widget
 from .checklist_widget import handle_checklist_query, send_checklist_widget
 from .keyboards import (
     back_menu,
@@ -102,6 +103,13 @@ class TelegramDependencies:
     visa_sync_service: VisaSyncService | None = None
     visa_catalog: VisaCatalogService | None = None
     visa_watch_service: VisaWatchService | None = None
+
+
+def _airport_store(dependencies: TelegramDependencies) -> AirportGuideStore | None:
+    """Use the identity catalog already wired into the existing application."""
+    if dependencies.airport_catalog is None:
+        return None
+    return AirportGuideStore(dependencies.airport_catalog)
 
 
 def _widget_menu_enabled(update: Update, context: object | None) -> bool:
@@ -312,8 +320,12 @@ async def start_handler(
                     parse_mode="HTML",
                     reply_markup=menu_keyboard(language),
                 )
-        # /start airports is intentionally not routed while the airport
-        # feature is hidden. Old links fall through to the normal main menu.
+        elif entrypoint == "airports" and _widget_menu_enabled(update, context):
+            await dependencies.audit.record("airport.widget.opened", user_id=registered.id)
+            await send_airport_widget(
+                update.message, context.bot, _airport_store(dependencies),
+                dependencies.web_app_url,
+            )
         elif entrypoint == "useful":
             catalog = dependencies.useful_catalog or default_catalog()
             await update.message.reply_text(
@@ -388,6 +400,12 @@ async def callback_handler(
     await query.answer()
     user_id, language = await _user_language(update, dependencies)
     data = query.data or ""
+    if data == "menu:airports" and _widget_menu_enabled(update, context):
+        await dependencies.audit.record("airport.widget.opened", user_id=user_id)
+        await send_airport_widget(
+            query.message, context.bot, _airport_store(dependencies), dependencies.web_app_url
+        )
+        return
     if data == "menu:route_chart" or data.startswith("chart:"):
         history = getattr(dependencies.cheap_ticket_service, "price_history", None)
         if data == "menu:route_chart":
@@ -1008,6 +1026,22 @@ async def alerts_command_handler(
         )
 
 
+async def airports_command_handler(
+    update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
+) -> None:
+    """Open the 29-airport guide without leaving the private Telegram chat."""
+    if update.message is None:
+        return
+    if not _widget_menu_enabled(update, context):
+        await update.message.reply_text("راهنمای تعاملی فقط در چت خصوصی تلگرام فعال است.")
+        return
+    user_id, _language = await _user_language(update, dependencies)
+    await dependencies.audit.record("airport.widget.opened", user_id=user_id)
+    await send_airport_widget(
+        update.message, context.bot, _airport_store(dependencies), dependencies.web_app_url
+    )
+
+
 async def chart_command_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE, dependencies: TelegramDependencies
 ) -> None:
@@ -1059,7 +1093,9 @@ async def _all_widget_queries(
 ) -> None:
     raw = update.api_kwargs.get("widget_query")
     action = raw.get("data") if isinstance(raw, dict) else None
-    if isinstance(action, str) and action.startswith("cl:"):
+    if isinstance(action, str) and action.startswith("ap:"):
+        await handle_airport_widget_query(update, context, _airport_store(dependencies))
+    elif isinstance(action, str) and action.startswith("cl:"):
         await handle_checklist_query(update, context, dependencies.checklist_service)
     else:
         await widget_query_handler(update, context, dependencies.cheap_ticket_service)
@@ -1088,6 +1124,9 @@ def register_handlers(application: Application, dependencies: TelegramDependenci
     application.add_handler(CommandHandler("start", lambda u, c: start_handler(u, c, dependencies)))
     application.add_handler(CommandHandler("help", lambda u, c: help_handler(u, c, dependencies)))
     if getattr(application.bot, "platform", "telegram") != "bale":
+        application.add_handler(
+            CommandHandler("airports", lambda u, c: airports_command_handler(u, c, dependencies))
+        )
         application.add_handler(
             CommandHandler("fares", lambda u, c: fare_widget_command_handler(u, c, dependencies))
         )

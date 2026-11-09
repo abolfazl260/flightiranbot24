@@ -6,17 +6,25 @@ Bale uses the same bot handlers and travel services through a separate polling p
 
 ## Telegram main-menu availability
 
-**Airports** and **Traveler Rules** remain hidden from the Telegram bot until those features are ready. The **Telegram Mini App launch button is enabled** in the shared inline menu for `/start`, `/help`, language changes, and back-to-main-menu navigation when `WEB_APP_ENABLED=true` and `WEB_APP_URL` is a valid HTTPS URL.
+The **29-airport guide** is available from the private Telegram bot menu,
+the `/airports` command and `https://t.me/Flightiranbot?start=airports`.
+It uses the Bot API 10.4 HTML widget to browse the GitHub-maintained,
+published guide sections without leaving the chat. Traveler Rules is still
+hidden until a full public reader is approved. The Mini App button is shown
+when `WEB_APP_ENABLED=true` and `WEB_APP_URL` is valid HTTPS.
 
 | Feature | Telegram bot | Telegram Mini App |
 | --- | --- | --- |
-| Airports / فرودگاه‌ها | Main-menu button disabled/commented out; removed from welcome and `/help` | Home-page airport card and placeholder screen commented out |
-| Traveler Rules / قوانین مسافر | Main-menu button disabled/commented out; no longer advertised in `/help` | No standalone traveler-rules destination to expose |
-| Telegram Mini App launch / ورود به مینی‌اپ سفر | `🚀 ورود به مینی‌اپ سفر` opens the configured HTTPS Mini App via Telegram Web App; omitted if disabled or URL is invalid | Mini App implementation, backend endpoints, assets, and direct URL remain available |
+| Airports / فرودگاه‌ها | Private HTML widget with 29 airports and source-backed sections | Native searchable airport guide; same JSON data |
+| Traveler Rules / قوانین مسافر | Separate menu hidden | No standalone traveler-rules destination |
+| Telegram Mini App | Configured HTTPS Web App launch button | Full travel Mini App |
 
-**Compatibility:** Previously sent `menu:airports`, `airports:page:*`, `airport:*`, and `menu:rules` inline buttons safely return users to the normal main menu. Existing `/start airports` deep links also show the main menu rather than the airport placeholder.
-
-**Implementation retained:** Telegram airport services and traveler-rules modules remain in the repository; their public menu entries and Mini App airport markup are commented out. Android functionality is unaffected.
+**Compatibility:** The previously hidden `menu:airports` button now opens
+the widget in a Telegram private chat. Legacy `airports:page:*` and `airport:*`
+buttons still return to the main menu; `menu:rules` remains disabled. Bale
+retains its previous menu. Source links are sent only on an explicit request.
+Airport facts update when the Docker image is rebuilt with the reviewed JSON.
+See [the airport widget guide](docs/TELEGRAM_AIRPORT_WIDGET.md).
 
 **BotFather menu button:** The inline launch button shown after `/start` is independent of a persistent Telegram menu button configured through `@BotFather` (`/setmenubutton`). This change does not modify BotFather settings.
 
