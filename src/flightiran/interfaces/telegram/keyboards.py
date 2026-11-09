@@ -41,8 +41,7 @@ def main_menu(
     widgets_enabled: bool = False,
 ) -> InlineKeyboardMarkup:
     rows = [
-        # Temporarily hidden until ready for public use (see root README.md).
-        # ("airports", "menu:airports"),
+        # Traveler rules remain hidden until their full reader is shipped.
         # ("rules", "menu:rules"),
         [("tickets", "menu:tickets"), ("visa", "menu:visa")],
         [("price_alerts", "menu:price_alerts"), ("cargo", "menu:cargo")],
@@ -52,6 +51,7 @@ def main_menu(
     if is_admin:
         rows.append([("admin_reports", "menu:admin_reports")])
     if widgets_enabled:
+        rows.insert(1, [("airports", "menu:airports")])
         rows.append([
             InlineKeyboardButton("📊 کارت تعاملی قیمت بلیت", callback_data="menu:fare_widget")
         ])
