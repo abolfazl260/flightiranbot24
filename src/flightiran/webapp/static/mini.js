@@ -3,6 +3,7 @@
  */
 import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
 
+import {rankTicketFares, validDropPercent} from "./ticket-ranking.mjs";
 import {createGuideView} from "./guide-view.mjs";
 import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from "./mobile-parity.mjs";
 
@@ -17,7 +18,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     return name && name !== code ? name : (fallback || code);
   }
   const state = {
-    initData: "", bootstrap: null, prices: null, origin: "",
+    initData: "", bootstrap: null, prices: null, origin: "", ticketSort: "cheap",
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
     visaMode: "live", snapshot: null,
     websites: null, websitesFetchedAt: 0, websitesRequest: null,
@@ -248,14 +249,11 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
   }
   function renderHomePrice() {
     const routes = state.prices?.routes || [];
-    const quotes = routes.flatMap(route =>
-      (route.destinations || []).map(fare => ({...fare,origin:route.origin}))
-    ).filter(quote => Number(quote.price_toman) > 0);
+    const quotes = rankTicketFares(routes);
     if (!quotes.length) {
       fill("home-price-preview",el("p",{className:"muted",text:"هنوز قیمتی ثبت نشده است."}));
       return;
     }
-    quotes.sort((a,b) => a.price_toman - b.price_toman);
     const container = el("div");
     quotes.slice(0,3).forEach((fare,index) => {
       const btn = el("button",{type:"button",className:"preview-row",onClick:()=>selectRoute(fare.origin,fare.name)},
@@ -278,27 +276,38 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
   }
   function renderTickets() {
     const term = $("ticket-search").value.trim().toLocaleLowerCase("fa-IR");
-    const route = state.prices?.routes?.find(r => r.origin === state.origin);
-    const fares = (route?.destinations || []).filter(f => f.name.toLocaleLowerCase("fa-IR").includes(term));
+    const fares = rankTicketFares(state.prices?.routes, {
+      mode: state.ticketSort, origin: state.origin, search: term,
+    });
+    for (const mode of ["cheap", "drops"]) {
+      const tab = $("ticket-sort-" + mode), active = state.ticketSort === mode;
+      tab.setAttribute("aria-selected", String(active));
+      tab.classList.toggle("active", active);
+    }
     $("ticket-count").textContent = fmt(fares.length);
     if (!fares.length) {
-      fill("ticket-results",empty("مسیری پیدا نشد","مبدأ یا عبارت جست‌وجو را تغییر دهید."));
+      fill("ticket-results",empty(state.ticketSort === "drops"
+        ? "کاهش قیمت معتبری در داده‌های ثبت‌شده یافت نشد" : "مسیری پیدا نشد",
+        "حداقل سه نمونه تاریخی برای مقایسه لازم است؛ مبدأ یا جست‌وجو را بررسی کنید."));
       return;
     }
     fill("ticket-results",fares.map(fare => {
-      const avg = fare.average_price_toman && fare.average_sample_count
+      const avg = Number.isFinite(fare.average_price_toman) && fare.average_price_toman > 0 && fare.average_sample_count > 0
         ? "میانگین ثبت‌شده: "+money(fare.average_price_toman)
         : "میانگین در دسترس نیست";
       return el("article",{className:"fare-card"},
         el("div",{className:"fare-main"},
           el("div",{className:"fare-route"},
             el("strong",{text:"از "+state.origin+" به "+fare.name}),
-            el("small",{text:avg})
+            el("small",{text:avg}),
+            el("small",{text:"زمان ثبت: "+dateLabel(state.prices.observed_at)})
           ),
           el("div",{className:"fare-price"},fmt(fare.price_toman)," ",el("small",{text:"تومان"}))
         ),
         el("div",{className:"fare-lower"},
-          percentChip(fare.change_percent),
+          validDropPercent(fare) === null ? percentChip(null) : el("span",{className:"fare-chip down",
+            text:"↓ "+new Intl.NumberFormat("fa-IR",{minimumFractionDigits:1,maximumFractionDigits:1})
+              .format(validDropPercent(fare))+"٪ نسبت به میانگین"}),
           el("div",{className:"fare-actions"},
             el("button",{type:"button",className:"tiny-button",onClick:()=>link("support","https://t.me/Advertio_support")},"رزرو"),
             el("button",{type:"button",className:"tiny-button filled",onClick:()=>priceDialog(state.origin,fare)},"زنگوله قیمت")
@@ -860,6 +869,12 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     state.origin=event.target.value; renderTickets();
   });
   $("ticket-search").addEventListener("input",renderTickets);
+  for (const mode of ["cheap", "drops"]) {
+    $("ticket-sort-"+mode).addEventListener("click", () => {
+      state.ticketSort = mode; renderTickets();
+    });
+  }
+  $("ticket-refresh").addEventListener("click", loadPrices);
   $("visa-search").addEventListener("input",renderVisa);
   $("website-search").addEventListener("input",renderWebsites);
   $("website-category").addEventListener("change",renderWebsites);
