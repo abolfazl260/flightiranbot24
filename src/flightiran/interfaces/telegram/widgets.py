@@ -63,7 +63,8 @@ aria-selected="false">بیشترین کاهش قیمت</button></div>
     updated=document.getElementById('updated'),
     button=document.getElementById('refresh'),
     cheap=document.getElementById('cheap'),
-    drops=document.getElementById('drops'),active='cheap';
+    drops=document.getElementById('drops');
+  var active='cheap';
   function parse(x){try{return JSON.parse(x||'{}');}catch(e){return {};}}
   function fa(x){return String(x).replace(/[0-9]/g,function(c){
     return '۰۱۲۳۴۵۶۷۸۹'.charAt(c.charCodeAt(0)-48);});}
@@ -76,14 +77,14 @@ aria-selected="false">بیشترین کاهش قیمت</button></div>
     if(!items.length)fares.textContent=active==='cheap'
       ?'در حال حاضر قیمتی موجود نیست.':'کاهش قیمت معتبر ثبت نشده است.';
     for(var i=0;i<items.length;i++){
-      var f=items[i],row=document.createElement('div');row.className='fare';
+      var fare=items[i],row=document.createElement('div');row.className='fare';
       var name=document.createElement('span');name.className='route';
-      name.textContent='از '+f.o+' به '+f.d;
+      name.textContent='از '+fare.o+' به '+fare.d;
       var right=document.createElement('div'),price=document.createElement('div');
-      price.className='price';price.textContent=format(f.p);right.appendChild(price);
-      if(typeof f.x==='number'&&f.x>0){
+      price.className='price';price.textContent=format(fare.p);right.appendChild(price);
+      if(typeof fare.x==='number'&&fare.x>0){
         var drop=document.createElement('div');drop.className='drop';
-        drop.textContent=fa(f.x)+'٪ کاهش نسبت به میانگین';
+        drop.textContent=fa(fare.x)+'٪ کاهش نسبت به میانگین';
         right.appendChild(drop);
       }
       row.appendChild(name);row.appendChild(right);fares.appendChild(row);
