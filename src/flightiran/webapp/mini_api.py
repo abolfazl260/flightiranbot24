@@ -25,6 +25,7 @@ from flightiran.modules.useful_content import default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.watch import VisaWatchService
 from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
+from flightiran.webapp.experiences import private_router as experience_private_router
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
 _CODE = re.compile(r"[A-Z]{2}\Z")
@@ -110,6 +111,7 @@ def mini_router(
             raise HTTPException(503, "Mini App user unavailable")
         return record
 
+    router.include_router(experience_private_router(database, current_user))
     Identity = Annotated[User, Depends(current_user)]
 
     @router.get("/bootstrap")

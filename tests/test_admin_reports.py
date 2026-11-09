@@ -167,9 +167,12 @@ def test_report_button_visible_only_with_explicit_admin_flag():
         ) == 1
 
 
-def test_admin_reports_remain_visible_with_mini_app_launch():
+@pytest.mark.parametrize("widgets_enabled", [True, False])
+def test_admin_reports_remain_visible_with_mini_app_launch(widgets_enabled):
     url = "https://flightiran.example.com"
-    keyboard = main_menu("fa", web_app_url=url, is_admin=True)
+    keyboard = main_menu(
+        "fa", web_app_url=url, is_admin=True, widgets_enabled=widgets_enabled
+    )
     assert any(
         button.callback_data == "menu:admin_reports"
         for row in keyboard.inline_keyboard for button in row
@@ -178,7 +181,12 @@ def test_admin_reports_remain_visible_with_mini_app_launch():
         button.web_app.url
         for row in keyboard.inline_keyboard for button in row
         if button.web_app is not None
-    ] == [url]
+    ] == ([url] if widgets_enabled else [])
+    assert [
+        button.url
+        for row in keyboard.inline_keyboard for button in row
+        if button.url == url
+    ] == ([] if widgets_enabled else [url])
 
 
 def _update(user_id: int, chat_id: int, *, chat_type="private", query=None, message=None):

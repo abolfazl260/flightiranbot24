@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lossless GitHub 168 experience archive v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "source_issue",
+    "source_comments",
+    "blocks",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "source_issue": {
+      "type": "object"
+    },
+    "source_comments": {
+      "type": "array"
+    },
+    "blocks": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9
+    },
+    "records": {
+      "type": "array",
+      "minItems": 51,
+      "maxItems": 51,
+      "items": {
+        "type": "object",
+        "required": [
+          "archive_id",
+          "order",
+          "source_comment_id",
+          "source_offset",
+          "header",
+          "posted_label",
+          "author_original",
+          "raw_message",
+          "sha256",
+          "kind",
+          "publication",
+          "rating"
+        ],
+        "properties": {
+          "archive_id": {
+            "type": "string",
+            "pattern": "^gh168-[0-9]+-[0-9]+$"
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 51
+          },
+          "raw_message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "kind": {
+            "const": "archive"
+          },
+          "publication": {
+            "const": "withheld"
+          },
+          "rating": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  }
+}

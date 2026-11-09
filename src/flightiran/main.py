@@ -32,6 +32,7 @@ from flightiran.modules.admin.daily_active import (
 )
 from flightiran.modules.admin.reports import BotReportRepository
 from flightiran.modules.airport.catalog import AirportCatalog
+from flightiran.modules.experiences.persistent import SQLiteExperienceService
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
@@ -418,6 +419,9 @@ def run(*, platform: str = "telegram") -> None:
                 database, stale_after_hours=settings.visa_stale_after_hours
             ),
             useful_catalog=default_catalog(),
+            experience_service=(
+                SQLiteExperienceService(database) if platform == "telegram" else None
+            ),
         ),
     )
     LOGGER.info("Flight Iran Bot 24 started platform=%s", platform)

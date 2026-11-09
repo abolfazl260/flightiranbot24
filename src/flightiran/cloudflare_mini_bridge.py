@@ -33,6 +33,12 @@ from flightiran.webapp.app import create_app
 LOGGER = logging.getLogger(__name__)
 OPERATIONS: dict[str, tuple[str, str]] = {
     "bootstrap": ("GET", "/api/mini/bootstrap"),
+    "xp_mine": ("GET", "/api/mini/experiences/mine"),
+    "xp_create": ("POST", "/api/mini/experiences"),
+    "xp_edit": ("PATCH", "/api/mini/experiences/{id}"),
+    "xp_delete": ("DELETE", "/api/mini/experiences/{id}"),
+    "xp_vote": ("POST", "/api/mini/experiences/{id}/vote"),
+    "xp_report": ("POST", "/api/mini/experiences/{id}/report"),
     "useful": ("GET", "/api/mini/useful"),
     "alerts": ("GET", "/api/mini/alerts"),
     "passport": ("POST", "/api/mini/passport"),
@@ -87,6 +93,11 @@ def job_destination(job: Mapping) -> tuple[str, str, dict | None]:
         if type(identifier) is not int or not 0 < identifier < 10**13:
             raise ValueError("invalid Mini App alert identifier")
         path = path.replace("{id}", str(identifier))
+    if operation == "xp_mine":
+        offset = payload.get("offset", 0)
+        if type(offset) is not int or not 0 <= offset <= 10000:
+            raise ValueError("invalid experience offset")
+        path += f"?offset={offset}"
     if method in {"POST", "PATCH"}:
         body = {key: value for key, value in payload.items() if key != "id"}
     else:
@@ -121,7 +132,8 @@ class MiniAppBridge:
             method, path, body = job_destination(job)
             signed = signed_local_init_data(self._bot_token, job)
             response = await self._local.request(
-                method, path,
+                method,
+                path,
                 headers={"X-Telegram-Init-Data": signed},
                 json=body if method in {"POST", "PATCH"} else None,
             )
@@ -151,8 +163,10 @@ class MiniAppBridge:
             if not isinstance(job, dict):
                 continue
             job_id = job.get("id")
-            if not isinstance(job_id, str) or len(job_id) != 36 or not all(
-                ch in "0123456789abcdef-" for ch in job_id.lower()
+            if (
+                not isinstance(job_id, str)
+                or len(job_id) != 36
+                or not all(ch in "0123456789abcdef-" for ch in job_id.lower())
             ):
                 LOGGER.warning("cloudflare_mini_invalid_job_id")
                 continue
@@ -170,13 +184,15 @@ class MiniAppBridge:
                 # Mutations are deliberately not re-executed after a lease expires.
                 LOGGER.exception(
                     "cloudflare_mini_ack_failed job=%s operation=%s",
-                    job_id, job.get("operation"),
+                    job_id,
+                    job.get("operation"),
                 )
                 continue
             completed += 1
             LOGGER.info(
                 "cloudflare_mini_completed operation=%s http=%s",
-                job.get("operation"), status,
+                job.get("operation"),
+                status,
             )
         return completed
 
@@ -202,12 +218,16 @@ async def run(*, once: bool, interval_seconds: int) -> int:
                 follow_redirects=False,
             ) as local,
             httpx.AsyncClient(
-                follow_redirects=False, timeout=httpx.Timeout(30),
+                follow_redirects=False,
+                timeout=httpx.Timeout(30),
             ) as remote,
         ):
             bridge = MiniAppBridge(
-                origin, token, settings.telegram_bot_token.get_secret_value(),
-                local, remote,
+                origin,
+                token,
+                settings.telegram_bot_token.get_secret_value(),
+                local,
+                remote,
             )
             while True:
                 try:

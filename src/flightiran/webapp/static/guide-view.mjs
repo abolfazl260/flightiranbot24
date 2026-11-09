@@ -1,5 +1,5 @@
 import {fetchGuideJson,parseGuideIndex,parseGuideDetail,filterGuides} from './guide-catalog.mjs';
-export function createGuideView({kind,root,el,openUrl,onAirport,onFids,fetcher=fetch}) {
+export function createGuideView({kind,root,el,openUrl,onAirport,onFids,onExperiences,fetcher=fetch}) {
   let rows=null,selected=null,sectionId=null,page=null,offline=false,sequence=0;
   const pages=new Map(),positions=new Map();let directoryDate=null;
   const button=(title,fn)=>el('button',{type:'button',className:'secondary-cta',onClick:fn},title);
@@ -98,13 +98,11 @@ export function createGuideView({kind,root,el,openUrl,onAirport,onFids,fetcher=f
         if(!page.sections.length)nodes.push(p('بخش منتشرشده‌ای در دسترس نیست.'));
         nodes.push(...page.sections.map(s=>el('button',{type:'button',className:'panel guide-card',onClick:()=>{save();sectionId=s.id;render();}},
           el('strong',{text:s.title}),p('آخرین بررسی: '+date(s.reviewedAt)))));
-        if(kind==='airlines')nodes.push(el('h3',{text:'تجربه‌های مسافران و امتیازها'}),
-          p('تجربهٔ شخصی کاربر، نه مقررات رسمی شرکت هواپیمایی یا ارزیابی ایمنی.'),
-          p('تجربهٔ دارای مجوز انتشار هنوز متصل نشده است.'),p('تعداد رأی معتبر: '+page.reviewCount),
-          p('میانگین و مقایسه تا تعیین حداقل نمونهٔ معتبر نمایش داده نمی‌شود.'),
-          ...(page.reviewCount>0?Object.entries(page.counts).map(([key,n])=>p(({overall:'رضایت کلی',crew:'رفتار خدمه',seat:'راحتی صندلی',cleanliness:'نظافت',catering:'پذیرایی',checkin:'پذیرش و سوارشدن',baggage:'مدیریت بار',value:'ارزش در برابر هزینه'}[key])+': '+n+' رأی')):[]));
+        if(onExperiences)nodes.push(button('تجربه‌ها و رضایت مسافران',()=>onExperiences('airline:'+ref.id)));
+
       }
     }
+    if(kind==='airports'&&onExperiences)nodes.push(button('تجربه‌ها و رضایت مسافران',()=>onExperiences('airport:'+selected)));
     nodes.push(button('بررسی دوباره اطلاعات',()=>load(true)));
     root.replaceChildren(...nodes);restore();
   }

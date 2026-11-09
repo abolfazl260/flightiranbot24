@@ -4,6 +4,7 @@
 import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
 
 import {rankTicketFares, validDropPercent, pricesAreStale} from "./ticket-ranking.mjs";
+import {createExperienceView} from "./experience-view.mjs";
 import {parseHistory} from "./ticket-history.mjs";
 import {createGuideView} from "./guide-view.mjs";
 import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from "./mobile-parity.mjs";
@@ -105,6 +106,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
           throw new Error(
             result.http_status === 404 ? "این مورد دیگر در دسترس نیست." :
             result.http_status === 422 ? "اطلاعات واردشده معتبر نیست یا محدودیت هشدارها تکمیل شده است." :
+            result.http_status === 409 && path.includes("experiences") ? "این تجربه قبلاً ثبت شده است؛ تجربه‌های من را بررسی کنید." :
             result.http_status === 409 ? "قیمت‌های فعلی نیاز به بروزرسانی دارند." :
             "درخواست انجام نشد. کمی بعد دوباره تلاش کنید."
           );
@@ -118,6 +120,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     }
     if (!response.ok) {
       if (response.status === 401) throw new Error("نشست تلگرام معتبر نیست. مینی‌اپ را دوباره از ربات باز کنید.");
+      if (response.status === 409 && path.includes("experiences")) throw new Error("این تجربه قبلاً ثبت شده است. تجربه‌های من را بررسی کنید.");
       if (response.status === 409) throw new Error("قیمت‌های فعلی نیاز به بروزرسانی دارند. کمی بعد دوباره تلاش کنید.");
       if (response.status === 404) throw new Error("این مورد دیگر در دسترس نیست.");
       if (response.status === 422) throw new Error("اطلاعات واردشده معتبر نیست یا محدودیت هشدارها تکمیل شده است.");
@@ -148,6 +151,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
       else telegram.BackButton.show();
     }
     if (guides[screen]) guides[screen].load();
+    if (screen === "experiences") experiences.load();
     if (screen === "alerts") loadAlerts();
     if (screen === "useful") loadUseful();
     if (screen === "websites") loadWebsites();
@@ -173,8 +177,10 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
   function openUrl(url) {
     link(null,url);
   }
+  const experiences = createExperienceView({root:$("experiences-view"),el,request});
   const guides = Object.fromEntries(['airports','airlines'].map(kind => [kind,
     createGuideView({kind, root:$(kind+'-guide'), el, openUrl,
+      onExperiences:t=>{go('experiences');experiences.open(t);},
       onAirport:id=>{go('airports');guides.airports.open(id);}, onFids:()=>go('fids')})
   ]));
   function guideBack() {
@@ -916,6 +922,8 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
       populatePassport();
       initChecklist();
       await Promise.all([loadPrices(),loadVisa()]);
+      const entry=new URLSearchParams(window.location.search);
+      if(entry.get('screen')==='experiences'){go('experiences');if(/^\d{1,12}$/.test(entry.get('review')||''))experiences.openReview(Number(entry.get('review')));else experiences.open(entry.get('target')||'');}
     } catch(e) {
       showStartup(e.message);
     }

@@ -112,9 +112,7 @@ class PriceAlert(TimestampedModel):
     last_snapshot_hash: Mapped[str | None] = mapped_column(String(64))
     # A notification is sent once when a fare crosses the threshold; price
     # updates below the threshold do not create another Telegram message.
-    is_armed: Mapped[bool] = mapped_column(
-        default=True, server_default="1", nullable=False
-    )
+    is_armed: Mapped[bool] = mapped_column(default=True, server_default="1", nullable=False)
 
 
 class PriceSnapshot(TimestampedModel):
@@ -149,9 +147,7 @@ class Mz724RouteAverage(TimestampedModel):
     """Materialized 21-day rolling average for one mz724 route."""
 
     __tablename__ = "mz724_route_averages"
-    __table_args__ = (
-        UniqueConstraint("origin", "destination", name="uq_mz724_route_average"),
-    )
+    __table_args__ = (UniqueConstraint("origin", "destination", name="uq_mz724_route_average"),)
     origin: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     destination: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     average_price_toman: Mapped[float] = mapped_column(Float, nullable=False)
@@ -248,6 +244,64 @@ class TravelChecklist(Base):
     international_bits: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     revision: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     updated_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(),
-        onupdate=func.now(), nullable=False,
+        DateTime(timezone=True),
+        server_default=func.now(),
+        onupdate=func.now(),
+        nullable=False,
     )
+
+
+class TravelExperience(TimestampedModel):
+    __tablename__ = "travel_experiences"
+    owner_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), index=True)
+    kind: Mapped[str] = mapped_column(String(16), default="user")
+    archive_id: Mapped[str | None] = mapped_column(String(100), unique=True)
+    raw_source: Mapped[dict | None] = mapped_column(JSON)
+    original_hash: Mapped[str | None] = mapped_column(String(64))
+    duplicate_key: Mapped[str] = mapped_column(String(64), unique=True)
+    body: Mapped[str] = mapped_column(Text)
+    public_text: Mapped[str | None] = mapped_column(Text)
+    display_name: Mapped[str] = mapped_column(String(80), default="مسافر")
+    posted_label: Mapped[str | None] = mapped_column(String(100))
+    travel_date: Mapped[str | None] = mapped_column(String(10))
+    rating: Mapped[int | None] = mapped_column(Integer)
+    criteria: Mapped[dict] = mapped_column(JSON, default=dict)
+    consent: Mapped[int] = mapped_column(Integer, default=0)
+    consent_evidence: Mapped[str | None] = mapped_column(Text)
+    state: Mapped[str] = mapped_column(String(16), default="pending", index=True)
+    moderation_reason: Mapped[str | None] = mapped_column(Text)
+    __table_args__ = (Index("ix_experiences_public", "state", "consent", "created_at"),)
+
+
+class ExperienceTarget(Base):
+    __tablename__ = "experience_targets"
+    experience_id: Mapped[int] = mapped_column(
+        ForeignKey("travel_experiences.id", ondelete="CASCADE"), primary_key=True
+    )
+    target: Mapped[str] = mapped_column(String(128), primary_key=True, index=True)
+
+
+class ExperienceVote(Base):
+    __tablename__ = "experience_votes"
+    experience_id: Mapped[int] = mapped_column(
+        ForeignKey("travel_experiences.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+
+
+class ExperienceReport(TimestampedModel):
+    __tablename__ = "experience_reports"
+    experience_id: Mapped[int] = mapped_column(ForeignKey("travel_experiences.id"), index=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    reason: Mapped[str] = mapped_column(String(40))
+    status: Mapped[str] = mapped_column(String(16), default="open")
+    __table_args__ = (UniqueConstraint("experience_id", "user_id", name="uq_experience_report"),)
+
+
+class ExperienceAudit(TimestampedModel):
+    __tablename__ = "experience_audit"
+    experience_id: Mapped[int] = mapped_column(ForeignKey("travel_experiences.id"), index=True)
+    actor: Mapped[str] = mapped_column(String(100))
+    action: Mapped[str] = mapped_column(String(30))
+    reason: Mapped[str] = mapped_column(Text)
+    content_hash: Mapped[str] = mapped_column(String(64))
