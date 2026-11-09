@@ -32,7 +32,6 @@ padding:10px 0;border-bottom:1px solid var(--tg-theme-section-separator-color)}
 .route{font-size:13px;max-width:60%}
 .price{font-size:13px;font-weight:bold;direction:ltr;text-align:left}
 button{width:100%;margin-top:10px;padding:10px}
-#status{margin-top:7px;font-size:12px;color:var(--tg-theme-hint-color)}
 </style></head>
 <body>
 <h3>قیمت‌های منتخب بلیت</h3>
@@ -40,12 +39,10 @@ button{width:100%;margin-top:10px;padding:10px}
 <div id="fares"></div>
 <p class="sub" id="updated"></p>
 <button id="refresh">تازه‌سازی قیمت‌ها</button>
-<p id="status" aria-live="polite">قیمت‌ها پیش از رزرو باید تأیید شوند.</p>
 <script>
 (function(){
   var W=window.TelegramWidget;
   var fares=document.getElementById('fares');
-  var status=document.getElementById('status');
   var updated=document.getElementById('updated');
   var button=document.getElementById('refresh');
   function parse(value){try{return JSON.parse(value||'{}');}catch(e){return {};}}
@@ -65,23 +62,20 @@ button{width:100%;margin-top:10px;padding:10px}
       row.appendChild(route);row.appendChild(price);fares.appendChild(row);
     }
     updated.textContent=data.updated?'آخرین بررسی: '+data.updated:'';
-    if(state.status==='error'){
-      status.textContent='به‌روزرسانی ناموفق بود؛ آخرین قیمت‌ها حفظ شدند.';
-    } else if(state.status==='ready'){
-      status.textContent='به‌روزرسانی انجام شد؛ قیمت‌ها پیش از رزرو باید تأیید شوند.';
-    }
+    button.textContent=state.status==='error'
+      ? 'به‌روزرسانی ناموفق بود • تلاش مجدد' : 'تازه‌سازی قیمت‌ها';
     button.disabled=false;
   }
   button.addEventListener('click',function(){
     button.disabled=true;
-    status.textContent='در حال دریافت قیمت‌های جدید...';
+    button.textContent='در حال تازه‌سازی...';
     W.request('fare:refresh').then(function(answer){
       if(answer.result!=='accepted'){
-        status.textContent='درخواست قابل انجام نیست.';
+        button.textContent='درخواست انجام نشد • تلاش مجدد';
         button.disabled=false;
       }
     },function(){
-      status.textContent='ارتباط با ربات برقرار نشد. دوباره تلاش کنید.';
+      button.textContent='خطا در ارتباط • تلاش مجدد';
       button.disabled=false;
     });
   });
@@ -164,7 +158,6 @@ async def send_fare_widget(message: object, bot: object,
             "html": FARE_WIDGET_HTML,
             "public_data": state,
             "chat_data": '{"status":"ready"}',
-            "caption": "قیمت‌های منتخب بلیت؛ مبالغ قطعی نیستند.",
             "allow_queries": True,
         })
         return True

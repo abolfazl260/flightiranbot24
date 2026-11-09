@@ -54,6 +54,10 @@ def test_html_widget_is_within_telegram_limits():
     assert "TelegramWidget.request" not in FARE_WIDGET_HTML  # W.request is used
     assert "W.request('fare:refresh')" in FARE_WIDGET_HTML
     assert "publicDataChanged" in FARE_WIDGET_HTML
+    # Refresh feedback stays within the button, without footer paragraphs.
+    assert 'id="status"' not in FARE_WIDGET_HTML
+    assert "به‌روزرسانی انجام شد؛ قیمت‌ها" not in FARE_WIDGET_HTML
+    assert "button.textContent='در حال تازه‌سازی...'" in FARE_WIDGET_HTML
 
 
 def test_fare_widget_data_is_real_sorted_and_bounded():
@@ -81,6 +85,7 @@ async def test_send_widget_and_fallback_when_telegram_rejects():
     assert method == "sendWidget"
     assert data["allow_queries"] is True
     assert data["chat_id"] == 123
+    assert "caption" not in data
     assert json.loads(data["public_data"])["items"][0]["p"] == 2_800_000
 
     broken = FakeBot("sendWidget")
