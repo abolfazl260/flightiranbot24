@@ -1028,7 +1028,10 @@ async def _all_widget_queries(
     if isinstance(action, str) and action.startswith("cl:"):
         await handle_checklist_query(update, context, dependencies.checklist_service)
     else:
-        await widget_query_handler(update, context, dependencies.cheap_ticket_service)
+        await widget_query_handler(
+            update, context, dependencies.cheap_ticket_service,
+            support_username=dependencies.ticket_support_username,
+        )
 
 
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
