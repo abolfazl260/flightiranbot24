@@ -10,6 +10,7 @@ import pytest
 from telegram import Update
 
 from flightiran.db.engine import initialize_database
+from flightiran.interfaces.telegram.handlers import TelegramDependencies, start_handler
 from flightiran.interfaces.telegram.checklist_widget import (
     CHECKLIST_WIDGET_HTML,
     handle_checklist_query,
@@ -194,3 +195,75 @@ async def test_refresh_and_mode_reset_only_from_authentic_private_owner():
     assert all(method == "answerWidgetQuery" for method, _ in bot.calls[before:])
     assert all(data["data"] == "invalid" for _, data in bot.calls[before:])
     service.apply.assert_awaited_once()
+
+
+class ChecklistStartUsers:
+    async def get_or_create_with_status(self, user_id, **fields):
+        return SimpleNamespace(id=user_id), False
+
+    async def get_language(self, user_id):
+        return "fa"
+
+
+class ChecklistStartAudit:
+    def __init__(self):
+        self.events = []
+
+    async def record(self, event, **kwargs):
+        self.events.append(event)
+
+
+@pytest.mark.asyncio
+async def test_checklist_start_deep_link_opens_widget_without_menu(monkeypatch):
+    from flightiran.interfaces.telegram import handlers
+
+    bot = FakeBot()
+    msg = FakeMessage()
+    audit = ChecklistStartAudit()
+    service = object()
+    mock_send = AsyncMock()
+    monkeypatch.setattr(handlers, "send_checklist_widget", mock_send)
+    deps = TelegramDependencies(
+        users=ChecklistStartUsers(), audit=audit,
+        checklist_service=service, admin_chat_id=None,
+    )
+    update = SimpleNamespace(
+        effective_user=SimpleNamespace(
+            id=123, username="traveler", first_name="Test", last_name=None
+        ),
+        effective_chat=SimpleNamespace(id=123, type="private"),
+        message=msg,
+    )
+    await start_handler(
+        update, SimpleNamespace(args=["checklist"], bot=bot, user_data={}), deps
+    )
+    mock_send.assert_awaited_once_with(msg, bot, service)
+    msg.reply_text.assert_not_awaited()
+    assert "checklist.opened" in audit.events
+
+
+@pytest.mark.asyncio
+async def test_checklist_start_deep_link_on_bale_keeps_normal_menu(monkeypatch):
+    from flightiran.interfaces.telegram import handlers
+
+    bot = FakeBot()
+    bot.platform = "bale"
+    msg = FakeMessage()
+    mock_send = AsyncMock()
+    monkeypatch.setattr(handlers, "send_checklist_widget", mock_send)
+    deps = TelegramDependencies(
+        users=ChecklistStartUsers(), audit=ChecklistStartAudit(),
+        checklist_service=object(), admin_chat_id=None,
+    )
+    update = SimpleNamespace(
+        effective_user=SimpleNamespace(
+            id=123, username="traveler", first_name="Test", last_name=None
+        ),
+        effective_chat=SimpleNamespace(id=123, type="private"),
+        message=msg,
+    )
+    await start_handler(
+        update, SimpleNamespace(args=["checklist"], bot=bot, user_data={}), deps
+    )
+    mock_send.assert_not_awaited()
+    msg.reply_text.assert_awaited_once()
