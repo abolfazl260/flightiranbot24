@@ -93,6 +93,7 @@ def test_airport_widget_has_full_directory_and_is_under_telegram_size_limits(sto
     assert 'id="all"' in html and 'id="iran"' in html
     assert 'id="foreign"' in html
     assert "منابع و لینک‌ها" in html
+    assert ".tabs[hidden]{display:none}" in html
 
 
 def test_published_sections_are_paginated_and_never_silently_truncated(store):
