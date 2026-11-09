@@ -4,6 +4,7 @@
 import {approvedExternalUrl, fetchCatalog, filterWebsites} from "./travel-catalog.mjs";
 
 import {rankTicketFares, validDropPercent, pricesAreStale} from "./ticket-ranking.mjs";
+import {parseHistory} from "./ticket-history.mjs";
 import {createGuideView} from "./guide-view.mjs";
 import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from "./mobile-parity.mjs";
 
@@ -18,7 +19,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     return name && name !== code ? name : (fallback || code);
   }
   const state = {
-    initData: "", bootstrap: null, prices: null, origin: "", ticketSort: "cheap", pricesRequest: 0,
+    initData: "", bootstrap: null, prices: null, origin: "", ticketSort: "cheap", pricesRequest: 0, historyRequest: 0,
     passport: "IR", visa: null, alerts: null, useful: null, active: "home",
     visaMode: "live", snapshot: null,
     websites: null, websitesFetchedAt: 0, websitesRequest: null,
@@ -187,7 +188,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     if (!dlg.open) dlg.showModal();
     telegram?.HapticFeedback?.impactOccurred?.("light");
   }
-  function closeModal() { state.visaDetailRequest++; if ($("mini-dialog").open) $("mini-dialog").close(); }
+  function closeModal() { state.historyRequest++; state.visaDetailRequest++; if ($("mini-dialog").open) $("mini-dialog").close(); }
   function act(label, click, type = "primary-cta") {
     return el("button",{type:"button",className:type,onClick:click},label);
   }
@@ -323,11 +324,67 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
               .format(validDropPercent(fare))+"٪ نسبت به میانگین"}),
           el("div",{className:"fare-actions"},
             el("button",{type:"button",className:"tiny-button",onClick:()=>link("support","https://t.me/Advertio_support")},"رزرو"),
+            el("button",{type:"button",className:"tiny-button",onClick:()=>openHistory(state.origin,fare.name,fare)},"نمودار قیمت"),
             el("button",{type:"button",className:"tiny-button filled",onClick:()=>priceDialog(state.origin,fare)},"زنگوله قیمت")
           )
         )
       );
     }));
+  }
+  async function openHistory(origin,destination,fare=null) {
+    const seq=++state.historyRequest;
+    modal("نمودار قیمت ثبت‌شده",el("p",{text:"در حال دریافت تاریخچه…"}),[act("بستن",closeModal)]);
+    try {
+      const raw=await request("/api/v1/tickets/history?"+new URLSearchParams({origin,destination}));
+      if(seq!==state.historyRequest)return;
+      const h=parseHistory(raw);
+      if(h.origin!==origin||h.destination!==destination)throw Error("مسیر پاسخ معتبر نیست");
+      const details=el("p",{className:"dialog-text",text:"برای دیدن قیمت روز، نقطه یا ردیف آن را انتخاب کنید."});
+      const svg=document.createElementNS("http://www.w3.org/2000/svg","svg");
+      svg.setAttribute("viewBox","0 0 320 145");svg.setAttribute("role","img");
+      svg.setAttribute("aria-label","کمترین قیمت ثبت‌شدهٔ هر روز در ۲۱ روز UTC");
+      svg.style.width="100%";
+      function shape(name,attrs){const n=document.createElementNS(svg.namespaceURI,name);
+        for(const [k,v]of Object.entries(attrs))n.setAttribute(k,String(v));svg.append(n);return n;}
+      for(const [a,b]of h.segments)shape("line",{x1:a.x,y1:a.y,x2:b.x,y2:b.y,stroke:"#159979","stroke-width":3});
+      function pointText(p){return p.day+" UTC: "+money(p.price_toman)+" · "+fmt(p.sample_count)+" ثبت";}
+      for(const p of h.points){
+        const dot=shape("circle",{cx:p.x,cy:p.y,r:5,fill:"#159979",tabindex:0,role:"button","aria-label":pointText(p)});
+        dot.addEventListener("click",()=>{details.textContent=pointText(p);});
+        dot.addEventListener("keydown",e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();details.textContent=pointText(p);}});
+      }
+      const body=el("div",{},el("h3",{text:"از "+origin+" به "+destination}),
+        el("p",{text:"کمترین قیمت واقعی هر روز · تومان · ۲۱ روز UTC · "+new Date(h.start*86400000).toISOString().slice(0,10)+" تا "+h.as_of}),
+        h.points.length?svg:null,
+        el("p",{className:"status-strip"+(h.stale?" warning":""),text:h.stale?"تاریخچه قدیمی یا فاقد مشاهدهٔ تازه است؛ قیمت رزرو را تأیید کنید.":"قیمت‌های ثبت‌شده؛ موجودی و رزرو تضمین‌شده نیست."}),
+        el("p",{text:h.points.length?"کمینه: "+money(h.min)+" · بیشینه: "+money(h.max):"برای این مسیر تاریخچه‌ای ثبت نشده است."}),
+        el("p",{text:"روزهای دارای داده: "+fmt(h.points.length)+" از ۲۱ · تعداد مشاهدات: "+fmt(h.samples)}),
+        el("p",{text:"زمان آخرین مشاهده: "+dateLabel(h.observed_at)}),
+        el("p",{text:h.points.length===1?"برای تشخیص روند داده کافی نیست.":"روزهای بدون ثبت، نقطه یا خط تخمینی ندارند."}),details,
+        ...h.points.map(p=>el("button",{type:"button",className:"preview-row",onClick:()=>{details.textContent=pointText(p);}},pointText(p))));
+      modal("نمودار قیمت ثبت‌شده",body,[act("تغییر مسیر",()=>historyRoutes()),
+        act("رزرو / هماهنگی",()=>link("support","https://t.me/Advertio_support")),
+        ...(fare?[act("زنگوله قیمت",()=>priceDialog(origin,fare))]:[]),act("بستن",closeModal,"secondary-cta")]);
+    }catch{
+      if(seq!==state.historyRequest)return;
+      modal("تاریخچه در دسترس نیست",el("p",{text:"دریافت تاریخچه ناموفق بود؛ دوباره تلاش کنید."}),
+        [act("تلاش دوباره",()=>openHistory(origin,destination,fare)),act("بستن",closeModal,"secondary-cta")]);
+    }
+  }
+  async function historyRoutes(offset=0) {
+    const seq=++state.historyRequest;
+    modal("مسیرهای دارای تاریخچه",el("p",{text:"در حال دریافت مسیرها…"}),[act("بستن",closeModal)]);
+    try {
+      const data=await request("/api/v1/tickets/history/routes?offset="+offset);
+      if(seq!==state.historyRequest)return;
+      const rows=Array.isArray(data.routes)?data.routes:[];
+      const body=el("div",{},...rows.map(r=>el("button",{type:"button",className:"preview-row",
+        onClick:()=>openHistory(r.origin,r.destination)},"از "+r.origin+" به "+r.destination)));
+      if(!rows.length)body.append(el("p",{text:"هنوز مسیری با تاریخچه ثبت نشده است."}));
+      modal("مسیرهای دارای تاریخچه",body,[...(offset?[act("قبلی",()=>historyRoutes(Math.max(0,offset-100)))]:[]),
+        ...(Number.isInteger(data.next_offset)?[act("بعدی",()=>historyRoutes(data.next_offset))]:[]),act("بستن",closeModal,"secondary-cta")]);
+    }catch{if(seq===state.historyRequest)modal("مسیرها در دسترس نیست",el("p",{text:"دریافت مسیرها ناموفق بود."}),
+      [act("تلاش دوباره",()=>historyRoutes(offset)),act("بستن",closeModal,"secondary-cta")]);}
   }
   function priceDialog(origin, fare) {
     if (state.prices?.stale) {
@@ -888,6 +945,7 @@ import {createVisaSnapshotReader,filterCountries,POPULAR_VISA,FIDS_HOME} from ".
     });
   }
   $("ticket-refresh").addEventListener("click", loadPrices);
+  $("ticket-history-routes").addEventListener("click", ()=>historyRoutes());
   $("visa-search").addEventListener("input",renderVisa);
   $("website-search").addEventListener("input",renderWebsites);
   $("website-category").addEventListener("change",renderWebsites);

@@ -25,6 +25,7 @@ from sqlalchemy import select
 from flightiran.db.engine import Database, create_database
 from flightiran.db.models import VisaRuleIndex
 from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository
+from flightiran.webapp.ticket_history import public_history_documents
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
 LOGGER = logging.getLogger(__name__)
@@ -254,6 +255,18 @@ class PublicPublisher:
             jobs.append(("tickets", "internal/v1/tickets/prices", prices))
         except Exception:
             LOGGER.exception("cloudflare_prices_source_unavailable")
+            failed += 1
+        try:
+            history = await public_history_documents(
+                SQLiteMz724PriceHistoryRepository(self.database)
+            )
+            for document in history:
+                route_id = hashlib.sha256(encode_public({
+                    "origin": document["origin"], "destination": document["destination"]
+                })).hexdigest()
+                jobs.append((f"ticket-history:{route_id}", "internal/v1/tickets/history", document))
+        except Exception:
+            LOGGER.exception("cloudflare_history_source_unavailable")
             failed += 1
         try:
             jobs.append(("airports", "internal/v1/airports", public_airports()))

@@ -7,7 +7,7 @@ import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, Header, HTTPException, Response
+from fastapi import FastAPI, Header, HTTPException, Query, Response
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -16,6 +16,7 @@ from flightiran.db.engine import Database, create_database
 from flightiran.db.repositories import SQLiteMz724PriceHistoryRepository, SQLiteUserRepository
 from flightiran.modules.webapp import WebAppAuthenticator, WebAppService
 from flightiran.webapp.mini_api import mini_router
+from flightiran.webapp.ticket_history import PublicTicketHistory
 from flightiran.webapp.ticket_prices import PublicTicketPriceFeed
 
 STATIC_DIR = Path(__file__).with_name("static")
@@ -34,6 +35,9 @@ def create_app(
         PublicTicketPriceFeed(SQLiteMz724PriceHistoryRepository(activity_database))
         if activity_database is not None else None
     )
+
+    public_history = (PublicTicketHistory(SQLiteMz724PriceHistoryRepository(activity_database))
+                      if activity_database else None)
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
@@ -116,6 +120,31 @@ def create_app(
             return await public_prices.get()
         except Exception as exc:
             raise HTTPException(status_code=503, detail="Ticket prices unavailable") from exc
+
+    @app.get("/api/v1/tickets/history/routes")
+    async def ticket_history_routes(response: Response, offset: int = Query(0, ge=0, le=10000)):
+        if public_history is None:
+            raise HTTPException(503, "Ticket database unavailable")
+        response.headers["Cache-Control"] = "public, max-age=60"
+        try:
+            return await public_history.routes(offset)
+        except Exception as exc:
+            raise HTTPException(503, "History unavailable") from exc
+
+    @app.get("/api/v1/tickets/history")
+    async def ticket_history(
+        response: Response, origin: str = Query(min_length=1, max_length=128),
+        destination: str = Query(min_length=1, max_length=128),
+    ):
+        if public_history is None:
+            raise HTTPException(503, "Ticket database unavailable")
+        if not origin.strip() or not destination.strip():
+            raise HTTPException(422, "Invalid route")
+        response.headers["Cache-Control"] = "public, max-age=60"
+        try:
+            return await public_history.get(origin.strip(), destination.strip())
+        except Exception as exc:
+            raise HTTPException(503, "History unavailable") from exc
 
     @app.get("/api/session")
     async def session(x_telegram_init_data: str | None = Header(default=None)) -> dict[str, object]:

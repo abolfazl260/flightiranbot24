@@ -58,6 +58,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.abolfazl260.flightiranbot24.data.tickets.TicketHistoryRepository
+import com.abolfazl260.flightiranbot24.presentation.tickets.TicketHistoryViewModel
+import com.abolfazl260.flightiranbot24.presentation.tickets.TicketHistoryDialog
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.abolfazl260.flightiranbot24.data.tickets.TicketSort
 import com.abolfazl260.flightiranbot24.data.tickets.rankTicketFares
 import com.abolfazl260.flightiranbot24.data.tickets.TicketFare
@@ -100,6 +105,7 @@ class TicketPricesActivity : ComponentActivity() {
                     onRefresh = model::refresh,
                     onSupport = { openUrl(BotLinks.SUPPORT) },
                     allowSupport = true,
+                    historyRepository = remember { TicketHistoryRepository(container.publicApi()) },
                 )
             }
         }
@@ -133,10 +139,16 @@ internal fun TicketPricesScreen(
     onHome: () -> Unit = onBack,
     onChecklist: () -> Unit = {},
     onServices: () -> Unit = {},
+    historyRepository: TicketHistoryRepository? = null,
 ) {
     var selectedOrigin by rememberSaveable { mutableStateOf("") }
     var search by rememberSaveable { mutableStateOf("") }
     var sort by rememberSaveable { mutableStateOf(TicketSort.CHEAPEST) }
+    var historyOpen by rememberSaveable { mutableStateOf(false) }
+    val historyModel: TicketHistoryViewModel? = if (historyRepository == null) null else viewModel(
+        factory = viewModelFactory { initializer { TicketHistoryViewModel(historyRepository) } })
+    if (historyOpen && historyModel != null) TicketHistoryDialog(historyModel,
+        onDismiss = { historyModel.close(); historyOpen = false }, onSupport = onSupport)
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         // Deliberately keep the app-wide footer and its navigation unchanged.
@@ -157,6 +169,9 @@ internal fun TicketPricesScreen(
         ) {
             item {
                 TicketPricesHeader(onBack = onBack)
+                if (historyModel != null) TextButton(onClick = {
+                    historyOpen = true; historyModel.routes()
+                }) { Text("مسیرهای دارای تاریخچه") }
             }
             when (state) {
                 TicketPricesUiState.Loading -> item {
@@ -294,6 +309,9 @@ internal fun TicketPricesScreen(
                                 Text("از " + active.city + " به " + fare.destination,
                                     style = MaterialTheme.typography.labelMedium)
                                 FareCard(fare)
+                                if (historyModel != null) TextButton(onClick = {
+                                    historyOpen = true; historyModel.open(active.city,fare.destination)
+                                }) { Text("نمودار قیمت این مسیر") }
                                 Text("زمان ثبت: " + snapshot.observedAt,
                                     style = MaterialTheme.typography.labelSmall)
                             }
