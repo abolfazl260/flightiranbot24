@@ -64,9 +64,9 @@ def test_html_widget_uses_official_limits_and_localized_accessible_controls():
     assert "پرواز داخلی" in CHECKLIST_WIDGET_HTML
     assert "سفر خارجی" in CHECKLIST_WIDGET_HTML
     assert "تأیید پاک‌سازی" in CHECKLIST_WIDGET_HTML
-    assert len(TASKS) == 15
-    assert VALID_BITS["d"].bit_count() == 11
-    assert VALID_BITS["i"].bit_count() == 15
+    assert len(TASKS) == 17
+    assert VALID_BITS["d"].bit_count() == 13
+    assert VALID_BITS["i"].bit_count() == 17
 
 
 @pytest.mark.asyncio
@@ -267,3 +267,57 @@ async def test_checklist_start_deep_link_on_bale_keeps_normal_menu(monkeypatch):
     )
     mock_send.assert_not_awaited()
     msg.reply_text.assert_awaited_once()
+
+
+def test_document_tasks_are_present_once_and_old_indices_stay_stable():
+    titles = [item[0] for item in TASKS]
+    assert "اعتبار گذرنامه" in titles
+    assert "شرایط ویزا یا مجوز ورود" in titles
+    assert "بیمه مسافرتی" in titles
+    assert "واچر هتل یا تأییدیه اقامت" in titles
+    assert "مدارک کودک" in titles
+    assert "تطابق نام مسافر با بلیت" in titles
+    assert titles.count("بیمه مسافرتی") == 1
+    assert titles.index("اعتبار گذرنامه") == 3
+    assert titles.index("شرایط ویزا یا مجوز ورود") == 4
+    assert titles.index("واچر هتل یا تأییدیه اقامت") == 8
+    assert titles[15:17] == ["مدارک کودک", "تطابق نام مسافر با بلیت"]
+    assert not TASKS[15][3] and not TASKS[16][3]
+    assert "در صورت سفر با کودک" in TASKS[15][2]
+    assert "تاریخ انقضا" in TASKS[3][2]
+    assert "گذرنامه" in TASKS[4][2]
+    assert "مدرک هویتی" in TASKS[16][2]
+    assert "مدارک کودک" in CHECKLIST_WIDGET_HTML
+    assert "تطابق نام مسافر با بلیت" in CHECKLIST_WIDGET_HTML
+    assert 'id="count">۰ / ۱۳' in CHECKLIST_WIDGET_HTML
+
+
+@pytest.mark.asyncio
+async def test_new_document_tasks_save_for_both_modes_without_corrupting_old_bits(tmp_path):
+    from flightiran.interfaces.telegram.checklist_widget import ACTION
+
+    assert ACTION.fullmatch("cl:t:d:15")
+    assert ACTION.fullmatch("cl:t:i:16")
+    assert not ACTION.fullmatch("cl:t:d:17")
+
+    db_url = f"sqlite+aiosqlite:///{tmp_path / 'documents.db'}"
+    db = await initialize_database(db_url)
+    svc = SQLiteTravelChecklistService(db)
+    await svc.apply(333, "toggle", "d", 0)
+    await svc.apply(333, "toggle", "d", 15)
+    await svc.apply(333, "toggle", "i", 16)
+    await svc.apply(333, "toggle", "i", 3)
+    state = await svc.get(333)
+    assert state.domestic == (1 << 0) | (1 << 15)
+    assert state.international == (1 << 16) | (1 << 3)
+    assert state.progress("d") == (2, 13)
+    assert state.progress("i") == (2, 17)
+    await db.close()
+
+    restored = await initialize_database(db_url)
+    state = await SQLiteTravelChecklistService(restored).get(333)
+    assert state.domestic & (1 << 15)
+    assert state.domestic & (1 << 0)
+    assert state.international & (1 << 16)
+    assert state.international & (1 << 3)
+    await restored.close()
