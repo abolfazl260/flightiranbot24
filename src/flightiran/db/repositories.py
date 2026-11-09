@@ -277,6 +277,38 @@ class SQLiteMz724PriceHistoryRepository:
                 if (origin, destination) in requested
             }
 
+    async def get_route_history(
+        self, origin: str, destination: str, *, days: int = 21
+    ) -> list[tuple[datetime, int]]:
+        """Return actual hourly observations for a route, oldest first.
+
+        Missing hours remain missing. The widget derives daily observed lows
+        from these records without interpolation or fabricated quotations.
+        """
+        if not origin or not destination or not 1 <= days <= 21:
+            return []
+        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+        async with self.database.session() as session:
+            result = await session.execute(
+                select(
+                    Mz724PriceSnapshot.captured_at,
+                    Mz724PriceSnapshot.price_toman,
+                )
+                .where(
+                    Mz724PriceSnapshot.origin == origin,
+                    Mz724PriceSnapshot.destination == destination,
+                    Mz724PriceSnapshot.captured_at >= cutoff,
+                )
+                .order_by(Mz724PriceSnapshot.captured_at)
+                .limit(600)
+            )
+            return [
+                (when.replace(tzinfo=timezone.utc) if when.tzinfo is None else when,
+                 int(price))
+                for when, price in result.all()
+                if price is not None and price > 0
+            ]
+
     async def get_latest_prices(self) -> RecordedTicketBatch | None:
         """Read the latest captured cohort and its averages, never the upstream site.
 
