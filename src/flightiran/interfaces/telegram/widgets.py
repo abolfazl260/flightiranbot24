@@ -15,7 +15,11 @@ from datetime import datetime, timezone
 from telegram import Update
 from telegram.ext import ContextTypes
 
+from flightiran.config.settings import DEFAULT_SUPPORT_USERNAME
 from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
+
+from .fare_chart_frontend import enhance_fare_html
+from .fare_route_chart import handle_route_widget_query
 
 LOGGER = logging.getLogger(__name__)
 
@@ -140,6 +144,8 @@ aria-pressed="false">بیشترین کاهش قیمت</button>
   W.ready();
 })();
 </script></body></html>"""
+
+FARE_WIDGET_HTML = enhance_fare_html(FARE_WIDGET_HTML)
 
 assert len(FARE_WIDGET_HTML.encode("utf-8")) <= 32768
 assert len(zlib.compress(FARE_WIDGET_HTML.encode("utf-8"), level=9)) <= 4096
@@ -266,6 +272,7 @@ async def send_fare_widget(message: object, bot: object,
 async def widget_query_handler(
     update: Update, context: ContextTypes.DEFAULT_TYPE,
     service: CheapTicketService | None,
+    *, support_username: str = DEFAULT_SUPPORT_USERNAME,
 ) -> None:
     """Handle raw widget_query updates on PTB versions lacking Bot API 10.4."""
     raw = update.api_kwargs.get("widget_query")
@@ -283,6 +290,7 @@ async def widget_query_handler(
     chat = raw.get("chat") or {}
     sender = raw.get("from") or {}
     message_id = raw.get("message_id")
+    action = raw.get("data")
     # Production widgets are private and non-shared. Do not allow foreign chat
     # IDs, unexpected query types, or unsupported actions to trigger a fetch.
     if not (
@@ -292,7 +300,8 @@ async def widget_query_handler(
         and type(sender.get("id")) is int
         and sender["id"] == chat.get("id")
         and type(message_id) is int and message_id > 0
-        and raw.get("data") == "fare:refresh"
+        and isinstance(action, str)
+        and (action == "fare:refresh" or action.startswith("fare:"))
         and (raw.get("type") is None
              or (isinstance(raw["type"], dict)
                  and raw["type"].get("type") == "data"))
@@ -301,6 +310,12 @@ async def widget_query_handler(
         return
     if service is None:
         await answer("unavailable")
+        return
+
+    if action != "fare:refresh":
+        await handle_route_widget_query(
+            raw, context.bot, service, answer, support_username=support_username,
+        )
         return
 
     # Answer immediately. Slow provider requests must not block the 15s deadline.
