@@ -78,7 +78,10 @@ def render_route_chart_html(
     first = samples[0].day
     total_observations = sum(entry.sample_count for entry in samples)
     last_updated = samples[-1].last_captured_at.strftime("%Y-%m-%d %H:%M")
-    trend_note = "تنها یک روز داده موجود است؛ هنوز روند قابل محاسبه نیست. " if len(samples) < 2 else ""
+    trend_note = (
+        "تنها یک روز داده موجود است؛ هنوز روند قابل محاسبه نیست. "
+        if len(samples) < 2 else ""
+    )
     html = f"""<!DOCTYPE html>
 <html lang="fa" dir="rtl"><head><style>
 body{{margin:0;padding:12px;font-family:Arial,sans-serif;
