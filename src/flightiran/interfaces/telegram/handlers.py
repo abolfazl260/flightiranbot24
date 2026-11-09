@@ -38,13 +38,13 @@ from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
 from flightiran.modules.visa.watch import VisaWatchService
 
-from .checklist_widget import handle_checklist_query, send_checklist_widget
 from .admin_report_rich import (
     render_admin_report_fallback,
     render_rich_admin_report,
     render_rich_user_activity_reports,
     render_user_activity_fallback,
 )
+from .checklist_widget import handle_checklist_query, send_checklist_widget
 from .keyboards import (
     back_menu,
     language_menu,
