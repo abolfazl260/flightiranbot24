@@ -74,7 +74,7 @@ def route_chart_state(
     *, now: datetime | None = None,
 ) -> str:
     """Encode daily observed low prices, explicitly skipping missing days."""
-    daily: dict[str, int] = {}
+    daily: dict[int, int] = {}
     sample_count = 0
     for captured, price in history:
         if not isinstance(captured, datetime) or not isinstance(price, int) or price <= 0:
@@ -82,10 +82,10 @@ def route_chart_state(
         stamp = captured.astimezone(timezone.utc) if captured.tzinfo else captured.replace(
             tzinfo=timezone.utc
         )
-        label = stamp.strftime("%m/%d")
+        label = stamp.date().toordinal()
         daily[label] = min(daily.get(label, price), price)
         sample_count += 1
-    points = [[day, value] for day, value in daily.items()]
+    points = [[day, value] for day, value in sorted(daily.items())]
     avg = (
         round(average)
         if isinstance(average, (float, int)) and math.isfinite(average)
