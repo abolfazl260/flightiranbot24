@@ -1,0 +1,36 @@
+{
+  "currency": "TOMAN",
+  "metric": "daily_minimum",
+  "days": 21,
+  "origin": "A",
+  "destination": "B",
+  "as_of": "2026-01-02",
+  "observed_at": "2026-01-02T12:00:00+00:00",
+  "stale": false,
+  "points": [
+    {
+      "day": "2025-12-13",
+      "price_toman": 300,
+      "sample_count": 2,
+      "last_observed_at": "2025-12-13T12:00:00+00:00"
+    },
+    {
+      "day": "2025-12-31",
+      "price_toman": 100,
+      "sample_count": 3,
+      "last_observed_at": "2025-12-31T12:00:00+00:00"
+    },
+    {
+      "day": "2026-01-01",
+      "price_toman": 200,
+      "sample_count": 1,
+      "last_observed_at": "2026-01-01T12:00:00+00:00"
+    },
+    {
+      "day": "2026-01-02",
+      "price_toman": 100,
+      "sample_count": 4,
+      "last_observed_at": "2026-01-02T12:00:00+00:00"
+    }
+  ]
+}

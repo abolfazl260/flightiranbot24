@@ -94,3 +94,10 @@ The public API adds an exact mean alongside its compatible rounded field. Telegr
 reads the stored cohort; Android and Mini App keep stale last-good rates on failed
 refresh rather than presenting them as current. Result counts vary by interface,
 while the order of common routes is identical.
+
+## Recorded route charts (#200)
+Android and Mini App now render the same 21 UTC calendar-day daily minima as
+Telegram `/chart`. The native Canvas and web SVG keep real date gaps; explicit
+empty/single/flat-series states and accessible daily values accompany the graph.
+A public, bounded history API is served directly from SQLite or via the existing
+server-to-D1 publisher. See `TICKET_HISTORY.md` for rollout and rollback.

@@ -1,3 +1,4 @@
+import {publicHistory, publishHistory} from "./ticket_history.mjs";
 import { miniRoute } from "./mini.mjs";
 import { getIranFidsBoard } from "./iran_fids.mjs";
 import { publicVisaList, publicVisaRule } from "./visa_snapshot.mjs";
@@ -122,6 +123,8 @@ function validatedVisaPassport(data, passport) {
 }
 export async function handleRequest(request, env) {
   const url = new URL(request.url), path = url.pathname;
+  const history = await publicHistory(request, env);
+  if (history) return history;
   const mini = await miniRoute(request, env, authorized);
   if (mini) return mini;
   if (path.startsWith("/api/v1/iran/fids/")) return getIranFidsBoard(request, env);
@@ -167,6 +170,10 @@ export async function handleRequest(request, env) {
     if (!await authorized(request, env)) return bad(401, "Unauthorized");
     let payload;
     try { payload = await bodyJson(request); } catch { return bad(400, "Invalid JSON payload"); }
+    if (path === "/internal/v1/tickets/history") {
+      if (!env.PUBLIC_DB) return bad(503,"History unavailable");
+      return publishHistory(payload,env.PUBLIC_DB);
+    }
     if (path === "/internal/v1/tickets/prices") {
       if (!env.PUBLIC_DB) return bad(503, "Public index unavailable");
       const snapshot = validatedPrices(payload);

@@ -365,6 +365,33 @@ class SQLiteMz724PriceHistoryRepository:
             for day, min_price, count, captured in rows
         ]
 
+    async def get_public_daily_minimums(
+        self, *, days: int = 21, now: datetime | None = None,
+    ) -> list[tuple[str, str, RouteDailyMinimum]]:
+        """One bounded aggregation for public history publication; no private fields."""
+        start, end = self._chart_bounds(days, now)
+        day = func.date(Mz724PriceSnapshot.captured_at)
+        async with self.database.session() as session:
+            result = await session.execute(select(
+                Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination, day,
+                func.min(Mz724PriceSnapshot.price_toman), func.count(Mz724PriceSnapshot.id),
+                func.max(Mz724PriceSnapshot.captured_at),
+            ).where(
+                Mz724PriceSnapshot.captured_at >= start,
+                Mz724PriceSnapshot.captured_at <= end,
+                Mz724PriceSnapshot.price_toman > 0,
+            ).group_by(Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination, day)
+                .order_by(Mz724PriceSnapshot.origin, Mz724PriceSnapshot.destination, day)
+                .limit(210001))
+            rows = result.all()
+        if len(rows) > 210000:
+            raise ValueError("Public history exceeds 10000 routes x 21 days")
+        return [(origin, destination, RouteDailyMinimum(
+            date.fromisoformat(label), int(price), int(count),
+            captured.replace(tzinfo=timezone.utc) if captured.tzinfo is None
+            else captured.astimezone(timezone.utc),
+        )) for origin, destination, label, price, count, captured in rows]
+
     async def get_latest_prices(self) -> RecordedTicketBatch | None:
         """Read the latest captured cohort and its averages, never the upstream site.
 
