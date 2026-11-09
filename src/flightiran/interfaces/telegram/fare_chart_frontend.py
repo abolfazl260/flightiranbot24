@@ -4,9 +4,6 @@ Telegram's HTML widget sandbox does not support text fields or native selects.
 All user input here uses clickable buttons and TelegramWidget.request.
 """
 
-from __future__ import annotations
-
-
 _SELECTOR_CSS = """
 #route-panel{padding:10px 0 12px;border-bottom:1px solid var(--tg-theme-section-separator-color)}
 #route-panel h3{margin-bottom:7px}
