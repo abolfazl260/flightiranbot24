@@ -12,6 +12,8 @@ internal data class TicketFare(
     val currentToman: Long,
     val averageToman: Long?,
     val differencePercent: Double?,
+    val averageSampleCount: Int = 0,
+    val historicalAverage: Double? = averageToman?.toDouble(),
 )
 internal data class TicketOrigin(val city: String, val fares: List<TicketFare>)
 internal data class TicketPriceSnapshot(
@@ -61,14 +63,19 @@ internal class TicketPricesRepository(private val api: PublicJsonRepository<Json
                     val item = element.asJsonObject
                     val name = item.get("name")?.asString?.trim()
                         ?.takeIf { it.isNotEmpty() } ?: return@runCatching null
-                    val price = item.get("price_toman")?.asLong
-                        ?.takeIf { it > 0L } ?: return@runCatching null
-                    val average = item.get("average_price_toman")
-                        ?.takeUnless { it.isJsonNull }?.asDouble
-                        ?.takeIf { it.isFinite() && it > 0.0 }?.toLong()?.takeIf { it > 0L }
-                    val movement = item.get("change_percent")
-                        ?.takeUnless { it.isJsonNull }?.asDouble?.takeIf { it.isFinite() }
-                    TicketFare(name, price, average, if (average == null) null else movement)
+                    fun numeric(key: String): Double? = runCatching {
+                        item.get(key)?.takeIf { it.isJsonPrimitive && it.asJsonPrimitive.isNumber }
+                            ?.asDouble?.takeIf { it.isFinite() }
+                    }.getOrNull()
+                    val price = numeric("price_toman")
+                        ?.takeIf { it > 0.0 && it <= 9007199254740991.0 && it % 1.0 == 0.0 }
+                        ?.toLong() ?: return@runCatching null
+                    val average = numeric("average_price_toman")?.takeIf { it > 0.0 }
+                    val samples = numeric("average_sample_count")
+                        ?.takeIf { it >= 0 && it % 1.0 == 0.0 && it <= Int.MAX_VALUE }
+                        ?.toInt() ?: 0
+                    val fare = TicketFare(name, price, average?.toLong(), null, samples, average)
+                    fare.copy(differencePercent = fare.validDropPercent()?.let { -it })
                 }.getOrNull()
             }
             if (fares.isEmpty()) null else TicketOrigin(city, fares)

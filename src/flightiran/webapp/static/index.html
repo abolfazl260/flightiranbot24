@@ -9,7 +9,7 @@
   <title>ادورتیو | دستیار سفر</title>
   <link rel="stylesheet" href="/assets/mini.css?v=5">
   <script src="https://telegram.org/js/telegram-web-app.js" defer></script>
-  <script type="module" src="/assets/mini.js?v=5"></script>
+  <script type="module" src="/assets/mini.js?v=6"></script>
 </head>
 <body>
   <svg class="sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -79,7 +79,12 @@
         <div class="field"><label for="origin-select">شهر مبدأ</label><select id="origin-select"><option value="">در حال بارگذاری…</option></select></div>
         <div class="field search-field"><label for="ticket-search">جست‌وجوی مقصد</label><span class="search-wrap"><svg class="symbol"><use href="#i-search"></use></svg><input id="ticket-search" type="search" placeholder="نام شهر مقصد" autocomplete="off"></span></div>
         <div class="section-heading"><h2>مسیرهای موجود</h2><span class="count" id="ticket-count">—</span></div>
-        <div class="list-stack" id="ticket-results"><div class="panel muted">در حال بارگذاری…</div></div>
+        <div class="ticket-sort" role="tablist" aria-label="مرتب‌سازی قیمت‌ها">
+          <button type="button" role="tab" id="ticket-sort-cheap" class="active" aria-selected="true" aria-controls="ticket-results">ارزان‌ترین بلیت‌ها</button>
+          <button type="button" role="tab" id="ticket-sort-drops" aria-selected="false" aria-controls="ticket-results">بیشترین کاهش قیمت</button>
+        </div>
+        <button type="button" class="tiny-button" id="ticket-refresh">تازه‌سازی قیمت‌ها</button>
+        <div class="list-stack" role="tabpanel" id="ticket-results"><div class="panel muted">در حال بارگذاری…</div></div>
         <p class="footnote">قیمت‌ها به‌معنای موجودی قطعی یا رزرو تضمین‌شده نیستند. نرخ را قبل از پرداخت با پشتیبانی بررسی کنید.</p>
       </section>
 

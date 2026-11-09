@@ -77,3 +77,11 @@ It does not clear another user's checklist, browser caches or server alerts.
   snapshot, popular destination detail and pre-login privacy/auth boundaries.
 - Browser tests mock Telegram and APIs; no live Telegram message, backend user
   mutation, production deployment or Android release was performed.
+
+## Recorded fare ranking (#198)
+Android and Mini App now expose cheapest / verified historical reductions tabs.
+Origin and destination filters apply before ranking. Reduction eligibility requires
+positive finite historical mean, at least three samples and a current price below
+that mean; the displayed percentage is recomputed, never trusted from change_percent.
+Cards retain booking/support and Mini App price alerts. Recorded timestamps and
+stale labels remain visible; no inventory or booking guarantee is implied.

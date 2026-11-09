@@ -58,6 +58,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.abolfazl260.flightiranbot24.data.tickets.TicketSort
+import com.abolfazl260.flightiranbot24.data.tickets.rankTicketFares
 import com.abolfazl260.flightiranbot24.data.tickets.TicketFare
 import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.presentation.components.TravelEmptyState
@@ -134,6 +136,7 @@ internal fun TicketPricesScreen(
 ) {
     var selectedOrigin by rememberSaveable { mutableStateOf("") }
     var search by rememberSaveable { mutableStateOf("") }
+    var sort by rememberSaveable { mutableStateOf(TicketSort.CHEAPEST) }
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         // Deliberately keep the app-wide footer and its navigation unchanged.
@@ -234,9 +237,24 @@ internal fun TicketPricesScreen(
                             singleLine = true,
                         )
                     }
-                    val fares = active.fares.filter {
-                        it.destination.contains(search.trim(), ignoreCase = true)
-                    }.sortedBy { it.currentToman }
+                    item {
+                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            TicketSort.entries.forEach { mode ->
+                                FilterChip(
+                                    selected = sort == mode,
+                                    onClick = { sort = mode },
+                                    modifier = Modifier.weight(1f).heightIn(min = 48.dp),
+                                    label = { Text(
+                                        (if (sort == mode) "✓ " else "") +
+                                            if (mode == TicketSort.CHEAPEST) "ارزان‌ترین بلیت‌ها"
+                                            else "بیشترین کاهش قیمت",
+                                        fontWeight = FontWeight.Bold,
+                                    ) },
+                                )
+                            }
+                        }
+                    }
+                    val fares = rankTicketFares(active.fares, sort, search)
                     item {
                         Row(
                             modifier = Modifier.fillMaxWidth(),
@@ -262,9 +280,19 @@ internal fun TicketPricesScreen(
                         }
                     }
                     if (fares.isEmpty()) {
-                        item { TravelEmptyState(stringResource(R.string.ticket_prices_empty)) }
+                        item { TravelEmptyState(if (sort == TicketSort.DROPS)
+                            "کاهش قیمت معتبری در داده‌های ثبت‌شده یافت نشد؛ حداقل سه نمونه تاریخی لازم است."
+                            else stringResource(R.string.ticket_prices_empty)) }
                     } else {
-                        items(fares) { fare -> FareCard(fare) }
+                        items(fares) { fare ->
+                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                                Text("از " + active.city + " به " + fare.destination,
+                                    style = MaterialTheme.typography.labelMedium)
+                                FareCard(fare)
+                                Text("زمان ثبت: " + snapshot.observedAt,
+                                    style = MaterialTheme.typography.labelSmall)
+                            }
+                        }
                     }
                     if (allowSupport) {
                         item {
@@ -424,11 +452,15 @@ private fun FareSummaryCard(
 @Composable
 private fun FareCard(fare: TicketFare) {
     val number = NumberFormat.getNumberInstance(Locale("fa", "IR"))
+    val percentage = NumberFormat.getNumberInstance(Locale("fa", "IR")).apply {
+        minimumFractionDigits = 1
+        maximumFractionDigits = 1
+    }
     val percent = fare.differencePercent
     val change = when {
         percent == null -> "بدون مقایسه"
-        percent < -0.05 -> "↓ " + number.format(abs(percent)) + "٪"
-        percent > 0.05 -> "↑ " + number.format(percent) + "٪"
+        percent < -0.05 -> "↓ " + percentage.format(abs(percent)) + "٪"
+        percent > 0.05 -> "↑ " + percentage.format(percent) + "٪"
         else -> "بدون تغییر"
     }
     val changeColor = when {

@@ -283,3 +283,5 @@ dialog::backdrop { background: #0717279c; }
 #visa-popular button {min-height:44px;white-space:normal}
 #screen-privacy {overflow-wrap:anywhere}
 #screen-privacy > button {margin-top:12px}
+
+.ticket-sort{display:flex;gap:8px;margin:12px 0}.ticket-sort button{flex:1;min-height:48px;border:1px solid currentColor;border-radius:12px;padding:10px;background:var(--panel,#f1f3f5);color:var(--text,#222);font:inherit}.ticket-sort button.active{background:#14786e;color:#fff;font-weight:700;border:2px solid #095b53}
