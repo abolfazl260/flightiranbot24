@@ -35,6 +35,7 @@ from flightiran.modules.airport.catalog import AirportCatalog
 from flightiran.modules.tickets.alerts import PriceAlertService
 from flightiran.modules.tickets.mz724 import Mz724TicketProvider
 from flightiran.modules.tickets.service import CheapTicketService
+from flightiran.modules.travel_checklist import SQLiteTravelChecklistService
 from flightiran.modules.useful_content import default_catalog
 from flightiran.modules.visa.catalog import VisaCatalogService
 from flightiran.modules.visa.sync import VisaSyncService
@@ -60,6 +61,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "language": "تغییر زبان",
         "alerts": "زنگوله قیمت بلیط",
         "fares": "کارت تعاملی قیمت بلیت",
+        "checklist": "چک‌لیست سفر من",
         "visa": "اطلاعات ویزا",
         "visa_watch": "هشدار تغییرات ویزا",
         "visa_list": "کشورها بر اساس پاسپورت",
@@ -71,6 +73,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "language": "Change language",
         "alerts": "Ticket price alerts",
         "fares": "Interactive fare widget",
+        "checklist": "My travel checklist",
         "visa": "Visa requirements",
         "visa_watch": "Visa change alerts",
         "visa_list": "Countries by passport",
@@ -82,6 +85,7 @@ BOT_COMMAND_DESCRIPTIONS = {
         "language": "تغيير اللغة",
         "alerts": "تنبيهات أسعار التذاكر",
         "fares": "بطاقة أسعار الرحلات التفاعلية",
+        "checklist": "قائمة الاستعداد للسفر",
         "visa": "متطلبات التأشيرة",
         "visa_watch": "تنبيهات تغييرات التأشيرات",
         "visa_list": "الدول حسب جواز السفر",
@@ -393,6 +397,9 @@ def run(*, platform: str = "telegram") -> None:
                 Path(__file__).parent / "modules" / "airport" / "data" / "airports.json"
             ),
             cheap_ticket_service=cheap_ticket_service,
+            checklist_service=(
+                SQLiteTravelChecklistService(database) if platform == "telegram" else None
+            ),
             price_alert_service=price_alert_service,
             ticket_support_username=settings.ticket_support_username,
             admin_chat_id=(
