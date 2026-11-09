@@ -64,8 +64,9 @@ def main_menu(
         rows.append([
             InlineKeyboardButton("📈 نمودار قیمت مسیر", callback_data="menu:route_chart")
         ])
-    # Show the Mini App launch button when a valid HTTPS URL is configured.
-    # This shared keyboard is used by /start and returning main-menu navigation.
+    # WebAppInfo buttons are only valid in private Telegram chats.
+    # In groups and on Bale, keep the Mini App available as a regular HTTPS link.
+    # widgets_enabled is true only for supported private Telegram chats.
     secure_url = telegram_web_app_url(web_app_url)
     if secure_url:
         label = {
@@ -73,7 +74,10 @@ def main_menu(
             "en": "🚀 Travel Mini App (فارسی)",
             "ar": "🚀 تطبيق السفر المصغر (فارسی)",
         }.get(language, "🚀 ورود به مینی‌اپ سفر")
-        rows.append([InlineKeyboardButton(label, web_app=WebAppInfo(secure_url))])
+        if widgets_enabled:
+            rows.append([InlineKeyboardButton(label, web_app=WebAppInfo(secure_url))])
+        else:
+            rows.append([InlineKeyboardButton(label, url=secure_url)])
 
     def button_for(item: tuple[str, str] | InlineKeyboardButton) -> InlineKeyboardButton:
         if isinstance(item, InlineKeyboardButton):
