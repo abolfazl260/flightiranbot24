@@ -145,7 +145,7 @@ async def test_user_selects_only_recorded_origin_and_destination():
     message = FakeMessage()
     await open_chart_picker(message, bot, history, context.user_data)
     assert message.reply_text.await_count == 1
-    await handle_chart_callback(FakeQuery("chart:origin:1"), context, history)
+    await handle_chart_callback(FakeQuery("chart:origin:0"), context, history)
     assert context.user_data["route_chart_origin"] == "تهران"
     destination_query = FakeQuery("chart:dest:0")  # Unicode-sorted: مشهد, then کیش
     await handle_chart_callback(destination_query, context, history)
