@@ -1,6 +1,5 @@
 """Regression tests for the Telegram Bot API 10.4 interactive help centre."""
 
-import json
 import zlib
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
