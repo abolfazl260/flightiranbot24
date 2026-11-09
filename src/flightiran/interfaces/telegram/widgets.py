@@ -107,7 +107,10 @@ aria-selected="false">بیشترین کاهش قیمت</button></div>
   drops.addEventListener('click',function(){switchTab('drops');});
   button.addEventListener('click',function(){
     button.disabled=true;button.textContent='در حال تازه‌سازی...';
-    W.request('fare:refresh').then(function(a){
+    var updating=selection.view==='chart'
+      ? W.request('fare:route:'+selection.ok+':'+selection.dk)
+      : W.request('fare:refresh');
+    updating.then(function(a){
       if(a.result!=='accepted'){button.disabled=false;button.textContent='تلاش مجدد';}
     },function(){button.disabled=false;button.textContent='تلاش مجدد';});
   });
