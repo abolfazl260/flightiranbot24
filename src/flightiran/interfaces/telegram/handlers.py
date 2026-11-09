@@ -84,6 +84,7 @@ from .visa_flow import (
 )
 from .visa_watches import deliver_watch_notifications, handle_watch_callback, show_watches
 from .visa_watches import word as visa_watch_text
+from .visa_widget import handle_visa_widget_query, send_visa_widget
 from .widgets import send_fare_widget, widget_query_handler
 
 LOGGER = logging.getLogger(__name__)
@@ -279,7 +280,19 @@ async def start_handler(
     entrypoint = args[0] if args else ""
     visa_route = parse_visa_start_payload(entrypoint)
     if update.message:
-        if entrypoint == "visa":
+        if entrypoint == "visa_widget":
+            opened = False
+            if _widget_menu_enabled(update, context):
+                opened = await send_visa_widget(
+                    update.message, context, dependencies.visa_catalog,
+                    dependencies.visa_watch_service, dependencies.users, registered.id, language
+                )
+            if not opened:
+                await _load_visa_passport(context, registered.id, dependencies)
+                await open_visa_menu(
+                    update, context, dependencies.visa_catalog, language, edit=False
+                )
+        elif entrypoint == "visa":
             await dependencies.audit.record("visa.opened", user_id=registered.id)
             await _load_visa_passport(context, registered.id, dependencies)
             await open_visa_menu(
@@ -470,6 +483,10 @@ async def callback_handler(
             update, context, dependencies.visa_watch_service, user_id, language
         )
         return
+    if data == "menu:visa" and _widget_menu_enabled(update, context):
+        if await send_visa_widget(query.message, context, dependencies.visa_catalog,
+            dependencies.visa_watch_service, dependencies.users, user_id, language):
+            return
     if data == "menu:visa":
         await dependencies.audit.record("visa.opened", user_id=user_id)
         await _load_visa_passport(context, user_id, dependencies)
@@ -891,6 +908,11 @@ async def visa_handler(
 ) -> None:
     user_id, language = await _user_language(update, dependencies)
     await dependencies.audit.record("visa.command", user_id=user_id)
+    if (not getattr(context, "args", None) and update.message is not None
+            and _widget_menu_enabled(update, context)):
+        if await send_visa_widget(update.message, context, dependencies.visa_catalog,
+            dependencies.visa_watch_service, dependencies.users, user_id, language):
+            return
     await _load_visa_passport(context, user_id, dependencies)
     previous = context.user_data["visa_passport"]
     await visa_command(update, context, dependencies.visa_catalog, language)
@@ -1198,7 +1220,13 @@ async def _all_widget_queries(
 ) -> None:
     raw = update.api_kwargs.get("widget_query")
     action = raw.get("data") if isinstance(raw, dict) else None
-    if isinstance(action, str) and action.startswith("hp:"):
+    if isinstance(action, str) and action.startswith("vi:"):
+        async def open_existing(command, owner):
+            service = {"legacy": "visa", "watches": "visa_watch", "home": "start"}[command]
+            await _open_help_service(service, owner, context, dependencies)
+        await handle_visa_widget_query(update, context, dependencies.visa_catalog,
+            dependencies.visa_watch_service, dependencies.users, open_existing)
+    elif isinstance(action, str) and action.startswith("hp:"):
         await handle_help_widget_query(
             update, context,
             lambda service, user_id: _open_help_service(service, user_id, context, dependencies),
