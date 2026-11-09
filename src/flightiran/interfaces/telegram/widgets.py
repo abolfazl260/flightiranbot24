@@ -148,7 +148,9 @@ aria-pressed="false">بیشترین کاهش قیمت</button>
 FARE_WIDGET_HTML = enhance_fare_html(FARE_WIDGET_HTML)
 
 assert len(FARE_WIDGET_HTML.encode("utf-8")) <= 32768
-assert len(zlib.compress(FARE_WIDGET_HTML.encode("utf-8"), level=9)) <= 4096
+assert len(zlib.compress(FARE_WIDGET_HTML.encode("utf-8"), level=9)) <= 4096, (
+    f"Compressed fare widget bytes: {len(zlib.compress(FARE_WIDGET_HTML.encode('utf-8'), level=9))}"
+)
 
 
 def fare_widget_data(routes: list, *, now: datetime | None = None) -> str:
