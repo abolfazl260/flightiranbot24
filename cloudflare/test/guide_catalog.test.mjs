@@ -10,8 +10,9 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
  assert.equal(rows.length,2);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
  const p=parseGuideDetail(detail(),'airlines','emirates',now);
- assert.equal(p.sections.length,10);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
- assert(p.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet').every(b=>b.count===null));
+ assert.equal(p.sections.length,15);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
+ const fleet=p.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet');
+ assert.equal(fleet.reduce((n,b)=>n+b.count,0),277);assert(fleet.every(b=>b.status==='unknown'));
 });
 test('all enabled airport guides parse independently without importing legacy personal reviews',()=>{
  const rows=parseGuideIndex(read('data/airports/airport-index.v1.json'),'airports',read('src/flightiran/modules/airport/data/airports.json'),now);
@@ -23,7 +24,7 @@ test('archived, expired, stale and unknown sections fail closed without hiding v
  const s=detail();s.sections[0].metadata.stale=true;s.sections[1].metadata.effective_to='2020-01-01T00:00:00Z';
  s.sections[2].blocks=[{type:'future'}];const p=parseGuideDetail(s,'airlines','emirates',now);
  assert(!p.sections.some(s=>['baggage','ticket-rules','checkin'].includes(s.id)));
- const draft=detail();const fleet=draft.sections.find(s=>s.id==='fleet');fleet.metadata.status='draft';fleet.blocks[1].count=19;fleet.blocks[1].metadata.status='draft';
+ const draft=detail();const fleet=draft.sections.find(s=>s.id==='fleet');fleet.metadata.status='draft';const snapshot=fleet.blocks.find(b=>b.type==='fleet_snapshot');snapshot.count=19;snapshot.metadata.status='draft';
  assert(!parseGuideDetail(draft,'airlines','emirates',now).sections.some(s=>s.id==='fleet'));
 });
 test('identity mismatch, duplicate sections, missing sources and unsafe links are rejected',()=>{

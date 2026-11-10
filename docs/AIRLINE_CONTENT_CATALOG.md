@@ -22,7 +22,9 @@ it does not package/sign/release APK or AAB files.
 | Stable ID | Index/detail state | Published sections | Draft sections | Sources/limitations |
 | --- | --- | ---: | ---: | --- |
 | `iran-air` | published | 1 | 4 | IATA identity; official airline site unavailable during review. No operational rules or fleet claims published. |
-| `emirates` | published | 7 | 2 | IATA + official Emirates links and short paraphrases. Fleet families A350/A380/777, counts and configurations unknown. |
+| `emirates` | published | 15 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
+
+Current Emirates coverage supersedes the initial counts below; see `docs/airlines/emirates-2026-11-10.md`.
 
 Both are labelled **راهنما در حال تکمیل**, including when basic identity is
 available. `published` means a reviewed portion is available, never a complete

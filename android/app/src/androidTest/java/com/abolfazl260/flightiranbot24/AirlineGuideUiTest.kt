@@ -7,6 +7,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -45,7 +47,7 @@ class AirlineGuideUiTest {
         rule.onNodeWithText("امارات", useUnmergedTree = true).performScrollTo().performClick()
         rule.onNodeWithText("ناوگان هواپیما").performScrollTo().assertHasClickAction()
         rule.onNodeWithText("ناوگان هواپیما").performClick()
-        rule.onNodeWithText("Airbus A350").performScrollTo().assertExists()
+        rule.onAllNodesWithText("Airbus A380-800").onFirst().performScrollTo().assertExists()
         rule.onNodeWithText("بازگشت").performScrollTo().performClick()
         rule.onNodeWithText("بار مجاز و اقلام خاص").performScrollTo().assertHasClickAction()
     }
