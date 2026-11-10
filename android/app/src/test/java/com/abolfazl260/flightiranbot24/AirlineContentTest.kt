@@ -31,7 +31,7 @@ class AirlineContentTest {
         assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
         assertEquals(1, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
         val page = parse(page())
-        assertEquals(16, page.sections.size)
+        assertEquals(18, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
         assertEquals(0, page.ratingCount)
         assertNull(page.average)

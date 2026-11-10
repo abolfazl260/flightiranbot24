@@ -22,7 +22,7 @@ it does not package/sign/release APK or AAB files.
 | Stable ID | Index/detail state | Published sections | Draft sections | Sources/limitations |
 | --- | --- | ---: | ---: | --- |
 | `iran-air` | published | 1 | 4 | IATA identity; official airline site unavailable during review. No operational rules or fleet claims published. |
-| `emirates` | published | 16 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
+| `emirates` | published | 18 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
 
 Current Emirates coverage supersedes the initial counts below; see `docs/airlines/emirates-2026-11-10.md`.
 

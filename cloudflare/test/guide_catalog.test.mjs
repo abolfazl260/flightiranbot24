@@ -10,7 +10,7 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
  assert.equal(rows.length,2);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
  const p=parseGuideDetail(detail(),'airlines','emirates',now);
- assert.equal(p.sections.length,16);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
+ assert.equal(p.sections.length,18);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
  const fleet=p.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet');
  assert.equal(fleet.reduce((n,b)=>n+b.count,0),277);assert(fleet.every(b=>b.status==='unknown'));
 });

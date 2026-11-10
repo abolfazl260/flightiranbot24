@@ -122,7 +122,7 @@ The static historical review count fields are not merged into live statistics.
 
 ## Emirates follow-up — 10 November 2026 (local implementation)
 
-Both clients consume the same 16 published Emirates sections. `route_snapshot`
+Both clients consume the same 18 published Emirates sections. `route_snapshot`
 adds dated directed IATA relations with source-status labels, explicit unknown
 operator/service type, official schedule links and existing airport navigation.
 A route listing never guarantees travel-day service. Both readers preserve the
@@ -136,4 +136,8 @@ versions skip unknown route blocks and retain plain text / airport links. No
 production rollout or signed release was requested or triggered. Local tests and
 remaining runtime/access blockers are recorded in the Emirates completion report.
 
-The Android PR CI job now runs JVM tests, lintDebug and compileDebugAndroidTestKotlin. These checks do not sign, package or publish a release; manual release workflows remain unchanged. Instrumentation compilation does not claim device execution.
+The standard Android PR CI job now runs JVM tests, `lintDebug` and
+`compileDebugAndroidTestKotlin`. These are validation tasks, not signed packaging
+or publication. Manual release/screenshot workflows remain unchanged. The added
+checks cover new native route rendering and instrumentation-test compilation;
+compilation does not claim that instrumented UI/TalkBack tests ran on a device.

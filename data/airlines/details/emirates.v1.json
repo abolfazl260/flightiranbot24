@@ -59,6 +59,17 @@
           ]
         },
         {
+          "type": "bullets",
+          "items_fa": [
+            "در جدول عمومی بار کابین، اکونومی یک قطعه ۷ کیلوگرمی و پریمیوم اکونومی یک قطعه ۱۰ کیلوگرمی با ابعاد حداکثر ۵۵×۳۸×۲۲ سانتی‌متر معرفی شده‌اند؛ برای خروج از برزیل سقف ۱۰ کیلوگرم و برای پذیرش اکونومی/پریمیوم در هند قاعده یک قطعه با مجموع ابعاد ۱۱۵ سانتی‌متر آمده است. قواعد همان مسیر و بلیت مقدم‌اند.",
+            "در بیزنس و فرست، جدول یک کیف کابین تا ۷ کیلوگرم و یک کیف اداری یا کاور لباس تا ۷ کیلوگرم را معرفی می‌کند. کیف اداری حداکثر ۴۵×۳۵×۲۰، کیف دستی ۵۵×۳۸×۲۲ سانتی‌متر و ضخامت کاور لباس تاشده حداکثر ۲۰ سانتی‌متر است؛ کیف شخصی اضافی نامحدود فرض نکنید.",
+            "در جدول قطعه‌ای عمومی آمریکا/آفریقا، اکونومی Special یک قطعه تا ۲۳ کیلوگرم و Saver/Flex/Flex Plus دو قطعه تا ۲۳ کیلوگرم، پریمیوم اکونومی دو قطعه تا ۲۳ و بیزنس/فرست دو قطعه تا ۳۲ کیلوگرم دارند. در پرواز داخل قاره آمریکا یا آمریکا–اروپا، Saver نیز فقط یک قطعه تا ۲۳ کیلوگرم دارد؛ استثنای تاریخ صدور و توقف را از منبع بررسی کنید.",
+            "در مبنای وزنی مجموع ابعاد معمول چمدان حداکثر ۲۰۳ سانتی‌متر است؛ در مبنای قطعه‌ای حد استاندارد ۱۵۰ سانتی‌متر و بزرگ‌تر تا ۲۰۳ مشمول هزینه ابعاد اضافه می‌شود. تجهیزات ورزشی و اقلام ویژه قواعد جدا دارند؛ این اعداد مجوز خودکار پذیرش آن‌ها نیست.",
+            "مایعات کابین طبق راهنمای امارات در ظرف با ظرفیت حداکثر ۱۰۰ میلی‌لیتر و یک کیسه شفاف قابل‌بستن تا یک لیتر حمل می‌شوند؛ ظرف بزرگ‌تر حتی نیمه‌پر پذیرفته نیست. غذا/شیر نوزاد، دارو و نیاز رژیمی استثناهای همراه با بررسی دارند و دستور امنیتی مبدأ و ترانزیت نیز لازم‌الاجراست.",
+            "برای نوزاد زیر دو سال، صفحه اقلام ویژه سهمیه را روی بلیت ملاک می‌گذارد؛ کالسکه تاشو، گهواره یا صندلی کودک در صورت وجود جا ممکن است در کابین پذیرفته شود. برای صندلی کودک تأییدشده و خرید صندلی اضافه پیشاپیش با امارات هماهنگ کنید."
+          ]
+        },
+        {
           "type": "link",
           "title_fa": "منبع رسمی: checked",
           "url": "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/"
@@ -113,6 +124,10 @@
             "برای خرید بلیت و خدمات از آژانس به همان آژانس مراجعه کنید؛ خدمات اضافه‌ای که مستقیماً از امارات خریده‌اید می‌تواند درخواست جدا داشته باشد.",
             "فرم استرداد ابزار استعلام جریمه نیست: ارسال شماره بلیت در درخواست می‌تواند کل سفر را لغو کند و فرایند قابل برگشت نیست. برای بازپرداخت صرفاً خدمت ارائه‌نشده، پس از پایان سفر فقط شماره رسید EMD آن خدمت را وارد کنید و دستور فرم را دقیق بخوانید."
           ]
+        },
+        {
+          "type": "text",
+          "text_fa": "اگر بلیت را از واسطه یا کانال ثالث خریده‌اید، ابتدا فروشنده و صادرکننده روی رسید را مشخص و روند تغییر/استرداد را با همان مرجع پیگیری کنید. خرید مستقیم از امارات، خرید آژانسی و خدمات اضافه مستقیم می‌توانند مسیر رسیدگی متفاوت داشته باشند."
         },
         {
           "type": "link",
@@ -253,7 +268,8 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+          "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf",
+          "https://www.emirates.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs"
         ],
         "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
@@ -270,6 +286,10 @@
         {
           "type": "text",
           "text_fa": "۱۱۹ فروند 777-300ER گزارش‌شده شامل یک فروند در حال تبدیل به باری است؛ آن را فعال مسافری فرض نکنید. سفارش‌های 787، 777-X و تحویل‌های آینده در این تعداد نیستند. هواپیمای کدشر یا شریک به این موجودی افزوده نمی‌شود. پیکربندی، ظرفیت و نوع هواپیمای روز سفر باید در همان رزرو بررسی شود."
+        },
+        {
+          "type": "text",
+          "text_fa": "به‌روزرسانی جدیدتر: اطلاعیه رسمی ۵ نوامبر ۲۰۲۶، تحویل ۹ فروند A350 و ۵ فروند 777 باری در بازه ۱ آوریل تا ۳۰ سپتامبر و به‌کارگیری نخستین هواپیمای تبدیل‌شده مسافری‌به‌باری را گزارش می‌کند. این اطلاعیه جدول کامل مدل/مالکیت/خروج از ناوگان نمی‌دهد؛ از جمع‌زدن این تحویل‌ها با عدد مارس، تعداد عملیاتی امروز ساخته نمی‌شود. کارت‌های زیر عمداً شمارش تاریخی مارس باقی می‌مانند."
         },
         {
           "type": "fleet_snapshot",
@@ -480,6 +500,11 @@
             "stale": false,
             "confidence": "official"
           }
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه جدیدتر نیم‌سال ۲۰۲۶–۲۰۲۷؛ تغییرات تحویل، نه موجودی کامل",
+          "url": "https://www.emirates.com/media-centre/emirates-group-announces-half-year-profit-for-2026-27-despite-full-six-month-impact-of-regional-conflict-and-high-fuel-costs"
         }
       ]
     },
@@ -494,7 +519,8 @@
         "source_urls": [
           "https://www.iata.org/en/about/members/airline-list/emirates/73/",
           "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf",
-          "https://www.emirates.com/us/english/manage-booking/online-check-in/"
+          "https://www.emirates.com/us/english/manage-booking/online-check-in/",
+          "https://www.emirates.com/us/english/about-us/timeline/"
         ],
         "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
@@ -521,6 +547,15 @@
           "type": "link",
           "title_fa": "گزارش سالانه؛ یادداشت ۱، اطلاعات عمومی",
           "url": "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+        },
+        {
+          "type": "text",
+          "text_fa": "در خط زمانی رسمی، نخستین پروازهای امارات در ۲۵ اکتبر ۱۹۸۵ از دبی به کراچی و بمبئی با دو هواپیمای اجاره خدمه‌دار از PIA ثبت شده است؛ نخستین هواپیمای ملکی در ژوئیه ۱۹۸۷ تحویل شد. این تاریخچه با موجودی عملیاتی امروز متفاوت است."
+        },
+        {
+          "type": "link",
+          "title_fa": "خط زمانی رسمی امارات",
+          "url": "https://www.emirates.com/us/english/about-us/timeline/"
         }
       ]
     },
@@ -533,7 +568,10 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.emirates.com/us/english/experience/cabin-features/"
+          "https://www.emirates.com/us/english/experience/cabin-features/",
+          "https://www.emirates.com/us/english/experience/our-fleet/a350/",
+          "https://www.emirates.com/us/english/experience/our-fleet/a380/",
+          "https://www.emirates.com/us/english/experience/our-fleet/boeing-777/"
         ],
         "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
@@ -551,6 +589,33 @@
           "type": "link",
           "title_fa": "مشاهده کابین‌ها در منبع رسمی",
           "url": "https://www.emirates.com/us/english/experience/cabin-features/"
+        },
+        {
+          "type": "text",
+          "text_fa": "نمونه مشخصات درج‌شده در وب‌سایت، نه تضمین صندلی همان رزرو: A380 با چهارکلاس ultra long-range تعداد ۴۸۴ صندلی، سه‌کلاس long-range تعداد ۵۱۷، سه‌کلاس ultra long-range تعداد ۴۸۹ و دوکلاس long-range تعداد ۶۱۵ صندلی معرفی شده است. این نمونه‌ها فهرست جامع همه بازسازی‌ها نیستند."
+        },
+        {
+          "type": "text",
+          "text_fa": "صفحه مشخصات 777-300ER نمونه‌های سه‌کلاس ۳۶۴/۳۵۸/۳۵۴ و دوکلاس ۴۲۷/۴۴۲ مسافر را فهرست می‌کند؛ برای 777-200LR نمونه سه‌کلاس ۲۶۶ مسافر آمده است. این اعداد توصیف نمونه وب‌سایت‌اند و به تک‌تک هواپیماهای شمارش تاریخی یا چیدمان روز سفر نگاشت نشده‌اند؛ نقشه همان پرواز را بررسی کنید."
+        },
+        {
+          "type": "text",
+          "text_fa": "صفحه A350، اکونومی، پریمیوم اکونومی و بیزنس با چیدمان ۱–۲–۱ در بیزنس، شارژ بی‌سیم آن صندلی و سرگرمی ice را معرفی می‌کند. برخی قابلیت‌های جدید صرفاً در هواپیماهای منتخب یا آینده معرفی شده‌اند؛ از متن تبلیغاتی، وجود آن‌ها در همه هواپیماها یا صندلی‌ها نتیجه گرفته نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "مشخصات رسمی مدل",
+          "url": "https://www.emirates.com/us/english/experience/our-fleet/a350/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مشخصات رسمی مدل",
+          "url": "https://www.emirates.com/us/english/experience/our-fleet/a380/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مشخصات رسمی مدل",
+          "url": "https://www.emirates.com/us/english/experience/our-fleet/boeing-777/"
         }
       ]
     },
@@ -945,6 +1010,91 @@
           "type": "airport_link",
           "iata": "IKA",
           "title_fa": "راهنمای امام خمینی"
+        }
+      ]
+    },
+    {
+      "id": "dubai-connections",
+      "title_fa": "ترانزیت دبی و بلیت‌های جداگانه",
+      "icon": "dubai-connections",
+      "order": 146,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/before-you-fly/dubai-international-airport/transferring-between-terminals/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "emirates",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط مخصوص سفر و رزرو خود را بررسی کنید؛ نبود داده به معنی نبود خدمت نیست."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای اتصال امارات به امارات در دبی، صفحه رسمی مسیر ترمینال ۳ و تابلوهای Connections را معرفی می‌کند. بخش پرواز بعدی ممکن است در کانکورس دیگری باشد؛ ترمینال و گیت واقعی را از کارت پرواز و تابلوها کنترل کنید."
+        },
+        {
+          "type": "text",
+          "text_fa": "اگر کل سفر همراه پرواز شریک را از امارات خریده باشید، صفحه رسمی انتقال بار تا پرواز بعدی را برای اتصال ظرف ۲۴ ساعت توضیح می‌دهد؛ اتصال بیشتر از ۲۴ ساعت به تحویل و پذیرش دوباره بار نیاز دارد. پرواز flydubai قواعد جدا دارد. برچسب مقصد نهایی بار و کارت پرواز بعدی را هنگام پذیرش بررسی کنید."
+        },
+        {
+          "type": "text",
+          "text_fa": "اگر همه پروازهای اتصال را از امارات نخریده‌اید، ممکن است لازم باشد از مهاجرت، تحویل بار و گمرک عبور و دوباره پذیرش شوید؛ ممکن است ویزای ورود لازم شود. در بلیت‌های جدا، انتقال خودکار بار را فرض نکنید. سرویس انتقال بار پولی با شروط و حداقل زمان اتصال ارائه می‌شود؛ پیش از اتکا، امکان همان سفر را با ایرلاین تأیید کنید. این متن تصمیم حقوقی درباره ویزا نیست."
+        },
+        {
+          "type": "airport_link",
+          "iata": "DXB",
+          "title_fa": "راهنمای فرودگاه دبی"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی",
+          "url": "https://www.emirates.com/us/english/before-you-fly/dubai-international-airport/transferring-between-terminals/"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و شرایط ورود",
+      "icon": "lounges",
+      "order": 147,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/experience/our-lounges/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ورود رایگان یا تخفیف‌دار به کلاس سفر، سطح Skywards و شرایط همراه وابسته است؛ ورود پولی نیز در دبی و برخی لانژهای دیگر ارائه می‌شود. پیش از مراجعه، eligibility و جست‌وجوی لانژ فرودگاه مبدأ را در سایت رسمی بررسی کنید. بلیت امارات به‌تنهایی تضمین ورود به هر سالن نیست."
+        },
+        {
+          "type": "text",
+          "text_fa": "هنگام بررسی، صفحه رسمی از بازسازی و احتمال بسته یا نیمه‌باز بودن برخی سالن‌های دبی خبر می‌داد. سالن جایگزین و دسترسی واقعی روز سفر را از کارت پرواز و کارکنان کنترل کنید؛ ظرفیت، ساعت یا قیمت ثابت در این راهنما وعده داده نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی",
+          "url": "https://www.emirates.com/us/english/experience/our-lounges/"
         }
       ]
     }
