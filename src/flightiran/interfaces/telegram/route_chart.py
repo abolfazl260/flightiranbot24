@@ -9,6 +9,7 @@ from html import escape
 from typing import Protocol
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.error import BadRequest
 
 from flightiran.db.repositories import RouteDailyMinimum
 
@@ -157,7 +158,19 @@ def _destinations(routes: list[tuple[str, str]], origin: str) -> list[str]:
 
 async def _show(target: object, text: str, keyboard: InlineKeyboardMarkup) -> None:
     if hasattr(target, "edit_message_text"):
-        await target.edit_message_text(text, reply_markup=keyboard)
+        message = getattr(target, "message", None)
+        if (
+            getattr(message, "text", None) == text
+            and getattr(message, "reply_markup", None) == keyboard
+        ):
+            return
+        try:
+            await target.edit_message_text(text, reply_markup=keyboard)
+        except BadRequest as exc:
+            # Telegram rejects identical edits; a concurrent callback can make
+            # the message identical after the check above.
+            if "message is not modified" not in str(exc).lower():
+                raise
     else:
         await target.reply_text(text, reply_markup=keyboard)
 

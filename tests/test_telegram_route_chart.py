@@ -5,6 +5,7 @@ from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
 import pytest
+from telegram.error import BadRequest
 
 from flightiran.db.engine import initialize_database
 from flightiran.db.models import Mz724PriceSnapshot
@@ -184,3 +185,66 @@ async def test_empty_history_shows_empty_state_without_fake_points():
     await open_chart_picker(message, bot, history, {})
     assert "هنوز هیچ مسیر" in message.reply_text.await_args.args[0]
     bot._post.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_reopening_same_route_picker_skips_identical_edit():
+    bot = FakeBot()
+    history = SimpleNamespace(
+        list_chart_routes=AsyncMock(return_value=[("تهران", "مشهد")])
+    )
+    context = SimpleNamespace(bot=bot, user_data={})
+    query = FakeQuery("chart:start")
+
+    await handle_chart_callback(query, context, history)
+    text, = query.edit_message_text.await_args.args
+    keyboard = query.edit_message_text.await_args.kwargs["reply_markup"]
+    query.message.text = text
+    query.message.reply_markup = keyboard
+    query.edit_message_text.reset_mock()
+
+    await handle_chart_callback(query, context, history)
+    query.edit_message_text.assert_not_awaited()
+
+
+@pytest.mark.asyncio
+async def test_route_picker_ignores_telegram_not_modified_race():
+    bot = FakeBot()
+    history = SimpleNamespace(
+        list_chart_routes=AsyncMock(return_value=[("تهران", "مشهد")])
+    )
+    query = FakeQuery("chart:start")
+    query.edit_message_text.side_effect = BadRequest(
+        "Message is not modified: specified new message content and reply markup "
+        "are exactly the same as a current content and reply markup of the message"
+    )
+
+    await open_chart_picker(query, bot, history, {})
+    query.edit_message_text.assert_awaited_once()
+
+
+@pytest.mark.asyncio
+async def test_route_picker_keeps_real_bad_request_errors_visible():
+    bot = FakeBot()
+    history = SimpleNamespace(
+        list_chart_routes=AsyncMock(return_value=[("تهران", "مشهد")])
+    )
+    query = FakeQuery("chart:start")
+    query.edit_message_text.side_effect = BadRequest("Message to edit not found")
+
+    with pytest.raises(BadRequest, match="Message to edit not found"):
+        await open_chart_picker(query, bot, history, {})
+
+
+@pytest.mark.asyncio
+async def test_route_picker_edits_when_only_markup_changes():
+    bot = FakeBot()
+    history = SimpleNamespace(
+        list_chart_routes=AsyncMock(return_value=[("تهران", "مشهد")])
+    )
+    query = FakeQuery("chart:start")
+    query.message.text = "مبدأ را برای نمودار قیمت ۲۱ روزه انتخاب کنید:"
+    query.message.reply_markup = None
+
+    await open_chart_picker(query, bot, history, {})
+    query.edit_message_text.assert_awaited_once()
