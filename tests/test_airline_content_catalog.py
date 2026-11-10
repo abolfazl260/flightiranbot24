@@ -16,7 +16,7 @@ spec = importlib.util.spec_from_file_location(
 )
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-NOW = datetime(2026, 11, 5, tzinfo=timezone.utc)
+NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
 
 
 def test_actual_catalog_and_independent_snapshots():
@@ -33,7 +33,7 @@ def test_actual_catalog_and_independent_snapshots():
             for status in ("published", "draft")
         }
     assert coverage == {"iran-air": {"published": 1, "draft": 4},
-                        "emirates": {"published": 7, "draft": 2}}
+                        "emirates": {"published": 10, "draft": 0}}
     fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
     assert [b["model"] for b in models] == ["A350", "A380", "777"]

@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [28])
 class AirlineContentTest {
     private val context: Context get() = ApplicationProvider.getApplicationContext()
-    private val now = Instant.parse("2026-11-05T00:00:00Z")
+    private val now = Instant.parse("2026-11-11T00:00:00Z")
     private fun bundled(path: String) = context.assets.open(path).bufferedReader().use { it.readText() }
     private fun page() = JsonParser.parseString(bundled("details/emirates.v1.json")).asJsonObject
     private fun parse(root: JsonObject) = AirlineContentParser.detail(root.toString(), "emirates", now)!!
@@ -31,8 +31,8 @@ class AirlineContentTest {
         assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
         assertEquals(1, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
         val page = parse(page())
-        assertEquals(7, page.sections.size)
-        assertFalse(page.sections.any { it.id == "cabin" || it.id == "catering" })
+        assertEquals(10, page.sections.size)
+        assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
         assertEquals(0, page.ratingCount)
         assertNull(page.average)
         val fleet = page.sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Fleet>()

@@ -3,14 +3,14 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {parseGuideIndex,parseGuideDetail,filterGuides,fetchGuideJson} from '../../src/flightiran/webapp/static/guide-catalog.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../../'+p,import.meta.url),'utf8'));
-const now=Date.parse('2026-11-05T00:00:00Z');
+const now=Date.parse('2026-11-11T00:00:00Z');
 const detail=()=>read('data/airlines/details/emirates.v1.json');
 test('shared Android airline data preserves identity, draft gates, fleet unknowns and no synthetic scores',()=>{
  const rows=parseGuideIndex(read('data/airlines/airline-index.v1.json'),'airlines',[],now);
  assert.equal(rows.length,2);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
  const p=parseGuideDetail(detail(),'airlines','emirates',now);
- assert.equal(p.sections.length,7);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
+ assert.equal(p.sections.length,10);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
  assert(p.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet').every(b=>b.count===null));
 });
 test('all enabled airport guides parse independently without importing legacy personal reviews',()=>{
