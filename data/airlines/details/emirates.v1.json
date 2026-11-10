@@ -23,9 +23,10 @@
         "status": "published",
         "source_urls": [
           "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/",
-          "https://www.emirates.com/us/english/before-you-fly/travel/dangerous-goods-policy/"
+          "https://www.emirates.com/us/english/before-you-fly/baggage/cabin-baggage-rules/",
+          "https://www.emirates.com/us/english/before-you-fly/baggage/unusual-baggage-and-special-allowances/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -43,17 +44,34 @@
       "blocks": [
         {
           "type": "text",
-          "text_fa": "سهمیه بار امارات به مسیر، نوع نرخ و کلاس سفر بستگی دارد. برای سهمیه دقیق و هزینه اضافه‌بار، بلیت و مدیریت رزرو را بررسی کنید. در سفر با شرکت همکار، قوانین بار ممکن است متفاوت باشد."
+          "text_fa": "مبنای بار تحویلی ممکن است وزن کل یا تعداد قطعه باشد. مسیر، تاریخ صدور بلیت، توقف، کلاس و نرخ تعیین‌کننده‌اند؛ سهمیه نهایی را از بلیت و مدیریت رزرو بخوانید. قوانین شرکت همکار یا نخستین شرکت در سفر آمریکا ممکن است متفاوت باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در مبنای وزنی، اکونومی Special / Saver / Flex / Flex Plus به‌ترتیب ۲۰ / ۲۵ / ۳۰ / ۳۵ کیلوگرم است. Saver برای مبدأ استرالیا و نیوزیلند و برخی سفرهای اروپا به این دو کشور استثنای ۳۰ کیلوگرم با تاریخ صدور مشخص دارد؛ جدول رسمی را بررسی کنید.",
+            "در مبنای وزنی، پریمیوم اکونومی ۳۵، بیزنس ۴۰ و فرست ۵۰ کیلوگرم است؛ وزن هر چمدان حداکثر ۳۲ کیلوگرم. این‌ها سهمیه همهٔ مسیرهای امارات نیستند.",
+            "برای مسیرهای آمریکا و آفریقا مبنای قطعه‌ای و استثناهای تاریخ صدور/توقف مطرح است؛ مسیرهای داخل قاره آمریکا و آمریکا–اروپا جدول جدا دارند. سهمیه قطعه‌ای را از جدول رسمی و بلیت همان سفر بررسی کنید.",
+            "بار کابین محدودیت وزن و ابعاد مستقل از بار تحویلی دارد؛ در خروج از برزیل و پذیرش در هند استثنا وجود دارد. خرید فروشگاه فرودگاه نیز مشمول محدودیت مایعات و بازرسی است.",
+            "تجهیزات ورزشی مانند دوچرخه و اسکی در سهمیه استاندارد بار تحویلی محاسبه می‌شوند؛ بسته‌بندی، ابعاد و اضافه‌بار را جدا بررسی کنید. برای دوچرخه دست‌کم ۲۴ ساعت قبل هماهنگ کنید.",
+            "ساز موسیقی سهمیه رایگان ویژه ندارد: بسته به اندازه و شرایط، بار کابین، بار تحویلی یا صندلی خریداری‌شده مطرح است. قبل از خرید صندلی برای ساز با امارات هماهنگ کنید.",
+            "حمل حیوان به مسیر، نوع، قفس و مدارک وابسته و هزینه آن جدا از سهمیه معمول است. مجوزها و واکسیناسیون را پیشاپیش تکمیل و مدارک را حداقل یک هفته قبل ارسال کنید؛ پذیرش در کابین را از روی بلیت استنباط نکنید. سگ خدمت‌رسان قواعد اختصاصی دارد."
+          ]
         },
         {
           "type": "link",
-          "title_fa": "بررسی آخرین قوانین بار در سایت ایرلاین",
+          "title_fa": "منبع رسمی: checked",
           "url": "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/"
         },
         {
           "type": "link",
-          "title_fa": "اقلام خطرناک، باتری و پاوربانک",
-          "url": "https://www.emirates.com/us/english/before-you-fly/travel/dangerous-goods-policy/"
+          "title_fa": "منبع رسمی: cabin-bag",
+          "url": "https://www.emirates.com/us/english/before-you-fly/baggage/cabin-baggage-rules/"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی: special-bag",
+          "url": "https://www.emirates.com/us/english/before-you-fly/baggage/unusual-baggage-and-special-allowances/"
         }
       ]
     },
@@ -66,9 +84,11 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.emirates.com/uk/english/help/forms/refund-request/"
+          "https://www.emirates.com/us/english/help/faq-topics/cancelling-or-changing-a-booking/",
+          "https://www.emirates.com/us/english/help/forms/refund-request/",
+          "https://c.ekstatic.net/ecl/documents/conditions-of-carriage/US/English/conditions-of-carriage.pdf"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -85,13 +105,33 @@
       },
       "blocks": [
         {
-          "type": "text",
-          "text_fa": "امارات درخواست استرداد را طبق شرایط نرخ هنگام خرید بررسی می‌کند. برای خرید مستقیم، فرم رسمی را بررسی کنید. برای بلیت و خدمات خریداری‌شده از آژانس، با همان آژانس تماس بگیرید. برای خرید از کانال ثالث، ابتدا فروشنده صادرکننده را مشخص کنید. خدماتی که مستقیماً از امارات خریده‌اید می‌تواند مسیر درخواست جداگانه داشته باشد. ارسال درخواست استرداد ممکن است رزرو را لغو کند."
+          "type": "bullets",
+          "items_fa": [
+            "تغییر آنلاین فقط برای رزرو واجد شرایط در مدیریت رزرو در دسترس است. جریمه تغییر، مالیات و تفاوت نرخ ممکن است اعمال شود؛ عدد ثابت یا تغییر رایگان عمومی اعلام نمی‌شود.",
+            "تغییر آنلاین پرواز برای همهٔ مسافران همان رزرو اعمال می‌شود؛ برای تغییر فقط یک نفر با ایرلاین یا آژانس صادرکننده تماس بگیرید. پس از تغییر، صندلی و غذای بخش تغییریافته را دوباره انتخاب کنید.",
+            "استرداد به شرایط نرخ هنگام خرید و میزان استفاده از بلیت بستگی دارد؛ برخی بلیت‌ها پس از شروع سفر غیرقابل استردادند و بازپرداخت لزوماً متناسب با مسافت استفاده‌نشده نیست.",
+            "برای خرید بلیت و خدمات از آژانس به همان آژانس مراجعه کنید؛ خدمات اضافه‌ای که مستقیماً از امارات خریده‌اید می‌تواند درخواست جدا داشته باشد.",
+            "فرم استرداد ابزار استعلام جریمه نیست: ارسال شماره بلیت در درخواست می‌تواند کل سفر را لغو کند و فرایند قابل برگشت نیست. برای بازپرداخت صرفاً خدمت ارائه‌نشده، پس از پایان سفر فقط شماره رسید EMD آن خدمت را وارد کنید و دستور فرم را دقیق بخوانید."
+          ]
         },
         {
           "type": "link",
-          "title_fa": "شرایط و فرم رسمی استرداد",
-          "url": "https://www.emirates.com/uk/english/help/forms/refund-request/"
+          "title_fa": "منبع رسمی: change",
+          "url": "https://www.emirates.com/us/english/help/faq-topics/cancelling-or-changing-a-booking/"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی: refund",
+          "url": "https://www.emirates.com/us/english/help/forms/refund-request/"
+        },
+        {
+          "type": "text",
+          "text_fa": "No-show: در نسخه آمریکا از شرایط حمل، مواد ۳٫۴ و ۵٫۷، استفاده ترتیبی کوپن‌ها و حضور به‌موقع اهمیت دارد؛ عدم پذیرش یا نرسیدن به گیت می‌تواند رزرو بخش‌های استفاده‌نشده را لغو و به ارزیابی دوباره نرخ منجر شود. پیش از مهلت مربوط با امارات هماهنگ کنید. نسخه قابل اعمال به محل خرید/سفر را از صفحه قوانین انتخاب کنید؛ این حکم به همه کشورها تعمیم داده نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "شرایط حمل، نسخه آمریکا؛ مواد ۳٫۴ و ۵٫۷",
+          "url": "https://c.ekstatic.net/ecl/documents/conditions-of-carriage/US/English/conditions-of-carriage.pdf"
         }
       ]
     },
@@ -106,7 +146,7 @@
         "source_urls": [
           "https://www.emirates.com/us/english/manage-booking/online-check-in/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -123,8 +163,17 @@
       },
       "blocks": [
         {
+          "type": "bullets",
+          "items_fa": [
+            "برای مسافر دارای بلیت الکترونیکی، چک‌این آنلاین از ۴۸ ساعت تا ۹۰ دقیقه پیش از زمان برنامه‌ریزی‌شده پرواز باز است. اگر اولین پرواز را امارات اجرا نکند، از جمله کدشر، چک‌این آنلاین امارات برای آن شروع سفر در دسترس نیست.",
+            "نام خانوادگی و کد رزرو را در سایت رسمی وارد کنید؛ ممکن است اطلاعات تکمیلی مسافر لازم شود. دریافت کارت پرواز جایگزین کنترل گذرنامه، ویزا و تحویل بار نیست.",
+            "در بیشتر فرودگاه‌ها حضور ۳ ساعت قبل توصیه شده، اما در برخی ۴ ساعت؛ زمان بلیت و دستور فرودگاه خود را ملاک قرار دهید. طبق راهنما، کنترل گذرنامه و امنیت را حداکثر تا ۹۰ دقیقه قبل طی کنید و برای اکونومی/پریمیوم اکونومی ۶۰ دقیقه و بیزنس/فرست ۴۵ دقیقه قبل در گیت باشید.",
+            "در دبی تحویل زودهنگام بار تا ۲۴ ساعت قبل و برای مقصد آمریکا تا ۱۲ ساعت قبل ممکن است. همهٔ مسافران رزرو باید برای پذیرش حضوری و تحویل بار حاضر باشند؛ تحویل به نمایندگی از مسافر دیگر مجاز نیست."
+          ]
+        },
+        {
           "type": "link",
-          "title_fa": "چک‌این آنلاین و محدودیت‌های مسیر",
+          "title_fa": "منبع رسمی: checkin",
           "url": "https://www.emirates.com/us/english/manage-booking/online-check-in/"
         }
       ]
@@ -167,7 +216,7 @@
           "https://www.emirates.com/us/english/before-you-fly/baggage/delayed-damaged-baggage/",
           "https://www.emirates.com/us/english/help/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -176,13 +225,21 @@
       "scope": null,
       "blocks": [
         {
+          "type": "bullets",
+          "items_fa": [
+            "بار نرسیده یا آسیب‌دیده را گزارش و مرجع پرونده PIR را نگه دارید؛ پیگیری وب به نام خانوادگی و PIR نیاز دارد. این اطلاعات خصوصی را در نظر عمومی وارد نکنید.",
+            "برای هزینه ضروری ناشی از تأخیر بار، رسیدها را نگه دارید؛ صفحه امارات می‌گوید ظرف ۲۱ روز پس از دریافت بار تماس بگیرید. این اشاره همهٔ مهلت‌های مطالبه برای آسیب یا همه قوانین کشورها را پوشش نمی‌دهد.",
+            "اگر بخش آخر سفر را شرکت دیگری اجرا کرده، همان شرکت مسئول رسیدگی به پرونده بار است، حتی اگر بلیت امارات باشد. تحویل بار پیداشده می‌تواند به ترخیص گمرکی و قانون محلی وابسته باشد."
+          ]
+        },
+        {
           "type": "link",
-          "title_fa": "گزارش و پیگیری بار نرسیده یا آسیب‌دیده",
+          "title_fa": "منبع رسمی: lost",
           "url": "https://www.emirates.com/us/english/before-you-fly/baggage/delayed-damaged-baggage/"
         },
         {
           "type": "link",
-          "title_fa": "راه‌های رسمی تماس و پشتیبانی",
+          "title_fa": "منبع رسمی: contact",
           "url": "https://www.emirates.com/us/english/help/"
         }
       ]
@@ -196,7 +253,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.emirates.com/us/english/experience/our-fleet/"
+          "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
         ],
         "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
@@ -208,21 +265,25 @@
       "blocks": [
         {
           "type": "text",
-          "text_fa": "مدل هواپیما و چیدمان کابین ممکن است در روز سفر تغییر کند. فهرست زیر خانواده‌های معرفی‌شده در سایت امارات است؛ تعداد و مالکیت هر خانواده تأیید نشده و از روی کدشر استنباط نمی‌شود."
+          "text_fa": "جدول رسمی Fleet information گزارش سالانه ۲۰۲۵–۲۰۲۶، صفحه چاپی ۱۳۸ (صفحه ۷۰ فایل PDF دوصفحه‌ای)، وضعیت ۳۱ مارس ۲۰۲۶ را گزارش می‌کند: ۲۶۴ هواپیمای مسافری و ۱۳ باری، جمعاً ۲۷۷؛ ۱۹۰ ملکی و ۸۷ اجاره‌ای. این شمارش تاریخی دارایی/ناوگان گزارش‌شده است، نه تعداد فعال امروز. ملکی شامل خرید با تأمین مالی تضمین‌شده است. جدول تفکیک فعال/پارک‌شده نمی‌دهد؛ وضعیت هر کارت نامعلوم می‌ماند."
+        },
+        {
+          "type": "text",
+          "text_fa": "۱۱۹ فروند 777-300ER گزارش‌شده شامل یک فروند در حال تبدیل به باری است؛ آن را فعال مسافری فرض نکنید. سفارش‌های 787، 777-X و تحویل‌های آینده در این تعداد نیستند. هواپیمای کدشر یا شریک به این موجودی افزوده نمی‌شود. پیکربندی، ظرفیت و نوع هواپیمای روز سفر باید در همان رزرو بررسی شود."
         },
         {
           "type": "fleet_snapshot",
-          "model": "A350",
+          "model": "A380-800",
           "manufacturer": "Airbus",
-          "count": null,
-          "observed_at": "2026-11-10T00:00:00Z",
+          "count": 78,
+          "observed_at": "2026-03-31T00:00:00Z",
           "status": "unknown",
-          "relationship": "operated",
+          "relationship": "owned",
           "configuration_fa": null,
           "metadata": {
             "status": "published",
             "source_urls": [
-              "https://www.emirates.com/us/english/experience/our-fleet/"
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
             ],
             "verified_at": "2026-11-10T00:00:00Z",
             "effective_from": null,
@@ -233,17 +294,17 @@
         },
         {
           "type": "fleet_snapshot",
-          "model": "A380",
+          "model": "A380-800",
           "manufacturer": "Airbus",
-          "count": null,
-          "observed_at": "2026-11-10T00:00:00Z",
+          "count": 38,
+          "observed_at": "2026-03-31T00:00:00Z",
           "status": "unknown",
-          "relationship": "operated",
+          "relationship": "leased",
           "configuration_fa": null,
           "metadata": {
             "status": "published",
             "source_urls": [
-              "https://www.emirates.com/us/english/experience/our-fleet/"
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
             ],
             "verified_at": "2026-11-10T00:00:00Z",
             "effective_from": null,
@@ -254,17 +315,164 @@
         },
         {
           "type": "fleet_snapshot",
-          "model": "777",
+          "model": "777-300ER",
           "manufacturer": "Boeing",
-          "count": null,
-          "observed_at": "2026-11-10T00:00:00Z",
+          "count": 77,
+          "observed_at": "2026-03-31T00:00:00Z",
           "status": "unknown",
-          "relationship": "operated",
+          "relationship": "owned",
           "configuration_fa": null,
           "metadata": {
             "status": "published",
             "source_urls": [
-              "https://www.emirates.com/us/english/experience/our-fleet/"
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "777-300ER",
+          "manufacturer": "Boeing",
+          "count": 42,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "leased",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "777-200LR",
+          "manufacturer": "Boeing",
+          "count": 7,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "owned",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "777-200LR",
+          "manufacturer": "Boeing",
+          "count": 3,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "leased",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A350-900",
+          "manufacturer": "Airbus",
+          "count": 19,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "owned",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A350-900",
+          "manufacturer": "Airbus",
+          "count": 0,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "leased",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "777 Freighter",
+          "manufacturer": "Boeing",
+          "count": 9,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "owned",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "777 Freighter",
+          "manufacturer": "Boeing",
+          "count": 4,
+          "observed_at": "2026-03-31T00:00:00Z",
+          "status": "unknown",
+          "relationship": "leased",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
             ],
             "verified_at": "2026-11-10T00:00:00Z",
             "effective_from": null,
@@ -284,9 +492,11 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.iata.org/en/about/members/airline-list/emirates/73/"
+          "https://www.iata.org/en/about/members/airline-list/emirates/73/",
+          "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf",
+          "https://www.emirates.com/us/english/manage-booking/online-check-in/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -302,6 +512,15 @@
           "type": "link",
           "title_fa": "مرجع هویت در IATA",
           "url": "https://www.iata.org/en/about/members/airline-list/emirates/73/"
+        },
+        {
+          "type": "text",
+          "text_fa": "طبق یادداشت ۱ صورت‌های مالی گزارش سالانه ۲۰۲۵–۲۰۲۶، امارات در ۲۶ ژوئن ۱۹۸۵ به موجب فرمان دبی ایجاد شده و کاملاً متعلق به Investment Corporation of Dubai است. این رابطه مالکیت شرکت است و مالکیت تک‌تک هواپیماها را تعیین نمی‌کند. پایگاه سفر در راهنمای چک‌این، فرودگاه بین‌المللی دبی DXB و ترمینال ۳ معرفی می‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "گزارش سالانه؛ یادداشت ۱، اطلاعات عمومی",
+          "url": "https://c.ekstatic.net/ecl/documents/annual-report/2025-2026.pdf"
         }
       ]
     },
@@ -344,7 +563,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.emirates.com/us/english/experience/dining/"
+          "https://www.emirates.com/us/english/before-you-fly/travel/dietary-requirements/"
         ],
         "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
@@ -355,13 +574,17 @@
       "scope": null,
       "blocks": [
         {
-          "type": "text",
-          "text_fa": "راهنمای رسمی پذیرایی بر اساس کلاس سفر تفکیک شده است. خدمات و وعدهٔ واقعی به پرواز بستگی دارد و انطباق کامل با تصویر یا منوی وب‌سایت تضمین نشده است."
+          "type": "bullets",
+          "items_fa": [
+            "در مدیریت رزرو تا ۲۴ ساعت پیش از پرواز غذای رژیمی درخواست کنید؛ برخی غذاهای ویژه در اکونومی پروازهای کمتر از دو ساعت در دسترس نیستند. صفحه رسمی غذاها را حلال تأییدشده معرفی می‌کند.",
+            "غذای کودک و نوزاد به‌طور معمول از روی رزرو شناسایی می‌شود؛ نیاز رژیمی خاص را جدا درخواست کنید. منو و وعده واقعی به پرواز و کلاس بستگی دارد.",
+            "محیط و غذای کاملاً بدون آلرژن تضمین نمی‌شود؛ آجیل و مواد حساسیت‌زا در پرواز و محل آماده‌سازی وجود دارند. حساسیت شدید را پیشاپیش اعلام و برنامه سفر و داروی مورد نیاز را با پزشک هماهنگ کنید؛ عنوان غذای رژیمی تضمین بی‌خطر بودن برای حساسیت نیست."
+          ]
         },
         {
           "type": "link",
-          "title_fa": "راهنمای رسمی پذیرایی بر اساس کلاس",
-          "url": "https://www.emirates.com/us/english/experience/dining/"
+          "title_fa": "منبع رسمی: diet",
+          "url": "https://www.emirates.com/us/english/before-you-fly/travel/dietary-requirements/"
         }
       ]
     },
@@ -374,7 +597,140 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.emirates.com/us/english/before-you-fly/health/"
+          "https://www.emirates.com/us/english/help/accessibility-hub/",
+          "https://www.emirates.com/us/english/family/planning-your-family-trip/unaccompanied-minors/",
+          "https://www.emirates.com/us/english/before-you-fly/health/before-you-leave/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای خدمات دسترس‌پذیری و کمک حرکتی، هنگام رزرو اطلاع دهید؛ از مدیریت رزرو، آژانس یا تماس با امارات دست‌کم ۴۸ ساعت پیش از سفر هماهنگ کنید. نوع ویلچر، باتری و تجهیزات پزشکی را دقیق اعلام کنید.",
+            "خدمت کودک بدون همراه برای سن ۵ تا ۱۱ سال با نرخ بزرگسال است؛ برای ۱۲ تا ۱۵ سال درخواست اختیاری با هزینه مطرح است. این خدمت فقط در پروازهای اجراشده توسط امارات برقرار است؛ شرکت همکار و اتصال شرایط جدا دارند. مدارک سرپرست و شرایط اتصال را پیش از رزرو بررسی کنید.",
+            "از هفته ۲۹ بارداری گواهی پزشکی لازم می‌شود؛ در بارداری تک‌قلویی سفر از هفته ۳۷ و چندقلویی از هفته ۳۳ مجاز نیست. برای عارضه در هر مرحله MEDIF لازم است و مسیر کلمبیا شرایط اختصاصی دارد. متن رسمی و پزشک را برای وضعیت شخصی ملاک قرار دهید؛ این راهنما مجوز پزشکی یا تضمین پذیرش نیست.",
+            "برای بیماری یا تجهیزات پزشکی ممکن است MEDIF لازم باشد؛ فرم بر اساس وضعیت یک ماه نزدیک سفر تهیه و حداقل ۴۸ ساعت قبل ارسال می‌شود. دارو، مجوز ورود و نگهداری دمایی را پیشاپیش هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی: assist",
+          "url": "https://www.emirates.com/us/english/help/accessibility-hub/"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی: minor",
+          "url": "https://www.emirates.com/us/english/family/planning-your-family-trip/unaccompanied-minors/"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی: pregnancy",
+          "url": "https://www.emirates.com/us/english/before-you-fly/health/before-you-leave/"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "باتری، پاوربانک و اقلام ممنوع",
+      "icon": "batteries",
+      "order": 120,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/english/before-you-fly/travel/dangerous-goods-policy/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "emirates",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "ویژه پرواز اجراشده توسط امارات؛ شرایط مسیر، کلاس، نرخ، تاریخ سفر و فروشندهٔ بلیت باید جداگانه بررسی شود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق جدول جاری امارات، هر مسافر می‌تواند یک پاوربانک با ظرفیت حداکثر ۱۰۰ وات‌ساعت و برچسب ظرفیت خوانا فقط در بار کابین حمل کند. داخل هواپیما استفاده از پاوربانک برای شارژ دستگاه و شارژ خود پاوربانک ممنوع است؛ آن را در محفظه بالای سر نگذارید، بلکه در جیب صندلی یا کیف زیر صندلی مقابل نگه دارید."
+        },
+        {
+          "type": "text",
+          "text_fa": "قواعد باتری یدکی، دستگاه دارای باتری، چمدان هوشمند و تجهیزات پزشکی یکسان نیست. جدول رسمی را برای نوع دقیق وسیله بخوانید و در موارد نیازمند تأیید پیش از سفر هماهنگ کنید. محدودیت امنیتی و گمرکی مبدأ، ترانزیت و مقصد نیز اعمال می‌شود؛ مجاز بودن نزد ایرلاین به معنی مجاز بودن ورود به کشور نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/english/before-you-fly/travel/dangerous-goods-policy/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی",
+      "icon": "seat-selection",
+      "order": 121,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/book/about-booking-online/emirates-seat-selection/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "emirates",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "ویژه پرواز اجراشده توسط امارات؛ شرایط مسیر، کلاس، نرخ، تاریخ سفر و فروشندهٔ بلیت باید جداگانه بررسی شود."
+      },
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "انتخاب صندلی هنگام خرید، مدیریت رزرو یا چک‌این انجام می‌شود. انتخاب زودهنگام اکونومی به نرخ، نوع صندلی و سطح Skywards وابسته است و ممکن است هزینه داشته باشد؛ قیمت ثابت منتشر نمی‌شود.",
+            "فرست، پریمیوم اکونومی و بیزنس Saver/Flex/Flex Plus انتخاب رایگان دارند؛ برای Business Special انتخاب رایگان از بازشدن چک‌این است و Platinum استثنا دارد. اکونومی در زمان چک‌این می‌تواند Regular/Preferred/Twin را رایگان انتخاب کند؛ ظرفیت همان پرواز ملاک است.",
+            "انتخاب صندلی اختیاری است؛ اگر انتخاب نکنید صندلی بدون هزینه تخصیص می‌یابد. صندلی کنار خروج اضطراری شرط ایمنی دارد. تغییر هواپیما یا دلایل عملیاتی/ایمنی می‌تواند شماره صندلی را تغییر دهد؛ بازپرداخت هزینه انتخاب تابع شرایط رسمی است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/book/about-booking-online/emirates-seat-selection/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس، شکایت و حقوق مسافر",
+      "icon": "contact",
+      "order": 122,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/help/",
+          "https://www.emirates.com/us/english/before-you-fly/travel/rules-and-notices/",
+          "https://www.emirates.com/us/english/help/travel-updates/"
         ],
         "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
@@ -386,12 +742,126 @@
       "blocks": [
         {
           "type": "text",
-          "text_fa": "برای آشنایی با خدمات دسترس‌پذیری، نیازهای غذایی و درخواست‌های ویژه، راهنمای رسمی امارات را بررسی کنید. این صفحه تأیید پذیرش یا مجوز پزشکی سفر نیست؛ دربارهٔ نیاز شخصی، پیش از سفر با ایرلاین و در صورت نیاز پزشک هماهنگ کنید."
+          "text_fa": "برای تماس، دفتر محلی و ساعت کار را از مرکز رسمی پشتیبانی انتخاب کنید؛ شماره صفحه منطقه آمریکا را شماره جهانی معرفی نمی‌کنیم. فرم بازخورد/شکایت از همین مرکز قابل دسترسی است. مدارک رزرو را فقط در کانال رسمی ارسال کنید."
+        },
+        {
+          "type": "text",
+          "text_fa": "برای تأخیر یا لغو، وضعیت پرواز و اطلاعیه اختلال همان تاریخ را بررسی و با فروشنده یا امارات برای گزینه‌های تغییر/استرداد هماهنگ کنید. حقوق مسافر وابسته به مبدأ، مقصد و قانون قابل اعمال است؛ صفحه Rules and notices اطلاعیه‌های جدا برای اتحادیه اروپا، کانادا و کشورهای دیگر دارد. مبلغ یا حق جبران یکسان برای همه مسیرها وعده داده نمی‌شود."
         },
         {
           "type": "link",
-          "title_fa": "خدمات ویژه در سایت رسمی امارات",
-          "url": "https://www.emirates.com/us/english/before-you-fly/health/"
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/help/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/before-you-fly/travel/rules-and-notices/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/help/travel-updates/"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی پیش از سفر",
+      "icon": "practical-faq",
+      "order": 123,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/",
+          "https://www.emirates.com/us/english/book/about-booking-online/emirates-seat-selection/",
+          "https://www.emirates.com/us/english/help/faq-topics/cancelling-or-changing-a-booking/",
+          "https://www.emirates.com/us/english/help/forms/refund-request/",
+          "https://www.emirates.com/us/english/manage-booking/online-check-in/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "از کجا سهمیه بارم را بدانم؟ از بلیت و مدیریت رزرو؛ نام امارات به‌تنهایی وزن یا تعداد چمدان را تعیین نمی‌کند.",
+            "چرا در رزرو EK نمی‌توانم چک‌این کنم؟ شرکت اجراکننده اولین بخش را بررسی کنید؛ کدشر لزوماً پرواز اجراشده توسط امارات نیست.",
+            "اگر پرواز را تغییر دهم غذای ویژه و صندلی حفظ می‌شود؟ برای بخش تغییرکرده دوباره انتخاب کنید.",
+            "فقط می‌خواهم مبلغ استرداد را بدانم؛ فرم را بفرستم؟ خیر، ابتدا شرایط نرخ و فروشنده را بررسی کنید؛ فرم می‌تواند رزرو را لغو کند.",
+            "می‌توانم فقط صندلی یک نفر را تغییر دهم؟ خدمات فردی در مدیریت رزرو ممکن است؛ تغییر آنلاین خود پرواز همه افراد رزرو را دربرمی‌گیرد و برای یک نفر باید تماس بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/book/about-booking-online/emirates-seat-selection/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/help/faq-topics/cancelling-or-changing-a-booking/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/help/forms/refund-request/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/manage-booking/online-check-in/"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و خدمات داخل پرواز",
+      "icon": "onboard-connectivity",
+      "order": 124,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/experience/inflight-entertainment/onboard-wifi/",
+          "https://www.emirates.com/us/english/skywards/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی، دسترسی اینترنت را بر اساس سطح عضویت Skywards و کلاس تفکیک می‌کند؛ پیش از پرواز عضویت را به رزرو متصل و شرایط همان هواپیما را بررسی کنید. وجود اینترنت، سرعت، قیمت یا پریز برق یکسان در همه صندلی‌ها تضمین نمی‌شود."
+        },
+        {
+          "type": "text",
+          "text_fa": "Skywards برنامه وفاداری امارات است؛ مزایا به سطح، نرخ و شرایط برنامه بستگی دارد. امتیازهای این برنامه با رضایت مسافران در سرویس مشترک پروژه متفاوت است. هیچ رأی یا رضایتی از عضویت یا متن تبلیغاتی تولید نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/experience/inflight-entertainment/onboard-wifi/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی",
+          "url": "https://www.emirates.com/us/english/skywards/"
         }
       ]
     }

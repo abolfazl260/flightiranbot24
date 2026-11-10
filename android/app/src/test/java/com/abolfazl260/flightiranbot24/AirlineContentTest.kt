@@ -31,13 +31,14 @@ class AirlineContentTest {
         assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
         assertEquals(1, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
         val page = parse(page())
-        assertEquals(10, page.sections.size)
+        assertEquals(15, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
         assertEquals(0, page.ratingCount)
         assertNull(page.average)
         val fleet = page.sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Fleet>()
-        assertEquals(listOf("A350", "A380", "777"), fleet.map { it.model })
-        assertTrue(fleet.all { it.count == null && it.relationship == "operated" })
+        assertEquals(277, fleet.sumOf { it.count ?: 0 })
+        assertTrue(fleet.all { it.status == "unknown" })
+        assertEquals(190, fleet.filter { it.relationship == "owned" }.sumOf { it.count ?: 0 })
     }
 
     @Test fun arabicPersianLatinCodesAndAliasesAreSearchable() {

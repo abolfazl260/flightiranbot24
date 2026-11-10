@@ -33,11 +33,15 @@ def test_actual_catalog_and_independent_snapshots():
             for status in ("published", "draft")
         }
     assert coverage == {"iran-air": {"published": 1, "draft": 4},
-                        "emirates": {"published": 10, "draft": 0}}
+                        "emirates": {"published": 15, "draft": 0}}
     fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
-    assert [b["model"] for b in models] == ["A350", "A380", "777"]
-    assert all(b["count"] is None and b["relationship"] == "operated" for b in models)
+    assert sum(b["count"] for b in models) == 277
+    assert sum(b["count"] for b in models if b["relationship"] == "owned") == 190
+    assert sum(b["count"] for b in models if b["relationship"] == "leased") == 87
+    assert all(b["status"] == "unknown" for b in models)
+    assert {b["observed_at"] for b in models} == {"2026-03-31T00:00:00Z"}
+    assert not any("787" in b["model"] or "777-X" in b["model"] for b in models)
 
 
 @pytest.fixture
@@ -126,7 +130,8 @@ def test_unpublishable_ratings_rejected(dataset, field, value):
 
 def test_fleet_count_needs_own_source_and_observation(dataset):
     def mutate(d):
-        block = next(s for s in d["sections"] if s["id"] == "fleet")["blocks"][1]
+        block = next(b for s in d["sections"] if s["id"] == "fleet"
+                     for b in s["blocks"] if b["type"] == "fleet_snapshot")
         block["count"] = 19
         block["metadata"]["source_urls"] = []
     edit(dataset, "details/emirates.v1.json", mutate)
@@ -175,7 +180,7 @@ def test_draft_fleet_can_hold_unverified_counts_without_publishing(dataset):
     def mutate(d):
         section = next(s for s in d["sections"] if s["id"] == "fleet")
         section["metadata"]["status"] = "draft"
-        block = section["blocks"][1]
+        block = next(b for b in section["blocks"] if b["type"] == "fleet_snapshot")
         block["count"] = 19
         block["configuration_fa"] = "پیش‌نویس نیازمند بررسی"
         block["metadata"].update(status="draft", source_urls=[], verified_at=None,
