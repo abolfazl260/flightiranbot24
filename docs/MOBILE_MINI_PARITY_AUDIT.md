@@ -109,3 +109,13 @@ Mini App supplies signed identity for submission, status, edit/delete, reports a
 helpful votes. Ratings are actual approved integers; archives have no inferred
 stars. All 51 source reports are preserved separately and withheld by default.
 See `TRAVEL_EXPERIENCES.md` for moderation, permission, propagation and rollback.
+
+## Airline criterion statistics (#172 follow-up)
+The live experience service, D1 projection reader, Mini App forms/readers and
+Android now share check-in/boarding, baggage-handling and value-for-money votes
+in addition to the existing airline criteria. Summary counts and arithmetic means
+use an independent denominator for each optional criterion over the complete
+filtered public cohort, before paging. Overall votes are not inferred from
+criteria. Both readers explain the method and limited samples. The shared
+Python/Node/Kotlin fixture and real SQLite/D1 tests verify the additive contract.
+The static historical review count fields are not merged into live statistics.

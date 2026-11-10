@@ -47,3 +47,17 @@ test('Mini App review jobs are authenticated, sanitize identities, paginate own 
  assert.equal((await handleRequest(req(`/internal/v1/mini/jobs/${job.id}/result`,result,true),e)).status,200);
  assert.equal(e.db.prepare('SELECT expires_ms FROM experience_projection_meta').get().expires_ms,0);e.db.close();
 });
+
+test('airline criterion means use their own numeric votes and the full filtered cohort',async()=>{
+ const e=environment(),generated=new Date().toISOString();
+ for(const [i,criteria]of [{checkin:2,baggage:1,value:4,crew:5},{value:5,crew:4},{crew:1}].entries()){
+  const record={...fixture.items[0],id:i+1,targets:['airline:iran-air','route:IKA-IST'],rating:null,criteria};
+  assert.equal((await handleRequest(req('/internal/v1/experiences/record',{generated_at:generated,record},true),e)).status,200);
+ }
+ await handleRequest(req('/internal/v1/experiences/commit',{generated_at:generated,ids:[1,2,3]},true),e);
+ const data=await (await handleRequest(req('/api/v1/experiences?target=airline:iran-air&offset=10'),e)).json();
+ assert.equal(data.stats.average,null);assert.equal(data.items.length,0);
+ assert.deepEqual(data.stats.criteria,{crew:{count:3,average:3.33,low_sample:true},checkin:{count:1,average:2,low_sample:true},baggage:{count:1,average:1,low_sample:true},value:{count:2,average:4.5,low_sample:true}});
+ const other=await (await handleRequest(req('/api/v1/experiences?target=airline:emirates'),e)).json();
+ assert.deepEqual(other.stats.criteria,{});e.db.close();
+});

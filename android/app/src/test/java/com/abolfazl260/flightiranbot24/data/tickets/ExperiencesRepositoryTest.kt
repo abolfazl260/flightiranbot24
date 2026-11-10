@@ -21,4 +21,15 @@ class ExperiencesRepositoryTest {
         val archive=fixture();archive.getAsJsonArray("items")[0].asJsonObject.addProperty("kind","archive")
         assertNull(ExperiencesRepository(null).parse(archive))
     }
+    @Test fun criterionCountsAreIndependentFromOverallAndRejectInvalidSummaries(){
+        val raw=fixture()
+        val page=ExperiencesRepository(null).parse(raw)!!
+        assertEquals(1,page.criteria.getValue("cleanliness").count)
+        assertEquals(5.0,page.criteria.getValue("cleanliness").average,0.001)
+        assertTrue(page.criteria.getValue("cleanliness").lowSample)
+        val metric=raw.getAsJsonObject("stats").getAsJsonObject("criteria").getAsJsonObject("cleanliness")
+        metric.addProperty("count",0)
+        assertNull(ExperiencesRepository(null).parse(raw))
+        assertTrue(experienceCriteriaLabels.keys.containsAll(listOf("checkin","baggage","value")))
+    }
 }

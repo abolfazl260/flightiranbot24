@@ -169,3 +169,55 @@ Remaining phases: richer source-reviewed Iranian operational guides; detailed
 scoped allowances and fleet counts; route inventory and airport backlinks; #168
 immutable/permission-aware reader; approved rating means and comparison; licensed
 inline media. Live data and online submissions require separate approval per #172.
+
+## Current integration after #202 and the #172 ratings follow-up
+
+The initial-baseline limitations above are historical. The immutable 51-report
+archive and persistent, consent/moderation-aware publication service now exist
+(see `TRAVEL_EXPERIENCES.md`). Android's airline overview opens the shared live
+`airline:<stable-id>` experience panel, and native submissions explicitly hand
+off to Telegram. The old static `published_reviews` fields are not combined with
+the live API or used to double-count votes. Archive originals remain withheld
+until individual permission/privacy review; no source content is changed here.
+
+The live submission contract now covers all eight requested dimensions: explicit
+overall satisfaction (`rating`), crew, seat, cleanliness, catering, check-in and
+boarding (`checkin`), baggage handling (`baggage`) and value for money (`value`).
+The existing optional delay-response criterion is retained for compatibility.
+Airline-only criteria are rejected for an airport-only context. Each optional
+criterion may be omitted independently; omission is never a zero vote. Criteria
+remain optional when editing, and changing form contexts retains the draft votes
+for criteria that still apply.
+
+Both first-party SQLite and Cloudflare D1 return additive `stats.criteria` entries
+with a separate count, arithmetic average (two-decimal half-up), and low-sample
+flag. A criterion without votes has no summary entry, meaning unknown, not zero.
+The cohort is all approved, consented records matching the selected context and
+text filter, before pagination. Multi-context associations do not duplicate a
+review. Overall satisfaction still uses explicit overall votes only; criteria
+never create a weighted or inferred overall score. The reader displays the
+method and each denominator, and marks samples below five. These are passenger
+satisfaction measures, not safety scores or official airline rankings. No
+cross-airline leaderboard/comparison is introduced: a common time window and
+comparable populations still require a separate product decision.
+
+The shared Python/Node/Kotlin JSON fixture now includes criterion statistics.
+Database tests cover missing overall votes, different criterion denominators,
+rounding, context isolation and pending-review exclusion. D1 tests exercise the
+actual SQL aggregation over the filtered cohort, including a page with no rows.
+Android validates received summary counts/means/low-sample flags and gracefully
+supports an older server without `stats.criteria`. Existing clients ignore the
+additive fields. No new table, migration, token, or signed release trigger.
+
+Deploy the Python service and existing Worker to enable the additive API; release
+Android manually using the existing workflow to show the native summaries.
+Content-only guide edits still require no APK rebuild. Revert the follow-up PR
+for rollback: the new integer votes remain valid JSON and must not be erased.
+A previous backend rejects submissions using the three new criterion names;
+pause those submissions during rollback until server/client contracts match.
+
+Remaining #172 work is not represented as complete: richer verified Iranian
+operational content, detailed dated fleet counts, structured sourced routes,
+licensed inline media, comparable airline rankings and real-device TalkBack/RTL
+acceptance. Unknown information remains unpublished; no archive permission,
+source verification, aircraft count, media license or user rating is fabricated.

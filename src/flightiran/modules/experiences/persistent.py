@@ -27,7 +27,16 @@ TARGET = re.compile(
 )
 CRITERIA = {
     "airport": {"cleanliness", "signage", "queues", "services"},
-    "airline": {"crew", "seat", "catering", "cleanliness", "delay_response"},
+    "airline": {
+        "crew",
+        "seat",
+        "catering",
+        "cleanliness",
+        "delay_response",
+        "checkin",
+        "baggage",
+        "value",
+    },
 }
 
 
@@ -397,6 +406,15 @@ class SQLiteExperienceService:
             "items": rows[offset : offset + 10],
             "next_offset": offset + 10 if offset + 10 < len(rows) else None,
             "stats": {
+                "criteria": {
+                    key: {
+                        "count": len(votes),
+                        "average": math.floor(sum(votes) * 100 / len(votes) + 0.5) / 100,
+                        "low_sample": len(votes) < 5,
+                    }
+                    for key in sorted(set().union(*CRITERIA.values()))
+                    if (votes := [r["criteria"][key] for r in rows if key in r["criteria"]])
+                },
                 "rating_count": len(ratings),
                 "average": math.floor(sum(ratings) * 100 / len(ratings) + 0.5) / 100
                 if ratings

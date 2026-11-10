@@ -25,6 +25,13 @@
     "rating_count": 1,
     "average": 4.0,
     "low_sample": true,
-    "comparison_allowed": false
+    "comparison_allowed": false,
+    "criteria": {
+      "cleanliness": {
+        "count": 1,
+        "average": 5.0,
+        "low_sample": true
+      }
+    }
   }
 }

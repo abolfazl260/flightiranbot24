@@ -1,3 +1,4 @@
+export const airlineCriteriaLabels={crew:'رفتار خدمه',seat:'راحتی صندلی',catering:'پذیرایی',cleanliness:'نظافت',checkin:'پذیرش و سوارشدن',baggage:'مدیریت بار',value:'ارزش در برابر هزینه',delay_response:'رسیدگی به تأخیر'};
 export function createExperienceView({root,el,request}){
  let target='',query='',sort='newest',offset=0,sequence=0,ownOffset=0;
  const button=(label,click)=>el('button',{type:'button',className:'tiny-button',onClick:click},label);
@@ -22,7 +23,8 @@ export function createExperienceView({root,el,request}){
    const order=el('select',{},...['newest','helpful','rating'].map((v,i)=>el('option',{value:v,text:['جدیدترین','مفیدترین','بالاترین رضایت'][i]})));
    order.value=sort;order.querySelector('[value="rating"]').disabled=!data.stats.comparison_allowed;
    order.addEventListener('change',()=>{sort=order.value;load(target,0)});
-   const nodes=[p('تجربهٔ شخصی مسافر؛ نه مقررات رسمی یا ارزیابی ایمنی.'),p(statsText(data.stats)),
+   const nodes=[p('تجربهٔ شخصی مسافر؛ نه مقررات رسمی یا ارزیابی ایمنی.'),p(statsText(data.stats)),p('میانگین سادهٔ رأی‌های منتشرشده؛ هر معیار فقط از رأی همان معیار محاسبه می‌شود. امتیاز کل از ترکیب معیارها ساخته نمی‌شود.'),
+    ...Object.entries(data.stats.criteria||{}).map(([k,v])=>p((airlineCriteriaLabels[k]||({signage:'راهنمایی',queues:'صف',services:'خدمات'}[k])||k)+': '+new Intl.NumberFormat('fa-IR',{maximumFractionDigits:2}).format(v.average)+' از ۵ · '+v.count+' رأی'+(v.low_sample?' · نمونه کم':''))),
     el('div',{className:'field'},kind,context,search,order,button('اعمال فیلتر',()=>{target=context.value.trim()?kind.value+':'+context.value.trim():'';query=search.value.trim();load(target,0)})),
     el('div',{className:'row'},button('ثبت تجربه و رضایت',()=>form()),button('تجربه‌های من',()=>mine(0)))];
    if(!data.items.length)nodes.push(p('تجربهٔ دارای مجوز و تأیید انتشار برای این فیلتر موجود نیست.'));
@@ -32,7 +34,7 @@ export function createExperienceView({root,el,request}){
      p(row.kind==='archive'?'گزارش آرشیوی با مجوز انتشار؛ تجربهٔ شخصی':'تجربهٔ منتشرشدهٔ مسافر'),
      p('تاریخ پیام: '+(row.posted_label||row.created_at)+' · تاریخ سفر: '+(row.travel_date||'مشخص نشده')),
      p(row.rating===null?'بدون رأی عددی':`رضایت کلی: ${new Intl.NumberFormat('fa-IR').format(row.rating)} از ۵`),
-     ...Object.entries(row.criteria||{}).map(([k,v])=>p(({crew:'خدمه',seat:'صندلی',catering:'پذیرایی',cleanliness:'نظافت',delay_response:'رسیدگی به تأخیر',signage:'راهنمایی',queues:'صف',services:'خدمات'}[k]||k)+': '+v+' از ۵')),
+     ...Object.entries(row.criteria||{}).map(([k,v])=>p(({checkin:'پذیرش و سوارشدن',baggage:'مدیریت بار',value:'ارزش در برابر هزینه',crew:'خدمه',seat:'صندلی',catering:'پذیرایی',cleanliness:'نظافت',delay_response:'رسیدگی به تأخیر',signage:'راهنمایی',queues:'صف',services:'خدمات'}[k]||k)+': '+v+' از ۵')),
      p(row.text.slice(0,160)+(row.text.length>160?'…':'')),button('متن کامل',()=>{text.hidden=!text.hidden}),text,
      p('مفید برای '+new Intl.NumberFormat('fa-IR').format(row.helpful)+' مسافر'),
      button('مفید بود',async()=>{try{await perform(`/api/mini/experiences/${row.id}/vote`,{helpful:true});load()}catch(e){alertText(e.message)}}),
@@ -60,12 +62,12 @@ export function createExperienceView({root,el,request}){
   const date=el('input',{type:'date',value:row?.travel_date||''});
   const consent=el('input',{type:'checkbox'});consent.checked=row?.consent===true;
   const criteria=el('div'),criteriaInputs={};
-  function criteriaFields(){criteria.replaceChildren();for(const k of Object.keys(criteriaInputs))delete criteriaInputs[k];
+  function criteriaFields(){const saved=Object.fromEntries(Object.entries(criteriaInputs).map(([k,s])=>[k,s.value]));criteria.replaceChildren();for(const k of Object.keys(criteriaInputs))delete criteriaInputs[k];
    const isAirline=context.value.includes('airline:'),isAirport=context.value.includes('airport:');
-   const names={...(isAirline?{crew:'خدمه',seat:'صندلی',catering:'پذیرایی',cleanliness:'نظافت',delay_response:'رسیدگی به تأخیر'}:{}),...(isAirport?{cleanliness:'نظافت',signage:'راهنمایی',queues:'صف',services:'خدمات'}:{})};
+   const names={...(isAirline?{checkin:'پذیرش و سوارشدن',baggage:'مدیریت بار',value:'ارزش در برابر هزینه',crew:'خدمه',seat:'صندلی',catering:'پذیرایی',cleanliness:'نظافت',delay_response:'رسیدگی به تأخیر'}:{}),...(isAirport?{cleanliness:'نظافت',signage:'راهنمایی',queues:'صف',services:'خدمات'}:{})};
    for(const [k,label]of Object.entries(names)){
     const select=el('select',{},el('option',{value:'',text:label+' (اختیاری)'}),...[1,2,3,4,5].map(n=>el('option',{value:String(n),text:String(n)})));
-    select.value=row?.criteria?.[k]?String(row.criteria[k]):'';criteriaInputs[k]=select;criteria.append(select);
+    select.value=Object.hasOwn(saved,k)?saved[k]:(row?.criteria?.[k]?String(row.criteria[k]):'');criteriaInputs[k]=select;criteria.append(select);
    }
   }
   context.addEventListener('input',criteriaFields);criteriaFields();showContexts();
