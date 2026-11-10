@@ -56,6 +56,17 @@ function parseBlock(b, kind, now) {
       return {type:'link',title:text(b.title_fa||b.alt_fa),url:url(b.url),credit:b.attribution_fa||b.caption_fa};
     case 'map':return {type:'link',title:text(b.title_fa),url:url(b.external_url)};
     case 'airport_link':need(/^[A-Z]{3}$/.test(b.iata));return {type:'airport',id:b.iata,title:text(b.title_fa)};
+    case 'route_snapshot': {
+      if(kind!=='airlines'||!active(b.metadata,now))return null;
+      need(/^[A-Z]{3}$/.test(b.origin)&&/^[A-Z]{3}$/.test(b.destination)&&b.origin!==b.destination);
+      need(['non_stop','connecting','unknown'].includes(b.service_type));
+      need(['listed','announced','seasonal','suspended','unknown'].includes(b.status));
+      need(b.operating_carrier===null||idPattern.test(b.operating_carrier));
+      need(date(b.observed_at)<=now);
+      return {type:'route',origin:b.origin,destination:b.destination,serviceType:b.service_type,
+        operatingCarrier:b.operating_carrier,status:b.status,observedAt:b.observed_at,
+        note:text(b.note_fa),sources:sources(b.metadata.source_urls)};
+    }
     case 'fleet_snapshot': {
       if(kind!=='airlines'||!active(b.metadata,now))return null;
       need(date(b.observed_at)<=now && (b.count===null||Number.isSafeInteger(b.count)&&b.count>=0));
@@ -82,9 +93,13 @@ export function parseGuideDetail(raw, kind, id, now=Date.now()) {
     need(date(reviewedAt)<=now);
     const refs=sources(kind==='airlines'?s.metadata.source_urls:s.source_urls);
     if(s.kind==='policy')need(s.scope&&typeof s.scope.note_fa==='string');
-    const blocks=array(s.blocks).map(b=>parseBlock(b,kind,now)).filter(Boolean);
+    const blocks=array(s.blocks).map(b=>{
+      if(b.type==='route_snapshot')need(s.kind==='network');
+      return parseBlock(b,kind,now);
+    }).filter(Boolean);
     if(!blocks.length)return [];
-    return [{id:s.id,title:text(s.title_fa),order:s.order,reviewedAt,sources:refs,scope:s.scope,blocks}];
+    return [{id:s.id,title:text(s.title_fa),order:s.order,reviewedAt,sources:refs,scope:s.scope,blocks,
+      reviewOverdue:kind==='airlines'&&now-date(reviewedAt)>30*86400000}];
   }).sort((a,b)=>a.order-b.order);
   const counts={overall:0,crew:0,seat:0,cleanliness:0,catering:0,checkin:0,baggage:0,value:0};
   const reviewIds=new Set();let reviewCount=0;

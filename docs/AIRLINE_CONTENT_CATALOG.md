@@ -22,7 +22,7 @@ it does not package/sign/release APK or AAB files.
 | Stable ID | Index/detail state | Published sections | Draft sections | Sources/limitations |
 | --- | --- | ---: | ---: | --- |
 | `iran-air` | published | 1 | 4 | IATA identity; official airline site unavailable during review. No operational rules or fleet claims published. |
-| `emirates` | published | 15 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
+| `emirates` | published | 16 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
 
 Current Emirates coverage supersedes the initial counts below; see `docs/airlines/emirates-2026-11-10.md`.
 
@@ -232,3 +232,19 @@ status provenance corrected, and fleet family references rechecked without addin
 counts. Iran Air remains 1 published / 4 draft sections. See
 [the source review](airlines/emirates-2026-11-10.md) for URLs, scope and limitations.
 No carrier is represented as complete; no other content's review date is advanced.
+
+### Dated route block and source review age (Emirates follow-up)
+
+`route_snapshot` extends v1 additively; old readers skip it and still display
+network text and airport links. See the dated Emirates audit for exact field
+semantics and sources. It records a directed source-page relationship, not a
+live schedule. Both native and Mini App readers support it; publication does not
+install a new reader on existing Android devices. Published route endpoints must
+exist in the airport index and operating carrier IDs, when known, in the airline
+index. Unknown operator/connection stays null/unknown; metadata preserves unknown
+effective dates. No duplicated airport details or reverse-direction route inferred.
+
+An editorial warning appears after 30 days since source review, independently of
+legal effective periods. Mark explicitly invalid data stale to hide it. Review
+network and policy sources monthly and before travel; retain the historical fleet
+observation date rather than silently replacing it with the source review date.

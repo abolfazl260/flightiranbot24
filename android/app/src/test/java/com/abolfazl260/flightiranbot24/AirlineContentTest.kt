@@ -31,7 +31,7 @@ class AirlineContentTest {
         assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
         assertEquals(1, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
         val page = parse(page())
-        assertEquals(15, page.sections.size)
+        assertEquals(16, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
         assertEquals(0, page.ratingCount)
         assertNull(page.average)
@@ -39,6 +39,34 @@ class AirlineContentTest {
         assertEquals(277, fleet.sumOf { it.count ?: 0 })
         assertTrue(fleet.all { it.status == "unknown" })
         assertEquals(190, fleet.filter { it.relationship == "owned" }.sumOf { it.count ?: 0 })
+    }
+
+    @Test fun datedRoutesKeepUnknownCarrierAndSuppressStaleObservations() {
+        val root = page()
+        val routes = parse(root).sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Route>()
+        assertEquals(2, routes.size)
+        val tehran = routes.single { it.destination == "IKA" }
+        assertNull(tehran.operatingCarrier)
+        assertEquals("unknown", tehran.serviceType)
+        assertEquals("listed", tehran.status)
+        val network = root.getAsJsonArray("sections").first { it.asJsonObject.get("id").asString == "network" }.asJsonObject
+        val snapshot = network.getAsJsonArray("blocks").first { it.asJsonObject.get("type").asString == "route_snapshot" }.asJsonObject
+        snapshot.getAsJsonObject("metadata").addProperty("stale", true)
+        assertEquals(1, parse(root).sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Route>().size)
+        snapshot.getAsJsonObject("metadata").addProperty("stale", false)
+        snapshot.addProperty("destination", "DXB")
+        rejected { parse(root) }
+        snapshot.addProperty("destination", "LHR")
+        snapshot.addProperty("observed_at", "2099-01-01T00:00:00Z")
+        rejected { parse(root) }
+    }
+
+    @Test fun reviewAgeWarnsWithoutInventingEffectiveExpiry() {
+        val fresh = parse(page()).sections.single { it.id == "network" }
+        assertFalse(fresh.reviewOverdue)
+        val later = AirlineContentParser.detail(page().toString(), "emirates",
+            Instant.parse("2026-12-11T00:00:01Z"))!!
+        assertTrue(later.sections.single { it.id == "network" }.reviewOverdue)
     }
 
     @Test fun arabicPersianLatinCodesAndAliasesAreSearchable() {

@@ -40,4 +40,4 @@ jobs:
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.13'
-      - run: gradle --no-daemon -p android :app:testDebugUnitTest
+      - run: gradle --no-daemon -p android :app:testDebugUnitTest :app:lintDebug :app:compileDebugAndroidTestKotlin

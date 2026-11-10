@@ -47,6 +47,18 @@ export function createGuideView({kind,root,el,openUrl,onAirport,onFids,onExperie
     if(b.type==='bullets')return el('ul',{},b.items.map(s=>el('li',{text:s})));
     if(b.type==='link')return el('div',{},link(b.title,b.url),b.credit?p(b.credit):null);
     if(b.type==='airport')return button(b.title+' · '+b.id,()=>onAirport(b.id));
+    if(b.type==='route') {
+      const service={non_stop:'بدون توقف',connecting:'اتصالی',unknown:'تأیید نشده'};
+      const state={listed:'صفحه مسیر موجود است',announced:'اعلام‌شده',seasonal:'فصلی',suspended:'تعلیق‌شده',unknown:'نامعلوم'};
+      return el('article',{className:'panel guide-route'},el('h3',{text:b.origin+' → '+b.destination}),
+        p('نوع سفر: '+service[b.serviceType]),p('وضعیت منبع: '+state[b.status]),
+        p('شرکت اجراکننده: '+(rows?.find(r=>r.id===b.operatingCarrier)?.name||'تأیید نشده')),
+        p('تاریخ مشاهده: '+date(b.observedAt)),p(b.note),
+        p('وجود مسیر تضمین پرواز در تاریخ سفر نیست؛ برنامه رسمی را بررسی کنید.'),
+        button('فرودگاه مبدأ · '+b.origin,()=>onAirport(b.origin)),
+        button('فرودگاه مقصد · '+b.destination,()=>onAirport(b.destination)),
+        b.sources.map(s=>link('مرجع مسیر و بررسی برنامه',s)));
+    }
     if(b.type==='fids')return button('مشاهده وضعیت پروازها',onFids);
     if(b.type==='fleet') {
       const relation={owned:'ملکی',operated:'بهره‌برداری',leased:'اجاره‌ای',unknown:'نامعلوم'};
@@ -84,7 +96,9 @@ export function createGuideView({kind,root,el,openUrl,onAirport,onFids,onExperie
         const s=page.sections.find(s=>s.id===sectionId);
         if(!s)nodes.push(p('این بخش منتشر نشده یا نیازمند بررسی دوباره است.'));
         else {
-          nodes.push(el('h2',{text:s.title}),p('آخرین بررسی: '+date(s.reviewedAt)));
+          nodes.push(el('h2',{text:s.title}),p('آخرین بررسی: '+date(s.reviewedAt)),
+            p('اطلاعات رسمیِ ثبت‌شده در تاریخ بررسی؛ پیش از سفر منبع را دوباره بررسی کنید. بخش‌های تأییدنشده، دارای علامت قدیمی یا خارج از اعتبار نمایش داده نمی‌شوند.'));
+          if(s.reviewOverdue)nodes.push(el('p',{role:'status',className:'website-warning',text:'بیش از ۳۰ روز از بررسی منبع گذشته است؛ این نسخه قدیمی ممکن است تغییر کرده باشد. پیش از تصمیم، مرجع رسمی را بررسی کنید.'}));
           if(s.scope){nodes.push(p(s.scope.note_fa));for(const [field,label] of [['route','مسیر'],['fare_brand','نرخ'],['cabin_class','کلاس']])if(s.scope[field])nodes.push(p(label+': '+s.scope[field]));
             if(s.scope.seller&&s.scope.seller!=='unknown')nodes.push(p('فروشنده: '+({airline:'خرید مستقیم',agency:'آژانس',third_party:'واسطه'}[s.scope.seller]||'نیازمند تأیید')));
             if(s.scope.journey_type&&s.scope.journey_type!=='unknown')nodes.push(p(s.scope.journey_type==='domestic'?'مخصوص پرواز داخلی':'مخصوص پرواز خارجی'));

@@ -19,6 +19,7 @@ internal data class AirlinePolicyScope(
 internal data class AirlineSection(
     val id: String, val title: String, val order: Int, val reviewedAt: String,
     val sources: List<String>, val scope: AirlinePolicyScope?, val blocks: List<AirlineBlock>,
+    val reviewOverdue: Boolean = false,
 )
 internal data class AirlinePage(
     val id: String, val reviewedAt: String, val sections: List<AirlineSection>,
@@ -35,6 +36,11 @@ internal sealed interface AirlineBlock {
         val sources: List<String>,
     ) : AirlineBlock
     data class Airport(val iata: String, val title: String) : AirlineBlock
+    data class Route(
+        val origin: String, val destination: String, val serviceType: String,
+        val operatingCarrier: String?, val status: String, val observedAt: String,
+        val note: String, val sources: List<String>,
+    ) : AirlineBlock
     data class Media(val title: String, val url: String, val attribution: String) : AirlineBlock
 }
 
@@ -101,7 +107,10 @@ internal object AirlineContentParser {
             require(row.text("kind") != "policy" || scope != null)
             val blocks = row.getAsJsonArray("blocks")
             require(blocks.size() <= 200)
-            val rendered = blocks.mapNotNull { b -> block(b.asJsonObject, now) }
+            val rendered = blocks.mapNotNull { b ->
+                require(b.asJsonObject.text("type") != "route_snapshot" || row.text("kind") == "network")
+                block(b.asJsonObject, now)
+            }
             if (rendered.isEmpty()) return@mapNotNull null
             AirlineSection(sectionId, row.text("title_fa"), row.get("order").asInt,
                 meta.text("verified_at"), sources(meta), scope?.let { policy ->
@@ -109,7 +118,7 @@ internal object AirlineContentParser {
                         policy.optional("fare_brand"), policy.optional("cabin_class"),
                         policy.optional("operating_carrier"), policy.text("seller"),
                         policy.text("journey_type"))
-                }, rendered)
+                }, rendered, Instant.parse(meta.text("verified_at")) < now.minusSeconds(30L * 86400))
         }.sortedWith(compareBy({ it.order }, { it.id }))
         val reviewIds = mutableSetOf<String>()
         val counts = criteria.keys.associateWith { 0 }.toMutableMap()
@@ -171,6 +180,24 @@ internal object AirlineContentParser {
             val code = row.text("iata")
             require(code.matches(Regex("[A-Z]{3}")))
             AirlineBlock.Airport(code, row.text("title_fa"))
+        }
+        "route_snapshot" -> {
+            val meta = row.getAsJsonObject("metadata")
+            if (!published(meta, now)) null else {
+                val origin = row.text("origin")
+                val destination = row.text("destination")
+                require(origin.matches(Regex("[A-Z]{3}")) && destination.matches(Regex("[A-Z]{3}")) && origin != destination)
+                val service = row.text("service_type")
+                val status = row.text("status")
+                val carrier = row.optional("operating_carrier")
+                val observed = row.text("observed_at")
+                require(service in setOf("non_stop", "connecting", "unknown"))
+                require(status in setOf("listed", "announced", "seasonal", "suspended", "unknown"))
+                require(carrier == null || idPattern.matches(carrier))
+                require(Instant.parse(observed) <= now)
+                AirlineBlock.Route(origin, destination, service, carrier, status, observed,
+                    row.text("note_fa"), sources(meta))
+            }
         }
         "image", "video" -> {
             require(row.get("rights_verified").asBoolean)

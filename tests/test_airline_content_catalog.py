@@ -33,7 +33,7 @@ def test_actual_catalog_and_independent_snapshots():
             for status in ("published", "draft")
         }
     assert coverage == {"iran-air": {"published": 1, "draft": 4},
-                        "emirates": {"published": 15, "draft": 0}}
+                        "emirates": {"published": 16, "draft": 0}}
     fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
     assert sum(b["count"] for b in models) == 277
@@ -191,4 +191,36 @@ def test_draft_fleet_can_hold_unverified_counts_without_publishing(dataset):
          lambda d: next(s for s in d["sections"] if s["id"] == "fleet")[
              "metadata"].update(status="published"))
     with pytest.raises(ValueError, match="published sources"):
+        module.validate_dataset(dataset, NOW)
+
+
+def test_dated_network_does_not_promote_listing_to_active_schedule():
+    detail = module.read_json(ROOT / 'data/airlines/details/emirates.v1.json')
+    network = next(s for s in detail['sections'] if s['id'] == 'network')
+    routes = [b for b in network['blocks'] if b['type'] == 'route_snapshot']
+    assert {(b['origin'], b['destination']) for b in routes} == {('DXB', 'LHR'), ('DXB', 'IKA')}
+    tehran = next(b for b in routes if b['destination'] == 'IKA')
+    assert tehran['status'] == 'listed'
+    assert tehran['service_type'] == 'unknown' and tehran['operating_carrier'] is None
+    assert all(b['metadata']['effective_to'] is None for b in routes)
+    assert all('flight_number' not in b and 'price' not in b for b in routes)
+
+
+@pytest.mark.parametrize('mutation', [
+    lambda b: b.update(origin='ZZZ'),
+    lambda b: b.update(destination=b['origin']),
+    lambda b: b.update(operating_carrier='nonexistent'),
+    lambda b: b.update(observed_at='2099-01-01T00:00:00Z'),
+    lambda b: b['metadata'].update(source_urls=[]),
+    lambda b: b['metadata'].update(status='draft'),
+    lambda b: b.update(service_type='daily'),
+    lambda b: b.update(status='active'),
+])
+def test_route_provenance_and_relations_fail_closed(dataset, mutation):
+    def mutate(d):
+        route = next(b for s in d['sections'] for b in s['blocks']
+                     if b['type'] == 'route_snapshot')
+        mutation(route)
+    edit(dataset, 'details/emirates.v1.json', mutate)
+    with pytest.raises((ValueError, ValidationError)):
         module.validate_dataset(dataset, NOW)
