@@ -5,7 +5,7 @@ export function publicExperience(r){
     typeof r.display_name!=='string'||r.display_name.length>80||!Array.isArray(r.targets)||r.targets.length>10||r.targets.some(t=>!target.test(t))||
     r.rating!==null&&(!Number.isInteger(r.rating)||r.rating<1||r.rating>5)||r.kind==='archive'&&r.rating!==null||
     !Number.isSafeInteger(r.helpful)||r.helpful<0||!Number.isFinite(Date.parse(r.created_at))||!Number.isFinite(Date.parse(r.modified_at)))return null;
- const criteria={};for(const [k,v]of Object.entries(r.criteria||{})){if(!['crew','seat','catering','cleanliness','delay_response','signage','queues','services'].includes(k)||!Number.isInteger(v)||v<1||v>5)return null;criteria[k]=v;}
+ const criteria={};for(const [k,v]of Object.entries(r.criteria||{})){if(!['crew','seat','catering','cleanliness','delay_response','checkin','baggage','value','signage','queues','services'].includes(k)||!Number.isInteger(v)||v<1||v>5)return null;criteria[k]=v;}
  return {id:r.id,kind:r.kind,text:r.text,display_name:r.display_name,rating:r.rating,criteria,targets:[...r.targets],helpful:r.helpful,
    created_at:r.created_at,modified_at:r.modified_at,posted_label:typeof r.posted_label==='string'?r.posted_label.slice(0,100):null,
    travel_date:typeof r.travel_date==='string'&&/^\d{4}-\d\d-\d\d$/.test(r.travel_date)?r.travel_date:null};
@@ -48,13 +48,15 @@ export async function experienceRead(request,env){
   const params=[t,t,q.toLowerCase()];
   const stats=await env.PUBLIC_DB.prepare('SELECT count(*) AS total,count(rating) AS rating_count,sum(rating) AS rating_sum FROM public_experiences WHERE '+where).bind(...params).first();
   if(stats.total>1000)return response({error:'Projection exceeds bounds'},503);
+  const {results:criterionRows}=await env.PUBLIC_DB.prepare("SELECT c.key AS criterion,count(*) AS count,sum(c.value) AS total FROM public_experiences,json_each(snapshot_json,'$.criteria') AS c WHERE "+where+' GROUP BY c.key').bind(...params).all();
+  const criteria=Object.fromEntries(criterionRows.map(r=>[r.criterion,{count:r.count,average:Math.floor(r.total*100/r.count+0.5)/100,low_sample:r.count<5}]));
   const canCompare=stats.rating_count>=5;
   const order=sort==='helpful'?'helpful DESC,id DESC':sort==='rating'&&canCompare?'rating DESC,id DESC':'id DESC';
   const {results}=await env.PUBLIC_DB.prepare('SELECT snapshot_json FROM public_experiences WHERE '+where+' ORDER BY '+order+' LIMIT 10 OFFSET ?').bind(...params,Number(off)).all();
   const items=results.map(r=>publicExperience(JSON.parse(r.snapshot_json)));
   if(items.some(r=>!r))return response({error:'Invalid public projection'},503);
   return response({items,next_offset:Number(off)+10<stats.total?Number(off)+10:null,
-   stats:{rating_count:stats.rating_count,average:stats.rating_count?Math.floor(stats.rating_sum*100/stats.rating_count+0.5)/100:null,
+   stats:{criteria,rating_count:stats.rating_count,average:stats.rating_count?Math.floor(stats.rating_sum*100/stats.rating_count+0.5)/100:null,
     low_sample:stats.rating_count>0&&!canCompare,comparison_allowed:canCompare}});
 
  }catch{return response({error:'Experiences unavailable'},503);}

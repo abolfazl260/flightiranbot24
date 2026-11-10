@@ -74,8 +74,14 @@ internal fun ExperiencesPanel(initialTarget: String,compact: Boolean=true){
         if(loading)Text("در حال دریافت تجربه‌های منتشرشده…")
         if(error)Text("تجربه‌ها فعلاً در دسترس نیستند؛ اتصال یا همگام‌سازی را دوباره بررسی کنید.",color=MaterialTheme.colorScheme.error)
         page?.let { data->
-            Text(if(data.count==0)"هنوز رأی عددی تأییدشده‌ای موجود نیست." else
-                "رضایت: ${number.format(data.average)} از ۵ · ${number.format(data.count)} رأی"+(if(data.lowSample)" · نمونه کم؛ قابل مقایسه نیست"else ""))
+            Text(if(data.count==0)"هنوز رأی رضایت کلیِ تأییدشده‌ای موجود نیست." else
+                "رضایت کلی: ${number.format(data.average)} از ۵ · ${number.format(data.count)} رأی"+(if(data.lowSample)" · نمونه کم؛ قابل مقایسه نیست"else ""))
+            Text("میانگین سادهٔ رأی‌های منتشرشده؛ هر معیار فقط از رأی همان معیار محاسبه می‌شود. امتیاز کل از ترکیب معیارها ساخته نمی‌شود.")
+            data.criteria.forEach { (key,summary) ->
+                Text((experienceCriteriaLabels[key]?:key)+": "+number.format(summary.average)+
+                    " از ۵ · "+number.format(summary.count)+" رأی"+
+                    (if(summary.lowSample)" · نمونه کم" else ""))
+            }
             if(data.items.isEmpty())Text("تجربهٔ دارای مجوز و تأیید انتشار برای این فیلتر موجود نیست.")
             data.items.take(if(compact)3 else 10).forEach { row->
                 var expanded by rememberSaveable(row.id){mutableStateOf(false)}
@@ -83,7 +89,7 @@ internal fun ExperiencesPanel(initialTarget: String,compact: Boolean=true){
                     Text(row.name);Text(if(row.kind=="archive")"گزارش آرشیوی با مجوز انتشار"else "تجربهٔ مسافر")
                     Text("تاریخ پیام: ${row.posted?:row.created} · تاریخ سفر: ${row.travelDate?:"مشخص نشده"}")
                     Text(row.rating?.let{"رضایت کلی: ${number.format(it)} از ۵"}?:"بدون رأی عددی")
-                    row.criteria.forEach{(key,value)->Text((mapOf("crew" to "خدمه","seat" to "صندلی","catering" to "پذیرایی","cleanliness" to "نظافت","delay_response" to "رسیدگی به تأخیر","signage" to "راهنمایی","queues" to "صف","services" to "خدمات")[key]?:key)+": "+number.format(value)+" از ۵")}
+                    row.criteria.forEach{(key,value)->Text((experienceCriteriaLabels[key]?:key)+": "+number.format(value)+" از ۵")}
                     Text(if(expanded)row.text else row.text.take(160)+(if(row.text.length>160)"…"else ""))
                     TextButton(onClick={expanded=!expanded}){Text(if(expanded)"بستن متن"else "متن کامل")}
                     Text("مفید برای ${number.format(row.helpful)} مسافر")

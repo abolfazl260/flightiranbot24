@@ -87,6 +87,7 @@ async def test_persistent_user_review_consent_moderation_edit_delete_votes_and_r
     await service.moderate(identifier, state="approved", reason="Reviewed", actor="operator")
     public = await service.public(target="airport:IKA")
     assert public["stats"] == {
+        "criteria": {"cleanliness": {"count": 1, "average": 5.0, "low_sample": True}},
         "rating_count": 1,
         "average": 4.0,
         "low_sample": True,
@@ -226,4 +227,53 @@ async def test_signed_identity_controls_private_experience_api_and_public_fixtur
         )
         assert response.status_code == 200 and response.json()["experience_mutation"]
         assert not (await client.get("/api/v1/experiences")).json()["items"]
+    await db.close()
+
+
+@pytest.mark.asyncio
+async def test_airline_criteria_have_independent_denominators_and_publication_gates(tmp_path):
+    db = await initialize_database(f"sqlite+aiosqlite:///{tmp_path / 'criteria.db'}")
+    users = SQLiteUserRepository(db)
+    service = SQLiteExperienceService(db)
+    for index, criteria in enumerate(
+        [
+            {"crew": 5, "checkin": 2, "baggage": 1, "value": 4},
+            {"crew": 4, "value": 5},
+            {"crew": 1},
+            {"value": 1},
+        ]
+    ):
+        user = await users.create(1000 + index)
+        row = await service.submit(
+            user.id,
+            targets=["airline:iran-air", "route:IKA-IST"],
+            body=f"Genuine test experience with distinct body {index}",
+            rating=None,
+            criteria=criteria,
+            consent=True,
+            display_name="Test",
+        )
+        if index != 3:
+            await service.moderate(row["id"], state="approved", actor="test", reason="Reviewed")
+    stats = (await service.public(target="airline:iran-air"))["stats"]
+    assert stats["rating_count"] == 0 and stats["average"] is None
+    assert stats["criteria"] == {
+        "crew": {"count": 3, "average": 3.33, "low_sample": True},
+        "checkin": {"count": 1, "average": 2.0, "low_sample": True},
+        "baggage": {"count": 1, "average": 1.0, "low_sample": True},
+        "value": {"count": 2, "average": 4.5, "low_sample": True},
+    }
+    assert not (await service.public(target="airline:emirates"))["stats"]["criteria"]
+    assert (await service.public(target="route:IKA-IST"))["stats"] == stats
+    other = await users.create(2000)
+    with pytest.raises(ExperienceError):
+        await service.submit(
+            other.id,
+            targets=["airport:IKA"],
+            body="An airport-only review cannot rate airline baggage handling.",
+            rating=None,
+            criteria={"baggage": 5},
+            consent=True,
+            display_name="Test",
+        )
     await db.close()
