@@ -503,6 +503,9 @@
             "iata",
             "title_fa"
           ]
+        },
+        {
+          "$ref": "#/$defs/route"
         }
       ]
     },
@@ -805,6 +808,69 @@
         "submission_id",
         "moderation_status",
         "ratings"
+      ]
+    },
+    "route": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "route_snapshot"
+        },
+        "origin": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "destination": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "service_type": {
+          "enum": [
+            "non_stop",
+            "connecting",
+            "unknown"
+          ]
+        },
+        "operating_carrier": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z][a-z0-9-]{1,79}$"
+        },
+        "status": {
+          "enum": [
+            "listed",
+            "announced",
+            "seasonal",
+            "suspended",
+            "unknown"
+          ]
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "note_fa": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 10000
+        },
+        "metadata": {
+          "$ref": "#/$defs/metadata"
+        }
+      },
+      "required": [
+        "type",
+        "origin",
+        "destination",
+        "service_type",
+        "operating_carrier",
+        "status",
+        "observed_at",
+        "note_fa",
+        "metadata"
       ]
     }
   }

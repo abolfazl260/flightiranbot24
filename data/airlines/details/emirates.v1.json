@@ -864,6 +864,89 @@
           "url": "https://www.emirates.com/us/english/skywards/"
         }
       ]
+    },
+    {
+      "id": "network",
+      "title_fa": "مسیرها و فرودگاه‌های مرتبط",
+      "icon": "network",
+      "order": 90,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/english/destinations/dxb/lhr/flights-from-dubai-to-london-heathrow/",
+          "https://www.emirates.com/english/destinations/dxb/ika/flights-from-dubai-to-tehran/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این فهرست نمونهٔ مسیرهای بررسی‌شده است، نه همه شبکه امارات. وجود صفحه مقصد یا مسیر تضمین پرواز در روز خاص، ظرفیت، قیمت، کلاس یا شرکت اجراکننده نیست. برای تاریخ سفر، برنامه و وضعیت رسمی پرواز و نام شرکت اجراکننده روی بلیت را بررسی کنید. تاریخ مشاهده، تاریخ خواندن صفحه است و بازه عملیاتی نامعلوم به معنی فعالیت دائمی نیست."
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "DXB",
+          "destination": "LHR",
+          "service_type": "non_stop",
+          "operating_carrier": "emirates",
+          "status": "listed",
+          "observed_at": "2026-11-10T00:00:00Z",
+          "note_fa": "صفحه رسمی، پروازهای DXB–LHR را با اجراکننده EK معرفی می‌کند؛ ساعت، تناوب و تخصیص هواپیما ذخیره نشده‌اند. این مشاهده تأیید پرواز امروز نیست.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.emirates.com/english/destinations/dxb/lhr/flights-from-dubai-to-london-heathrow/"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "DXB",
+          "destination": "IKA",
+          "service_type": "unknown",
+          "operating_carrier": null,
+          "status": "listed",
+          "observed_at": "2026-11-10T00:00:00Z",
+          "note_fa": "صفحه رسمی مسیر دبی–تهران وجود دارد، اما هنگام بررسی، اطلاعات برنامه با پیام خطای دریافت روبه‌رو بود. مستقیم/اتصالی، اجراکننده، وضعیت عملیاتی و روز پرواز تأیید نشده‌اند؛ صرفاً وجود صفحه ثبت شده است.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.emirates.com/english/destinations/dxb/ika/flights-from-dubai-to-tehran/"
+            ],
+            "verified_at": "2026-11-10T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "airport_link",
+          "iata": "DXB",
+          "title_fa": "راهنمای فرودگاه دبی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "LHR",
+          "title_fa": "راهنمای هیترو"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "راهنمای امام خمینی"
+        }
+      ]
     }
   ],
   "published_reviews": [],

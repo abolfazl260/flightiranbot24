@@ -10,7 +10,7 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
  assert.equal(rows.length,2);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
  const p=parseGuideDetail(detail(),'airlines','emirates',now);
- assert.equal(p.sections.length,15);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
+ assert.equal(p.sections.length,16);assert.equal(p.reviewCount,0);assert.equal(p.average,null);
  const fleet=p.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet');
  assert.equal(fleet.reduce((n,b)=>n+b.count,0),277);assert(fleet.every(b=>b.status==='unknown'));
 });
@@ -43,4 +43,28 @@ test('bounded remote reads use exact public paths without Telegram credentials',
  assert.equal(result.schema_version,1);assert.equal(request[1].credentials,'omit');assert.deepEqual(request[1].headers,{Accept:'application/json'});
  for(const path of ['../secrets','data/airlines/details/../../x.v1.json'])await assert.rejects(fetchGuideJson(path));
  await assert.rejects(fetchGuideJson('data/airlines/airline-index.v1.json',async()=>new Response('x'.repeat(65000))));
+});
+
+test('dated route snapshots preserve unknown operator and hide stale or expired observations',()=>{
+ const d=detail(), network=d.sections.find(s=>s.id==='network');
+ let page=parseGuideDetail(d,'airlines','emirates',now);
+ const routes=page.sections.find(s=>s.id==='network').blocks.filter(b=>b.type==='route');
+ assert.equal(routes.length,2);
+ const tehran=routes.find(b=>b.destination==='IKA');
+ assert.equal(tehran.status,'listed');assert.equal(tehran.operatingCarrier,null);assert.equal(tehran.serviceType,'unknown');
+ const raw=network.blocks.find(b=>b.type==='route_snapshot');raw.metadata.stale=true;
+ page=parseGuideDetail(d,'airlines','emirates',now);
+ assert.equal(page.sections.find(s=>s.id==='network').blocks.filter(b=>b.type==='route').length,1);
+ raw.metadata.stale=false;raw.metadata.effective_to='2026-11-09T00:00:00Z';
+ assert.equal(parseGuideDetail(d,'airlines','emirates',now).sections.find(s=>s.id==='network').blocks.filter(b=>b.type==='route').length,1);
+ raw.metadata.effective_to=null;raw.destination=raw.origin;
+ assert.throws(()=>parseGuideDetail(d,'airlines','emirates',now));
+ raw.destination='LHR';raw.observed_at='2099-01-01T00:00:00Z';
+ assert.throws(()=>parseGuideDetail(d,'airlines','emirates',now));
+});
+
+test('review age warns after thirty days without inventing legal expiry',()=>{
+ const d=detail(), later=Date.parse('2026-12-11T00:00:01Z');
+ assert.equal(parseGuideDetail(d,'airlines','emirates',now).sections.find(s=>s.id==='network').reviewOverdue,false);
+ assert.equal(parseGuideDetail(d,'airlines','emirates',later).sections.find(s=>s.id==='network').reviewOverdue,true);
 });

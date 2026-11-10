@@ -109,6 +109,10 @@ internal fun AirlineGuideScreen(
                             if (section == null) item { TravelEmptyState("این بخش هنوز منتشر نشده یا نیازمند بررسی دوباره است.") }
                             else {
                                 item { Text("آخرین بررسی: " + section.reviewedAt.take(10)) }
+                                item { Text("اطلاعات رسمیِ ثبت‌شده در تاریخ بررسی؛ پیش از سفر منبع را دوباره بررسی کنید. بخش‌های تأییدنشده، دارای علامت قدیمی یا خارج از اعتبار نمایش داده نمی‌شوند.") }
+                                if (section.reviewOverdue) item {
+                                    Text("بیش از ۳۰ روز از بررسی منبع گذشته است؛ این نسخه قدیمی ممکن است تغییر کرده باشد. پیش از تصمیم، مرجع رسمی را بررسی کنید.", color = MaterialTheme.colorScheme.error)
+                                }
                                 section.scope?.let { scope -> item {
                                     Text(scope.note)
                                     Text("سهمیه و شرایط دقیق از روی بلیت و شرکت اجراکننده تعیین می‌شود.")
@@ -128,7 +132,7 @@ internal fun AirlineGuideScreen(
                                         "international" -> Text("مخصوص پرواز خارجی")
                                     }
                                 } }
-                                items(section.blocks) { block -> AirlineBlockView(block, onLink, onAirport) }
+                                items(section.blocks) { block -> AirlineBlockView(block, onLink, onAirport, index.orEmpty()) }
                                 item { AirlineHeading("منابع و آخرین قوانین") }
                                 items(section.sources) { source ->
                                     TextButton(onClick = { onLink(source) }) { Text("بررسی مرجع · " + java.net.URI(source).host) }
@@ -179,7 +183,7 @@ private fun OfflineAirlineNotice() = Text(
 )
 
 @Composable
-private fun AirlineBlockView(block: AirlineBlock, onLink: (String) -> Unit, onAirport: (String) -> Unit) {
+private fun AirlineBlockView(block: AirlineBlock, onLink: (String) -> Unit, onAirport: (String) -> Unit, airlines: List<AirlineReference>) {
     when (block) {
         is AirlineBlock.Content -> when (val content = block.block) {
             is AirportContentBlock.Text -> Text(content.content)
@@ -190,6 +194,25 @@ private fun AirlineBlockView(block: AirlineBlock, onLink: (String) -> Unit, onAi
             else -> Unit
         }
         is AirlineBlock.Airport -> TextButton(onClick = { onAirport(block.iata) }) { Text(block.title + " · " + block.iata) }
+        is AirlineBlock.Route -> Card(Modifier.fillMaxWidth()) {
+            Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                AirlineHeading(block.origin + " → " + block.destination)
+                val service = mapOf("non_stop" to "بدون توقف", "connecting" to "اتصالی", "unknown" to "تأیید نشده")
+                val state = mapOf("listed" to "صفحه مسیر موجود است", "announced" to "اعلام‌شده",
+                    "seasonal" to "فصلی", "suspended" to "تعلیق‌شده", "unknown" to "نامعلوم")
+                Text("نوع سفر: " + service[block.serviceType])
+                Text("وضعیت منبع: " + state[block.status])
+                Text("شرکت اجراکننده: " + (airlines.firstOrNull { it.id == block.operatingCarrier }?.name ?: "تأیید نشده"))
+                Text("تاریخ مشاهده: " + block.observedAt.take(10))
+                Text(block.note)
+                Text("وجود مسیر تضمین پرواز در تاریخ سفر نیست؛ برنامه رسمی را بررسی کنید.")
+                TextButton(onClick = { onAirport(block.origin) }) { Text("فرودگاه مبدأ · " + block.origin) }
+                TextButton(onClick = { onAirport(block.destination) }) { Text("فرودگاه مقصد · " + block.destination) }
+                block.sources.forEach { source ->
+                    TextButton(onClick = { onLink(source) }) { Text("مرجع مسیر و بررسی برنامه") }
+                }
+            }
+        }
         is AirlineBlock.Media -> Column {
             Text(block.title)
             Text(block.attribution)

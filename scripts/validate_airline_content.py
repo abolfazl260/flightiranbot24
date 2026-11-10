@@ -134,6 +134,22 @@ def validate_dataset(root: Path = ROOT, now: datetime | None = None) -> None:
             for block in section["blocks"]:
                 if block["type"] == "airport_link" and block["iata"] not in airports:
                     raise ValueError("Unknown airport link")
+                if block["type"] == "route_snapshot":
+                    if section["kind"] != "network":
+                        raise ValueError("Route block outside network section")
+                    if block["origin"] == block["destination"]:
+                        raise ValueError("Route endpoints must differ")
+                    if not {block["origin"], block["destination"]}.issubset(airports):
+                        raise ValueError("Unknown route airport")
+                    if block["operating_carrier"] not in (None, *[
+                        e["airline_id"] for e in index["airlines"]
+                    ]):
+                        raise ValueError("Unknown route operating carrier")
+                    if timestamp(block["observed_at"]) > now:
+                        raise ValueError("Future route observation")
+                    if (section["metadata"]["status"] == "published"
+                            and block["metadata"]["status"] != "published"):
+                        raise ValueError("Published routes require published sources")
                 if block["type"] == "fleet_snapshot":
                     if section["kind"] != "fleet":
                         raise ValueError("Fleet block outside fleet section")

@@ -119,3 +119,21 @@ filtered public cohort, before paging. Overall votes are not inferred from
 criteria. Both readers explain the method and limited samples. The shared
 Python/Node/Kotlin fixture and real SQLite/D1 tests verify the additive contract.
 The static historical review count fields are not merged into live statistics.
+
+## Emirates follow-up — 10 November 2026 (local implementation)
+
+Both clients consume the same 16 published Emirates sections. `route_snapshot`
+adds dated directed IATA relations with source-status labels, explicit unknown
+operator/service type, official schedule links and existing airport navigation.
+A route listing never guarantees travel-day service. Both readers preserve the
+current shared experiences/criterion-statistics entry point; no static reviews,
+publication grants, votes or archive text were created. An over-30-day source
+review warning is computed from the same field and threshold in both readers.
+Stale/expired/draft gating and offline notices remain in force.
+
+The native reader change needs a manual future build; existing installed Android
+versions skip unknown route blocks and retain plain text / airport links. No
+production rollout or signed release was requested or triggered. Local tests and
+remaining runtime/access blockers are recorded in the Emirates completion report.
+
+The Android PR CI job now runs JVM tests, lintDebug and compileDebugAndroidTestKotlin. These checks do not sign, package or publish a release; manual release workflows remain unchanged. Instrumentation compilation does not claim device execution.
