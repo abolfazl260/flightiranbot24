@@ -74,8 +74,8 @@ internal fun ExperiencesPanel(initialTarget: String,compact: Boolean=true){
         if(loading)Text("در حال دریافت تجربه‌های منتشرشده…")
         if(error)Text("تجربه‌ها فعلاً در دسترس نیستند؛ اتصال یا همگام‌سازی را دوباره بررسی کنید.",color=MaterialTheme.colorScheme.error)
         page?.let { data->
-            Text(if(data.count==0)"هنوز رأی عددی تأییدشده‌ای موجود نیست." else
-                "رضایت: ${number.format(data.average)} از ۵ · ${number.format(data.count)} رأی"+(if(data.lowSample)" · نمونه کم؛ قابل مقایسه نیست"else ""))
+            Text(if(data.count==0)"هنوز رأی رضایت کلیِ تأییدشده‌ای موجود نیست." else
+                "رضایت کلی: ${number.format(data.average)} از ۵ · ${number.format(data.count)} رأی"+(if(data.lowSample)" · نمونه کم؛ قابل مقایسه نیست"else ""))
             Text("میانگین سادهٔ رأی‌های منتشرشده؛ هر معیار فقط از رأی همان معیار محاسبه می‌شود. امتیاز کل از ترکیب معیارها ساخته نمی‌شود.")
             data.criteria.forEach { (key,summary) ->
                 Text((experienceCriteriaLabels[key]?:key)+": "+number.format(summary.average)+

@@ -3,8 +3,8 @@ export function createExperienceView({root,el,request}){
  let target='',query='',sort='newest',offset=0,sequence=0,ownOffset=0;
  const button=(label,click)=>el('button',{type:'button',className:'tiny-button',onClick:click},label);
  const p=text=>el('p',{text}),message=text=>root.replaceChildren(p(text),button('تلاش دوباره',()=>load()),button('تجربه‌های من',()=>mine(0)),button('ثبت تجربه',()=>form()));
- const statsText=s=>s.rating_count===0?'هنوز رأی عددی تأییدشده‌ای ثبت نشده است.':
-  `میانگین رضایت: ${new Intl.NumberFormat('fa-IR',{maximumFractionDigits:2}).format(s.average)} از ۵ · ${new Intl.NumberFormat('fa-IR').format(s.rating_count)} رأی`+(s.low_sample?' · نمونه کم؛ قابل رتبه‌بندی نیست':'');
+ const statsText=s=>s.rating_count===0?'هنوز رأی رضایت کلیِ تأییدشده‌ای ثبت نشده است.':
+  `میانگین رضایت کلی: ${new Intl.NumberFormat('fa-IR',{maximumFractionDigits:2}).format(s.average)} از ۵ · ${new Intl.NumberFormat('fa-IR').format(s.rating_count)} رأی`+(s.low_sample?' · نمونه کم؛ قابل رتبه‌بندی نیست':'');
  async function perform(path,body,method='POST'){
   try{return await request(path,{method,body});}
   catch(e){throw Error('درخواست تأیید نشد؛ پیش از تکرار، «تجربه‌های من» را بررسی کنید. '+e.message);}
