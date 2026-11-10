@@ -29,7 +29,7 @@ class AirlineContentTest {
     @Test fun bundledCatalogHasIndependentPagesAndNoSyntheticRatings() {
         val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
         assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
-        assertEquals(1, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
+        assertEquals(3, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
         val page = parse(page())
         assertEquals(18, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
@@ -169,7 +169,10 @@ class AirlineContentTest {
             server.enqueue(MockResponse().setResponseCode(503))
             val fallback = repo.index()
             assertTrue(fallback.usedBundledFallback)
-            assertTrue(fallback.value.all { it.reviewedAt.startsWith("2026-11-04") })
+            val bundledRows = AirlineContentParser.index(bundled("airline-index.v1.json"), Instant.now())
+            assertEquals(bundledRows.associate { it.id to it.reviewedAt },
+                fallback.value.associate { it.id to it.reviewedAt })
+            assertTrue(fallback.value.single { it.id == "iran-air" }.reviewedAt.startsWith("2026-11-10"))
             val archived = page()
             archived.getAsJsonObject("metadata").addProperty("status", "archived")
             server.enqueue(MockResponse().setBody(archived.toString()))
