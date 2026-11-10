@@ -138,9 +138,9 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.emirates.com/us/english/before-you-fly/baggage/checked-baggage/"
+          "https://www.emirates.com/us/english/manage-booking/flight-status/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -198,7 +198,7 @@
         "source_urls": [
           "https://www.emirates.com/us/english/experience/our-fleet/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -215,7 +215,7 @@
           "model": "A350",
           "manufacturer": "Airbus",
           "count": null,
-          "observed_at": "2026-11-04T14:30:00Z",
+          "observed_at": "2026-11-10T00:00:00Z",
           "status": "unknown",
           "relationship": "operated",
           "configuration_fa": null,
@@ -224,7 +224,7 @@
             "source_urls": [
               "https://www.emirates.com/us/english/experience/our-fleet/"
             ],
-            "verified_at": "2026-11-04T14:30:00Z",
+            "verified_at": "2026-11-10T00:00:00Z",
             "effective_from": null,
             "effective_to": null,
             "stale": false,
@@ -236,7 +236,7 @@
           "model": "A380",
           "manufacturer": "Airbus",
           "count": null,
-          "observed_at": "2026-11-04T14:30:00Z",
+          "observed_at": "2026-11-10T00:00:00Z",
           "status": "unknown",
           "relationship": "operated",
           "configuration_fa": null,
@@ -245,7 +245,7 @@
             "source_urls": [
               "https://www.emirates.com/us/english/experience/our-fleet/"
             ],
-            "verified_at": "2026-11-04T14:30:00Z",
+            "verified_at": "2026-11-10T00:00:00Z",
             "effective_from": null,
             "effective_to": null,
             "stale": false,
@@ -257,7 +257,7 @@
           "model": "777",
           "manufacturer": "Boeing",
           "count": null,
-          "observed_at": "2026-11-04T14:30:00Z",
+          "observed_at": "2026-11-10T00:00:00Z",
           "status": "unknown",
           "relationship": "operated",
           "configuration_fa": null,
@@ -266,7 +266,7 @@
             "source_urls": [
               "https://www.emirates.com/us/english/experience/our-fleet/"
             ],
-            "verified_at": "2026-11-04T14:30:00Z",
+            "verified_at": "2026-11-10T00:00:00Z",
             "effective_from": null,
             "effective_to": null,
             "stale": false,
@@ -312,16 +312,28 @@
       "order": 70,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/experience/cabin-features/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
         "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "امارات در راهنمای رسمی، کابین‌های اکونومی، پریمیوم اکونومی، بیزنس و فرست را معرفی می‌کند. وجود هر کلاس و امکانات آن به مسیر و چیدمان هواپیما بستگی دارد؛ همهٔ پروازها لزوماً همهٔ این کلاس‌ها را ندارند. پیش از انتخاب، مشخصات همان پرواز را بررسی کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مشاهده کابین‌ها در منبع رسمی",
+          "url": "https://www.emirates.com/us/english/experience/cabin-features/"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -330,16 +342,58 @@
       "order": 70,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/experience/dining/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
         "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای رسمی پذیرایی بر اساس کلاس سفر تفکیک شده است. خدمات و وعدهٔ واقعی به پرواز بستگی دارد و انطباق کامل با تصویر یا منوی وب‌سایت تضمین نشده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی پذیرایی بر اساس کلاس",
+          "url": "https://www.emirates.com/us/english/experience/dining/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات ویژه و نیازهای سفر",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.emirates.com/us/english/before-you-fly/health/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای آشنایی با خدمات دسترس‌پذیری، نیازهای غذایی و درخواست‌های ویژه، راهنمای رسمی امارات را بررسی کنید. این صفحه تأیید پذیرش یا مجوز پزشکی سفر نیست؛ دربارهٔ نیاز شخصی، پیش از سفر با ایرلاین و در صورت نیاز پزشک هماهنگ کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "خدمات ویژه در سایت رسمی امارات",
+          "url": "https://www.emirates.com/us/english/before-you-fly/health/"
+        }
+      ]
     }
   ],
   "published_reviews": [],

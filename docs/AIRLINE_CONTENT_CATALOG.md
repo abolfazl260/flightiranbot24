@@ -221,3 +221,12 @@ operational content, detailed dated fleet counts, structured sourced routes,
 licensed inline media, comparable airline rankings and real-device TalkBack/RTL
 acceptance. Unknown information remains unpublished; no archive permission,
 source verification, aircraft count, media license or user rating is fabricated.
+
+## Reviewed content on 2026-11-10
+
+Emirates now has 10 published sections and no draft sections: cabin and catering
+were published after official-source review, special assistance was added, flight
+status provenance corrected, and fleet family references rechecked without adding
+counts. Iran Air remains 1 published / 4 draft sections. See
+[the source review](airlines/emirates-2026-11-10.md) for URLs, scope and limitations.
+No carrier is represented as complete; no other content's review date is advanced.
