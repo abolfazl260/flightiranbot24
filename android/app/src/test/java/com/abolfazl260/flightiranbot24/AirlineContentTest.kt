@@ -29,7 +29,7 @@ class AirlineContentTest {
     @Test fun bundledCatalogHasIndependentPagesAndNoSyntheticRatings() {
         val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
         assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
-        assertEquals(1, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
+        assertEquals(3, AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!.sections.size)
         val page = parse(page())
         assertEquals(18, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))

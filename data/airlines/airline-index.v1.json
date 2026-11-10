@@ -31,14 +31,16 @@
             "shared": false
           }
         ],
-        "website": "https://www.iranair.com/"
+        "website": "https://www.iranair.ir/"
       },
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+          "https://www.iata.org/en/about/members/airline-list/iran-air/102/",
+          "https://t.me/IranAirChannel/18859",
+          "https://telegram.me/s/IranAirChannel?q=%23IranAir"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,

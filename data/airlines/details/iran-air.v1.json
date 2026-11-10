@@ -4,9 +4,11 @@
   "metadata": {
     "status": "published",
     "source_urls": [
-      "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+      "https://www.iata.org/en/about/members/airline-list/iran-air/102/",
+      "https://t.me/IranAirChannel/18859",
+      "https://telegram.me/s/IranAirChannel?q=%23IranAir"
     ],
-    "verified_at": "2026-11-04T14:30:00Z",
+    "verified_at": "2026-11-10T00:00:00Z",
     "effective_from": null,
     "effective_to": null,
     "stale": false,
@@ -24,7 +26,7 @@
         "source_urls": [
           "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
         ],
-        "verified_at": "2026-11-04T14:30:00Z",
+        "verified_at": "2026-11-10T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
@@ -34,17 +36,17 @@
       "blocks": [
         {
           "type": "text",
-          "text_fa": "ایران‌ایر با کد IATA برابر IR و کد ICAO برابر IRA در فهرست IATA برای ایران ثبت شده است."
+          "text_fa": "ایران‌ایر، هواپیمایی جمهوری اسلامی ایران (هما)، در فهرست IATA با شناسه IR، کد ICAO برابر IRA و کد حسابداری 096 برای ایران ثبت شده است. شناسه و نام شرکت اجراکننده را از روی بلیت تطبیق دهید."
         },
         {
           "type": "link",
-          "title_fa": "مرجع هویت در IATA",
+          "title_fa": "هویت در IATA",
           "url": "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
         },
         {
           "type": "link",
-          "title_fa": "وب‌سایت رسمی ایران‌ایر",
-          "url": "https://www.iranair.com/"
+          "title_fa": "وب‌سایت اعلام‌شده جدید ایران‌ایر",
+          "url": "https://www.iranair.ir/"
         }
       ]
     },
@@ -143,6 +145,91 @@
       },
       "scope": null,
       "blocks": []
+    },
+    {
+      "id": "official-access",
+      "title_fa": "سایت رسمی و خرید بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/IranAirChannel/18859",
+          "https://telegram.me/s/IranAirChannel?q=%23IranAir"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق اطلاعیه هما، از دوم آبان ۱۴۰۵ نشانی وب‌سایت به www.iranair.ir و سامانه فروش اینترنتی به ebooking.iranair.ir تغییر کرده است. ممکن است در فهرست‌های قدیمی همچنان iranair.com درج شده باشد. نشانی را دقیق کنترل کنید؛ صرف داشتن نام یا لوگوی هما، فروشنده را رسمی نمی‌کند."
+        },
+        {
+          "type": "text",
+          "text_fa": "این راهنما بازبودن لحظه‌ای سایت یا درگاه پرداخت را تضمین نمی‌کند. اگر نشانی اعلام‌شده باز نشد، از تماس رسمی یا دفتر صادرکننده کمک بگیرید و برای پرداخت به لینک نامشخص مراجعه نکنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت اعلام‌شده هما",
+          "url": "https://www.iranair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه اعلام‌شده فروش بلیت",
+          "url": "https://ebooking.iranair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اصل اطلاعیه انتقال نشانی",
+          "url": "https://t.me/IranAirChannel/18859"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس و پیگیری رزرو",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/IranAirChannel/18877",
+          "https://telegram.me/s/IranAirChannel?q=%23IranAir"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اطلاعیه جدید شبکه پروازی از مشهد، مرکز تماس ۰۲۱۴۶۶۲۲۲ داخلی ۲ برای اطلاع از برنامه و رزرو معرفی شده است. ساعات پاسخ‌گویی یا موفقیت اتصال در این راهنما تضمین نشده است؛ اعلام پاسخ‌گویی شبانه‌روزی نوروز را به تمام سال تعمیم نمی‌دهیم."
+        },
+        {
+          "type": "text",
+          "text_fa": "پیش از تماس، شماره بلیت، کد رزرو، تاریخ و مسیر و نام فروشنده را آماده کنید. برای خرید آژانسی یا واسطه‌ای، صادرکننده را از روی رسید مشخص کنید. این اطلاعات و مدارک هویتی را در تجربه یا نظر عمومی منتشر نکنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع مرکز تماس و برنامه اعلام‌شده",
+          "url": "https://t.me/IranAirChannel/18877"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت ایران‌ایر",
+          "url": "https://www.iranair.ir/"
+        }
+      ]
     }
   ],
   "published_reviews": [],
