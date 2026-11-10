@@ -33,7 +33,7 @@ def test_actual_catalog_and_independent_snapshots():
             for status in ("published", "draft")
         }
     assert coverage == {"iran-air": {"published": 1, "draft": 4},
-                        "emirates": {"published": 16, "draft": 0}}
+                        "emirates": {"published": 18, "draft": 0}}
     fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
     assert sum(b["count"] for b in models) == 277
