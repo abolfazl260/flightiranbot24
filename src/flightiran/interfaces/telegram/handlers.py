@@ -76,6 +76,7 @@ from .useful_content import (
     useful_category_menu,
     useful_menu,
 )
+from .useful_widget import handle_useful_widget_query, send_useful_widget
 from .visa_flow import (
     handle_visa_callback,
     open_visa_menu,
@@ -354,13 +355,9 @@ async def start_handler(
                 dependencies.web_app_url,
             )
         elif entrypoint == "useful":
-            catalog = dependencies.useful_catalog or default_catalog()
-            await update.message.reply_text(
-                "<b>📚 راهنمای سفر</b>\n"
-                "اطلاعات موردنیاز قبل، حین و بعد از سفر را از بخش‌های زیر انتخاب کنید:",
-                parse_mode="HTML",
-                reply_markup=useful_menu(language, catalog),
-            )
+            await useful_command_handler(update, context, dependencies)
+        elif entrypoint == "useful_legacy":
+            await useful_command_handler(update, context, dependencies, legacy=True)
         else:
             await update.message.reply_text(
                 render_main_menu(language, telegram_user.first_name),
@@ -565,6 +562,12 @@ async def callback_handler(
             ),
         )
     elif data == "menu:useful":
+        if (_widget_menu_enabled(update, context)
+                and not context.user_data.get("useful_widget_legacy")):
+            if await send_useful_widget(query.message, context,
+                    lambda: dependencies.useful_catalog or default_catalog()):
+                await dependencies.audit.record("useful.widget.opened", user_id=user_id)
+                return
         catalog = dependencies.useful_catalog or default_catalog()
         await dependencies.audit.record(
             "menu.callback", user_id=user_id, payload={"action": "useful"}
@@ -1236,7 +1239,10 @@ async def _all_widget_queries(
 ) -> None:
     raw = update.api_kwargs.get("widget_query")
     action = raw.get("data") if isinstance(raw, dict) else None
-    if isinstance(action, str) and action.startswith("vi:"):
+    if isinstance(action, str) and action.startswith("uf:"):
+        await handle_useful_widget_query(update, context,
+            lambda: dependencies.useful_catalog or default_catalog())
+    elif isinstance(action, str) and action.startswith("vi:"):
         async def open_existing(command, owner):
             service = {"legacy": "visa", "watches": "visa_watch", "home": "start"}[command]
             await _open_help_service(service, owner, context, dependencies)
@@ -1263,10 +1269,35 @@ async def experiences_command_handler(update, context, dependencies):
                            dependencies.web_app_url, target=args[0] if args else "")
 
 
+async def useful_command_handler(update, context, dependencies, *, legacy=False):
+    if update.message is None:
+        return
+    if isinstance(getattr(context, "user_data", None), dict):
+        context.user_data["useful_widget_legacy"] = legacy
+    _, language = await _user_language(update, dependencies)
+    if not legacy and _widget_menu_enabled(update, context):
+        if await send_useful_widget(update.message, context,
+                lambda: dependencies.useful_catalog or default_catalog()):
+            return
+    catalog = dependencies.useful_catalog or default_catalog()
+    await update.message.reply_text(
+        "<b>📚 راهنمای سفر</b>\n"
+        "اطلاعات موردنیاز قبل، حین و بعد از سفر را از بخش‌های زیر انتخاب کنید:",
+        parse_mode="HTML", reply_markup=useful_menu(language, catalog),
+    )
+
+
 def register_handlers(application: Application, dependencies: TelegramDependencies) -> None:
     """Register the shell handlers on an existing Telegram application."""
     application.add_handler(
         TypeHandler(Update, lambda u, c: user_activity_handler(u, c, dependencies)), group=1
+    )
+    application.add_handler(
+        CommandHandler("useful", lambda u,c: useful_command_handler(u,c,dependencies))
+    )
+    application.add_handler(
+        CommandHandler("useful_legacy",
+            lambda u,c: useful_command_handler(u,c,dependencies,legacy=True))
     )
     application.add_handler(
         CommandHandler("experiences", lambda u,c: experiences_command_handler(u,c,dependencies))
