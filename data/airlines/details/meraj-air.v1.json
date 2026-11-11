@@ -6,7 +6,7 @@
     "source_urls": [
       "https://www.planespotters.net/airline/Meraj-Airlines",
       "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
-      "https://oibk.ir/fa/iran/airlines/mrj"
+      "https://oibk.ir/fa/aircraft/fleet?operator=MRJ"
     ],
     "verified_at": "2026-11-11T00:00:00Z",
     "effective_from": null,
@@ -807,7 +807,7 @@
         "source_urls": [
           "https://www.planespotters.net/airline/Meraj-Airlines",
           "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
-          "https://oibk.ir/fa/iran/airlines/mrj"
+          "https://oibk.ir/fa/aircraft/fleet?operator=MRJ"
         ],
         "verified_at": "2026-11-11T00:00:00Z",
         "effective_from": null,
@@ -819,7 +819,7 @@
       "blocks": [
         {
           "type": "text",
-          "text_fa": "هواپیمایی معراج (Meraj Airlines) یک شرکت هواپیمایی ایرانی است. کد دوحرفی IATA آن IJ و کد سه‌حرفی ICAO آن MRJ است. شناسه MRJ در داده‌های رسمی اپراتورهای هوانوردی ایران دیده می‌شود. نام شرکت اجراکننده را با بلیت تطبیق دهید."
+          "text_fa": "هواپیمایی معراج (Meraj Airlines) یک شرکت هواپیمایی ایرانی است. کد IATA آن در Planespotters به‌صورت IJ و کد ICAO آن در هر دو مرجع تخصصی به‌صورت MRJ آمده است. CAPA برای IATA این شرکت شناسه‌ای درج نکرده؛ بنابراین در صورت اختلاف اطلاعات بلیت یا سامانه رزرو، شناسه شرکت اجراکننده را مستقیماً بررسی کنید. شناسه MRJ در داده‌های اپراتورهای هوانوردی ایران نیز دیده می‌شود. نام شرکت اجراکننده را با بلیت تطبیق دهید."
         },
         {
           "type": "link",
@@ -834,7 +834,7 @@
         {
           "type": "link",
           "title_fa": "فهرست اپراتورهای هوانوردی ایران",
-          "url": "https://oibk.ir/fa/iran/airlines/mrj"
+          "url": "https://oibk.ir/fa/aircraft/fleet?operator=MRJ"
         }
       ]
     }
