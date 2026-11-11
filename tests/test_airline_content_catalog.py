@@ -32,7 +32,7 @@ def test_actual_catalog_and_independent_snapshots():
             status: sum(s["metadata"]["status"] == status for s in detail["sections"])
             for status in ("published", "draft")
         }
-    assert coverage == {"iran-air": {"published": 3, "draft": 4},
+    assert coverage == {"iran-air": {"published": 17, "draft": 1},
                         "emirates": {"published": 18, "draft": 0}}
     fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -224,3 +224,32 @@ def test_route_provenance_and_relations_fail_closed(dataset, mutation):
     edit(dataset, 'details/emirates.v1.json', mutate)
     with pytest.raises((ValueError, ValidationError)):
         module.validate_dataset(dataset, NOW)
+
+
+def test_iran_air_source_scoped_content_and_unknown_fleet():
+    detail = module.read_json(ROOT / "data/airlines/details/iran-air.v1.json")
+    sections = {section["id"]: section for section in detail["sections"]}
+    assert len(sections) == 18
+    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert sections["onboard-connectivity"]["metadata"]["status"] == "draft"
+    assert sections["onboard-connectivity"]["blocks"] == []
+    for section_id in ("baggage", "ticket-rules", "checkin", "fleet",
+                       "special-assistance", "seat-selection", "batteries",
+                       "lost-baggage", "network"):
+        section = sections[section_id]
+        assert section["metadata"]["status"] == "published"
+        assert section["metadata"]["source_urls"]
+        assert section["blocks"]
+        assert section["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+        if section["kind"] == "policy":
+            assert section["scope"]["operating_carrier"] == "iran-air"
+            assert section["scope"]["seller"] == "unknown"
+    models = [b for b in sections["fleet"]["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(models) == 9
+    assert all(b["count"] is None and b["configuration_fa"] is None for b in models)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in models)
+    assert all(b["metadata"]["source_urls"] for b in models)
+    assert not any(b["type"] == "route_snapshot" for b in sections["network"]["blocks"])
+    assert {b["iata"] for b in sections["network"]["blocks"] if
+            b["type"] == "airport_link"} == {"THR", "IKA", "MHD", "BND", "DXB", "IST"}
+
