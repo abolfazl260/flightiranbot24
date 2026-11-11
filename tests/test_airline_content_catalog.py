@@ -23,7 +23,7 @@ def test_actual_catalog_and_independent_snapshots():
     module.validate_dataset(now=NOW)
     index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
     ids = [r["airline_id"] for r in index["airlines"]]
-    assert ids == ["iran-air", "emirates", "mahan-air", "iran-aseman"]
+    assert ids == ["iran-air", "emirates", "mahan-air", "iran-aseman", "iran-airtour"]
     coverage = {}
     for entry in index["airlines"]:
         detail = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
@@ -36,7 +36,8 @@ def test_actual_catalog_and_independent_snapshots():
     assert coverage == {"iran-air": {"published": 17, "draft": 1},
                         "emirates": {"published": 18, "draft": 0},
                         "mahan-air": {"published": 19, "draft": 1},
-                        "iran-aseman": {"published": 14, "draft": 4}}
+                        "iran-aseman": {"published": 14, "draft": 4},
+                        "iran-airtour": {"published": 13, "draft": 6}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -302,3 +303,39 @@ def test_new_airline_codes_and_official_domains():
         ("iata", "EP"), ("icao", "IRC")}
     assert mahan["identity"]["website"] == "https://www.mahanair.co.ir/"
     assert aseman["identity"]["website"] == "https://www.iaa.ir/"
+
+
+def test_iran_airtour_sourced_scope_and_draft_exclusion():
+    airline_id = "iran-airtour"
+    detail = module.read_json(ROOT / "data/airlines/details/iran-airtour.v1.json")
+    assert detail["airline_id"] == airline_id
+    assert len(detail["sections"]) == 19
+    assert len({s["id"] for s in detail["sections"]}) == 19
+    assert detail["published_reviews"] == detail["experience_links"] == []
+    published = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
+    drafts = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
+    assert len(published) == 13
+    assert len(drafts) == 6
+    assert {s["id"] for s in drafts} == {
+        "checkin", "seat-selection", "cabin", "catering",
+        "lounges", "onboard-connectivity",
+    }
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in published)
+    assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None for s in drafts)
+    for s in detail["sections"]:
+        if s["kind"] == "policy":
+            assert s["scope"]["operating_carrier"] == airline_id
+            assert s["scope"]["seller"] == "unknown"
+    fleet = next(s for s in published if s["id"] == "fleet")
+    models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(models) == 6
+    assert all(b["count"] is None and b["configuration_fa"] is None for b in models)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in models)
+    network = next(s for s in published if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entry = next(x for x in index["airlines"] if x["airline_id"] == airline_id)
+    assert {(x["system"], x["value"]) for x in entry["identity"]["codes"]} == {
+        ("iata", "B9"), ("icao", "IRB"),
+    }
+    assert entry["identity"]["website"] == "https://www.iranairtour.ir/"

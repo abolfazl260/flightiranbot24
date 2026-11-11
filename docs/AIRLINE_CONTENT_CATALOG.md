@@ -25,6 +25,7 @@ it does not package/sign/release APK or AAB files.
 | `emirates` | published | 18 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
 | `mahan-air` | published | 19 | 1 | Mahan traveler guide, historic first-party check-in and live-animal notices, loyalty and cabin examples; 6 unknown-count families. See [source audit](airlines/mahan-aseman-2026-11-11.md). |
 | `iran-aseman` | published | 14 | 4 | Aseman identity, scoped traveler guidance, official route announcements and 5 unknown-count fleet families; no asserted online check-in/seat selection, catering or CIP. See [source audit](airlines/mahan-aseman-2026-11-11.md). |
+| `iran-airtour` | published | 13 | 6 | IATA B9/IRB identity, dated carrier route announcements, general passenger guidance, 6 aircraft families with unknown counts/status; current fare and check-in rules not verified. [Source audit](airlines/iran-airtour-2026-11-11.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -54,7 +55,7 @@ Android UI, content schemas and existing release workflows remain unchanged.
 
 ## Added Mahan Air and Iran Aseman guides — 2026-11-11
 
-The index now includes four airlines. The two new independent records use the
+At the Mahan/Aseman follow-up, the index included four airlines. Iran Airtour now adds a fifth independent record. The two new independent records use the
 existing published/draft and per-section source gates. Mahan has 19 published
 and 1 draft section; Iran Aseman has 14 published and 4 drafts. These figures
 measure available, sourced guidance — **not full verification of operational
@@ -68,6 +69,16 @@ as general, and unknown aircraft count/configuration/ownership remain null/
 unknown. Draft service cards are suppressed by Android/Mini App. No media,
 personal feedback, invented ratings or live route times were added.
 
+
+## Iran Airtour guide — 2026-11-11
+
+Iran Airtour joins as the fifth carrier, with 13 source-scoped published sections
+and 6 draft sections. IATA verifies B9 / IRB, while carrier-associated social
+pages give a different domain from the IATA member listing. Both domains are
+recorded for transparency; neither was used to infer live buying or operational
+rules. Fleet models have no asserted counts or active/owned/leased states;
+recent route announcements are not active timetable guarantees. See the
+[dated source audit](airlines/iran-airtour-2026-11-11.md).
 
 ## File contract and maintenance
 
