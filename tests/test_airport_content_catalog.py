@@ -344,3 +344,54 @@ def test_six_more_international_airports_publish_official_parking_and_lounge_gui
         b.get("text_fa", "")
         for b in next(s for s in madrid["sections"] if s["id"] == "lounges")["blocks"]
     )
+
+
+def test_munich_minsk_and_beijing_publish_official_parking_and_lounge_guides():
+    base = ROOT / "data/airports/details"
+    for code in ("MUC", "MSQ", "PEK"):
+        airport = load(base / f"{code}.v1.json")
+        sections = {s["id"]: s for s in airport["sections"]}
+        for section_id in ("parking", "lounges"):
+            section = sections[section_id]
+            assert section["status"] == "published"
+            assert section["reviewed_at"] == "2026-11-11T00:00:00Z"
+            assert section["source_urls"]
+            assert section["blocks"]
+            assert all(b["type"] in {"text", "bullets", "link"} for b in section["blocks"])
+        assert {
+            s["id"] for s in airport["sections"] if s["status"] == "draft"
+        } == {"traveler-experiences", "airport-videos"}
+
+    munich = load(base / "MUC.v1.json")
+    munich_parking = next(s for s in munich["sections"] if s["id"] == "parking")
+    munich_text = " ".join(
+        b.get("text_fa", "") + " " + " ".join(b.get("items_fa", []))
+        for b in munich_parking["blocks"]
+    )
+    assert "۲ نوامبر ۲۰۲۶" in munich_text
+    assert "P8" in munich_text
+
+    minsk = load(base / "MSQ.v1.json")
+    minsk_parking = next(s for s in minsk["sections"] if s["id"] == "parking")
+    minsk_text = " ".join(
+        b.get("text_fa", "") + " " + " ".join(b.get("items_fa", []))
+        for b in minsk_parking["blocks"]
+    )
+    assert "۱٬۲۳۵" in minsk_text
+    assert "متفاوت" in minsk_text
+    minsk_lounge = next(s for s in minsk["sections"] if s["id"] == "lounges")
+    assert "VIP/CIP" in " ".join(b.get("text_fa", "") for b in minsk_lounge["blocks"])
+
+    beijing = load(base / "PEK.v1.json")
+    beijing_parking = next(s for s in beijing["sections"] if s["id"] == "parking")
+    beijing_text = " ".join(
+        b.get("text_fa", "") + " " + " ".join(b.get("items_fa", []))
+        for b in beijing_parking["blocks"]
+    )
+    assert "۴٬۳۰۰" in beijing_text
+    beijing_lounge = next(s for s in beijing["sections"] if s["id"] == "lounges")
+    beijing_text = " ".join(
+        b.get("text_fa", "") + " " + " ".join(b.get("items_fa", []))
+        for b in beijing_lounge["blocks"]
+    )
+    assert "Ji Hotel" in beijing_text
