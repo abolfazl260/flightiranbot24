@@ -435,3 +435,31 @@ An editorial warning appears after 30 days since source review, independently of
 legal effective periods. Mark explicitly invalid data stale to hide it. Review
 network and policy sources monthly and before travel; retain the historical fleet
 observation date rather than silently replacing it with the source review date.
+
+
+## Draft-completion batch — 2026-11-11
+
+The first evidence-backed completion batch publishes two previously draft
+Iran Airtour sections:
+
+- `checkin`: identifies the company-advertised website and a secondary
+  check-in guide. The online-check-in window, live availability and boarding
+  pass issuance are explicitly **not confirmed**; the section does not invent
+  universal deadlines.
+- `seat-selection`: documents the secondary source's described entry methods
+  (national ID, ticket number or PNR) and selection flow. Price, seat map,
+  aircraft-specific layout and availability remain unconfirmed.
+
+Both sections carry `confidence=secondary`, source URLs and a review timestamp.
+The other four Iran Airtour drafts (cabin, catering, lounges and connectivity)
+remain hidden because available evidence was stale, promotional or insufficient
+to establish current carrier policy.
+
+Airport traveler-experience sections are user-generated content slots, not
+editorial placeholders. They must not be published with invented names, dates,
+ratings or testimonials. Airport video sections require a verified source and
+reuse/licensing check before publication. Similar unknown airline services
+remain drafts until a reliable, current source supports the claim.
+
+Python, Android and Cloudflare tests were updated to enforce the new
+publication count and the client-side visibility of the two sections.
