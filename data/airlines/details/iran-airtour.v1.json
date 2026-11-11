@@ -1,0 +1,873 @@
+{
+  "schema_version": 1,
+  "airline_id": "iran-airtour",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/",
+      "https://ir.linkedin.com/company/airtourofficial"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "نشانی رسمی و خرید بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست IATA وب‌سایت ایران‌ایرتور «iat.aero» آمده، اما صفحه‌ای که خود شرکت در لینکدین به‌عنوان صفحه رسمی معرفی کرده، «iranairtour.ir» را برای رزرو و پشتیبانی معرفی می‌کند. این اختلاف باید پیش از هر پرداخت کنترل شود. در بررسی حاضر هیچ‌یک از دو دامنه محتوای خرید/مقررات قابل بازیابی ارائه نکردند؛ قابلیت پرداخت و درستی مسیر انتقال تضمین نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نشانی صفحه نهایی پرداخت را با نام شرکت صادرکننده و دامنه رسمی تطبیق دهید و از ورود رمز یا اطلاعات مالی در آدرس‌های ناشناس خودداری کنید.",
+            "بلیت صادرشده از آژانس را از نظر شماره بلیت، شرایط نرخ و نام صادرکننده بررسی کنید.",
+            "ایران‌ایرتور با ایران‌ایر (هما) یک شرکت یکسان نیست؛ کد پرواز ایران‌ایرتور B9 است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "دامنه اعلام‌شده در صفحه رسمی شرکت",
+          "url": "https://www.iranairtour.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "دامنه ثبت‌شده نزد IATA",
+          "url": "https://www.iat.aero/"
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت ایران‌ایرتور در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه شرکتی اعلام‌کننده دامنه",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز، بار کابین و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.iranairtour.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-airtour",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "عدد ثابت و هزینه اضافه‌بار برای ایران‌ایرتور تأیید نشده؛ اطلاعات همان بلیت، کلاس، مسیر و تاریخ مقدم است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقدار مجاز بار تحویلی و دستی ایران‌ایرتور در منابع مستقیمِ قابل بازیابی برای همه نرخ‌ها، کلاس‌ها و مسیرها تأیید نشد. سهمیه اعلام‌شده در سایت فروش ثالث را نمی‌توان به‌جای مقررات قطعی شرکت منتشر کرد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وزن و تعداد بار تحویلی را از بلیت الکترونیکی، شرایط نرخ یا تأیید مستقیم شرکت اجراکننده بررسی کنید.",
+            "بار دستی با بار تحویلی متفاوت است؛ حداکثر وزن، ابعاد و تعداد قطعات را جداگانه بپرسید.",
+            "برای کودک/نوزاد، کالسکه، تجهیزات ورزشی، ساز موسیقی و اقلام حجیم استعلام مخصوص لازم است.",
+            "سهمیه بار در پروازهای دارای توقف یا چند شرکت ممکن است تابع قواعد دیگری باشد؛ مقدار ذکرشده برای یک مسیر را به سایر مسیرها تعمیم ندهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA درباره بار",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "نشانی اعلام‌شده شرکت برای بررسی بلیت",
+          "url": "https://www.iranairtour.ir/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "قوانین تغییر، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-airtour",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "نتیجه درخواست به بلیت، صادرکننده، علت تغییر و قوانین قابل اعمال به مسیر شما بستگی دارد."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در این بررسی به شرایط نرخ جاری ایران‌ایرتور دسترسی مستقیم حاصل نشد. امکان استرداد، میزان کسورات و جریمه تغییر تاریخ، از روی نوع نرخ، زمان درخواست، صادرکننده و دلیل لغو تعیین می‌شود؛ هیچ درصد یا مهلت ثابتی برای همه بلیت‌ها قابل ادعا نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای خرید مستقیم، از کانال رسمی شرکت، و برای خرید آژانسی از صادرکننده درج‌شده روی رسید پیگیری کنید.",
+            "لغو پرواز توسط شرکت را با کنسلی داوطلبانه یا عدم حضور مسافر یکسان تلقی نکنید.",
+            "قبل از درخواست تغییر، شرایط نرخ و احتمال تأثیر بر سایر قطعات سفر را بپرسید.",
+            "شماره بلیت، پیام تغییر برنامه، کد رزرو و رسید پرداخت را برای پیگیری خصوصی نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی ایران‌ایرتور برای راه ارتباطی",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش آنلاین و کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-airtour",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "زمان شروع/پایان پذیرش و فعال‌بودن چک‌این آنلاین برای این پرواز هنوز بررسی نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "برنامه و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی اجتماعی ایران‌ایرتور در آبان ۱۴۰۵ اطلاعیه‌های مسیرهای بین‌المللی، از جمله تهران–تاشکند از ۱۴ آبان ۱۴۰۵، و پروازهای تهران–ایروان، تهران–اسلام‌آباد و تهران–کوالالامپور را منتشر کرده است. اطلاعیه پرواز، تابلو وضعیت لحظه‌ای یا تضمین انجام آن در روز سفر نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای دریافت وضعیت همان روز، کد پرواز B9، تاریخ، مبدأ و مقصد را به شرکت یا فرودگاه ارائه کنید.",
+            "در صورت تأخیر یا لغو، اطلاعیه رسمی تاریخ‌دار را نگه دارید و شرایط تغییر/بازپرداخت را با صادرکننده بررسی کنید.",
+            "ساعت و روز هفته مندرج در یک پست قبلی را بدون بازبینی به پرواز فعلی نسبت ندهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های مسیر در صفحه رسمی ایران‌ایرتور",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت اعلام‌شده شرکت",
+          "url": "https://www.iranairtour.ir/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس و رسیدگی به درخواست مسافر",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ir.linkedin.com/company/airtourofficial",
+          "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی اجتماعی ایران‌ایرتور کاربران را برای رزرو و خدمات مشتری به iranairtour.ir هدایت کرده و خود را کانال پاسخ‌گویی اختصاصی مشتری نمی‌داند. شماره مرکز تماس، ساعات کاری و ایمیل جاری از منبع قابل بازبینی در این بررسی احراز نشد؛ اعداد آرشیوی یا واسطه‌ای را بدون تأیید منتشر نمی‌کنیم."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام شرکت اجراکننده، شماره پرواز، تاریخ سفر، کد رزرو و صادرکننده بلیت را پیش از پیگیری آماده کنید.",
+            "کد رزرو، شماره کامل بلیت و مدارک هویتی را در تجربه یا پیام عمومی منتشر نکنید.",
+            "برای تأخیر، بار تحویل‌نشده یا نیاز ویژه، از شرکت و فرودگاه راه تماس مسئول همان سرویس را بخواهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی شرکتی ایران‌ایرتور",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده توسط شرکت",
+          "url": "https://www.iranairtour.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار گمشده، تأخیری و آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "براساس راهنمای عمومی IATA، اگر چمدان شما در مقصد تحویل نشد یا آسیب داشت، پیش از خروج از سالن بار، موضوع را در بخش خدمات بار فرودگاه ثبت و شماره پرونده دریافت کنید. این توضیح جایگزین مهلت شکایت و شرایط جبران خسارت خاص ایران‌ایرتور نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، کارت پرواز، عکس آسیب و رسید ثبت گزارش را حفظ کنید.",
+            "نام شرکت اجراکننده سفر و شماره مرجع پرونده را برای پیگیری مشخص کنید.",
+            "برای پیگیری حقوقی، مهلت و مبلغ خسارت را مطابق قانون حاکم بر مسیر و شرایط حمل همان بلیت بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA برای مشکلات بار",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و نیازهای ویژه مسافر",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "به گفته IATA مقررات خدمات مسافران دارای محدودیت حرکتی میان کشورها یکسان نیست. شرایط جاری خدمات ویلچر، باتری وسیله کمک‌حرکتی، کودک بدون همراه یا پذیرش پزشکی ایران‌ایرتور به‌طور مستقل تأیید نشد؛ پیش از خرید باید با شرکت هماهنگ شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع کمک مورد نیاز در سوارشدن، جابه‌جایی و پیاده‌شدن را برای مبدأ، توقف و مقصد توضیح دهید.",
+            "برای ویلچر برقی یا باتری‌دار، نوع و مشخصات باتری و بسته‌بندی را از پیش اعلام کنید.",
+            "برای کودک بدون همراه، مسافر باردار یا تجهیزات پزشکی، پیش از خرید شرایط پذیرش و مدارک لازم را بپرسید.",
+            "این راهنما هیچ مجوز پزشکی یا تضمین پذیرش صادر نمی‌کند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "حقوق مسافر و تفاوت مقررات دسترس‌پذیری",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی شرکت برای اطلاعات تماس",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و چیدمان کابین",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس‌های پروازی و امکانات کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و خدمات تشریفات CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک، باتری و لوازم محدودشده",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/",
+          "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این بخش درباره دستورالعمل عمومی IATA/ICAO است و شرایط خاص ایران‌ایرتور را تأیید نمی‌کند. برخی فرودگاه‌ها و کشورها محدودیت جداگانه دارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی قرار ندهید و در کابین آن‌ها را در برابر اتصال کوتاه محافظت کنید.",
+            "اگر کیف دستی شما در گیت تحویل قسمت بار شد، باتری‌ها و پاوربانک‌های یدکی را بیرون آورید.",
+            "در سال ۲۰۲۶ محدودیت‌های بین‌المللی تازه درباره پاوربانک مطرح شده است؛ برای تعداد، ظرفیت و شرایط استفاده مقررات همان سفر را کنترل کنید.",
+            "برای وسایل پزشکی یا باتری ظرفیت‌بالا پیشاپیش با شرکت هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی IATA درباره باتری",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه ICAO در سال ۲۰۲۶",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر و شرایط ورود کشورها",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای مسیرهای بین‌المللی اعلام‌شده توسط ایران‌ایرتور، شرایط گذرنامه، ویزا، اقامت و ترانزیت با تابعیت، کشور مقصد و تاریخ سفر متفاوت است؛ اعلام وجود یک مسیر به معنی معافیت ویزا نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدارک هویتی داخلی و گذرنامه معتبر را مطابق نوع پرواز همراه داشته باشید.",
+            "شرایط ویزا، ترانزیت و اعتبار گذرنامه را در مرجع رسمی کشور مقصد و ابزار اطلاعات مسافرتی IATA بررسی کنید.",
+            "در صورت سفر با بلیت‌های جداگانه یا اتصال چندشرکتی، مقررات ورود و تحویل بار را جدا بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre؛ شرایط گذرنامه و ویزا",
+          "url": "https://www.iata.org/en/travel-centre"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های مسیر در کانال رسمی شرکت",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی قبل از سفر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/",
+          "https://ir.linkedin.com/company/airtourofficial",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد ایرلاین کدام است؟ ایران‌ایرتور B9 / IRB است؛ IR / IRA متعلق به ایران‌ایر (هما) است.",
+            "سهمیه بار من چقدر است؟ مقدار روی بلیت و شرایط همان مسیر/نرخ مقدم است؛ جدول جاری منبع‌دار برای همه بلیت‌ها در این بررسی در دسترس نبود.",
+            "می‌توانم آنلاین چک‌این کنم؟ وضعیت فعلی از منابع رسمی قابل تأیید نشد؛ از شرکت بپرسید.",
+            "تاریخ پرواز تهران–تاشکند یا دیگر مسیرها قطعی است؟ خبر رسمی تاریخ‌دار را با بلیت و برنامه همان روز تطبیق دهید.",
+            "چگونه برای ویلچر یا کودک بدون همراه اقدام کنم؟ قبل از خرید با شرکت هماهنگ کنید و شرایط پذیرش را به‌صورت موردی بررسی کنید.",
+            "کنسلی بلیت چقدر جریمه دارد؟ جریمه ثابت و عمومی تأیید نشده؛ شرایط نرخ و صادرکننده تعیین‌کننده‌اند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت رسمی در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌ها در صفحه رسمی",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌های مرتبط و مسیرهای اعلام‌شده",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اطلاعیه‌های صفحه رسمی ایران‌ایرتور درباره تهران–تاشکند، تهران–ایروان، تهران–اسلام‌آباد و تهران–کوالالامپور، و معرفی هاب‌های تهران و مشهد، تنها با تاریخ و دامنه خودشان قابل اتکا هستند. این بخش هیچ مسیر دائمی، پرواز مستقیم روز مورد نظر، قیمت یا ساعت قطعی را تضمین نمی‌کند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KUL",
+          "title_fa": "فرودگاه کوالالامپور"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "فرودگاه استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "اعلام مسیرهای تاریخ‌دار در صفحه رسمی ایران‌ایرتور",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ در هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان و مدل هواپیما",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+          "https://www.planespotters.net/airline/Iran-Air-Tours",
+          "https://oibk.ir/fa/iran/airlines/irb"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پایگاه‌های مستقل Flightradar24 و Planespotters خانواده‌های ایرباس A300-600، A310، A320 و مک‌دانل‌داگلاس MD-82/83/87 را در فهرست‌ها و سوابق ایران‌ایرتور ثبت کرده‌اند. این اعداد و ثبت‌ها، به‌تنهایی اثبات هواپیماهای فعال روز سفر، مالکیت یا چیدمان صندلی نیستند."
+        },
+        {
+          "type": "text",
+          "text_fa": "تعداد فعلی، وضعیت بهره‌برداری، رابطه مالکیت و مدل پرواز مشخص، بدون تطبیق با اسناد عملیاتی به‌روز تأیید نشده‌اند؛ بنابراین همه شمارش‌ها تهی و وضعیت‌ها نامشخص‌اند. سن هواپیما مبنای رتبه‌بندی ایمنی نیست."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A300-600",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+              "https://www.planespotters.net/airline/Iran-Air-Tours"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A310",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+              "https://www.planespotters.net/airline/Iran-Air-Tours"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+              "https://www.planespotters.net/airline/Iran-Air-Tours"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-82",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+              "https://www.planespotters.net/airline/Iran-Air-Tours"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-83",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+              "https://www.planespotters.net/airline/Iran-Air-Tours"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-87",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/b9-irb/fleet",
+              "https://www.planespotters.net/airline/Iran-Air-Tours"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "پایگاه Flightradar24 ناوگان ایران‌ایرتور",
+          "url": "https://www.flightradar24.com/data/airlines/b9-irb/fleet"
+        },
+        {
+          "type": "link",
+          "title_fa": "ماتریس ناوگان و سوابق Planespotters",
+          "url": "https://www.planespotters.net/airline/Iran-Air-Tours"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی شرکت و شناسه‌های هوانوردی",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ایران‌ایرتور (Iran Airtour Airline) در فهرست رسمی اعضای IATA با شناسه B9، کد ICAO برابر IRB و کد حسابداری 491 برای کشور ایران ثبت شده است. شرکت با ایران‌ایر (هما) با کد IR یکسان نیست؛ نام شرکت اجراکننده را از بلیت بررسی کنید."
+        },
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی اجتماعی شرکت از فعالیت در مسیرهای ایران و کشورهای مختلف خبر می‌دهد. تعداد مقصد و وضع فعالیت مسیرها متغیر است؛ اعداد تبلیغاتی به‌عنوان برنامه قطعی روز سفر استفاده نمی‌شوند."
+        },
+        {
+          "type": "link",
+          "title_fa": "عضویت و شناسه رسمی IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی ایران‌ایرتور",
+          "url": "https://ir.linkedin.com/company/airtourofficial"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
