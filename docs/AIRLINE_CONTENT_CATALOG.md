@@ -26,6 +26,8 @@ it does not package/sign/release APK or AAB files.
 | `mahan-air` | published | 19 | 1 | Mahan traveler guide, historic first-party check-in and live-animal notices, loyalty and cabin examples; 6 unknown-count families. See [source audit](airlines/mahan-aseman-2026-11-11.md). |
 | `iran-aseman` | published | 14 | 4 | Aseman identity, scoped traveler guidance, official route announcements and 5 unknown-count fleet families; no asserted online check-in/seat selection, catering or CIP. See [source audit](airlines/mahan-aseman-2026-11-11.md). |
 | `iran-airtour` | published | 13 | 6 | IATA B9/IRB identity, dated carrier route announcements, general passenger guidance, 6 aircraft families with unknown counts/status; current fare and check-in rules not verified. [Source audit](airlines/iran-airtour-2026-11-11.md). |
+| `qeshm-air` | published | 17 | 2 | Reviewed official site: cabin baggage, refund workflow, check-in FAQ, complaint and phone, airport guidance and 4 unknown-count aircraft models. See [dated Qeshm/Kish audit](airlines/qeshm-kish-2026-11-11.md). |
+| `kish-air` | published | 15 | 5 | Official channel, dates of route/service announcements, travel guidance and 4 unknown-count fleet models. Current policy details unavailable; some services remain draft. See [dated audit](airlines/qeshm-kish-2026-11-11.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -79,6 +81,28 @@ recorded for transparency; neither was used to infer live buying or operational
 rules. Fleet models have no asserted counts or active/owned/leased states;
 recent route announcements are not active timetable guarantees. See the
 [dated source audit](airlines/iran-airtour-2026-11-11.md).
+
+## Added Qeshm Air and Kish Air guides — 2026-11-11
+
+The public index now includes **seven** independently sourced airlines.
+Qeshm Air has **17 published / 2 draft** sections and Kish Air has
+**15 published / 5 draft** sections. Published means source-backed guidance,
+not complete up-to-date fare, operations or passenger service terms.
+
+Qeshm Air's official site exposed textual passenger rules (cabin baggage,
+check-in, refund workflows and contact). Its pages did not state a
+policy-effective date: dated review and route/fare-specific warnings are
+shown with every source. Kish Air's official website could not be retrieved
+in this environment; its channel identifies the official domain and
+announces selected route/fleet/catering activities, but does not supply
+all current operational policy tables. Missing current carrier-specific
+services remain draft or are explicitly general IATA guidance.
+
+Aircraft type lists are sourced, but active/owned/leased counts and seat
+configurations remain null/unknown. No live route schedule, synthetic
+ratings, passenger experiences or unlicensed media were added. Schema,
+Android/Mini App readers and release workflows are unchanged. See the
+[full audit](airlines/qeshm-kish-2026-11-11.md).
 
 ## File contract and maintenance
 

@@ -228,6 +228,99 @@
         "stale": false,
         "confidence": "official"
       }
+    },
+    {
+      "airline_id": "qeshm-air",
+      "detail_path": "details/qeshm-air.v1.json",
+      "identity": {
+        "name_fa": "قشم‌ایر",
+        "name_en": "Qeshm Air",
+        "legal_name": "Qeshm Air",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی قشم",
+          "قشم ایر",
+          "Qeshm Airlines"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "QB",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "QSM",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.qeshm-air.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/",
+          "https://t.me/s/qeshmair",
+          "https://centreforaviation.com/data/profiles/airlines/qeshm-air-qb"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "kish-air",
+      "detail_path": "details/kish-air.v1.json",
+      "identity": {
+        "name_fa": "کیش‌ایر",
+        "name_en": "Kish Air",
+        "legal_name": "Kish Air",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی کیش",
+          "کیش ایر",
+          "Kish Airlines"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "Y9",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "KIS",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://kishairlines.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir",
+          "https://www.planespotters.net/airline/Kish-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
     }
   ]
 }

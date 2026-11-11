@@ -1,0 +1,879 @@
+{
+  "schema_version": 1,
+  "airline_id": "qeshm-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.qeshm-air.com/web2/",
+      "https://t.me/s/qeshmair",
+      "https://centreforaviation.com/data/profiles/airlines/qeshm-air-qb"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "رزرو، خرید و وضعیت بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/",
+          "https://t.me/s/qeshmair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در سایت رسمی قشم‌ایر خدمات خرید اینترنتی، اعتبارسنجی بلیت و پیگیری وضعیت پرواز معرفی شده است. کانال رسمی برای خرید به apps.qeshm-air.com/ibe ارجاع می‌دهد. این صفحه موفقیت پرداخت یا موجودی لحظه‌ای را تضمین نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مبدأ/مقصد، تاریخ، کلاس و صادرکننده بلیت را پیش از پرداخت بررسی کنید.",
+            "برای پرواز داخلی و خارجی تهران، فرودگاه عملیاتی را با بلیت تطبیق دهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه اعلام‌شده خرید",
+          "url": "https://apps.qeshm-air.com/ibe"
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی",
+          "url": "https://www.qeshm-air.com/web2/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار کابین و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?cid=5106&ctype=guide&lang=&title=%D8%A8%D8%A7%D8%B1_%D9%87%D9%85%D8%B1%D8%A7%D9%87_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_(%DA%A9%D8%A7%D8%A8%DB%8C%D9%86)",
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=&pid=21&title=%D8%A8%D8%A7%D8%B1_%D9%85%D8%B3%D8%A7%D9%81%D8%B1",
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "qeshm-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مقادیر مربوط به راهنمای رسمیِ بدون تاریخ اجرای مشخص هستند؛ بلیت و مقررات روز مقدم‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای رسمی قشم‌ایر بار کابین را برای اکونومی/داخلی یک قطعه تا ۵ کیلوگرم و برای بیزینس/بین‌المللی تا ۷ کیلوگرم با ابعاد ۵۵×۴۰×۲۰ سانتی‌متر توصیف می‌کند. تاریخ اجرای این صفحه مشخص نیست؛ برای رزرو فعلی بازتأیید لازم است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سهمیه بار تحویلی را از بلیت بخوانید؛ مثال ۳۰/۴۰ کیلوگرم FAQ فقط برای پرواز از/به دبی ذکر شده است.",
+            "بار اضافه طبق تعرفه روز و شرایط نرخ محاسبه می‌شود؛ هزینه ثابت برای همه مسیرها نداریم.",
+            "برای نوزاد، کودک، حیوان، کالسکه و اقلام خاص مقررات جدا را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بار کابین",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?cid=5106&ctype=guide&lang=&title=%D8%A8%D8%A7%D8%B1_%D9%87%D9%85%D8%B1%D8%A7%D9%87_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_(%DA%A9%D8%A7%D8%A8%DB%8C%D9%86)"
+        },
+        {
+          "type": "link",
+          "title_fa": "سؤالات بار مسافر",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=&pid=21&title=%D8%A8%D8%A7%D8%B1_%D9%85%D8%B3%D8%A7%D9%81%D8%B1"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "اصلاح، ابطال و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?cid=5788&ctype=help&lang=&pid=22&title=%D8%B1%D9%88%D8%B4_%D8%A7%D8%B3%D8%AA%D8%B1%D8%AF%D8%A7%D8%AF_%D8%A8%D9%84%DB%8C%D8%B7:",
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "qeshm-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط نرخ و فروشنده (مستقیم/آژانسی) تعیین‌کننده است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای قشم‌ایر استرداد خرید مهمان را با اطلاعات تلفن خریدار و شماره بلیت و خرید از حساب را از همان حساب توضیح داده است. برای خرید آژانسی، صادرکننده باید مشخص شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "جریمه تغییر، لغو و استرداد بر اساس شرایط همان نرخ، مسیر و علت تغییر تعیین می‌شود.",
+            "درصدهای تصویری یا نرخ‌های بدون تاریخ از وب‌سایت به‌عنوان تعرفه جاری همه بلیت‌ها منتشر نشده‌اند.",
+            "مدارک خرید و پیام تأخیر/لغو را نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی استرداد",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?cid=5788&ctype=help&lang=&pid=22&title=%D8%B1%D9%88%D8%B4_%D8%A7%D8%B3%D8%AA%D8%B1%D8%AF%D8%A7%D8%AF_%D8%A8%D9%84%DB%8C%D8%B7:"
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های عمومی",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش فرودگاهی و کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "qeshm-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "زمان‌ها از صفحه رسمی بدون تاریخ اثرگذاری‌اند؛ مهلت روز سفر را مجدداً استعلام کنید."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "FAQ رسمی حضور دو ساعت پیش از پرواز داخلی و سه ساعت پیش از پرواز خارجی را توصیه می‌کند؛ همچنین آخرین مهلت کانتر داخلی ۳۰ دقیقه، خارجی ۴۵ دقیقه و گیت ۱۵ دقیقه پیش از پرواز را معرفی کرده است. این صفحه تاریخ اعتبار صریح ندارد و باید با فرودگاه بازبینی شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای داخلی کارت شناسایی معتبر و برای خارجی گذرنامه و مدارک مقصد لازم است.",
+            "ترمینال پرواز را از روی بلیت و فرودگاه تأیید کنید؛ اشاره تاریخی سایت به ترمینال ۲ مهرآباد را ثابت تلقی نکنید.",
+            "وضعیت فعلی چک‌این آنلاین برای تمام مبادی تأیید نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های پذیرش قشم‌ایر",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "برنامه و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/",
+          "https://t.me/s/qeshmair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در سایت رسمی ابزار بررسی وضعیت با مسیر، تاریخ و شماره پرواز وجود دارد. کانال قشم‌ایر برنامه‌های تاریخ‌دار منتشر می‌کند، ولی خبرها وضعیت زنده یا تضمین اجرای پرواز نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد QB، شماره پرواز و تاریخ بلیت را برای استعلام آماده کنید.",
+            "اگر برنامه تغییر کرد، با صادرکننده بلیت برای گزینه‌های همان رزرو تماس بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وضعیت پرواز در سایت شرکت",
+          "url": "https://www.qeshm-air.com/web2/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی اطلاعیه‌ها",
+          "url": "https://t.me/s/qeshmair"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "مرکز تماس و راه‌های پیگیری",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?id=8013&lang=fa&pid=0&tid=0&title=%D8%AA%D9%85%D8%A7%D8%B3_%D8%A8%D8%A7_%D9%85%D8%A7"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی تماس قشم‌ایر مرکز تماس ۰۲۱-۴۷۹۹۹ و نشانی ایمیل info.qeshm@qeshm-air.com را معرفی می‌کند. دفتر مرکزی تهران در خیابان شهید ریاحی، پلاک ۱۲ معرفی شده است؛ ساعات دفتر الزاماً ساعات تمام‌وقت مرکز تماس نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پیگیری، شماره پرواز، تاریخ، کد رزرو و نام صادرکننده را آماده کنید.",
+            "اطلاعات حساس سفر را در تجربه‌ها یا پیام‌های عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات تماس رسمی",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?id=8013&lang=fa&pid=0&tid=0&title=%D8%AA%D9%85%D8%A7%D8%B3_%D8%A8%D8%A7_%D9%85%D8%A7"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "پیگیری بار مفقود یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قشم‌ایر در FAQ می‌گوید خسارت یا مفقودی بار باید پیش از ترک سالن تحویل با تکمیل فرم ثبت شود. برچسب بار و پرونده را نگه دارید؛ حدود و مهلت قانونی خسارت به قانون حاکم و سفر مشخص وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرونده، کارت پرواز، تگ بار و عکس آسیب را نگه دارید.",
+            "درخواست کتبی بعدی را از طریق مرجع معرفی‌شده رسمی پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "FAQ گزارش بار",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و مسافران دارای نیاز ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?cid=5780&ctype=guide&lang=&title=%D8%B5%D9%86%D8%AF%D9%84%DB%8C_%DA%86%D8%B1%D8%AE%D8%AF%D8%A7%D8%B1_%D9%88_%DB%8C%D8%A7_%D8%B3%D8%A7%DB%8C%D8%B1_%D9%88%D8%B3%D8%A7%DB%8C%D9%84_%DA%A9%D9%85%DA%A9_%D8%AD%D8%B1%DA%A9%D8%AA%DB%8C_%D8%A8%D8%A7%D8%AA%D8%B1%DB%8C_%D8%AF%D8%A7%D8%B1",
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=guide&lang=fa&title=%D8%B1%D8%A7%D9%87%D9%86%D9%85%D8%A7%DB%8C_%D8%B3%D9%81%D8%B1"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در راهنمای رسمی، حمل ویلچر و وسایل کمک‌حرکتی دارای باتری بر اساس نوع و امکان جداشدن باتری تفکیک شده است؛ این توضیح تضمین پذیرش همه تجهیزات نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از رزرو، نوع وسیله و باتری را اعلام کنید.",
+            "برای مسافر دارای شرایط پزشکی، نوزاد یا کودک بدون همراه از شرکت شرایط پذیرش را بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی ویلچر باتری‌دار",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?cid=5780&ctype=guide&lang=&title=%D8%B5%D9%86%D8%AF%D9%84%DB%8C_%DA%86%D8%B1%D8%AE%D8%AF%D8%A7%D8%B1_%D9%88_%DB%8C%D8%A7_%D8%B3%D8%A7%DB%8C%D8%B1_%D9%88%D8%B3%D8%A7%DB%8C%D9%84_%DA%A9%D9%85%DA%A9_%D8%AD%D8%B1%DA%A9%D8%AA%DB%8C_%D8%A8%D8%A7%D8%AA%D8%B1%DB%8C_%D8%AF%D8%A7%D8%B1"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای سفر",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=guide&lang=fa&title=%D8%B1%D8%A7%D9%87%D9%86%D9%85%D8%A7%DB%8C_%D8%B3%D9%81%D8%B1"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و ردیف خروج اضطراری",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=guide&lang=fa&title=%D8%B1%D8%A7%D9%87%D9%86%D9%85%D8%A7%DB%8C_%D8%B3%D9%81%D8%B1"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قشم‌ایر شرایط خاص انتخاب صندلی در ردیف در خروج اضطراری را منتشر کرده است. این صفحه به معنی وجود انتخاب آنلاین رایگان صندلی برای همه رزروها نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "صلاحیت و توان کمک هنگام تخلیه برای صندلی کنار خروج اضطراری اهمیت دارد.",
+            "انتخاب، هزینه و موقعیت صندلی را از شرکت برای پرواز خود بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه راهنمای صندلی",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=guide&lang=fa&title=%D8%B1%D8%A7%D9%87%D9%86%D9%85%D8%A7%DB%8C_%D8%B3%D9%81%D8%B1"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس‌های کابین و ظرفیت هواپیما",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?cid=5106&ctype=guide&lang=&title=%D8%A8%D8%A7%D8%B1_%D9%87%D9%85%D8%B1%D8%A7%D9%87_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_(%DA%A9%D8%A7%D8%A8%DB%8C%D9%86)",
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در راهنمای بار رسمی از کلاس تجاری و عادی نام برده می‌شود و صفحه ناوگان ظرفیت‌های متفاوت مدل‌ها را معرفی می‌کند. چیدمان و خدمات ثابت برای یک مدل در همه پروازها تضمین نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "تفکیک کلاس در راهنمای بار",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?cid=5106&ctype=guide&lang=&title=%D8%A8%D8%A7%D8%B1_%D9%87%D9%85%D8%B1%D8%A7%D9%87_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_(%DA%A9%D8%A7%D8%A8%DB%8C%D9%86)"
+        },
+        {
+          "type": "link",
+          "title_fa": "ناوگان قشم‌ایر",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حیوان زنده و بار خاص",
+      "icon": "services",
+      "order": 65,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "qeshm-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "پذیرش به مسیر، گونه، قفس، هواپیما و تأیید روز سفر وابسته است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "FAQ رسمی قشم‌ایر مقررات، اسناد و هزینه جداگانه حمل حیوان زنده را شرح داده و محدودیت‌هایی بر حسب هواپیما و مسیر ذکر می‌کند. شرایط فعلی باید قبل از رزرو مشخص شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع حیوان، مدارک سلامت، میکروچیپ و قفس را با شرکت هماهنگ کنید.",
+            "حمل حیوان در کابین یا نرخ ثابت را بدون تأیید رزرو قطعی فرض نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های حمل حیوان",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و اقلام ممنوعه",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/",
+          "https://t.me/s/qeshmair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای عمومی IATA و اطلاعیه‌های رسمی قشم‌ایر درباره باتری‌های یدکی و اشیای ممنوع در کابین توضیح می‌دهند؛ مقررات فرودگاه و کشور می‌تواند محدودیت اضافه داشته باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری لیتیومی یدکی و پاوربانک را در بار تحویلی قرار ندهید.",
+            "اگر کیف کابین در گیت تحویل قسمت بار شد، باتری یدکی را بیرون بیاورید.",
+            "برای ظرفیت‌ها و ابزار پزشکی، با ایرلاین هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA درباره باتری",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های شرکت",
+          "url": "https://t.me/s/qeshmair"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "گذرنامه، مدارک و شرایط ورود",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86",
+          "https://www.iata.org/en/travel-centre"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پرواز داخلی کارت شناسایی و در سفر خارجی گذرنامه و مجوزهای کشور مقصد لازم است؛ الزام ویزا و اعتبار گذرنامه بر اساس مقصد، تابعیت و تاریخ تغییر می‌کند."
+        },
+        {
+          "type": "link",
+          "title_fa": "FAQ مدارک",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پاسخ‌های سریع پیش از سفر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86",
+          "https://www.qeshm-air.com/web2/knowledge.asp?cid=5106&ctype=guide&lang=&title=%D8%A8%D8%A7%D8%B1_%D9%87%D9%85%D8%B1%D8%A7%D9%87_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_(%DA%A9%D8%A7%D8%A8%DB%8C%D9%86)",
+          "https://www.qeshm-air.com/web2/knowledge.asp?cid=5788&ctype=help&lang=&pid=22&title=%D8%B1%D9%88%D8%B4_%D8%A7%D8%B3%D8%AA%D8%B1%D8%AF%D8%A7%D8%AF_%D8%A8%D9%84%DB%8C%D8%B7:"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار کابین؟ در راهنمای بدون تاریخ اثرگذاری ۵ کیلو عادی/داخلی و ۷ کیلو تجاری/بین‌المللی ذکر شده؛ تأیید کنید.",
+            "پرواز و ترمینال؟ از وضعیت بلیت و فرودگاه بررسی کنید.",
+            "استرداد؟ روش خرید مهمان و حساب کاربری متفاوت است.",
+            "بار گم شد؟ قبل از خروج سالن بار گزارش کنید.",
+            "پشتیبانی؟ شماره رسمی ۰۲۱-۴۷۹۹۹."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "FAQ رسمی",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=faq&lang=fa&pid=15&title=%D8%B3%D9%88%D8%A7%D9%84%D8%A7%D8%AA_%D8%B9%D9%85%D9%88%D9%85%DB%8C_%D9%85%D8%B3%D8%A7%D9%81%D8%B1%D8%A7%D9%86"
+        },
+        {
+          "type": "link",
+          "title_fa": "روش استرداد",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?cid=5788&ctype=help&lang=&pid=22&title=%D8%B1%D9%88%D8%B4_%D8%A7%D8%B3%D8%AA%D8%B1%D8%AF%D8%A7%D8%AF_%D8%A8%D9%84%DB%8C%D8%B7:"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و شبکه پروازی",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/",
+          "https://t.me/s/qeshmair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اعلامیه‌های قشم‌ایر مسیرهایی چون تهران–قشم، تهران–مشهد، تهران–استانبول و تهران–تبریز را معرفی می‌کنند. پیوندهای اینجا راهنمای فرودگاه‌اند، نه برنامه زنده یا تضمین پرواز در تاریخ مشخص."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "امام خمینی تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "GSM",
+          "title_fa": "فرودگاه قشم"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "استانبول"
+        },
+        {
+          "type": "airport_link",
+          "iata": "TBZ",
+          "title_fa": "تبریز"
+        },
+        {
+          "type": "link",
+          "title_fa": "برنامه تاریخ‌دار شرکت",
+          "url": "https://t.me/s/qeshmair"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "وای‌فای و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "خانواده‌های ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+          "https://www.flightradar24.com/data/airlines/qb-qsm/fleet",
+          "https://www.planespotters.net/airline/Qeshm-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی ناوگان از ایرباس A300-600، A320، فوکر ۱۰۰ و آورو RJ100 نام می‌برد. تعداد مدل‌ها در پایگاه‌های رصد متفاوت است و وضعیت فعال، پارک‌شده و رابطه مالکیت بر اساس منابع عمومی یکسان تأیید نشده؛ بنابراین شمارش‌های این راهنما نامشخص‌اند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A300-600",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+              "https://www.flightradar24.com/data/airlines/qb-qsm/fleet",
+              "https://www.planespotters.net/airline/Qeshm-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+              "https://www.flightradar24.com/data/airlines/qb-qsm/fleet",
+              "https://www.planespotters.net/airline/Qeshm-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 100",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+              "https://www.flightradar24.com/data/airlines/qb-qsm/fleet",
+              "https://www.planespotters.net/airline/Qeshm-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Avro RJ100",
+          "manufacturer": "British Aerospace",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+              "https://www.flightradar24.com/data/airlines/qb-qsm/fleet",
+              "https://www.planespotters.net/airline/Qeshm-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی ناوگان",
+          "url": "https://www.qeshm-air.com/web2/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+        },
+        {
+          "type": "link",
+          "title_fa": "رصد ثانویه",
+          "url": "https://www.flightradar24.com/data/airlines/qb-qsm/fleet"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و شناسه قشم‌ایر",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/qeshm-air-qb",
+          "https://www.qeshm-air.com/web2/",
+          "https://www.planespotters.net/airline/Qeshm-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قشم‌ایر با نام انگلیسی Qeshm Air و کد دوحرفی QB و کد سه‌حرفی QSM در منابع هوانوردی ثبت شده است. نام شرکت اجراکننده و شناسه رزرو را با بلیت خود تطبیق دهید."
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل CAPA",
+          "url": "https://centreforaviation.com/data/profiles/airlines/qeshm-air-qb"
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی",
+          "url": "https://www.qeshm-air.com/web2/"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
