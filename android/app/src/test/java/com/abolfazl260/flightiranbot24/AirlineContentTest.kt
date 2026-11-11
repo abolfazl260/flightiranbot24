@@ -31,7 +31,8 @@ class AirlineContentTest {
         assertEquals(setOf("iran-air", "emirates", "mahan-air", "iran-aseman",
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
-            "caspian-air", "sepehran-air", "taban-air", "karun-air"), rows.map { it.id }.toSet())
+            "caspian-air", "sepehran-air", "taban-air", "karun-air",
+            "pars-air", "chabahar-air"), rows.map { it.id }.toSet())
         val iranAir = AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!
         assertEquals(17, iranAir.sections.size)
         assertFalse(iranAir.sections.any { it.id == "onboard-connectivity" })
@@ -168,6 +169,37 @@ class AirlineContentTest {
         assertTrue(sepehran.sections.any { it.id == "seat-selection" })
         assertTrue(sepehran.sections.any { it.id == "loyalty" })
         assertFalse(sepehran.sections.any { it.id == "lounges" })
+        for ((carrier, published, fleetSize) in listOf(
+            Triple("pars-air", 14, 3),
+            Triple("chabahar-air", 13, 4)
+        )) {
+            val guide = AirlineContentParser.detail(
+                bundled("details/$carrier.v1.json"), carrier, now)!!
+            assertEquals(published, guide.sections.size)
+            assertEquals(0, guide.ratingCount)
+            assertNull(guide.average)
+            assertFalse(guide.sections.any { it.id == "onboard-connectivity" })
+            val aircraft = guide.sections.flatMap { it.blocks }
+                .filterIsInstance<AirlineBlock.Fleet>()
+            assertEquals(fleetSize, aircraft.size)
+            assertTrue(aircraft.all {
+                it.count == null && it.status == "unknown" &&
+                    it.relationship == "unknown"
+            })
+        }
+        val pars = AirlineContentParser.detail(
+            bundled("details/pars-air.v1.json"), "pars-air", now)!!
+        assertFalse(pars.sections.any { it.id in listOf(
+            "checkin", "seat-selection", "catering", "lounges", "pets"
+        ) })
+        val chabahar = AirlineContentParser.detail(
+            bundled("details/chabahar-air.v1.json"), "chabahar-air", now)!!
+        assertFalse(chabahar.sections.any { it.id in listOf(
+            "checkin", "special-assistance", "seat-selection",
+            "catering", "lounges", "pets"
+        ) })
+        assertTrue(chabahar.sections.any { it.id == "flight-status" })
+
         for ((id, published, fleetSize) in listOf(
             Triple("taban-air", 15, 5),
             Triple("karun-air", 14, 4)
@@ -249,6 +281,8 @@ class AirlineContentTest {
         assertEquals("sepehran-air", filterAirlines(rows, "سپهران", "iran").single().id)
         assertEquals("taban-air", filterAirlines(rows, "تابان", "iran").single().id)
         assertEquals("karun-air", filterAirlines(rows, "کارون", "iran").single().id)
+        assertEquals("pars-air", filterAirlines(rows, "پارس", "iran").single().id)
+        assertEquals("chabahar-air", filterAirlines(rows, "چابهار", "iran").single().id)
     }
 
     @Test fun draftArchivedStaleAndExpiredContentAreNeverRendered() {
