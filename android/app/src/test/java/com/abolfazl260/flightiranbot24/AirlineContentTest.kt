@@ -29,7 +29,8 @@ class AirlineContentTest {
     @Test fun bundledCatalogHasIndependentPagesAndNoSyntheticRatings() {
         val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
         assertEquals(setOf("iran-air", "emirates", "mahan-air", "iran-aseman",
-            "iran-airtour", "qeshm-air", "kish-air"), rows.map { it.id }.toSet())
+            "iran-airtour", "qeshm-air", "kish-air",
+            "zagros-air", "meraj-air"), rows.map { it.id }.toSet())
         val iranAir = AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!
         assertEquals(17, iranAir.sections.size)
         assertFalse(iranAir.sections.any { it.id == "onboard-connectivity" })
@@ -94,6 +95,24 @@ class AirlineContentTest {
         val qeshm = AirlineContentParser.detail(
             bundled("details/qeshm-air.v1.json"), "qeshm-air", now)!!
         assertFalse(qeshm.sections.any { it.id == "catering" })
+        for (carrier in listOf("zagros-air", "meraj-air")) {
+            val guide = AirlineContentParser.detail(
+                bundled("details/$carrier.v1.json"), carrier, now)!!
+            assertEquals(14, guide.sections.size)
+            assertEquals(0, guide.ratingCount)
+            assertNull(guide.average)
+            assertFalse(guide.sections.any { it.id in listOf(
+                "checkin", "seat-selection", "catering",
+                "lounges", "pets", "onboard-connectivity"
+            ) })
+            val models = guide.sections.flatMap { it.blocks }
+                .filterIsInstance<AirlineBlock.Fleet>()
+            assertEquals(4, models.size)
+            assertTrue(models.all {
+                it.count == null && it.status == "unknown" &&
+                    it.relationship == "unknown"
+            })
+        }
         val page = parse(page())
         assertEquals(18, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
@@ -142,6 +161,8 @@ class AirlineContentTest {
         assertTrue(filterAirlines(rows, "EK", "iran").isEmpty())
         assertEquals("qeshm-air", filterAirlines(rows, "قشم", "iran").single().id)
         assertEquals("kish-air", filterAirlines(rows, "کیش", "iran").single().id)
+        assertEquals("zagros-air", filterAirlines(rows, "زاگرس", "iran").single().id)
+        assertEquals("meraj-air", filterAirlines(rows, "معراج", "iran").single().id)
     }
 
     @Test fun draftArchivedStaleAndExpiredContentAreNeverRendered() {
@@ -157,7 +178,9 @@ class AirlineContentTest {
         val directory = JsonParser.parseString(bundled("airline-index.v1.json")).asJsonObject
         directory.getAsJsonArray("airlines")[0].asJsonObject.getAsJsonObject("metadata").addProperty("status", "draft")
         assertEquals(listOf("emirates", "mahan-air", "iran-aseman",
-            "iran-airtour", "qeshm-air", "kish-air"), AirlineContentParser.index(directory.toString(), now).map { it.id })
+            "iran-airtour", "qeshm-air", "kish-air",
+            "zagros-air", "meraj-air"),
+            AirlineContentParser.index(directory.toString(), now).map { it.id })
     }
 
     @Test fun unknownBlocksAreSkippedWithoutCrashingOrBlankCards() {
