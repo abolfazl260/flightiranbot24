@@ -321,6 +321,100 @@
         "stale": false,
         "confidence": "secondary"
       }
+    },
+    {
+      "airline_id": "zagros-air",
+      "detail_path": "details/zagros-air.v1.json",
+      "identity": {
+        "name_fa": "زاگرس",
+        "name_en": "Zagros Airlines",
+        "legal_name": "Zagros Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی زاگرس",
+          "Zagros Air",
+          "زاگرس ایر"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "ZO",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "IZG",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.zagrosairlines.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/izg",
+          "https://www.planespotters.net/airline/Zagros-Air",
+          "https://www.govinfo.gov/content/pkg/FR-2026-09-15/pdf/2026-18909.pdf"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
+    },
+    {
+      "airline_id": "meraj-air",
+      "detail_path": "details/meraj-air.v1.json",
+      "identity": {
+        "name_fa": "معراج",
+        "name_en": "Meraj Airlines",
+        "legal_name": "Meraj Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی معراج",
+          "Meraj Air",
+          "معراج ایر"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "IJ",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "MRJ",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://meraj.aero/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Meraj-Airlines",
+          "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
+          "https://midrma.com/en/rvsm/approvalList/ir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
     }
   ]
 }
