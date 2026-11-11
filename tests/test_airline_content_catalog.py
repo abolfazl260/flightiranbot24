@@ -23,7 +23,10 @@ def test_actual_catalog_and_independent_snapshots():
     module.validate_dataset(now=NOW)
     index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
     ids = [r["airline_id"] for r in index["airlines"]]
-    assert ids == ["iran-air", "emirates", "mahan-air", "iran-aseman", "iran-airtour"]
+    assert ids == [
+        "iran-air", "emirates", "mahan-air", "iran-aseman",
+        "iran-airtour", "qeshm-air", "kish-air",
+    ]
     coverage = {}
     for entry in index["airlines"]:
         detail = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
@@ -37,7 +40,9 @@ def test_actual_catalog_and_independent_snapshots():
                         "emirates": {"published": 18, "draft": 0},
                         "mahan-air": {"published": 19, "draft": 1},
                         "iran-aseman": {"published": 14, "draft": 4},
-                        "iran-airtour": {"published": 13, "draft": 6}}
+                        "iran-airtour": {"published": 13, "draft": 6},
+                        "qeshm-air": {"published": 17, "draft": 2},
+                        "kish-air": {"published": 15, "draft": 5}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -339,3 +344,60 @@ def test_iran_airtour_sourced_scope_and_draft_exclusion():
         ("iata", "B9"), ("icao", "IRB"),
     }
     assert entry["identity"]["website"] == "https://www.iranairtour.ir/"
+
+
+@pytest.mark.parametrize("airline_id,published,draft,models", [
+    ("qeshm-air", 17, 2, 4),
+    ("kish-air", 15, 5, 4),
+])
+def test_qeshm_kish_independent_sourced_guides(airline_id, published, draft, models):
+    detail = module.read_json(ROOT / "data/airlines/details" / f"{airline_id}.v1.json")
+    assert detail["airline_id"] == airline_id
+    assert len(detail["sections"]) == published + draft
+    assert len({s["id"] for s in detail["sections"]}) == published + draft
+    assert detail["published_reviews"] == detail["experience_links"] == []
+    active = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
+    hidden = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
+    assert len(active) == published
+    assert len(hidden) == draft
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in active)
+    assert all(s["metadata"]["verified_at"] == "2026-11-11T00:00:00Z" for s in active)
+    assert all(not s["blocks"] and s["metadata"]["verified_at"] is None for s in hidden)
+    assert {s["id"] for s in hidden}.issuperset({"onboard-connectivity"})
+    for s in detail["sections"]:
+        if s["kind"] == "policy":
+            assert s["scope"]["operating_carrier"] == airline_id
+            assert s["scope"]["seller"] == "unknown"
+    fleet = next(s for s in active if s["id"] == "fleet")
+    blocks = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(blocks) == models
+    assert all(b["count"] is None and b["configuration_fa"] is None for b in blocks)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in blocks)
+    network = next(s for s in active if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+
+
+def test_qeshm_kish_codes_and_draft_publication_limits():
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    lookup = {x["airline_id"]: x for x in index["airlines"]}
+    assert {(c["system"], c["value"]) for c in
+            lookup["qeshm-air"]["identity"]["codes"]} == {
+        ("iata", "QB"), ("icao", "QSM"),
+    }
+    assert {(c["system"], c["value"]) for c in
+            lookup["kish-air"]["identity"]["codes"]} == {
+        ("iata", "Y9"), ("icao", "KIS"),
+    }
+    assert lookup["qeshm-air"]["identity"]["website"] == "https://www.qeshm-air.com/"
+    assert lookup["kish-air"]["identity"]["website"] == "https://kishairlines.ir/"
+    qeshm = module.read_json(ROOT / "data/airlines/details/qeshm-air.v1.json")
+    kish = module.read_json(ROOT / "data/airlines/details/kish-air.v1.json")
+    assert {s["id"] for s in qeshm["sections"] if
+            s["metadata"]["status"] == "draft"} == {
+        "catering", "onboard-connectivity",
+    }
+    assert {s["id"] for s in kish["sections"] if
+            s["metadata"]["status"] == "draft"} == {
+        "checkin", "seat-selection", "lounges", "pets", "onboard-connectivity",
+    }
+
