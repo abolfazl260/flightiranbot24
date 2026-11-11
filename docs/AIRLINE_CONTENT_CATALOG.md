@@ -30,6 +30,8 @@ it does not package/sign/release APK or AAB files.
 | `kish-air` | published | 15 | 5 | Official channel, dates of route/service announcements, travel guidance and 4 unknown-count fleet models. Current policy details unavailable; some services remain draft. See [dated audit](airlines/qeshm-kish-2026-11-11.md). |
 | `zagros-air` | published | 14 | 6 | ZO/IZG identity confirmed by aviation records, source-qualified baggage/refund guidance, dated flight observations, and 4 aircraft family models with unknown operational counts. See [source audit](airlines/zagros-meraj-2026-11-11.md). |
 | `meraj-air` | published | 14 | 6 | IJ/MRJ industry-code references (CAPA lists IATA as n/a), historically scoped baggage example, IATA travel guidance and 4 unknown-count fleet families. See [source audit](airlines/zagros-meraj-2026-11-11.md). |
+| `ata-air` | published | 16 | 4 | Official 1404 airline rules, independently scoped baggage/child/pet/medical information, 7 unknown-count model families; I3/TBZ. [Source review](airlines/ata-varesh-2026-11-11.md). |
+| `varesh-air` | published | 18 | 2 | Official luggage, wheelchair, pets, loyalty, catering and sales pages; only ICAO VRH verified (no IATA code); 3 model families with unknown counts. [Source review](airlines/ata-varesh-2026-11-11.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -122,6 +124,26 @@ links navigate published airport guides; no recurring flight schedule or
 synthetic passenger rating is generated. Existing API, Android and Mini App
 reader contracts, archive data and manually triggered Android builds remain
 unchanged.
+
+## ATA and Varesh reviewed guides — 2026-11-11
+
+The public airline index now has **11** independent carrier identities.
+ATA Airlines publishes **16 sections / 4 drafts** and Varesh Airlines
+**18 sections / 2 drafts**. Both carriers expose primary passenger
+guidance on their own sites, including ATA's rules updated in 1404 and
+Varesh's undated baggage, wheelchair, pet, loyalty and catering pages.
+**A review date does not establish the current effective date** of a
+fare-specific rule. Numbers and amenities must be reconfirmed for the
+ticket/route. See [ATA/Varesh source audit](airlines/ata-varesh-2026-11-11.md).
+
+ATA's IATA I3 and ICAO TBZ codes are separately typed (TBZ also names
+Tabriz airport in the IATA airport namespace). Varesh's only confirmed
+code in this review is ICAO VRH; an unverified IATA code was not added.
+Aviation trackers differ on active/parked and owned/leased aircraft,
+so neither carrier has an asserted active-fleet count or seat map.
+Historic route notices do not become live schedule records.
+Existing Android/Mini App parsers, user feedback/consent and manual
+APK release workflow were preserved.
 
 ## File contract and maintenance
 

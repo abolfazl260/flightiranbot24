@@ -1,0 +1,972 @@
+{
+  "schema_version": 1,
+  "airline_id": "ata-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://ataair.ir/",
+      "https://ataair.ir/قوانین-و-مقررات-آتا/",
+      "https://www.planespotters.net/airline/ATA-Airlines-Iran"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "خرید اینترنتی و اعتبارسنجی بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/",
+          "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی آتا امکان خرید اینترنتی، استرداد و اعتبارسنجی بلیت خریداری‌شده مستقیم را معرفی می‌کند. مقررات رسمی می‌گوید خرید با تأیید قطعی بانک و دریافت شماره بلیت نهایی می‌شود. در این بررسی تراکنشی انجام نشده و موجودی یا عملکرد درگاه تضمین نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "آدرس دقیق دامنه و اطلاعات صادرکننده را پیش از پرداخت کنترل کنید.",
+            "رسید خرید و شماره بلیت را نگه دارید؛ اعتبارسنجی آنلاین برای بلیت‌های مستقیم شرکت معرفی شده است.",
+            "نام مسافر را مطابق مدرک هویتی وارد کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی آتا",
+          "url": "https://ataair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "درگاه خرید معرفی‌شده",
+          "url": "https://app.ataair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین خرید",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز، کابین و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/",
+          "https://ataair.ir/اطلاعات-بار/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ata-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اعداد مربوط به نسخه منتشرشده آبان ۱۴۰۴ هستند؛ برای بلیت و تاریخ سفر باید دوباره تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در مقررات رسمی منتشرشده آتا (صفحه ویرایش‌شده در آبان ۱۴۰۴)، برای مسافر دارای صندلی ۲۰ کیلوگرم در پرواز داخلی و ۲۵ کیلوگرم در پرواز بین‌المللی، و برای نوزاد بدون صندلی ۱۰ کیلوگرم ذکر شده است. صفحه برای پرواز با هواپیمای امبرائر استثنای ۱۵ کیلوگرم دارد. این اعداد را برای نرخ و پرواز روز ۱۴۰۵ بدون بازتأیید قطعی فرض نکنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار دستی تا ۶ کیلوگرم و ابعاد حداکثر ۳۵×۵۵×۲۵ سانتی‌متر با مجموع ابعاد حداکثر ۱۱۵ سانتی‌متر در صفحه رسمی درج شده است.",
+            "مقررات ممکن است بر اساس مسیر، کلاس، نرخ و نوع هواپیمای اجراکننده تفاوت کند؛ متن بلیت مقدم است.",
+            "حمل ساز، کالسکه، ویلچر یا اشیای ویژه به هماهنگی و مقررات پذیرش جدا نیاز دارد.",
+            "برای اضافه‌بار مبلغ ثابت سراسری در منبع به‌روز تأیید نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات رسمی بار آتا",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای اقلام داخل بار",
+          "url": "https://ataair.ir/اطلاعات-بار/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/",
+          "https://ataair.ir/سوالات-متداول/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ata-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "نوع بلیت، صادرکننده، زمان درخواست و علت تغییر تعیین‌کننده است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آتا مسیر استرداد و اعتبارسنجی را در سامانه مستقیم معرفی کرده و در پرسش‌های متداولِ منتشرشده در ۱۴۰۲ به وضعیت خاص تأخیر طولانی اشاره می‌کند. این صفحات درصد جریمه جاری همه کلاس‌های نرخی را اثبات نمی‌کنند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای بلیت آژانسی ابتدا از صادرکننده درج‌شده در رسید پیگیری کنید.",
+            "در FAQ قدیمی، پس از تأیید رئیس ایستگاه برای تأخیر بیش از دو ساعت داخلی و سه ساعت خارجی، شرایط خاص استرداد بدون جریمه ذکر شده؛ این عدد را بدون تأیید روز سفر حق تضمین‌شده فرض نکنید.",
+            "لغو توسط ایرلاین، تغییر داوطلبانه و عدم حضور مسافر از نظر فرآیند یکسان نیستند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌های متداول رسمی",
+          "url": "https://ataair.ir/سوالات-متداول/"
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه اعلام‌شده شرکت",
+          "url": "https://app.ataair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش فرودگاهی و کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/",
+          "https://ataair.ir/سوالات-متداول/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ata-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مهلت‌های جاری و امکان پذیرش آنلاین برای تاریخ و فرودگاه شما باید جدا تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی FAQ آتا (منتشرشده در ۱۴۰۲) دریافت کارت پرواز را حضوری در فرودگاه معرفی می‌کند؛ این متن اثبات نبود چک‌این آنلاین در تاریخ سفر فعلی نیست. مقررات آتا ارائه مدرک شناسایی عکس‌دار را برای پذیرش الزامی معرفی می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از حرکت، آخرین ساعت کانتر و درِ خروج را برای همان پرواز از شرکت و فرودگاه تأیید کنید.",
+            "نام بلیت باید با مدرک هویت تطبیق داشته باشد.",
+            "برای کودک بدون همراه و درخواست پزشکی، فرآیند مخصوص را از پیش هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "FAQ پذیرش شرکت",
+          "url": "https://ataair.ir/سوالات-متداول/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات پذیرش",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز و تغییر برنامه",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/",
+          "https://ataair.ir/شبکه-پروازی-آتا/",
+          "https://t.me/s/ataair_ir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی آتا بخش «وضعیت پروازها» دارد و شبکه پروازی را معرفی می‌کند. برنامه‌ها و پیام‌های تاریخی کانال تلگرام وضعیت زنده یا تعهد اجرای پرواز در یک روز آینده نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد I3، شماره پرواز، تاریخ و فرودگاه‌های مبدا و مقصد را از بلیت بررسی کنید.",
+            "برای تغییر یا لغو از شرکت اجراکننده و صادرکننده بلیت پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی برای وضعیت پرواز",
+          "url": "https://ataair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "شبکه معرفی‌شده شرکت",
+          "url": "https://ataair.ir/شبکه-پروازی-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "مرکز تماس و خدمات مشتری",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/تماس-با-ما/",
+          "https://ataair.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آتا در صفحه تماس رسمی خود شماره ۰۲۱-۴۸۵۵ را برای دفتر تهران و شماره ۰۴۱-۳۲۶۱۳۳۳۰ را برای دفتر فرودگاه تبریز درج می‌کند. شماره پشتیبانی فروش اینترنتی ۰۲۱-۴۸۵۵ داخلی ۲۱۳۱ یا ۲۱۳۳ در همان صفحه آمده است؛ ساعات خدمت از این صفحه قابل تعمیم به تمام ساعات شبانه‌روز نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد رزرو و شماره بلیت را فقط در کانال معتبر پشتیبانی وارد کنید.",
+            "در تماس با آژانس، شماره پرواز، تاریخ و نام فروشنده را آماده کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه تماس رسمی آتا",
+          "url": "https://ataair.ir/تماس-با-ما/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار گمشده یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/",
+          "https://ataair.ir/سوالات-متداول/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در متن رسمی آتا، اعلام مفقودی یا آسیب بار در فرودگاه مقصد و نزد مسئول شرکت توصیه شده است. FAQ نیز برای وسایل شخصی فرم صورت‌جلسه در فرودگاه را معرفی می‌کند. این دستور جایگزین بررسی مهلت قانونی حقوق مسافر نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از خروج از محل دریافت بار، برچسب بار و گزارش آسیب/عدم تحویل را ارائه کنید.",
+            "شماره پرونده، کارت پرواز و تصاویر آسیب را نگه دارید.",
+            "برای مبلغ و مهلت حقوقی به قوانین قابل اعمال به همان مسیر رجوع کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات شرکت",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        },
+        {
+          "type": "link",
+          "title_fa": "FAQ بار و وسایل شخصی",
+          "url": "https://ataair.ir/سوالات-متداول/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و خدمات پزشکی ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات آتا برای برخی بیماری‌ها، تجهیزات پزشکی و بارداری، اطلاع قبلی و بررسی پزشکی را ضروری معرفی می‌کند. همان صفحه محدودیت خدمات ویلچر در مدل امبرائر را بیان می‌کند. متن بدون تأیید به‌روز شرایط پزشکی هر فرد مبنای پذیرش قطعی نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای بیماری، بارداری یا تجهیزات پزشکی، پیش از خرید با شرکت و پزشک هماهنگ کنید.",
+            "نوع هواپیمای اجراکننده را برای درخواست ویلچر و تجهیزات بررسی کنید.",
+            "آتا برای کودک ۶ تا ۱۲ سال بدون همراه در مقررات خود فرآیند حضور والد یا قیم در کانتر را شرح می‌دهد؛ الزامات روز سفر باید تأیید شوند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات پذیرش ویژه آتا",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "مدل هواپیما و کلاس کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/ناوگان-هوایی/",
+          "https://www.planespotters.net/airline/ATA-Airlines-Iran"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی ناوگان آتا مدل‌های MD-83، ایرباس A320، بوئینگ 737 و هواپیماهای دیگر را در اطلاعات تاریخی معرفی می‌کند. نوع هواپیما، ظرفیت و چیدمانِ روز پرواز ممکن است با معرفی عمومی تفاوت داشته باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "هواپیما و کلاس ثبت‌شده در بلیت را بررسی کنید.",
+            "ظرفیت فنی یک مدل به معنی چیدمان یا خدمات قطعی صندلی همان پرواز نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی رسمی مدل‌های ناوگان",
+          "url": "https://ataair.ir/ناوگان-هوایی/"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق مستقل Planespotters",
+          "url": "https://www.planespotters.net/airline/ATA-Airlines-Iran"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی و پرندگان",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ata-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "محدودیت‌ها و مستثنیات از صفحه منتشرشده در ۱۴۰۴ نقل شده و برای سفر روز باید بازتأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در مقررات منتشرشده آتا، حمل سگ، گربه و برخی پرندگان در بعضی پروازهای داخلی با هماهنگی قبلی معرفی شده؛ از مدل امبرائر به‌عنوان استثنا یاد شده است. مدارک و قفس مناسب لازم است و پذیرش گونه‌های جونده در همان صفحه منع شده است. این شرایط را برای تاریخ و نوع هواپیما بازتأیید کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شناسنامه و مدارک واکسیناسیون و قفس تهویه‌دار را مطابق مقررات آماده کنید.",
+            "مقررات درباره حمل و تحویل حیوان به معنی مجازبودن حضور آن در کابین مسافران نیست.",
+            "نوع حیوان، مسیر و ظرفیت را پیش از خرید با شرکت هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات رسمی حمل حیوان آتا",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و اقلام خطرناک",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/اطلاعات-بار/",
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آتا در بخش بار خود اقلام خطرناک مجاز و ممنوع را تفکیک می‌کند و IATA برای باتری‌های لیتیومی یدکی قواعد عمومی تعیین کرده است. محدودیت کشور و فرودگاه نیز ممکن است اضافه شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری لیتیومی یدکی و پاوربانک را در بار تحویلی نگذارید.",
+            "در صورت تحویل کیف کابین در گیت، باتری یدکی را خارج کنید.",
+            "برای ویلچر باتری‌دار و وسایل پزشکی مشخصات و مجوز لازم را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات بار آتا",
+          "url": "https://ataair.ir/اطلاعات-بار/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA باتری‌ها",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک شناسایی و ورود به کشورها",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/",
+          "https://www.iata.org/en/travel-centre"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آتا در مقررات خود ارائه مدرک عکس‌دار معتبر برای داخل ایران و گذرنامه برای سفر بین‌المللی را الزامی معرفی می‌کند. اعتبار گذرنامه و شرایط ورود مقصد با تابعیت و تاریخ سفر متفاوت است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام بلیت را با مدرک هویتی تطبیق دهید.",
+            "برای ویزا و ترانزیت اطلاعات رسمی مقصد و IATA Travel Centre را بررسی کنید.",
+            "شرایط قدیمی حداقل اعتبار گذرنامه را بدون بررسی کشور مقصد ملاک قرار ندهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات شناسایی آتا",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرکز اطلاعات سفر IATA",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "سؤال‌های کاربردی سفر با آتا",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/قوانین-و-مقررات-آتا/",
+          "https://ataair.ir/سوالات-متداول/",
+          "https://ataair.ir/تماس-با-ما/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار مجاز من چقدر است؟ صفحه رسمی آبان ۱۴۰۴ برای پرواز داخلی/خارجی ۲۰/۲۵ کیلو نوشته، اما بلیت و نوع هواپیما را دوباره کنترل کنید.",
+            "چک‌این آنلاین وجود دارد؟ FAQ قدیمی فقط پذیرش حضوری را شرح می‌دهد؛ وضعیت امروز را بپرسید.",
+            "استرداد چگونه است؟ نوع نرخ، صادرکننده و علت تغییر تعیین‌کننده است.",
+            "بلیت من معتبر است؟ سامانه رسمی اعتبارسنجی برای خریدهای مستقیم معرفی شده است.",
+            "حیوان همراه؟ شرایط گونه، مدارک، قفس و هواپیمای اجراکننده را پیشاپیش تأیید کنید.",
+            "شماره تماس؟ ۰۲۱-۴۸۵۵ در صفحه رسمی شرکت درج شده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سؤالات متداول",
+          "url": "https://ataair.ir/سوالات-متداول/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات شرکت",
+          "url": "https://ataair.ir/قوانین-و-مقررات-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "شبکه و راهنمای فرودگاه‌ها",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/شبکه-پروازی-آتا/",
+          "https://ataair.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی آتا شبکه پروازی و اطلاعات مقصد را منتشر می‌کند. لینک‌های فرودگاهی صرفاً برای راهنمای سفر هستند و هیچ برنامه فعلی، ساعت ثابت یا مسیر مستقیم در یک تاریخ مشخص را تضمین نمی‌کنند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "TBZ",
+          "title_fa": "فرودگاه تبریز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IFN",
+          "title_fa": "فرودگاه اصفهان"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "link",
+          "title_fa": "شبکه پروازی اعلام‌شده",
+          "url": "https://ataair.ir/شبکه-پروازی-آتا/"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "وای‌فای و شارژ داخل پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های شناخته‌شده ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/ناوگان-هوایی/",
+          "https://www.planespotters.net/airline/ATA-Airlines-Iran"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی ناوگان آتا آمار قدیمیِ ۱۶ فروند را معرفی می‌کند، درحالی‌که سوابق مستقل ۲۰۲۶ Planespotters برای مدل‌های فعال/پارک‌شده/تاریخی طبقه‌بندی متفاوت دارد. رقم رسمی قدیمی را نباید تعداد فعال امروز دانست. مدل‌ها در این راهنما با شمارش، مالکیت و وضعیت عملیاتی نامشخص ثبت می‌شوند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-500",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-82",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-83",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-87",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Embraer ERJ-145",
+          "manufacturer": "Embraer",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+              "https://ataair.ir/ناوگان-هوایی/"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "ناوگان معرفی‌شده شرکت",
+          "url": "https://ataair.ir/ناوگان-هوایی/"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تاریخی/فعلی مستقل",
+          "url": "https://www.planespotters.net/airline/ATA-Airlines-Iran"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و شناسه‌های آتا",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+          "https://oibk.ir/iran/airlines",
+          "https://ataair.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی آتا (ATA Airlines) شرکت هواپیمایی ایرانی با پایگاه تاریخی تبریز است. منابع هوانوردی کد IATA را I3، کد ICAO را TBZ و کال‌ساین را ATALAR AIR ثبت کرده‌اند. کد TBZ در اینجا شناسه سه‌حرفی اپراتور است و نباید با کد فرودگاه تبریز در سامانه‌های دیگر اشتباه شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "کدهای I3/TBZ در Planespotters",
+          "url": "https://www.planespotters.net/airline/ATA-Airlines-Iran"
+        },
+        {
+          "type": "link",
+          "title_fa": "کد رسمی ICAO اپراتورهای ایرانی",
+          "url": "https://oibk.ir/iran/airlines"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}

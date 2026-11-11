@@ -26,6 +26,7 @@ def test_actual_catalog_and_independent_snapshots():
     assert ids == [
         "iran-air", "emirates", "mahan-air", "iran-aseman",
         "iran-airtour", "qeshm-air", "kish-air", "zagros-air", "meraj-air",
+        "ata-air", "varesh-air",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -44,7 +45,9 @@ def test_actual_catalog_and_independent_snapshots():
                         "qeshm-air": {"published": 17, "draft": 2},
                         "kish-air": {"published": 15, "draft": 5},
                         "zagros-air": {"published": 14, "draft": 6},
-                        "meraj-air": {"published": 14, "draft": 6}}
+                        "meraj-air": {"published": 14, "draft": 6},
+                        "ata-air": {"published": 16, "draft": 4},
+                        "varesh-air": {"published": 18, "draft": 2}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -475,3 +478,63 @@ def test_zagros_meraj_airline_baggage_cannot_be_read_as_universal_allowance():
     )
     assert "رشت" in meraj_text
     assert "همه" in meraj_text
+
+
+@pytest.mark.parametrize("airline_id,published,draft,fleet_models,draft_ids", [
+    ("ata-air", 16, 4, 7,
+     {"seat-selection", "catering", "lounges", "onboard-connectivity"}),
+    ("varesh-air", 18, 2, 3,
+     {"seat-selection", "onboard-connectivity"}),
+])
+def test_ata_varesh_independent_source_scoped_guides(
+    airline_id, published, draft, fleet_models, draft_ids
+):
+    detail = module.read_json(
+        ROOT / "data/airlines/details" / f"{airline_id}.v1.json"
+    )
+    assert detail["airline_id"] == airline_id
+    assert len(detail["sections"]) == 20
+    assert len({s["id"] for s in detail["sections"]}) == 20
+    assert detail["published_reviews"] == detail["experience_links"] == []
+    released = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
+    hidden = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
+    assert len(released) == published
+    assert len(hidden) == draft
+    assert {s["id"] for s in hidden} == draft_ids
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in released)
+    assert all(s["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+               for s in released)
+    assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None
+               for s in hidden)
+    for section in detail["sections"]:
+        if section["kind"] == "policy":
+            assert section["scope"]["operating_carrier"] == airline_id
+            assert section["scope"]["seller"] == "unknown"
+            assert section["scope"]["fare_brand"] is None
+    fleet = next(s for s in released if s["id"] == "fleet")
+    snapshots = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(snapshots) == fleet_models
+    assert all(b["count"] is None and b["configuration_fa"] is None
+               for b in snapshots)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in snapshots)
+    network = next(s for s in released if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+
+
+def test_ata_varesh_codes_and_official_websites():
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entries = {e["airline_id"]: e for e in index["airlines"]}
+    ata = entries["ata-air"]
+    varesh = entries["varesh-air"]
+    assert {(c["system"], c["value"]) for c in ata["identity"]["codes"]} == {
+        ("iata", "I3"), ("icao", "TBZ")
+    }
+    assert {(c["system"], c["value"]) for c in varesh["identity"]["codes"]} == {
+        ("icao", "VRH")
+    }
+    assert ata["identity"]["website"] == "https://ataair.ir/"
+    assert varesh["identity"]["website"] == "https://vareshair.ir/"
+    assert varesh["identity"]["former_names"] == []
+    # Without verified IATA code for Varesh, never create a guessed placeholder.
+    assert all(c["system"] != "iata" for c in varesh["identity"]["codes"])
+
