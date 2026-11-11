@@ -22,7 +22,8 @@ NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
 def test_actual_catalog_and_independent_snapshots():
     module.validate_dataset(now=NOW)
     index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
-    assert [r["airline_id"] for r in index["airlines"]] == ["iran-air", "emirates"]
+    ids = [r["airline_id"] for r in index["airlines"]]
+    assert ids == ["iran-air", "emirates", "mahan-air", "iran-aseman"]
     coverage = {}
     for entry in index["airlines"]:
         detail = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
@@ -33,8 +34,11 @@ def test_actual_catalog_and_independent_snapshots():
             for status in ("published", "draft")
         }
     assert coverage == {"iran-air": {"published": 17, "draft": 1},
-                        "emirates": {"published": 18, "draft": 0}}
-    fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
+                        "emirates": {"published": 18, "draft": 0},
+                        "mahan-air": {"published": 19, "draft": 1},
+                        "iran-aseman": {"published": 14, "draft": 4}}
+    emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
+    fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
     assert sum(b["count"] for b in models) == 277
     assert sum(b["count"] for b in models if b["relationship"] == "owned") == 190
@@ -253,3 +257,48 @@ def test_iran_air_source_scoped_content_and_unknown_fleet():
     assert {b["iata"] for b in sections["network"]["blocks"] if
             b["type"] == "airport_link"} == {"THR", "IKA", "MHD", "BND", "DXB", "IST"}
 
+
+
+@pytest.mark.parametrize("airline_id,published,draft,fleet_models", [
+    ("mahan-air", 19, 1, 6),
+    ("iran-aseman", 14, 4, 5),
+])
+def test_new_carriers_have_independent_sourced_sections(airline_id, published, draft, fleet_models):
+    detail = module.read_json(ROOT / "data/airlines/details" / f"{airline_id}.v1.json")
+    assert detail["airline_id"] == airline_id
+    assert len(detail["sections"]) == published + draft
+    assert len({s["id"] for s in detail["sections"]}) == len(detail["sections"])
+    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert sum(s["metadata"]["status"] == "published" for s in detail["sections"]) == published
+    for section in detail["sections"]:
+        if section["metadata"]["status"] == "published":
+            assert section["metadata"]["source_urls"]
+            assert section["blocks"]
+            assert section["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+        else:
+            assert section["metadata"]["status"] == "draft"
+            assert section["metadata"]["verified_at"] is None
+            assert not section["blocks"]
+        if section["kind"] == "policy":
+            assert section["scope"]["operating_carrier"] == airline_id
+            assert section["scope"]["seller"] == "unknown"
+    fleet = next(s for s in detail["sections"] if s["id"] == "fleet")
+    models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(models) == fleet_models
+    assert all(b["count"] is None and b["configuration_fa"] is None for b in models)
+    assert all(b["status"] == "unknown" and b["relationship"] == "unknown" for b in models)
+    network = next(s for s in detail["sections"] if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+
+
+def test_new_airline_codes_and_official_domains():
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entries = {e["airline_id"]: e for e in index["airlines"]}
+    mahan = entries["mahan-air"]
+    aseman = entries["iran-aseman"]
+    assert {(x["system"], x["value"]) for x in mahan["identity"]["codes"]} == {
+        ("iata", "W5"), ("icao", "IRM")}
+    assert {(x["system"], x["value"]) for x in aseman["identity"]["codes"]} == {
+        ("iata", "EP"), ("icao", "IRC")}
+    assert mahan["identity"]["website"] == "https://www.mahanair.co.ir/"
+    assert aseman["identity"]["website"] == "https://www.iaa.ir/"

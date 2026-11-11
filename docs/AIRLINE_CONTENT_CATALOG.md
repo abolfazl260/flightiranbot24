@@ -23,8 +23,10 @@ it does not package/sign/release APK or AAB files.
 | --- | --- | ---: | ---: | --- |
 | `iran-air` | published | 17 | 1 | Source-reviewed passenger guidance, scoped historical baggage/refund notices, 9 fleet families with unknown counts/status, and a draft for unverified onboard connectivity. See docs/airlines/iran-air-2026-11-11.md. |
 | `emirates` | published | 18 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
+| `mahan-air` | published | 19 | 1 | Mahan traveler guide, historic first-party check-in and live-animal notices, loyalty and cabin examples; 6 unknown-count families. See [source audit](airlines/mahan-aseman-2026-11-11.md). |
+| `iran-aseman` | published | 14 | 4 | Aseman identity, scoped traveler guidance, official route announcements and 5 unknown-count fleet families; no asserted online check-in/seat selection, catering or CIP. See [source audit](airlines/mahan-aseman-2026-11-11.md). |
 
-Current Emirates coverage and the 11 November Iran Air follow-up supersede the initial counts below; see dated source audits under `docs/airlines/`.
+Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
 Both are labelled **راهنما در حال تکمیل**, including when basic identity is
 available. `published` means a reviewed portion is available, never a complete
@@ -49,6 +51,23 @@ medical eligibility, images, personal experiences or invented ratings were added
 The `network` section links airport guides but deliberately publishes no
 `route_snapshot` without reliable route-specific current evidence. Other carriers,
 Android UI, content schemas and existing release workflows remain unchanged.
+
+## Added Mahan Air and Iran Aseman guides — 2026-11-11
+
+The index now includes four airlines. The two new independent records use the
+existing published/draft and per-section source gates. Mahan has 19 published
+and 1 draft section; Iran Aseman has 14 published and 4 drafts. These figures
+measure available, sourced guidance — **not full verification of operational
+tariffs, fleet counts or carrier services**. See the dedicated
+[Mahan/Aseman 2026-11-11 audit](airlines/mahan-aseman-2026-11-11.md).
+
+Carrier-specific current baggage, refund, online check-in and active fleet
+rules could not be verified from accessible primary website pages. Historic
+official announcements are labelled as historic, international safety rules
+as general, and unknown aircraft count/configuration/ownership remain null/
+unknown. Draft service cards are suppressed by Android/Mini App. No media,
+personal feedback, invented ratings or live route times were added.
+
 
 ## File contract and maintenance
 
