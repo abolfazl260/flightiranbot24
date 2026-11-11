@@ -16,137 +16,6 @@
   },
   "sections": [
     {
-      "id": "introduction",
-      "title_fa": "معرفی و هویت",
-      "icon": "introduction",
-      "order": 100,
-      "kind": "information",
-      "metadata": {
-        "status": "published",
-        "source_urls": [
-          "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
-        ],
-        "verified_at": "2026-11-10T00:00:00Z",
-        "effective_from": null,
-        "effective_to": null,
-        "stale": false,
-        "confidence": "official"
-      },
-      "scope": null,
-      "blocks": [
-        {
-          "type": "text",
-          "text_fa": "ایران‌ایر، هواپیمایی جمهوری اسلامی ایران (هما)، در فهرست IATA با شناسه IR، کد ICAO برابر IRA و کد حسابداری 096 برای ایران ثبت شده است. شناسه و نام شرکت اجراکننده را از روی بلیت تطبیق دهید."
-        },
-        {
-          "type": "link",
-          "title_fa": "هویت در IATA",
-          "url": "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
-        },
-        {
-          "type": "link",
-          "title_fa": "وب‌سایت اعلام‌شده جدید ایران‌ایر",
-          "url": "https://www.iranair.ir/"
-        }
-      ]
-    },
-    {
-      "id": "baggage",
-      "title_fa": "بار مجاز",
-      "icon": "baggage",
-      "order": 50,
-      "kind": "policy",
-      "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
-        "effective_from": null,
-        "effective_to": null,
-        "stale": false,
-        "confidence": "official"
-      },
-      "scope": {
-        "route": null,
-        "fare_brand": null,
-        "cabin_class": null,
-        "operating_carrier": "iran-air",
-        "seller": "unknown",
-        "journey_type": "unknown",
-        "note_fa": "اطلاعات این بخش هنوز تأیید و منتشر نشده است."
-      },
-      "blocks": []
-    },
-    {
-      "id": "ticket-rules",
-      "title_fa": "قوانین بلیت",
-      "icon": "ticket-rules",
-      "order": 50,
-      "kind": "policy",
-      "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
-        "effective_from": null,
-        "effective_to": null,
-        "stale": false,
-        "confidence": "official"
-      },
-      "scope": {
-        "route": null,
-        "fare_brand": null,
-        "cabin_class": null,
-        "operating_carrier": "iran-air",
-        "seller": "unknown",
-        "journey_type": "unknown",
-        "note_fa": "اطلاعات این بخش هنوز تأیید و منتشر نشده است."
-      },
-      "blocks": []
-    },
-    {
-      "id": "checkin",
-      "title_fa": "پذیرش و چک‌این",
-      "icon": "checkin",
-      "order": 50,
-      "kind": "policy",
-      "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
-        "effective_from": null,
-        "effective_to": null,
-        "stale": false,
-        "confidence": "official"
-      },
-      "scope": {
-        "route": null,
-        "fare_brand": null,
-        "cabin_class": null,
-        "operating_carrier": "iran-air",
-        "seller": "unknown",
-        "journey_type": "unknown",
-        "note_fa": "اطلاعات این بخش هنوز تأیید و منتشر نشده است."
-      },
-      "blocks": []
-    },
-    {
-      "id": "fleet",
-      "title_fa": "ناوگان هواپیما",
-      "icon": "fleet",
-      "order": 50,
-      "kind": "fleet",
-      "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
-        "effective_from": null,
-        "effective_to": null,
-        "stale": false,
-        "confidence": "official"
-      },
-      "scope": null,
-      "blocks": []
-    },
-    {
       "id": "official-access",
       "title_fa": "سایت رسمی و خرید بلیت",
       "icon": "ticket-rules",
@@ -192,6 +61,225 @@
       ]
     },
     {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel?before=16873",
+          "https://t.me/s/IranAirChannel?before=16970",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "برای مسیر، کلاس و تاریخ معین بررسی کنید؛ مثال‌های کانال مربوط به اعلامیه‌های گذشته‌اند و ممکن است تغییر کرده باشند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سهمیه بار ایران‌ایر برای همه مسیرها و نرخ‌ها یکسان نیست. ملاک نهایی، مقدار ثبت‌شده روی بلیت همان مسافر، شرکت اجراکننده و شرایط همان سفر است؛ بار کابین را با بار تحویلی اشتباه نگیرید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در اطلاعیه مسیر تهران–دبی–تهران در سال ۱۴۰۴، نمونه‌ای از بار تحویلی اکونومی ۳۰، بیزینس ۴۵ و نوزاد ۱۰ کیلوگرم اعلام شده بود. این اعداد تاریخی و مخصوص همان اطلاعیه‌اند و سهمیه تضمین‌شده پروازهای فعلی یا مسیرهای دیگر نیستند.",
+            "برای تهران–استانبول نیز اطلاعیه‌های دوره‌های مختلف اعداد متفاوتی داده‌اند؛ بنابراین سهمیه را از بلیت و مرکز تماس رسمی بازبینی کنید.",
+            "در اطلاعیه تهران–دبی امکان خرید بسته اضافه‌بار هنگام خرید یا تا ۲۴ ساعت پیش از پرواز ذکر شده است؛ دسترسی، مهلت و مبلغ را برای رزرو جاری از کانال رسمی تأیید کنید.",
+            "وزن، اندازه و تعداد بار دستی، کالسکه، ساز، وسایل ورزشی، حیوان همراه و اقلام ویژه به مقررات مسیر و پذیرش وابسته است؛ بدون تأیید ایران‌ایر عددی به همه پروازها تعمیم داده نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه بار در کانال رسمی هما (نمونه تاریخی)",
+          "url": "https://t.me/s/IranAirChannel?before=16873"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA درباره بار مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه اعلام‌شده فروش و بررسی بلیت",
+          "url": "https://ebooking.iranair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر، لغو و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel?before=16873",
+          "https://t.me/IranAirChannel/18877"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "این بخش راهنمای پیگیری است، نه جدول جریمه یا تعهد بازپرداخت عمومی؛ بخشنامه تاریخی فقط برای واقعه و تاریخ خودش معتبر بود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هزینه و امکان تغییر یا کنسلی داوطلبانه بر اساس شرایط همان بلیت، کانال صدور، نوع نرخ و وضعیت پرواز تعیین می‌شود. این راهنما هیچ درصد جریمه، مهلت یا مبلغ بازپرداخت ثابت برای تمام بلیت‌های هما اعلام نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "ابتدا بررسی کنید بلیت مستقیماً از هما صادر شده یا از آژانس/فروشنده دیگر؛ کد رزرو، شماره بلیت و رسید پرداخت را نزد خود نگه دارید.",
+            "در اطلاعیه ویژه لغو پروازهای ۲۳ تیر ۱۴۰۴، هما از دفاتر خواسته بود وجه بلیت‌های مشمول را بازگردانند و امکان تغییر تاریخ را برای همان وضعیت اعلام کرده بود. این تصمیم اضطراری به لغوهای دیگر و کنسلی اختیاری تعمیم ندارد.",
+            "اگر پرواز توسط شرکت لغو یا جابه‌جا شده است، از صادرکننده یا مرکز رسمی درباره بازپرداخت، تغییر مسیر/تاریخ و مستندات لازم استعلام کنید.",
+            "برای بلیت آژانسی، مسیر رسیدگی معمولاً از همان صادرکننده آغاز می‌شود؛ بدون خواندن شرایط نرخ، درخواست استرداد ثبت نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه خاص استرداد پروازهای لغوشده ۱۴۰۴",
+          "url": "https://t.me/s/IranAirChannel?before=16873"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع تماس جدید هما",
+          "url": "https://t.me/IranAirChannel/18877"
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی اعلام‌شده",
+          "url": "https://www.iranair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش، کارت پرواز و چک‌این",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/caa_ir?q=%23%D8%AF%D8%A7%D9%86%D8%B3%D8%AA%D9%86%DB%8C%D9%87%D8%A7%DB%8C_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%DB%B2",
+          "https://t.me/s/IranAirChannel/15621",
+          "https://t.me/IranAirChannel/18877"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "پیش از سفر، فرودگاه، شرکت اجراکننده، مدارک و آخرین مهلت پذیرش را برای بلیت خود تأیید کنید."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پذیرش فرودگاهی، هویت و اطلاعات بلیت کنترل، کارت پرواز صادر و بار تحویلی دریافت می‌شود. پیش از حرکت، زمان شروع و پایان پذیرش، ترمینال و مدارک همان پرواز را از شرکت و فرودگاه بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کارت شناسایی معتبر برای پرواز داخلی و مدارک گذرنامه/روادید یا مجوز ورود برای مسیر بین‌المللی را مطابق مقررات مقصد آماده کنید.",
+            "هما درباره بهبود پیشخوان پذیرش و خدمات CIP مهرآباد اطلاع‌رسانی کرده است؛ دسترسی این خدمات را برای پرواز مشخص مجدداً استعلام کنید.",
+            "دسترسی فعلی به چک‌این آنلاین ایران‌ایر، بازه بازشدن یا بسته‌شدن آن و پذیرش کارت پرواز دیجیتال در این بررسی مستقلاً تأیید نشد؛ هیچ مهلت همگانی اعلام نمی‌کنیم.",
+            "برای کدشر، نام شرکت اجراکننده روی بلیت را ملاک قرار دهید و محل پذیرش را با فرودگاه چک کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "توضیح مرحله چک‌این از سازمان هواپیمایی کشوری",
+          "url": "https://t.me/s/caa_ir?q=%23%D8%AF%D8%A7%D9%86%D8%B3%D8%AA%D9%86%DB%8C%D9%87%D8%A7%DB%8C_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%DB%B2"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه پیشخوان پذیرش هما",
+          "url": "https://t.me/s/IranAirChannel/15621"
+        },
+        {
+          "type": "link",
+          "title_fa": "تماس رسمی برای تأیید مهلت‌ها",
+          "url": "https://t.me/IranAirChannel/18877"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "برنامه و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/IranAirChannel/18877",
+          "https://t.me/s/IranAirChannel?before=16970"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "خبرهای مسیر و برنامه در کانال رسمی هما منتشر می‌شوند، اما این صفحه تابلوی وضعیت لحظه‌ای پرواز نیست. برنامه‌های قدیمی، تضمین انجام پرواز در تاریخ دلخواه نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ و مبدأ/مقصد را از بلیت بخوانید و پیش از عزیمت، وضعیت روز را از خود فرودگاه یا مرکز رسمی ایران‌ایر استعلام کنید.",
+            "اگر پیام تغییر زمان یا لغو دریافت کردید، صادرکننده بلیت و شرکت اجراکننده را جدا بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی اطلاعیه‌های هما",
+          "url": "https://t.me/s/IranAirChannel?before=16970"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع جدید تماس و پیگیری",
+          "url": "https://t.me/IranAirChannel/18877"
+        }
+      ]
+    },
+    {
       "id": "contact",
       "title_fa": "تماس و پیگیری رزرو",
       "icon": "services",
@@ -227,6 +315,709 @@
         {
           "type": "link",
           "title_fa": "وب‌سایت ایران‌ایر",
+          "url": "https://www.iranair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار تأخیری، مفقود یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://t.me/IranAirChannel/18877"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای عمومی IATA توصیه می‌کند در صورت تحویل‌نشدن یا آسیب‌دیدن بار، همان زمان در بخش رسیدگی به بار فرودگاه موضوع را ثبت کنید. این توصیه جایگزین مقررات خاص ایران‌ایر و مهلت‌های حقوقی قابل اعمال به سفر شما نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره برچسب بار، کارت پرواز، رسید پرونده، عکس خسارت و اطلاعات تماس پیگیری را نگه دارید.",
+            "پس از ثبت در فرودگاه، نام شرکت اجراکننده و شماره پرونده را با مرکز رسمی هما مطرح کنید.",
+            "مبلغ خسارت یا مهلت شکایت را بدون بررسی مسیر، قانون قابل اعمال و شرایط حمل هواپیمایی ثابت فرض نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA برای مشکلات بار",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "تماس هما",
+          "url": "https://t.me/IranAirChannel/18877"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و خدمات مسافران دارای نیاز ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel/15621",
+          "https://t.me/s/IranAirChannel/15656",
+          "https://t.me/IranAirChannel/18877"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هما در گزارش خدمات فرودگاهی خود از کمک به مسافران توانخواه، راهنمایی حضوری و تجهیزات ویلچر نام برده است. این گزارش بیانگر سابقه ارائه خدمت است، نه تضمین ظرفیت یا شرایط پزشکی همه پروازها."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای ویلچر، کمک هنگام سوارشدن، کودک بدون همراه یا نیاز به همراهی ویژه، پیش از صدور بلیت و مجدداً قبل از سفر شرایط پذیرش را از هما بپرسید.",
+            "نوع وسیله کمک‌حرکتی، باتری آن، شرایط ترانزیت و هماهنگی فرودگاه مبدأ/مقصد را اعلام کنید.",
+            "هیچ حکم پزشکی یا ضمانت پذیرش مسافر از روی این راهنما صادر نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "گزارش خدمات ویژه در کانال رسمی هما",
+          "url": "https://t.me/s/IranAirChannel/15656"
+        },
+        {
+          "type": "link",
+          "title_fa": "ارتباط رسمی برای هماهنگی",
+          "url": "https://t.me/IranAirChannel/18877"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی پیش از سفر",
+      "icon": "seat-selection",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel/15831",
+          "https://t.me/s/IranAirChannel?before=16970"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اطلاعیه رسمی گذشته، امکان انتخاب صندلی هنگام خرید بلیت برای بعضی پروازهای A330 و A319 اعلام شده است. وجود این قابلیت، مجانی‌بودن آن یا دسترسی در همه مسیرها و رزروهای فعلی تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "هنگام رزرو از درگاه اعلام‌شده رسمی، اگر گزینه انتخاب صندلی ارائه شد، شماره صندلی و شرایط هزینه آن را پیش از پرداخت کنترل کنید.",
+            "مدل هواپیما، چیدمان و صندلی اختصاص‌یافته ممکن است با تغییر عملیات عوض شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه انتخاب صندلی هما",
+          "url": "https://t.me/s/IranAirChannel/15831"
+        },
+        {
+          "type": "link",
+          "title_fa": "فروش اینترنتی اعلام‌شده",
+          "url": "https://ebooking.iranair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس‌های پروازی و کابین",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel?before=16873",
+          "https://t.me/s/IranAirChannel/15831"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در معرفی برخی پروازهای ایران‌ایر، کلاس‌های اکونومی و بیزینس و استفاده از ایرباس A330 ذکر شده است. این داده‌ها نشان‌دهنده معرفی دو کلاس در همان اطلاعیه‌ها هستند، نه تضمین ارائه بیزینس، فاصله صندلی مشخص یا امکانات ثابت در هر مدل و مسیر."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کلاس درج‌شده روی بلیت، نوع هواپیمای اعلام‌شده و شرایط نرخ را در زمان خرید بررسی کنید.",
+            "برای ردیف خروج اضطراری، صندلی مخصوص کودک و نیازهای حرکتی، امکان اختصاص صندلی را با شرکت هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه نمونه کلاس‌های تهران–دبی",
+          "url": "https://t.me/s/IranAirChannel?before=16873"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و خدمات حین پرواز",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel/15611"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هما در اطلاعیه خدمات مسافری از تلاش برای ارتقای پذیرایی و تنوع غذا و نوشیدنی خبر داده است. منوی ثابت، غذای رایگان، وعده خاص یا امکان سفارش رژیم ویژه در تمامی مسیرها از این اطلاعیه نتیجه نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از خرید یا سفر، برای پرواز و کلاس مشخص درباره نوع پذیرایی و امکان درخواست غذای ویژه استعلام کنید.",
+            "در صورت حساسیت غذایی یا نیاز پزشکی، دریافت خدمت را بدون تأیید مشخص از ایرلاین قطعی ندانید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه خدمات مسافری هما",
+          "url": "https://t.me/s/IranAirChannel/15611"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "CIP و خدمات تشریفات فرودگاهی",
+      "icon": "services",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel/15713",
+          "https://t.me/s/IranAirChannel/15621"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی هما خدمات تشریفات و CIP را برای فرودگاه‌های مهرآباد و امام خمینی معرفی کرده و در اطلاعیه‌ای برای برخی مسافران بیزینس بین‌المللی شرایط ویژه ذکر کرده است. این اعلامیه مربوط به زمان انتشار خود است و به هر کلاس، فرودگاه یا تاریخ دیگر تعمیم ندارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شرایط ورود، هزینه، محل پیشخوان، مدت دسترسی و نیاز به رزرو را برای تاریخ سفر از فرودگاه و برگزارکننده خدمات تأیید کنید.",
+            "خدمات CIP ممکن است توسط فرودگاه یا ارائه‌دهنده مستقل عرضه شود و لزوماً در بلیت همه مسافران هما گنجانده نشده باشد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه رسمی خدمات CIP",
+          "url": "https://t.me/s/IranAirChannel/15713"
+        },
+        {
+          "type": "link",
+          "title_fa": "گزارش پیشخوان مهرآباد",
+          "url": "https://t.me/s/IranAirChannel/15621"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری در پرواز",
+      "icon": "baggage",
+      "order": 72,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/",
+          "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این بخش مقررات ایمنی عمومی IATA/ICAO را معرفی می‌کند، نه استثناهای اختصاصی ایران‌ایر. برای مسیر و تاریخ خود محدودیت‌های شرکت و مقررات فرودگاهی را جداگانه بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی قرار ندهید؛ آن‌ها را در کابین حمل و در برابر اتصال کوتاه محافظت کنید.",
+            "طبق به‌روزرسانی بین‌المللی ۲۰۲۶، درباره تعداد مجاز پاوربانک و ممنوعیت شارژ مجدد آن‌ها در پرواز محدودیت‌های تازه برقرار شده است؛ برای وسایل پرظرفیت و کمک‌حرکتی با ایرلاین هماهنگ کنید.",
+            "اگر کیف دستی شما در گیت به قسمت بار منتقل شد، پاوربانک و باتری یدکی را پیش از تحویل خارج کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای ایمنی مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه ICAO درباره پاوربانک ۲۰۲۶",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی پیش از سفر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://t.me/s/IranAirChannel/15831",
+          "https://t.me/s/IranAirChannel/15621",
+          "https://t.me/IranAirChannel/18877"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار من چقدر است؟ فقط مقدار مندرج در بلیت و شرایط همان مسیر/نرخ را ملاک قرار دهید؛ آگهی بارِ مسیر دیگر قابل تعمیم نیست.",
+            "می‌توانم صندلی انتخاب کنم؟ در برخی پروازهای A330/A319 اعلام شده، ولی برای رزرو شما باید در درگاه رسمی بررسی شود.",
+            "چک‌این آنلاین باز است؟ دسترسی و مهلت فعلی مستقلاً تأیید نشده؛ از مرکز تماس و فرودگاه سؤال کنید.",
+            "پروازم تغییر کرده است؟ شماره پرواز و کد رزرو را برای پیگیری در کانال‌های رسمی آماده کنید.",
+            "ویلچر یا CIP می‌خواهم؟ قبل از سفر امکان و نحوه رزرو را با شرکت و فرودگاه هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات تماس رسمی",
+          "url": "https://t.me/IranAirChannel/18877"
+        },
+        {
+          "type": "link",
+          "title_fa": "ورود به وب‌سایت اعلام‌شده",
+          "url": "https://www.iranair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "شبکه و فرودگاه‌های مرتبط",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/IranAirChannel/18877",
+          "https://t.me/s/IranAirChannel?before=16970",
+          "https://t.me/s/IranAirChannel?before=16873"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این فهرست برای دسترسی به راهنمای فرودگاه‌هایی است که در اطلاعیه‌های هما ذکر شده‌اند؛ هیچ‌یک از پیوندها به‌معنی فعالیت کنونی مسیر، ساعت پرواز مشخص، امکان خرید یا پرواز مستقیم نیستند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "فرودگاه بندرعباس"
+        },
+        {
+          "type": "airport_link",
+          "iata": "DXB",
+          "title_fa": "فرودگاه بین‌المللی دبی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "فرودگاه استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های مسیر (تاریخی)",
+          "url": "https://t.me/s/IranAirChannel?before=16970"
+        },
+        {
+          "type": "link",
+          "title_fa": "استعلام برنامه روز سفر",
+          "url": "https://t.me/IranAirChannel/18877"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل کابین",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان هواپیما",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/IranAirChannel?before=16873",
+          "https://t.me/s/IranAirChannel/15831",
+          "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+          "https://www.planespotters.net/airline/Iran-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این فهرست فقط خانواده‌های هواپیما را در منابع رسمی قدیمی و پایگاه‌های رصد ناوگان معرفی می‌کند. به دلیل تفاوت موجودی ثبت‌شده، در خدمت، پارک‌شده و هواپیماهای تاریخی، تعداد فعال، مالکیت، اجاره، چیدمان صندلی و نوع هواپیمای پرواز مشخص نیست."
+        },
+        {
+          "type": "text",
+          "text_fa": "منابع ثانویه درباره تعداد هواپیماها یکسان نیستند؛ از هیچ عددی به عنوان ناوگان عملیاتی فعلی یا شاخص ایمنی استفاده نشده است. مدل هواپیمای پرواز خاص ممکن است تغییر کند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A300-600",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+              "https://www.planespotters.net/airline/Iran-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A310",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+              "https://www.planespotters.net/airline/Iran-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A319",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/IranAirChannel/15831",
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+              "https://www.planespotters.net/airline/Iran-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A321",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+              "https://www.planespotters.net/airline/Iran-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A330-200",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/IranAirChannel?before=16873",
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "ATR 72",
+          "manufacturer": "ATR",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/IranAirChannel?before=16970",
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 100",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+              "https://www.planespotters.net/airline/Iran-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 747-200",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/ir-ira/fleet",
+              "https://www.planespotters.net/airline/Iran-Air"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست هواپیماهای قابل مشاهده در Flightradar24",
+          "url": "https://www.flightradar24.com/data/airlines/ir-ira/fleet"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق و وضعیت‌های جداگانه هواپیماها در Planespotters",
+          "url": "https://www.planespotters.net/airline/Iran-Air"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمونه اطلاعیه استفاده از ایرباس A330",
+          "url": "https://t.me/s/IranAirChannel?before=16873"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و هویت",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+        ],
+        "verified_at": "2026-11-10T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ایران‌ایر، هواپیمایی جمهوری اسلامی ایران (هما)، در فهرست IATA با شناسه IR، کد ICAO برابر IRA و کد حسابداری 096 برای ایران ثبت شده است. شناسه و نام شرکت اجراکننده را از روی بلیت تطبیق دهید."
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-air/102/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت اعلام‌شده جدید ایران‌ایر",
           "url": "https://www.iranair.ir/"
         }
       ]
