@@ -1,0 +1,840 @@
+{
+  "schema_version": 1,
+  "airline_id": "kish-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://t.me/s/KishAir",
+      "https://www.planespotters.net/airline/Kish-Air"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت رسمی و رزرو",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی کیش‌ایر برای رزرو بلیت، وب‌سایت kishairlines.ir را معرفی کرده است؛ بررسی خود وب‌سایت در محیط من با خطای دسترسی مواجه شد. این به معنی قطع بودن وب‌سایت برای همه کاربران نیست و عملکرد درگاه پرداخت تأیید نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "هنگام پرداخت، دامنه و فروشنده را با اطلاعیه شرکت تطبیق دهید.",
+            "اطلاعات بلیت، نام صادرکننده و شرایط نرخ را پیش از پرداخت بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت اعلام‌شده شرکت",
+          "url": "https://kishairlines.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی کیش‌ایر",
+          "url": "https://t.me/s/KishAir"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "kish-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "قانون عددی یا تعرفه جاری اختصاصی کیش‌ایر تأیید نشده؛ بلیت همان سفر ملاک است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جدول جاری رسمی بار تحویلی و کابین کیش‌ایر در این بررسی قابل بازیابی نبود. سهمیه را از متن بلیت یا تأیید شرکت اجراکننده بپرسید؛ وزن نقل‌شده در صفحات آژانس‌ها، سیاست عمومی کیش‌ایر محسوب نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وزن، تعداد و اندازه بار دستی و چمدان تحویلی را جدا بررسی کنید.",
+            "برای نوزاد، کالسکه، ابزار پزشکی، حیوان و بار خاص از قبل هماهنگ کنید.",
+            "هزینه اضافه‌بار تابع نرخ روز، مسیر و شرایط بلیت است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده کیش‌ایر",
+          "url": "https://kishairlines.ir/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "قوانین تغییر، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "kish-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "بازپرداخت تابع قرارداد بلیت، صادرکننده و قانون قابل اعمال به مسیر است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جریمه استرداد یا تغییر تاریخ به نوع نرخ، صادرکننده، زمان درخواست و علت لغو بستگی دارد. متن رسمی فعلی و جدول نرخ‌های کیش‌ایر در این بررسی قابل دریافت نبود؛ هیچ درصد ثابت یا استرداد تضمینی درج نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر از آژانس خریده‌اید ابتدا از صادرکننده درج‌شده روی رسید پیگیری کنید.",
+            "لغو شرکت، جابه‌جایی برنامه و کنسلی داوطلبانه را از هم تفکیک کنید.",
+            "کد رزرو، بلیت و پیام تغییر برنامه را نزد خود نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اعلام‌شده فروش شرکت",
+          "url": "https://kishairlines.ir/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "چک‌این آنلاین و مهلت پذیرش",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "kish-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "بازه فعلی پذیرش و امکان چک‌این آنلاین شرکت تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز و تغییر برنامه",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در کانال رسمی کیش‌ایر خبرهای تاریخ‌دار از آغاز یا گسترش مسیرهایی مانند کیش–گرگان و رشت–بندرعباس منتشر شده‌اند. این پیام‌ها وضعیت زنده پرواز، ظرفیت روز سفر یا تضمین اجرای هر هفته نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز Y9، تاریخ و مبدأ و مقصد را با شرکت و فرودگاه کنترل کنید.",
+            "در صورت تغییر برنامه، از مرجع صادرکننده درباره حقوق و گزینه‌های همان بلیت سؤال کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های تاریخ‌دار کیش‌ایر",
+          "url": "https://t.me/s/KishAir"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس و پیگیری رزرو",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اطلاعیه رسمی کانال، kishairlines.ir را برای بلیت و اطلاعات شرکت معرفی می‌کند. شماره تلفن و ساعات جاری مرکز تماس در این بررسی از وب‌سایت قابل تأیید نبود؛ شماره‌های واسطه‌ها را بدون منبع به‌عنوان مرجع رسمی درج نمی‌کنیم."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ، کد رزرو و نام صادرکننده را برای پیگیری آماده کنید.",
+            "اطلاعات هویتی و شماره کامل بلیت را در نظر عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی معرفی‌شده",
+          "url": "https://kishairlines.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی شرکت",
+          "url": "https://t.me/s/KishAir"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار تحویل‌نشده، تأخیری یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق راهنمای عمومی IATA، مشکلات بار باید هرچه زودتر در میز بار شرکت اجراکننده در فرودگاه ثبت و شماره پرونده دریافت شود. مهلت‌های حقوقی و مبلغ خسارت اختصاصی کیش‌ایر در این بررسی تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تگ بار، کارت پرواز، گزارش و عکس خسارت را نگه دارید.",
+            "شرکت اجراکننده واقعی و شماره پرونده را برای پیگیری مشخص کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و خدمات مسافر نیازمند کمک",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات پذیرش ویلچر برقی، کودک بدون همراه و تجهیزات پزشکی در کیش‌ایر از صفحه رسمی قابل بازیابی تأیید نشد. هماهنگی قبلی لازم است و این راهنما ضمانت ارائه خدمات نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در زمان خرید نوع کمک، دستگاه و باتری را به شرکت اعلام کنید.",
+            "برای پرواز توقف‌دار، نیازهای فرودگاه میانی را نیز بررسی کنید.",
+            "برای شرایط پزشکی و مدارک لازم به مرجع شرکت/پزشک مراجعه کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و هزینه آن",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و انواع هواپیما",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir",
+          "https://www.planespotters.net/airline/Kish-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کیش‌ایر در اطلاعیه رسمی به بازگشت یک فروند فوکر و یک فروند ایرباس پس از آماده‌سازی اشاره کرده است. رصدگرهای ناوگان نیز مدل‌های گوناگون نشان می‌دهند؛ این خبر چیدمان صندلی یا مدل تضمینی سفر شما نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کلاس و نوع هواپیما را از بلیت و تغییرات برنامه پرواز تأیید کنید.",
+            "آماده‌سازی یک هواپیما به معنی فعال‌بودن همه مدل‌های تاریخی نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های ناوگان شرکت",
+          "url": "https://t.me/s/KishAir"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق مدل‌ها",
+          "url": "https://www.planespotters.net/airline/Kish-Air"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و وعده غذایی داخل پرواز",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی کیش‌ایر از توجه به خدمات مهمان‌نوازی و غذای پروازی خبر داده است. این اطلاعیه یک منوی ثابت، وعده رایگان یا امکان غذای رژیمی در تمام مسیرها و کلاس‌ها را تضمین نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای حساسیت غذایی یا رژیم ویژه، امکان سفارش و زمان اعلام درخواست را قبل از سفر بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه خدمات کابین کیش‌ایر",
+          "url": "https://t.me/s/KishAir"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ فرودگاهی و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حیوان خانگی و شرایط حمل",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "kish-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط پذیرش حیوان توسط کیش‌ایر مستقلاً تأیید نشده و نیازمند استعلام از شرکت است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری‌ها",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "IATA برای پاوربانک و باتری لیتیومی یدکی قواعد ایمنی عمومی دارد. این مقررات جایگزین استثناها و الزامات کیش‌ایر یا فرودگاه روز سفر نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی قرار ندهید.",
+            "برای وسایل پزشکی یا باتری پرظرفیت، پیشاپیش با شرکت و فرودگاه هماهنگ کنید.",
+            "هنگام تحویل کیف کابین در گیت، باتری یدکی را از آن خارج کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای ایمنی باتری IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر، گذرنامه و ویزا",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "شرایط ورود، اعتبار گذرنامه و ویزا به تابعیت، مقصد، ترانزیت و تاریخ سفر وابسته است. باز بودن یک مسیر کیش‌ایر به معنی معافیت روادید یا تأیید پذیرش مسافر نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پرواز داخلی مدرک هویتی و خارجی گذرنامه و مدارک ورود را کنترل کنید.",
+            "برای سفر بین‌المللی قوانین رسمی مقصد را همراه با IATA Travel Centre بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "سؤال‌های کاربردی مسافران",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار مجاز چقدر است؟ سهمیه همان بلیت و شرکت اجراکننده ملاک است.",
+            "چک‌این آنلاین فعال است؟ در این بررسی وضعیت جاری تأیید نشد؛ از شرکت بپرسید.",
+            "چه مسیرهایی برقرارند؟ اطلاعیه‌های تاریخ‌دار را با برنامه روز سفر تطبیق دهید.",
+            "برای ویلچر یا تغییر پرواز چه کنم؟ پیش از حرکت و از طریق صادرکننده/شرکت پیگیری کنید.",
+            "کدام مدل هواپیما؟ بسته به عملیات روز سفر تغییر می‌کند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی کیش‌ایر",
+          "url": "https://t.me/s/KishAir"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و مسیرهای اطلاعیه‌ای",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی کیش‌ایر درباره ارتباط کیش با تهران، گرگان و بندرعباس و مسیرهای دیگر در تاریخ‌های مشخص اطلاع‌رسانی کرده است. این پیوندها راهنمای فرودگاه‌اند، نه تضمین پرواز مستقیم یا ساعت حرکت فعلی."
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "فرودگاه کیش"
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "فرودگاه بندرعباس"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های مسیر",
+          "url": "https://t.me/s/KishAir"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "وای‌فای و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "خانواده‌های هواپیماهای کیش‌ایر",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Kish-Air",
+          "https://www.flightradar24.com/data/airlines/kis/fleet",
+          "https://planefinder.net/data/airline/KIS/fleet",
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در منابع ناوگان کیش‌ایر مدل‌های فوکر ۱۰۰، ایرباس A321 و سری MD-80 از جمله MD-82/MD-83 ثبت شده‌اند. شمارش رصدگرهای مختلف با هم یکسان نیست و ممکن است سوابق تاریخی یا پارک‌شده را در بر گیرد؛ تعداد عملیاتی، مالکیت و چیدمان هر مدل تأیید نمی‌شود."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 100",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Kish-Air",
+              "https://www.flightradar24.com/data/airlines/kis/fleet",
+              "https://planefinder.net/data/airline/KIS/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A321",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Kish-Air",
+              "https://www.flightradar24.com/data/airlines/kis/fleet",
+              "https://planefinder.net/data/airline/KIS/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-82",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Kish-Air",
+              "https://www.flightradar24.com/data/airlines/kis/fleet",
+              "https://planefinder.net/data/airline/KIS/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-83",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Kish-Air",
+              "https://www.flightradar24.com/data/airlines/kis/fleet",
+              "https://planefinder.net/data/airline/KIS/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "Planespotters",
+          "url": "https://www.planespotters.net/airline/Kish-Air"
+        },
+        {
+          "type": "link",
+          "title_fa": "Flightradar24",
+          "url": "https://www.flightradar24.com/data/airlines/kis/fleet"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و شناسه‌های شرکت کیش‌ایر",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Kish-Air",
+          "https://t.me/s/KishAir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کیش‌ایر (Kish Air) در منابع هوانوردی با کد IATA برابر Y9 و ICAO برابر KIS ثبت شده است. وب‌سایت و کانال رسمی آن به نام kishairlines.ir و @KishAir شناخته می‌شوند. کد شرکت اجراکننده را با بلیت مطابقت دهید."
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت در پایگاه ناوگان",
+          "url": "https://www.planespotters.net/airline/Kish-Air"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی کیش‌ایر",
+          "url": "https://t.me/s/KishAir"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
