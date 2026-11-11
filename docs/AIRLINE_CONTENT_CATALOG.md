@@ -36,6 +36,8 @@ it does not package/sign/release APK or AAB files.
 | `sepehran-air` | published | 19 | 2 | IATA IS / ICAO SHI; original airline 1402–1404 articles on baggage, seat selection, refunds, wheelchair, pet limits, RedMiles; 3h/4h seat cutoff discrepancy documented. Five fleet family counts unknown. [Audit](airlines/caspian-sepehran-2026-11-11.md). |
 | `taban-air` | published | 15 | 6 | Official HH/TBN and 1405 airport, commercial notices, 2-power-bank safety restriction, contact/baggage channels, 5 model families with unknown counts. [Audit](airlines/taban-karun-2026-11-11.md). |
 | `karun-air` | published | 14 | 6 | NV/KRU and Iranian Naft Airlines historical identity; general passenger guidance with current airline tariff/check-in unknown; 4 model families. [Audit](airlines/taban-karun-2026-11-11.md). |
+| `pars-air` | published | 14 | 6 | ICAO PRS / PARS SKY, no verified IATA code; Oct 2026 baggage circular, recent route observations, secondary contact listing and 3 unknown-count model families. [Audit](airlines/pars-chabahar-2026-11-11.md). |
+| `chabahar-air` | published | 13 | 7 | ICAO IRU / CHABAHAR; official channel reports temporary flight pause with no confirmed restart date; new .ir domain, legacy .com excluded; 4 unknown-count model families. [Audit](airlines/pars-chabahar-2026-11-11.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -193,6 +195,29 @@ Both guides have zero synthetic ratings/reviews or licensed-media
 substitutes. Full [source audit](airlines/taban-karun-2026-11-11.md).
 No schema, UI reader, consent or manual-only Android APK build
 workflow changes.
+
+## Added Pars Air and Chabahar Airlines — 2026-11-11
+
+The shared catalog now has **17 independent carriers**.
+Pars Air is registered as **ICAO PRS / PARS SKY**; no IATA
+two-letter code was inserted because the sources conflict and none
+authoritatively confirmed one. Its guide includes the **17 Mehr 1405**
+baggage-policy update announcement and Rahig's recent route observations,
+but does not invent the unextractable baggage tariff attachment or
+superseded 1402 limits.
+
+Chabahar is registered as **ICAO IRU / CHABAHAR** with no guessed IATA
+code. Its official Telegram channel explicitly reports that flights are
+temporarily stopped, with no restart date confirmed in the notice.
+The channel lists a newer `.ir` domain; the legacy `.com` currently
+shows suspicious unrelated content and is deliberately not linked.
+No current ticket-sales or active-route CTA is exposed.
+
+Pars publishes **14 / 6** sections; Chabahar **13 / 7**. Fleet counts
+and configurations remain unknown, no synthetic reviews or active
+route snapshots were added, and the Android APK build remains
+manual-only. See the [source-by-source audit]
+(airlines/pars-chabahar-2026-11-11.md).
 
 ## File contract and maintenance
 
