@@ -196,10 +196,57 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.munich-airport.com/parking-260363",
+        "https://www.munich-airport.com/terminal-parking-261312",
+        "https://www.munich-airport.com/public-transport-260822",
+        "https://www.munich-airport.com/meeters-and-greeters-27003122",
+        "https://www.munich-airport.com/accessible-travel-260945"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه مونیخ پارکینگ‌های Terminal، Economy، Premium، Valet و جایگاه‌های ویژه را عرضه می‌کند. P1، P2، P3 و P7 در موقعیت مناسب برای ترمینال ۱، P8 بین ترمینال‌های ۱ و ۲ و P20 و P26 در موقعیت مناسب ترمینال ۲ قرار دارند. پارکینگ Economy شامل محوطه‌ها و پارکینگ‌های P41، P43، P44، P50، P51، P90، P91 و P92 است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در برخی پارکینگ‌های Economy، بلیت پارکینگ امکان استفاده رایگان از قطارهای S1/S8 یا اتوبوس 635 را برای رفت‌وآمد به ترمینال می‌دهد؛ مسیر دقیق به پارکینگ انتخابی بستگی دارد.",
+            "پارکینگ P8 از ۱ سپتامبر ۲۰۲۶ دوباره در محدوده مرکزی بین دو ترمینال در دسترس قرار گرفته است.",
+            "از ۲ نوامبر ۲۰۲۶ تا حدود اکتبر ۲۰۲۷، عملیات نگهداری پل‌های شمالی در محدوده Terminalstraße West و Mitte باعث محدودیت ترافیکی و پیاده‌روی می‌شود؛ تابلوهای محل را دنبال کنید و زمان اضافه در نظر بگیرید.",
+            "در مسیرهای توقف کنار ترمینال، ۱۰ دقیقه اول در دو ورود نخست هر روز تقویمی رایگان است؛ برای توقف طولانی‌تر از پارکینگ‌های رسمی استفاده کنید.",
+            "جایگاه‌های قابل دسترس در همه پارکینگ‌های چندطبقه وجود دارد و نزدیک ورودی ترمینال یا آسانسورها قرار گرفته‌اند؛ امکان رزرو اختصاصی آن‌ها وجود ندارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پارکینگ رسمی و رزرو آنلاین فرودگاه مونیخ",
+          "url": "https://www.munich-airport.com/parking-260363"
+        },
+        {
+          "type": "link",
+          "title_fa": "پارکینگ ترمینالی و وضعیت P8",
+          "url": "https://www.munich-airport.com/terminal-parking-261312"
+        },
+        {
+          "type": "link",
+          "title_fa": "اتصال رایگان برخی پارکینگ‌های Economy با S-Bahn و اتوبوس",
+          "url": "https://www.munich-airport.com/public-transport-260822"
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین توقف کوتاه و Drop-off کنار ترمینال",
+          "url": "https://www.munich-airport.com/meeters-and-greeters-27003122"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات پارکینگ دسترس‌پذیر",
+          "url": "https://www.munich-airport.com/accessible-travel-260945"
+        }
+      ],
+      "subtitle_fa": "پارکینگ‌های Terminal، Economy و Premium؛ محدودیت ساخت‌وساز پل‌های شمالی تا اکتبر ۲۰۲۷"
     },
     {
       "id": "facilities",
@@ -266,10 +313,50 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.munich-airport.com/lounges-830529",
+        "https://www.munich-airport.com/frequently-asked-questions-376207",
+        "https://www.munich-airport.com/lh-lounge-521172",
+        "https://www.munich-airport.com/ten-reasons"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه مونیخ دو سالن مشترک اصلی در ترمینال ۱ دارد: Airport Lounge Europe در Module D، Level 5 و Airport Lounge World در Module A، Level 4. Airport Lounge World در محدوده خروجی غیرشنگن قرار دارد و فقط برای مسافران پروازهای غیرشنگن، از جمله مسافران ترانزیت واجد شرایط، قابل استفاده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سالن‌های Lufthansa در ترمینال ۲، گیت‌های G تا L و طبقات ۴ و ۵ قرار دارند؛ دسترسی به آن‌ها تابع کلاس پرواز، وضعیت عضویت و شرایط Star Alliance است.",
+            "در ترمینال ۱ سالن‌های Emirates، Air France/KLM و British Airways نیز در فهرست رسمی فرودگاه دیده می‌شوند.",
+            "Airport Lounge Europe در ترمینال ۱ قرار دارد؛ مسافری که از ترمینال ۲ پرواز می‌کند برای استفاده از آن باید تغییر ترمینال و زمان اضافه را در نظر بگیرد.",
+            "VipWing یک سرویس VIP جداگانه با پذیرش و همراهی اختصاصی است و نباید با سالن عمومی مشترک یکسان تلقی شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی سالن‌های فرودگاه مونیخ",
+          "url": "https://www.munich-airport.com/lounges-830529"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی دسترسی به سالن‌ها و تغییر ترمینال",
+          "url": "https://www.munich-airport.com/frequently-asked-questions-376207"
+        },
+        {
+          "type": "link",
+          "title_fa": "موقعیت سالن‌های Lufthansa در T2",
+          "url": "https://www.munich-airport.com/lh-lounge-521172"
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی سالن‌های مشترک و VIP Wing",
+          "url": "https://www.munich-airport.com/ten-reasons"
+        }
+      ],
+      "subtitle_fa": "Airport Lounge Europe و World در T1؛ سالن‌های Lufthansa در T2؛ دسترسی وابسته به مسیر و کلاس پرواز"
     },
     {
       "id": "baggage-claims",
