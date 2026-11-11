@@ -300,7 +300,8 @@ class AirlineContentTest {
         assertEquals(listOf("emirates", "mahan-air", "iran-aseman",
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
-            "caspian-air", "sepehran-air", "taban-air", "karun-air"),
+            "caspian-air", "sepehran-air", "taban-air", "karun-air",
+            "pars-air", "chabahar-air"),
             AirlineContentParser.index(directory.toString(), now).map { it.id })
     }
 
