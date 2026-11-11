@@ -1,0 +1,845 @@
+{
+  "schema_version": 1,
+  "airline_id": "pars-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html",
+      "https://oibk.ir/fa/iran/airlines",
+      "https://www.planespotters.net/airline/Pars-Air"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت رسمی و کانال‌های اطلاع‌رسانی",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://parsair.ir/",
+          "https://www.instagram.com/parsair.official/",
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نشانی parsair.ir در پروفایل هوانوردی و اطلاعیه‌های استخدامی منتسب به شرکت معرفی شده است. وب‌سایت در بررسی مرورگر قابل دریافت نبود؛ این موضوع به‌تنهایی نشانه تعطیلی یا مشکل امنیتی نیست. حساب parsair.official در بازنشر کانال انجمن شرکت‌های هواپیمایی به‌عنوان حساب شرکت دیده می‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای خرید، دامنه را دقیق کنترل کنید و نام شرکت اجراکننده را با بلیت تطبیق دهید.",
+            "پیوندهای شبکه اجتماعی و وب‌سایت، موجودی پرواز یا موفقیت پرداخت را تضمین نمی‌کنند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده شرکت",
+          "url": "https://parsair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "حساب اینستاگرام منتسب به شرکت",
+          "url": "https://www.instagram.com/parsair.official/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال انجمن شرکت‌های هواپیمایی",
+          "url": "https://t.me/s/airanews"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار تحویلی، بار کابین و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/aircir",
+          "https://www.flightgate.ir/%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C-%D9%BE%D8%A7%D8%B1%D8%B3/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "pars-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مقادیر ۱۴۰۲ تاریخی‌اند؛ بخشنامه جدید مهر ۱۴۰۵ منتشر شده ولی ضمیمه عددی قابل استخراج نبود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در ۱۷ مهر ۱۴۰۵ کانال بخشنامه‌های صنعت هوانوردی از به‌روزرسانی رویه و مقررات میزان بار مجاز و تعرفه اضافه‌بار پارس‌ایر خبر داده است. ضمیمه عددی آن در این بررسی قابل بازیابی نبود؛ بنابراین سقف جدید یا تعرفه‌ای حدس زده نمی‌شود. در صفحه رهیگ نیز در نمونه ۲۰ پرواز اخیر، ۲۰ کیلوگرم به‌عنوان بار رایج مشاهده شده؛ این آمار محدود و ثانویه است و سهمیه همه کلاس‌ها یا پروازهای خارجی را ثابت نمی‌کند."
+        },
+        {
+          "type": "text",
+          "text_fa": "یک راهنمای فروش قدیمی با تاریخ انتشار ۱۸ اردیبهشت ۱۴۰۲ و آخرین به‌روزرسانی ۲ دی ۱۴۰۲، ارقام ۲۰ کیلوگرم داخلی، ۲۵ کیلوگرم خارجی، ۱۰ کیلوگرم نوزاد و ۷ کیلوگرم بار کابین را ذکر می‌کرد. این ارقام تاریخی‌اند و به‌دلیل بخشنامه جدید ۱۴۰۵ نباید مبنای بار امروز قرار گیرند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مقدار معتبر همان پرواز را از روی بلیت صادرشده و آخرین بخشنامه شرکت کنترل کنید.",
+            "وزن و ابعاد کابین، بار تحویلی، نوزاد و تجهیزات ویژه ممکن است قواعد جداگانه داشته باشند.",
+            "تعرفه اضافه‌بار را برای همان مسیر و تاریخ از شرکت یا صادرکننده بلیت استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه به‌روزرسانی بار و اضافه‌بار مهر ۱۴۰۵",
+          "url": "https://t.me/s/aircir"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای تاریخی فروشنده، منتشرشده در ۱۴۰۲",
+          "url": "https://www.flightgate.ir/%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C-%D9%BE%D8%A7%D8%B1%D8%B3/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر تاریخ، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/aircir",
+          "https://www.flightgate.ir/%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C-%D9%BE%D8%A7%D8%B1%D8%B3/",
+          "https://rahig.com/airlines/parsair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "pars-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "درصدهای جریمه قدیمی ۱۴۰۲ مبنای مقررات جاری نیستند؛ عدد جاری بدون کلاس و بلیت مشخص اعلام نمی‌شود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای قدیمی فلایت‌گیت در سال ۱۴۰۲ جدول جریمه‌هایی برای کنسلی و عدم حضور منتشر کرده بود؛ آن جدول را به‌عنوان مقررات جاری ۱۴۰۵ بازنشر نمی‌کنیم. در صفحه جاری رهیگ نیز تأکید شده جریمه به کلاس نرخی و سیستمی یا چارتری بودن بلیت وابسته است و برای بلیت چارتر، چارترکننده می‌تواند مقررات متفاوت داشته باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر بلیت از آژانس یا سامانه فروش صادر شده، درخواست استرداد را ابتدا همان‌جا ثبت کنید.",
+            "پیش از تأیید نهایی کنسلی، مبلغ بازپرداخت و جریمه را کتبی یا در پنل فروشنده بررسی کنید.",
+            "برای تأخیر یا لغو از سوی شرکت، شرایط همان بلیت و دستورالعمل مرجع ناظر را جداگانه پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای جاری فروشنده درباره تفاوت سیستمی و چارتر",
+          "url": "https://rahig.com/airlines/parsair"
+        },
+        {
+          "type": "link",
+          "title_fa": "بخشنامه‌ها و نرخ‌نامه‌های منتشرشده صنعت",
+          "url": "https://t.me/s/aircir"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "چک‌این آنلاین و مهلت پذیرش",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "pars-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مهلت رسمی کانتر، زمان بسته‌شدن گیت و فعال‌بودن چک‌این آنلاین برای پرواز مشخص تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز و مسیرهای مشاهده‌شده",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/parsair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رهیگ در زمان بررسی، بر پایه جست‌وجوهای شش ماه اخیر ۶۸ مسیر بین ۲۳ شهر را برای پارس‌ایر گزارش می‌کرد. نمونه‌های مشاهده‌شده شامل تهران–شیراز با آخرین پرواز ثبت‌شده در ۱۹ آبان ۱۴۰۵، تهران–اصفهان در ۱۶ آبان و تهران–مشهد در ۱۰ آبان بود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "این داده، سابقه مشاهده پرواز در سامانه فروش است؛ برنامه قطعی یا وضعیت لحظه‌ای فردا نیست.",
+            "برای تاریخ سفر، شماره پرواز و وضعیت همان روز را از صادرکننده بلیت و فرودگاه بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مشاهده مسیرها و آخرین پروازهای ثبت‌شده",
+          "url": "https://rahig.com/airlines/parsair"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس و پیگیری درخواست مسافر",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/",
+          "https://parsair.ir/",
+          "https://www.instagram.com/parsair.official/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فهرست تماس مای‌سفر در ۲۴ خرداد ۱۴۰۵ شماره ۰۲۱-۴۹۹۶۵۰۰۰ را برای پارس‌ایر درج کرده است. این شماره از منبع ثانویه است؛ تماس و ساعات پاسخ‌گویی آن در این بررسی آزمایش نشده و از وب‌سایت شرکت نیز مستقلاً تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره رزرو، شماره بلیت، تاریخ و مسیر را هنگام تماس آماده داشته باشید.",
+            "اگر بلیت از آژانس صادر شده، برای پرداخت و استرداد ابتدا با همان فروشنده تماس بگیرید.",
+            "اطلاعات بانکی یا تصویر کامل گذرنامه را در شبکه اجتماعی عمومی ارسال نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تماس ایرلاین‌ها، به‌روزرسانی خرداد ۱۴۰۵",
+          "url": "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده پارس‌ایر",
+          "url": "https://parsair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "چمدان نرسیده، آسیب‌دیده یا گم‌شده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در صورت نرسیدن یا آسیب بار، پیش از خروج از سالن تحویل بار موضوع را به واحد خدمات بار فرودگاه اعلام کنید و گزارش کتبی و شماره پرونده بگیرید. در منابع بررسی‌شده، ایمیل یا سامانه فعال و اختصاصی پارس‌ایر برای بار مفقود به‌طور مستقل تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تگ بار، کارت پرواز، گزارش خسارت و عکس چمدان را نگه دارید.",
+            "اگر بلیت از آژانس صادر شده، اطلاعات رزرو و شرکت اجراکننده را هم به فروشنده اعلام کنید.",
+            "مهلت اعلام خسارت و مسئولیت حمل به مسیر و مقررات قابل اعمال بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تماس ثانویه پارس‌ایر",
+          "url": "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر، بارداری و نیازهای ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.flightgate.ir/%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C-%D9%BE%D8%A7%D8%B1%D8%B3/",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای فلایت‌گیت که در ۱۴۰۲ منتشر و در همان سال به‌روزرسانی شده بود، درخواست ویلچر هنگام رزرو و برخی محدودیت‌های پذیرش مسافر باردار، نوزاد و دوره نقاهت را توصیف می‌کرد. این سند، بخشنامه مستقیم و جاری شرکت نیست و هیچ‌یک از سن‌ها یا هفته‌های بارداری آن نباید به‌عنوان مجوز قطعی سفر در ۱۴۰۵ تلقی شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از خرید، نیاز ویلچر، تجهیزات پزشکی، وضعیت بارداری یا شرایط نوزاد را با شرکت اجراکننده هماهنگ کنید.",
+            "مدارک پزشکی یا تأییدیه لازم را برای همان تاریخ و مسیر بپرسید.",
+            "در صورت نیاز به ویلچر، درخواست را پیش از صدور نهایی بلیت ثبت و تأییدیه را نگهداری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع ثانویه تاریخی خدمات ویژه، ۱۴۰۲",
+          "url": "https://www.flightgate.ir/%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C-%D9%BE%D8%A7%D8%B1%D8%B3/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و هزینه آن",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و مدل هواپیمای اجراکننده",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Pars-Air",
+          "https://www.flightgate.ir/%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C-%D9%BE%D8%A7%D8%B1%D8%B3/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در ثبت ناوگان Planespotters، خانواده Bombardier CRJ-200 در snapshot مورخ ۲۷ سپتامبر ۲۰۲۶ به‌عنوان مدل اصلی در سرویس آمده و Boeing 737-400 در ردیف‌های آینده/پارک‌شده و Boeing 737-300 در سوابق تاریخی دیده می‌شود. این طبقه‌بندی، نوع هواپیمای پرواز آینده یا آرایش صندلی بلیت شما را تضمین نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع هواپیمای روز سفر و چیدمان صندلی را از بلیت یا شرکت اجراکننده بررسی کنید.",
+            "مدل‌های ثبت‌شده یا تاریخی را به معنی ناوگان عملیاتی قطعی تلقی نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق ناوگان پارس‌ایر در Planespotters",
+          "url": "https://www.planespotters.net/airline/Pars-Air"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و وعده غذایی",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ فرودگاهی و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی و موجود زنده",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "pars-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط فعلی پذیرش حیوان، نوع قفس، مدارک، مسیر و هزینه پارس‌ایر از منبع مستقیم جاری تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری لیتیومی",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قواعد عمومی IATA برای باتری لیتیومی یدکی و پاوربانک به ظرفیت، محل حمل و حفاظت در برابر اتصال کوتاه وابسته است. این موارد مقررات اختصاصی پارس‌ایر نیستند و ممکن است محدودیت‌های شرکت یا فرودگاه سخت‌گیرانه‌تر باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی لیتیومی را در بار تحویلی قرار ندهید.",
+            "قطب‌ها را در برابر اتصال کوتاه محافظت کنید و ظرفیت باتری را پیش از سفر بررسی کنید.",
+            "برای باتری پرظرفیت یا تجهیزات پزشکی/ویلچر برقی، پیش از سفر تأیید شرکت را بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای باتری و پاوربانک IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر و شرایط ورود",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "الزامات گذرنامه، ویزا، ترانزیت و مدارک ورود به مقصد به تابعیت، مسیر، توقف و تاریخ سفر بستگی دارد. هیچ فهرست ثابت مقصدها یا معافیت ویزا از روی سابقه مسیرهای پارس‌ایر قابل استنتاج نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای سفر داخلی مدرک هویتی معتبر و برای سفر خارجی گذرنامه و مدارک ورود/ترانزیت را بررسی کنید.",
+            "شرایط ورود را از مرجع رسمی کشور مقصد و پیش از خرید نهایی کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre/"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی مسافران پارس‌ایر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://rahig.com/airlines/parsair",
+          "https://t.me/s/aircir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد هوانوردی پارس‌ایر چیست؟ ICAO برابر PRS و کال‌ساین PARS SKY است؛ IATA دوحرفی در منابع معتبر بررسی‌شده تأیید نشد.",
+            "بار مجاز چقدر است؟ در مهر ۱۴۰۵ بخشنامه به‌روزرسانی بار منتشر شده؛ مقدار دقیق را از بلیت و ضمیمه جاری بگیرید.",
+            "جریمه کنسلی چقدر است؟ جدول‌های قدیمی ۱۴۰۲ جاری نیستند؛ کلاس نرخی و سیستمی/چارتر تعیین‌کننده‌اند.",
+            "آیا مسیرها فعال‌اند؟ داده فروشنده مسیرهای مشاهده‌شده اخیر را نشان می‌دهد؛ برنامه روز سفر باید جداگانه کنترل شود.",
+            "شماره تماس چیست؟ ۰۲۱-۴۹۹۶۵۰۰۰ در فهرست ثانویه خرداد ۱۴۰۵ آمده و فعالیت آن مستقلاً تأیید نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "شناسه رسمی ICAO و کال‌ساین در FAA",
+          "url": "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست اپراتورهای ایران",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "مسیرهای مشاهده‌شده اخیر",
+          "url": "https://rahig.com/airlines/parsair"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و مسیرهای مشاهده‌شده",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/parsair"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در صفحه رهیگ، پروازهای پارس‌ایر طی شش ماه اخیر در ۶۸ مسیر بین ۲۳ شهر مشاهده شده‌اند. نمونه‌های دارای آخرین مشاهده در آبان ۱۴۰۵ شامل تهران–شیراز، تهران–اصفهان، اصفهان–مشهد، تهران–مشهد و تهران–اهواز هستند. این‌ها سابقه مشاهده‌اند، نه مسیر تضمین‌شده یا جدول زمان‌بندی آینده."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IFN",
+          "title_fa": "فرودگاه اصفهان"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "AWZ",
+          "title_fa": "فرودگاه اهواز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "ZAH",
+          "title_fa": "فرودگاه زاهدان"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "فرودگاه کیش"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع مشاهده مسیرها و آخرین پروازها",
+          "url": "https://rahig.com/airlines/parsair"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های ثبت‌شده در ناوگان پارس‌ایر",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Pars-Air",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Planespotters در snapshot مورخ ۲۷ سپتامبر ۲۰۲۶ خانواده CRJ-200 را در سرویس، 737-400 را در ردیف آینده/پارک‌شده و 737-300 را تاریخی نشان می‌دهد. فهرست رسمی اپراتورهای ایران نیز شناسه PRS را ثبت می‌کند. تعداد ثبت‌شده، مالکیت و وضعیت عملیاتی مدل‌ها از منابع مختلف یکسان نیست؛ بنابراین شمارش عملیاتی قطعی ارائه نمی‌شود."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Bombardier CRJ-200",
+          "manufacturer": "Bombardier",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Pars-Air",
+              "https://oibk.ir/fa/iran/airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-400",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Pars-Air",
+              "https://oibk.ir/fa/iran/airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Pars-Air",
+              "https://oibk.ir/fa/iran/airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "snapshot ناوگان ۲۷ سپتامبر ۲۰۲۶",
+          "url": "https://www.planespotters.net/airline/Pars-Air"
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت رسمی ICAO در ایران",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی پارس‌ایر و شناسه‌های هوانوردی",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Pars-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پارس‌ایر (Pars Air)، با نام شرکتی Pars Oghyanous Kish Company، در منابع هوانوردی با شناسه سه‌حرفی ICAO برابر PRS و کال‌ساین PARS SKY شناخته می‌شود. کد دوحرفی IATA برای این شرکت در منابع معتبر بررسی‌شده تأیید نشد؛ بنابراین هیچ کد دوحرفی حدسی در کاتالوگ درج نشده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "شناسه PRS و کال‌ساین در فهرست FAA",
+          "url": "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست اپراتورهای هوانوردی ایران",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل هویت و ناوگان",
+          "url": "https://www.planespotters.net/airline/Pars-Air"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}

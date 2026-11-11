@@ -687,6 +687,86 @@
         "stale": false,
         "confidence": "secondary"
       }
+    },
+    {
+      "airline_id": "pars-air",
+      "detail_path": "details/pars-air.v1.json",
+      "identity": {
+        "name_fa": "پارس‌ایر",
+        "name_en": "Pars Air",
+        "legal_name": "Pars Oghyanous Kish Company",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی پارس",
+          "پارس ایر",
+          "Pars Airlines"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "PRS",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://parsair.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Pars-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "chabahar-air",
+      "detail_path": "details/chabahar-air.v1.json",
+      "identity": {
+        "name_fa": "هواپیمایی چابهار",
+        "name_en": "Chabahar Airlines",
+        "legal_name": "Chabahar Airline",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "چابهار ایر",
+          "هواپیمایی چابهار",
+          "Chabahar Air"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "IRU",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://chabaharairlines.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://t.me/s/chabaharairline",
+          "https://www.planespotters.net/airline/Chabahar-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
     }
   ]
 }
