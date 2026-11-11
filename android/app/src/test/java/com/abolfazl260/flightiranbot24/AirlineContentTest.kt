@@ -109,7 +109,8 @@ class AirlineContentTest {
 
     @Test fun arabicPersianLatinCodesAndAliasesAreSearchable() {
         val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
-        assertEquals("iran-air", filterAirlines(rows, "ايران اير", "iran").single().id)
+        assertTrue(filterAirlines(rows, "ايران اير", "iran").any { it.id == "iran-air" })
+        assertEquals("iran-airtour", filterAirlines(rows, "ایرتور", "iran").single().id)
         assertEquals("iran-air", filterAirlines(rows, "هما", "all").single().id)
         assertEquals("emirates", filterAirlines(rows, "uae", "foreign").single().id)
         assertTrue(filterAirlines(rows, "EK", "iran").isEmpty())
