@@ -196,10 +196,32 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.schiphol.nl/en/parking/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه اسخیپول چند نوع پارکینگ رسمی تحت مدیریت خود فرودگاه دارد. P1 برای توقف کوتاه و پیاده‌روی حدود ۲ تا ۶ دقیقه‌ای تا ترمینال است؛ P3 پارکینگ بلندمدت سرپوشیده و روباز دارد و شاتل رایگان آن شبانه‌روزی، تقریباً هر ۱۰ دقیقه حرکت می‌کند. P6 خدمات پارکینگ با تحویل خودرو (Valet) و P12 نیز گزینه‌های دیگر هستند؛ برای P12 و خدمات Valet رزرو لازم است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "P1 برای توقف کوتاه و پیاده‌روی مستقیم به سالن خروج مناسب است.",
+            "P3 برای توقف چندروزه طراحی شده و دسترسی به ترمینال با شاتل رایگان انجام می‌شود.",
+            "P6 Valet و P12 نیازمند رزرو هستند؛ محدودیت ارتفاع، دسترسی و امکان شارژ خودرو برقی بین پارکینگ‌ها متفاوت است.",
+            "تعرفه، ظرفیت و شرایط رزرو را پیش از حرکت در صفحه رسمی کنترل کنید؛ نرخ‌ها ممکن است تغییر کنند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پارکینگ رسمی فرودگاه اسخیپول و مقایسه گزینه‌ها",
+          "url": "https://www.schiphol.nl/en/parking/"
+        }
+      ],
+      "subtitle_fa": "P1، P3، P6 و P12؛ تعرفه و ظرفیت باید هنگام رزرو کنترل شود"
     },
     {
       "id": "facilities",
@@ -266,10 +288,37 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.schiphol.nl/en/page/airline-lounges/",
+        "https://www.schiphol.nl/en/at-schiphol/schiphol-s-lounges-and-piers/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اسخیپول واژه Lounge هم برای نواحی تجاری پس از کنترل امنیتی (Lounge 1 تا 4) و هم برای سالن‌های اختصاصی است؛ این دو را نباید یکی دانست. Lounge 1 عمدتاً برای پروازهای اروپایی، Lounge 2 و 3 برای پروازهای بین‌قاره‌ای و Lounge 4 برای برخی پروازهای کوتاه‌برد و کم‌هزینه استفاده می‌شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "Privium ClubLounge پیش از کنترل امنیتی بین سالن‌های خروج ۱ و ۲ قرار دارد؛ Privium ExpressLounge پس از کنترل امنیتی در ابتدای Pier D واقع است.",
+            "KLM Crown Lounge در Lounge 2 و Aspire Lounge در Lounge 1 و 2 قرار دارند؛ دسترسی به سالن‌های ایرلاینی تابع بلیت، کلاس پرواز، وضعیت عضویت یا شرایط پذیرش همان سالن است.",
+            "برای سالن و گیت دقیق، اطلاعات پرواز و تابلوهای روز سفر را کنترل کنید؛ سالن‌ها و ساعات فعالیت ممکن است تغییر کنند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی سالن‌ها و لانژهای اسخیپول",
+          "url": "https://www.schiphol.nl/en/page/airline-lounges/"
+        },
+        {
+          "type": "link",
+          "title_fa": "توضیح رسمی Lounge 1 تا 4 و نواحی پس از امنیت",
+          "url": "https://www.schiphol.nl/en/at-schiphol/schiphol-s-lounges-and-piers/"
+        }
+      ],
+      "subtitle_fa": "تفاوت نواحی تجاری Lounge 1–4 با سالن‌های اختصاصی ایرلاین و Privium"
     },
     {
       "id": "baggage-claims",
