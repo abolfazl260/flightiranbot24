@@ -42,7 +42,7 @@ def test_actual_catalog_and_independent_snapshots():
                         "emirates": {"published": 18, "draft": 0},
                         "mahan-air": {"published": 19, "draft": 1},
                         "iran-aseman": {"published": 14, "draft": 4},
-                        "iran-airtour": {"published": 13, "draft": 6},
+                        "iran-airtour": {"published": 15, "draft": 4},
                         "qeshm-air": {"published": 17, "draft": 2},
                         "kish-air": {"published": 15, "draft": 5},
                         "zagros-air": {"published": 14, "draft": 6},
@@ -331,12 +331,12 @@ def test_iran_airtour_sourced_scope_and_draft_exclusion():
     assert detail["published_reviews"] == detail["experience_links"] == []
     published = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
     drafts = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
-    assert len(published) == 13
-    assert len(drafts) == 6
+    assert len(published) == 15
+    assert len(drafts) == 4
     assert {s["id"] for s in drafts} == {
-        "checkin", "seat-selection", "cabin", "catering",
-        "lounges", "onboard-connectivity",
+        "cabin", "catering", "lounges", "onboard-connectivity",
     }
+    assert all(s["metadata"]["confidence"] == "secondary" for s in published if s["id"] in {"checkin", "seat-selection"})
     assert all(s["blocks"] and s["metadata"]["source_urls"] for s in published)
     assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None for s in drafts)
     for s in detail["sections"]:
