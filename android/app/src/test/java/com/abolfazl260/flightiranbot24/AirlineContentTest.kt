@@ -113,7 +113,7 @@ class AirlineContentTest {
         assertFalse(parse(fresh).sections.any { it.id == "ticket-rules" })
         val directory = JsonParser.parseString(bundled("airline-index.v1.json")).asJsonObject
         directory.getAsJsonArray("airlines")[0].asJsonObject.getAsJsonObject("metadata").addProperty("status", "draft")
-        assertEquals(listOf("emirates"), AirlineContentParser.index(directory.toString(), now).map { it.id })
+        assertEquals(listOf("emirates", "mahan-air", "iran-aseman"), AirlineContentParser.index(directory.toString(), now).map { it.id })
     }
 
     @Test fun unknownBlocksAreSkippedWithoutCrashingOrBlankCards() {
