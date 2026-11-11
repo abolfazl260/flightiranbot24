@@ -1,0 +1,833 @@
+{
+  "schema_version": 1,
+  "airline_id": "chabahar-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://oibk.ir/fa/iran/airlines",
+      "https://t.me/s/chabaharairline",
+      "https://www.planespotters.net/airline/Chabahar-Airlines"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت و کانال‌های رسمی",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline",
+          "https://chabaharairlines.ir/",
+          "https://www.instagram.com/ChabaharAirlines/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال تلگرام @chabaharairline خود را کانال رسمی شرکت معرفی می‌کند و دامنه chabaharairlines.ir را در توضیحات و پست‌هایش درج کرده است. دامنه جدید .ir در بررسی مرورگر قابل بارگذاری نبود؛ کانال رسمی در دسترس است. دامنه قدیمی .com در بررسی فعلی محتوای نامرتبط و مشکوک نشان می‌دهد و عمداً هیچ پیوند خرید یا پشتیبانی از آن در اپ قرار نگرفته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای اطلاعیه‌های عملیاتی و خبر ازسرگیری پروازها، کانال رسمی را بررسی کنید.",
+            "در وضعیت فعلی توقف اعلام‌شده پروازها، هیچ لینک فروش را به‌عنوان رزرو فعال تلقی نکنید.",
+            "پیش از واردکردن اطلاعات شخصی یا پرداخت، دامنه را از کانال رسمی تطبیق دهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی تلگرام هواپیمایی چابهار",
+          "url": "https://t.me/s/chabaharairline"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده در کانال رسمی",
+          "url": "https://chabaharairlines.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه اینستاگرام معرفی‌شده",
+          "url": "https://www.instagram.com/ChabaharAirlines/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز، اضافه‌بار و اقلام کابین",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "chabahar-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "هیچ حد وزنی یا تعرفه جاری اختصاصی چابهار تأیید نشده است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "میزان بار تحویلی، بار دستی و تعرفه اضافه‌بار جاری چابهار از منبع مستقیم قابل دسترس و قابل تأیید در این بررسی به دست نیامد. صفحه قدیمی .com قابل اعتماد نیست و در این راهنما هیچ عددی از آن بازنشر نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سهمیه معتبر را از بلیت صادرشده و شرکت اجراکننده کنترل کنید.",
+            "پیش از تحویل بار، تعداد بسته‌ها، وزن و ابعاد مجاز را از صادرکننده یا شرکت تأیید کنید.",
+            "برای کالسکه، تجهیزات ورزشی و بار ویژه، هماهنگی جداگانه لازم است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی برای اطلاعیه‌های شرکت",
+          "url": "https://t.me/s/chabaharairline"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر، لغو و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline",
+          "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "chabahar-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط استرداد و جبران خسارت به بلیت و اطلاعیه رسمی همان پرواز بستگی دارد."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جدول معتبر و جاری جریمه کنسلی، تغییر تاریخ یا زمان بازپرداخت چابهار از منبع مستقیم قابل تأیید در دسترس نیست. یک فهرست تماس ثانویه شماره پیگیری استرداد را منتشر کرده، اما فعالیت فعلی آن شماره مستقلاً آزمایش نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر بلیت را از آژانس یا سامانه فروش خریده‌اید، درخواست را ابتدا از همان صادرکننده پیگیری کنید.",
+            "در صورت اعلام توقف پرواز، پیش از هر پرداخت یا خرید جایگزین، وضعیت رزرو و استرداد را از فروشنده و کانال رسمی تأیید کنید.",
+            "هیچ درصد جریمه یا مهلت بازپرداخت حدسی در این راهنما درج نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی شرکت",
+          "url": "https://t.me/s/chabaharairline"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تماس ثانویه، به‌روزرسانی خرداد ۱۴۰۵",
+          "url": "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "چک‌این و زمان حضور در فرودگاه",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "chabahar-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "زمان شروع/پایان کانتر و امکان چک‌این آنلاین برای پرواز فعال چابهار تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت عملیاتی و توقف پروازها",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در کانال رسمی هواپیمایی چابهار، اطلاعیه‌ای با مضمون «پروازها فعلاً متوقف شده» منتشر شده و تاریخ ازسرگیری مشخصی در همان اطلاعیه ارائه نشده است. در بررسی انجام‌شده، اعلام رسمی روشنی برای شروع مجدد پروازها پیدا نشد؛ بنابراین وضعیت فروش یا اجرای پرواز را فعال فرض نکنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "این پیام به معنی انحلال یا توقف دائمی شرکت نیست؛ متن اطلاعیه توقف موقت را بیان می‌کند.",
+            "پست‌های قدیمی‌تر درباره مسیرهای تهران–مشهد، تهران–شیراز و تهران–زاهدان برنامه فعلی محسوب نمی‌شوند.",
+            "اگر بلیت صادرشده دارید، برای وضعیت، جایگزینی یا استرداد با فروشنده و کانال رسمی پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مشاهده کانال رسمی و اطلاعیه وضعیت پرواز",
+          "url": "https://t.me/s/chabaharairline"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "راه‌های ارتباط و شماره پیگیری",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline",
+          "https://www.instagram.com/ChabaharAirlines/",
+          "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال تلگرام @chabaharairline و صفحه اینستاگرام ChabaharAirlines در پست‌های شرکت به‌عنوان مسیرهای رسمی اطلاع‌رسانی معرفی شده‌اند. فهرست مای‌سفر در ۲۴ خرداد ۱۴۰۵ شماره ۰۲۱-۴۴۶۷۱۹۵۹ را برای پیگیری استرداد درج می‌کند؛ این شماره از منبع ثانویه است و در وضعیت توقف پروازها، فعال‌بودن آن تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از تماس یا ارسال مدارک، از کانال رسمی درباره معتبر بودن شماره و روش پاسخ‌گویی سؤال کنید.",
+            "شماره رزرو، شماره بلیت و تاریخ سفر را آماده داشته باشید.",
+            "اطلاعات بانکی یا تصویر کامل مدارک هویتی را در کامنت یا کانال عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی تلگرام",
+          "url": "https://t.me/s/chabaharairline"
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه اینستاگرام",
+          "url": "https://www.instagram.com/ChabaharAirlines/"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تماس ثانویه",
+          "url": "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار مفقود، تأخیری یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline",
+          "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در منابع فعلی، سامانه یا ایمیل قابل تأیید برای ثبت خسارت بار چابهار پیدا نشد. در صورت وقوع مشکل در پرواز انجام‌شده، پیش از ترک سالن بار، گزارش کتبی فرودگاه و شماره پرونده دریافت کنید؛ سپس کانال تماس معتبر را از شرکت یا صادرکننده بلیت تأیید کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تگ بار، کارت پرواز، گزارش خسارت و تصویر چمدان را نگه دارید.",
+            "درخواست را با شماره پرونده و مشخصات پرواز از مسیر تماس تأییدشده پیگیری کنید.",
+            "مهلت و حدود جبران خسارت به مسیر و مقررات قابل اعمال بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی برای تأیید راه ارتباطی",
+          "url": "https://t.me/s/chabaharairline"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر، بارداری و خدمات پزشکی",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و هزینه آن",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "مدل هواپیما و امکانات کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Chabahar-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فهرست اپراتورهای ایران برای شناسه IRU، مدل‌های MD-82، MD-83 و Fokker 100 را در داده ثبتی نشان می‌دهد. Planespotters یک Boeing 737-300 را نیز در سوابق تاریخی ثبت کرده است. وجود مدل در رجیستری یا سابقه ناوگان به معنی استفاده در پرواز آینده یا چیدمان مشخص کابین نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدل اجراکننده، کلاس و صندلی سفر را از بلیت و اطلاعیه روز سفر کنترل کنید.",
+            "ظرفیت صندلی، فاصله ردیف‌ها و امکانات هر هواپیما در منابع بررسی‌شده تأیید نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست اپراتور و مدل‌های ثبت‌شده در ایران",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق ناوگان چابهار",
+          "url": "https://www.planespotters.net/airline/Chabahar-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و خدمات CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی و موجود زنده",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "chabahar-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "پذیرش حیوان، قفس، گونه مجاز، مدارک و هزینه برای چابهار تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری لیتیومی",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "دستورالعمل عمومی IATA برای باتری لیتیومی یدکی و پاوربانک به ظرفیت، محل حمل و حفاظت در برابر اتصال کوتاه وابسته است. این راهنما مقررات اختصاصی چابهار نیست؛ در صورت ازسرگیری پروازها، محدودیت‌های شرکت و فرودگاه باید جداگانه بررسی شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی را در بار تحویلی قرار ندهید.",
+            "قطب‌ها را در برابر اتصال کوتاه محافظت کنید و ظرفیت باتری را بررسی کنید.",
+            "برای ویلچر برقی یا باتری‌های پرظرفیت، پیش از سفر تأیید کتبی شرکت لازم است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای باتری IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک هویتی، گذرنامه و ویزا",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "شرایط گذرنامه، ویزا و ترانزیت به تابعیت، مسیر، توقف و تاریخ سفر وابسته است. سابقه اعلام مسیرهای خارجی چابهار، به‌تنهایی اثبات‌کننده فعال بودن آن مسیر یا معافیت ویزا نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای سفر داخلی مدرک هویت معتبر و برای سفر خارجی گذرنامه و مدارک ورود/ترانزیت را کنترل کنید.",
+            "پیش از هر خرید جدید، ابتدا از سرگیری رسمی پروازها را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre/"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پاسخ‌های سریع مسافران چابهار",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Chabahar-Airlines",
+          "https://t.me/s/chabaharairline",
+          "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد هوانوردی چابهار چیست؟ ICAO برابر IRU و کال‌ساین CHABAHAR است؛ کد دوحرفی IATA در منابع بررسی‌شده تأیید نشد.",
+            "آیا پروازها برقرارند؟ کانال رسمی از توقف موقت پروازها خبر داده و تاریخ شروع مجدد مشخصی در اطلاعیه نیامده است.",
+            "بار مجاز چقدر است؟ سهمیه عددی جاری از منبع مستقیم تأیید نشده؛ بلیت و بخشنامه معتبر ملاک‌اند.",
+            "شماره تماس چیست؟ ۰۲۱-۴۴۶۷۱۹۵۹ در فهرست ثانویه خرداد ۱۴۰۵ درج شده، اما فعال‌بودن آن تأیید نشده است.",
+            "از کدام سایت خرید کنم؟ دامنه جدید .ir در کانال رسمی معرفی شده ولی در این بررسی باز نشد؛ دامنه قدیمی .com به‌دلیل محتوای مشکوک لینک نشده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی شناسه ICAO",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی و اطلاعیه توقف پرواز",
+          "url": "https://t.me/s/chabaharairline"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تماس ثانویه",
+          "url": "https://www.mysafar.com/mag/travel-facts/contact-information-for-iranian-airlines/"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "مسیرهای تاریخی و فرودگاه‌های مرتبط",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/chabaharairline"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی در پست‌های پیشین از مسیرهای تهران–مشهد، تهران–شیراز، تهران–زاهدان و مشهد–زاهدان خبر داده است. این پست‌ها سابقه تبلیغ/اعلام مسیر هستند و با توجه به اطلاعیه توقف موقت پروازها، هیچ‌کدام به‌عنوان مسیر فعال یا قابل رزرو امروز نمایش داده نمی‌شوند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "ZAH",
+          "title_fa": "فرودگاه زاهدان"
+        },
+        {
+          "type": "link",
+          "title_fa": "آرشیو کانال رسمی و اطلاعیه‌های مسیر",
+          "url": "https://t.me/s/chabaharairline"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های ثبت‌شده و تاریخی ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Chabahar-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فهرست اپراتورهای ایران برای KRU سه مدل MD-82، MD-83 و Fokker 100 را در داده ثبتی نشان می‌دهد. Planespotters یک Boeing 737-300 را نیز در سوابق تاریخی ناوگان ثبت کرده است. داده ثبتی و تاریخی ممکن است هواپیماهای خارج از خدمت را شامل شود؛ تعداد فعال، مالکیت و آرایش کابین از این منابع قابل نتیجه‌گیری نیست."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-82",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines",
+              "https://www.planespotters.net/airline/Chabahar-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-83",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines",
+              "https://www.planespotters.net/airline/Chabahar-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 100",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines",
+              "https://www.planespotters.net/airline/Chabahar-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines",
+              "https://www.planespotters.net/airline/Chabahar-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت مدل‌های هواپیما در فهرست اپراتورها",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق تاریخی ناوگان",
+          "url": "https://www.planespotters.net/airline/Chabahar-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی هواپیمایی چابهار و شناسه‌ها",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://t.me/s/chabaharairline"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی چابهار (Chabahar Airlines) در فهرست رسمی اپراتورهای ایران با کد ICAO برابر IRU و کال‌ساین CHABAHAR ثبت شده است. کد دوحرفی IATA در منابع هوانوردی بررسی‌شده به‌طور معتبر تأیید نشد و در کاتالوگ حدس زده نشده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی اپراتورهای ایران و کد IRU",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی شرکت",
+          "url": "https://t.me/s/chabaharairline"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
