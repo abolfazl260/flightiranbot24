@@ -331,10 +331,14 @@ def test_six_more_international_airports_publish_official_parking_and_lounge_gui
         for b in next(s for s in kul["sections"] if s["id"] == "parking")["blocks"]
     )
     heathrow = load(base / "LHR.v1.json")
-    assert "۲۳ ژوئن" in " ".join(
-        b.get("text_fa", "")
-        for b in next(s for s in heathrow["sections"] if s["id"] == "parking")["blocks"]
+    heathrow_parking = next(
+        s for s in heathrow["sections"] if s["id"] == "parking"
     )
+    heathrow_parking_text = " ".join(
+        b.get("text_fa", "") + " " + " ".join(b.get("items_fa", []))
+        for b in heathrow_parking["blocks"]
+    )
+    assert "۲۳ ژوئن" in heathrow_parking_text
     madrid = load(base / "MAD.v1.json")
     assert "Neptuno" in " ".join(
         b.get("text_fa", "")
