@@ -1,0 +1,1018 @@
+{
+  "schema_version": 1,
+  "airline_id": "mahan-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.iata.org/en/publications/directories/code-search/?airline.search=W5",
+      "https://t.me/s/mahanairchannel",
+      "https://www.mahanair.co.ir/"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت رسمی و خرید بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel",
+          "https://www.mahanair.co.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال اطلاع‌رسانی ماهان نشانی www.mahanair.co.ir را برای اطلاعات و خرید بلیت معرفی می‌کند. بررسی این راهنما تأیید نمی‌کند که موتور رزرو یا درگاه پرداخت در همه زمان‌ها قابل دسترسی است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از پرداخت، دامنه وب‌سایت و شرکت صادرکننده بلیت را کنترل کنید.",
+            "برای بلیت خریداری‌شده از آژانس، رسید صادرکننده را نگه دارید؛ لینک‌های پیامکی نامشخص مرجع رسمی نیستند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده توسط ماهان",
+          "url": "https://www.mahanair.co.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی اطلاع‌رسانی",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز، اضافه‌بار و وسایل ویژه",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "mahan-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "هیچ سهمیه عددی برای همه بلیت‌های ماهان تأیید نشده است؛ مقدار درج‌شده در بلیت و قواعد همان مسیر ملاک است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای ماهان مقدار ثابت و تأییدشده‌ای که بدون توجه به مسیر، کلاس و نرخ بر همه بلیت‌ها اعمال شود در منابع رسمی قابل بازیابی نبود. سهمیه نهایی را از متن بلیت یا پاسخ مستقیم شرکت اجراکننده دریافت کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار تحویلی، بار کابین و وسیله شخصی سه تعریف متفاوت دارند؛ وزن و ابعاد آن‌ها را جداگانه بررسی کنید.",
+            "در پروازهای دارای تغییر شرکت یا مسیر توقف‌دار، ممکن است شرایط چند شرکت متفاوت باشد؛ سهمیه را برای هر قطعه سفر کنترل کنید.",
+            "هزینه اضافه‌بار و حمل تجهیزات ورزشی، کالسکه، صندلی کودک و ساز موسیقی را پیش از حرکت استعلام کنید.",
+            "برای حیوانات همراه، راهنمای مستقل و رسمی ماهان وجود دارد و پذیرش به هماهنگی قبلی وابسته است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA درباره بار",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های شرکت ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر تاریخ، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.mahanair.co.ir/",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "mahan-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "روند تغییر/استرداد به نوع بلیت، صادرکننده و وضعیت واقعی پرواز وابسته است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جریمه کنسلی، امکان استرداد و تغییر تاریخ به شرایط نرخ صادرشده، علت تغییر پرواز، زمان درخواست و صادرکننده بستگی دارد. از نبود جدول منبع‌دار نمی‌توان نتیجه گرفت که همه بلیت‌ها قابل یا غیرقابل استردادند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بلیت خریداری‌شده از ماهان را از کانال رسمی خود شرکت پیگیری کنید.",
+            "اگر آژانس یا واسطه صادرکننده بلیت است، ابتدا با همان صادرکننده تماس بگیرید و مقررات نرخ درج‌شده در رسید را درخواست کنید.",
+            "لغو پرواز توسط ایرلاین را با کنسلی داوطلبانه مسافر یکسان ندانید؛ مدارک پیام تغییر، شماره پرواز و رسید پرداخت را حفظ کنید.",
+            "تا زمانی که مقررات نرخ برای همان سفر خوانده نشده است، درصد جریمه یا مهلت بدون منبع در راهنما درج نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت شرکت برای پیگیری بلیت",
+          "url": "https://www.mahanair.co.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال اطلاعیه‌های ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش آنلاین و فرودگاهی",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel?before=870",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "mahan-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "دسترس‌پذیری پذیرش آنلاین، مبادی مشمول و آخرین مهلت فعلی برای هر رزرو باید دوباره تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ماهان در راهنمای رسمی قدیمی کانال خود سرویس چک‌این آنلاین را شرح داده است. آن اطلاعیه، اثبات فعال‌بودن همیشگی این سرویس یا پذیرش همه مسیرهای فعلی نیست؛ قبل از اتکا به آن، امکان و محدودیت‌های رزرو را در وب‌سایت رسمی کنترل کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در اعلامیه تاریخی، دریافت کارت پرواز اینترنتی برای برخی مبادی داخلی مطرح شده و تکمیل تحویل بار همچنان در کانتر فرودگاه لازم بوده است.",
+            "مدرک هویت، بلیت و مدارک ورود مقصد را با خود داشته باشید؛ چک‌این آنلاین جایگزین بررسی مدارک و کنترل امنیتی نیست.",
+            "بازه اعلام‌شده در راهنمای قدیمی ۲۴ ساعت تا ۹۰ دقیقه پیش از پرواز بود؛ این بازه را برای پرواز روز خود بدون تأیید جدید فرض نکنید.",
+            "برای کودک بدون همراه، مسافر نیازمند ویلچر، همراه با حیوان یا تجهیزات پزشکی، امکان پذیرش آنلاین را جدا استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پرسش‌وپاسخ تاریخی چک‌این ماهان",
+          "url": "https://t.me/s/mahanairchannel?before=870"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت فعلی معرفی‌شده",
+          "url": "https://www.mahanair.co.ir/"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "تغییر زمان و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel",
+          "https://www.mahanair.co.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی ماهان در آبان ۱۴۰۵ چند پرواز فوق‌العاده و افزایش ظرفیت با تاریخ مشخص را اعلام کرده است. این پیام‌ها تابلوی زنده وضعیت پرواز نیستند و انجام هر پرواز را در تاریخ‌های دیگر تضمین نمی‌کنند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از حرکت، شماره پرواز و تاریخ درج‌شده روی بلیت را با فرودگاه و شرکت اجراکننده تطبیق دهید.",
+            "در صورت تغییر برنامه، صادرکننده بلیت و شرکت را برای گزینه‌های مجاز جابه‌جایی یا بازپرداخت مطلع کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های تاریخ‌دار ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت ماهان",
+          "url": "https://www.mahanair.co.ir/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "پشتیبانی و پیگیری خرید",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel",
+          "https://www.mahanair.co.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این بخش به کانال‌های اعلام‌شده رسمی ارجاع می‌دهد. شماره تلفن، ساعت پاسخ‌گویی و ایمیل پشتیبانی جاری از یک صفحه قابل استناد تازه در این بررسی تأیید نشد و عمداً درج نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پیگیری شماره پرواز، کد رزرو و نام صادرکننده را آماده کنید.",
+            "شماره بلیت، کد رزرو و اطلاعات هویتی را در نظرات عمومی منتشر نکنید.",
+            "لینک‌های خرید و پرداخت را فقط پس از اطمینان از دامنه و هویت مرجع باز کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت ماهان",
+          "url": "https://www.mahanair.co.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های رسمی ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "پیگیری بار گمشده یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.mahanair.co.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای بار نرسیده یا آسیب‌دیده، پیش از خروج از سالن تحویل بار موضوع را به واحد بار فرودگاه و شرکت اجراکننده گزارش کنید. این یک راهنمای عمومی است؛ مهلت حقوقی و مبلغ خسارت ماهان در این بررسی تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، کارت پرواز، گزارش ثبت‌شده و عکس آسیب را نگه دارید.",
+            "مسئولیت شرکت اجراکننده و مسیر چندشرکتی را از روی بلیت مشخص کنید.",
+            "شماره پرونده و راه پیگیری را از بخش خدمات بار دریافت کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA برای بار",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت شرکت",
+          "url": "https://www.mahanair.co.ir/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و کمک به مسافران ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel?before=870",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پذیرش برخط قدیمی ماهان برخی سفرهای نیازمند کمک ویژه یا تجهیزات پزشکی را از چک‌این عمومی مستثنا معرفی می‌کرد. محدودیت‌های کنونی یا پذیرش پزشکی از آن اطلاعیه قابل نتیجه‌گیری نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای ویلچر، دستگاه کمک‌حرکتی، باتری ویژه، کودک بدون همراه یا نیاز به تجهیزات پزشکی پیش از خرید با ماهان هماهنگ کنید.",
+            "نوع کمک و نیاز هنگام سوارشدن و پیاده‌شدن را برای مبدأ، مقصد و توقف احتمالی توضیح دهید.",
+            "قبول قطعی مسافر، دستگاه و خدمات بدون تأیید اختصاصی شرکت و فرودگاه قابل تضمین نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای قدیمی پذیرش ماهان",
+          "url": "https://t.me/s/mahanairchannel?before=870"
+        },
+        {
+          "type": "link",
+          "title_fa": "ارتباط از وب‌سایت رسمی",
+          "url": "https://www.mahanair.co.ir/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel?before=870"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در توضیحات قدیمی چک‌این ماهان قابلیت مشاهده و انتخاب صندلی، و محدودیت انتخاب ردیف خروج اضطراری مطرح شده است؛ این‌ها شرایط تاریخی سامانه‌اند و درباره وضعیت همه رزروهای فعلی حکمی ندارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "موجود بودن صندلی و هزینه احتمالی را فقط در رزرو همان پرواز بررسی کنید.",
+            "صندلی ردیف خروج اضطراری تابع ضوابط صلاحیت مسافر و تصمیم کارکنان فرودگاه است.",
+            "با تغییر هواپیما، جای صندلی یا امکانات کابین ممکن است عوض شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "توضیحات اولین نسخه پذیرش آنلاین",
+          "url": "https://t.me/s/mahanairchannel?before=870"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس‌ها و فضای کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel?before=2406",
+          "https://www.flightradar24.com/data/airlines/w5-irm/fleet"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ماهان در معرفی پیشین ناوگان A310 به کلاس تجاری و صندلی‌های ویژه اشاره کرده است. این نمونه مربوط به نوع هواپیمای معرفی‌شده است و چیدمان، امکان خوابیدن صندلی یا دسترسی به بیزینس را برای تمام پروازها ثابت نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کلاس روی بلیت و نوع هواپیمای عملیاتی روز پرواز را کنترل کنید.",
+            "برای انتخاب صندلی، حمل نوزاد و تجهیزات همراه، شرایط همان کلاس و پرواز را استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه تاریخی کلاس تجاری A310",
+          "url": "https://t.me/s/mahanairchannel?before=2406"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و درخواست غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel/3257",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی ماهان به ارائه غذا و نوشیدنی در پروازها اشاره کرده است. نوع وعده، رایگان بودن سرویس و امکان غذای ویژه در همه کلاس‌ها و مسیرها مستقلاً احراز نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای رژیم غذایی خاص یا حساسیت، امکان سفارش و زمان درخواست را مستقیماً از شرکت بپرسید.",
+            "روی منوی تبلیغاتی به‌عنوان تعهد برای یک پرواز مشخص حساب نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه خدمات پذیرایی ماهان",
+          "url": "https://t.me/s/mahanairchannel/3257"
+        }
+      ]
+    },
+    {
+      "id": "loyalty",
+      "title_fa": "باشگاه مسافران وفادار",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel?before=1442",
+          "https://t.me/s/mahanairchannel/775",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ماهان در کانال رسمی خود از باشگاه مسافران ویژه و امتیازهای پروازی خبر داده است و در اطلاعیه جدیدتر به قرعه‌کشی ارتقای کلاس ویژه اعضا اشاره دارد. امتیاز، سطوح عضویت، شرایط عضویت و مزایا ممکن است تغییر کرده باشند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از ثبت‌نام، اعتبار نشانی ورود، شیوه جمع‌آوری امتیاز و شرایط استفاده را از کانال و سایت رسمی بررسی کنید.",
+            "مزایای قدیمی مثل اضافه‌بار رایگان یا لانژ را به‌عنوان حق فعلی تمام اعضا تلقی نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "آرشیو معرفی باشگاه ماهان",
+          "url": "https://t.me/s/mahanairchannel?before=1442"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های جدید ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و خدمات تشریفات",
+      "icon": "services",
+      "order": 68,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel/775",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در نسخه قدیمی معرفی باشگاه مسافران ماهان، دسترسی به سالن پذیرایی به برخی سطوح عضویت نسبت داده شده است. این اطلاعیه تاریخی ملاک دسترسی، هزینه یا شرایط لانژ امروز نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "لانژ، CIP و سالن انتظار عمومی یک خدمت واحد نیستند؛ مرجع ارائه‌دهنده را از فرودگاه و شرکت بپرسید.",
+            "پیش از خرید، شرایط عضویت، کلاس کابین و امکان ورود همراه را برای پرواز خود بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "آرشیو مزایای قدیمی باشگاه ماهان",
+          "url": "https://t.me/s/mahanairchannel/775"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات فعلی ماهان",
+          "url": "https://www.mahanair.co.ir/"
+        }
+      ]
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوانات خانگی",
+      "icon": "services",
+      "order": 70,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.mahanair.co.ir/fa/live-animals",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "mahan-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "نوع حیوان، مسیر، ضوابط کشور، قفس و ظرفیت همان پرواز تعیین‌کننده‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ماهان در کانال رسمی خود به صفحه مقررات حمل حیوانات در دامنه معرفی‌شده شرکت ارجاع داده است. پذیرش حیوان به نوع، محدودیت تعداد، نوع قفس، مسیر و مدارک بستگی دارد؛ ورود حیوان به کابین مسافر از این اطلاعیه نتیجه نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "طبق اطلاعیه رسمی، برای سفر با حیوان اخذ کد AVIH هنگام رزرو و هماهنگی قبلی ضروری معرفی شده است.",
+            "اطلاعیه میان فرآیند داخلی از طریق کارگو و پذیرش برخی مسیرهای بین‌المللی تفاوت گذاشته؛ نوع سرویس را برای رزرو روز خود تأیید کنید.",
+            "گواهی سلامت، واکسیناسیون، مدارک شناسایی حیوان و الزامات کشور مقصد را قبل از سفر کنترل کنید.",
+            "در اطلاعیه قدیمی حضور زودتر و هماهنگی ۲۴ ساعته برای برخی موارد ذکر شده، اما این عدد را بدون بررسی صفحه به‌روز برای سفر خود قطعی فرض نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه اعلام‌شده مقررات حیوانات",
+          "url": "https://www.mahanair.co.ir/fa/live-animals"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه رسمی حمل حیوانات",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "باتری لیتیومی، پاوربانک و اقلام خطرناک",
+      "icon": "baggage",
+      "order": 72,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/",
+          "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این بخش دستورالعمل عمومی IATA و ICAO است و مقررات اختصاصی ماهان را جایگزین نمی‌کند. برای ابزارهای پزشکی، باتری‌های ظرفیت‌بالا و شرایط خاص، از شرکت هواپیمایی مجوز مرتبط را بگیرید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی نگذارید؛ آن‌ها را در کابین و با محافظت در برابر اتصال کوتاه حمل کنید.",
+            "قواعد تعداد و استفاده از پاوربانک در سال ۲۰۲۶ تغییر کرده است؛ آخرین مقررات شرکت و کشور را بررسی کنید.",
+            "اگر در گیت مجبور به تحویل ساک کابین شدید، باتری‌های یدکی را پیش از تحویل خارج کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA باتری‌ها",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه ICAO درباره محدودیت پاوربانک",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی قبل از سفر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel",
+          "https://www.mahanair.co.ir/fa/live-animals",
+          "https://t.me/s/mahanairchannel?before=870",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار مجاز من چقدر است؟ فقط شرایط همان بلیت و تأیید شرکت را ملاک قرار دهید؛ مقدار کلی بدون مسیر منتشر نشده است.",
+            "چک‌این آنلاین امکان دارد؟ ماهان این سرویس را در گذشته معرفی کرده، اما وضعیت سامانه و مبادی فعلی باید بررسی شود.",
+            "می‌توانم صندلی را انتخاب کنم؟ انتخاب صندلی در سامانه قدیمی مطرح شده؛ امکان فعلی به رزرو شما بستگی دارد.",
+            "برای حیوان همراه چه کنم؟ ابتدا به صفحه رسمی حمل حیوانات مراجعه و کد و هماهنگی لازم را با ماهان تأیید کنید.",
+            "کدام مسیرها برقرار است؟ اطلاعیه‌های تاریخ‌دار را با برنامه همان روز پرواز اشتباه نگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی",
+          "url": "https://www.mahanair.co.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و اطلاعیه‌های مسیر",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اطلاعیه‌های تاریخ‌دار سال ۱۴۰۵ ماهان، نمونه‌هایی از تهران–مشهد، تهران–بندرعباس، کرمان–تهران و تهران–بجنورد ذکر شده‌اند. این‌ها اسناد تاریخی مربوط به تاریخ درج‌شده در اطلاعیه هستند، نه فهرست تضمین‌شده پروازهای جاری یا تایید مسیر برگشت."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "فرودگاه بندرعباس"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KER",
+          "title_fa": "فرودگاه کرمان"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌ها و برنامه‌های تاریخ‌دار ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ حین پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان هواپیما",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+          "https://www.planespotters.net/airline/Mahan-Airlines",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مدل‌ها از سوابق معرفی‌شده شرکت و پایگاه‌های مستقل رصد ناوگان تهیه شده‌اند. این فهرست تعداد هواپیمای فعال، مالکیت، اجاره، آمادگی پرواز یا چیدمان قطعی را بیان نمی‌کند و هیچ نتیجه‌ای درباره ایمنی به‌دست نمی‌دهد."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A340-300",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+              "https://www.planespotters.net/airline/Mahan-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A340-600",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+              "https://www.planespotters.net/airline/Mahan-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A310",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+              "https://www.planespotters.net/airline/Mahan-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A300-600",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+              "https://www.planespotters.net/airline/Mahan-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+              "https://www.planespotters.net/airline/Mahan-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "BAe 146 / Avro RJ",
+          "manufacturer": "British Aerospace",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flightradar24.com/data/airlines/w5-irm/fleet",
+              "https://www.planespotters.net/airline/Mahan-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "پایگاه مستقل Flightradar24",
+          "url": "https://www.flightradar24.com/data/airlines/w5-irm/fleet"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق Planespotters",
+          "url": "https://www.planespotters.net/airline/Mahan-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی و کدهای ایرلاین",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/publications/directories/code-search/?airline.search=W5",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی ماهان (Mahan Air) شرکت هواپیمایی ایرانی است. در فهرست کدهای IATA شناسه W5 و در منابع هوانوردی ICAO شناسه IRM برای آن ثبت شده است. نام شرکت اجراکننده را از روی بلیت بخوانید و آن را با فروشنده یا شرکت بازاریاب اشتباه نگیرید."
+        },
+        {
+          "type": "link",
+          "title_fa": "جست‌وجوی رسمی IATA برای کد W5",
+          "url": "https://www.iata.org/en/publications/directories/code-search/?airline.search=W5"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی ماهان",
+          "url": "https://t.me/s/mahanairchannel"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
