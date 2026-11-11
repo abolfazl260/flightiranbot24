@@ -27,7 +27,7 @@ def test_actual_catalog_and_independent_snapshots():
         "iran-air", "emirates", "mahan-air", "iran-aseman",
         "iran-airtour", "qeshm-air", "kish-air", "zagros-air", "meraj-air",
         "ata-air", "varesh-air", "caspian-air", "sepehran-air",
-        "taban-air", "karun-air",
+        "taban-air", "karun-air", "pars-air", "chabahar-air",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -52,7 +52,9 @@ def test_actual_catalog_and_independent_snapshots():
                         "caspian-air": {"published": 14, "draft": 6},
                         "sepehran-air": {"published": 19, "draft": 2},
                         "taban-air": {"published": 15, "draft": 6},
-                        "karun-air": {"published": 14, "draft": 6}}
+                        "karun-air": {"published": 14, "draft": 6},
+                        "pars-air": {"published": 14, "draft": 6},
+                        "chabahar-air": {"published": 13, "draft": 7}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -690,4 +692,76 @@ def test_taban_karun_codes_and_historical_designators():
     bag = next(s for s in karun["sections"] if s["id"] == "baggage")
     assert bag["metadata"]["confidence"] == "secondary"
     assert "تأیید" in bag["scope"]["note_fa"]
+
+
+@pytest.mark.parametrize("airline_id,published,draft,models,draft_ids", [
+    ("pars-air", 14, 6, 3, {
+        "checkin", "seat-selection", "catering", "lounges", "pets",
+        "onboard-connectivity",
+    }),
+    ("chabahar-air", 13, 7, 4, {
+        "checkin", "special-assistance", "seat-selection", "catering",
+        "lounges", "pets", "onboard-connectivity",
+    }),
+])
+def test_pars_chabahar_publication_scope_and_unknown_fleet(
+    airline_id, published, draft, models, draft_ids
+):
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entries = {entry["airline_id"]: entry for entry in index["airlines"]}
+    entry = entries[airline_id]
+    data = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
+    assert data["airline_id"] == airline_id
+    assert data["published_reviews"] == data["experience_links"] == []
+    assert len(data["sections"]) == published + draft
+    assert len({s["id"] for s in data["sections"]}) == published + draft
+    visible = [s for s in data["sections"] if s["metadata"]["status"] == "published"]
+    hidden = [s for s in data["sections"] if s["metadata"]["status"] == "draft"]
+    assert len(visible) == published and len(hidden) == draft
+    assert {s["id"] for s in hidden} == draft_ids
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in visible)
+    assert all(s["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+               for s in visible)
+    assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None
+               for s in hidden)
+    for section in data["sections"]:
+        if section["kind"] == "policy":
+            assert section["scope"]["operating_carrier"] == airline_id
+            assert section["scope"]["seller"] == "unknown"
+            assert section["scope"]["route"] is None
+    fleet = next(s for s in visible if s["id"] == "fleet")
+    aircraft = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(aircraft) == models
+    assert all(b["count"] is None and b["configuration_fa"] is None
+               for b in aircraft)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in aircraft)
+    network = next(s for s in visible if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+    if airline_id == "pars-air":
+        assert {(c["system"], c["value"]) for c in entry["identity"]["codes"]} == {
+            ("icao", "PRS")
+        }
+        assert entry["identity"]["website"] == "https://parsair.ir/"
+        baggage = next(s for s in visible if s["id"] == "baggage")
+        baggage_text = " ".join(
+            b["text_fa"] for b in baggage["blocks"] if b["type"] == "text"
+        )
+        assert "۱۷ مهر ۱۴۰۵" in baggage_text
+        assert "تاریخی‌اند" in baggage_text
+    else:
+        assert {(c["system"], c["value"]) for c in entry["identity"]["codes"]} == {
+            ("icao", "IRU")
+        }
+        assert entry["identity"]["website"] == "https://chabaharairlines.ir/"
+        status = next(s for s in visible if s["id"] == "flight-status")
+        status_text = " ".join(
+            b["text_fa"] for b in status["blocks"] if b["type"] == "text"
+        )
+        assert "متوقف شده" in status_text
+        links = [
+            b["url"] for section in data["sections"] for b in section["blocks"]
+            if b["type"] == "link"
+        ]
+        assert all("chabaharairlines.com" not in url for url in links)
+        assert any("chabaharairlines.ir" in url for url in links)
 
