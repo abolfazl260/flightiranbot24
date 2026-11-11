@@ -35,9 +35,23 @@ def test_all_original_29_airports_enabled_and_remaining_guides_are_source_backed
         assert len(published) >= 9, code
         assert all(s["blocks"] and s["reviewed_at"] and s["source_urls"] for s in published)
         drafts = {s["id"] for s in detail["sections"] if s["status"] == "draft"}
-        assert {"traveler-experiences", "airport-videos"}.issubset(drafts)
+        if code in {"OMH", "ZAH"}:
+            assert drafts == {"traveler-experiences"}
+            assert len(published) == 18
+            video_section = next(s for s in published if s["id"] == "airport-videos")
+            assert any(
+                b["type"] == "video"
+                for b in video_section["blocks"]
+            )
+        else:
+            assert {"traveler-experiences", "airport-videos"}.issubset(drafts)
+            assert not any(
+                b["type"] == "video"
+                for s in published
+                for b in s["blocks"]
+            )
         assert not any(
-            b["type"] in ("video", "experience")
+            b["type"] == "experience"
             for s in published
             for b in s["blocks"]
         )
