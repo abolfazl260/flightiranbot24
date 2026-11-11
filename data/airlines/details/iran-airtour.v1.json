@@ -181,13 +181,16 @@
       "order": 30,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://ir.linkedin.com/company/airtourofficial",
+          "https://www.samanehha.com/web/2227/%D8%B3%D8%A7%D9%85%D8%A7%D9%86%D9%87-%D8%B1%D8%B2%D8%B1%D9%88-%D8%B5%D9%86%D8%AF%D9%84%DB%8C-%D8%A7%DB%8C%D8%B1%D8%A7%D9%86-%D8%A7%DB%8C%D8%B1%D8%AA%D9%88%D8%B1.html"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "secondary"
       },
       "scope": {
         "route": null,
@@ -196,9 +199,32 @@
         "operating_carrier": "iran-airtour",
         "seller": "unknown",
         "journey_type": "unknown",
-        "note_fa": "زمان شروع/پایان پذیرش و فعال‌بودن چک‌این آنلاین برای این پرواز هنوز بررسی نشده است."
+        "note_fa": "در دسترس بودن پذیرش برخط و مهلت آن برای هر پرواز باید در سامانه شرکت کنترل شود؛ زمان قطعی و عمومی تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه شرکتی ایران‌ایرتور در لینکدین، وب‌سایت iranairtour.ir را برای رزرو و پشتیبانی معرفی می‌کند. یک راهنمای ثانویه سامانه onlinecheckin.iranairtour.ir را برای خدمات پذیرش و انتخاب صندلی معرفی کرده است. در این بررسی، پنجره زمانی پذیرش، صدور کارت پرواز و عملکرد زنده سامانه از منبع رسمی قابل تأیید نبود؛ بنابراین فعال‌بودن آن برای همه پروازها تضمین نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از مراجعه، لینک پذیرش را از وب‌سایت معرفی‌شده توسط شرکت یا صادرکننده بلیت دنبال کنید؛ از دامنه‌های مشابه و ناشناس استفاده نکنید.",
+            "اگر سامانه برای رزرو شما پذیرش برخط ارائه نکرد، پذیرش را در فرودگاه و طبق مهلت درج‌شده در بلیت انجام دهید.",
+            "برای پرواز خارجی، مدارک ورود و ترانزیت را پیش از پذیرش آماده کنید؛ پذیرش برخط جایگزین کنترل مدارک نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده در صفحه شرکتی ایران‌ایرتور",
+          "url": "https://www.iranairtour.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای ثانویه سامانه انتخاب صندلی و پذیرش",
+          "url": "https://www.samanehha.com/web/2227/%D8%B3%D8%A7%D9%85%D8%A7%D9%86%D9%87-%D8%B1%D8%B2%D8%B1%D9%88-%D8%B5%D9%86%D8%AF%D9%84%DB%8C-%D8%A7%DB%8C%D8%B1%D8%A7%D9%86-%D8%A7%DB%8C%D8%B1%D8%AA%D9%88%D8%B1.html"
+        }
+      ]
     },
     {
       "id": "flight-status",
@@ -383,16 +409,42 @@
       "order": 50,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.samanehha.com/web/2227/%D8%B3%D8%A7%D9%85%D8%A7%D9%86%D9%87-%D8%B1%D8%B2%D8%B1%D9%88-%D8%B5%D9%86%D8%AF%D9%84%D9%8A-%D8%A7%D9%8A%D8%B1%D8%A7%D9%86-%D8%A7%D9%8A%D8%B1%D8%AA%D9%88%D8%B1.html",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "secondary"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای ثانویه سامانه ایران‌ایرتور، فرایند انتخاب صندلی را از طریق بخش انتخاب صندلی وب‌سایت و ورود با یکی از شناسه‌های اعلام‌شده (کد ملی، شماره بلیت یا کد رزرو/PNR) توصیف می‌کند. این راهنما وجود گزینه را گزارش می‌کند، اما رایگان یا پولی بودن صندلی‌ها، نقشه ناوگان، امکان انتخاب صندلی خاص و فعال‌بودن سرویس برای همه مسیرها را مشخص نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پس از ورود، اطلاعات مسافر و پرواز را با بلیت تطبیق دهید و پیش از تأیید نهایی، هر هزینه احتمالی را بررسی کنید.",
+            "اگر نقشه صندلی یا گزینه انتخاب نمایش داده نشد، تخصیص صندلی را از صادرکننده بلیت یا کانتر فرودگاه پیگیری کنید.",
+            "چیدمان صندلی به هواپیمای اجراکننده وابسته است و ممکن است با تغییر هواپیما عوض شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای ثانویه انتخاب صندلی ایران‌ایرتور",
+          "url": "https://www.samanehha.com/web/2227/%D8%B3%D8%A7%D9%85%D8%A7%D9%86%D9%87-%D8%B1%D8%B2%D8%B1%D9%88-%D8%B5%D9%86%D8%AF%D9%84%DB%8C-%D8%A7%DB%8C%D8%B1%D8%A7%D9%86-%D8%A7%D9%8A%D8%B1%D8%AA%D9%88%D8%B1.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده توسط شرکت",
+          "url": "https://www.iranairtour.ir/"
+        }
+      ]
     },
     {
       "id": "cabin",
