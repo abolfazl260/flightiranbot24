@@ -181,6 +181,53 @@
         "stale": false,
         "confidence": "official"
       }
+    },
+    {
+      "airline_id": "iran-airtour",
+      "detail_path": "details/iran-airtour.v1.json",
+      "identity": {
+        "name_fa": "ایران‌ایرتور",
+        "name_en": "Iran Airtour Airline",
+        "legal_name": "Iran Airtour Airline",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "ایران ایرتور",
+          "ایران ایر تور",
+          "Iran Air Tour",
+          "Iran Airtours"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "B9",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "IRB",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.iranairtour.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-airtour-airline/498/",
+          "https://ir.linkedin.com/company/airtourofficial"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
     }
   ]
 }
