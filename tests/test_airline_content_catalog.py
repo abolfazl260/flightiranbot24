@@ -22,7 +22,8 @@ NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
 def test_actual_catalog_and_independent_snapshots():
     module.validate_dataset(now=NOW)
     index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
-    assert [r["airline_id"] for r in index["airlines"]] == ["iran-air", "emirates", "mahan-air", "iran-aseman"]
+    ids = [r["airline_id"] for r in index["airlines"]]
+    assert ids == ["iran-air", "emirates", "mahan-air", "iran-aseman"]
     coverage = {}
     for entry in index["airlines"]:
         detail = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
