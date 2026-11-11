@@ -197,10 +197,37 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://airports.malaysiaairports.com.my/transit/klia1/parking",
+        "https://airports.malaysiaairports.com.my/index.php/klia2/air-travel/parking"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پارکینگ KLIA Terminal 1 تحت مدیریت Malaysia Airports شامل پارکینگ اصلی با بیش از ۵٬۷۰۰ جایگاه، Long Term Car Park با بیش از ۵٬۲۰۰ جایگاه و Preferred Parking با بیش از ۳۰۰ جایگاه است. پارکینگ Preferred حدود ۲ دقیقه و پارکینگ اصلی حدود ۳ دقیقه پیاده تا ترمینال ۱ فاصله دارد؛ شاتل رایگان شبانه‌روزی LTCP هر ۱۰ دقیقه حرکت می‌کند و سفر آن تا T1 حدود ۱۰ دقیقه و تا T2 حدود ۱۵ دقیقه اعلام شده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در Terminal 2، پارکینگ ۸ طبقه Gateway@klia2 مستقیماً از طریق مرکز خرید به ساختمان اصلی متصل است و نگهبانی آن شبانه‌روزی فعال است.",
+            "برای مسافرانی که در T2 پارک می‌کنند، LTCP تحت مدیریت Malaysia Airports نیز به‌عنوان گزینه جایگزین با شاتل معرفی شده است.",
+            "نرخ‌ها، ظرفیت قابل رزرو و هزینه‌های Drive-in بین T1، T2 و LTCP متفاوت است؛ صفحه رسمی همان ترمینال را برای تاریخ ورود و خروج انتخاب کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پارکینگ رسمی KLIA Terminal 1 و رزرو",
+          "url": "https://airports.malaysiaairports.com.my/transit/klia1/parking"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات رسمی پارکینگ KLIA Terminal 2",
+          "url": "https://airports.malaysiaairports.com.my/index.php/klia2/air-travel/parking"
+        }
+      ],
+      "subtitle_fa": "پارکینگ اصلی، Preferred و LTCP در T1؛ Gateway@klia2 و گزینه LTCP برای T2"
     },
     {
       "id": "facilities",
@@ -267,10 +294,37 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://airports.malaysiaairports.com.my/flight-information/klia1/booking-services/things-to-do",
+        "https://airports.malaysiaairports.com.my/node/klia2/air-travel/facilities"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Malaysia Airports برای Terminal 1 سالن‌های مشترک (Common-use Airport Lounges)، Sama-Sama Express و Airport FastTrack Lounge را معرفی می‌کند. سالن‌های مشترک و Sama-Sama Express در Satellite Building هستند؛ Airport FastTrack Lounge در Level 5 ساختمان اصلی قرار دارد. استفاده از Airport FastTrack مستلزم عبور از تشریفات مهاجرت و گمرک است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای توقف کوتاه بین پروازهای بین‌المللی، Sama-Sama Express در Satellite Building بدون نیاز به خروج از محدوده ترانزیت معرفی شده؛ این مجموعه هتل ترانزیتی است و نباید با سالن تجاری یکسان در نظر گرفته شود.",
+            "در Terminal 2، فرودگاه Sama-Sama Express، امکانات دوش و TV Lounge (فیلم و ورزش) را در فهرست امکانات ثبت کرده است؛ TV Lounge با لانژ ایرلاین یا سالن پذیرش Priority Pass یکی نیست.",
+            "شرایط دسترسی، ساعت فعالیت و امکان ورود پولی به سالن‌های مشترک در صفحه اپراتور و بر اساس ترمینال و مسیر سفر کنترل شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی امکانات و سالن‌های انتظار KLIA Terminal 1",
+          "url": "https://airports.malaysiaairports.com.my/flight-information/klia1/booking-services/things-to-do"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی امکانات و فضاهای انتظار KLIA Terminal 2",
+          "url": "https://airports.malaysiaairports.com.my/node/klia2/air-travel/facilities"
+        }
+      ],
+      "subtitle_fa": "سالن‌های مشترک، Airport FastTrack و Sama-Sama Express؛ تفاوت هتل ترانزیتی و لانژ مشخص شده است"
     },
     {
       "id": "baggage-claims",
