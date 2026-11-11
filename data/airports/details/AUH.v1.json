@@ -196,10 +196,39 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.zayedinternationalairport.ae/parking-and-transport/parking/pre-book-parking",
+        "https://www.zayedinternationalairport.ae/parking-and-transport/parking/valet-parking"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه زاید ابوظبی پارکینگ کوتاه‌مدت و بلندمدت رسمی دارد. پارکینگ اصلی حدود ۳٬۳۸۰ جایگاه دارد، شبانه‌روزی فعال است و فاصله پیاده‌روی اعلام‌شده تا ترمینال حدود ۲ تا ۵ دقیقه است. برای پارکینگ بلندمدت رزرو قبلی الزامی است؛ رزرو برای پارکینگ کوتاه‌مدت توصیه می‌شود، اما الزامی نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پیاده‌کردن مسافر، توقف تا ۱۰ دقیقه در محدوده تعیین‌شده رایگان است؛ خودرو را بدون راننده رها نکنید.",
+            "برای سوار کردن مسافر ورودی، از پارکینگ Short Stay روبه‌روی فرودگاه استفاده کنید؛ توقف در حاشیه ورودی Arrivals مجاز فرض نشود.",
+            "پارکینگ قابل دسترس نزدیک آسانسورها و پل‌های عابر وجود دارد؛ سه ساعت نخست برای جایگاه‌های دسترس‌پذیر رایگان اعلام شده است.",
+            "خدمات Valet در محوطه اختصاصی کنار ورودی Departures، Gate 2 و به‌صورت ۲۴/۷ ارائه می‌شود؛ تعرفه و شرایط آن جداگانه است.",
+            "نرخ‌ها، ظرفیت باقی‌مانده و رزرو بلندمدت را پیش از حرکت در سایت رسمی بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پارکینگ رسمی و رزرو پارکینگ فرودگاه زاید",
+          "url": "https://www.zayedinternationalairport.ae/parking-and-transport/parking/pre-book-parking"
+        },
+        {
+          "type": "link",
+          "title_fa": "خدمات پارکینگ با تحویل خودرو (Valet)",
+          "url": "https://www.zayedinternationalairport.ae/parking-and-transport/parking/valet-parking"
+        }
+      ],
+      "subtitle_fa": "پارکینگ کوتاه‌مدت و بلندمدت، Valet و جایگاه دسترس‌پذیر"
     },
     {
       "id": "facilities",
