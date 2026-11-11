@@ -1,0 +1,856 @@
+{
+  "schema_version": 1,
+  "airline_id": "zagros-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.govinfo.gov/content/pkg/FR-2026-09-15/pdf/2026-18909.pdf",
+      "https://oibk.ir/fa/iran/airlines/izg",
+      "https://www.planespotters.net/airline/Zagros-Air"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت اعلام‌شده و خرید بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.govinfo.gov/content/pkg/FR-2026-09-15/pdf/2026-18909.pdf",
+          "https://www.planespotters.net/airline/Zagros-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نشانی www.zagrosairlines.com در سند رسمی ثبت شرکت در سال ۲۰۲۶ و فهرست ناوگان زاگرس درج شده است. وب‌سایت در بررسی فعلی از این محیط قابل بازیابی نبود؛ این به معنی قطعی سراسری سایت نیست و امکان خرید، موجودی صندلی یا پرداخت تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از پرداخت، نشانی مقصد، مشخصات شرکت اجراکننده و صادرکننده و شرایط نرخ را بررسی کنید.",
+            "اگر بلیت از آژانس خریداری شده، همان صادرکننده مرجع ابتدایی پیگیری است.",
+            "کد دوحرفی زاگرس در منابع هوانوردی معتبر ZO است، نه کدهای متناقض برخی سایت‌های واسطه."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت منتسب به شرکت",
+          "url": "https://www.zagrosairlines.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "سند شناسایی شرکت در Federal Register 2026",
+          "url": "https://www.govinfo.gov/content/pkg/FR-2026-09-15/pdf/2026-18909.pdf"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.planespotters.net/airline/Zagros-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "zagros-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "هیچ سقف عددی یکسان برای همه بلیت‌های زاگرس تأیید نشده است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در این بررسی جدول رسمی و قابل تأیید بار مجاز زاگرس برای تمام نرخ‌ها و مسیرها به‌دست نیامد. سهمیه بار دستی، تحویلی و قطعات باید روی بلیت یا در پاسخ شرکت اجراکننده کنترل شود؛ عدد ۲۰/۳۰ کیلوگرم برخی آژانس‌ها قانون عمومی تضمین‌شده نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای کابین وزن و ابعاد، و برای تحویل تعداد بسته و سهمیه وزن را جداگانه بررسی کنید.",
+            "هزینه اضافه‌بار و حمل تجهیزات ورزشی، صندلی کودک، کالسکه یا ساز موسیقی را پیش از سفر استعلام کنید.",
+            "در پرواز چندشرکتی، مقررات تمام قطعات سفر ممکن است تفاوت داشته باشد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA درباره بار مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده شرکت برای پیگیری",
+          "url": "https://www.zagrosairlines.com/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر، لغو و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/caa_ir?before=765",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "zagros-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط نرخ، صادرکننده، علت لغو و قانون قابل اعمال به مسیر تعیین‌کننده‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "درصد جریمه یا مهلت عمومی استرداد زاگرس به‌طور قابل اتکا از سایت رسمی بازیابی نشد. استرداد بلیت اختیاری، لغو پرواز توسط شرکت و وضعیت بلیت صادرشده از آژانس، فرآیند یکسانی ندارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شرایط کلاس نرخی و صادرکننده بلیت را در رسید بررسی کنید.",
+            "در صورت لغو یا تغییر برنامه، مدارک و پیام رسمی تغییر را ذخیره و از صادرکننده درخواست روش پیگیری بگیرید.",
+            "سازمان هواپیمایی کشوری برای شکایت از استرداد پرداخت‌نشده، مسیرهای رسمی رسیدگی را معرفی کرده است؛ این مسیر جایگزین شرایط قراردادی هر بلیت نیست.",
+            "هیچ درصد جریمه یا تضمین بازپرداخت فوری از خبرهای عمومی استنباط نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه رسمی سازمان هواپیمایی کشوری درباره پیگیری استرداد",
+          "url": "https://t.me/s/caa_ir?before=765"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و دریافت کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "zagros-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "زمان کانتر/گیت و امکان آنلاین باید برای همان پرواز از شرکت تأیید شود."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز و اختلالات",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/MEHRABAD_AIRPORT?before=28745",
+          "https://www.flightradar24.com/data/aircraft/ep-zat",
+          "https://data.flightradar24.com/data/aircraft/ep-zax"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اطلاعیه‌های فرودگاه مهرآباد و سوابق پرواز رصدگر مستقل شامل نمونه‌های تاریخ‌دار از پروازهای زاگرس است. این منابع فقط رویداد یا مشاهده ثبت‌شده را نشان می‌دهند، نه برنامه تضمین‌شده آینده."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای سفر روز خود شماره پرواز ZO، تاریخ، مبدا و مقصد را در سامانه شرکت و فرودگاه کنترل کنید.",
+            "اطلاعات هواپیماهای رهگیری‌شده لزوماً وضعیت قطعی همه پروازها یا ساعت خروج در یک روز دیگر نیست.",
+            "اگر پرواز تغییر کرد، با صادرکننده یا شرکت اجراکننده درباره گزینه‌های بلیت تماس بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های رسمی فرودگاه مهرآباد",
+          "url": "https://t.me/s/MEHRABAD_AIRPORT?before=28745"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمونه تاریخ‌دار رصد پرواز زاگرس",
+          "url": "https://www.flightradar24.com/data/aircraft/ep-zat"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس و پیگیری بلیت",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.govinfo.gov/content/pkg/FR-2026-09-15/pdf/2026-18909.pdf",
+          "https://t.me/s/caa_ir?before=765"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سند شناسایی رسمی سال ۲۰۲۶ نشانی سایت زاگرس را تأیید می‌کند؛ اما شماره تماس و ساعت پاسخ‌گویی جاری از متن سایت در این بررسی قابل تأیید نشد. شماره‌های منتشرشده در آگهی‌های قدیمی و وب‌سایت‌های واسطه ممکن است تغییر کرده باشند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پیگیری، شماره پرواز، تاریخ، کد رزرو و نام صادرکننده را آماده کنید.",
+            "برای استرداد پرداخت‌نشده، علاوه بر کانال صادرکننده، راه شکایت معرفی‌شده توسط سازمان هواپیمایی کشوری قابل بررسی است.",
+            "کد رزرو و مدارک شناسایی را در پیام عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "دامنه ثبت‌شده شرکت",
+          "url": "https://www.zagrosairlines.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع عمومی نظارت و شکایات",
+          "url": "https://www.caa.gov.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار مفقودی و آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اگر چمدان تحویل نشد یا آسیب دید، موضوع را در فرودگاه به نماینده بار شرکت اجراکننده گزارش کنید و رسید و شماره پرونده بگیرید. این توصیه عمومی است و مهلت قانونی یا مبلغ خسارت اختصاصی زاگرس را تعیین نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تگ بار، کارت پرواز و عکس چمدان و محتویات آسیب‌دیده را حفظ کنید.",
+            "پیگیری را با شماره پرونده، محل تحویل و نام شرکت مسئول حمل انجام دهید.",
+            "شرایط حقوقی و مهلت مطالبه خسارت می‌تواند به مسیر و قانون حاکم بستگی داشته باشد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر، کمک‌حرکتی و خدمات ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات فعلی شرکت زاگرس برای ویلچر، باتری کمک‌حرکتی، مسافر نیازمند خدمات پزشکی و کودک بدون همراه از یک متن رسمی در دسترس تأیید نشد. برای این سفرها پیش از خرید هماهنگی اختصاصی لازم است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع وسیله کمک‌حرکتی، مشخصات باتری، نیاز در توقف و نحوه سوارشدن را از پیش شرح دهید.",
+            "برای خدمات پزشکی، مجوز و مدارک را از شرکت و پزشک مربوطه استعلام کنید.",
+            "توصیه‌های عمومی IATA به معنی پذیرش تضمین‌شده خدمات خاص توسط زاگرس نیستند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA درباره محدودیت باتری",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و ردیف خروج اضطراری",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و نوع هواپیمای سفر",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Zagros-Air",
+          "https://www.flightradar24.com/data/airlines/zo-izg/fleet"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "رصدگرهای ناوگان زاگرس مدل‌هایی از خانواده Airbus A319/A320 و McDonnell Douglas MD-80 را ثبت کرده‌اند. ظرفیت و چیدمان هر فروند و امکانات کلاس پروازی ممکن است متفاوت باشد؛ مدل ثبت‌شده برای یک پرواز گذشته، تعهدی درباره پرواز آینده نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کلاس درج‌شده در بلیت، نوع هواپیمای روز سفر و امکان صندلی انتخابی را با شرکت کنترل کنید.",
+            "مدل یا سن هواپیما به‌تنهایی مجوز نتیجه‌گیری درباره ایمنی نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پایگاه ثبت ناوگان Planespotters",
+          "url": "https://www.planespotters.net/airline/Zagros-Air"
+        },
+        {
+          "type": "link",
+          "title_fa": "پایگاه رصد Flightradar24",
+          "url": "https://www.flightradar24.com/data/airlines/zo-izg/fleet"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ فرودگاهی و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان زنده",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "zagros-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "پذیرش حیوان و مدارک آن باید از زاگرس برای پرواز مشخص تأیید شود."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و وسایل دارای باتری",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "IATA محدودیت‌های عمومی حمل باتری لیتیومی یدکی و پاوربانک را برای مسافر توضیح می‌دهد؛ شرکت اجراکننده و فرودگاه ممکن است ضوابط سخت‌گیرانه‌تری داشته باشند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در چمدان تحویلی قرار ندهید و در کابین از اتصال کوتاه محافظت کنید.",
+            "اگر کیف دستی در گیت تحویل بار شد، باتری‌های یدکی را از آن خارج کنید.",
+            "برای دستگاه پزشکی یا باتری با ظرفیت بالا قبل از سفر موافقت شرکت را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "قواعد عمومی باتری IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "گذرنامه، ویزا و مدارک سفر",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://data.flightradar24.com/data/aircraft/ep-zax"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پروازهای تاریخ‌دار زاگرس به مقصد خارجی در رصدگرها ثبت شده‌اند، اما ورود به کشور مقصد به ملیت، مسیر، ترانزیت و زمان سفر وابسته است. وجود پرواز به معنای معافیت ویزا نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در پرواز داخلی مدرک هویتی و در پرواز بین‌المللی گذرنامه، مجوز ورود و شرایط ترانزیت را بررسی کنید.",
+            "اطلاعات سفر را با مرجع رسمی مقصد و ابزار IATA تطبیق دهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های مهم مسافران",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://t.me/s/caa_ir?before=765",
+          "https://www.planespotters.net/airline/Zagros-Air"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد زاگرس چیست؟ کد هوانوردی دوحرفی ZO و سه‌حرفی IZG است؛ کد درج‌شده روی بلیت را کنترل کنید.",
+            "بار مجاز من چقدر است؟ نرخ همان بلیت و تأیید شرکت را ملاک قرار دهید؛ عدد عمومی به‌روز تأیید نشده است.",
+            "استرداد چگونه است؟ ابتدا با صادرکننده بلیت تماس بگیرید و مقررات نرخ و علت لغو را روشن کنید.",
+            "چک‌این آنلاین فعال است؟ از سایت رسمی در این بررسی قابل تأیید نشد.",
+            "برای ویلچر یا حیوان زنده چه کنم؟ پیش از خرید شرایط دقیق همان مسیر را استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع شکایات هواپیمایی",
+          "url": "https://t.me/s/caa_ir?before=765"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و نمونه مسیرهای ثبت‌شده",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.flightradar24.com/data/aircraft/ep-zat",
+          "https://data.flightradar24.com/data/aircraft/ep-zax",
+          "https://t.me/s/MEHRABAD_AIRPORT?before=28745"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در سوابق پروازی تاریخ‌دار نوامبر ۲۰۲۶ زاگرس پروازهای تهران، شیراز، کیش و مسیرهای بین‌المللی نظیر استانبول ثبت شده‌اند. این بخش فقط پیوند به راهنمای فرودگاه‌های موجود است؛ هیچ ساعت ثابت، نرخ یا مسیر فعال همیشگی ادعا نمی‌شود."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "فرودگاه کیش"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "فرودگاه استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمونه تاریخ‌دار مسیر داخلی",
+          "url": "https://www.flightradar24.com/data/aircraft/ep-zat"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمونه تاریخ‌دار مسیر بین‌المللی",
+          "url": "https://data.flightradar24.com/data/aircraft/ep-zax"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های ثبت‌شده ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Zagros-Air",
+          "https://www.flightradar24.com/data/airlines/zo-izg/fleet",
+          "https://oibk.ir/fa/iran/airlines/izg"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پایگاه‌های مستقل مدل‌های Airbus A319 و A320، همچنین McDonnell Douglas MD-82 و MD-83 ثبت شده‌اند. موجودی تاریخی، ثبت هواپیما و فعال‌بودن روزانه سه مفهوم متفاوت‌اند؛ شمارش پایگاه‌ها برای تعداد هواپیماهای قابل‌خدمت در روز سفر ملاک قطعی نیست."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A319",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Zagros-Air",
+              "https://www.flightradar24.com/data/airlines/zo-izg/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Zagros-Air",
+              "https://www.flightradar24.com/data/airlines/zo-izg/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-82",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Zagros-Air",
+              "https://www.flightradar24.com/data/airlines/zo-izg/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-83",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Zagros-Air",
+              "https://www.flightradar24.com/data/airlines/zo-izg/fleet"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست مدل‌های Planespotters",
+          "url": "https://www.planespotters.net/airline/Zagros-Air"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع شناسه ICAO اپراتور در فهرست رسمی ایران",
+          "url": "https://oibk.ir/fa/iran/airlines/izg"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی زاگرس و کدهای هوانوردی",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/izg",
+          "https://www.planespotters.net/airline/Zagros-Air",
+          "https://www.govinfo.gov/content/pkg/FR-2026-09-15/pdf/2026-18909.pdf"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی زاگرس (Zagros Airlines) یک شرکت هواپیمایی ایرانی است. کد دوحرفی IATA آن ZO و کد سه‌حرفی ICAO آن IZG است؛ شناسه IZG در فهرست اپراتورهای اعلام‌شده ایران به ICAO در ۲۰۲۶ نیز آمده است. نام شرکت اجراکننده را از روی بلیت بررسی کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی کدهای بهره‌برداران ایرانی",
+          "url": "https://oibk.ir/fa/iran/airlines/izg"
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت و کدهای هوانوردی در Planespotters",
+          "url": "https://www.planespotters.net/airline/Zagros-Air"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
