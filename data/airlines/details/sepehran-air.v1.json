@@ -1,0 +1,997 @@
+{
+  "schema_version": 1,
+  "airline_id": "sepehran-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://blog.flysepehran.com/fa/",
+      "https://www.planespotters.net/airline/Sepehran-Airlines",
+      "https://oibk.ir/fa/iran/airlines"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت رسمی و خدمات خرید",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://www.planespotters.net/airline/Sepehran-Airlines",
+          "https://blog.flysepehran.com/fa/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وبلاگ رسمی سپهران flysepehran.com را برای خرید، استرداد، خدمات صندلی و ثبت درخواست معرفی می‌کند. فهرست Planespotters دامنه flysepehran.ir را نیز ثبت کرده است. درگاه خرید در این بررسی به‌صورت مستقل بازیابی نشد؛ موجودی یا تراکنش لحظه‌ای تضمین نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از پرداخت، آدرس، نام صادرکننده و شرایط بلیت را بررسی کنید.",
+            "برای خدمات پس از خرید، فقط از لینک‌های معرفی‌شده در کانال معتبر شرکت استفاده کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت اعلام‌شده از وبلاگ رسمی",
+          "url": "https://flysepehran.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "آموزش خرید در وبلاگ رسمی",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار تحویلی، کابین و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/airline/where-is-my-baggage/",
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/magazine/online-services/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "sepehran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اعداد از مقاله تیر ۱۴۰۴ هستند؛ بلیت و مقررات روز پرواز مقدم‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقاله رسمی سپهران منتشرشده در تیر ۱۴۰۴ برای داخلی تا ۲۰ کیلوگرم، خارجی ۲۵ تا ۳۰ کیلوگرم بار تحویلی، تا ۲ قطعه بار خارجی، و ۶ کیلوگرم بار کابین با ابعاد ۲۰×۴۰×۵۵ سانتی‌متر ذکر می‌کند. این مقادیر از صفحه ۱۴۰۴ هستند و برای همه بلیت‌های فعلی بدون بازتأیید قطعی محسوب نمی‌شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مقدار نهایی با کلاس نرخی، مسیر و درج روی بلیت تعیین می‌شود.",
+            "سپهران ثبت اضافه‌بار آنلاین را توضیح داده است، اما قیمت و عملکرد سامانه فعلی مستقل آزمایش نشد.",
+            "برای کالسکه، تجهیزات خاص، کودک یا پرواز چندشرکتی به توافق اختصاصی نیاز است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی بار سپهران ۱۴۰۴",
+          "url": "https://blog.flysepehran.com/fa/airline/where-is-my-baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "خدمات اضافه‌بار آنلاین",
+          "url": "https://blog.flysepehran.com/fa/magazine/online-services/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "کنسلی و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/online-servicess/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "sepehran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط تاریخ‌دار شرکت برای همه نرخ‌ها و روزهای ۱۴۰۵ تضمین‌شده نیست؛ بلیت و تأیید شرکت مقدم‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وبلاگ رسمی می‌گوید شرایط و درصد جریمه استرداد هنگام خرید و در بلیت درج می‌شود و درخواست از بخش «پیگیری و استرداد» سایت انجام می‌شود. جریمه ثابت سراسری تأیید نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "دلیل لغو، نوع نرخ، تاریخ درخواست و صادرکننده را بررسی کنید.",
+            "مزایای RedMiles درباره تغییر رایگان یا استرداد بدون جریمه مختص شرایط و سطوح مشخص عضویت است؛ عمومی نیست.",
+            "در صورت لغو شرکت، پیام‌ها و مدارک خرید را برای پیگیری نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "استرداد و طبقه‌بندی نرخ در راهنمای رسمی",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        },
+        {
+          "type": "link",
+          "title_fa": "خدمات آنلاین",
+          "url": "https://blog.flysepehran.com/fa/online-servicess/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و دریافت کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/category/airports/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "sepehran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط تاریخ‌دار شرکت برای همه نرخ‌ها و روزهای ۱۴۰۵ تضمین‌شده نیست؛ بلیت و تأیید شرکت مقدم‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای سپهران تحویل بار و کارت پرواز در کانتر را شرح می‌دهد و انتخاب اینترنتی صندلی را از چک‌این جدا می‌کند. بدون تأیید مسیر نباید فرض کرد همه مسافران کارت پرواز آنلاین دریافت می‌کنند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "آخرین زمان کانتر و گیت را برای همان فرودگاه و تاریخ کنترل کنید.",
+            "حتی با انتخاب اینترنتی صندلی، مقاله شرکت دریافت کارت پرواز از کانتر را توصیف می‌کند.",
+            "برای خدمات ویژه یا بار تحویلی شرایط پذیرش جدا را بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی پذیرش",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای فرودگاه‌ها",
+          "url": "https://blog.flysepehran.com/fa/category/airports/"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "برنامه و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/flight/thr-to-evn/",
+          "https://blog.flysepehran.com/fa/category/airports/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وبلاگ رسمی مسیرهای تاریخ‌دار از جمله تهران–ایروان را معرفی کرده و برای وضعیت لحظه‌ای به تابلوهای فرودگاه و منابع همان روز اشاره می‌کند. اطلاعات مطلب سفر، جدول زنده پرواز نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز IS، تاریخ، فرودگاه مبدا و مقصد را از بلیت بررسی کنید.",
+            "از بازنشر برنامه قدیمی برای تضمین ساعت آینده استفاده نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای فرودگاه سپهران",
+          "url": "https://blog.flysepehran.com/fa/category/airports/"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمونه مطلب رسمی مسیر",
+          "url": "https://blog.flysepehran.com/fa/flight/thr-to-evn/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "راه تماس و پشتیبانی",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/services/pet-transportation/",
+          "https://blog.flysepehran.com/fa/ticket/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی حمل حیوان سپهران در اردیبهشت ۱۴۰۳، شماره ۰۰۹۸۲۱۴۹۱۱۶ را برای استعلام معرفی کرده است. ساعات و پاسخ‌گویی فعلی این شماره در آبان ۱۴۰۵ از صفحه خرید قابل بررسی نبود و باید دوباره تأیید شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پشتیبانی شماره رزرو، مسیر و تاریخ بلیت را آماده کنید.",
+            "مشخصات هویتی و پرداخت را در کانال عمومی به اشتراک نگذارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "شماره اعلام‌شده در متن رسمی",
+          "url": "https://blog.flysepehran.com/fa/services/pet-transportation/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع خدمات بلیت",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار مفقود یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/airline/where-is-my-baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقاله رسمی سپهران توصیه می‌کند در صورت نرسیدن چمدان، گزارش مفقودی هرچه زودتر نزد شرکت ثبت و پرونده پیگیری تهیه شود. بازه‌های عمومی یا اظهارات حقوقی مقاله، مهلت قطعی دعوای قانونی شما نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تگ بار، کارت پرواز، عکس آسیب و شماره پرونده را حفظ کنید.",
+            "مبلغ و مهلت خسارت را با شرایط حمل و قانون قابل اعمال بر سفر بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقاله بار گمشده در وبلاگ رسمی",
+          "url": "https://blog.flysepehran.com/fa/airline/where-is-my-baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و خدمات کمک‌حرکتی",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/online-servicess/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سپهران در محتوای رسمی امکان ثبت درخواست ویلچر حین یا پس از خرید را معرفی کرده و در زمان انتشار، استفاده داخلی را بدون هزینه توصیف کرده است. ظرفیت، نوع وسیله و پذیرش برای روز سفر باید تأیید شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای ویلچر شخصی یا باتری‌دار، نوع باتری و نیازهای جابه‌جایی را از قبل اعلام کنید.",
+            "برای کودک بدون همراه، مسافر باردار یا دارای وضعیت پزشکی شرایط ویژه را استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی خدمات ویلچر",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی خدمات پس از خرید",
+          "url": "https://blog.flysepehran.com/fa/online-servicess/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی آنلاین",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/magazine/online-services/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سپهران انتخاب اینترنتی صندلی برای بلیت‌های مستقیم یا آژانسی را توضیح می‌دهد. در یک بخش از راهنمای خود، آخرین فرصت انتخاب را ۳ ساعت و در بخش سؤال‌های متداول ۴ ساعت پیش از پرواز ذکر می‌کند. به‌دلیل تعارض، هیچ‌یک را به عنوان مهلت قطعی روز سفر منتشر نمی‌کنیم."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در سامانه همان رزرو مهلت و هزینه و صندلی‌های باقی‌مانده را بررسی کنید.",
+            "اگر انتخاب آنلاین بسته شد، درباره تخصیص در کانتر سؤال کنید.",
+            "برای صندلی کنار خروج اضطراری، شرایط جسمی و ایمنی خاص را رعایت کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "دو مهلت متناقض در راهنمای رسمی",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی سرویس صندلی",
+          "url": "https://blog.flysepehran.com/fa/magazine/online-services/"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس و چیدمان هواپیما",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Sepehran-Airlines",
+          "https://blog.flysepehran.com/fa/ticket/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "منابع ناوگان، مدل‌های گوناگون بوئینگ 737 را برای سپهران ثبت می‌کنند. آرایش صندلی، کلاس و نوع هواپیمای اجراکننده می‌تواند تغییر کند و مدل ثبت‌شده تاریخی، خدمات آینده را تضمین نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "چیدمان و کلاس را با بلیت و شرایط روز سفر کنترل کنید.",
+            "سن مدل هواپیما معیار رتبه‌بندی ایمنی نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست مستقل ناوگان",
+          "url": "https://www.planespotters.net/airline/Sepehran-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و انتخاب غذای خاص",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/airline/airline-meals/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقاله رسمی شهریور ۱۴۰۲ نمونه غذاهای سرد و گرم و میان‌وعده را در پروازهای سپهران ذکر کرده و انتخاب آنلاین غذای سفارشی را «به زودی» عنوان کرده است. این متن اثبات فعال‌بودن رزرو غذای خاص یا منوی تضمینی امروز نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای رژیم غذایی خاص، امکان درخواست را پیش از خرید بررسی کنید.",
+            "نوع وعده به مسیر و مدت پرواز و کلاس بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقاله تاریخ‌دار پذیرایی سپهران",
+          "url": "https://blog.flysepehran.com/fa/airline/airline-meals/"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و تشریفات فرودگاهی",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "loyalty",
+      "title_fa": "باشگاه RedMiles",
+      "icon": "services",
+      "order": 67,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/flight/mhd-to-njf/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سپهران باشگاه RedMiles با امتیاز سفر و مزایای وابسته به سطوح عضویت را معرفی می‌کند. تغییر تاریخ رایگان، اضافه‌بار یا استرداد بدون جریمه در برخی سطوح و شرایط ذکر شده‌اند؛ هیچ‌کدام مزیت عمومی برای همه بلیت‌ها نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از استفاده از مزایا، سطح عضویت، اعتبار و محدودیت کلاس بلیت را بررسی کنید.",
+            "شرایط و زمان خدمات را در پنل رسمی همان حساب کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "باشگاه در راهنمای رسمی خرید",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی سطوح و شرایط",
+          "url": "https://blog.flysepehran.com/fa/flight/mhd-to-njf/"
+        }
+      ]
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/services/pet-transportation/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "sepehran-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "سیاست مربوط به انتشار اردیبهشت ۱۴۰۳ است؛ تأیید امروز ضروری است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در صفحه رسمی ۱۸ اردیبهشت ۱۴۰۳، سپهران حمل حیوان را به برخی مسیرهای خارجی، با تأیید قبلی شرکت و برای گونه‌های محدود از سگ، گربه و پرنده زینتی مشروط کرده است. همان صفحه ورود حیوان به کابین مسافر را مجاز نمی‌داند؛ این شرایط تاریخ‌دارند و باید برای پرواز فعلی بازتأیید شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از خرید با پشتیبانی درباره مسیر، گونه، قفس و ظرفیت استعلام کنید.",
+            "مدارک سلامت، واکسیناسیون و مجوز ورود کشور مقصد را آماده کنید.",
+            "هزینه حمل حیوان با بار مجاز معمولی یکسان فرض نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین تاریخ‌دار حمل حیوان در سایت رسمی",
+          "url": "https://blog.flysepehran.com/fa/services/pet-transportation/"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری لیتیومی",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/",
+          "https://blog.flysepehran.com/fa/airline/where-is-my-baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قواعد عمومی IATA درباره حمل باتری لیتیومی یدکی و پاوربانک راهنمای ایمنی هستند؛ برای تجهیزات خاص مقررات شرکت، فرودگاه و مقصد نیز باید بررسی شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری یدکی و پاوربانک را در بار تحویلی نگذارید.",
+            "اگر کیف کابین در گیت به بار منتقل شد، باتری یدکی را خارج کنید.",
+            "برای باتری ویلچر یا دستگاه پزشکی تأیید اختصاصی دریافت کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA درباره باتری مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر داخلی و بین‌المللی",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://blog.flysepehran.com/fa/category/airports/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پروازهای داخلی مدارک هویتی و برای سفر خارجی گذرنامه، مجوزهای ورود و شرایط ترانزیت لازم است. مقررات بر اساس تابعیت، مسیر و تاریخ تغییر می‌کند و معرفی یک مسیر در وبلاگ، معافیت ویزا نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام بلیت و مدرک هویتی را تطبیق دهید.",
+            "قوانین مقصد را از مرجع رسمی و IATA Travel Centre بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرکز اطلاعات سفر IATA",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "سؤالات کاربردی سفر با سپهران",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://blog.flysepehran.com/fa/airline/where-is-my-baggage/",
+          "https://blog.flysepehran.com/fa/services/pet-transportation/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد سپهران چیست؟ IATA برابر IS و ICAO برابر SHI است.",
+            "بار مجاز؟ مقاله تیر ۱۴۰۴ داخلی تا ۲۰، خارجی بین ۲۵ تا ۳۰ کیلوگرم، کابین ۶ کیلو؛ بلیت شما ملاک است.",
+            "زمان انتخاب صندلی؟ راهنمای رسمی دو عدد ۳ و ۴ ساعت دارد؛ سامانه همان رزرو را کنترل کنید.",
+            "استرداد؟ مسیر پیگیری و استرداد در سایت رسمی، با جریمه وابسته به کلاس و زمان.",
+            "حیوان خانگی؟ طبق مقاله ۱۴۰۳ فقط برخی مسیرهای خارجی و پس از تأیید شرکت.",
+            "ویلچر؟ درخواست اینترنتی معرفی شده اما پذیرش قطعی نیازمند تأیید است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای خرید و سؤال‌های متداول",
+          "url": "https://blog.flysepehran.com/fa/ticket/"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و شبکه سفر",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Sepehran-Airlines",
+          "https://blog.flysepehran.com/fa/flight/thr-to-evn/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پایگاه‌های عملیاتی ثبت‌شده سپهران شامل مشهد، مهرآباد و شیراز هستند و وبلاگ درباره مسیرهای بین‌المللی نظیر تهران–ایروان محتوا دارد. این پیوندها راهنمای فرودگاه‌اند و برنامه فعال آینده را اثبات نمی‌کنند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "فرودگاه کیش"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "فرودگاه بندرعباس"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "فرودگاه استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "پایگاه‌های ثبت‌شده سپهران",
+          "url": "https://www.planespotters.net/airline/Sepehran-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های فعلی و تاریخی ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Sepehran-Airlines",
+          "https://oibk.ir/fa/iran/airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست Planespotters مدل‌های بوئینگ 737-300 و 737-500 به‌عنوان موجودی ثبت‌شده و 737-400، Dornier Do-328 و Dornier 328JET در سوابق تاریخی آمده‌اند. این فهرست، وضعیت فعال روز سفر، مالکیت و چیدمان صندلی را با قطعیت برای راهنمای ما ثابت نمی‌کند؛ مقادیر نامشخص باقی می‌مانند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Sepehran-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-500",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Sepehran-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-400",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Sepehran-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Dornier Do-328",
+          "manufacturer": "Dornier",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Sepehran-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Dornier 328JET-300",
+          "manufacturer": "Dornier",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Sepehran-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست مدل‌های ناوگان در Planespotters",
+          "url": "https://www.planespotters.net/airline/Sepehran-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع ICAO بهره‌برداران ایران",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "هویت و کدهای سپهران",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Sepehran-Airlines",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://blog.flysepehran.com/fa/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی سپهران (Sepehran Airlines) شرکت هواپیمایی ایرانی با کد IATA برابر IS، کد ICAO برابر SHI و کال‌ساین SHIRAZI است. مرجع اپراتورهای ایران شناسه SHI را در فهرست معتبر از ۱۰ ژوئن ۲۰۲۶ ثبت کرده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "شناسه‌ها در Planespotters",
+          "url": "https://www.planespotters.net/airline/Sepehran-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی ICAO بهره‌برداران ایران",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "وبلاگ رسمی سپهران",
+          "url": "https://blog.flysepehran.com/fa/"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
