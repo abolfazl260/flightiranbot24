@@ -1,0 +1,823 @@
+{
+  "schema_version": 1,
+  "airline_id": "iran-aseman",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/",
+      "https://t.me/s/asemanairlines"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت و خرید مستقیم بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/",
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "IATA و کانال رسمی هواپیمایی آسمان، دامنه iaa.ir را به‌عنوان وب‌سایت شرکت معرفی می‌کنند. در زمان بررسی، متن و وضعیت سامانه خرید در وب‌سایت به‌طور مستقل قابل بازیابی نبود؛ باز بودن درگاه پرداخت تضمین نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای خرید، دامنه را با مرجع رسمی مطابقت دهید و به نشانی‌های مشابه یا لینک پرداخت ناشناس اعتماد نکنید.",
+            "اطلاعات صادرکننده، نرخ، کلاس و شرایط استرداد را پیش از پرداخت ذخیره کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت اعلام‌شده آسمان",
+          "url": "https://www.iaa.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی روابط عمومی آسمان",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.iaa.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-aseman",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "میزان و هزینه بار آسمان برای همه بلیت‌ها یکسان فرض نمی‌شود؛ سهمیه دقیق فقط با اطلاعات همان سفر تعیین می‌شود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جدول جاری بار تحویلی و دستی هواپیمایی آسمان از سایت رسمی در این بررسی به‌طور قابل اتکا دریافت نشد؛ وزن ثابت از وب‌سایت‌های فروش ثالث به‌عنوان سیاست قطعی شرکت منتشر نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وزن و تعداد بار تحویلی را از بلیت و شرایط همان کلاس، نرخ، تاریخ و مسیر بررسی کنید.",
+            "بار کابین، وسیله شخصی و بار تحویلی را جداگانه در نظر بگیرید.",
+            "هزینه اضافه‌بار، اندازه بسته، کالسکه، لوازم پزشکی و وسایل خاص را مستقیماً با صادرکننده و شرکت هماهنگ کنید.",
+            "اگر در یک سفر چند شرکت اجراکننده مشارکت دارند، قوانین بار را برای تمام قطعات سفر کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA درباره بار",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده آسمان",
+          "url": "https://www.iaa.ir/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "قوانین تغییر و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iaa.ir/",
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-aseman",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط نرخ، صادرکننده، زمان درخواست و علت تغییر برای هر بلیت جداگانه تعیین‌کننده‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نرخ جریمه، تغییر تاریخ، کنسلی داوطلبانه و بازپرداخت در صورت لغو از سوی شرکت، تابع شرایط بلیت و مقررات قابل اعمال است. متن فعلی سیاست‌های آسمان از سایت رسمی مستقل تأیید نشد؛ درصد جریمه یا بازپرداخت تضمین‌شده منتشر نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر از سایت شرکت خریده‌اید، با پشتیبانی همان کانال رسمی پیگیری کنید.",
+            "اگر خرید از آژانس انجام شده، مشخصات صادرکننده درج‌شده روی رسید را ملاک شروع رسیدگی قرار دهید.",
+            "لغو توسط ایرلاین را از عدم حضور یا کنسلی اختیاری مسافر تفکیک کنید.",
+            "پیام اعلام تغییر، شماره بلیت، تاریخ پرواز و رسید پرداخت را برای پیگیری نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت آسمان",
+          "url": "https://www.iaa.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های روابط عمومی",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و دریافت کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/asemanairlines",
+          "https://www.iaa.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "iran-aseman",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مهلت‌ها و امکان پذیرش آنلاین از روی بلیت و شرکت اجراکننده همان روز تعیین می‌شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال شرکت درباره رزرو اینترنتی و پروازهای مشخص اطلاع‌رسانی دارد، اما وضعیت فعلی چک‌این آنلاین، فهرست مبادی مجاز و مهلت دقیق پذیرش از وب‌سایت در این بررسی تأیید نشد. امکان چک‌این آنلاین را نه قطعی و نه ناممکن معرفی نمی‌کنیم."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از حرکت ساعت بازشدن و بسته‌شدن کانتر، ترمینال و مدارک همان پرواز را با فرودگاه و شرکت کنترل کنید.",
+            "برای پرواز داخلی مدرک هویتی معتبر و برای خارجی گذرنامه و مدارک ورود مقصد را مطابق مقررات آماده کنید.",
+            "در صورت بار تحویلی یا نیاز به خدمات ویژه، زمان لازم برای باجه و کنترل امنیتی را در نظر بگیرید.",
+            "نام شرکت اجراکننده و کد پرواز را از بلیت کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت آسمان",
+          "url": "https://www.iaa.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی آسمان",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "بررسی برنامه و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال آسمان اعلامیه‌های مسیر مانند شیراز–بندرعباس، شیراز–آبادان و تهران–شیراز را منتشر کرده است. این‌ها به‌تنهایی تابلوی لحظه‌ای، گواه انجام پرواز یا برنامه ثابت همه هفته‌های آینده نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ و مسیر را با برنامه روز شرکت و فرودگاه تطبیق دهید.",
+            "برای تأخیر یا لغو، به اطلاعیه‌های تاریخ‌دار توجه کنید و از صادرکننده بلیت درباره حقوق و گزینه‌های همان پرونده بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های رسمی مسیرهای آسمان",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "ارتباط و پیگیری رزرو",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/",
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وب‌سایت اعلام‌شده آسمان iaa.ir است و کانال @asemanairlines خود را به‌عنوان کانال رسمی روابط عمومی معرفی می‌کند. شماره مرکز تماس و ساعات پاسخگویی جاری به‌طور مستقل از وب‌سایت رسمی تأیید نشد؛ شماره‌های قدیمی واسطه‌ها در این راهنما منتشر نمی‌شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از پیگیری شماره پرواز، تاریخ، کد رزرو، نام صادرکننده و رسید را آماده کنید.",
+            "مدارک هویتی، شماره کامل بلیت و اطلاعات مالی را در نظر عمومی به اشتراک نگذارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت آسمان",
+          "url": "https://www.iaa.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی آسمان",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار تحویل‌نشده یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://www.iaa.ir/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در صورت دریافت‌نکردن بار یا مشاهده آسیب، پیش از ترک سالن تحویل موضوع را با میز خدمات بار فرودگاه و شرکت اجراکننده ثبت کنید. مبلغ و مهلت خاص مطالبه خسارت آسمان در این بررسی تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، شماره پرونده، کارت پرواز و مدارک مربوط به محتویات را نگه دارید.",
+            "نام شرکت مسئول حمل و شماره تماس ثبت‌شده در رسید پرونده را بررسی کنید.",
+            "بازه قانونی پیگیری تابع شرایط حمل و قانون مسیر است و نباید از نمونه‌های اینترنتی نتیجه‌گیری شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات ویلچر و نیازهای ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iaa.ir/",
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سیاست جاری آسمان درباره پذیرش ویلچر، باتری وسیله کمک‌حرکتی، کودک بدون همراه و خدمات پزشکی از یک صفحه رسمی قابل بازیابی تأیید نشد؛ به‌جای وعده خدمت قطعی، راهنمای هماهنگی پیش از سفر ارائه می‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در هنگام رزرو، نوع کمک لازم و تجهیزات همراه را به شرکت اطلاع دهید.",
+            "در پروازهای توقف‌دار، هماهنگی فرودگاه‌های میانی و مقصد را نیز کنترل کنید.",
+            "برای بارداری، اکسیژن یا کمک پزشکی، شرایط پذیرش را از مرجع صلاحیت‌دار و ایرلاین جداگانه بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی معرفی‌شده",
+          "url": "https://www.iaa.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال آسمان",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی آنلاین",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و نوع هواپیما",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/asemanairlines",
+          "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اطلاعیه رسمی آسمان، استفاده از فوکر ۱۰۰ برای برخی پروازهای تهران–شیراز ذکر شده است. پایگاه‌های مستقل از مدل‌های دیگری در سوابق ناوگان نام می‌برند. صندلی، کلاس کابین و نوع هواپیمای تاریخ مشخص ممکن است متفاوت باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع هواپیمای اعلام‌شده برای مسیر قبلی، تضمین استفاده از همان مدل در پرواز شما نیست.",
+            "پیکربندی صندلی، امکانات کودکان و خدمات هر کلاس را پیش از سفر از شرکت استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه ناوگان فوکر ۱۰۰ در کانال آسمان",
+          "url": "https://t.me/s/asemanairlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق مستقل ناوگان آسمان",
+          "url": "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذاهای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و خدمات CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و اقلام خطرناک",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/",
+          "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات عمومی IATA و ICAO برای باتری‌های لیتیومی و پاوربانک قابل استنادند، اما استثناها و فرآیندهای خاص آسمان باید برای سفر همان مسافر تأیید شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی لیتیومی را در بار تحویلی قرار ندهید و در کابین از اتصال کوتاه حفاظت کنید.",
+            "در صورت تحویل اجباری ساک کابین در گیت، پاوربانک را پیش از تحویل خارج کنید.",
+            "در به‌روزرسانی‌های ۲۰۲۶ محدودیت‌های استفاده و تعداد پاوربانک تغییر کرده است؛ درباره تجهیزات خاص و باتری‌های ظرفیت‌بالا هماهنگی بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی IATA برای مسافران",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه ۲۰۲۶ ICAO درباره پاوربانک",
+          "url": "https://www.icao.int/news/new-power-bank-restrictions-will-safeguard-international-aviation?pubDate=20260427"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "راهنمای پیش از سفر و پرسش‌ها",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/",
+          "https://t.me/s/asemanairlines",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار مجاز من چقدر است؟ مقدار دقیق را از بلیت و شرکت اجراکننده بخوانید؛ عدد عمومی برای آسمان تأیید نشده است.",
+            "چک‌این آنلاین در دسترس است؟ وضعیت جاری در این بررسی تأیید نشده؛ پیش از سفر مستقیماً بررسی کنید.",
+            "برای تغییر یا لغو چه کنم؟ ابتدا شرایط نرخ و صادرکننده بلیت را مشخص کنید.",
+            "چه مدل هواپیما داریم؟ از اخبار رسمی می‌توان برخی مدل‌ها را شناخت، اما ناوگان فعال و مدل پرواز روز مشخص نیست.",
+            "وضعیت امروز پرواز کجاست؟ با شرکت و فرودگاه بررسی کنید؛ خبر کانال جای تابلوی زنده نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی رسمی آسمان",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال اطلاعیه‌ها",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌های مرتبط و شبکه پروازی",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در کانال رسمی آسمان از شیراز، آبادان، بندرعباس و تهران در اطلاعیه‌های مسیر نام برده شده است. این پیوندها فقط راهنمای فرودگاه‌اند و به معنای پرواز مستقیم روزانه، ساعت پرواز، ظرفیت یا تضمین انجام مسیر در آینده نیستند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "فرودگاه بندرعباس"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های تاریخ‌دار مسیر در کانال رسمی",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان و مدل‌های هواپیما",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/asemanairlines",
+          "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اطلاعیه روابط عمومی آسمان، فوکر ۱۰۰ در مسیر تهران–شیراز معرفی شده و گزارش احیای ناوگان به A320، A340 و Boeing 737 اشاره می‌کند. داده‌های ثانویه ATR 72 را نیز در سوابق نشان می‌دهند. عملیات احیا به معنای بازگشت قطعی هواپیماها به خدمت نیست."
+        },
+        {
+          "type": "text",
+          "text_fa": "برای این مدل‌ها هیچ تعداد فعال، وضعیت عملیاتی، رابطه مالکیت/اجاره یا چیدمان صندلی تأییدشده در این راهنما ادعا نمی‌شود؛ اطلاعات ناوگان پویا است و آمار منبع‌های مستقل ممکن است متفاوت باشد."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 100",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/asemanairlines",
+              "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/asemanairlines",
+              "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A340",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/asemanairlines",
+              "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/asemanairlines",
+              "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "ATR 72",
+          "manufacturer": "ATR",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/asemanairlines",
+              "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه روابط عمومی و احیای ناوگان",
+          "url": "https://t.me/s/asemanairlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "سوابق ناوگان در Planespotters",
+          "url": "https://www.planespotters.net/airline/Iran-Aseman-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی هواپیمایی آسمان",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/",
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی آسمان (Iran Aseman Airlines) یک شرکت هواپیمایی ایرانی است. در فهرست رسمی IATA کد دوحرفی EP، کد ICAO برابر IRC و کد حسابداری 815 برای آن ثبت شده است. شرکت اجراکننده واقعی پرواز را با نام درج‌شده روی بلیت تطبیق دهید."
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت رسمی آسمان در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه‌های رسمی شرکت",
+          "url": "https://t.me/s/asemanairlines"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
