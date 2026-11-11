@@ -25,7 +25,7 @@ def test_actual_catalog_and_independent_snapshots():
     ids = [r["airline_id"] for r in index["airlines"]]
     assert ids == [
         "iran-air", "emirates", "mahan-air", "iran-aseman",
-        "iran-airtour", "qeshm-air", "kish-air",
+        "iran-airtour", "qeshm-air", "kish-air", "zagros-air", "meraj-air",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -42,7 +42,9 @@ def test_actual_catalog_and_independent_snapshots():
                         "iran-aseman": {"published": 14, "draft": 4},
                         "iran-airtour": {"published": 13, "draft": 6},
                         "qeshm-air": {"published": 17, "draft": 2},
-                        "kish-air": {"published": 15, "draft": 5}}
+                        "kish-air": {"published": 15, "draft": 5},
+                        "zagros-air": {"published": 14, "draft": 6},
+                        "meraj-air": {"published": 14, "draft": 6}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -401,3 +403,75 @@ def test_qeshm_kish_codes_and_draft_publication_limits():
         "checkin", "seat-selection", "lounges", "pets", "onboard-connectivity",
     }
 
+
+
+@pytest.mark.parametrize("airline_id,iata,icao,models", [
+    ("zagros-air", "ZO", "IZG", 4),
+    ("meraj-air", "IJ", "MRJ", 4),
+])
+def test_zagros_meraj_independent_source_and_publication_gates(
+    airline_id, iata, icao, models
+):
+    details = ROOT / "data/airlines/details" / f"{airline_id}.v1.json"
+    detail = module.read_json(details)
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    row = next(e for e in index["airlines"] if e["airline_id"] == airline_id)
+    assert detail["airline_id"] == airline_id
+    assert len(detail["sections"]) == 20
+    assert len({s["id"] for s in detail["sections"]}) == 20
+    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert row["detail_path"] == f"details/{airline_id}.v1.json"
+    assert {(c["system"], c["value"]) for c in row["identity"]["codes"]} == {
+        ("iata", iata), ("icao", icao),
+    }
+    assert row["metadata"]["status"] == "published"
+    assert row["metadata"]["source_urls"]
+
+    published = [s for s in detail["sections"] if
+                 s["metadata"]["status"] == "published"]
+    draft = [s for s in detail["sections"] if
+             s["metadata"]["status"] == "draft"]
+    assert len(published) == 14
+    assert len(draft) == 6
+    expected_draft = {
+        "checkin", "seat-selection", "catering",
+        "lounges", "pets", "onboard-connectivity",
+    }
+    assert {s["id"] for s in draft} == expected_draft
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in published)
+    assert all(s["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+               for s in published)
+    assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None
+               for s in draft)
+    for section in detail["sections"]:
+        if section["kind"] == "policy":
+            assert section["scope"]["operating_carrier"] == airline_id
+            assert section["scope"]["seller"] == "unknown"
+            assert section["scope"]["route"] is None
+
+    fleet = next(s for s in published if s["id"] == "fleet")
+    aircraft = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(aircraft) == models
+    assert all(b["count"] is None and b["configuration_fa"] is None
+               for b in aircraft)
+    assert all(b["status"] == "unknown" and b["relationship"] == "unknown"
+               for b in aircraft)
+    network = next(s for s in published if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+
+
+def test_zagros_meraj_airline_baggage_cannot_be_read_as_universal_allowance():
+    zagros = module.read_json(ROOT / "data/airlines/details/zagros-air.v1.json")
+    meraj = module.read_json(ROOT / "data/airlines/details/meraj-air.v1.json")
+    for detail in (zagros, meraj):
+        baggage = next(s for s in detail["sections"] if s["id"] == "baggage")
+        assert baggage["metadata"]["confidence"] == "secondary"
+        assert baggage["scope"]["fare_brand"] is None
+        assert baggage["scope"]["operating_carrier"] == detail["airline_id"]
+    meraj_text = " ".join(
+        b["text_fa"] for b in
+        next(s for s in meraj["sections"] if s["id"] == "baggage")["blocks"]
+        if b["type"] == "text"
+    )
+    assert "رشت" in meraj_text
+    assert "همه" in meraj_text
