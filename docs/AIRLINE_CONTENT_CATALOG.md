@@ -28,6 +28,8 @@ it does not package/sign/release APK or AAB files.
 | `iran-airtour` | published | 13 | 6 | IATA B9/IRB identity, dated carrier route announcements, general passenger guidance, 6 aircraft families with unknown counts/status; current fare and check-in rules not verified. [Source audit](airlines/iran-airtour-2026-11-11.md). |
 | `qeshm-air` | published | 17 | 2 | Reviewed official site: cabin baggage, refund workflow, check-in FAQ, complaint and phone, airport guidance and 4 unknown-count aircraft models. See [dated Qeshm/Kish audit](airlines/qeshm-kish-2026-11-11.md). |
 | `kish-air` | published | 15 | 5 | Official channel, dates of route/service announcements, travel guidance and 4 unknown-count fleet models. Current policy details unavailable; some services remain draft. See [dated audit](airlines/qeshm-kish-2026-11-11.md). |
+| `zagros-air` | published | 14 | 6 | ZO/IZG identity confirmed by aviation records, source-qualified baggage/refund guidance, dated flight observations, and 4 aircraft family models with unknown operational counts. See [source audit](airlines/zagros-meraj-2026-11-11.md). |
+| `meraj-air` | published | 14 | 6 | IJ/MRJ industry-code references (CAPA lists IATA as n/a), historically scoped baggage example, IATA travel guidance and 4 unknown-count fleet families. See [source audit](airlines/zagros-meraj-2026-11-11.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -103,6 +105,23 @@ configurations remain null/unknown. No live route schedule, synthetic
 ratings, passenger experiences or unlicensed media were added. Schema,
 Android/Mini App readers and release workflows are unchanged. See the
 [full audit](airlines/qeshm-kish-2026-11-11.md).
+
+## Added Zagros Airlines and Meraj Airlines — 2026-11-11
+
+The index now includes **nine** independent airline guides. Zagros and Meraj
+each publish **14 source-qualified / 6 draft** sections. Both official websites
+did not expose trustworthy current fare and passenger policy terms in the
+review environment; drafts represent unknown availability, not missing
+services. Older route-specific baggage and contact posts are **not** claimed
+as current or universal. IATA/ICAO identity discrepancies are recorded in the
+[dated audit](airlines/zagros-meraj-2026-11-11.md).
+
+Fleet model families are sourced to external aviation directories, but all
+counts, ownership, active status and configurations remain unknown. Route
+links navigate published airport guides; no recurring flight schedule or
+synthetic passenger rating is generated. Existing API, Android and Mini App
+reader contracts, archive data and manually triggered Android builds remain
+unchanged.
 
 ## File contract and maintenance
 
