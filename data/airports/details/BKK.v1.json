@@ -196,10 +196,38 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://suvarnabhumi.airportthai.co.th/service/transportation/detail/58",
+        "https://suvarnabhumi.airportthai.co.th/service/airport-guide/detail/All_parking_zones_at_Suvarnabhumi_Airport"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه سووارنابومی پارکینگ‌های چندطبقه و روباز در Zoneهای ۲ تا ۷ و پارکینگ بلندمدت در Zone A و مرکز حمل‌ونقل عمومی Zone D دارد. صفحه رسمی فرودگاه محل هر زون را به نقشه و پیوند Google Maps متصل کرده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "طبق جدول رسمی، ۱۵ دقیقه نخست پارکینگ عمومی رایگان است؛ پس از آن تعرفه بر اساس مدت توقف و نوع خودرو محاسبه می‌شود.",
+            "تعرفه خودروهای چهارچرخ با خودروهای شش‌چرخ و بالاتر متفاوت است؛ برای پارکینگ بلندمدت نیز جدول جداگانه وجود دارد.",
+            "مرکز تماس AOT به شماره ۱۷۲۲ به‌صورت ۲۴ ساعته معرفی شده است.",
+            "نرخ‌ها و ظرفیت ممکن است تغییر کنند؛ پیش از ورود، صفحه رسمی زون‌ها و تعرفه را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "زون‌های پارکینگ و نقشه رسمی سووارنابومی",
+          "url": "https://suvarnabhumi.airportthai.co.th/service/airport-guide/detail/All_parking_zones_at_Suvarnabhumi_Airport"
+        },
+        {
+          "type": "link",
+          "title_fa": "تعرفه رسمی پارکینگ خودرو",
+          "url": "https://suvarnabhumi.airportthai.co.th/service/transportation/detail/58"
+        }
+      ],
+      "subtitle_fa": "پارکینگ‌های چندطبقه، روباز و بلندمدت؛ تعرفه تابع مدت و نوع خودرو است"
     },
     {
       "id": "facilities",
@@ -266,10 +294,31 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://suvarnabhumi.airportthai.co.th/service/facility/detail/230"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سووارنابومی مجموعه بزرگی از سالن‌های اختصاصی ایرلاین‌ها و اپراتورهای تجاری دارد. صفحه رسمی فرودگاه، Miracle Lounge و The Coral Lounge را در چند کانکورس معرفی می‌کند؛ هر دو برای بخش بین‌المللی در نقاط مختلف شبانه‌روزی اعلام شده‌اند و سالن‌های داخلی آن‌ها معمولاً در بازه ۰۵:۰۰ تا ۲۲:۰۰ فعالیت دارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "از سالن‌های ثبت‌شده می‌توان به SilverKris، JAL Sakura، EVA Air, Thai Airways Royal First/Royal Orchid/Royal Silk، China Airlines Dynasty، Emirates، Oman Air، Bangkok Airways، Turkish Airlines، Qatar Airways، Cathay Pacific و Air France–KLM اشاره کرد.",
+            "موقعیت سالن‌ها به کانکورس و گیت وابسته است؛ برای نمونه بسیاری از سالن‌ها در سطح ۳ و داخل محدوده کنترل‌شده پروازهای بین‌المللی قرار دارند.",
+            "ساعات، دسترسی، ظرفیت و شرایط پذیرش ممکن است با برنامه پرواز تغییر کند؛ پیش از مراجعه، صفحه رسمی فرودگاه و شرایط ایرلاین/اپراتور را کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی لانژها و موقعیت آن‌ها در سووارنابومی",
+          "url": "https://suvarnabhumi.airportthai.co.th/service/facility/detail/230"
+        }
+      ],
+      "subtitle_fa": "سالن‌های تجاری و ایرلاینی در کانکورس‌های A تا G؛ دسترسی وابسته به اپراتور"
     },
     {
       "id": "baggage-claims",
