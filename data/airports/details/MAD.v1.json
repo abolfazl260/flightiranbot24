@@ -196,10 +196,44 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.aena.es/en/t1.html",
+        "https://www.aena.es/en/adolfo-suarez-madrid-barajas/parking/t4.html",
+        "https://www.aena.es/en/madrid-barajas-adolfo-suarez/parking/t2/expres-salidas-t2.html"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Aena برای فرودگاه مادرید-باراخاس پارکینگ‌های عمومی و اختصاصی ترمینال‌های T1، T2/T3 و T4، پارکینگ بلندمدت و پارکینگ Express را معرفی می‌کند. رزرو از وبگاه و اپ رسمی Aena انجام می‌شود و نوع پرداخت می‌تواند با بلیت، شماره پلاک، دستگاه پرداخت یا اپ انجام شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای T1، صفحه رسمی P1، پارکینگ بلندمدت T1/T2/T3 و پارکینگ کم‌هزینه را روی نقشه معرفی می‌کند؛ برای T4 نیز P4، First Class و Long Stay T4 فهرست شده‌اند.",
+            "پارکینگ Express خروجی T2 برای توقف کوتاه است: ۱۰ دقیقه نخست رایگان، حداکثر توقف ۲ ساعت و دسترسی مستقیم به کانترهای خروجی T2 دارد.",
+            "برای پارکینگ Express پس از ۱۰ دقیقه، هزینه از ابتدای توقف محاسبه می‌شود؛ عبور از سقف دو ساعت می‌تواند منجر به اعمال حداکثر تعرفه روزانه و انتقال خودرو شود.",
+            "بررسی کنید پارکینگ انتخابی اجازه ورود بدون رزرو دارد یا خیر؛ برخی پارکینگ‌ها رزرو قبلی می‌خواهند و نرخ‌ها با ترمینال و مدت توقف تغییر می‌کنند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "رزرو و نقشه پارکینگ‌های رسمی Aena در T1",
+          "url": "https://www.aena.es/en/t1.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "پارکینگ‌های رسمی ترمینال T4",
+          "url": "https://www.aena.es/en/adolfo-suarez-madrid-barajas/parking/t4.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین پارکینگ Express خروجی T2",
+          "url": "https://www.aena.es/en/madrid-barajas-adolfo-suarez/parking/t2/expres-salidas-t2.html"
+        }
+      ],
+      "subtitle_fa": "پارکینگ‌های T1، T2/T3 و T4؛ محدودیت ۲ ساعته پارکینگ Express T2"
     },
     {
       "id": "facilities",
@@ -266,10 +300,38 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.aena.es/en/adolfo-suarez-madrid-barajas/vip-services/vip-lounges/vip-lounges-all-terminals.html",
+        "https://serviciosvip.aena.es/vip/en/aeropuertos/adolfo-suarez-madrid-barajas"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Aena هشت سالن VIP را در فرودگاه مادرید-باراخاس فهرست می‌کند: Altitude و Cibeles در T1، Puerta de Alcalá در T2، Puerta del Sol در T3، Plaza Mayor و Retiro در T4 و Gran Vía و Neptuno در T4S."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "صفحه Aena VIP Services امکان انتخاب سالن بر اساس ترمینال و رزرو خدمات را ارائه می‌کند.",
+            "خدمات معمول سالن‌ها شامل اطلاعات پرواز، پذیرایی، مطبوعات و مجلات، تلویزیون، اینترنت و Wi-Fi ممتاز، فضاهای استراحت و در برخی سالن‌ها اتاق جلسه است.",
+            "قیمت، ساعات کار و واجدشرایط بودن مسافر به سالن، ترمینال، تاریخ و نوع سرویس بستگی دارد؛ نرخ را در سامانه رسمی Aena هنگام رزرو بررسی کنید.",
+            "Aena توصیه می‌کند خرید خدمات VIP فقط از کانال رسمی این شرکت انجام شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی هشت سالن VIP مادرید و محل هرکدام",
+          "url": "https://www.aena.es/en/adolfo-suarez-madrid-barajas/vip-services/vip-lounges/vip-lounges-all-terminals.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه رسمی رزرو خدمات VIP فرودگاه مادرید",
+          "url": "https://serviciosvip.aena.es/vip/en/aeropuertos/adolfo-suarez-madrid-barajas"
+        }
+      ],
+      "subtitle_fa": "هشت سالن VIP در T1، T2، T3، T4 و T4S؛ رزرو از سامانه رسمی Aena"
     },
     {
       "id": "baggage-claims",
