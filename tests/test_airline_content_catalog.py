@@ -27,6 +27,7 @@ def test_actual_catalog_and_independent_snapshots():
         "iran-air", "emirates", "mahan-air", "iran-aseman",
         "iran-airtour", "qeshm-air", "kish-air", "zagros-air", "meraj-air",
         "ata-air", "varesh-air", "caspian-air", "sepehran-air",
+        "taban-air", "karun-air",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -49,7 +50,9 @@ def test_actual_catalog_and_independent_snapshots():
                         "ata-air": {"published": 16, "draft": 4},
                         "varesh-air": {"published": 18, "draft": 2},
                         "caspian-air": {"published": 14, "draft": 6},
-                        "sepehran-air": {"published": 19, "draft": 2}}
+                        "sepehran-air": {"published": 19, "draft": 2},
+                        "taban-air": {"published": 15, "draft": 6},
+                        "karun-air": {"published": 14, "draft": 6}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -617,4 +620,74 @@ def test_caspian_icao_only_and_sepehran_industry_codes():
     bags = next(s for s in caspian["sections"] if s["id"] == "baggage")
     assert bags["metadata"]["confidence"] == "secondary"
     assert "تاریخ" in bags["scope"]["note_fa"]
+
+
+@pytest.mark.parametrize("airline_id,published,draft,models", [
+    ("taban-air", 15, 6, 5),
+    ("karun-air", 14, 6, 4),
+])
+def test_taban_karun_source_scoped_publication_and_null_fleet(
+    airline_id, published, draft, models
+):
+    dataset = module.read_json(
+        ROOT / "data/airlines/details" / f"{airline_id}.v1.json"
+    )
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entry = next(x for x in index["airlines"] if x["airline_id"] == airline_id)
+    assert entry["detail_path"] == f"details/{airline_id}.v1.json"
+    assert dataset["airline_id"] == airline_id
+    assert len(dataset["sections"]) == published + draft
+    assert len({s["id"] for s in dataset["sections"]}) == published + draft
+    assert dataset["published_reviews"] == dataset["experience_links"] == []
+    visible = [s for s in dataset["sections"] if s["metadata"]["status"] == "published"]
+    hidden = [s for s in dataset["sections"] if s["metadata"]["status"] == "draft"]
+    assert len(visible) == published and len(hidden) == draft
+    assert {s["id"] for s in hidden} == {
+        "checkin", "seat-selection", "catering", "lounges", "pets",
+        "onboard-connectivity",
+    }
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in visible)
+    assert all(s["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+               for s in visible)
+    assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None
+               for s in hidden)
+    for s in dataset["sections"]:
+        if s["kind"] == "policy":
+            assert s["scope"]["operating_carrier"] == airline_id
+            assert s["scope"]["seller"] == "unknown"
+            assert s["scope"]["route"] is None
+    fleet = next(s for s in visible if s["id"] == "fleet")
+    aircraft = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(aircraft) == models
+    assert all(b["count"] is None and b["configuration_fa"] is None
+               for b in aircraft)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in aircraft)
+    network = next(s for s in visible if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+
+
+def test_taban_karun_codes_and_historical_designators():
+    catalog = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entries = {entry["airline_id"]: entry for entry in catalog["airlines"]}
+    assert {(c["system"], c["value"]) for c in
+            entries["taban-air"]["identity"]["codes"]} == {
+        ("iata", "HH"), ("icao", "TBN"),
+    }
+    assert {(c["system"], c["value"]) for c in
+            entries["karun-air"]["identity"]["codes"]} == {
+        ("iata", "NV"), ("icao", "KRU"),
+    }
+    assert entries["taban-air"]["identity"]["website"] == "https://taban.aero/"
+    assert entries["karun-air"]["identity"]["website"] == "https://karunair.ir/"
+    assert "Iranian Naft Airlines" in entries["karun-air"]["identity"]["former_names"]
+    taban = module.read_json(ROOT / "data/airlines/details/taban-air.v1.json")
+    karun = module.read_json(ROOT / "data/airlines/details/karun-air.v1.json")
+    taban_faq = next(s for s in taban["sections"] if s["id"] == "practical-faq")
+    assert "TBM" in " ".join(
+        part for b in taban_faq["blocks"] if b["type"] == "bullets"
+        for part in b["items_fa"]
+    )
+    bag = next(s for s in karun["sections"] if s["id"] == "baggage")
+    assert bag["metadata"]["confidence"] == "secondary"
+    assert "تأیید" in bag["scope"]["note_fa"]
 
