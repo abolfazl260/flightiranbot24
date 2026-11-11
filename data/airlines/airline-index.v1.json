@@ -415,6 +415,93 @@
         "stale": false,
         "confidence": "secondary"
       }
+    },
+    {
+      "airline_id": "ata-air",
+      "detail_path": "details/ata-air.v1.json",
+      "identity": {
+        "name_fa": "آتا",
+        "name_en": "ATA Airlines",
+        "legal_name": "ATA Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی آتا",
+          "آتا ایر",
+          "Ata Airline"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "I3",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "TBZ",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://ataair.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://ataair.ir/",
+          "https://www.planespotters.net/airline/ATA-Airlines-Iran",
+          "https://oibk.ir/iran/airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "varesh-air",
+      "detail_path": "details/varesh-air.v1.json",
+      "identity": {
+        "name_fa": "وارش",
+        "name_en": "Varesh Airlines",
+        "legal_name": "Varesh Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی وارش",
+          "وارش ایر",
+          "Varesh Airline"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "VRH",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://vareshair.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://vareshair.ir/",
+          "https://centreforaviation.com/data/profiles/airlines/varesh-airlines-vrh",
+          "https://oibk.ir/fa/iran/airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
     }
   ]
 }
