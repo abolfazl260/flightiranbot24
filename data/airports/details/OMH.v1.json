@@ -110,7 +110,7 @@
       "icon": "video",
       "order": 50,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://t.me/airportnews/42349",
         "https://oibk.ir/fa/airports/oitr"
@@ -164,7 +164,7 @@
       "icon": "building-2",
       "order": 60,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr/charts",
@@ -202,7 +202,7 @@
       "icon": "car-taxi-front",
       "order": 70,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr"
@@ -234,7 +234,7 @@
       "icon": "car-front",
       "order": 80,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr/charts"
@@ -271,7 +271,7 @@
       "icon": "coffee",
       "order": 90,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr"
@@ -303,7 +303,7 @@
       "icon": "accessibility",
       "order": 100,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr"
@@ -335,7 +335,7 @@
       "icon": "armchair",
       "order": 110,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr"
@@ -475,7 +475,7 @@
       "icon": "route",
       "order": 160,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr"
@@ -507,7 +507,7 @@
       "icon": "shield-check",
       "order": 170,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846229/OITR.pdf",
         "https://oibk.ir/fa/airports/oitr"
