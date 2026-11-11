@@ -89,6 +89,98 @@
         "stale": false,
         "confidence": "official"
       }
+    },
+    {
+      "airline_id": "mahan-air",
+      "detail_path": "details/mahan-air.v1.json",
+      "identity": {
+        "name_fa": "ماهان",
+        "name_en": "Mahan Air",
+        "legal_name": "Mahan Air",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی ماهان",
+          "ماهان‌ایر",
+          "Mahan Airlines"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "W5",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "IRM",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.mahanair.co.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/publications/directories/code-search/?airline.search=W5",
+          "https://t.me/s/mahanairchannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "iran-aseman",
+      "detail_path": "details/iran-aseman.v1.json",
+      "identity": {
+        "name_fa": "آسمان",
+        "name_en": "Iran Aseman Airlines",
+        "legal_name": "Iran Aseman Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی آسمان",
+          "ایران آسمان",
+          "Aseman Airlines"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "EP",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "IRC",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.iaa.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/iran-aseman-airlines/158/",
+          "https://t.me/s/asemanairlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
     }
   ]
 }
