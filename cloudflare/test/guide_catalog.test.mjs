@@ -7,14 +7,16 @@ const now=Date.parse('2026-11-11T00:00:00Z');
 const detail=()=>read('data/airlines/details/emirates.v1.json');
 test('shared Android airline data preserves identity, draft gates, fleet unknowns and no synthetic scores',()=>{
  const rows=parseGuideIndex(read('data/airlines/airline-index.v1.json'),'airlines',[],now);
- assert.equal(rows.length,7);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
+ assert.equal(rows.length,9);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
  assert.equal(filterGuides(rows,'ماهان','iran')[0].id,'mahan-air');
  assert.equal(filterGuides(rows,'آسمان','iran')[0].id,'iran-aseman');
  assert.equal(filterGuides(rows,'ایران ایرتور','iran')[0].id,'iran-airtour');
  assert.equal(filterGuides(rows,'قشم','iran')[0].id,'qeshm-air');
  assert.equal(filterGuides(rows,'کیش','iran')[0].id,'kish-air');
+ assert.equal(filterGuides(rows,'زاگرس','iran')[0].id,'zagros-air');
+ assert.equal(filterGuides(rows,'معراج','iran')[0].id,'meraj-air');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
- for (const [id,available,drafted,fleetCount] of [['mahan-air',19,1,6],['iran-aseman',14,4,5],['iran-airtour',13,6,6],['qeshm-air',17,2,4],['kish-air',15,5,4]]) {
+ for (const [id,available,drafted,fleetCount] of [['mahan-air',19,1,6],['iran-aseman',14,4,5],['iran-airtour',13,6,6],['qeshm-air',17,2,4],['kish-air',15,5,4],['zagros-air',14,6,4],['meraj-air',14,6,4]]) {
   const d=read('data/airlines/details/'+id+'.v1.json');
   assert.equal(d.sections.filter(s=>s.metadata.status==='draft').length,drafted);
   const parsed=parseGuideDetail(d,'airlines',id,now);
@@ -28,6 +30,10 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
   if(id==='iran-airtour')assert(!parsed.sections.some(s=>s.id==='checkin'));
   if(id==='kish-air')assert(!parsed.sections.some(s=>s.id==='checkin'));
   if(id==='qeshm-air')assert(!parsed.sections.some(s=>s.id==='catering'));
+  if(['zagros-air','meraj-air'].includes(id)) {
+   assert(!parsed.sections.some(s=>s.id==='checkin'));
+   assert(!parsed.sections.some(s=>s.id==='pets'));
+  }
 
 
  }
