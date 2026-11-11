@@ -28,7 +28,7 @@ class AirlineContentTest {
 
     @Test fun bundledCatalogHasIndependentPagesAndNoSyntheticRatings() {
         val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
-        assertEquals(setOf("iran-air", "emirates"), rows.map { it.id }.toSet())
+        assertEquals(setOf("iran-air", "emirates", "mahan-air", "iran-aseman"), rows.map { it.id }.toSet())
         val iranAir = AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!
         assertEquals(17, iranAir.sections.size)
         assertFalse(iranAir.sections.any { it.id == "onboard-connectivity" })
@@ -37,6 +37,23 @@ class AirlineContentTest {
         val iranFleet = iranAir.sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Fleet>()
         assertEquals(9, iranFleet.size)
         assertTrue(iranFleet.all { it.count == null && it.status == "unknown" && it.relationship == "unknown" })
+        val mahan = AirlineContentParser.detail(bundled("details/mahan-air.v1.json"), "mahan-air", now)!!
+        assertEquals(19, mahan.sections.size)
+        assertFalse(mahan.sections.any { it.id == "onboard-connectivity" })
+        assertEquals(0, mahan.ratingCount)
+        assertNull(mahan.average)
+        val mahanFleet = mahan.sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Fleet>()
+        assertEquals(6, mahanFleet.size)
+        assertTrue(mahanFleet.all { it.count == null && it.status == "unknown" })
+
+        val aseman = AirlineContentParser.detail(bundled("details/iran-aseman.v1.json"), "iran-aseman", now)!!
+        assertEquals(14, aseman.sections.size)
+        assertFalse(aseman.sections.any { it.id in listOf("onboard-connectivity", "catering", "seat-selection", "lounges") })
+        assertEquals(0, aseman.ratingCount)
+        assertNull(aseman.average)
+        val asemanFleet = aseman.sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Fleet>()
+        assertEquals(5, asemanFleet.size)
+        assertTrue(asemanFleet.all { it.count == null && it.relationship == "unknown" })
         val page = parse(page())
         assertEquals(18, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
