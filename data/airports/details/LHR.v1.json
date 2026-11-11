@@ -196,10 +196,38 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.heathrow.com/transport-and-directions/heathrow-parking",
+        "https://www.heathrow.com/transport-and-directions/heathrow-parking/heathrow-park-and-ride"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Heathrow شش نوع محصول رسمی پارکینگ معرفی می‌کند: Terminal Parking، Park & Ride، Priority Park & Ride، Meet & Greet، Valet و Pod Parking ویژه T5. Terminal Parking نزدیک‌ترین گزینه به ترمینال‌های ۲، ۳ و ۵ است؛ Park & Ride در تمام ترمینال‌ها با شاتل رایگان و انتقال معمولاً تا حدود ۱۵ دقیقه ارائه می‌شود. Pod Parking فقط برای T5 است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تغییر مهم ۲۰۲۶: از ۲۳ ژوئن، پارکینگ چندطبقه Terminal Parking ترمینال ۴ برای بازسازی بسته شده و تمام پارکینگ مسافران T4 به Zone A از Park & Ride ترمینال ۴ منتقل شده است.",
+            "Priority Park & Ride ترمینال‌های ۲ و ۳ در حال حاضر به‌دلایل عملیاتی برای رزرو جدید و ورود بدون رزرو بسته اعلام شده؛ گزینه T5 باز است.",
+            "تمام پارکینگ‌های رسمی دارای گشت امنیتی هستند و جایگاه‌های Blue Badge دارند؛ شرایط استفاده و لغو رزرو را از صفحه رسمی بررسی کنید.",
+            "نرخ‌ها به تاریخ، مدت توقف و نوع محصول وابسته‌اند؛ پیش‌رزرو معمولاً ارزان‌تر است و امکان تغییر یا لغو تا دو ساعت پیش از زمان ورود اعلام شده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "رزرو و مقایسه پارکینگ‌های رسمی Heathrow",
+          "url": "https://www.heathrow.com/transport-and-directions/heathrow-parking"
+        },
+        {
+          "type": "link",
+          "title_fa": "جزئیات Park & Ride و انتقال شاتل",
+          "url": "https://www.heathrow.com/transport-and-directions/heathrow-parking/heathrow-park-and-ride"
+        }
+      ],
+      "subtitle_fa": "توجه ویژه به بسته بودن Terminal Parking در T4 و توقف موقت Priority Park & Ride در T2/T3"
     },
     {
       "id": "facilities",
@@ -266,10 +294,37 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.heathrow.com/at-the-airport/lounges-hotels-spas",
+        "https://www.heathrow.com/departures/departure-lounge-and-boarding"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Heathrow سالن‌های استراحت را در هر چهار ترمینال معرفی می‌کند و بخشی از آن‌ها امکان رزرو پیش از سفر دارند. فهرست رسمی شامل سالن‌های اختصاصی ایرلاین‌ها و سالن‌های قابل رزرو است؛ نمونه‌های فهرست‌شده در T2 شامل Lufthansa Senator/Business، Singapore Airlines SilverKris، Air Canada Maple Leaf، United Club و United Arrivals Lounge است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در T2، سالن‌های Lufthansa Senator/Business و Air Canada Maple Leaf در محدوده پس از امنیت و United Arrivals Lounge در بخش ورودی قرار دارند؛ ساعت‌های اعلام‌شده برای هر سالن متفاوت است.",
+            "سالن‌های هر ترمینال و ساعات آن‌ها ممکن است بر اساس برنامه پرواز تغییر کنند؛ ترمینال و ایرلاین خود را در صفحه رسمی فیلتر کنید.",
+            "Heathrow اعلام می‌کند سالن‌های فرودگاه در همه ترمینال‌ها وجود دارند و برخی را می‌توان پیشاپیش رزرو کرد؛ شرایط ورود، سن همراهان، مدت اقامت و قیمت به اپراتور بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی سالن‌ها و هتل‌های Heathrow",
+          "url": "https://www.heathrow.com/at-the-airport/lounges-hotels-spas"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی سالن خروج و خدمات پیش از سوارشدن",
+          "url": "https://www.heathrow.com/departures/departure-lounge-and-boarding"
+        }
+      ],
+      "subtitle_fa": "سالن‌ها در هر چهار ترمینال؛ نمونه‌های T2 و شرایط دسترسی در صفحه رسمی"
     },
     {
       "id": "baggage-claims",

@@ -292,3 +292,55 @@ def test_six_international_airports_publish_official_parking_lounge_and_transfer
             not any(b["type"] == "experience" for b in s["blocks"])
             for s in airport["sections"]
         )
+
+
+def test_six_more_international_airports_publish_official_parking_and_lounge_guides():
+    base = ROOT / "data/airports/details"
+    expected = {
+        "DOH": {"parking", "lounges"},
+        "DXB": {"parking", "lounges"},
+        "FRA": {"parking", "lounges"},
+        "KUL": {"parking", "lounges"},
+        "LHR": {"parking", "lounges"},
+        "MAD": {"parking", "lounges"},
+    }
+    for code, section_ids in expected.items():
+        airport = load(base / f"{code}.v1.json")
+        sections = {s["id"]: s for s in airport["sections"]}
+        for section_id in section_ids:
+            section = sections[section_id]
+            assert section["status"] == "published"
+            assert section["reviewed_at"] == "2026-11-11T00:00:00Z"
+            assert section["source_urls"]
+            assert section["blocks"]
+            assert all(b["type"] in {"text", "bullets", "link"} for b in section["blocks"])
+        drafts = {s["id"] for s in airport["sections"] if s["status"] == "draft"}
+        assert drafts == {"traveler-experiences", "airport-videos"}
+
+    doha = load(base / "DOH.v1.json")
+    parking = next(s for s in doha["sections"] if s["id"] == "parking")
+    assert "۳٬۳۲۵" in " ".join(b.get("text_fa", "") for b in parking["blocks"])
+    dxb = load(base / "DXB.v1.json")
+    lounges = next(s for s in dxb["sections"] if s["id"] == "lounges")
+    assert "Assisted Travel Lounge" in " ".join(
+        b.get("text_fa", "") for b in lounges["blocks"]
+    )
+    kul = load(base / "KUL.v1.json")
+    assert "۵٬۷۰۰" in " ".join(
+        b.get("text_fa", "")
+        for b in next(s for s in kul["sections"] if s["id"] == "parking")["blocks"]
+    )
+    heathrow = load(base / "LHR.v1.json")
+    heathrow_parking = next(
+        s for s in heathrow["sections"] if s["id"] == "parking"
+    )
+    heathrow_parking_text = " ".join(
+        b.get("text_fa", "") + " " + " ".join(b.get("items_fa", []))
+        for b in heathrow_parking["blocks"]
+    )
+    assert "۲۳ ژوئن" in heathrow_parking_text
+    madrid = load(base / "MAD.v1.json")
+    assert "Neptuno" in " ".join(
+        b.get("text_fa", "")
+        for b in next(s for s in madrid["sections"] if s["id"] == "lounges")["blocks"]
+    )

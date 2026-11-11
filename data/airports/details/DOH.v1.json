@@ -197,10 +197,38 @@
       "title_fa": "پارکینگ و توقف خودرو",
       "icon": "car-front",
       "order": 80,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://www.mawaqifqatar.com/booking/site/hia/",
+        "https://thepeninsulaqatar.com/article/22/04/2026/hia-updates-faqs-on-airline-partners-airport-operations-in-qatar"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پارکینگ فرودگاه حمد در مقابل مجموعه ترمینال مسافری قرار دارد و توسط اپراتور خدمات پارکینگ معرفی‌شده در وبگاه Mawaqif Qatar مدیریت می‌شود. اپراتور سه بخش East، West و Car Park C را با مجموع ۳٬۳۲۵ جایگاه، از جمله حدود ۳۴ جایگاه ویژه افراد دارای معلولیت، معرفی می‌کند. خدمات عمومی برای پیاده‌کردن، سوارکردن، توقف کوتاه و توقف بلندمدت در صفحه اپراتور توضیح داده شده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پارکینگ East برای مسافرانی که با Qatar Airways پرواز می‌کنند نزدیک‌تر معرفی شده؛ بخش West شامل جایگاه‌های اختصاصی دولتی نیز هست و آن قسمت برای استفاده عمومی نیست.",
+            "جایگاه‌های قابل دسترس نزدیک ورودی‌های ترمینال قرار دارند؛ محل دقیق را از تابلوهای داخل پارکینگ دنبال کنید.",
+            "در آوریل ۲۰۲۶، FAQ عملیاتی فرودگاه که در گزارش رسانه‌ای نقل شده بود، از در دسترس نبودن موقت Valet خبر می‌داد؛ بنابراین این راهنما Valet را خدمت فعال و تضمین‌شده معرفی نمی‌کند.",
+            "تعرفه، امکان رزرو و موجودی لحظه‌ای را از اپراتور پارکینگ پیش از حرکت بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اپراتور پارکینگ فرودگاه حمد و رزرو",
+          "url": "https://www.mawaqifqatar.com/booking/site/hia/"
+        },
+        {
+          "type": "link",
+          "title_fa": "به‌روزرسانی عملیاتی فرودگاه درباره خدمات پارکینگ",
+          "url": "https://thepeninsulaqatar.com/article/22/04/2026/hia-updates-faqs-on-airline-partners-airport-operations-in-qatar"
+        }
+      ],
+      "subtitle_fa": "سه بخش East، West و C با ۳٬۳۲۵ جایگاه؛ خدمات Valet بدون تأیید روز سفر تضمین نمی‌شود"
     },
     {
       "id": "facilities",
@@ -267,10 +295,49 @@
       "title_fa": "CIP، VIP و سالن‌های استراحت",
       "icon": "armchair",
       "order": 110,
-      "status": "draft",
-      "reviewed_at": null,
-      "source_urls": [],
-      "blocks": []
+      "status": "published",
+      "reviewed_at": "2026-11-11T00:00:00Z",
+      "source_urls": [
+        "https://dohahamadairport.com/sites/default/files/maps/pdf/Duty%20Free%20South%20Map%20-%20August%202024%20update.pdf",
+        "https://dohahamadairport.com/sites/default/files/maps/pdf/Duty%20Free%20North%20and%20Garden%20Map%20-%20August%202024%20update_0.pdf",
+        "https://www.qatarairways.com/en-tw/lounges.html",
+        "https://www.discoverqatar.qa/departure-al-maha-lounge/overview"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نقشه‌های رسمی فرودگاه حمد، سالن‌های Al Safwa First، Al Mourjan Business، Al Maha، Oryx، Platinum & Gold و Silver را در نواحی مختلف ترمینال و Duty Free نشان می‌دهند. Qatar Airways نیز سالن‌های Al Safwa و Al Mourjan و سالن‌های عضویت Privilege Club را معرفی می‌کند. Al Maha در دو محل شمالی و جنوبی Duty Free Plaza قرار دارد و سرویس Discover Qatar دسترسی پولی تا حداکثر ۶ ساعت را معرفی می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "Al Safwa برای مسافران واجد شرایط First Class و Al Mourjan برای گروه‌های واجد شرایط Business Class است؛ نام سالن به‌تنهایی به معنی دسترسی رایگان همه مسافران نیست.",
+            "Al Maha و برخی خدمات تجاری امکان خرید دسترسی دارند؛ مدت مجاز، ظرفیت و امکانات دو محل ممکن است متفاوت باشد.",
+            "نقشه‌های عمومی فرودگاه که در این بررسی بازیابی شدند، نسخه‌های ۲۰۲۴ هستند؛ برای محل دقیق و وضعیت باز بودن سالن، نقشه و اطلاعات روز فرودگاه و اپراتور را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "نقشه رسمی Duty Free South و سالن‌های جنوبی",
+          "url": "https://dohahamadairport.com/sites/default/files/maps/pdf/Duty%20Free%20South%20Map%20-%20August%202024%20update.pdf"
+        },
+        {
+          "type": "link",
+          "title_fa": "نقشه رسمی Duty Free North و The Orchard",
+          "url": "https://dohahamadairport.com/sites/default/files/maps/pdf/Duty%20Free%20North%20and%20Garden%20Map%20-%20August%202024%20update_0.pdf"
+        },
+        {
+          "type": "link",
+          "title_fa": "سالن‌های Qatar Airways در فرودگاه حمد",
+          "url": "https://www.qatarairways.com/en-tw/lounges.html"
+        },
+        {
+          "type": "link",
+          "title_fa": "رزرو و جزئیات Al Maha Lounge",
+          "url": "https://www.discoverqatar.qa/departure-al-maha-lounge/overview"
+        }
+      ],
+      "subtitle_fa": "سالن‌های ایرلاینی و تجاری؛ دسترسی وابسته به کلاس پرواز، عضویت یا رزرو پولی است"
     },
     {
       "id": "baggage-claims",
