@@ -590,6 +590,103 @@
         "stale": false,
         "confidence": "official"
       }
+    },
+    {
+      "airline_id": "taban-air",
+      "detail_path": "details/taban-air.v1.json",
+      "identity": {
+        "name_fa": "تابان",
+        "name_en": "Taban Airlines",
+        "legal_name": "Taban Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی تابان",
+          "تابان ایر",
+          "Taban Air"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "HH",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "TBN",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://taban.aero/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Taban-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "karun-air",
+      "detail_path": "details/karun-air.v1.json",
+      "identity": {
+        "name_fa": "کارون",
+        "name_en": "Karun Airlines",
+        "legal_name": "Karun Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی کارون",
+          "کارون ایر",
+          "Karun Air",
+          "Karoon Airlines"
+        ],
+        "former_names": [
+          "Iranian Naft Airlines"
+        ],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "NV",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "KRU",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://karunair.ir/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/kru",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv",
+          "https://www.planespotters.net/airline/Karun-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
     }
   ]
 }

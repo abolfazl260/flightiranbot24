@@ -31,7 +31,7 @@ class AirlineContentTest {
         assertEquals(setOf("iran-air", "emirates", "mahan-air", "iran-aseman",
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
-            "caspian-air", "sepehran-air"), rows.map { it.id }.toSet())
+            "caspian-air", "sepehran-air", "taban-air", "karun-air"), rows.map { it.id }.toSet())
         val iranAir = AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!
         assertEquals(17, iranAir.sections.size)
         assertFalse(iranAir.sections.any { it.id == "onboard-connectivity" })
@@ -168,6 +168,31 @@ class AirlineContentTest {
         assertTrue(sepehran.sections.any { it.id == "seat-selection" })
         assertTrue(sepehran.sections.any { it.id == "loyalty" })
         assertFalse(sepehran.sections.any { it.id == "lounges" })
+        for ((id, published, fleetSize) in listOf(
+            Triple("taban-air", 15, 5),
+            Triple("karun-air", 14, 4)
+        )) {
+            val guide = AirlineContentParser.detail(
+                bundled("details/$id.v1.json"), id, now)!!
+            assertEquals(published, guide.sections.size)
+            assertEquals(0, guide.ratingCount)
+            assertNull(guide.average)
+            assertFalse(guide.sections.any { it.id in listOf(
+                "checkin", "seat-selection", "catering", "lounges",
+                "pets", "onboard-connectivity"
+            ) })
+            val aircraft = guide.sections.flatMap { it.blocks }
+                .filterIsInstance<AirlineBlock.Fleet>()
+            assertEquals(fleetSize, aircraft.size)
+            assertTrue(aircraft.all {
+                it.count == null && it.status == "unknown" &&
+                    it.relationship == "unknown"
+            })
+        }
+        val taban = AirlineContentParser.detail(
+            bundled("details/taban-air.v1.json"), "taban-air", now)!!
+        assertTrue(taban.sections.any { it.id == "complaints" })
+        assertTrue(taban.sections.any { it.id == "batteries" })
         val page = parse(page())
         assertEquals(18, page.sections.size)
         assertTrue(page.sections.map { it.id }.containsAll(listOf("cabin", "catering", "special-assistance")))
@@ -222,6 +247,8 @@ class AirlineContentTest {
         assertEquals("varesh-air", filterAirlines(rows, "وارش", "iran").single().id)
         assertEquals("caspian-air", filterAirlines(rows, "کاسپین", "iran").single().id)
         assertEquals("sepehran-air", filterAirlines(rows, "سپهران", "iran").single().id)
+        assertEquals("taban-air", filterAirlines(rows, "تابان", "iran").single().id)
+        assertEquals("karun-air", filterAirlines(rows, "کارون", "iran").single().id)
     }
 
     @Test fun draftArchivedStaleAndExpiredContentAreNeverRendered() {
@@ -239,7 +266,7 @@ class AirlineContentTest {
         assertEquals(listOf("emirates", "mahan-air", "iran-aseman",
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
-            "caspian-air", "sepehran-air"),
+            "caspian-air", "sepehran-air", "taban-air", "karun-air"),
             AirlineContentParser.index(directory.toString(), now).map { it.id })
     }
 

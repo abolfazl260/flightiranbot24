@@ -1,0 +1,920 @@
+{
+  "schema_version": 1,
+  "airline_id": "taban-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://taban.aero/",
+      "https://oibk.ir/fa/iran/airlines",
+      "https://www.planespotters.net/airline/Taban-Airlines"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "خرید و اعتبارسنجی بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وب‌سایت رسمی تابان ابزار جست‌وجوی پرواز داخلی و خارجی، وضعیت بلیت با رفرنس و شماره پرواز و پیگیری تغییر برنامه را نمایش می‌دهد. کارکرد درگاه پرداخت و موجودی صندلی در این بررسی آزمایش نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام شرکت اجراکننده، مسیر و جزئیات بلیت را با صفحه رسمی مطابقت دهید.",
+            "برای خرید آژانسی، اطلاعات صادرکننده و شرایط بلیت را نگه دارید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی و ابزار پیگیری",
+          "url": "https://taban.aero/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار دستی، بار تحویلی و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7",
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9210&title=%D9%88%D8%B2%D9%86_%D9%85%D8%AC%D8%A7%D8%B2_%D8%A8%D8%A7%D8%B1_%D8%AF%D8%B3%D8%AA%DB%8C_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7",
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9273&title=%D9%86%D8%B1%D8%AE_%D8%A7%D8%B6%D8%A7%D9%81%D9%87_%D8%A8%D8%A7%D8%B1_%D9%88_%D9%87%D8%B2%DB%8C%D9%86%D9%87_%D8%AE%D8%AF%D9%85%D8%A7%D8%AA_%D9%88%DB%8C%D9%84%DA%86%D8%B1_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C_%D8%A8%DB%8C%D9%86_%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "taban-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اعداد جزئی بخشنامه‌های تصویری برای پرواز مشخص احراز نشده‌اند؛ هیچ نرخ ثابت عمومی استنتاج نمی‌شود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان در بخشنامه ۲۳ آذر ۱۴۰۴ درباره وزن مجاز بار دستی و در بخشنامه ۶ مهر ۱۴۰۵ درباره هزینه اضافه‌بار مسیرهای بین‌المللی اطلاع‌رسانی کرده است. فایل‌های ضمیمه بخشنامه به‌شکل تصویرند و از متن قابل استناد آنها سقف عمومی و نرخ هر مسیر استخراج نشده؛ بنابراین عدد ثابت برای همه بلیت‌ها درج نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای بار کابین، وزن و ابعاد مجاز را با بلیت و دستورهای روز فرودگاه تأیید کنید.",
+            "بار تحویلی، نوع پرواز، اضافه‌بار، کالسکه و وسایل ویژه ممکن است قواعد مختلف داشته باشند.",
+            "تعرفه اضافه‌بار از بخشنامه تاریخ‌دار و مخصوص همان مسیر کنترل شود؛ اعلان‌های قدیمی مبنای مبلغ امروز نیستند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بخشنامه رسمی وزن بار دستی",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9210&title=%D9%88%D8%B2%D9%86_%D9%85%D8%AC%D8%A7%D8%B2_%D8%A8%D8%A7%D8%B1_%D8%AF%D8%B3%D8%AA%DB%8C_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7"
+        },
+        {
+          "type": "link",
+          "title_fa": "اعلان رسمی اضافه‌بار مهر ۱۴۰۵",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9273&title=%D9%86%D8%B1%D8%AE_%D8%A7%D8%B6%D8%A7%D9%81%D9%87_%D8%A8%D8%A7%D8%B1_%D9%88_%D9%87%D8%B2%DB%8C%D9%86%D9%87_%D8%AE%D8%AF%D9%85%D8%A7%D8%AA_%D9%88%DB%8C%D9%84%DA%86%D8%B1_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C_%D8%A8%DB%8C%D9%86_%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "قوانین تغییر، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7",
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9196&title=_%D9%85%D9%82%D8%B1%D8%B1%D8%A7%D8%AA_%D8%AC%D8%AF%DB%8C%D8%AF_crcn_%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C_%D8%AA%D8%A7%D8%A8%D8%A7%D9%86",
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9211&title=%D8%A7%D8%B5%D9%84%D8%A7%D8%AD_%D9%85%D8%B4%D8%AE%D8%B5%D8%A7%D8%AA_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C_%D8%AF%D8%A7%D8%AE%D9%84%DB%8C_%D9%88_%D8%AE%D8%A7%D8%B1%D8%AC%DB%8C"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "taban-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط دقیق به بلیت، کلاس نرخ، مسیر، تاریخ و تأیید روز سفر شرکت اجراکننده وابسته است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان در وب‌سایت رسمی بخشنامه‌های جداگانه درباره مقررات CRCN، اصلاح مشخصات مسافر و نرخ‌نامه‌های تاریخ‌دار داخلی منتشر کرده است. جزئیات برخی از این بخشنامه‌ها فقط به‌صورت تصویر/PDF هستند؛ این راهنما درصد جریمه یا امکان اصلاح همه بلیت‌ها را قطعی اعلام نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع کلاس نرخی، شرکت صادرکننده و دلیل لغو را برای استعلام ذکر کنید.",
+            "استرداد داوطلبانه با لغو از سوی شرکت ممکن است فرآیند متفاوت داشته باشد.",
+            "برای اصلاح نام یا مشخصات، پیش از مراجعه مدارک معتبر و شرایط روز را از شرکت بپرسید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات CRCN تابان",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9196&title=_%D9%85%D9%82%D8%B1%D8%B1%D8%A7%D8%AA_%D8%AC%D8%AF%DB%8C%D8%AF_crcn_%D9%87%D9%88%D8%A7%D9%BE%DB%8C%D9%85%D8%A7%DB%8C%DB%8C_%D8%AA%D8%A7%D8%A8%D8%A7%D9%86"
+        },
+        {
+          "type": "link",
+          "title_fa": "بخشنامه اصلاح مشخصات",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9211&title=%D8%A7%D8%B5%D9%84%D8%A7%D8%AD_%D9%85%D8%B4%D8%AE%D8%B5%D8%A7%D8%AA_%D9%85%D8%B3%D8%A7%D9%81%D8%B1_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C_%D8%AF%D8%A7%D8%AE%D9%84%DB%8C_%D9%88_%D8%AE%D8%A7%D8%B1%D8%AC%DB%8C"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست تازه بخشنامه‌ها",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "چک‌این و مهلت کانتر",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "taban-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط دقیق به بلیت، کلاس نرخ، مسیر، تاریخ و تأیید روز سفر شرکت اجراکننده وابسته است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز و اعلان‌های تغییر برنامه",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/",
+          "https://gzpairport.com/en-EN/flights/arrival-flights/detail/7235/16.10.2026%2C03_30/HH_1003076"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی تابان فرم بررسی وضعیت پرواز بر اساس مبدأ، مقصد، تاریخ و شماره پرواز دارد. یک سابقه منتشرشده فرودگاه غازی‌پاشا در اکتبر ۲۰۲۶ پرواز HH7235 را نشان می‌دهد؛ این سابقه برنامه فعال یا ساعت آینده نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پرواز خود شماره HH، تاریخ و فرودگاه‌ها را از بلیت بررسی کنید.",
+            "در صورت تغییر گیت یا ساعت، وضعیت همان روز را در سایت شرکت و تابلو فرودگاه کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پیگیری رسمی وضعیت پرواز",
+          "url": "https://taban.aero/"
+        },
+        {
+          "type": "link",
+          "title_fa": "نمونه تاریخ‌دار ثبت فرودگاهی",
+          "url": "https://gzpairport.com/en-EN/flights/arrival-flights/detail/7235/16.10.2026%2C03_30/HH_1003076"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "پشتیبانی و راه ارتباطی",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وب‌سایت رسمی تابان مرکز تماس ۰۲۱-۴۸۵۴، پشتیبانی ۰۲۱-۴۰۴۴۱۲۱۴، فروش با داخلی‌های ۱۰۱ و ۱۰۲، و ایمیل info@taban.aero را معرفی می‌کند. ساعات پاسخ‌گویی و موفقیت تماس آزمایش نشده‌اند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای تماس شماره پرواز، تاریخ، شماره بلیت و صادرکننده را آماده کنید.",
+            "اطلاعات شخصی و شماره کامل رزرو را در نظرات عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه اصلی و اطلاعات تماس شرکت",
+          "url": "https://taban.aero/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار مفقود، تأخیری و خسارت‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت تابان ایمیل commercial@taban.aero را برای پیگیری بار درج کرده است. در صورت نرسیدن یا آسیب چمدان، موضوع را در سالن بار فرودگاه مقصد ثبت و شماره پرونده بگیرید؛ مهلت یا سقف خسارت به قانون و سفر مشخص بستگی دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تگ بار، گزارش فرودگاه، کارت پرواز و تصویر آسیب را نگه دارید.",
+            "برای پیگیری گزارش، نام شرکت اجراکننده و اطلاعات بار را در کانال رسمی ارائه کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راه تماس بخش پیگیری بار",
+          "url": "https://taban.aero/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و خدمات کمک‌حرکتی",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9273&title=%D9%86%D8%B1%D8%AE_%D8%A7%D8%B6%D8%A7%D9%81%D9%87_%D8%A8%D8%A7%D8%B1_%D9%88_%D9%87%D8%B2%DB%8C%D9%86%D9%87_%D8%AE%D8%AF%D9%85%D8%A7%D8%AA_%D9%88%DB%8C%D9%84%DA%86%D8%B1_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C_%D8%A8%DB%8C%D9%86_%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C",
+          "https://taban.aero/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان در بخشنامه ۶ مهر ۱۴۰۵ درباره هزینه خدمات ویلچر در پروازهای بین‌المللی اطلاع‌رسانی کرده است. جدول ضمیمه به‌صورت تصویر منتشر شده؛ مبلغ ثابت یا رایگان‌بودن خدمات همه مسیرها در این بررسی احراز نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای ویلچر باتری‌دار، نوع باتری و ابعاد وسیله را از پیش به شرکت اطلاع دهید.",
+            "امکانات، محدودیت ظرفیت، مدارک پزشکی و هزینه احتمالی را برای همان مقصد استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بخشنامه خدمات ویلچر مهر ۱۴۰۵",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&tid=9273&title=%D9%86%D8%B1%D8%AE_%D8%A7%D8%B6%D8%A7%D9%81%D9%87_%D8%A8%D8%A7%D8%B1_%D9%88_%D9%87%D8%B2%DB%8C%D9%86%D9%87_%D8%AE%D8%AF%D9%85%D8%A7%D8%AA_%D9%88%DB%8C%D9%84%DA%86%D8%B1_%D8%AF%D8%B1_%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C_%D8%A8%DB%8C%D9%86_%D8%A7%D9%84%D9%85%D9%84%D9%84%DB%8C"
+        },
+        {
+          "type": "link",
+          "title_fa": "پشتیبانی رسمی شرکت",
+          "url": "https://taban.aero/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و هزینه آن",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس کابین و تغییر نوع هواپیما",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+          "https://www.planespotters.net/airline/Taban-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان در صفحه رسمی ناوگان، MD-88، بوئینگ ۷۳۷-۴۰۰ و ایرباس A310 را معرفی می‌کند. منابع مستقل A319 و بوئینگ 737-300 را نیز در سوابق تاریخی ثبت کرده‌اند. وجود یک مدل در معرفی شرکت، چیدمان یا ظرفیت قطعی روز پرواز نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "هواپیمای اجراکننده و نوع کابین را از شرکت/بلیت بررسی کنید.",
+            "مدل تاریخی را به معنی موجودی عملیاتی امروز تلقی نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "ناوگان معرفی‌شده رسمی",
+          "url": "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست مستقل و تاریخ‌دار مدل‌ها",
+          "url": "https://www.planespotters.net/airline/Taban-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و وعده غذایی",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ فرودگاهی و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان زنده",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "taban-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط پذیرش حیوان، قفس، مدارک و هزینه برای پرواز تابان مستقیماً تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری لیتیومی",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?lang=fa&pid=32&tid=9247&title=title",
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان در اطلاعیه رسمی ۴ مرداد ۱۴۰۵، به اجرای اصلاحیه‌های ایمنی ICAO اشاره کرده است: شارژ خود پاوربانک داخل هواپیما ممنوع و بیش از دو پاوربانک شخصی برای هر مسافر مجاز نیست. استفاده از آن برای شارژ دستگاه نیز در اطلاعیه توصیه نشده است. الزامات روز سفر باید بازبینی شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک را در بار تحویلی نگذارید و در کابین از اتصال کوتاه محافظت کنید.",
+            "پاوربانک را داخل هواپیما شارژ نکنید؛ در اطلاعیه تابان محدودیت حداکثر دو دستگاه شخصی آمده است.",
+            "برای باتری وسیله کمک‌حرکتی یا لیتیومی پرظرفیت تأیید شرکت را بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه رسمی تابان مرداد ۱۴۰۵",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=32&tid=9247&title=title"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی باتری IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک هویتی، گذرنامه و ویزا",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7",
+          "https://www.iata.org/en/travel-centre"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان بخشنامه‌های جداگانه درباره مشخصات مسافر و شرایط ورود به کشورها منتشر کرده است. شرایط ورود و اعتبار گذرنامه به تابعیت، مسیر و تاریخ وابسته است؛ بخشنامه یک کشور را نمی‌توان به مقاصد دیگر تعمیم داد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در داخلی مدرک هویت معتبر و در خارجی گذرنامه و مدارک ورود/ترانزیت را بررسی کنید.",
+            "برای اطلاعیه مقصد موردنظر، تاریخ اثرگذاری و مرجع قانونی را کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بخشنامه‌های رسمی تابان",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7"
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی سفر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/",
+          "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7",
+          "https://taban.aero/knowledge.asp?lang=fa&pid=32&tid=9247&title=title"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد تابان چیست؟ کد IATA برابر HH و ICAO رسمی TBN است؛ TBM کد تاریخیِ موجود در داده ثبت است.",
+            "وضعیت پرواز را از کجا ببینم؟ ابزار جست‌وجوی رسمی شرکت با تاریخ و شماره پرواز.",
+            "بار چند کیلوست؟ بخشنامه‌های تاریخ‌دار برای کابین و مسیرهای خارجی موجود است؛ بلیت و نوع مسیر ملاک‌اند.",
+            "هزینه ویلچر یا اضافه‌بار؟ بخشنامه ۶ مهر ۱۴۰۵ را با مسیر و تاریخ سفر تطبیق دهید؛ مبلغ عمومی تضمینی نداریم.",
+            "پاوربانک؟ طبق اطلاعیه مرداد ۱۴۰۵ بیش از دو پاوربانک شخصی مجاز نیست و شارژ آن در پرواز ممنوع است.",
+            "پیگیری بار؟ ایمیل commercial@taban.aero در وب‌سایت درج شده است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی",
+          "url": "https://taban.aero/"
+        },
+        {
+          "type": "link",
+          "title_fa": "بخشنامه‌های جدید",
+          "url": "https://taban.aero/knowledge.asp?lang=fa&pid=36&title=%D8%A8%D8%AE%D8%B4%D9%86%D8%A7%D9%85%D9%87_%D9%87%D8%A7"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "شبکه پروازی و راهنمای فرودگاه‌ها",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/",
+          "https://gzpairport.com/en-EN/flights/arrival-flights/detail/7235/16.10.2026%2C03_30/HH_1003076"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی تابان مسیرهای ماهانه‌ای مانند مشهد–تهران، مشهد–اصفهان، تهران–نجف و تهران–استانبول را نمونه معرفی می‌کند. ارقام منتشرشده در صفحه برنامه ماهانه، ظرفیت یا تعهد برنامه زنده تاریخ دلخواه نیستند. پیوندهای زیر صرفاً راهنمای فرودگاه موجودند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IFN",
+          "title_fa": "فرودگاه اصفهان"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "فرودگاه استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "برنامه منتشرشده شرکت",
+          "url": "https://taban.aero/"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "وای‌فای و شارژ داخل پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های فعلی/تاریخی ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86",
+          "https://www.planespotters.net/airline/Taban-Airlines",
+          "https://oibk.ir/fa/iran/airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی تابان MD-88، بوئینگ 737-400 و Airbus A310 را معرفی می‌کند؛ Planespotters خانواده A319 و 737-300 را در سوابق تاریخی نشان می‌دهد. در فهرست رسمی بهره‌برداران ۲۰۲۶ شناسه TBN آمده اما داده ثبت هواپیما با شمارش مستقل فعال/پارک‌شده هم‌معنا نیست؛ به همین علت تعداد، مالکیت، وضعیت عملیاتی و چیدمان هر مدل نامشخص است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-88",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Taban-Airlines",
+              "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-400",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Taban-Airlines",
+              "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A310-300",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Taban-Airlines",
+              "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A319-100",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Taban-Airlines",
+              "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Taban-Airlines",
+              "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی رسمی ناوگان",
+          "url": "https://taban.aero/knowledge.asp?ctype=fleet&lang=fa&title=%D9%85%D8%B9%D8%B1%D9%81%DB%8C_%D9%86%D8%A7%D9%88%DA%AF%D8%A7%D9%86"
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت مستقل مدل‌ها",
+          "url": "https://www.planespotters.net/airline/Taban-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "complaints",
+      "title_fa": "نظرسنجی و شکایات مسافر",
+      "icon": "services",
+      "order": 95,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وب‌سایت تابان بخش‌های «نظرسنجی»، «شکایات» و «ارسال پیام» را معرفی می‌کند. ارائه این بخش‌ها به معنی تأیید ارسال موفق پرونده یا زمان پاسخ‌گویی قطعی نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای ثبت شکایت، شماره پرواز، تاریخ، موضوع و مدرک مرتبط را نزد خود نگه دارید.",
+            "اطلاعات شخصی را تنها در کانال رسمی و امن وارد کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "ورودی‌های ارتباط با مسافر در وب‌سایت",
+          "url": "https://taban.aero/"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی هواپیمایی تابان",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://taban.aero/",
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/Taban-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "تابان (Taban Airlines) شرکت هواپیمایی ایرانی با کد IATA «HH» و کد ICAO «TBN» و کال‌ساین TABAN است. فهرست رسمی ایران از ۱۰ ژوئن ۲۰۲۶ شناسه TBN را تأیید می‌کند و TBM را به‌صورت کد تاریخی در داده ثبتی جدا نشان می‌دهد."
+        },
+        {
+          "type": "link",
+          "title_fa": "شناسه TBN در فهرست رسمی اپراتورها",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل هوانوردی و کد HH",
+          "url": "https://www.planespotters.net/airline/Taban-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی تابان",
+          "url": "https://taban.aero/"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
