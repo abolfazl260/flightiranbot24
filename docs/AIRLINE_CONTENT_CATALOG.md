@@ -34,6 +34,8 @@ it does not package/sign/release APK or AAB files.
 | `varesh-air` | published | 18 | 2 | Official luggage, wheelchair, pets, loyalty, catering and sales pages; only ICAO VRH verified (no IATA code); 3 model families with unknown counts. [Source review](airlines/ata-varesh-2026-11-11.md). |
 | `caspian-air` | published | 14 | 6 | Official ICAO CPN, IATA unlisted, forwarded carrier baggage notice with unspecified policy effective date, seven unknown-count historical/current model families. [Audit](airlines/caspian-sepehran-2026-11-11.md). |
 | `sepehran-air` | published | 19 | 2 | IATA IS / ICAO SHI; original airline 1402–1404 articles on baggage, seat selection, refunds, wheelchair, pet limits, RedMiles; 3h/4h seat cutoff discrepancy documented. Five fleet family counts unknown. [Audit](airlines/caspian-sepehran-2026-11-11.md). |
+| `taban-air` | published | 15 | 6 | Official HH/TBN and 1405 airport, commercial notices, 2-power-bank safety restriction, contact/baggage channels, 5 model families with unknown counts. [Audit](airlines/taban-karun-2026-11-11.md). |
+| `karun-air` | published | 14 | 6 | NV/KRU and Iranian Naft Airlines historical identity; general passenger guidance with current airline tariff/check-in unknown; 4 model families. [Audit](airlines/taban-karun-2026-11-11.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -167,6 +169,30 @@ No passenger ratings, fake experiences, guaranteed routes or current
 fee tables are generated. See the [source-by-source audit]
 (airlines/caspian-sepehran-2026-11-11.md). Android, Mini App, JSON schema,
 release workflows and existing content archives remain unchanged.
+
+## Added Taban Airlines and Karun Airlines — 2026-11-11
+
+The shared catalog now includes **15 independent airlines**.
+Taban adds **15 source-reviewed sections and 6 unpublished drafts**,
+including 1405 official excess-baggage/wheelchair notices, dated
+powerbank rules and directly posted support and lost-baggage channels.
+Image-only allowance and fee tables are linked rather than extracted
+into unverified universal amounts.
+
+Karun adds **14 source-qualified sections and 6 drafts**. Its official
+Iran AIM code **KRU**, IATA industry code **NV**, former Iranian Naft
+Airlines name and four historical/current aircraft model families are
+documented. The website was inaccessible in the review environment;
+no unsupported current first-party luggage allowance, checked-in
+deadline, penalty rate or support hotline is asserted.
+
+Official **TBN** is distinct from historically seen registry **TBM**.
+All airplane counts, status, ownership and cabin configurations are
+unknown, and airport guide links are not current flight schedules.
+Both guides have zero synthetic ratings/reviews or licensed-media
+substitutes. Full [source audit](airlines/taban-karun-2026-11-11.md).
+No schema, UI reader, consent or manual-only Android APK build
+workflow changes.
 
 ## File contract and maintenance
 
