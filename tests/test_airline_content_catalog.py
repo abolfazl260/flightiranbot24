@@ -26,7 +26,7 @@ def test_actual_catalog_and_independent_snapshots():
     assert ids == [
         "iran-air", "emirates", "mahan-air", "iran-aseman",
         "iran-airtour", "qeshm-air", "kish-air", "zagros-air", "meraj-air",
-        "ata-air", "varesh-air",
+        "ata-air", "varesh-air", "caspian-air", "sepehran-air",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -47,7 +47,9 @@ def test_actual_catalog_and_independent_snapshots():
                         "zagros-air": {"published": 14, "draft": 6},
                         "meraj-air": {"published": 14, "draft": 6},
                         "ata-air": {"published": 16, "draft": 4},
-                        "varesh-air": {"published": 18, "draft": 2}}
+                        "varesh-air": {"published": 18, "draft": 2},
+                        "caspian-air": {"published": 14, "draft": 6},
+                        "sepehran-air": {"published": 19, "draft": 2}}
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
@@ -537,4 +539,82 @@ def test_ata_varesh_codes_and_official_websites():
     assert varesh["identity"]["former_names"] == []
     # Without verified IATA code for Varesh, never create a guessed placeholder.
     assert all(c["system"] != "iata" for c in varesh["identity"]["codes"])
+
+
+
+@pytest.mark.parametrize("airline_id,published,drafts,models,hidden_ids", [
+    ("caspian-air", 14, 6, 7,
+     {"checkin", "seat-selection", "catering", "lounges", "pets",
+      "onboard-connectivity"}),
+    ("sepehran-air", 19, 2, 5, {"lounges", "onboard-connectivity"}),
+])
+def test_caspian_sepehran_independent_source_and_publishing_gates(
+    airline_id, published, drafts, models, hidden_ids
+):
+    data = module.read_json(
+        ROOT / "data/airlines/details" / f"{airline_id}.v1.json"
+    )
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    row = next(e for e in index["airlines"] if e["airline_id"] == airline_id)
+    assert data["airline_id"] == airline_id
+    assert len(data["sections"]) == published + drafts
+    assert len({s["id"] for s in data["sections"]}) == published + drafts
+    assert data["published_reviews"] == data["experience_links"] == []
+    assert row["detail_path"] == f"details/{airline_id}.v1.json"
+    active = [s for s in data["sections"] if s["metadata"]["status"] == "published"]
+    hidden = [s for s in data["sections"] if s["metadata"]["status"] == "draft"]
+    assert len(active) == published
+    assert len(hidden) == drafts
+    assert {s["id"] for s in hidden} == hidden_ids
+    assert all(s["blocks"] and s["metadata"]["source_urls"] for s in active)
+    assert all(s["metadata"]["verified_at"] == "2026-11-11T00:00:00Z"
+               for s in active)
+    assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None
+               for s in hidden)
+    for section in data["sections"]:
+        if section["kind"] == "policy":
+            assert section["scope"]["operating_carrier"] == airline_id
+            assert section["scope"]["seller"] == "unknown"
+            assert section["scope"]["route"] is None
+    fleet = next(s for s in active if s["id"] == "fleet")
+    aircraft = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+    assert len(aircraft) == models
+    assert all(b["count"] is None and b["configuration_fa"] is None
+               for b in aircraft)
+    assert all(b["status"] == b["relationship"] == "unknown" for b in aircraft)
+    network = next(s for s in active if s["id"] == "network")
+    assert not any(b["type"] == "route_snapshot" for b in network["blocks"])
+
+
+def test_caspian_icao_only_and_sepehran_industry_codes():
+    catalog = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    rows = {x["airline_id"]: x for x in catalog["airlines"]}
+    assert {(c["system"], c["value"]) for c in
+            rows["caspian-air"]["identity"]["codes"]} == {
+        ("icao", "CPN")
+    }
+    assert {(c["system"], c["value"]) for c in
+            rows["sepehran-air"]["identity"]["codes"]} == {
+        ("iata", "IS"), ("icao", "SHI")
+    }
+    assert rows["caspian-air"]["identity"]["website"] == (
+        "https://caspianairlines.com/"
+    )
+    assert rows["sepehran-air"]["identity"]["website"] == (
+        "https://flysepehran.com/"
+    )
+    sepehran = module.read_json(
+        ROOT / "data/airlines/details/sepehran-air.v1.json"
+    )
+    seat = next(s for s in sepehran["sections"] if s["id"] == "seat-selection")
+    seat_text = " ".join(b["text_fa"] for b in seat["blocks"]
+                         if b["type"] == "text")
+    assert "۳ ساعت" in seat_text and "۴ ساعت" in seat_text
+    assert "تعارض" in seat_text
+    caspian = module.read_json(
+        ROOT / "data/airlines/details/caspian-air.v1.json"
+    )
+    bags = next(s for s in caspian["sections"] if s["id"] == "baggage")
+    assert bags["metadata"]["confidence"] == "secondary"
+    assert "تاریخ" in bags["scope"]["note_fa"]
 

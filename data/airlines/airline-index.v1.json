@@ -502,6 +502,94 @@
         "stale": false,
         "confidence": "official"
       }
+    },
+    {
+      "airline_id": "caspian-air",
+      "detail_path": "details/caspian-air.v1.json",
+      "identity": {
+        "name_fa": "کاسپین",
+        "name_en": "Caspian Airlines",
+        "legal_name": "Caspian Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی کاسپین",
+          "کاسپین ایر",
+          "Caspian Air"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "CPN",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://caspianairlines.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/cpn",
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn",
+          "https://www.planespotters.net/airline/Caspian-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
+    },
+    {
+      "airline_id": "sepehran-air",
+      "detail_path": "details/sepehran-air.v1.json",
+      "identity": {
+        "name_fa": "سپهران",
+        "name_en": "Sepehran Airlines",
+        "legal_name": "Sepehran Airlines",
+        "country": "IR",
+        "country_fa": "ایران",
+        "aliases": [
+          "هواپیمایی سپهران",
+          "فلای سپهران",
+          "فلای‌سپهران",
+          "Fly Sepehran"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "IS",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "SHI",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://flysepehran.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://blog.flysepehran.com/fa/ticket/",
+          "https://www.planespotters.net/airline/Sepehran-Airlines",
+          "https://oibk.ir/fa/iran/airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
     }
   ]
 }

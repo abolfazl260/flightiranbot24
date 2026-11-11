@@ -1,0 +1,917 @@
+{
+  "schema_version": 1,
+  "airline_id": "caspian-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://oibk.ir/fa/iran/airlines/cpn",
+      "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn",
+      "https://t.me/s/airanews"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت معرفی‌شده و خرید بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Caspian-Airlines",
+          "https://t.me/CaspianAirlinesChannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پایگاه تخصصی ناوگان، caspianairlines.com به‌عنوان وب‌سایت کاسپین معرفی شده است و کانال @CaspianAirlinesChannel خود را کانال رسمی شرکت می‌نامد. دامنه در این بررسی از مرورگر قابل بازیابی نبود؛ این نتیجه به معنی قطعی سراسری سایت یا تأیید خرید و درگاه پرداخت نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای رزرو، نام صادرکننده، شرکت اجراکننده و مقررات کلاس نرخی را در محیط امن بررسی کنید.",
+            "در منابع معتبر فعلی کد دوحرفی IATA برای کاسپین ثبت نشده است؛ از کدهای حدسی آژانس‌ها استفاده نکنید.",
+            "کد ICAO اپراتور کاسپین CPN است؛ این شناسه الزاماً همان پیشوند روی همه شماره‌های بلیت نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده شرکت",
+          "url": "https://caspianairlines.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال رسمی معرفی‌شده",
+          "url": "https://t.me/CaspianAirlinesChannel"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست مستقل هویت کاسپین",
+          "url": "https://www.planespotters.net/airline/Caspian-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار تحویلی، کابین و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/airanews",
+          "https://t.me/CaspianAirlinesChannel",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "caspian-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "اعداد مربوط به اطلاعیه بازنشرشده با تاریخ اجرای نامشخص‌اند؛ نرخ و تاریخ سفر باید بازتأیید شود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "انجمن شرکت‌های هواپیمایی ایران یک اطلاعیه بازنشرشده از کانال کاسپین درباره بار منتشر کرده است: برای اکونومی داخلی تا ۲۰ کیلوگرم بار تحویلی، بین‌المللی و بیزینس تا ۳۰ کیلوگرم، حداکثر وزن یک قطعه ۳۲ کیلوگرم، و بار کابین تا ۱۰ کیلوگرم. تاریخ اجرای سیاست و دامنه تمام کلاس‌های نرخی در متن بازنشر مشخص نیست؛ این ارقام باید روی همان بلیت دوباره تأیید شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وزن کابین و تحویلی را جدا از تعداد و ابعاد مجاز بررسی کنید؛ اندازه بار کابین در متن اطلاعیه تصریح نشده است.",
+            "توصیه منتشرشده مربوط به اطلاعیه انجمن است و به معنی تضمین سهمیه در همه بلیت‌ها و روزهای آینده نیست.",
+            "برای بار نوزاد، کالسکه، ویلچر، ابزار ورزشی و اضافه‌بار، شرایط مسیر و مبلغ روز را جدا استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بازنشر اطلاعیه بار کاسپین توسط انجمن شرکت‌های هواپیمایی",
+          "url": "https://t.me/s/airanews"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر تاریخ، کنسلی و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "caspian-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "نرخ بلیت، صادرکننده و علت تغییر/لغو و قانون مسیر تعیین‌کننده‌اند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جدول فعلی رسمی جریمه کنسلی و تغییر تاریخ کاسپین در این بررسی از دامنه شرکت قابل بازیابی نبود. میزان جریمه، مسیر بازپرداخت و امکان تغییر به صادرکننده بلیت، نوع نرخ، زمان درخواست و علت لغو بستگی دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بلیت آژانسی را ابتدا از صادرکننده مشخص‌شده در رسید پیگیری کنید.",
+            "کنسلی داوطلبانه، لغو پرواز توسط شرکت و عدم حضور مسافر یکسان نیستند.",
+            "پیام رسمی تغییر برنامه و رسیدهای خرید را برای پیگیری شخصی نگه دارید.",
+            "هیچ درصد عمومی جریمه یا زمان قطعی بازپرداخت بدون منبع معتبر منتشر نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "دامنه معرفی‌شده کاسپین",
+          "url": "https://caspianairlines.com/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش آنلاین و مهلت کانتر",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "caspian-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "امکان فعلی پذیرش آنلاین و مهلت‌های کانتر/گیت از متن رسمی قابل تأیید نبود."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "پیگیری برنامه و وضعیت پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn",
+          "https://t.me/CaspianAirlinesChannel"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پروفایل صنعت هوانوردی CAPA کاسپین را به‌عنوان بهره‌بردار پروازهای داخلی و بین‌المللی معرفی می‌کند. این معرفی یا اطلاعیه آرشیوی کانال به معنی مشاهده وضعیت لحظه‌ای و تضمین پرواز در تاریخ خاص نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ و مبدأ و مقصد را مطابق بلیت در فرودگاه و کانال معتبر شرکت بررسی کنید.",
+            "در صورت تأخیر یا تغییر برنامه، با شرکت اجراکننده و صادرکننده درباره گزینه‌های همان بلیت تماس بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل تخصصی کاسپین",
+          "url": "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال اطلاع‌رسانی شرکت",
+          "url": "https://t.me/CaspianAirlinesChannel"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "راه‌های ارتباط و خدمات مشتری",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/CaspianAirlinesChannel",
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال رسمی معرفی‌شده کاسپین و دامنه ثبت‌شده در پایگاه ناوگان، نقاط شروع برای یافتن پشتیبانی هستند. شماره تماس و ساعات جاری مرکز تماس در این بررسی از سایت شرکت قابل تأیید نبود؛ اطلاعات آژانس‌های واسطه یا آرشیوی را شماره رسمی فعلی معرفی نمی‌کنیم."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای پیگیری پرواز و بار، شماره پرواز، تاریخ، کد رزرو و نام صادرکننده را آماده کنید.",
+            "کد رزرو، مدارک هویتی و داده‌های پرداخت را در کانال عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال معرفی‌شده کاسپین",
+          "url": "https://t.me/CaspianAirlinesChannel"
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت منتسب به شرکت",
+          "url": "https://caspianairlines.com/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار مفقود، تأخیری یا آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای چمدان نرسیده یا آسیب‌دیده، در سالن تحویل بار فرودگاه مقصد موضوع را نزد واحد بار شرکت اجراکننده ثبت کنید و شماره پرونده بگیرید. این توصیه عمومی است؛ مهلت‌های ادعا و مبالغ خسارت اختصاصی کاسپین تأیید نشده‌اند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، کارت پرواز، عکس چمدان و رسید گزارش را نگه دارید.",
+            "شرکت اجراکننده هر قطعه سفر را برای پیگیری پرونده مشخص کنید.",
+            "مهلت شکایت و سقف خسارت را مطابق شرایط حمل و قانون حاکم بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار و رسیدگی IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و نیازهای ویژه مسافر",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "شرایط اختصاصی کاسپین برای ویلچر برقی، کودک بدون همراه، مسافر باردار و مدارک پزشکی در این بررسی از منابع رسمی فعلی قابل تأیید نبود. دریافت تأیید اختصاصی از شرکت پیش از خرید ضروری است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای تجهیزات پزشکی یا کمک‌حرکتی نوع باتری و ابعاد وسیله را به شرکت اعلام کنید.",
+            "نیاز به کمک در مبدا، فرودگاه میانی و مقصد را جداگانه شرح دهید.",
+            "از راهنمای عمومی IATA نمی‌توان تضمین پذیرش توسط یک ایرلاین را نتیجه گرفت."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "حقوق و خدمات عمومی مسافران IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات عمومی باتری",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و هزینه",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و مدل هواپیما",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Caspian-Airlines",
+          "https://oibk.ir/fa/iran/airlines/cpn"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پایگاه‌های هوانوردی خانواده‌های بوئینگ 737 و مک‌دانل‌داگلاس MD-80 را در ناوگان کاسپین ثبت کرده‌اند. نوع هواپیمای پرواز و چیدمان کابین می‌تواند تغییر کند؛ مدل ثبت‌شده در سوابق یک هواپیما تضمین صندلی یا کلاس نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کلاس، نوع هواپیما و نیازهای صندلی خود را با شرایط بلیت تأیید کنید.",
+            "سوابق هواپیما یا سن ناوگان به‌تنهایی رتبه‌بندی ایمنی نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست ناوگان مستقل",
+          "url": "https://www.planespotters.net/airline/Caspian-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت اپراتور در فهرست ایران",
+          "url": "https://oibk.ir/fa/iran/airlines/cpn"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای خاص",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "سالن تشریفات و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "پذیرش حیوان خانگی",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "caspian-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط حمل حیوان و مدارک یا قفس تأییدشده اختصاصی برای این پرواز در دسترس نیست."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و وسایل خطرناک",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "IATA برای پاوربانک و باتری‌های لیتیومی یدکی اصول ایمنی عمومی مشخص می‌کند؛ این اصول جایگزین ضوابط روز کاسپین، فرودگاه و کشور مقصد نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در چمدان تحویلی قرار ندهید.",
+            "برای باتری وسایل کمک‌حرکتی و تجهیزات پزشکی، شرایط شرکت را قبل از سفر جویا شوید.",
+            "اگر کیف دستی در گیت تحویل قسمت بار شد، باتری یدکی را از آن خارج کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقررات عمومی باتری IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک هویتی، گذرنامه و ویزا",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در مسیرهای داخلی مدرک شناسایی و در سفر خارجی گذرنامه و مجوزهای ورود لازم است. مقررات اعتبار گذرنامه، ویزا و ترانزیت تابع تابعیت، مقصد و تاریخ است و از وجود پرواز نمی‌توان معافیت روادید استنتاج کرد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نام روی بلیت را با مدرک هویتی تطبیق دهید.",
+            "برای کشور مقصد و توقف، شرایط رسمی ورود و IATA Travel Centre را کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی مسافران",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/airanews",
+          "https://oibk.ir/fa/iran/airlines/cpn",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد ایرلاین چیست؟ کد رسمی ICAO کاسپین CPN است؛ کد IATA مستقل در منابع معتبر این بررسی ثبت نشده است.",
+            "بار مجاز چقدر است؟ اطلاعیه بازنشرشده انجمن برای اکونومی داخلی تا ۲۰ و بین‌المللی/بیزینس تا ۳۰ کیلوگرم گفته؛ بلیت خود را مجدداً کنترل کنید.",
+            "چک‌این آنلاین فعال است؟ وضعیت جاری در این بررسی تأیید نشد.",
+            "کنسلی چه جریمه‌ای دارد؟ قرارداد نرخ و صادرکننده تعیین‌کننده است.",
+            "برای ویلچر یا حیوان همراه؟ قبل از خرید از شرکت اجراکننده تأیید بگیرید.",
+            "وضعیت پرواز؟ فقط اطلاعات همان تاریخ و شماره پرواز را ملاک قرار دهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بازنشر اطلاعیه کاسپین",
+          "url": "https://t.me/s/airanews"
+        },
+        {
+          "type": "link",
+          "title_fa": "شناسه ICAO در فهرست اپراتورهای ایران",
+          "url": "https://oibk.ir/fa/iran/airlines/cpn"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و شبکه معرفی‌شده",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn",
+          "https://www.planespotters.net/airline/Caspian-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فهرست صنعت هوانوردی از فعالیت‌های داخلی و بین‌المللی کاسپین نام می‌برد. پیوندهای این بخش صرفاً دسترسی به راهنماهای فرودگاه هستند و وجود مسیر همیشگی، زمان حرکت یا پرواز مستقیم در یک تاریخ مشخص را اثبات نمی‌کنند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "فرودگاه شیراز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "فرودگاه کیش"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "فرودگاه استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی شبکه کاسپین در CAPA",
+          "url": "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "خانواده‌های ناوگان و سوابق هواپیما",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Caspian-Airlines",
+          "https://oibk.ir/fa/iran/airlines/cpn"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فهرست مستقل ناوگان مدل‌های Boeing 737-300/400/500 و McDonnell Douglas MD-82/83 را شامل می‌شود؛ فهرست ثبتی ایران همچنین سابقه Boeing 747-100/200 را برای کاسپین دارد. این مدل‌های 747 سوابق تاریخی‌اند و به معنی حضور آن‌ها در خدمات مسافری فعلی نیستند. چون وضعیت فعال، مالکیت و چیدمان برای روز سفر قابل جمع‌بندی قطعی نیست، هیچ شمارش فعال یا مالکیت تأییدشده منتشر نشده است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Caspian-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-400",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Caspian-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-500",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Caspian-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-82",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Caspian-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "McDonnell Douglas MD-83",
+          "manufacturer": "McDonnell Douglas",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Caspian-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 747-100",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines/cpn"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 747-200",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines/cpn"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "هواپیماهای ثبت‌شده در Planespotters",
+          "url": "https://www.planespotters.net/airline/Caspian-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی کد و سابقه ثبت هواپیما",
+          "url": "https://oibk.ir/fa/iran/airlines/cpn"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی کاسپین و شناسه‌های پروازی",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/cpn",
+          "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn",
+          "https://www.planespotters.net/airline/Caspian-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی کاسپین (Caspian Airlines) شرکت هواپیمایی ایرانی است. مرجع بهره‌برداران هوانوردی ایران در نسخه معتبر از ۱۰ ژوئن ۲۰۲۶، ICAO CPN و کال‌ساین CASPIAN را ثبت کرده است. CAPA و Planespotters کد IATA مشخصی برای شرکت ثبت نمی‌کنند؛ بنابراین کد دوحرفی احتمالی منتشر نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "کد رسمی ICAO در فهرست اپراتورهای ایران",
+          "url": "https://oibk.ir/fa/iran/airlines/cpn"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل CAPA (IATA: n/a)",
+          "url": "https://centreforaviation.com/data/profiles/airlines/caspian-airlines-cpn"
+        },
+        {
+          "type": "link",
+          "title_fa": "ناوگان و هویت در Planespotters",
+          "url": "https://www.planespotters.net/airline/Caspian-Airlines"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
