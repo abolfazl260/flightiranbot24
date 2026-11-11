@@ -21,16 +21,34 @@ it does not package/sign/release APK or AAB files.
 
 | Stable ID | Index/detail state | Published sections | Draft sections | Sources/limitations |
 | --- | --- | ---: | ---: | --- |
-| `iran-air` | published | 3 | 4 | Rechecked IATA identity, announced .ir domain migration and contact; detailed operational policy review continues. See docs/airlines/iran-air-2026-11-10.md. |
+| `iran-air` | published | 17 | 1 | Source-reviewed passenger guidance, scoped historical baggage/refund notices, 9 fleet families with unknown counts/status, and a draft for unverified onboard connectivity. See docs/airlines/iran-air-2026-11-11.md. |
 | `emirates` | published | 18 | 0 | Specialist policies, seat selection and FAQ; dated 31 March 2026 model/owned/leased inventory. Active status and configurations unknown. See dated Emirates source audit. |
 
-Current Emirates coverage supersedes the initial counts below; see `docs/airlines/emirates-2026-11-10.md`.
+Current Emirates coverage and the 11 November Iran Air follow-up supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
 Both are labelled **راهنما در حال تکمیل**, including when basic identity is
 available. `published` means a reviewed portion is available, never a complete
 carrier guide. No entire airline is currently draft/archived. There are **zero**
 passenger experiences, numeric ratings, licensed photos or logos in this initial
 public dataset. Missing services are not described as unavailable.
+
+## Iran Air review — 2026-11-11
+
+The Iran Air guide now publishes 17 sourced sections; one section (inflight
+connectivity) remains a draft. The former empty baggage, ticket-rules, check-in
+and fleet drafts now offer independently scoped, source-cited passenger guidance.
+Historical announcements are explicitly dated and **are not current ticket rules,
+route schedules or baggage entitlements**. The dated
+[review](airlines/iran-air-2026-11-11.md) documents every source, limitation and
+rollback. Current operation of the announced .ir site was not verified.
+
+Nine aircraft families are visible with **unknown** fleet size, operating status,
+relationship and seat layout; tracking sites disagree on current counts. No
+current routes, baggage allowance for all fares, universal check-in deadline,
+medical eligibility, images, personal experiences or invented ratings were added.
+The `network` section links airport guides but deliberately publishes no
+`route_snapshot` without reliable route-specific current evidence. Other carriers,
+Android UI, content schemas and existing release workflows remain unchanged.
 
 ## File contract and maintenance
 
@@ -229,7 +247,7 @@ source verification, aircraft count, media license or user rating is fabricated.
 Emirates now has 10 published sections and no draft sections: cabin and catering
 were published after official-source review, special assistance was added, flight
 status provenance corrected, and fleet family references rechecked without adding
-counts. Iran Air remains 1 published / 4 draft sections. See
+counts. At that historical stage Iran Air had 1 published / 4 draft sections. See
 [the source review](airlines/emirates-2026-11-10.md) for URLs, scope and limitations.
 No carrier is represented as complete; no other content's review date is advanced.
 
