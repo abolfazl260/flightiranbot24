@@ -24,7 +24,7 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
  assert.equal(filterGuides(rows,'پارس','iran')[0].id,'pars-air');
  assert.equal(filterGuides(rows,'چابهار','iran')[0].id,'chabahar-air');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
- for (const [id,available,drafted,fleetCount] of [['mahan-air',19,1,6],['iran-aseman',14,4,5],['iran-airtour',13,6,6],['qeshm-air',17,2,4],['kish-air',15,5,4],['zagros-air',14,6,4],['meraj-air',14,6,4],['ata-air',16,4,7],['varesh-air',18,2,3],['caspian-air',14,6,7],['sepehran-air',19,2,5],['taban-air',15,6,5],['karun-air',14,6,4],['pars-air',14,6,3],['chabahar-air',13,7,4]]) {
+ for (const [id,available,drafted,fleetCount] of [['mahan-air',19,1,6],['iran-aseman',14,4,5],['iran-airtour',15,4,6],['qeshm-air',17,2,4],['kish-air',15,5,4],['zagros-air',14,6,4],['meraj-air',14,6,4],['ata-air',16,4,7],['varesh-air',18,2,3],['caspian-air',14,6,7],['sepehran-air',19,2,5],['taban-air',15,6,5],['karun-air',14,6,4],['pars-air',14,6,3],['chabahar-air',13,7,4]]) {
   const d=read('data/airlines/details/'+id+'.v1.json');
   assert.equal(d.sections.filter(s=>s.metadata.status==='draft').length,drafted);
   const parsed=parseGuideDetail(d,'airlines',id,now);
@@ -35,7 +35,11 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
   assert.equal(models.length,fleetCount);
   assert(models.every(b=>b.count===null && b.status==='unknown' && b.relationship==='unknown'));
   assert(!parsed.sections.some(s=>s.id==='onboard-connectivity'));
-  if(id==='iran-airtour')assert(!parsed.sections.some(s=>s.id==='checkin'));
+  if(id==='iran-airtour') {
+   assert(parsed.sections.some(s=>s.id==='checkin'));
+   assert(parsed.sections.some(s=>s.id==='seat-selection'));
+   assert(!parsed.sections.some(s=>s.id==='cabin'));
+  }
   if(id==='kish-air')assert(!parsed.sections.some(s=>s.id==='checkin'));
   if(id==='qeshm-air')assert(!parsed.sections.some(s=>s.id==='catering'));
   if(id==='pars-air') {
