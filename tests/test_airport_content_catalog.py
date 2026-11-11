@@ -230,3 +230,37 @@ def test_ahvaz_airport_guide_has_sourced_content_and_safe_drafts():
         for s in published
         for b in s["blocks"]
     )
+
+
+def test_urmia_and_zahedan_publish_verified_passenger_guides_but_not_fake_reviews():
+    root = ROOT / "data/airports/details"
+    for code, expected_video_url in (
+        ("OMH", "https://t.me/airportnews/42349"),
+        ("ZAH", "https://t.me/zahedanairport/10175"),
+    ):
+        airport = load(root / f"{code}.v1.json")
+        published = [s for s in airport["sections"] if s["status"] == "published"]
+        drafts = [s for s in airport["sections"] if s["status"] == "draft"]
+        assert len(published) == 18
+        assert {s["id"] for s in drafts} == {"traveler-experiences"}
+        assert all(s["blocks"] and s["source_urls"] and s["reviewed_at"] for s in published)
+        assert all(not s["blocks"] and not s["source_urls"] for s in drafts)
+        video = next(s for s in published if s["id"] == "airport-videos")
+        assert any(
+            b["type"] == "video" and b["url"] == expected_video_url
+            for b in video["blocks"]
+        )
+        assert not any(
+            b["type"] == "experience"
+            for section in airport["sections"]
+            for b in section["blocks"]
+        )
+
+    urmia = load(root / "OMH.v1.json")
+    ground = next(s for s in urmia["sections"] if s["id"] == "ground-transport")
+    assert "تاکسی و اتوبوس" in " ".join(
+        b.get("text_fa", "") for b in ground["blocks"]
+    )
+    zah = load(root / "ZAH.v1.json")
+    terminal = next(s for s in zah["sections"] if s["id"] == "terminals")
+    assert any("داخلی و خارجی" in b.get("text_fa", "") for b in terminal["blocks"])
