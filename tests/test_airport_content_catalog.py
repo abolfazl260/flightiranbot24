@@ -264,3 +264,31 @@ def test_urmia_and_zahedan_publish_verified_passenger_guides_but_not_fake_review
     zah = load(root / "ZAH.v1.json")
     terminal = next(s for s in zah["sections"] if s["id"] == "terminals")
     assert any("داخلی و خارجی" in b.get("text_fa", "") for b in terminal["blocks"])
+
+
+def test_six_international_airports_publish_official_parking_lounge_and_transfer_guides():
+    base = ROOT / "data/airports/details"
+    expected = {
+        "AMS": {"parking", "lounges"},
+        "ATH": {"lounges", "connections"},
+        "AUH": {"parking"},
+        "BKK": {"parking", "lounges"},
+        "CDG": {"parking", "lounges"},
+        "DEL": {"parking"},
+    }
+    for code, section_ids in expected.items():
+        airport = load(base / f"{code}.v1.json")
+        sections = {s["id"]: s for s in airport["sections"]}
+        for section_id in section_ids:
+            section = sections[section_id]
+            assert section["status"] == "published"
+            assert section["reviewed_at"] == "2026-11-11T00:00:00Z"
+            assert section["source_urls"]
+            assert section["blocks"]
+            assert all(b["type"] in {"text", "bullets", "link"} for b in section["blocks"])
+        drafts = {s["id"] for s in airport["sections"] if s["status"] == "draft"}
+        assert drafts == {"traveler-experiences", "airport-videos"}
+        assert all(
+            not any(b["type"] == "experience" for b in s["blocks"])
+            for s in airport["sections"]
+        )
