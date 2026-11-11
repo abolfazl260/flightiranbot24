@@ -1,0 +1,844 @@
+{
+  "schema_version": 1,
+  "airline_id": "meraj-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.planespotters.net/airline/Meraj-Airlines",
+      "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
+      "https://oibk.ir/fa/iran/airlines/mrj"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت معرفی‌شده و خرید بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Meraj-Airlines",
+          "https://t.me/s/Merajairlinesinfo/828"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مرجع ناوگان Planespotters و کانال اطلاع‌رسانی منتسب به معراج، نشانی meraj.aero را معرفی می‌کنند. صفحه سایت در این بررسی قابل دریافت نبود؛ این مسئله اثبات قطع سراسری سایت یا فعال‌بودن درگاه پرداخت نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از ورود مشخصات مسافر یا پرداخت، دامنه، شرکت اجراکننده و صادرکننده بلیت را کنترل کنید.",
+            "سامانه‌های استعلام منتشرشده در مقالات قدیمی، بدون بررسی امنیت و کارکرد فعلی نباید مرجع اطلاعات هویتی باشند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "نشانی اعلام‌شده معراج",
+          "url": "https://meraj.aero/"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل هوانوردی",
+          "url": "https://www.planespotters.net/airline/Meraj-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "سهمیه بار کابین و تحویلی",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/Merajairlinesinfo/828",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "meraj-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "ارقام تاریخ‌دار یک مسیر به بلیت یا سال دیگر تعمیم داده نمی‌شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در یک اطلاعیه آرشیوی منتسب به معراج، برای مسیر رشت–استانبول بار اکونومی ۲۵ و بیزینس ۳۰ کیلوگرم اعلام شده است. سال و اعتبار جاری آن پیام در این بررسی تأیید نشد؛ این ارقام فقط مثال تاریخی یک مسیرند، نه قانون همه بلیت‌های ۱۴۰۵."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سهمیه واقعی بار تحویلی و کابین را روی بلیت و با شرکت اجراکننده همان پرواز کنترل کنید.",
+            "تعداد بسته، وزن، اندازه بار دستی، اضافه‌بار و کالاهای خاص را جدا بررسی کنید.",
+            "برای نوزاد، کالسکه، حیوان و تجهیزات پزشکی پیشاپیش هماهنگی بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه بار مربوط به مسیر خاص",
+          "url": "https://t.me/s/Merajairlinesinfo/828"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "تغییر بلیت، لغو و استرداد",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/caa_ir?before=765",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "meraj-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "نوع بلیت، شرکت صادرکننده، دلیل لغو و قانون حاکم بر سفر تعیین‌کننده است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "جریمه کنسلی، امکان تغییر تاریخ و زمان بازپرداخت فعلی معراج از صفحه رسمی قابل تأیید استخراج نشد. شرایط خرید مستقیم، بلیت آژانسی و لغو پرواز توسط شرکت یکسان نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع نرخ، نام صادرکننده و علت لغو را قبل از ارسال درخواست روشن کنید.",
+            "کد رزرو، پیام تغییر برنامه و رسید پرداخت را برای پیگیری خصوصی ذخیره کنید.",
+            "سازمان هواپیمایی کشوری درباره استردادهای پرداخت‌نشده مسیر پیگیری و شکایت معرفی کرده؛ این اطلاعیه تضمین مبلغ یا موعد هر بلیت نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه سازمان هواپیمایی کشوری",
+          "url": "https://t.me/s/caa_ir?before=765"
+        },
+        {
+          "type": "link",
+          "title_fa": "حقوق مسافر در IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "چک‌این آنلاین و زمان پذیرش",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "meraj-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "زمان دقیق کانتر و امکان پذیرش آنلاین برای تاریخ سفر تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "برنامه و وضعیت روز پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
+          "https://t.me/s/Merajairlinesinfo/828"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "منابع تخصصی، سابقه پروازهای داخلی و بین‌المللی معراج را ثبت کرده‌اند؛ کانال اطلاع‌رسانی منتسب نیز اعلان‌هایی از مسیرهای تاریخ‌دار دارد. تاریخ و ساعت پست آرشیوی، وضعیت زنده پرواز نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای بررسی، شماره پرواز IJ، تاریخ و فرودگاه‌های مبدا و مقصد را از بلیت بردارید.",
+            "در صورت تغییر برنامه، با شرکت اجراکننده و صادرکننده بلیت پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "معرفی معراج در CAPA",
+          "url": "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj"
+        },
+        {
+          "type": "link",
+          "title_fa": "آرشیو اطلاعیه مسیر",
+          "url": "https://t.me/s/Merajairlinesinfo/828"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "ارتباط و پیگیری درخواست‌ها",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/Merajairlinesinfo/828",
+          "https://www.planespotters.net/airline/Meraj-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در اطلاعیه قدیمی منتسب به معراج شماره ۰۲۱-۶۱۹۵۴ ذکر شده است. فعالیت و ساعات پاسخ‌گویی فعلی این شماره از وب‌سایت شرکت در بررسی حاضر تأیید نشد؛ برای دریافت اطلاعات روز ابتدا به دامنه معرفی‌شده رجوع کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز، تاریخ، کد رزرو و نام صادرکننده را پیش از درخواست آماده کنید.",
+            "مدارک و اطلاعات مالی را در کانال و نظرات عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت معرفی‌شده شرکت",
+          "url": "https://meraj.aero/"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعیه آرشیوی",
+          "url": "https://t.me/s/Merajairlinesinfo/828"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "پیگیری بار تأخیری و آسیب‌دیده",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای چمدان تحویل‌نشده یا آسیب‌دیده، پیش از خروج از سالن بار موضوع را با نماینده شرکت اجراکننده ثبت و شماره پرونده دریافت کنید. مهلت‌های حقوقی و مبلغ خسارت اختصاصی معراج در این بررسی تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، کارت پرواز، عکس آسیب و شماره پرونده را نگه دارید.",
+            "شرکت اجراکننده و مرجع پیگیری همان سفر را مشخص کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و مسافران دارای نیاز ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات فعلی معراج برای ویلچر برقی، کودک بدون همراه و خدمات پزشکی از مرجع رسمی قابل دریافت نبود. پیش از خرید یا سفر باید شرایط پذیرش را مستقیماً استعلام کرد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع باتری و اندازه وسیله کمک‌حرکتی را به شرکت و فرودگاه اعلام کنید.",
+            "اگر پرواز توقف‌دار است، هماهنگی نیازهای ویژه در فرودگاه‌های میانی را بررسی کنید.",
+            "مدارک پزشکی لازم و شرایط خدمات را با شرکت و پزشک مربوطه کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی حقوق مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA باتری",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و هزینه آن",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کابین و هواپیمای روز سفر",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Meraj-Airlines",
+          "https://midrma.com/en/rvsm/approvalList/ir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سوابق هوانوردی معراج مدل‌های ایرباس A300-600، A319، A320 و A321 را نشان می‌دهد. ظرفیت و آرایش واقعی صندلی برای هر فروند متفاوت است و نوع هواپیما یا کلاس هر مسیر باید با بلیت و اطلاعیه روز سفر کنترل شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدل یک پرواز تاریخی، تضمین مدل پرواز آینده نیست.",
+            "از سن یا مدل هواپیما نمی‌توان به‌تنهایی درباره ایمنی آن نتیجه گرفت."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست ناوگان Planespotters",
+          "url": "https://www.planespotters.net/airline/Meraj-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "مدل‌ها در MIDRMA",
+          "url": "https://midrma.com/en/rvsm/approvalList/ir"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ فرودگاهی و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوانات زنده",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "meraj-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط پذیرش و مدارک حیوان باید از معراج برای سفر مشخص دریافت شود."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری لیتیومی",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "راهنمای IATA محدودیت عمومی حمل پاوربانک و باتری لیتیومی یدکی را توضیح می‌دهد. مجوز وسایل خاص و الزامات شرکت اجراکننده یا فرودگاه را جدا بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی لیتیومی را در بار تحویلی قرار ندهید.",
+            "اگر ساک کابین در گیت تحویل قسمت بار شد، باتری‌های یدکی را خارج کنید.",
+            "برای دستگاه پزشکی یا باتری پرظرفیت تأیید اختصاصی دریافت کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک، ویزا و ترانزیت",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای مسیرهای بین‌المللی منسوب به معراج، اعتبار گذرنامه، ویزا، ترانزیت و مدارک ورود با تابعیت، مقصد و تاریخ سفر تغییر می‌کند. وجود نام مقصد در سابقه پرواز به معنی معافیت روادید نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدرک هویتی معتبر برای داخلی و گذرنامه و مدارک ورود برای خارجی آماده کنید.",
+            "برای مسافرت چندشرکتی قوانین تمام قطعات و کشور توقف را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های مهم مسافر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://t.me/s/Merajairlinesinfo/828",
+          "https://www.planespotters.net/airline/Meraj-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد معراج چیست؟ IJ / MRJ؛ آن را با بلیت مطابقت دهید.",
+            "بار من چند کیلو است؟ عدد ۲۵/۳۰ کیلو مربوط به یک اطلاعیه قدیمیِ یک مسیر است؛ از روی بلیت و شرکت بازتأیید کنید.",
+            "چک‌این آنلاین یا انتخاب صندلی؟ سرویس فعلی از وب‌سایت قابل تأیید نبود.",
+            "در صورت لغو بلیت؟ شرایط نرخ و صادرکننده را بررسی کنید.",
+            "برای ویلچر یا حمل حیوان چه کنم؟ قبل از خرید درخواست خود را با شرکت هماهنگ کنید.",
+            "هواپیمای این پرواز کدام مدل است؟ به برنامه روز و هواپیمای عملیاتی بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بار در IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "آرشیو شرکت",
+          "url": "https://t.me/s/Merajairlinesinfo/828"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌ها و اطلاعیه‌های مسیر",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
+          "https://t.me/s/Merajairlinesinfo/828"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال اطلاع‌رسانی منتسب به معراج از مسیر رشت–استانبول در گذشته نام برده است. منابع تخصصی پایگاه‌های تهران و مشهد را ثبت کرده‌اند. این‌ها برنامه فعال قطعی آینده نیستند و پیوندها فقط راهنمای فرودگاه موجودند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "مهرآباد تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "امام خمینی تهران"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "استانبول"
+        },
+        {
+          "type": "link",
+          "title_fa": "آرشیو اعلان مسیر",
+          "url": "https://t.me/s/Merajairlinesinfo/828"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل تخصصی معراج",
+          "url": "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت و شارژ داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های شناخته‌شده ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Meraj-Airlines",
+          "https://midrma.com/en/rvsm/approvalList/ir"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست مستقل ناوگان و ثبت MIDRMA خانواده‌های A300-600، A319، A320 و A321 برای معراج آمده‌اند. ثبت تاریخی، مالکیت و وضعیت فعال هواپیما یکسان نیستند؛ در این راهنما تعداد/آمادگی/مالکیت/چیدمان هر مدل نامشخص باقی می‌ماند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A300-600",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Meraj-Airlines",
+              "https://midrma.com/en/rvsm/approvalList/ir"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A319",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Meraj-Airlines",
+              "https://midrma.com/en/rvsm/approvalList/ir"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Meraj-Airlines",
+              "https://midrma.com/en/rvsm/approvalList/ir"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Airbus A321",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Meraj-Airlines",
+              "https://midrma.com/en/rvsm/approvalList/ir"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "Planespotters",
+          "url": "https://www.planespotters.net/airline/Meraj-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت MIDRMA",
+          "url": "https://midrma.com/en/rvsm/approvalList/ir"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی معراج و شناسه‌ها",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Meraj-Airlines",
+          "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj",
+          "https://oibk.ir/fa/iran/airlines/mrj"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی معراج (Meraj Airlines) یک شرکت هواپیمایی ایرانی است. کد دوحرفی IATA آن IJ و کد سه‌حرفی ICAO آن MRJ است. شناسه MRJ در داده‌های رسمی اپراتورهای هوانوردی ایران دیده می‌شود. نام شرکت اجراکننده را با بلیت تطبیق دهید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مدل‌ها و کدهای هوانوردی در Planespotters",
+          "url": "https://www.planespotters.net/airline/Meraj-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل CAPA",
+          "url": "https://centreforaviation.com/data/profiles/airlines/meraj-air-mrj"
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست اپراتورهای هوانوردی ایران",
+          "url": "https://oibk.ir/fa/iran/airlines/mrj"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
