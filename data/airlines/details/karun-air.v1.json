@@ -1,0 +1,848 @@
+{
+  "schema_version": 1,
+  "airline_id": "karun-air",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://oibk.ir/fa/iran/airlines/kru",
+      "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv",
+      "https://www.planespotters.net/airline/Karun-Airlines"
+    ],
+    "verified_at": "2026-11-11T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت شرکت و بلیت",
+      "icon": "ticket-rules",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Karun-Airlines",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پایگاه معتبر ناوگان و پروفایل صنعت هوانوردی، karunair.ir را به‌عنوان دامنه کارون معرفی می‌کنند. وب‌سایت در این بررسی پاسخ ۴۰۳ داد و متن مقررات/سامانه خرید بازیابی نشد؛ بنابراین عملکرد پرداخت، وضعیت فروش و موجودی پرواز را تأیید نمی‌کنیم."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای رزرو، نام شرکت اجراکننده NV/KRU، صادرکننده بلیت و شرایط نرخ را تطبیق دهید.",
+            "درگاه پرداخت و اطلاعات مسافر را تنها در نشانی معتبر وارد کنید.",
+            "کد NV در منابع مربوط به سابقه «نفت» نیز دیده می‌شود؛ نام و شناسه فعلی شرکت روی بلیت ملاک است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "دامنه ثبت‌شده شرکت",
+          "url": "https://karunair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع هویت در Planespotters",
+          "url": "https://www.planespotters.net/airline/Karun-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل CAPA",
+          "url": "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "سهمیه بار و اضافه‌بار",
+      "icon": "baggage",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "karun-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "هیچ حد وزنیِ فعلی و اختصاصی کارون از مرجع مستقیم قابل تأیید نبود."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سهمیه رسمی و به‌روز بار کابین و تحویلی کارون از وب‌سایت شرکت در این بررسی بازیابی نشد. مقادیر منتشرشده در سایت‌های فروشنده یا جدول قدیمی را نمی‌توان به همه نرخ‌ها، فرودگاه‌ها و مسیرهای کارون تعمیم داد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از سفر، وزن و تعداد چمدان‌های تحویلی و وزن/ابعاد بار کابین را از بلیت یا شرکت اجراکننده تأیید کنید.",
+            "هزینه اضافه‌بار و پذیرش کالسکه، ساز و تجهیزات ورزشی ممکن است به هواپیما و مسیر وابسته باشد.",
+            "بار نوزاد یا مسافری با شرایط ویژه را از مقررات اختصاصی همان نرخ استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی بار IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت کارون و اطلاعات عملیات",
+          "url": "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "استرداد، لغو و اصلاح بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "karun-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "تعهدات استرداد تابع قرارداد بلیت، مقررات مسیر و صادرکننده است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "درصد جریمه کنسلی، تغییر تاریخ، استرداد و اصلاح مشخصات کارون از متن رسمی به‌روز قابل دریافت نبود. فروش آژانسی، تغییر داوطلبانه، عدم حضور و لغو شرکت باید جداگانه بررسی شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای بلیت خریداری‌شده از آژانس، ابتدا با صادرکننده مندرج روی رسید تماس بگیرید.",
+            "شرایط نرخ، شماره بلیت، مسیر و علت درخواست را برای پیگیری آماده کنید.",
+            "هیچ مبلغ یا مهلت تضمینی بازپرداخت بدون منبع دقیق اعلام نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای حقوق مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل مرجع صنعت",
+          "url": "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش فرودگاهی و کارت پرواز",
+      "icon": "checkin",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "karun-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مهلت روز پرواز و امکان چک‌این آنلاین کارون از سایت رسمی بازیابی نشد."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "بررسی وضعیت روز پرواز",
+      "icon": "flight-status",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv",
+          "https://www.planespotters.net/airline/Karun-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "CAPA و Planespotters شرکت کارون را با عملیات داخلی و چارتر معرفی می‌کنند. این سوابق به‌معنای اعلام لحظه‌ای یا تضمین پرواز آینده نیستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز NV، تاریخ، مبدا و مقصد را از بلیت بردارید و در منابع شرکت/فرودگاه بررسی کنید.",
+            "اگر برنامه تغییر کرد، وضعیت همان روز و گزینه‌های بلیت را با صادرکننده پیگیری کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل صنعت هوایی کارون",
+          "url": "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات تاریخی اپراتور",
+          "url": "https://www.planespotters.net/airline/Karun-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "تماس و پیگیری درخواست",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://hormuz.group/companies/karun-airlines/",
+          "https://www.planespotters.net/airline/Karun-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پروفایل‌های صنعتی، دفتر مرکزی کارون را در اهواز و وب‌سایت karunair.ir را معرفی می‌کنند. شماره فعال، واحد پاسخ‌گویی، ایمیل و ساعات کار در این بررسی از وب‌سایت رسمی تأیید نشد؛ اطلاعات تماس آگهی‌ها و صفحات قدیمی نباید به‌عنوان پشتیبانی فعلی درج شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره رزرو، نام صادرکننده، مسیر و تاریخ را برای پیگیری آماده کنید.",
+            "اسناد هویتی و مالی را در کانال عمومی ارسال نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل تجاری با معرفی شرکت",
+          "url": "https://hormuz.group/companies/karun-airlines/"
+        },
+        {
+          "type": "link",
+          "title_fa": "دامنه معرفی‌شده شرکت",
+          "url": "https://karunair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "بار مفقود، آسیب‌دیده یا تأخیری",
+      "icon": "lost-baggage",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای تأخیر یا آسیب بار، پیش از ترک سالن تحویل موضوع را به مسئول بار شرکت اجراکننده اعلام و شماره پرونده دریافت کنید. این یک راهنمای عمومی است و مبلغ و مهلت قانونی اختصاصی کارون را مشخص نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برچسب بار، کارت پرواز، گزارش فرودگاه و عکس چمدان را نگه دارید.",
+            "شماره پرونده و شرکت مسئول حمل را برای پیگیری ثبت کنید.",
+            "برای حقوق ناشی از تأخیر و خسارت به شرایط مسیر و مقررات حاکم رجوع کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی مسافر IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "ویلچر و کمک مسافر",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات جاری کارون برای کودک بدون همراه، خدمات پزشکی، بارداری و حمل ویلچر برقی در منابع مستقیمِ قابل بازیابی تأیید نشد. پذیرش و ظرفیت هر خدمت باید پیش از خرید هماهنگ شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع نیاز، تجهیزات، باتری و مقصد/توقف را برای رزرو مشخص بیان کنید.",
+            "هزینه و مدارک پزشکی احتمالی را با شرکت اجراکننده بررسی کنید.",
+            "راهنمای عمومی IATA به معنی تضمین ارائه خدمت توسط کارون نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات عمومی حقوق مسافر",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای باتری‌های مسافری",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب و هزینه صندلی",
+      "icon": "seat-selection",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس و نوع هواپیمای سفر",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Karun-Airlines",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست ناوگان کارون هواپیماهای بوئینگ 737-300/500، فوکر ۵۰ و فوکر ۱۰۰ ثبت شده‌اند. کلاس، مدل اجراکننده و آرایش صندلی هر پرواز ممکن است تغییر کند؛ وجود مدل در فهرست تاریخی ضمانت استفاده از آن در سفر شما نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع هواپیمای واقعی و خدمات موردنظر را از شرکت/بلیت تأیید کنید.",
+            "تعداد صندلی و مدل تاریخی، رتبه‌بندی ایمنی پرواز نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت انواع هواپیما در Planespotters",
+          "url": "https://www.planespotters.net/airline/Karun-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای خاص",
+      "icon": "services",
+      "order": 60,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و CIP",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی",
+      "icon": "services",
+      "order": 68,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "karun-air",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "مجوز حمل حیوان، مدل هواپیما، گونه، قفس و مدارک در کارون تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری یدکی",
+      "icon": "baggage",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/batteries/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "IATA برای باتری لیتیومی یدکی و پاوربانک دستورهای ایمنی عمومی دارد. این راهنما جایگزین تأیید مقررات خاص کارون، فرودگاه و کشور مقصد نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری لیتیومی یدکی را در بار تحویلی نگذارید.",
+            "باتری‌های یدکی را در کابین در برابر اتصال کوتاه محافظت کنید.",
+            "در صورت تحویل ساک کابین در گیت، باتری یدکی را خارج کنید.",
+            "برای ویلچر باتری‌دار یا تجهیزات پزشکی موافقت شرکت را بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای عمومی باتری IATA",
+          "url": "https://www.iata.org/en/youandiata/travelers/batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "گذرنامه و مدارک سفر",
+      "icon": "services",
+      "order": 73,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/travel-centre",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کارون در منابع هوانوردی به‌عنوان شرکت دارای عملیات داخلی و برخی فعالیت‌های بین‌المللی/چارتر معرفی شده است. شرایط ورود کشور مقصد به تابعیت، مسیر و تاریخ سفر وابسته است؛ وجود یک مقصد در سوابق تاریخی معافیت ویزا یا پرواز فعال را ثابت نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای داخلی مدرک هویت و برای خارجی گذرنامه و مدارک ورود را کنترل کنید.",
+            "قبل از خرید مقررات ترانزیت و کشور مقصد را در منابع رسمی بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "IATA Travel Centre",
+          "url": "https://www.iata.org/en/travel-centre"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پاسخ‌های سریع مسافران کارون",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/kru",
+          "https://www.planespotters.net/airline/Karun-Airlines",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شناسه کارون چیست؟ کد IATA برابر NV و کد ICAO رسمی KRU است.",
+            "نام قدیمی شرکت؟ نفت (Iranian Naft Airlines) در سوابق تاریخی پیش از نام کارون آمده است.",
+            "بار مجاز؟ عدد به‌روز اختصاصی از شرکت تأیید نشده؛ بلیت ملاک است.",
+            "چک‌این آنلاین؟ وضعیت فعلی قابل تأیید نبود.",
+            "لغو و استرداد؟ شرایط نرخ و صادرکننده، دلیل لغو و مقررات مسیر تعیین‌کننده‌اند.",
+            "چه هواپیمایی؟ خانواده‌های بوئینگ ۷۳۷ و فوکر در سوابق ثبت شده‌اند؛ مدل سفر قطعی نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "هویت رسمی ICAO",
+          "url": "https://oibk.ir/fa/iran/airlines/kru"
+        },
+        {
+          "type": "link",
+          "title_fa": "تاریخچه و کد NV در Planespotters",
+          "url": "https://www.planespotters.net/airline/Karun-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "فرودگاه‌های مرتبط و مسیرها",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv",
+          "https://www.planespotters.net/airline/Karun-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "معرفی صنعتی کارون فعالیت حول اهواز و تهران مهرآباد و نیز برخی پروازهای چارتر را بیان می‌کند. لینک‌ها به راهنمای فرودگاه‌های موجود می‌روند، نه برنامه زنده یا تضمین یک مسیر مستقیم در تاریخ معین."
+        },
+        {
+          "type": "airport_link",
+          "iata": "AWZ",
+          "title_fa": "فرودگاه اهواز"
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "فرودگاه مهرآباد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IKA",
+          "title_fa": "فرودگاه امام خمینی"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "فرودگاه بندرعباس"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "فرودگاه مشهد"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "فرودگاه کیش"
+        },
+        {
+          "type": "link",
+          "title_fa": "پروفایل مرجع فعالیت کارون",
+          "url": "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "وای‌فای و شارژ داخل پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "خانواده‌های هواپیما و سوابق ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/Karun-Airlines",
+          "https://oibk.ir/fa/iran/airlines/kru"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Planespotters برای کارون مدل‌های Boeing 737-300 و 737-500، Fokker 50 و Fokker 100 را ثبت می‌کند. پایگاه هوانوردی ایران یک ثبت مرتبط با KRU را در مجموعه دیگری نشان می‌دهد؛ تعداد ثبتی، تعداد عملیاتی نیست. مدل‌های شناخته‌شده بدون حدس درباره تعداد فعال، مالکیت، قابلیت پرواز و چیدمان درج شده‌اند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-300",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Karun-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Boeing 737-500",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Karun-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 50",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Karun-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "Fokker 100",
+          "manufacturer": "Fokker",
+          "count": null,
+          "observed_at": "2026-11-11T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/Karun-Airlines"
+            ],
+            "verified_at": "2026-11-11T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست مدل‌ها در Planespotters",
+          "url": "https://www.planespotters.net/airline/Karun-Airlines"
+        },
+        {
+          "type": "link",
+          "title_fa": "شناسه اپراتور در فهرست رسمی",
+          "url": "https://oibk.ir/fa/iran/airlines/kru"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی کارون و شناسه‌های هوانوردی",
+      "icon": "introduction",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/kru",
+          "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv",
+          "https://www.planespotters.net/airline/Karun-Airlines"
+        ],
+        "verified_at": "2026-11-11T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی کارون (Karun Airlines) با شناسه IATA «NV»، ICAO «KRU» و کال‌ساین KARUN شناخته می‌شود. کد KRU در فهرست رسمی ایران معتبر از ۱۰ ژوئن ۲۰۲۶ آمده است. Planespotters نام پیشین Iranian Naft Airlines را ثبت کرده؛ این سوابق نباید به‌عنوان شرایط جاری فروش یا مالکیت تفسیر شوند."
+        },
+        {
+          "type": "link",
+          "title_fa": "فهرست رسمی شناسه KRU",
+          "url": "https://oibk.ir/fa/iran/airlines/kru"
+        },
+        {
+          "type": "link",
+          "title_fa": "اطلاعات IATA NV در CAPA",
+          "url": "https://centreforaviation.com/data/profiles/airlines/karun-airlines-nv"
+        },
+        {
+          "type": "link",
+          "title_fa": "پیشینه نام و ناوگان",
+          "url": "https://www.planespotters.net/airline/Karun-Airlines"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
