@@ -110,7 +110,7 @@
       "icon": "video",
       "order": 50,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://t.me/zahedanairport/10175",
         "https://oibk.ir/fa/airports/oizh"
@@ -164,7 +164,7 @@
       "icon": "building-2",
       "order": 60,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://gostareshsakhteman.com/city-housing-construction/134427/",
@@ -208,7 +208,7 @@
       "icon": "car-taxi-front",
       "order": 70,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh"
@@ -240,7 +240,7 @@
       "icon": "car-front",
       "order": 80,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh/charts"
@@ -277,7 +277,7 @@
       "icon": "coffee",
       "order": 90,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh"
@@ -309,7 +309,7 @@
       "icon": "accessibility",
       "order": 100,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh"
@@ -341,7 +341,7 @@
       "icon": "armchair",
       "order": 110,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh"
@@ -481,7 +481,7 @@
       "icon": "route",
       "order": 160,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh"
@@ -513,7 +513,7 @@
       "icon": "shield-check",
       "order": 170,
       "status": "published",
-      "reviewed_at": "2026-11-11T17:04:00Z",
+      "reviewed_at": "2026-11-11T00:00:00Z",
       "source_urls": [
         "https://ais.airport.ir/documents/452631/186846253/OIZH.pdf",
         "https://oibk.ir/fa/airports/oizh"
