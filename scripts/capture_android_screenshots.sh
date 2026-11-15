@@ -19,20 +19,20 @@ adb_device_ready() {
 # Reconnect the offline transport and restart the ADB server as a last resort.
 recover_adb() {
   local attempt
-  for attempt in $(seq 1 8); do
+  for attempt in $(seq 1 4); do
     if adb_device_ready; then
       return 0
     fi
 
-    echo "::warning::ADB device is not online (recovery attempt $attempt/8)"
+    echo "::warning::ADB device is not online (recovery attempt $attempt/4)"
     if (( attempt % 3 == 0 )); then
       command adb kill-server >/dev/null 2>&1 || true
       sleep 1
     fi
     command adb start-server >/dev/null 2>&1 || true
     command adb reconnect offline >/dev/null 2>&1 || true
-    timeout 10s adb -s "$EMULATOR_SERIAL" wait-for-device >/dev/null 2>&1 || true
-    sleep 2
+    timeout 3s adb -s "$EMULATOR_SERIAL" wait-for-device >/dev/null 2>&1 || true
+    sleep 1
   done
 
   adb_device_ready
@@ -95,7 +95,7 @@ PY
 capture() {
   local file="$1"
   local output="android/screenshots/$file"
-  local temporary="$output.tmp.$"
+  local temporary="$output.tmp.$$"
   local attempt
 
   sleep 2
@@ -183,9 +183,8 @@ wait_for_activity() {
   adb shell dumpsys activity activities | grep -E '(topResumedActivity|mResumedActivity)' >&2 || true
   # Persist useful diagnostics instead of hiding the failing UI behind a
   # transient emulator window. Artifacts are uploaded even if this job fails.
-  adb exec-out screencap -p > "android/screenshots/failed-navigation.png" || true
-  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
-  adb exec-out cat /sdcard/flightiran-failed-window.xml > "android/screenshots/failed-window.xml" || true
+  adb -s "$EMULATOR_SERIAL" shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
+  adb -s "$EMULATOR_SERIAL" exec-out cat /sdcard/flightiran-failed-window.xml > "android/screenshots/failed-window.xml" || true
   return 1
 }
 
