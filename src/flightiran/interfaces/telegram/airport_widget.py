@@ -387,7 +387,7 @@ async def send_airport_widget(
                                      web_app=WebAppInfo(mini_app_url))
             ]])
         await message.reply_text(
-             "راهنمای فرودگاه‌ها در نسخه‌های جدید تلگرام به شکل تعاملی نمایش "
+            "راهنمای فرودگاه‌ها در نسخه‌های جدید تلگرام به شکل تعاملی نمایش "
             "داده می‌شود. تلگرام را به‌روز کنید یا از مینی‌اپ استفاده کنید.",
             reply_markup=keyboard,
         )
