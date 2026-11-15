@@ -5,17 +5,17 @@ set -euo pipefail
 # process is still alive. Put a retrying ADB shim on PATH so both Bash and the
 # Python UIAutomator helpers use the same recovery behavior.
 REAL_ADB="$(command -v adb)"
-ADB_RETRY_DIR="$(mktemp -d "\${TMPDIR:-/tmp}/flightiran-adb-retry.XXXXXX")"
+ADB_RETRY_DIR="$(mktemp -d "${TMPDIR:-/tmp}/flightiran-adb-retry.XXXXXX")"
 cat > "$ADB_RETRY_DIR/adb" <<'ADB_RETRY_WRAPPER'
 #!/usr/bin/env bash
 set -u
 
-real="\${FLIGHTIRAN_REAL_ADB:?FLIGHTIRAN_REAL_ADB is not set}"
+real="${FLIGHTIRAN_REAL_ADB:?FLIGHTIRAN_REAL_ADB is not set}"
 max_attempts=4
 attempt=1
 
 while (( attempt <= max_attempts )); do
-  tmp="$(mktemp -d "\${TMPDIR:-/tmp}/flightiran-adb-call.XXXXXX")"
+  tmp="$(mktemp -d "${TMPDIR:-/tmp}/flightiran-adb-call.XXXXXX")"
   "$real" "$@" >"$tmp/stdout" 2>"$tmp/stderr"
   status=$?
 
@@ -41,7 +41,7 @@ while (( attempt <= max_attempts )); do
     exit "$status"
   fi
 
-  printf '::warning::ADB transport unavailable (attempt %s/%s); reconnecting emulator...\\n' "$attempt" "$max_attempts" >&2
+  printf '::warning::ADB transport unavailable (attempt %s/%s); reconnecting emulator...\n' "$attempt" "$max_attempts" >&2
   "$real" reconnect offline >/dev/null 2>&1 || true
   "$real" start-server >/dev/null 2>&1 || true
 
@@ -68,6 +68,7 @@ ADB_RETRY_WRAPPER
 chmod +x "$ADB_RETRY_DIR/adb"
 export FLIGHTIRAN_REAL_ADB="$REAL_ADB"
 export PATH="$ADB_RETRY_DIR:$PATH"
+trap 'rm -rf "$ADB_RETRY_DIR"' EXIT
 
 # Executed in one shell: emulator-runner otherwise launches every script line
 # independently and loses shell variables / breaks multi-line Python heredocs.
@@ -127,7 +128,7 @@ on_capture_failure() {
   trap - ERR
   set +e
   mkdir -p android/screenshots
-  printf 'Screenshot workflow failed; collecting emulator diagnostics.\\n' \
+  printf 'Screenshot workflow failed; collecting emulator diagnostics.\n' \
     > android/screenshots/failed-diagnostics.txt
   adb devices -l >> android/screenshots/failed-diagnostics.txt 2>&1
   adb shell dumpsys activity activities >> android/screenshots/failed-diagnostics.txt 2>&1
@@ -269,7 +270,7 @@ capture() {
 
   sleep 2
   while (( attempt <= 3 )); do
-    temporary="\${target}.tmp.$"
+    temporary="${target}.tmp.${BASHPID}"
     if adb exec-out screencap -p > "$temporary" && validate_png "$temporary"; then
       mv -f "$temporary" "$target"
       echo "Captured $file"
