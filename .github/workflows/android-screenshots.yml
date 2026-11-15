@@ -1,6 +1,6 @@
 name: Android Store Screenshots
 
-# Emulator screenshots build an APK, so run only when explicitly requested.
+# Build and capture store screenshots only when explicitly requested.
 on:
   workflow_dispatch:
 
@@ -27,7 +27,9 @@ jobs:
           gradle-version: "8.13"
       - name: Install SDK
         run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
-      # Required for a reliable hardware-accelerated Linux emulator boot.
+      - name: Build Android APK for screenshots
+        run: gradle --no-daemon -p android :app:assembleDebug
+      # KVM accelerates the x86_64 guest; SwiftShader keeps graphics rendering stable.
       - name: Enable KVM for Android emulator
         shell: bash
         run: |
