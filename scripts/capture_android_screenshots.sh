@@ -164,12 +164,13 @@ package="com.abolfazl260.flightiranbot24.debug"
 activity_prefix="com.abolfazl260.flightiranbot24"
 
 open_launcher() {
-  # Merely starting MainActivity again can deliver the intent to the task
-  # while a non-exported child Activity remains foreground (Android task reuse).
-  # Force-stop the test app before launch so every screenshot starts from home.
-  # This does not clear user preferences or other app data.
-  adb shell am force-stop "$package"
-  adb shell am start -W -n "$package/$activity_prefix.MainActivity" | tee /tmp/flightiran-launch.txt
+  # Reset the app's task stack without force-stopping the process. Force-stop
+  # briefly exposes the HOME launcher; on hosted AVDs that can trigger a
+  # Pixel Launcher ANR dialog which blocks UIAutomator while the app is visible.
+  # NEW_TASK | CLEAR_TASK (0x10008000) starts a fresh MainActivity task without
+  # bringing the launcher to the foreground or clearing app preferences.
+  adb -s "$EMULATOR_SERIAL" shell am start -W -f 0x10008000 \
+    -n "$package/$activity_prefix.MainActivity" | tee /tmp/flightiran-launch.txt
   grep -q 'Status: ok' /tmp/flightiran-launch.txt
 }
 
@@ -192,8 +193,61 @@ wait_for_activity() {
   return 1
 }
 
+# Pixel Launcher can occasionally become unresponsive on hosted AVDs.
+# Its Android system ANR dialog overlays the app and hides the app's UI tree
+# from UIAutomator. Close only that launcher dialog; never dismiss app dialogs.
+dismiss_launcher_anr_dialog() {
+  local dialog_path="/sdcard/flightiran-system-dialog.xml"
+  timeout 8s adb -s "$EMULATOR_SERIAL" shell uiautomator dump "$dialog_path" >/dev/null 2>&1 || return 0
+
+  local dialog_xml
+  dialog_xml="$(adb -s "$EMULATOR_SERIAL" exec-out cat "$dialog_path" 2>/dev/null || true)"
+  if ! grep -Fq "Pixel Launcher isn't responding" <<< "$dialog_xml"; then
+    return 0
+  fi
+
+  local tap_coordinates
+  tap_coordinates="$(python3 - "$dialog_xml" <<'PY'
+import re
+import sys
+import xml.etree.ElementTree as ET
+
+try:
+    root = ET.fromstring(sys.argv[1])
+except ET.ParseError:
+    raise SystemExit(0)
+
+for node in root.iter("node"):
+    if node.attrib.get("package") != "android":
+        continue
+    if node.attrib.get("resource-id") != "android:id/aerr_close":
+        continue
+    match = re.fullmatch(r"\[(\d+),(\d+)\]\[(\d+),(\d+)\]",
+                         node.attrib.get("bounds", ""))
+    if match is None:
+        continue
+    left, top, right, bottom = map(int, match.groups())
+    if right > left and bottom > top:
+        print((left + right) // 2, (top + bottom) // 2)
+        break
+PY
+)"
+
+  if [[ -z "$tap_coordinates" ]]; then
+    echo "::warning::Pixel Launcher ANR dialog detected, but its Close app button could not be located."
+    return 0
+  fi
+
+  local tap_x tap_y
+  read -r tap_x tap_y <<< "$tap_coordinates"
+  echo "::warning::Closing the unresponsive Pixel Launcher system dialog; the FlightIran app remains the test target."
+  adb -s "$EMULATOR_SERIAL" shell input tap "$tap_x" "$tap_y"
+  sleep 2
+}
+
 tap_persian_control() {
   local label="$1"
+  dismiss_launcher_anr_dialog
   python3 - "$label" <<'PY'
 import re
 import subprocess
@@ -278,6 +332,7 @@ PY
 # control through UIAutomator, scrolling the page without guessed coordinates.
 tap_service_row() {
   local label="$1"
+  dismiss_launcher_anr_dialog
   python3 - "$label" <<'PY'
 import re
 import subprocess
@@ -344,6 +399,7 @@ scroll_down() {
 wait_for_text() {
   local expected="$1"
   for _ in $(seq 1 15); do
+    dismiss_launcher_anr_dialog
     adb shell uiautomator dump /sdcard/flightiran-assert.xml >/dev/null 2>&1 || true
     local xml
     xml="$(adb exec-out cat /sdcard/flightiran-assert.xml || true)"
@@ -360,6 +416,7 @@ wait_for_prices() {
   # Both successful live data and the genuine API error state count as a
   # rendered screen. Never photograph a loading spinner or invent fares.
   for _ in $(seq 1 25); do
+    dismiss_launcher_anr_dialog
     adb shell uiautomator dump /sdcard/flightiran-prices.xml >/dev/null 2>&1 || true
     local xml
     xml="$(adb exec-out cat /sdcard/flightiran-prices.xml || true)"
