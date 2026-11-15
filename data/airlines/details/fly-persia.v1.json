@@ -1,0 +1,713 @@
+{
+  "schema_version": 1,
+  "airline_id": "fly-persia",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://oibk.ir/fa/iran/airlines",
+      "https://www.planespotters.net/airline/FlyPersia",
+      "https://rahig.com/airlines/flypersia"
+    ],
+    "verified_at": "2026-11-15T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت و اطلاعات رسمی",
+      "icon": "services",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/FlyPersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "دامنه flypersia.aero توسط منابع هوانوردی به فلای پرشیا نسبت داده شده است؛ هنگام مرور، سایت شرکت قابل دریافت نبود. پیش از پرداخت از صحت آدرس و نام فروشنده مطمئن شوید."
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت معرفی‌شده شرکت",
+          "url": "https://www.flypersia.aero/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "ticket-rules",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "fly-persia",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در نمونه ۳۳ پرواز رصدشده توسط رهیگ، بار رایج ۲۰ کیلوگرم گزارش شده است. این آمار فروشگاهی، سهمیه قطعی بار در تمام بلیت‌ها نیست؛ کلاس نرخی، چارتر و مسیر ممکن است متفاوت باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مقدار واقعی بار را از بلیت همان پرواز کنترل کنید.",
+            "تعرفه اضافه‌بار را قبل از مراجعه استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://rahig.com/airlines/flypersia"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "استرداد و تغییر بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "fly-persia",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق صفحه رهیگ، بلیت‌های مشاهده‌شده شامل سیستمی و چارتری هستند. جریمه کنسلی و شرایط استرداد به صادرکننده و کلاس نرخی وابسته است؛ درصد ثابت و فراگیر از منبع اصلی تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "درخواست استرداد را نزد صادرکننده بلیت پیگیری کنید.",
+            "مبلغ بازپرداخت را پیش از تأیید نهایی مشاهده کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://rahig.com/airlines/flypersia"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و چک‌این",
+      "icon": "ticket-rules",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "fly-persia",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز",
+      "icon": "services",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سامانه رهیگ برخی مسیرهای مشاهده‌شده در ماه‌های اخیر را نمایش می‌دهد، نه وضعیت زنده پرواز. برای تاریخ و شماره پرواز خود اطلاعات فرودگاه و شرکت اجراکننده را کنترل کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://rahig.com/airlines/flypersia"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "پشتیبانی و تماس",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/flypersia",
+          "https://www.planespotters.net/airline/FlyPersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "شماره پشتیبانی فعلی، ساعات پاسخ‌گویی و درگاه رسمی شکایت فلای پرشیا در صفحات شرکت طی این بررسی تأیید نشد. از اطلاعات تماس روی بلیت معتبر یا اطلاعات صادرکننده بلیت استفاده کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://rahig.com/airlines/flypersia"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "چمدان نرسیده یا آسیب‌دیده",
+      "icon": "services",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای بار مفقود یا آسیب‌دیده، پیش از خروج از سالن دریافت بار فرودگاه گزارش ثبت کرده و شماره پیگیری، کارت پرواز و برچسب چمدان را حفظ کنید. این توصیه عمومی IATA است و سیاست اختصاصی این ایرلاین را ثابت نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدارک گزارش و عکس چمدان را نگه دارید.",
+            "شرایط و مهلت مطالبه خسارت را برای شرکت اجراکننده بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات مسافر ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات اختصاصی ویلچر، بارداری و تجهیزات پزشکی فلای پرشیا از منبع رسمی در دسترس نبود. قبل از خرید و صدور بلیت، پذیرش و خدمات مورد نیاز را از شرکت اجراکننده تأیید کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی",
+      "icon": "services",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "هواپیما و کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/FlyPersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در دیتابیس Planespotters نام Boeing 737-300 در ناوگان و Boeing 757-200 در سوابق تاریخی فلای پرشیا دیده می‌شود. این داده‌ها مدل پرواز فردا یا چیدمان قطعی کابین را ثابت نمی‌کنند."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.planespotters.net/airline/FlyPersia"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "خدمات پذیرایی",
+      "icon": "services",
+      "order": 57,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و تشریفات",
+      "icon": "services",
+      "order": 59,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی",
+      "icon": "ticket-rules",
+      "order": 60,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "fly-persia",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/programs/cargo/dangerous-goods/lithium-batteries/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پاوربانک و باتری لیتیومی یدکی تابع محدودیت‌های ایمنی است. راهنمای IATA معیار عمومی است، نه تأیید سقف تعداد یا ظرفیت برای این شرکت؛ آخرین دستورالعمل شرکت و فرودگاه را بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری یدکی و پاوربانک را بدون بررسی مقررات به بار تحویلی نسپارید.",
+            "باتری آسیب‌دیده را به خدمه اعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/programs/cargo/dangerous-goods/lithium-batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر",
+      "icon": "services",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نام روی بلیت باید با مدرک هویتی مطابق باشد. برای مسیرهای بین‌المللی، گذرنامه، ویزا و شرایط ورود را از مرجع کشور مقصد و شرکت اجراکننده تأیید کنید؛ راهنمای عمومی جایگزین بررسی پرونده نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های پرتکرار",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اطلاعات تجاری فروشندگان با شرایط بلیت قطعی تفاوت دارد. اعداد نمونه، زمان‌بندی پرواز یا امکان خرید را برای آینده تضمین نمی‌کنند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار مجاز ۲۰ کیلوگرم برای همه بلیت‌ها؟ خیر؛ فقط در نمونه فروش مشاهده شده است.",
+            "ساعت چک‌این آنلاین؟ به‌صورت رسمی تأیید نشده است.",
+            "مسیرهای دیده‌شده فعال‌اند؟ برای تاریخ سفر دوباره کنترل شوند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://rahig.com/airlines/flypersia"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "مسیرها و فرودگاه‌ها",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "رهیگ در مرور اخیر ۲۳ مسیر مشاهده‌شده در ۶ ماه گزارش می‌کند که نمونه‌هایی از تهران، مشهد و شیراز را شامل می‌شود. این سابقه فروش، برنامه پرواز قطعی آینده نیست."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "راهنمای فرودگاه THR"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "راهنمای فرودگاه MHD"
+        },
+        {
+          "type": "airport_link",
+          "iata": "SYZ",
+          "title_fa": "راهنمای فرودگاه SYZ"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://rahig.com/airlines/flypersia"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/FlyPersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Planespotters نوع Boeing 737-300 را در سوابق فلای پرشیا و Boeing 757-200 را در سوابق تاریخی ثبت کرده است. تعداد فعال، مالکیت و چینش کابین به‌صورت نامعلوم نگهداری می‌شود."
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "Boeing",
+          "model": "Boeing 737-300",
+          "count": null,
+          "observed_at": "2026-09-15T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/FlyPersia"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "Boeing",
+          "model": "Boeing 757-200 (historical)",
+          "count": null,
+          "observed_at": "2026-09-15T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/FlyPersia"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.planespotters.net/airline/FlyPersia"
+        }
+      ]
+    },
+    {
+      "id": "loyalty",
+      "title_fa": "باشگاه مشتریان",
+      "icon": "services",
+      "order": 95,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "complaints",
+      "title_fa": "ثبت شکایت",
+      "icon": "services",
+      "order": 96,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی شرکت",
+      "icon": "services",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/FlyPersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فلای پرشیا در فهرست بهره‌برداران ایران با کد ICAO برابر FPI و علامت رادیویی PERSIA ثبت شده است. کد FP در منابع ثانویه Planespotters و رهیگ ذکر می‌شود؛ این به‌معنای تأیید عضویت IATA نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://oibk.ir/fa/iran/airlines"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}

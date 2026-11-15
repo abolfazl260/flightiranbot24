@@ -18,7 +18,7 @@ import org.robolectric.annotation.Config
 @Config(sdk = [28])
 class AirlineContentTest {
     private val context: Context get() = ApplicationProvider.getApplicationContext()
-    private val now = Instant.parse("2026-11-11T00:00:00Z")
+    private val now = Instant.parse("2026-11-15T12:00:00Z")
     private fun bundled(path: String) = context.assets.open(path).bufferedReader().use { it.readText() }
     private fun page() = JsonParser.parseString(bundled("details/emirates.v1.json")).asJsonObject
     private fun parse(root: JsonObject) = AirlineContentParser.detail(root.toString(), "emirates", now)!!
@@ -32,7 +32,8 @@ class AirlineContentTest {
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
             "caspian-air", "sepehran-air", "taban-air", "karun-air",
-            "pars-air", "chabahar-air"), rows.map { it.id }.toSet())
+            "pars-air", "chabahar-air",
+            "fly-persia", "ava-airlines", "yazd-airways"), rows.map { it.id }.toSet())
         val iranAir = AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!
         assertEquals(17, iranAir.sections.size)
         assertFalse(iranAir.sections.any { it.id == "onboard-connectivity" })
@@ -223,6 +224,18 @@ class AirlineContentTest {
                     it.relationship == "unknown"
             })
         }
+        for ((carrier, published, models) in listOf(
+            Triple("fly-persia", 14, 2),
+            Triple("ava-airlines", 20, 4),
+            Triple("yazd-airways", 14, 3)
+        )) {
+            val guide = AirlineContentParser.detail(bundled("details/$carrier.v1.json"), carrier, now)!!
+            assertEquals(published, guide.sections.size)
+            assertEquals(0, guide.ratingCount)
+            assertNull(guide.average)
+            assertEquals(models, guide.sections.flatMap { it.blocks }.filterIsInstance<AirlineBlock.Fleet>().size)
+            assertFalse(guide.sections.any { it.id == "onboard-connectivity" })
+        }
         val taban = AirlineContentParser.detail(
             bundled("details/taban-air.v1.json"), "taban-air", now)!!
         assertTrue(taban.sections.any { it.id == "complaints" })
@@ -303,7 +316,7 @@ class AirlineContentTest {
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
             "caspian-air", "sepehran-air", "taban-air", "karun-air",
-            "pars-air", "chabahar-air"),
+            "pars-air", "chabahar-air", "fly-persia", "ava-airlines", "yazd-airways"),
             AirlineContentParser.index(directory.toString(), now).map { it.id })
     }
 

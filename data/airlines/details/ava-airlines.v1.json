@@ -1,0 +1,818 @@
+{
+  "schema_version": 1,
+  "airline_id": "ava-airlines",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://avaair.ir/",
+      "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+    ],
+    "verified_at": "2026-11-15T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت و اطلاعات رسمی",
+      "icon": "services",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وب‌سایت avaair.ir خدمات جست‌وجوی بلیت، ورود کاربر، چک‌این آنلاین و صفحه قوانین را معرفی کرده است. فعال بودن همه این قابلیت‌ها برای هر پرواز، خودبه‌خود تضمین نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "صفحه رسمی آوا",
+          "url": "https://avaair.ir/"
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین شرکت",
+          "url": "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "ticket-rules",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ava-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مقررات عمومی آوا بار مجاز را تابع کلاس نرخی بلیت می‌داند و به حد معمول ۳۰ کیلوگرم برای هر بسته اشاره می‌کند؛ این «وزن هر بسته» با «سهمیه بار رایگان» یکسان نیست. استثنای مسیر یا ناوگان ملاک است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وزن مجاز بار تحویلی و کابین را روی بلیت خود بررسی کنید.",
+            "اقلام باارزش و مدارک را در بار تحویلی قرار ندهید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "استرداد و تغییر بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/",
+          "https://avaair.ir/rules/rules-cancellation-and-refund-policy/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ava-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آوا جدول استرداد تفکیکی کلاس‌های نرخی داخلی و خارجی را منتشر کرده است. مقررات عمومی و صفحه تغییر پرواز درباره بعضی مهلت‌ها و شیوه برگشت وجه تفاوت دارند؛ بنابراین بدون بررسی بلیت، مبلغ یا مسیر واریز را قطعی اعلام نمی‌کنیم."
+        },
+        {
+          "type": "link",
+          "title_fa": "جدول رسمی کنسلی و استرداد",
+          "url": "https://avaair.ir/rules/rules-cancellation-and-refund-policy/"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و چک‌این",
+      "icon": "ticket-rules",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/",
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ava-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در صفحه رسمی آوا «چک‌این آنلاین» معرفی شده است. مقررات عمومی حضور دست‌کم دو ساعت قبل از پرواز داخلی و سه ساعت قبل از پرواز بین‌المللی را ذکر می‌کند؛ بازبودن سرویس آنلاین و مهلت کانتر را برای بلیت خود تأیید کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز",
+      "icon": "services",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی آوا مسیرهای نمونه را معرفی می‌کند. نمایش مسیر لزوماً به معنی موجودی یا انجام پرواز در تاریخ معین نیست؛ شماره پرواز و آخرین وضعیت را از فرودگاه و شرکت کنترل کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "پشتیبانی و تماس",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/contact-us/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در سایت رسمی آوا شماره ۰۲۱-۹۲۰۰-۱۱۰۰ و ایمیل info@avaair.ir برای ارتباط اعلام شده است. از درگاه رسمی تماس و شکایت برای ارسال مدارک استفاده کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "تماس با آوا",
+          "url": "https://avaair.ir/contact-us/"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "چمدان نرسیده یا آسیب‌دیده",
+      "icon": "services",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "طبق مقررات رسمی آوا در صورت گم‌شدن یا آسیب بار، پیش از خروج از سالن ورودی به دفتر جامه‌دان مراجعه و فرم مربوط را تکمیل کنید؛ سپس با شماره گزارش پیگیری نمایید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات مسافر ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/pregnant-women/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آوا طرح خدمات ویژه بانوان باردار بدون عارضه را معرفی کرده است. برای دریافت خدمات این طرح، طبق صفحه شرکت باید تا ۷۲ ساعت پیش از پرواز درخواست و مدارک لازم ارسال شود. تأیید پذیرش پزشکی باید مستقیم از آوا دریافت شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین و فرم طرح بارداری آوا",
+          "url": "https://avaair.ir/pregnant-women/"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی",
+      "icon": "services",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت آوا خدمات «انتخاب صندلی» را تبلیغ می‌کند، اما نقشه صندلی، مبلغ و دسترس‌پذیری آن برای همه پروازها تأیید نشده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "هواپیما و کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/AVA-Airlines"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Planespotters مدل‌های A310-300، Boeing 737-400/500 و MD-83 را در سوابق آوا نشان می‌دهد. وضعیت هواپیمای اجراکننده و چیدمان صندلی بر اساس شماره پرواز باید بررسی شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.planespotters.net/airline/AVA-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "خدمات پذیرایی",
+      "icon": "services",
+      "order": 57,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/",
+          "https://avaair.ir/pregnant-women/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در وب‌سایت آوا گزینه «انتخاب غذا» و در طرح بارداری منوی ویژه معرفی شده است. انجام خدمات برای هر مسیر و کلاس نرخی تضمین نشده است."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و تشریفات",
+      "icon": "services",
+      "order": 59,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی",
+      "icon": "ticket-rules",
+      "order": 60,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/pet-transport/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "ava-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی آوا خدمات حمل سگ و گربه را برای مسیر رفت‌وبرگشت تهران–استانبول از فرودگاه امام خمینی توضیح می‌دهد. ارائه این خدمت در مسیر یا تاریخ دیگر تأیید نشده؛ شرایط قفس، مدارک دامپزشکی و ظرفیت باید پیش از خرید استعلام شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "شرایط اختصاصی حیوانات زنده",
+          "url": "https://avaair.ir/pet-transport/"
+        }
+      ]
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/",
+          "https://www.iata.org/en/programs/cargo/dangerous-goods/lithium-batteries/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آوا در مقررات عمومی حمل اقلام خطرناک را محدود می‌کند. برای حمل پاوربانک و باتری یدکی از ضوابط IATA و دستورالعمل روز پرواز استفاده کنید؛ این خلاصه سقف اختصاصی آوا را مشخص نمی‌کند."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر",
+      "icon": "services",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در مقررات رسمی آوا، تطابق نام و مدارک شناسایی با بلیت الزامی است. برای سفر خارجی باید اعتبار گذرنامه و شرایط کشور مقصد جداگانه بررسی شوند."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های پرتکرار",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/rules/rules-general-terms-and-conditions/",
+          "https://avaair.ir/rules/rules-cancellation-and-refund-policy/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قوانین عمومی و نرخی آوا باید همراه با شرایط درج‌شده بر بلیت خوانده شوند. بعضی خدمات جانبی منوط به ظرفیت و تأیید قبلی هستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "آیا بار مجاز برای همه بلیت‌ها ثابت است؟ خیر.",
+            "آیا انتخاب صندلی برای همه پروازها تضمین شده؟ خیر.",
+            "استرداد چگونه محاسبه می‌شود؟ طبق جدول کلاس نرخی و وضعیت بلیت."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/rules/rules-general-terms-and-conditions/"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "مسیرها و فرودگاه‌ها",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "صفحه رسمی آوا لینک مسیرهای مشهد–کیش، مشهد–اصفهان، مشهد–تهران و تهران–مشهد را نشان می‌دهد. این‌ها صفحات معرفی مسیر هستند و جایگزین برنامه لحظه‌ای پرواز نیستند."
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "راهنمای فرودگاه MHD"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "راهنمای فرودگاه KIH"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IFN",
+          "title_fa": "راهنمای فرودگاه IFN"
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "راهنمای فرودگاه THR"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.planespotters.net/airline/AVA-Airlines"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "چهار خانواده مدل A310-300، 737-400، 737-500 و MD-83 در داده ثانویه Planespotters دیده می‌شوند؛ تعداد و وضعیت عملیاتی فعلی، مالکیت و پیکربندی هر مدل در کاتالوگ عمداً نامعلوم است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "Airbus",
+          "model": "Airbus A310-300",
+          "count": null,
+          "observed_at": "2026-09-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/AVA-Airlines"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "Boeing",
+          "model": "Boeing 737-400",
+          "count": null,
+          "observed_at": "2026-09-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/AVA-Airlines"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "Boeing",
+          "model": "Boeing 737-500",
+          "count": null,
+          "observed_at": "2026-09-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/AVA-Airlines"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "McDonnell Douglas",
+          "model": "MD-83",
+          "count": null,
+          "observed_at": "2026-09-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.planespotters.net/airline/AVA-Airlines"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.planespotters.net/airline/AVA-Airlines"
+        }
+      ]
+    },
+    {
+      "id": "loyalty",
+      "title_fa": "باشگاه مشتریان",
+      "icon": "services",
+      "order": 95,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در وب‌سایت آوا برنامه وفاداری «ترآوا» با کسب امتیاز و مزایای عضویت معرفی شده است. نرخ کسب و تبدیل امتیاز برای بلیت خاص باید از شرایط جاری سامانه خوانده شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "complaints",
+      "title_fa": "ثبت شکایت",
+      "icon": "services",
+      "order": 96,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سایت رسمی آوا مسیر ثبت شکایت و گزارش محرمانه ایمنی را جداگانه ارائه می‌کند؛ پیگیری استرداد مالی باید از بخش رزرو و پشتیبانی انجام شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "سایت رسمی و منوی ثبت شکایت",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی شرکت",
+      "icon": "services",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/",
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آوا شرکت هواپیمایی ایرانی است که در وب‌سایت خود آغاز فعالیت را سال ۱۴۰۲ معرفی می‌کند. کد ICAO برابر AXV و کال‌ساین AVA در FAA ثبت شده و کد دوحرفی قابل اتکای IATA در بررسی موجود نبود."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://avaair.ir/"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}

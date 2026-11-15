@@ -38,6 +38,9 @@ it does not package/sign/release APK or AAB files.
 | `karun-air` | published | 14 | 6 | NV/KRU and Iranian Naft Airlines historical identity; general passenger guidance with current airline tariff/check-in unknown; 4 model families. [Audit](airlines/taban-karun-2026-11-11.md). |
 | `pars-air` | published | 14 | 6 | ICAO PRS / PARS SKY, no verified IATA code; Oct 2026 baggage circular, recent route observations, secondary contact listing and 3 unknown-count model families. [Audit](airlines/pars-chabahar-2026-11-11.md). |
 | `chabahar-air` | published | 13 | 7 | ICAO IRU / CHABAHAR; official channel reports temporary flight pause with no confirmed restart date; new .ir domain, legacy .com excluded; 4 unknown-count model families. [Audit](airlines/pars-chabahar-2026-11-11.md). |
+| `fly-persia` | published | 14 | 8 | Source-scoped traveler guide; airline-specific unknown terms remain drafts; fleet counts intentionally unknown. [Source audit](airlines/flypersia-ava-yazd-2026-11-15.md). |
+| `ava-airlines` | published | 20 | 2 | Source-scoped traveler guide; airline-specific unknown terms remain drafts; fleet counts intentionally unknown. [Source audit](airlines/flypersia-ava-yazd-2026-11-15.md). |
+| `yazd-airways` | published | 14 | 8 | Source-scoped traveler guide; airline-specific unknown terms remain drafts; fleet counts intentionally unknown. [Source audit](airlines/flypersia-ava-yazd-2026-11-15.md). |
 
 Current Emirates coverage and the 11 November Iranian-carrier follow-ups supersede the initial counts below; see dated source audits under `docs/airlines/`.
 
@@ -198,7 +201,7 @@ workflow changes.
 
 ## Added Pars Air and Chabahar Airlines — 2026-11-11
 
-The shared catalog now has **17 independent carriers**.
+The catalog comprised **17 carriers** at this stage; 15 November 2026 expanded it to **20**.
 Pars Air is registered as **ICAO PRS / PARS SKY**; no IATA
 two-letter code was inserted because the sources conflict and none
 authoritatively confirmed one. Its guide includes the **17 Mehr 1405**

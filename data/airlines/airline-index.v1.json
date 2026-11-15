@@ -767,6 +767,131 @@
         "stale": false,
         "confidence": "official"
       }
+    },
+    {
+      "airline_id": "fly-persia",
+      "detail_path": "details/fly-persia.v1.json",
+      "identity": {
+        "name_fa": "فلای پرشیا",
+        "name_en": "FlyPersia",
+        "legal_name": "Fly Persia Airlines",
+        "aliases": [
+          "فلای‌پرشیا",
+          "Fly Persia",
+          "FlyPersia"
+        ],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "FPI",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "iata",
+            "value": "FP",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.flypersia.aero/",
+        "country": "IR",
+        "country_fa": "ایران",
+        "former_names": []
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines",
+          "https://www.planespotters.net/airline/FlyPersia",
+          "https://rahig.com/airlines/flypersia"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
+    },
+    {
+      "airline_id": "ava-airlines",
+      "detail_path": "details/ava-airlines.v1.json",
+      "identity": {
+        "name_fa": "آوا",
+        "name_en": "Ava Airlines",
+        "legal_name": "Ava Airlines",
+        "aliases": [
+          "هواپیمایی آوا",
+          "آوا ایرلاین",
+          "Ava Air"
+        ],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "AXV",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://avaair.ir/",
+        "country": "IR",
+        "country_fa": "ایران",
+        "former_names": []
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://avaair.ir/",
+          "https://www.faa.gov/air_traffic/publications/atpubs/cnt_html/chap3_section_3.html"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "yazd-airways",
+      "detail_path": "details/yazd-airways.v1.json",
+      "identity": {
+        "name_fa": "یزد ایر",
+        "name_en": "Yazd Airways",
+        "legal_name": "Yazd International Airways Company",
+        "aliases": [
+          "هواپیمایی یزد",
+          "یزد ایرویز",
+          "Yazd Air"
+        ],
+        "codes": [
+          {
+            "system": "icao",
+            "value": "DZD",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.yazdairways.com/",
+        "country": "IR",
+        "country_fa": "ایران",
+        "former_names": []
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/dzd",
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      }
     }
   ]
 }

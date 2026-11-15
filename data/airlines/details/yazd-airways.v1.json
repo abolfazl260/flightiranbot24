@@ -1,0 +1,736 @@
+{
+  "schema_version": 1,
+  "airline_id": "yazd-airways",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://oibk.ir/fa/iran/airlines/dzd",
+      "https://t.me/s/yazdairways"
+    ],
+    "verified_at": "2026-11-15T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "secondary"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت و اطلاعات رسمی",
+      "icon": "services",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال روابط عمومی شرکت، yazdairways.com را نشانی رسمی فروش معرفی کرده است. سایت اصلی در ابزار مرور زمان بررسی پاسخ نداد؛ این به‌تنهایی نشان‌دهنده غیرفعال بودن شرکت نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "نشانی اعلام‌شده شرکت",
+          "url": "https://www.yazdairways.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال روابط عمومی",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز و اضافه‌بار",
+      "icon": "ticket-rules",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "yazd-airways",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "از منابع رسمی قابل دریافت یزد ایر جدول فعلی بار مجاز، وزن کابین و تعرفه اضافه‌بار برای هر کلاس نرخی به دست نیامد. رقم ثابت حدس نمی‌زنیم؛ مقدار معتبر را از بلیت همان پرواز بخوانید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "استرداد و تغییر بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "yazd-airways",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای یزد ایر جدول جاری جریمه تغییر یا استرداد در صفحات قابل دسترس تأیید نشد. مقررات واقعی به بلیت و صادرکننده آن وابسته است و درصد جریمه عمومی اعلام نمی‌شود."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "پذیرش و چک‌این",
+      "icon": "ticket-rules",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "yazd-airways",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": []
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز",
+      "icon": "services",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال روابط عمومی یزد ایر اطلاعیه‌هایی درباره ازسرگیری عملیات پروازی و گسترش مسیرها منتشر کرده است؛ این اطلاعیه‌های تاریخ‌دار تأیید وضعیت یک پرواز در روز آینده نیستند."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "پشتیبانی و تماس",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "روابط عمومی یزد ایر در پست‌های رسمی شماره ۰۲۱-۳۷۹۹۳۰۰۰ را درج کرده است. شماره‌های دیگر در توضیحات کانال دیده می‌شوند؛ ساعات پاسخ‌گویی از طریق تماس آزمایش نشده‌اند."
+        },
+        {
+          "type": "link",
+          "title_fa": "کانال ارتباطی شرکت",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "چمدان نرسیده یا آسیب‌دیده",
+      "icon": "services",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای بار مفقود یا آسیب‌دیده، پیش از خروج از سالن دریافت بار فرودگاه گزارش ثبت کرده و شماره پیگیری، کارت پرواز و برچسب چمدان را حفظ کنید. این توصیه عمومی IATA است و سیاست اختصاصی این ایرلاین را ثابت نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدارک گزارش و عکس چمدان را نگه دارید.",
+            "شرایط و مهلت مطالبه خسارت را برای شرکت اجراکننده بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات مسافر ویژه",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways",
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قوانین اختصاصی پذیرش بانوان باردار، ویلچر و تجهیزات پزشکی در منابع رسمی قابل دسترسی احراز نشد. پیش از صدور بلیت با شرکت اجراکننده هماهنگی و تأییدیه دریافت کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی",
+      "icon": "services",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "cabin",
+      "title_fa": "هواپیما و کابین",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال شرکت از Avro RJ85 و BAe 146 در مسیرهای داخلی و Airbus A310 در برخی اعلان‌های پرواز نام برده است. مدل انجام‌دهنده پرواز در تاریخ سفر می‌تواند متفاوت باشد."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "catering",
+      "title_fa": "خدمات پذیرایی",
+      "icon": "services",
+      "order": 57,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و تشریفات",
+      "icon": "services",
+      "order": 59,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی",
+      "icon": "ticket-rules",
+      "order": 60,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "yazd-airways",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط به مسیر، کلاس نرخی و بلیت مشخص وابسته است؛ موارد نامعلوم باید از شرکت تأیید شوند."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "پاوربانک و باتری",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/programs/cargo/dangerous-goods/lithium-batteries/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پاوربانک و باتری لیتیومی یدکی تابع محدودیت‌های ایمنی است. راهنمای IATA معیار عمومی است، نه تأیید سقف تعداد یا ظرفیت برای این شرکت؛ آخرین دستورالعمل شرکت و فرودگاه را بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری یدکی و پاوربانک را بدون بررسی مقررات به بار تحویلی نسپارید.",
+            "باتری آسیب‌دیده را به خدمه اعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/programs/cargo/dangerous-goods/lithium-batteries/"
+        }
+      ]
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر",
+      "icon": "services",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "نام روی بلیت باید با مدرک هویتی مطابق باشد. برای مسیرهای بین‌المللی، گذرنامه، ویزا و شرایط ورود را از مرجع کشور مقصد و شرکت اجراکننده تأیید کنید؛ راهنمای عمومی جایگزین بررسی پرونده نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های پرتکرار",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways",
+          "https://www.iata.org/en/youandiata/travelers/baggage/"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اطلاعیه‌های شبکه پروازی یزد ایر اطلاعات تاریخی‌اند؛ قبل از خرید از انجام پرواز در تاریخ مدنظر اطمینان حاصل کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "آیا سهمیه بار یکسان است؟ اطلاعات رسمی جامع قابل تأیید نبود.",
+            "آیا چک‌این آنلاین فعال است؟ منبع معتبر در دسترس نبود.",
+            "آیا همه مسیرهای قدیمی برقرارند؟ باید موردی بررسی شوند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "مسیرها و فرودگاه‌ها",
+      "icon": "network",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کانال یزد ایر در اطلاعیه‌های قبلی مسیرهایی از مبدأ یزد به تهران، اهواز، مشهد، بندرعباس و کیش و نیز تهران–سیرجان را معرفی کرده است. به‌دلیل ماهیت تاریخی منابع، هیچ مسیر به‌عنوان برنامه تضمین‌شده فعلی عرضه نمی‌شود."
+        },
+        {
+          "type": "airport_link",
+          "iata": "THR",
+          "title_fa": "راهنمای فرودگاه THR"
+        },
+        {
+          "type": "airport_link",
+          "iata": "AWZ",
+          "title_fa": "راهنمای فرودگاه AWZ"
+        },
+        {
+          "type": "airport_link",
+          "iata": "MHD",
+          "title_fa": "راهنمای فرودگاه MHD"
+        },
+        {
+          "type": "airport_link",
+          "iata": "BND",
+          "title_fa": "راهنمای فرودگاه BND"
+        },
+        {
+          "type": "airport_link",
+          "iata": "KIH",
+          "title_fa": "راهنمای فرودگاه KIH"
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://t.me/s/yazdairways"
+        }
+      ]
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "اینترنت داخل هواپیما",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "مدل‌های ناوگان",
+      "icon": "fleet",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/dzd",
+          "https://t.me/s/yazdairways"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "secondary"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "رکوردهای ثبتی مندرج در OIBK از خانواده‌های Airbus A310 و Avro RJ85 نام می‌برند؛ کانال شرکت نیز به BAe 146 اشاره دارد. شمار فعال، مالکیت، وضعیت و آرایش کابین تأیید نشده‌اند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "Airbus",
+          "model": "Airbus A310",
+          "count": null,
+          "observed_at": "2026-09-27T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines/dzd"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "British Aerospace",
+          "model": "Avro RJ85",
+          "count": null,
+          "observed_at": "2026-09-27T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://oibk.ir/fa/iran/airlines/dzd"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "manufacturer": "British Aerospace",
+          "model": "BAe 146",
+          "count": null,
+          "observed_at": "2026-11-15T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://t.me/s/yazdairways"
+            ],
+            "verified_at": "2026-11-15T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "secondary"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://oibk.ir/fa/iran/airlines/dzd"
+        }
+      ]
+    },
+    {
+      "id": "loyalty",
+      "title_fa": "باشگاه مشتریان",
+      "icon": "services",
+      "order": 95,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "complaints",
+      "title_fa": "ثبت شکایت",
+      "icon": "services",
+      "order": 96,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی شرکت",
+      "icon": "services",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://oibk.ir/fa/iran/airlines/dzd"
+        ],
+        "verified_at": "2026-11-15T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هواپیمایی یزد در فهرست بهره‌برداران ایران با کد ICAO برابر DZD و علامت رادیویی YAZD AIRWAYS دیده می‌شود. کد دوحرفی IATA در اسناد بررسی‌شده تأیید نشد."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع اطلاعات و بررسی جزئیات",
+          "url": "https://oibk.ir/fa/iran/airlines/dzd"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": []
+}
