@@ -70,14 +70,9 @@ export FLIGHTIRAN_REAL_ADB="$REAL_ADB"
 export PATH="$ADB_RETRY_DIR:$PATH"
 trap 'rm -rf "$ADB_RETRY_DIR"' EXIT
 
-# Executed in one shell: emulator-runner otherwise launches every script line
-# independently and loses shell variables / breaks multi-line Python heredocs.
-gradle --no-daemon -p android :app:assembleDebug
-apk="android/app/build/outputs/apk/debug/app-debug.apk"
-test -s "$apk"
-adb install -r "$apk"
 mkdir -p android/screenshots
-rm -f android/screenshots/*.png android/screenshots/failed-window.xml
+rm -f android/screenshots/*.png android/screenshots/failed-*
+
 
 # Reject truncated/corrupt screenshots before publishing them as artifacts.
 validate_png() {
@@ -148,6 +143,13 @@ on_capture_failure() {
   exit "$failure_status"
 }
 trap on_capture_failure ERR
+
+# Executed in one shell: emulator-runner otherwise launches every script line
+# independently and loses shell variables / breaks multi-line Python heredocs.
+gradle --no-daemon -p android :app:assembleDebug
+apk="android/app/build/outputs/apk/debug/app-debug.apk"
+test -s "$apk"
+adb install -r "$apk"
 
 # Only the launcher is exported. Never make private screens exported
 # just for test automation: navigate via visible Persian controls as users do.
