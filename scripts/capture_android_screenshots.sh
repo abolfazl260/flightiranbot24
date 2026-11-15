@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Executed in one shell: emulator-runner otherwise launches every script line
-# independently and loses shell variables / breaks multi-line Python heredocs.
-gradle --no-daemon -p android :app:assembleDebug
+# The APK is built in the workflow before the emulator starts. This avoids
+# leaving the AVD idle during Gradle compilation and reduces ADB disconnects.
 apk="android/app/build/outputs/apk/debug/app-debug.apk"
 test -s "$apk"
 mkdir -p android/screenshots
