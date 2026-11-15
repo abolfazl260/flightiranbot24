@@ -66,7 +66,7 @@ def _query(action, *, user_id=123, chat_id=123, qid="ap-test"):
     )
 
 
-def test_all_29_airports_use_shared_canonical_identity_and_enabled_index(store):
+def test_all_34_airports_use_shared_canonical_identity_and_enabled_index(store):
     codes = store.airports()
     assert len(codes) == 34
     assert len({item[0] for item in codes}) == 34
@@ -85,6 +85,8 @@ def test_airport_widget_has_full_directory_and_is_under_telegram_size_limits(sto
     assert len(html.encode("utf-8")) <= 32768
     assert len(zlib.compress(html.encode("utf-8"), 9)) <= 4096
     assert "__AIRPORTS__" not in html
+    assert "۲۹ فرودگاه" not in html
+    assert "فهرست فرودگاه‌های فعال" in html
     for code, name, _ in store.airports():
         assert f'"{code}"' in html
         assert name in html
