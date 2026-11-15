@@ -6,17 +6,153 @@ set -euo pipefail
 gradle --no-daemon -p android :app:assembleDebug
 apk="android/app/build/outputs/apk/debug/app-debug.apk"
 test -s "$apk"
-adb install -r "$apk"
 mkdir -p android/screenshots
-rm -f android/screenshots/*.png android/screenshots/failed-window.xml
+rm -f android/screenshots/*.png android/screenshots/*.tmp.* android/screenshots/failed-window.xml
 
-# Capture emulator diagnostics even when a UI assertion or instrumentation fails.
+EMULATOR_SERIAL="emulator-5554"
+
+adb_device_ready() {
+  [[ "$(command adb -s "$EMULATOR_SERIAL" get-state 2>/dev/null || true)" == "device" ]]
+}
+
+# The emulator occasionally drops its ADB transport while remaining alive.
+# Reconnect the offline transport and restart the ADB server as a last resort.
+recover_adb() {
+  local attempt
+  for attempt in $(seq 1 8); do
+    if adb_device_ready; then
+      return 0
+    fi
+
+    echo "::warning::ADB device is not online (recovery attempt $attempt/8)"
+    if (( attempt % 3 == 0 )); then
+      command adb kill-server >/dev/null 2>&1 || true
+      sleep 1
+    fi
+    command adb start-server >/dev/null 2>&1 || true
+    command adb reconnect offline >/dev/null 2>&1 || true
+    timeout 10s adb -s "$EMULATOR_SERIAL" wait-for-device >/dev/null 2>&1 || true
+    sleep 2
+  done
+
+  adb_device_ready
+}
+
+# Validate the complete PNG chunk stream and CRCs, not just its file header.
+# This prevents a disconnected ADB stream from being published as a screenshot.
+validate_png() {
+  python3 - "$1" <<'PY'
+from pathlib import Path
+import struct
+import sys
+import zlib
+
+try:
+    data = Path(sys.argv[1]).read_bytes()
+    if not data.startswith(b"\x89PNG\r\n\x1a\n"):
+        raise ValueError("missing PNG signature")
+
+    offset = 8
+    width = height = 0
+    saw_ihdr = saw_iend = False
+    while offset + 12 <= len(data):
+        length = struct.unpack(">I", data[offset:offset + 4])[0]
+        chunk_end = offset + 12 + length
+        if chunk_end > len(data):
+            raise ValueError("truncated PNG chunk")
+
+        chunk_type = data[offset + 4:offset + 8]
+        chunk_data = data[offset + 8:offset + 8 + length]
+        expected_crc = struct.unpack(">I", data[offset + 8 + length:chunk_end])[0]
+        actual_crc = zlib.crc32(chunk_type + chunk_data) & 0xffffffff
+        if actual_crc != expected_crc:
+            raise ValueError(f"invalid CRC in {chunk_type!r}")
+
+        if chunk_type == b"IHDR":
+            if length != 13 or saw_ihdr:
+                raise ValueError("invalid IHDR")
+            width, height = struct.unpack(">II", chunk_data[:8])
+            saw_ihdr = True
+        elif chunk_type == b"IEND":
+            if length != 0:
+                raise ValueError("invalid IEND")
+            saw_iend = True
+            offset = chunk_end
+            break
+
+        offset = chunk_end
+
+    if not saw_ihdr or not saw_iend or offset != len(data):
+        raise ValueError("PNG stream is incomplete")
+    if width < 320 or height < 480:
+        raise ValueError(f"unexpected image dimensions: {width}x{height}")
+except Exception as exc:
+    print(f"Invalid screenshot {sys.argv[1]}: {exc}", file=sys.stderr)
+    sys.exit(1)
+PY
+}
+
+capture() {
+  local file="$1"
+  local output="android/screenshots/$file"
+  local temporary="$output.tmp.$"
+  local attempt
+
+  sleep 2
+  for attempt in $(seq 1 5); do
+    rm -f "$temporary"
+    if ! adb_device_ready; then
+      recover_adb || true
+    fi
+
+    if adb_device_ready \
+      && command adb -s "$EMULATOR_SERIAL" exec-out screencap -p > "$temporary" \
+      && validate_png "$temporary"; then
+      mv "$temporary" "$output"
+      echo "Captured verified screenshot: $file"
+      return 0
+    fi
+
+    echo "::warning::Screenshot capture failed or returned an incomplete PNG: $file (attempt $attempt/5)"
+    rm -f "$temporary"
+    recover_adb || true
+    sleep 2
+  done
+
+  echo "::error::Unable to capture a complete screenshot after 5 attempts: $file" >&2
+  return 1
+}
+
+# Keep diagnostics useful even when the ADB transport itself is the failure.
 on_capture_failure() {
-  adb exec-out screencap -p > android/screenshots/failed-navigation.png || true
-  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
-  adb exec-out cat /sdcard/flightiran-failed-window.xml > android/screenshots/failed-window.xml || true
+  trap - ERR
+  recover_adb || true
+  capture "failed-navigation.png" || true
+
+  if adb_device_ready; then
+    adb -s "$EMULATOR_SERIAL" shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
+    adb -s "$EMULATOR_SERIAL" exec-out cat /sdcard/flightiran-failed-window.xml > android/screenshots/failed-window.xml || true
+    adb -s "$EMULATOR_SERIAL" logcat -d -t 2000 > android/screenshots/failed-logcat.txt || true
+  else
+    : > android/screenshots/failed-window.xml
+    : > android/screenshots/failed-logcat.txt
+  fi
+
+  {
+    echo "UTC: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    echo "Expected emulator serial: $EMULATOR_SERIAL"
+    echo
+    echo "ADB devices:"
+    command adb devices -l 2>&1 || true
+    echo
+    echo "Emulator processes:"
+    ps -ef | grep -E '[e]mulator|[q]emu-system' || true
+  } > android/screenshots/failed-emulator-state.txt
 }
 trap on_capture_failure ERR
+
+recover_adb
+adb -s "$EMULATOR_SERIAL" install -r "$apk"
 
 # Only the launcher is exported. Never make private screens exported
 # just for test automation: navigate via visible Persian controls as users do.
@@ -342,6 +478,7 @@ capture 09-visa-detail.png
 python3 - <<'PY'
 from pathlib import Path
 import struct
+import zlib
 
 folder = Path("android/screenshots")
 expected = {
@@ -357,13 +494,36 @@ expected = {
 }
 actual = {p.name for p in folder.glob("*.png")}
 assert actual == expected, f"Missing: {expected - actual}; unexpected: {actual - expected}"
+
 for name in sorted(expected):
     data = (folder / name).read_bytes()
-    assert data.startswith(b"\x89PNG\r\n\x1a\n"), name
-    width, height = struct.unpack(">II", data[16:24])
+    assert data.startswith(b"\x89PNG\r\n\x1a\n"), f"{name}: invalid PNG signature"
+    offset = 8
+    width = height = 0
+    saw_ihdr = saw_iend = False
+    while offset + 12 <= len(data):
+        length = struct.unpack(">I", data[offset:offset + 4])[0]
+        end = offset + 12 + length
+        assert end <= len(data), f"{name}: truncated PNG chunk"
+        chunk_type = data[offset + 4:offset + 8]
+        chunk_data = data[offset + 8:offset + 8 + length]
+        expected_crc = struct.unpack(">I", data[offset + 8 + length:end])[0]
+        assert (zlib.crc32(chunk_type + chunk_data) & 0xffffffff) == expected_crc, f"{name}: invalid PNG CRC"
+        if chunk_type == b"IHDR":
+            assert length == 13 and not saw_ihdr, f"{name}: invalid IHDR"
+            width, height = struct.unpack(">II", chunk_data[:8])
+            saw_ihdr = True
+        if chunk_type == b"IEND":
+            assert length == 0, f"{name}: invalid IEND"
+            saw_iend = True
+            offset = end
+            break
+        offset = end
+    assert saw_ihdr and saw_iend and offset == len(data), f"{name}: incomplete PNG stream"
     assert width >= 320 and height >= 480, (name, width, height)
-    print(f"{name}: {width}x{height}")
+    print(f"{name}: {width}x{height} (PNG integrity OK)")
 PY
 
+recover_adb
 gradle --no-daemon -p android :app:connectedDebugAndroidTest
 trap - ERR
