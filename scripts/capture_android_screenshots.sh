@@ -1,6 +1,74 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# GitHub-hosted Android emulators can briefly disappear from ADB while the
+# process is still alive. Put a retrying ADB shim on PATH so both Bash and the
+# Python UIAutomator helpers use the same recovery behavior.
+REAL_ADB="$(command -v adb)"
+ADB_RETRY_DIR="$(mktemp -d "\${TMPDIR:-/tmp}/flightiran-adb-retry.XXXXXX")"
+cat > "$ADB_RETRY_DIR/adb" <<'ADB_RETRY_WRAPPER'
+#!/usr/bin/env bash
+set -u
+
+real="\${FLIGHTIRAN_REAL_ADB:?FLIGHTIRAN_REAL_ADB is not set}"
+max_attempts=4
+attempt=1
+
+while (( attempt <= max_attempts )); do
+  tmp="$(mktemp -d "\${TMPDIR:-/tmp}/flightiran-adb-call.XXXXXX")"
+  "$real" "$@" >"$tmp/stdout" 2>"$tmp/stderr"
+  status=$?
+
+  if (( status == 0 )); then
+    cat "$tmp/stdout"
+    cat "$tmp/stderr" >&2
+    rm -rf "$tmp"
+    exit 0
+  fi
+
+  cat "$tmp/stdout" "$tmp/stderr" > "$tmp/all"
+  if ! grep -Eiq 'device offline|no devices/emulators found|cannot connect to daemon|connection refused|device not found|closed' "$tmp/all"; then
+    cat "$tmp/stdout"
+    cat "$tmp/stderr" >&2
+    rm -rf "$tmp"
+    exit "$status"
+  fi
+
+  if (( attempt == max_attempts )); then
+    cat "$tmp/stdout"
+    cat "$tmp/stderr" >&2
+    rm -rf "$tmp"
+    exit "$status"
+  fi
+
+  printf '::warning::ADB transport unavailable (attempt %s/%s); reconnecting emulator...\\n' "$attempt" "$max_attempts" >&2
+  "$real" reconnect offline >/dev/null 2>&1 || true
+  "$real" start-server >/dev/null 2>&1 || true
+
+  # If a stale ADB server survives the first reconnect, restart it once.
+  if (( attempt == 2 )); then
+    "$real" kill-server >/dev/null 2>&1 || true
+    "$real" start-server >/dev/null 2>&1 || true
+  fi
+
+  for _ in $(seq 1 20); do
+    devices="$("$real" devices 2>/dev/null || true)"
+    if grep -Eq '^emulator-[0-9]+[[:space:]]+device([[:space:]]|$)' <<< "$devices"; then
+      break
+    fi
+    sleep 1
+  done
+
+  rm -rf "$tmp"
+  attempt=$((attempt + 1))
+done
+
+exit 1
+ADB_RETRY_WRAPPER
+chmod +x "$ADB_RETRY_DIR/adb"
+export FLIGHTIRAN_REAL_ADB="$REAL_ADB"
+export PATH="$ADB_RETRY_DIR:$PATH"
+
 # Executed in one shell: emulator-runner otherwise launches every script line
 # independently and loses shell variables / breaks multi-line Python heredocs.
 gradle --no-daemon -p android :app:assembleDebug
@@ -10,11 +78,73 @@ adb install -r "$apk"
 mkdir -p android/screenshots
 rm -f android/screenshots/*.png android/screenshots/failed-window.xml
 
-# Capture emulator diagnostics even when a UI assertion or instrumentation fails.
+# Reject truncated/corrupt screenshots before publishing them as artifacts.
+validate_png() {
+  python3 - "$1" <<'PY'
+import pathlib
+import struct
+import sys
+import zlib
+
+path = pathlib.Path(sys.argv[1])
+data = path.read_bytes()
+if len(data) < 57 or data[:8] != b"\x89PNG\r\n\x1a\n":
+    raise SystemExit(f"Invalid or truncated PNG: {path}")
+if data[12:16] != b"IHDR":
+    raise SystemExit(f"Missing PNG IHDR: {path}")
+width, height = struct.unpack_from(">II", data, 16)
+if width < 320 or height < 480:
+    raise SystemExit(f"Unexpected screenshot dimensions {width}x{height}: {path}")
+
+offset = 8
+saw_iend = False
+while offset + 12 <= len(data):
+    length = struct.unpack_from(">I", data, offset)[0]
+    kind = data[offset + 4:offset + 8]
+    end = offset + 12 + length
+    if end > len(data):
+        raise SystemExit(f"Truncated PNG chunk in {path}")
+    payload = data[offset + 8:offset + 8 + length]
+    expected_crc = struct.unpack_from(">I", data, offset + 8 + length)[0]
+    if zlib.crc32(kind + payload) & 0xFFFFFFFF != expected_crc:
+        raise SystemExit(f"PNG CRC mismatch in {path}")
+    offset = end
+    if kind == b"IEND":
+        if length != 0:
+            raise SystemExit(f"Invalid PNG IEND chunk: {path}")
+        saw_iend = True
+        break
+
+if not saw_iend or offset != len(data):
+    raise SystemExit(f"PNG is incomplete or has trailing data: {path}")
+PY
+}
+
+# Capture diagnostics while the emulator action still owns the device.
+# Disable ERR handling here to avoid recursively entering this function.
 on_capture_failure() {
-  adb exec-out screencap -p > android/screenshots/failed-navigation.png || true
-  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml || true
-  adb exec-out cat /sdcard/flightiran-failed-window.xml > android/screenshots/failed-window.xml || true
+  local failure_status=$?
+  trap - ERR
+  set +e
+  mkdir -p android/screenshots
+  printf 'Screenshot workflow failed; collecting emulator diagnostics.\\n' \
+    > android/screenshots/failed-diagnostics.txt
+  adb devices -l >> android/screenshots/failed-diagnostics.txt 2>&1
+  adb shell dumpsys activity activities >> android/screenshots/failed-diagnostics.txt 2>&1
+  adb logcat -d -v threadtime -t 3000 > android/screenshots/failed-logcat.txt 2>&1
+
+  local diagnostic_png="android/screenshots/failed-navigation.png.tmp"
+  if adb exec-out screencap -p > "$diagnostic_png" && validate_png "$diagnostic_png"; then
+    mv -f "$diagnostic_png" android/screenshots/failed-navigation.png
+  else
+    rm -f "$diagnostic_png"
+  fi
+
+  adb shell uiautomator dump /sdcard/flightiran-failed-window.xml \
+    >> android/screenshots/failed-diagnostics.txt 2>&1
+  adb exec-out cat /sdcard/flightiran-failed-window.xml \
+    > android/screenshots/failed-window.xml 2>> android/screenshots/failed-diagnostics.txt
+  exit "$failure_status"
 }
 trap on_capture_failure ERR
 
@@ -133,8 +263,26 @@ PY
 
 capture() {
   local file="$1"
+  local target="android/screenshots/$file"
+  local attempt=1
+  local temporary
+
   sleep 2
-  adb exec-out screencap -p > "android/screenshots/$file"
+  while (( attempt <= 3 )); do
+    temporary="\${target}.tmp.$"
+    if adb exec-out screencap -p > "$temporary" && validate_png "$temporary"; then
+      mv -f "$temporary" "$target"
+      echo "Captured $file"
+      return 0
+    fi
+    rm -f "$temporary"
+    echo "::warning::Screenshot $file was incomplete (capture attempt $attempt/3); retrying." >&2
+    sleep 2
+    attempt=$((attempt + 1))
+  done
+
+  echo "Unable to capture a complete screenshot: $file" >&2
+  return 1
 }
 
 
