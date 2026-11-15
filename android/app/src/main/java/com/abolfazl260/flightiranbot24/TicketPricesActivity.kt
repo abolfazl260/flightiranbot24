@@ -66,6 +66,8 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.abolfazl260.flightiranbot24.data.tickets.TicketSort
 import com.abolfazl260.flightiranbot24.data.tickets.rankTicketFares
 import com.abolfazl260.flightiranbot24.data.tickets.TicketFare
+import com.abolfazl260.flightiranbot24.data.tickets.formatTicketObservedAt
+import com.abolfazl260.flightiranbot24.data.tickets.formatPersianDigits
 import com.abolfazl260.flightiranbot24.di.AppContainer
 import com.abolfazl260.flightiranbot24.presentation.components.TravelEmptyState
 import com.abolfazl260.flightiranbot24.presentation.components.TravelErrorState
@@ -76,9 +78,6 @@ import com.abolfazl260.flightiranbot24.presentation.theme.TravelTheme
 import com.abolfazl260.flightiranbot24.presentation.tickets.TicketPricesUiState
 import com.abolfazl260.flightiranbot24.presentation.tickets.TicketPricesViewModel
 import java.text.NumberFormat
-import java.time.OffsetDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Locale
 import kotlin.math.abs
 
@@ -147,6 +146,9 @@ internal fun TicketPricesScreen(
     var historyOpen by rememberSaveable { mutableStateOf(false) }
     val historyModel: TicketHistoryViewModel? = if (historyRepository == null) null else viewModel(
         factory = viewModelFactory { initializer { TicketHistoryViewModel(historyRepository) } })
+    val currentSnapshot = (state as? TicketPricesUiState.Ready)?.snapshot
+    val headerOrigin = currentSnapshot?.origins?.firstOrNull { it.city == selectedOrigin }
+        ?: currentSnapshot?.origins?.firstOrNull()
     if (historyOpen && historyModel != null) TicketHistoryDialog(historyModel,
         onDismiss = { historyModel.close(); historyOpen = false }, onSupport = onSupport)
     Scaffold(
@@ -168,7 +170,7 @@ internal fun TicketPricesScreen(
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
             item {
-                TicketPricesHeader(onBack = onBack)
+                TicketPricesHeader(onBack = onBack, originCity = headerOrigin?.city)
                 if (historyModel != null) TextButton(onClick = {
                     historyOpen = true; historyModel.routes()
                 }) { Text("مسیرهای دارای تاریخچه") }
@@ -258,63 +260,57 @@ internal fun TicketPricesScreen(
                         )
                     }
                     item {
-                        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                            TicketSort.entries.forEach { mode ->
-                                FilterChip(
-                                    selected = sort == mode,
-                                    onClick = { sort = mode },
-                                    modifier = Modifier.weight(1f).heightIn(min = 48.dp),
-                                    label = { Text(
-                                        (if (sort == mode) "✓ " else "") +
-                                            if (mode == TicketSort.CHEAPEST) "ارزان‌ترین بلیت‌ها"
-                                            else "بیشترین کاهش قیمت",
-                                        fontWeight = FontWeight.Bold,
-                                    ) },
-                                )
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text(
+                                "مقاصد",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold,
+                            )
+                            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                TicketSort.entries.forEach { mode ->
+                                    val label = when (mode) {
+                                        TicketSort.CHEAPEST -> "کمترین قیمت"
+                                        TicketSort.DROPS -> "بیشترین کاهش"
+                                        TicketSort.ALL -> "همه مقاصد"
+                                    }
+                                    FilterChip(
+                                        selected = sort == mode,
+                                        onClick = { sort = mode },
+                                        modifier = Modifier.weight(1f).heightIn(min = 48.dp),
+                                        label = {
+                                            Text(
+                                                (if (sort == mode) "✓ " else "") + label,
+                                                fontWeight = FontWeight.Bold,
+                                                textAlign = TextAlign.Center,
+                                                maxLines = 2,
+                                                style = MaterialTheme.typography.labelMedium,
+                                            )
+                                        },
+                                        shape = RoundedCornerShape(14.dp),
+                                        colors = FilterChipDefaults.filterChipColors(
+                                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                                        ),
+                                    )
+                                }
                             }
                         }
                     }
                     val fares = rankTicketFares(active.fares, sort, search)
-                    item {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            Text(
-                                stringResource(R.string.ticket_prices_live_label),
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.Bold,
-                            )
-                            Surface(
-                                color = MaterialTheme.colorScheme.primaryContainer,
-                                shape = RoundedCornerShape(50),
-                            ) {
-                                Text(
-                                    stringResource(R.string.ticket_prices_fares_count, fares.size),
-                                    modifier = Modifier.padding(horizontal = 12.dp, vertical = 5.dp),
-                                    style = MaterialTheme.typography.labelMedium,
-                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                )
-                            }
-                        }
-                    }
                     if (fares.isEmpty()) {
-                        item { TravelEmptyState(if (sort == TicketSort.DROPS)
-                            "کاهش قیمت معتبری در داده‌های ثبت‌شده یافت نشد؛ حداقل سه نمونه تاریخی لازم است."
-                            else stringResource(R.string.ticket_prices_empty)) }
+                        item {
+                            TravelEmptyState(
+                                if (sort == TicketSort.DROPS)
+                                    "کاهش قیمت معتبری در داده‌های ثبت‌شده یافت نشد؛ حداقل سه نمونه تاریخی لازم است."
+                                else stringResource(R.string.ticket_prices_empty)
+                            )
+                        }
                     } else {
                         items(fares) { fare ->
-                            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                                Text("از " + active.city + " به " + fare.destination,
-                                    style = MaterialTheme.typography.labelMedium)
-                                FareCard(fare)
-                                if (historyModel != null) TextButton(onClick = {
-                                    historyOpen = true; historyModel.open(active.city,fare.destination)
-                                }) { Text("نمودار قیمت این مسیر") }
-                                Text("زمان ثبت: " + snapshot.observedAt,
-                                    style = MaterialTheme.typography.labelSmall)
+                            val openHistory = historyModel?.let { model ->
+                                { historyOpen = true; model.open(active.city, fare.destination) }
                             }
+                            FareCard(fare, openHistory)
                         }
                     }
                     if (allowSupport) {
@@ -346,7 +342,7 @@ internal fun TicketPricesScreen(
 }
 
 @Composable
-private fun TicketPricesHeader(onBack: () -> Unit) {
+private fun TicketPricesHeader(onBack: () -> Unit, originCity: String?) {
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -354,6 +350,7 @@ private fun TicketPricesHeader(onBack: () -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             Row(
+                modifier = Modifier.weight(1f),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
             ) {
@@ -369,9 +366,13 @@ private fun TicketPricesHeader(onBack: () -> Unit) {
                     )
                 }
                 Text(
-                    stringResource(R.string.ticket_prices_title),
+                    originCity?.let { "قیمت بلیت از $it" }
+                        ?: stringResource(R.string.ticket_prices_title),
+                    modifier = Modifier.weight(1f),
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
             TextButton(
@@ -381,11 +382,13 @@ private fun TicketPricesHeader(onBack: () -> Unit) {
                 Text("بازگشت")
             }
         }
-        Text(
-            stringResource(R.string.ticket_prices_explanation),
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            style = MaterialTheme.typography.bodySmall,
-        )
+        if (originCity == null) {
+            Text(
+                stringResource(R.string.ticket_prices_explanation),
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = MaterialTheme.typography.bodySmall,
+            )
+        }
     }
 }
 
@@ -396,11 +399,8 @@ private fun FareSummaryCard(
     routeCount: Int,
     onRefresh: () -> Unit,
 ) {
-    val timestamp = runCatching {
-        OffsetDateTime.parse(observedAt)
-            .atZoneSameInstant(ZoneId.of("Asia/Tehran"))
-            .format(DateTimeFormatter.ofPattern("yyyy/MM/dd  HH:mm", Locale("fa", "IR")))
-    }.getOrElse { observedAt.take(16).replace("T", " ") }
+    val timestamp = formatTicketObservedAt(observedAt) ?: "نامشخص"
+    val largeType = LocalDensity.current.fontScale >= 1.4f
 
     val backgroundColors = if (stale) {
         listOf(MaterialTheme.colorScheme.errorContainer, MaterialTheme.colorScheme.surfaceVariant)
@@ -415,73 +415,119 @@ private fun FareSummaryCard(
             .padding(18.dp),
         verticalArrangement = Arrangement.spacedBy(13.dp),
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Surface(
-                color = MaterialTheme.colorScheme.surface,
-                shape = RoundedCornerShape(50),
-            ) {
+        if (largeType) {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                Surface(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(50),
+                ) {
+                    Text(
+                        if (stale) stringResource(R.string.ticket_prices_outdated_label)
+                        else stringResource(R.string.ticket_prices_live_label),
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (stale) MaterialTheme.colorScheme.error
+                        else MaterialTheme.colorScheme.primary,
+                    )
+                }
                 Text(
-                    if (stale) stringResource(R.string.ticket_prices_outdated_label)
-                    else stringResource(R.string.ticket_prices_live_label),
-                    modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                    formatPersianDigits(routeCount) + " مقصد",
                     style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = if (stale) MaterialTheme.colorScheme.error
-                    else MaterialTheme.colorScheme.primary,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold,
                 )
             }
-            Text(
-                "✈  " + stringResource(R.string.ticket_prices_fares_count, routeCount),
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                fontWeight = FontWeight.SemiBold,
-            )
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Surface(
+                    color = MaterialTheme.colorScheme.surface,
+                    shape = RoundedCornerShape(50),
+                ) {
+                    Text(
+                        if (stale) stringResource(R.string.ticket_prices_outdated_label)
+                        else stringResource(R.string.ticket_prices_live_label),
+                        modifier = Modifier.padding(horizontal = 14.dp, vertical = 8.dp),
+                        style = MaterialTheme.typography.labelMedium,
+                        fontWeight = FontWeight.Bold,
+                        color = if (stale) MaterialTheme.colorScheme.error
+                        else MaterialTheme.colorScheme.primary,
+                    )
+                }
+                Text(
+                    formatPersianDigits(routeCount) + " مقصد",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.SemiBold,
+                )
+            }
         }
         Text(
-            stringResource(R.string.ticket_prices_observed, timestamp),
+            "آخرین به‌روزرسانی: $timestamp",
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface,
         )
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            TextButton(
-                onClick = onRefresh,
-                modifier = Modifier.heightIn(min = 48.dp),
-            ) {
+        if (largeType) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                TextButton(
+                    onClick = onRefresh,
+                    modifier = Modifier.heightIn(min = 48.dp),
+                ) {
+                    Text(
+                        "↻  " + stringResource(R.string.ticket_prices_refresh),
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
                 Text(
-                    "↻  " + stringResource(R.string.ticket_prices_refresh),
-                    fontWeight = FontWeight.Bold,
+                    if (stale) stringResource(R.string.ticket_prices_stale)
+                    else "بر اساس آخرین دادهٔ ثبت‌شده",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (stale) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Text(
-                if (stale) stringResource(R.string.ticket_prices_stale)
-                else "بر اساس آخرین دادهٔ ثبت‌شده",
-                style = MaterialTheme.typography.labelSmall,
-                color = if (stale) MaterialTheme.colorScheme.error
-                else MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+        } else {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                TextButton(
+                    onClick = onRefresh,
+                    modifier = Modifier.heightIn(min = 48.dp),
+                ) {
+                    Text(
+                        "↻  " + stringResource(R.string.ticket_prices_refresh),
+                        fontWeight = FontWeight.Bold,
+                    )
+                }
+                Text(
+                    if (stale) stringResource(R.string.ticket_prices_stale)
+                    else "بر اساس آخرین دادهٔ ثبت‌شده",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = if (stale) MaterialTheme.colorScheme.error
+                    else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }
 
 /** A compact three-part fare row, with a high-font-scale layout for readability. */
 @Composable
-private fun FareCard(fare: TicketFare) {
+private fun FareCard(fare: TicketFare, onOpenHistory: (() -> Unit)?) {
     val number = NumberFormat.getNumberInstance(Locale("fa", "IR"))
     val percentage = NumberFormat.getNumberInstance(Locale("fa", "IR")).apply {
         minimumFractionDigits = 1
         maximumFractionDigits = 1
     }
-    val percent = fare.differencePercent
+    val percent = fare.differencePercent?.takeIf { it.isFinite() }
     val change = when {
-        percent == null -> "بدون مقایسه"
+        percent == null -> null
         percent < -0.05 -> "↓ " + percentage.format(abs(percent)) + "٪"
         percent > 0.05 -> "↑ " + percentage.format(percent) + "٪"
         else -> "بدون تغییر"
@@ -496,8 +542,7 @@ private fun FareCard(fare: TicketFare) {
         percent < 0 -> MaterialTheme.colorScheme.primaryContainer
         else -> MaterialTheme.colorScheme.errorContainer
     }
-    val average = fare.averageToman?.let { "میانگین: " + number.format(it) }
-        ?: stringResource(R.string.ticket_prices_no_average)
+    val average = fare.averageToman?.takeIf { it > 0 }
     val largeType = LocalDensity.current.fontScale >= 1.4f
 
     Card(
@@ -507,15 +552,33 @@ private fun FareCard(fare: TicketFare) {
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.48f)),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
     ) {
-        if (largeType) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(14.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
+        Column(
+            modifier = Modifier.fillMaxWidth().padding(14.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+        ) {
+            if (largeType) {
+                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    ) {
+                        FareCityIcon(city = fare.destination, size = 38.dp)
+                        Text(
+                            fare.destination,
+                            modifier = Modifier.weight(1f),
+                            style = MaterialTheme.typography.titleLarge,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                    }
+                    if (change != null) FareChangeBadge(change, changeColor, badgeBackground)
+                }
+            } else {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
                     Row(
                         modifier = Modifier.weight(1f),
@@ -531,64 +594,110 @@ private fun FareCard(fare: TicketFare) {
                             overflow = TextOverflow.Ellipsis,
                         )
                     }
-                    FareChangeBadge(change, changeColor, badgeBackground)
+                    if (change != null) FareChangeBadge(change, changeColor, badgeBackground)
                 }
-                Text(
-                    number.format(fare.currentToman) + " تومان",
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                )
-                Text(
-                    if (fare.averageToman != null) average + " تومان" else average,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    style = MaterialTheme.typography.bodySmall,
-                )
             }
-        } else {
-            Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 14.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
+
+            Column(verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                Text(
+                    "کمترین قیمت ثبت‌شده",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                if (largeType || number.format(fare.currentToman).length > 11) {
+                    Text(
+                        number.format(fare.currentToman),
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        maxLines = 2,
+                    )
+                    Text(
+                        "تومان",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                } else {
+                    Row(
+                        verticalAlignment = Alignment.Bottom,
+                        horizontalArrangement = Arrangement.spacedBy(7.dp),
+                    ) {
+                        Text(
+                            number.format(fare.currentToman),
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
+                        )
+                        Text(
+                            "تومان",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
+            }
+
+            if (largeType) {
+                Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(
+                        "میانگین قیمت",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        average?.let { number.format(it) + " تومان" } ?: "در دسترس نیست",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2,
+                    )
+                }
+            } else {
                 Row(
-                    modifier = Modifier.weight(1.05f),
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
-                    FareCityIcon(city = fare.destination, size = 38.dp)
                     Text(
-                        fare.destination,
-                        style = MaterialTheme.typography.titleSmall,
-                        fontWeight = FontWeight.Bold,
+                        "میانگین قیمت",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        average?.let { number.format(it) + " تومان" } ?: "در دسترس نیست",
+                        modifier = Modifier.weight(1f),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.End,
                         maxLines = 2,
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
-                Column(
-                    modifier = Modifier.weight(1.25f),
-                    verticalArrangement = Arrangement.spacedBy(3.dp),
+            }
+
+            if (onOpenHistory != null) {
+                TextButton(
+                    onClick = onOpenHistory,
+                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp),
                 ) {
-                    Text(
-                        number.format(fare.currentToman),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
-                    Text(
-                        "تومان",
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.labelSmall,
-                    )
-                    Text(
-                        average,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        style = MaterialTheme.typography.labelSmall,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    if (largeType) {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.Start,
+                        ) {
+                            Text("روند قیمت این مسیر")
+                            Text("مشاهده نمودار ←", fontWeight = FontWeight.Bold)
+                        }
+                    } else {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text("روند قیمت این مسیر")
+                            Text("مشاهده نمودار ←", fontWeight = FontWeight.Bold)
+                        }
+                    }
                 }
-                FareChangeBadge(change, changeColor, badgeBackground)
             }
         }
     }
@@ -607,7 +716,7 @@ private fun FareChangeBadge(
             style = MaterialTheme.typography.labelSmall,
             fontWeight = FontWeight.Bold,
             color = color,
-            maxLines = 1,
+            maxLines = 2,
         )
     }
 }

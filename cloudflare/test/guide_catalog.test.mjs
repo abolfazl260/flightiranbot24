@@ -89,8 +89,9 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
 });
 test('all enabled airport guides parse independently without importing legacy personal reviews',()=>{
  const rows=parseGuideIndex(read('data/airports/airport-index.v1.json'),'airports',read('src/flightiran/modules/airport/data/airports.json'),now);
+ const guideNow=Date.parse('2026-11-15T12:00:00Z');
  assert(rows.length>=28);
- for(const r of rows){const p=parseGuideDetail(read('data/airports/'+r.path),'airports',r.id,now);assert(p.sections.length>0);assert(!JSON.stringify(p).includes('"type":"experience"'));}
+ for(const r of rows){const p=parseGuideDetail(read('data/airports/'+r.path),'airports',r.id,guideNow);assert(p.sections.length>0);assert(!JSON.stringify(p).includes('"type":"experience"'));}
 });
 test('archived, expired, stale and unknown sections fail closed without hiding valid sections',()=>{
  const d=detail();d.metadata.status='archived';assert.equal(parseGuideDetail(d,'airlines','emirates',now),null);
