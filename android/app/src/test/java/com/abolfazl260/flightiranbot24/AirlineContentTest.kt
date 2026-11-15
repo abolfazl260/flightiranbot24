@@ -316,7 +316,7 @@ class AirlineContentTest {
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
             "caspian-air", "sepehran-air", "taban-air", "karun-air",
-            "pars-air", "chabahar-air"),
+            "pars-air", "chabahar-air", "fly-persia", "ava-airlines", "yazd-airways"),
             AirlineContentParser.index(directory.toString(), now).map { it.id })
     }
 
