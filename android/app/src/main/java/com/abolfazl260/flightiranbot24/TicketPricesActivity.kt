@@ -808,6 +808,10 @@ internal fun fareCityIconName(city: String): String? {
         "طبس" -> "price_city_tabas"
         "لار" -> "price_city_lar"
         "سراوان" -> "price_city_saravan"
+        "شهرکرد" -> "price_city_shahrekord"
+        "لامرد" -> "price_city_lamerd"
+        "قندهار", "کندهار" -> "price_city_kandahar"
+        "تاشکند", "تاشکنت" -> "price_city_tashkent"
         else -> null
     }
 }
