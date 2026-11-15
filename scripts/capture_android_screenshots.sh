@@ -124,7 +124,9 @@ capture() {
 
 # Keep diagnostics useful even when the ADB transport itself is the failure.
 on_capture_failure() {
+  local failure_status=$?
   trap - ERR
+  set +e
   recover_adb || true
   capture "failed-navigation.png" || true
 
@@ -147,6 +149,9 @@ on_capture_failure() {
     echo "Emulator processes:"
     ps -ef | grep -E '[e]mulator|[q]emu-system' || true
   } > android/screenshots/failed-emulator-state.txt
+
+  # Preserve the original failure even if diagnostics were collected cleanly.
+  exit "$failure_status"
 }
 trap on_capture_failure ERR
 
@@ -265,11 +270,8 @@ subprocess.run(["adb", "shell", "input", "tap", str(x), str(y)], check=True)
 PY
 }
 
-capture() {
-  local file="$1"
-  sleep 2
-  adb exec-out screencap -p > "android/screenshots/$file"
-}
+# Screenshot capture is defined once above with ADB recovery and PNG validation.
+
 
 
 # Service rows may be below the fold. Locate the ACTUAL visible Persian
