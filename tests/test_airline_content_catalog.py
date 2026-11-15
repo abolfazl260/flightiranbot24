@@ -16,7 +16,7 @@ spec = importlib.util.spec_from_file_location(
 )
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
+NOW = datetime(2026, 11, 15, tzinfo=timezone.utc)
 
 
 def test_actual_catalog_and_independent_snapshots():
