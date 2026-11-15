@@ -42,7 +42,7 @@ jobs:
           arch: x86_64
           profile: pixel_6
           # Prefer software rendering and a clean boot to avoid flaky GPU/snapshot state on hosted runners.
-          emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim
+          emulator-options: -no-window -gpu swiftshader -no-snapshot -noaudio -no-boot-anim
           disable-animations: true
           emulator-boot-timeout: 900
           script: bash scripts/capture_android_screenshots.sh
