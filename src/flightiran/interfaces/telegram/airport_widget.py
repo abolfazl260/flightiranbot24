@@ -257,7 +257,7 @@ border-radius:10px;overflow-wrap:anywhere}#status{margin:7px 0 0;
 color:var(--tg-theme-hint-color,#73808e);font-size:11px}
 button:disabled{opacity:.5}
 </style></head><body>
-<h3>راهنمای فرودگاه‌ها</h3><p class="muted" id="subtitle">۲۹ فرودگاه، اطلاعات تأییدشده</p>
+<h3>راهنمای فرودگاه‌ها</h3><p class="muted" id="subtitle">فهرست فرودگاه‌های فعال</p>
 <div class="tabs" id="filters" role="tablist" aria-label="محدوده فرودگاه‌ها">
 <button id="all" class="sel" aria-pressed="true">همه</button>
 <button id="iran" aria-pressed="false">ایران</button>
@@ -387,7 +387,7 @@ async def send_airport_widget(
                                      web_app=WebAppInfo(mini_app_url))
             ]])
         await message.reply_text(
-            "راهنمای ۲۹ فرودگاه در نسخه‌های جدید تلگرام به شکل تعاملی نمایش "
+             "راهنمای فرودگاه‌ها در نسخه‌های جدید تلگرام به شکل تعاملی نمایش "
             "داده می‌شود. تلگرام را به‌روز کنید یا از مینی‌اپ استفاده کنید.",
             reply_markup=keyboard,
         )
