@@ -2,6 +2,11 @@
   "schema_version": 1,
   "airports": [
     {
+      "iata": "ABD",
+      "detail_path": "details/ABD.v1.json",
+      "enabled": true
+    },
+    {
       "iata": "AMS",
       "detail_path": "details/AMS.v1.json",
       "enabled": true
@@ -22,6 +27,11 @@
       "enabled": true
     },
     {
+      "iata": "AZD",
+      "detail_path": "details/AZD.v1.json",
+      "enabled": true
+    },
+    {
       "iata": "BKK",
       "detail_path": "details/BKK.v1.json",
       "enabled": true
@@ -29,6 +39,11 @@
     {
       "iata": "BND",
       "detail_path": "details/BND.v1.json",
+      "enabled": true
+    },
+    {
+      "iata": "BUZ",
+      "detail_path": "details/BUZ.v1.json",
       "enabled": true
     },
     {
@@ -124,6 +139,16 @@
     {
       "iata": "PEK",
       "detail_path": "details/PEK.v1.json",
+      "enabled": true
+    },
+    {
+      "iata": "RAS",
+      "detail_path": "details/RAS.v1.json",
+      "enabled": true
+    },
+    {
+      "iata": "SRY",
+      "detail_path": "details/SRY.v1.json",
       "enabled": true
     },
     {

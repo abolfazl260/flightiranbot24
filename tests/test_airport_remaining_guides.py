@@ -14,11 +14,11 @@ CODES = (
 )
 
 
-def test_all_original_29_airports_enabled_and_remaining_guides_are_source_backed():
+def test_all_34_airports_enabled_and_original_remaining_guides_are_source_backed():
     validate_dataset()
     base = ROOT / "data" / "airports"
     index = json.loads((base / "airport-index.v1.json").read_text(encoding="utf-8"))
-    assert len(index["airports"]) == 29
+    assert len(index["airports"]) == 34
     assert all(entry["enabled"] for entry in index["airports"])
     for code in CODES:
         path = base / "details" / f"{code}.v1.json"

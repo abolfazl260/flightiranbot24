@@ -1,6 +1,6 @@
 """Interactive Telegram Bot API 10.4 directory for published airport guides.
 
-The airport catalog and its 29 per-IATA JSON documents are the same files
+The airport catalog and its 34 per-IATA JSON documents are the same files
 used by Android and the Mini App. The widget never fabricates airport facts.
 """
 

@@ -68,9 +68,9 @@ def _query(action, *, user_id=123, chat_id=123, qid="ap-test"):
 
 def test_all_29_airports_use_shared_canonical_identity_and_enabled_index(store):
     codes = store.airports()
-    assert len(codes) == 29
-    assert len({item[0] for item in codes}) == 29
-    assert len([item for item in codes if item[2]]) == 13
+    assert len(codes) == 34
+    assert len({item[0] for item in codes}) == 34
+    assert len([item for item in codes if item[2]]) == 18
     for code, name, _ in codes:
         assert name and store.catalog.get(code) is not None
         _, sections = store.sections(code)

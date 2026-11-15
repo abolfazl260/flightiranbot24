@@ -1,7 +1,7 @@
 """Validate the public, extensible per-airport content catalog before publication.
 
 Run: python scripts/validate_airport_content.py
-The 28-airport identity catalog remains the source of airport identity; this is
+The canonical airport identity catalog remains the source of airport identity; this is
 a separate, optional registry for curated content. Drafts are never published.
 """
 
