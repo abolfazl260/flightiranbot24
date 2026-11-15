@@ -28,6 +28,7 @@ def test_actual_catalog_and_independent_snapshots():
         "iran-airtour", "qeshm-air", "kish-air", "zagros-air", "meraj-air",
         "ata-air", "varesh-air", "caspian-air", "sepehran-air",
         "taban-air", "karun-air", "pars-air", "chabahar-air",
+        "fly-persia", "ava-airlines", "yazd-airways",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -54,7 +55,16 @@ def test_actual_catalog_and_independent_snapshots():
                         "taban-air": {"published": 15, "draft": 6},
                         "karun-air": {"published": 14, "draft": 6},
                         "pars-air": {"published": 14, "draft": 6},
-                        "chabahar-air": {"published": 13, "draft": 7}}
+                        "chabahar-air": {"published": 13, "draft": 7},
+                        "fly-persia": {"published": 14, "draft": 8},
+                        "ava-airlines": {"published": 20, "draft": 2},
+                        "yazd-airways": {"published": 14, "draft": 8}}
+    for carrier in ("fly-persia", "ava-airlines", "yazd-airways"):
+        item = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
+        assert item["published_reviews"] == item["experience_links"] == []
+        assert all(not s["blocks"] for s in item["sections"] if s["metadata"]["status"] == "draft")
+        fleets = [b for s in item["sections"] for b in s["blocks"] if b["type"] == "fleet_snapshot"]
+        assert all(b["count"] is None and b["relationship"] == "unknown" for b in fleets)
     emirates_detail = module.read_json(ROOT / "data/airlines/details/emirates.v1.json")
     fleet = next(s for s in emirates_detail["sections"] if s["id"] == "fleet")
     models = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
