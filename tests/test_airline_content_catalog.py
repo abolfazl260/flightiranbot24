@@ -16,7 +16,7 @@ spec = importlib.util.spec_from_file_location(
 )
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-NOW = datetime(2026, 11, 11, tzinfo=timezone.utc)
+NOW = datetime(2026, 11, 15, tzinfo=timezone.utc)
 
 
 def test_actual_catalog_and_independent_snapshots():
@@ -42,7 +42,7 @@ def test_actual_catalog_and_independent_snapshots():
                         "emirates": {"published": 18, "draft": 0},
                         "mahan-air": {"published": 19, "draft": 1},
                         "iran-aseman": {"published": 14, "draft": 4},
-                        "iran-airtour": {"published": 13, "draft": 6},
+                        "iran-airtour": {"published": 15, "draft": 4},
                         "qeshm-air": {"published": 17, "draft": 2},
                         "kish-air": {"published": 15, "draft": 5},
                         "zagros-air": {"published": 14, "draft": 6},
@@ -331,12 +331,23 @@ def test_iran_airtour_sourced_scope_and_draft_exclusion():
     assert detail["published_reviews"] == detail["experience_links"] == []
     published = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
     drafts = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
-    assert len(published) == 13
-    assert len(drafts) == 6
+    assert len(published) == 15
+    assert len(drafts) == 4
     assert {s["id"] for s in drafts} == {
-        "checkin", "seat-selection", "cabin", "catering",
-        "lounges", "onboard-connectivity",
+        "cabin", "catering", "lounges", "onboard-connectivity",
     }
+    for section in published:
+        if section["id"] in {"checkin", "seat-selection"}:
+            assert section["metadata"]["confidence"] == "secondary"
+            assert section["metadata"]["verified_at"] == "2026-11-15T00:00:00Z"
+            assert "https://onlinecheckin.iranairtour.ir/" in section["metadata"]["source_urls"]
+            assert not any("samanehha.com" in u for u in section["metadata"]["source_urls"])
+            body = " ".join(
+                [block.get("text_fa", "") for block in section["blocks"]]
+                + [item for block in section["blocks"] for item in block.get("items_fa", [])]
+            )
+            assert "کارت پرواز" in body and "کانتر" in body
+            assert "۶۰ دقیقه" in body
     assert all(s["blocks"] and s["metadata"]["source_urls"] for s in published)
     assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None for s in drafts)
     for s in detail["sections"]:

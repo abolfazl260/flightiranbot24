@@ -435,3 +435,44 @@ An editorial warning appears after 30 days since source review, independently of
 legal effective periods. Mark explicitly invalid data stale to hide it. Review
 network and policy sources monthly and before travel; retain the historical fleet
 observation date rather than silently replacing it with the source review date.
+
+
+## Iran Airtour draft-completion batch — 2026-11-11, reverified 2026-11-15
+
+Two previously draft sections are published for **Iran Airtour** with the
+limited evidence actually available on the service's public page:
+
+- `checkin`: documents the carrier-subdomain **seat-reservation** interface
+  and explicitly distinguishes it from full check-in / boarding-pass issuance.
+  The web interface requires an airport counter visit to collect a boarding
+  pass or check baggage. The notice warns that a reserved seat is cancelled
+  if the passenger does not reach the counter by 60 minutes before departure.
+  Online check-in availability, opening/closing windows, supported routes and
+  boarding-pass issuance are **not claimed**.
+- `seat-selection`: documents the seat-selection flow and visible national-ID,
+  ticket-number and booking-reference fields on the actual interface. It does
+  not promise eligibility, price, available seat map, seat permanence or
+  aircraft-specific layout for any particular flight.
+
+Direct first-party-subdomain evidence (checked 15 November 2026):
+https://onlinecheckin.iranairtour.ir/
+
+The airline's public social profile links to its website:
+https://ir.linkedin.com/company/airtourofficial
+
+The service URL is on a subdomain of the company-advertised domain, but the
+public front end alone is insufficient to independently verify live booking
+functionality, accepted flights or eligibility; editorial confidence remains
+`secondary`. The previous third-party `samanehha.com` guide is no longer
+used as a source for these two sections.
+
+The four remaining Iran Airtour drafts (cabin, catering, lounges and onboard
+connectivity) stay hidden until supported by adequate current evidence.
+Airport traveler-experience sections require actual approved submissions,
+while video publication requires verifiable source and usage rights; none are
+fabricated here.
+
+The Python, Android and Cloudflare tests enforce publication counts, the
+updated source URLs and the distinction between seat reservation and receiving
+a boarding pass. Airline-only test time is scoped to 15 November 2026 for the
+refreshed sections without changing existing frozen fixtures.

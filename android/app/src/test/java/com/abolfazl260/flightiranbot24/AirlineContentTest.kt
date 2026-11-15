@@ -59,13 +59,15 @@ class AirlineContentTest {
         assertEquals(5, asemanFleet.size)
         assertTrue(asemanFleet.all { it.count == null && it.relationship == "unknown" })
         val airtour = AirlineContentParser.detail(
-            bundled("details/iran-airtour.v1.json"), "iran-airtour", now)!!
-        assertEquals(13, airtour.sections.size)
+            bundled("details/iran-airtour.v1.json"), "iran-airtour",
+            Instant.parse("2026-11-15T12:00:00Z"))!!
+        assertEquals(15, airtour.sections.size)
+        assertTrue(airtour.sections.any { it.id == "checkin" })
+        assertTrue(airtour.sections.any { it.id == "seat-selection" })
         assertEquals(0, airtour.ratingCount)
         assertNull(airtour.average)
         assertFalse(airtour.sections.any { it.id in listOf(
-            "checkin", "seat-selection", "cabin", "catering",
-            "lounges", "onboard-connectivity") })
+            "cabin", "catering", "lounges", "onboard-connectivity") })
         val airtourFleet = airtour.sections.flatMap { it.blocks }
             .filterIsInstance<AirlineBlock.Fleet>()
         assertEquals(6, airtourFleet.size)
