@@ -27,7 +27,7 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
  for (const [id,available,drafted,fleetCount] of [['mahan-air',19,1,6],['iran-aseman',14,4,5],['iran-airtour',15,4,6],['qeshm-air',17,2,4],['kish-air',15,5,4],['zagros-air',14,6,4],['meraj-air',14,6,4],['ata-air',16,4,7],['varesh-air',18,2,3],['caspian-air',14,6,7],['sepehran-air',19,2,5],['taban-air',15,6,5],['karun-air',14,6,4],['pars-air',14,6,3],['chabahar-air',13,7,4]]) {
   const d=read('data/airlines/details/'+id+'.v1.json');
   assert.equal(d.sections.filter(s=>s.metadata.status==='draft').length,drafted);
-  const parsed=parseGuideDetail(d,'airlines',id,now);
+  const parsed=parseGuideDetail(d,'airlines',id,id==='iran-airtour'?Date.parse('2026-11-15T12:00:00Z'):now);
   assert.equal(parsed.sections.length,available);
   assert.equal(parsed.reviewCount,0);
   assert.equal(parsed.average,null);
@@ -38,6 +38,16 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
   if(id==='iran-airtour') {
    assert(parsed.sections.some(s=>s.id==='checkin'));
    assert(parsed.sections.some(s=>s.id==='seat-selection'));
+   const checkin=d.sections.find(s=>s.id==='checkin');
+   const seats=d.sections.find(s=>s.id==='seat-selection');
+   for(const section of [checkin,seats]) {
+    assert(section.metadata.source_urls.includes('https://onlinecheckin.iranairtour.ir/'));
+    assert(!section.metadata.source_urls.some(u=>u.includes('samanehha.com')));
+    assert.equal(section.metadata.verified_at,'2026-11-15T00:00:00Z');
+   }
+   const text=[...checkin.blocks,...seats.blocks].flatMap(b=>[b.text_fa||'',...(b.items_fa||[])]).join(' ');
+   assert(text.includes('کارت پرواز') && text.includes('کانتر') && text.includes('۶۰ دقیقه'));
+
    assert(!parsed.sections.some(s=>s.id==='cabin'));
   }
   if(id==='kish-air')assert(!parsed.sections.some(s=>s.id==='checkin'));

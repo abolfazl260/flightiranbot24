@@ -336,7 +336,18 @@ def test_iran_airtour_sourced_scope_and_draft_exclusion():
     assert {s["id"] for s in drafts} == {
         "cabin", "catering", "lounges", "onboard-connectivity",
     }
-    assert all(s["metadata"]["confidence"] == "secondary" for s in published if s["id"] in {"checkin", "seat-selection"})
+    for section in published:
+        if section["id"] in {"checkin", "seat-selection"}:
+            assert section["metadata"]["confidence"] == "secondary"
+            assert section["metadata"]["verified_at"] == "2026-11-15T00:00:00Z"
+            assert "https://onlinecheckin.iranairtour.ir/" in section["metadata"]["source_urls"]
+            assert not any("samanehha.com" in u for u in section["metadata"]["source_urls"])
+            body = " ".join(
+                [block.get("text_fa", "") for block in section["blocks"]]
+                + [item for block in section["blocks"] for item in block.get("items_fa", [])]
+            )
+            assert "کارت پرواز" in body and "کانتر" in body
+            assert "۶۰ دقیقه" in body
     assert all(s["blocks"] and s["metadata"]["source_urls"] for s in published)
     assert all(s["blocks"] == [] and s["metadata"]["verified_at"] is None for s in drafts)
     for s in detail["sections"]:
