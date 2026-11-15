@@ -1,0 +1,492 @@
+{
+  "schema_version": 1,
+  "iata": "ABD",
+  "sections": [
+    {
+      "id": "baggage-rules",
+      "title_fa": "بار مجاز و اقلام ممنوعه",
+      "icon": "luggage",
+      "order": 10,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.iata.org/en/youandiata/travelers/baggage/",
+        "https://oibk.ir/fa/airports/oiaa"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سهمیه بار در پروازهای آبادان را کلاس نرخی، ایرلاین مجری و بلیت تعیین می‌کنند. مقررات عمومی IATA به‌معنای تأیید وزن یکسان برای همه پروازها نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سقف بار کابین، تحویلی و اضافه‌بار را در بلیت کنترل کنید.",
+            "باتری یدکی و پاوربانک را مطابق دستورالعمل ایرلاین در کابین حمل کنید.",
+            "برای اقلام خطرناک و مایعات، ضوابط مسیر داخلی یا خارجی را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "پیگیری وضعیت پرواز و اطلاعیه‌ها",
+      "icon": "plane-takeoff",
+      "order": 20,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.tasnimnews.ir/fa/news/1405/02/09/3578499/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%A2%D8%A8%D8%A7%D8%AF%D8%A7%D9%86-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C-%D8%AF%D8%A7%D8%AE%D9%84%DB%8C-%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA%DB%8C-%D8%B4%D8%AF",
+        "https://fids.airport.ir/",
+        "https://oibk.ir/fa/airports/oiaa"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مدیر فرودگاه آبادان در اردیبهشت ۱۴۰۵ از آمادگی پذیرش پروازهای داخلی و مسیرهای تهران و مشهد خبر داده بود؛ این اطلاعیه، استمرار این مسیرها در آبان ۱۴۰۵ یا وجود پرواز خارجی را ثابت نمی‌کند. وضعیت تاخیر، شماره گیت و انجام پرواز لحظه‌ای است و در این فایل ذخیره نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از خرید و حرکت، فرودگاه واقعی اجراکننده و شماره پرواز را از ایرلاین بررسی کنید.",
+            "دسترس‌پذیری لحظه‌ای FIDS تضمین نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.tasnimnews.ir/fa/news/1405/02/09/3578499/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%A2%D8%A8%D8%A7%D8%AF%D8%A7%D9%86-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C-%D8%AF%D8%A7%D8%AE%D9%84%DB%8C-%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA%DB%8C-%D8%B4%D8%AF"
+        }
+      ]
+    },
+    {
+      "id": "traveler-experiences",
+      "title_fa": "تجربه مسافران",
+      "icon": "message-square",
+      "order": 30,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "airport-map",
+      "title_fa": "موقعیت فرودگاه و نقشه",
+      "icon": "map",
+      "order": 40,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "موقعیت تقریبی فرودگاه بین‌المللی آیت‌الله جمی آبادان (ABD/OIAA) از مختصات جامعه‌محور مرجع هوانوردی تهیه شده است و نقشه سالن‌ها یا ورودی خودرو نیست."
+        },
+        {
+          "type": "map",
+          "title_fa": "نقطه مرجع فرودگاه ABD",
+          "latitude": 30.367833,
+          "longitude": 48.23,
+          "external_url": "https://www.google.com/maps/search/?api=1&query=30.367833%2C48.23"
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa"
+        }
+      ]
+    },
+    {
+      "id": "airport-videos",
+      "title_fa": "ویدیوی فرودگاه",
+      "icon": "video",
+      "order": 50,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "airport-identity",
+      "title_fa": "شناسه و مشخصات فرودگاه",
+      "icon": "info",
+      "order": 55,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa",
+        "https://oibk.ir/fa/airports/oiaa/charts"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "فرودگاه بین‌المللی آیت‌الله جمی آبادان در خوزستان با کد یاتا ABD و ایکائو OIAA ثبت شده است؛ باندهای درج‌شده در مرجع جامعه‌محور ۱۴L/۳۲R و ۱۴R/۳۲L هستند. برای اطلاعات عملیاتی نهایی، AIP و NOTAM معتبر را بررسی کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa"
+        }
+      ]
+    },
+    {
+      "id": "terminals",
+      "title_fa": "سالن‌ها، کانترها و ترمینال",
+      "icon": "building-2",
+      "order": 60,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa/charts",
+        "https://www.tasnimnews.ir/fa/news/1405/02/09/3578499/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%A2%D8%A8%D8%A7%D8%AF%D8%A7%D9%86-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C-%D8%AF%D8%A7%D8%AE%D9%84%DB%8C-%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA%DB%8C-%D8%B4%D8%AF"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "AIP رسمی نام فرودگاه آبادان را ثبت کرده، اما نقشه داخلی مسافری و شماره‌گذاری قابل اتکای کانترها و گیت‌های امروز در منابع مرورشده مشخص نیست. مدیر فرودگاه آبادان در اردیبهشت ۱۴۰۵ از آمادگی پذیرش پروازهای داخلی و مسیرهای تهران و مشهد خبر داده بود؛ این اطلاعیه، استمرار این مسیرها در آبان ۱۴۰۵ یا وجود پرواز خارجی را ثابت نمی‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "چارت هوانوردی ADC نقشه سالن مسافری نیست.",
+            "ترمینال پرواز داخلی، خارجی یا مناسبتی را روز سفر از شرکت اجراکننده تأیید کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa/charts"
+        }
+      ]
+    },
+    {
+      "id": "city-access",
+      "title_fa": "دسترسی به شهر و تاکسی",
+      "icon": "car",
+      "order": 70,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://tg.me/airportnews/47519",
+        "https://oibk.ir/fa/airports/oiaa"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "روابط عمومی شرکت فرودگاه‌ها از پروژه بهسازی فضای سبز و بلوار ورودی فرودگاه آبادان خبر داده است؛ این خبر نباید به‌عنوان بسته‌بودن مسیر ورودی، قیمت تاکسی یا طرح تکمیل‌شده تلقی شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قیمت تاکسی، زمان رسیدن و محل سوارشدن ممکن است تغییر کند.",
+            "در صورت نیاز به ویلچر یا تردد شبانه پیش از حرکت هماهنگی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://tg.me/airportnews/47519"
+        }
+      ]
+    },
+    {
+      "id": "parking",
+      "title_fa": "پارکینگ خودرو",
+      "icon": "car-front",
+      "order": 80,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "airport-facilities",
+      "title_fa": "امکانات و خدمات مسافری",
+      "icon": "coffee",
+      "order": 90,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.tasnimnews.ir/fa/news/1405/02/09/3578499/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%A2%D8%A8%D8%A7%D8%AF%D8%A7%D9%86-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C-%D8%AF%D8%A7%D8%AE%D9%84%DB%8C-%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA%DB%8C-%D8%B4%D8%AF",
+        "https://oibk.ir/fa/airports/oiaa"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "مدیر فرودگاه آبادان در اردیبهشت ۱۴۰۵ از آمادگی پذیرش پروازهای داخلی و مسیرهای تهران و مشهد خبر داده بود؛ این اطلاعیه، استمرار این مسیرها در آبان ۱۴۰۵ یا وجود پرواز خارجی را ثابت نمی‌کند. در منابع این مرور فهرست به‌روز تمام فروشگاه‌ها، نمازخانه‌ها و خدمات فعال مسافری تأیید نشد؛ برای نیاز مشخص از اطلاعات فرودگاه استعلام کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.tasnimnews.ir/fa/news/1405/02/09/3578499/%D9%81%D8%B1%D9%88%D8%AF%DA%AF%D8%A7%D9%87-%D8%A2%D8%A8%D8%A7%D8%AF%D8%A7%D9%86-%D8%A8%D8%B1%D8%A7%DB%8C-%D9%BE%D8%B1%D9%88%D8%A7%D8%B2%D9%87%D8%A7%DB%8C-%D8%AF%D8%A7%D8%AE%D9%84%DB%8C-%D8%B9%D9%85%D9%84%DB%8C%D8%A7%D8%AA%DB%8C-%D8%B4%D8%AF"
+        }
+      ]
+    },
+    {
+      "id": "passenger-guide",
+      "title_fa": "مدارک و پذیرش پرواز",
+      "icon": "clipboard-check",
+      "order": 100,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa",
+        "https://www.iata.org/en/youandiata/travelers/baggage/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای خروج از آبادان ساعت پذیرش و مدارک را از بلیت و ایرلاین مجری بگیرید. یک زمان ثابت برای همه پروازها یا همه ایرلاین‌ها قابل تعمیم نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد مقصد/مبدأ بلیت را با ABD تطبیق دهید.",
+            "مدرک هویتی و شماره رزرو را آماده کنید.",
+            "دستورات فرودگاه در روز پرواز بر راهنمای ایستا مقدم‌اند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa"
+        }
+      ]
+    },
+    {
+      "id": "baggage-claims",
+      "title_fa": "دریافت چمدان و گزارش خسارت",
+      "icon": "luggage",
+      "order": 110,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.iata.org/en/youandiata/travelers/baggage/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پس از فرود، برچسب چمدان را با رسید بار کنترل کنید. در صورت نرسیدن یا آسیب چمدان، قبل از خروج از سالن دریافت بار به خدمات بار شرکت هواپیمایی مجری مراجعه و گزارش کتبی تهیه کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "رسید بار، عکس، کارت پرواز و شماره گزارش را نگه دارید.",
+            "مهلت مطالبه خسارت به مقررات قابل اعمال بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.iata.org/en/youandiata/travelers/baggage/"
+        }
+      ]
+    },
+    {
+      "id": "lost-property",
+      "title_fa": "اشیای گمشده",
+      "icon": "search",
+      "order": 120,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.airport.ir/",
+        "https://www.iata.org/en/youandiata/travelers/baggage/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وسیله جامانده در کابین را از ایرلاین و اشیای گمشده در محوطه فرودگاه را از واحد اطلاعات محل پیگیری کنید؛ شماره مستقیم فعال واحد اشیای گمشده در منابع فعلی تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "زمان و محل پیدا نشدن وسیله را ثبت کنید.",
+            "مدارک شخصی و اطلاعات بانکی را در شبکه‌های اجتماعی عمومی منتشر نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.airport.ir/"
+        }
+      ]
+    },
+    {
+      "id": "accessibility",
+      "title_fa": "ویلچر و خدمات ویژه",
+      "icon": "heart",
+      "order": 130,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.iata.org/en/youandiata/travelers/passenger-rights/",
+        "https://www.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای ویلچر، تجهیزات پزشکی، همراه مسافر کم‌توان و وضعیت بارداری باید پیش از خرید با شرکت اجراکننده هماهنگ کنید؛ منابع عمومی تأیید نمی‌کنند همه خدمات در همه ساعات قابل ارائه‌اند."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "اطلاعات پرواز و تماس",
+      "icon": "phone",
+      "order": 140,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://www.airport.ir/",
+        "https://fids.airport.ir/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای اطلاعات پرواز ABD از درگاه شرکت فرودگاه‌ها یا سامانه اطلاعات پرواز استفاده کنید. ساعات و شماره مستقیم مرکز اطلاعات فرودگاه در این پژوهش مستقلاً تأیید نشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره پرواز و تاریخ را هنگام استعلام همراه داشته باشید.",
+            "اطلاعیه ایرلاین و تابلوهای فرودگاه را با داده سایت مقایسه کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://www.airport.ir/"
+        }
+      ]
+    },
+    {
+      "id": "complaints",
+      "title_fa": "شکایت و حقوق مسافر",
+      "icon": "message-square",
+      "order": 150,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://farasa.cao.ir/",
+        "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای اختلال پرواز، استرداد یا خسارت بار، ابتدا مسئول ارائه خدمت (ایرلاین یا فروشنده) را شناسایی کنید. موضوعات مشمول صلاحیت سازمان هواپیمایی را با مستندات در مسیر رسمی ثبت کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره بلیت، تاریخ، مکاتبات و رسیدها را نگه دارید.",
+            "پیش از ارسال مدارک، اصالت درگاه رسمی را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://farasa.cao.ir/"
+        }
+      ]
+    },
+    {
+      "id": "lounges",
+      "title_fa": "CIP و خدمات تشریفات",
+      "icon": "sofa",
+      "order": 155,
+      "status": "draft",
+      "reviewed_at": null,
+      "source_urls": [],
+      "blocks": []
+    },
+    {
+      "id": "connections",
+      "title_fa": "ترانزیت و پرواز اتصالی",
+      "icon": "route",
+      "order": 160,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa",
+        "https://oibk.ir/fa/airports/oiaa/charts"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "حداقل زمان اتصال، انتقال خودکار بار و ترانزیت بدون ورود برای همه پروازهای ABD در منابع تأیید نشده است. در سفر با دو بلیت مستقل ممکن است نیاز به تحویل دوباره بار و پذیرش مجدد باشد."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa"
+        }
+      ]
+    },
+    {
+      "id": "international-travel",
+      "title_fa": "گذرنامه و پرواز خارجی",
+      "icon": "shield-check",
+      "order": 170,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa/charts",
+        "https://www.iata.org/en/youandiata/travelers/passenger-rights/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "عنوان بین‌المللی یا ثبت نام فرودگاه به‌تنهایی وجود پرواز خارجی یا خدمات گذرنامه در همه روزها را تضمین نمی‌کند. برای سفر خارجی، مسیر، گذرنامه، ویزا و مقررات ورود مقصد را متناسب با تاریخ سفر بررسی کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa/charts"
+        }
+      ]
+    },
+    {
+      "id": "security-notices",
+      "title_fa": "ایمنی و اطلاعیه‌ها",
+      "icon": "shield-alert",
+      "order": 180,
+      "status": "published",
+      "reviewed_at": "2026-11-15T00:00:00Z",
+      "source_urls": [
+        "https://oibk.ir/fa/airports/oiaa/charts",
+        "https://www.iata.org/en/youandiata/travelers/baggage/"
+      ],
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "محدودیت بار، اقلام خطرناک و شرایط بازرسی ممکن است بر اساس اطلاعیه رسمی روز سفر تغییر کند. این صفحه اطلاعات زنده NOTAM، وضعیت هوا یا ساعات پرواز ندارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری خاص را با ایرلاین بررسی کنید.",
+            "دستورات کارکنان فرودگاه و اطلاعیه معتبر روز پرواز اولویت دارند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع و اطلاعات تکمیلی",
+          "url": "https://oibk.ir/fa/airports/oiaa/charts"
+        }
+      ]
+    }
+  ]
+}

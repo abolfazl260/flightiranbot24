@@ -288,5 +288,55 @@
       "ar": "أثينا"
     },
     "timezone": "Europe/Athens"
+  },
+  {
+    "code": "AZD",
+    "country": "IR",
+    "names": {
+      "fa": "یزد",
+      "en": "Yazd",
+      "ar": "يزد"
+    },
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "code": "RAS",
+    "country": "IR",
+    "names": {
+      "fa": "رشت",
+      "en": "Rasht",
+      "ar": "رشت"
+    },
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "code": "SRY",
+    "country": "IR",
+    "names": {
+      "fa": "ساری",
+      "en": "Sari",
+      "ar": "ساري"
+    },
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "code": "BUZ",
+    "country": "IR",
+    "names": {
+      "fa": "بوشهر",
+      "en": "Bushehr",
+      "ar": "بوشهر"
+    },
+    "timezone": "Asia/Tehran"
+  },
+  {
+    "code": "ABD",
+    "country": "IR",
+    "names": {
+      "fa": "آبادان",
+      "en": "Abadan",
+      "ar": "عبادان"
+    },
+    "timezone": "Asia/Tehran"
   }
 ]

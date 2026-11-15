@@ -4,14 +4,18 @@
 
 **GitHub is the content management interface. There is no airport admin panel.**
 The canonical airport identity list remains
-`src/flightiran/modules/airport/data/airports.json` (29 airports).
+`src/flightiran/modules/airport/data/airports.json` (34 airports).
 This new `data/airports/` directory contains independent *content*
 documents, keyed by IATA code, without duplicating airport identity data.
 
-All **29 existing airports** have independent JSON content files in `details/`.
+All **34 existing airports** have independent JSON content files in `details/`.
 The **Imam Khomeini (IKA)** page has **14 source-backed published sections** and **two empty drafts**. The **Mashhad (MHD)** page has **17 source-backed published sections** and **two empty drafts** (traveler experiences and airport videos). The **Kerman (KER)** page has **13 source-backed published sections** and **two unpublished drafts**; see `docs/airports/KER_CONTENT_NOTES.md`. The **Urmia (OMH)** and **Zahedan (ZAH)** pages now each have **18 source-backed published sections**; only the user-generated traveler-experience section remains unpublished because no approved passenger submissions are present. Their terminal, transport, parking, facilities, accessibility, lounge, connection and international-travel sections were reviewed against AIP and airport public-relations sources; video sections link to official airport-channel posts. See [Urmia and Zahedan source audit](airports/urmia-zahedan-2026-11-11.md). The **Amsterdam (AMS), Athens (ATH), Abu Dhabi (AUH), Bangkok (BKK), Paris-CDG (CDG), and Delhi (DEL)** pages now also have their previously empty parking, lounge, and Athens connection sections completed from airport/operator sources. Each has **17 published sections** and only the two user-generated/media sections (traveler experiences and airport videos) remain unpublished. See [international airport services audit](airports/parking-lounges-batch-2026-11-11.md). The **Doha (DOH), Dubai (DXB), Frankfurt (FRA), Kuala Lumpur (KUL), London Heathrow (LHR), and Madrid (MAD)** records now also have their parking and lounge sections published from official airport/operator sources. Each has **17 published sections**; only traveler experiences and airport videos remain unpublished. See [global airport parking and lounge audit](airports/parking-lounges-global-2026-11-11.md). The **Munich (MUC), Minsk (MSQ), and Beijing Capital (PEK)** records now also have official parking and lounge sections published and reverified on **15 November 2026**. Each has **17 published sections**, with only traveler experiences and airport videos remaining unpublished. See [Munich, Minsk and Beijing source audit](airports/parking-lounges-muc-msq-pek-2026-11-11.md). The **Doha (DOH), Dubai (DXB), Frankfurt (FRA), Kuala Lumpur (KUL), London Heathrow (LHR), and Madrid (MAD)** records also now have parking and lounge sections published. Each has **17 published sections** and only traveler experiences and airport videos remain unpublished. See [global airport parking and lounge audit](airports/parking-lounges-global-2026-11-11.md). Other airport pages are published independently; consult `airport-index.v1.json` for the current enabled set rather than assuming a fixed allowlist. The IKA location-map entry links to the location supplied on the official website. The MHD map uses a referenced airport point, not a terminal floor plan. No unverified terminal plans, passenger reviews, videos or live flight values are published. Android and the Mini App have published airport readers. Telegram private chats
 now expose the same reviewed sections through a paginated HTML widget; see
 [Telegram airport widget](TELEGRAM_AIRPORT_WIDGET.md).
+
+## New Iranian airports (15 November 2026)
+
+Five independent sourced guides — AZD, RAS, SRY, BUZ, ABD — are published in the shared registry. The index now has **34 enabled airports**, **18 in Iran** and **16 outside Iran**. See [dated source audit](airports/azd-ras-sry-buz-abd-2026-11-15.md). Sari runway reopening is **not confirmed**. New records can be loaded by existing readers; a deployed bot requires an updated image and APK generation stays manual.
 
 ## Repository layout
 
@@ -25,7 +29,7 @@ data/airports/
     THR.v1.json                                   # Mehrabad
     IKA.v1.json                                   # Imam Khomeini
     MHD.v1.json                                   # Mashhad
-    ...                                           # One file for each of 29 airports
+    ...                                           # One file for each of 34 airports
 ```
 
 There is no predefined fixed feature menu. Each document contains its own
@@ -140,7 +144,7 @@ python scripts/airport_content.py add-airport XYZ
 ```
 
 If the code already exists in `data/airports/airport-index.v1.json` (all
-current 29 do), do not call `add-airport`; edit its file directly.
+current 34 do), do not call `add-airport`; edit its file directly.
 
 ## Validation and deployment
 
