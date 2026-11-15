@@ -282,7 +282,7 @@ def test_six_international_airports_publish_official_parking_lounge_and_transfer
         for section_id in section_ids:
             section = sections[section_id]
             assert section["status"] == "published"
-            assert section["reviewed_at"] == "2026-11-15T00:00:00Z"
+            assert section["reviewed_at"] == "2026-11-11T00:00:00Z"
             assert section["source_urls"]
             assert section["blocks"]
             assert all(b["type"] in {"text", "bullets", "link"} for b in section["blocks"])
@@ -354,7 +354,7 @@ def test_munich_minsk_and_beijing_publish_official_parking_and_lounge_guides():
         for section_id in ("parking", "lounges"):
             section = sections[section_id]
             assert section["status"] == "published"
-            assert section["reviewed_at"] == "2026-11-11T00:00:00Z"
+            assert section["reviewed_at"] == "2026-11-15T00:00:00Z"
             assert section["source_urls"]
             assert section["blocks"]
             assert all(b["type"] in {"text", "bullets", "link"} for b in section["blocks"])
