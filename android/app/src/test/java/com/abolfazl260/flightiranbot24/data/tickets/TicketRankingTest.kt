@@ -55,4 +55,21 @@ class TicketRankingTest {
         assertEquals(listOf("X"),rankTicketFares(fares,TicketSort.DROPS,"x").map { it.destination })
         assertTrue(rankTicketFares(fares,TicketSort.DROPS,"missing").isEmpty())
     }
+
+    @Test fun allDestinationsKeepsFeedOrderAndIncludesMissingComparisons() {
+        val fares = listOf(
+            fare("کیش", 90, 100.0),
+            fare("تبریز", 40, null),
+            fare("مشهد", 70, 100.0),
+        )
+        assertEquals(
+            listOf("کیش", "تبریز", "مشهد"),
+            rankTicketFares(fares, TicketSort.ALL).map { it.destination },
+        )
+        assertEquals(
+            listOf("تبریز"),
+            rankTicketFares(fares, TicketSort.ALL, "تب").map { it.destination },
+        )
+    }
+
 }
