@@ -33,7 +33,10 @@ def test_new_airports_identity_index_and_per_airport_guides():
         assert {"traveler-experiences", "airport-videos", "lounges"}.issubset(
             {s["id"] for s in drafts})
         assert all(s["source_urls"] and s["blocks"] and s["reviewed_at"] for s in published)
-        assert all(not s["source_urls"] and not s["blocks"] and s["reviewed_at"] is None for s in drafts)
+        assert all(
+            not s["source_urls"] and not s["blocks"] and s["reviewed_at"] is None
+            for s in drafts
+        )
         assert not any(b["type"] in {"video", "experience", "image", "flight_board"}
                        for s in published for b in s["blocks"])
         assert any(b.get("type") == "map" for s in published for b in s["blocks"])
