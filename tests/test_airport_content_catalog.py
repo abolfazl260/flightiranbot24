@@ -380,7 +380,7 @@ def test_munich_minsk_and_beijing_publish_official_parking_and_lounge_guides():
         for b in minsk_parking["blocks"]
     )
     assert "۱٬۲۳۵" in minsk_text
-    assert "متفاوت" in minsk_text
+    assert "۱٬۵۷۹" in minsk_text and "۱٬۲۸۳" in minsk_text
     assert "۴ سپتامبر ۲۰۲۶" in minsk_text
     assert "معاف" in minsk_text
     minsk_lounge = next(s for s in minsk["sections"] if s["id"] == "lounges")
