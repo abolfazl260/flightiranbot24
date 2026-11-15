@@ -50,14 +50,21 @@ jobs:
           path: |
             android/screenshots/failed-navigation.png
             android/screenshots/failed-window.xml
+            android/screenshots/failed-diagnostics.txt
+            android/screenshots/failed-logcat.txt
             android/screenshots/01-home.png
           if-no-files-found: warn
           retention-days: 7
+      # Store graphics are deterministic source assets; keep generating them
+      # even if the emulator or UI screenshot capture fails.
       - name: Generate Google Play graphics
+        if: always() && hashFiles('scripts/generate_android_store_graphics.py') != ''
         run: |
           python -m pip install --disable-pip-version-check "Pillow==11.3.0"
           python scripts/generate_android_store_graphics.py --out android/dist/store
-      - uses: actions/upload-artifact@v4
+      - name: Upload Google Play graphics
+        if: always() && hashFiles('android/dist/store/*.png') != ''
+        uses: actions/upload-artifact@v4
         with:
           name: android-play-graphics
           path: android/dist/store/*.png
