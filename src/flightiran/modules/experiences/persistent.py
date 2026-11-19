@@ -486,7 +486,10 @@ class SQLiteExperienceService:
                 or set(linked) != {r["archive_id"] for r in data["records"]}):
             raise ExperienceError("Archive mapping is missing or inconsistent")
         for association in linked.values():
-            if association["publication"] != "withheld" or association["consent_evidence"] is not None:
+            if (
+                association["publication"] != "withheld"
+                or association["consent_evidence"] is not None
+            ):
                 raise ExperienceError("Archive mapping cannot grant publication consent")
             if len(association["airline_ids"]) != len(set(association["airline_ids"])):
                 raise ExperienceError("Duplicate airline mapping")
@@ -533,7 +536,8 @@ class SQLiteExperienceService:
                     session.add(row)
                     await session.flush()
                     self.audit(
-                        session, row, "archive-import", "import", "Withheld pending permission review"
+                        session, row, "archive-import", "import",
+                        "Withheld pending permission review",
                     )
                 # Backfill source attribution and verified airline links without
                 # touching the immutable source or previously moderated content.
