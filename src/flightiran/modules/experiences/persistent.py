@@ -293,12 +293,16 @@ class SQLiteExperienceService:
                         not consent_evidence
                         or not consent_evidence.strip()
                         or not public_text
-                        or not display_name
-                        or len(display_name) > 80
+                        or (display_name is not None and len(display_name) > 80)
                     ):
                         raise ExperienceError(
                             "Archive needs publication permission, reviewed text and name"
                         )
+                    original_author = row.raw_source["author_original"]
+                    if display_name is None:
+                        display_name = original_author
+                    if display_name != original_author:
+                        raise ExperienceError("Archive author attribution must match the original")
                     row.consent, row.consent_evidence = 1, consent_evidence
                     row.display_name = display_name
                 elif not row.consent or row.state == "deleted":
@@ -476,6 +480,19 @@ class SQLiteExperienceService:
             r["order"] for r in data["records"]
         ] != list(range(1, 52)):
             raise ExperienceError("Archive IDs and source order must be complete and unique")
+        mapping = json.loads(path.with_name("index.v1.json").read_text(encoding="utf-8"))
+        linked = {record["archive_id"]: record for record in mapping["records"]}
+        if (mapping["schema_version"] != 1 or len(linked) != 51
+                or set(linked) != {r["archive_id"] for r in data["records"]}):
+            raise ExperienceError("Archive mapping is missing or inconsistent")
+        for association in linked.values():
+            if association["publication"] != "withheld" or association["consent_evidence"] is not None:
+                raise ExperienceError("Archive mapping cannot grant publication consent")
+            if len(association["airline_ids"]) != len(set(association["airline_ids"])):
+                raise ExperienceError("Duplicate airline mapping")
+            for airline in association["airline_ids"]:
+                if not re.fullmatch(r"[a-z][a-z0-9-]{1,79}", airline):
+                    raise ExperienceError("Invalid airline association")
         for block in data["blocks"]:
             joined = "".join(
                 r["raw_message"]
@@ -497,24 +514,39 @@ class SQLiteExperienceService:
                 if old:
                     if old.original_hash != record["sha256"] or old.raw_source != record:
                         raise ExperienceError("Refusing to rewrite immutable archive")
-                    continue
-                row = TravelExperience(
-                    kind="archive",
-                    archive_id=record["archive_id"],
-                    raw_source=record,
-                    original_hash=record["sha256"],
-                    duplicate_key=digest("archive:" + record["archive_id"]),
-                    body=record["raw_message"],
-                    display_name="مسافر",
-                    posted_label=record["posted_label"],
-                    state="pending",
-                    consent=0,
-                    rating=None,
-                    criteria={},
-                )
-                session.add(row)
-                await session.flush()
-                self.audit(
-                    session, row, "archive-import", "import", "Withheld pending permission review"
-                )
+                    row = old
+                else:
+                    row = TravelExperience(
+                        kind="archive",
+                        archive_id=record["archive_id"],
+                        raw_source=record,
+                        original_hash=record["sha256"],
+                        duplicate_key=digest("archive:" + record["archive_id"]),
+                        body=record["raw_message"],
+                        display_name=record["author_original"],
+                        posted_label=record["posted_label"],
+                        state="pending",
+                        consent=0,
+                        rating=None,
+                        criteria={},
+                    )
+                    session.add(row)
+                    await session.flush()
+                    self.audit(
+                        session, row, "archive-import", "import", "Withheld pending permission review"
+                    )
+                # Backfill source attribution and verified airline links without
+                # touching the immutable source or previously moderated content.
+                if row.state == "pending" and not row.consent:
+                    if row.display_name == "مسافر":
+                        row.display_name = record["author_original"]
+                    current_targets = set((await session.scalars(
+                        select(ExperienceTarget.target).where(
+                            ExperienceTarget.experience_id == row.id
+                        )
+                    )).all())
+                    for airline in linked[record["archive_id"]]["airline_ids"]:
+                        target = "airline:" + airline
+                        if target not in current_targets:
+                            session.add(ExperienceTarget(experience_id=row.id, target=target))
         return 51

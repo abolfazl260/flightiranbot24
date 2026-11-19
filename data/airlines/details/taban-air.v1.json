@@ -916,5 +916,17 @@
     }
   ],
   "published_reviews": [],
-  "experience_links": []
+  "experience_links": [
+    {
+      "experience_id": "gh168-6629082132-2",
+      "airline_ids": [
+        "taban-air"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629082132",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    }
+  ]
 }
