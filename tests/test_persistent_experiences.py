@@ -59,7 +59,7 @@ async def test_all_51_original_messages_round_trip_immutable_and_withheld(tmp_pa
         consent_evidence="test-only permission reference",
         public_text="Approved redacted text",
         display_name=raw["records"][0]["author_original"],
-        targets=["airport:IKA", "airline:iran-air", "country:IR"],
+        targets=["airport:IKA", "airline:iran-air", "airline:iran-airtour", "country:IR"],
     )
     public = await service.public(target="airport:IKA")
     assert public["stats"]["average"] is None
