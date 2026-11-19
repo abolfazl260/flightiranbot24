@@ -4,7 +4,10 @@
     {
       "archive_id": "gh168-6629075104-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-airtour",
+        "varesh-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -15,7 +18,9 @@
     {
       "archive_id": "gh168-6629075104-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -26,7 +31,9 @@
     {
       "archive_id": "gh168-6629075104-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "kish-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -48,7 +55,9 @@
     {
       "archive_id": "gh168-6629075104-5",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -81,7 +90,9 @@
     {
       "archive_id": "gh168-6629075104-8",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-airtour"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -103,7 +114,9 @@
     {
       "archive_id": "gh168-6629078682-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "mahan-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -125,7 +138,9 @@
     {
       "archive_id": "gh168-6629078682-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "ava-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -147,7 +162,9 @@
     {
       "archive_id": "gh168-6629078682-6",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "mahan-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -158,7 +175,9 @@
     {
       "archive_id": "gh168-6629078682-7",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "mahan-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -169,7 +188,10 @@
     {
       "archive_id": "gh168-6629078682-8",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "ata-air",
+        "meraj-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -180,7 +202,9 @@
     {
       "archive_id": "gh168-6629082132-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -191,7 +215,9 @@
     {
       "archive_id": "gh168-6629082132-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "taban-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -202,7 +228,9 @@
     {
       "archive_id": "gh168-6629082132-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "varesh-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -224,7 +252,9 @@
     {
       "archive_id": "gh168-6629082132-5",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-airtour"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -235,7 +265,9 @@
     {
       "archive_id": "gh168-6629082132-6",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "iran-airtour"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -246,7 +278,9 @@
     {
       "archive_id": "gh168-6629082132-7",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "varesh-air"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -257,7 +291,9 @@
     {
       "archive_id": "gh168-6629256473-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "emirates"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -312,7 +348,9 @@
     {
       "archive_id": "gh168-6629260731-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "emirates"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -334,7 +372,9 @@
     {
       "archive_id": "gh168-6629260731-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "emirates"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -433,7 +473,9 @@
     {
       "archive_id": "gh168-6629266764-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "emirates"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -510,7 +552,9 @@
     {
       "archive_id": "gh168-6629272217-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "emirates"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -521,7 +565,9 @@
     {
       "archive_id": "gh168-6629272217-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "emirates"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,

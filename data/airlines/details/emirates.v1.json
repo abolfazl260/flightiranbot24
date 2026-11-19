@@ -1100,5 +1100,72 @@
     }
   ],
   "published_reviews": [],
-  "experience_links": []
+  "experience_links": [
+    {
+      "experience_id": "gh168-6629256473-1",
+      "airline_ids": [
+        "emirates"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629256473",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    },
+    {
+      "experience_id": "gh168-6629260731-2",
+      "airline_ids": [
+        "emirates"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629260731",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    },
+    {
+      "experience_id": "gh168-6629260731-4",
+      "airline_ids": [
+        "emirates"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629260731",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    },
+    {
+      "experience_id": "gh168-6629266764-4",
+      "airline_ids": [
+        "emirates"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629266764",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    },
+    {
+      "experience_id": "gh168-6629272217-1",
+      "airline_ids": [
+        "emirates"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629272217",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    },
+    {
+      "experience_id": "gh168-6629272217-2",
+      "airline_ids": [
+        "emirates"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629272217",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    }
+  ]
 }

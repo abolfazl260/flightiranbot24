@@ -10,7 +10,7 @@ from sqlalchemy import func, select
 
 from flightiran.config import Settings
 from flightiran.db import initialize_database
-from flightiran.db.models import ExperienceAudit, TravelExperience
+from flightiran.db.models import ExperienceAudit, ExperienceTarget, TravelExperience
 from flightiran.db.repositories import SQLiteUserRepository
 from flightiran.modules.experiences.persistent import ExperienceError, SQLiteExperienceService
 from flightiran.webapp.app import create_app
@@ -36,10 +36,21 @@ async def test_all_51_original_messages_round_trip_immutable_and_withheld(tmp_pa
         rows = (await session.scalars(select(TravelExperience).order_by(TravelExperience.id))).all()
         assert [r.raw_source for r in rows] == raw["records"]
         assert all(r.rating is None and not r.consent and r.public_text is None for r in rows)
+        assert [r.display_name for r in rows] == [r["author_original"] for r in raw["records"]]
+        targets = (await session.scalars(select(ExperienceTarget.target).where(
+            ExperienceTarget.experience_id == rows[0].id
+        ))).all()
+        assert set(targets) == {"airline:iran-airtour", "airline:varesh-air"}
         assert await session.scalar(select(func.count()).select_from(ExperienceAudit)) == 51
     assert not (await service.public())["items"]
     with pytest.raises(ExperienceError):
         await service.moderate(rows[0].id, state="approved", reason="test", actor="operator")
+    with pytest.raises(ExperienceError, match="attribution"):
+        await service.moderate(
+            rows[0].id, state="approved", reason="test", actor="operator",
+            consent_evidence="test-only permission reference",
+            public_text="Approved redacted text", display_name="Anonymous",
+        )
     await service.moderate(
         rows[0].id,
         state="approved",
@@ -47,12 +58,14 @@ async def test_all_51_original_messages_round_trip_immutable_and_withheld(tmp_pa
         actor="operator",
         consent_evidence="test-only permission reference",
         public_text="Approved redacted text",
-        display_name="Anonymous",
-        targets=["airport:IKA", "airline:iran-air", "country:IR"],
+        display_name=raw["records"][0]["author_original"],
+        targets=["airport:IKA", "airline:iran-air", "airline:iran-airtour", "country:IR"],
     )
     public = await service.public(target="airport:IKA")
     assert public["stats"]["average"] is None
     assert public["items"][0]["text"] == "Approved redacted text"
+    assert public["items"][0]["display_name"] == raw["records"][0]["author_original"]
+    assert (await service.public(target="airline:iran-airtour"))["items"][0]["id"] == rows[0].id
     assert public["items"][0]["rating"] is None
     async with db.session() as session:
         preserved = await session.get(TravelExperience, rows[0].id)

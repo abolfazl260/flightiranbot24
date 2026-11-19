@@ -836,5 +836,17 @@
     }
   ],
   "published_reviews": [],
-  "experience_links": []
+  "experience_links": [
+    {
+      "experience_id": "gh168-6629075104-3",
+      "airline_ids": [
+        "kish-air"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629075104",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    }
+  ]
 }

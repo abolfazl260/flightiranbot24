@@ -34,7 +34,10 @@ def test_actual_catalog_and_independent_snapshots():
     for entry in index["airlines"]:
         detail = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
         assert detail["airline_id"] == entry["airline_id"]
-        assert detail["published_reviews"] == detail["experience_links"] == []
+        assert detail["published_reviews"] == []
+        assert all(a["moderation_status"] == "pending" and
+                   a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+                   for a in detail["experience_links"])
         coverage[entry["airline_id"]] = {
             status: sum(s["metadata"]["status"] == status for s in detail["sections"])
             for status in ("published", "draft")
@@ -61,7 +64,8 @@ def test_actual_catalog_and_independent_snapshots():
                         "yazd-airways": {"published": 14, "draft": 8}}
     for carrier in ("fly-persia", "ava-airlines", "yazd-airways"):
         item = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
-        assert item["published_reviews"] == item["experience_links"] == []
+        assert item["published_reviews"] == []
+        assert all(a["moderation_status"] == "pending" for a in item["experience_links"])
         assert all(not s["blocks"] for s in item["sections"] if s["metadata"]["status"] == "draft")
         fleets = [b for s in item["sections"] for b in s["blocks"] if b["type"] == "fleet_snapshot"]
         assert all(b["count"] is None and b["relationship"] == "unknown" for b in fleets)
@@ -262,7 +266,10 @@ def test_iran_air_source_scoped_content_and_unknown_fleet():
     detail = module.read_json(ROOT / "data/airlines/details/iran-air.v1.json")
     sections = {section["id"]: section for section in detail["sections"]}
     assert len(sections) == 18
-    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert detail["published_reviews"] == []
+    assert all(a["moderation_status"] == "pending" and
+               a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+               for a in detail["experience_links"])
     assert sections["onboard-connectivity"]["metadata"]["status"] == "draft"
     assert sections["onboard-connectivity"]["blocks"] == []
     for section_id in ("baggage", "ticket-rules", "checkin", "fleet",
@@ -296,7 +303,10 @@ def test_new_carriers_have_independent_sourced_sections(airline_id, published, d
     assert detail["airline_id"] == airline_id
     assert len(detail["sections"]) == published + draft
     assert len({s["id"] for s in detail["sections"]}) == len(detail["sections"])
-    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert detail["published_reviews"] == []
+    assert all(a["moderation_status"] == "pending" and
+               a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+               for a in detail["experience_links"])
     assert sum(s["metadata"]["status"] == "published" for s in detail["sections"]) == published
     for section in detail["sections"]:
         if section["metadata"]["status"] == "published":
@@ -338,7 +348,10 @@ def test_iran_airtour_sourced_scope_and_draft_exclusion():
     assert detail["airline_id"] == airline_id
     assert len(detail["sections"]) == 19
     assert len({s["id"] for s in detail["sections"]}) == 19
-    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert detail["published_reviews"] == []
+    assert all(a["moderation_status"] == "pending" and
+               a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+               for a in detail["experience_links"])
     published = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
     drafts = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
     assert len(published) == 15
@@ -388,7 +401,10 @@ def test_qeshm_kish_independent_sourced_guides(airline_id, published, draft, mod
     assert detail["airline_id"] == airline_id
     assert len(detail["sections"]) == published + draft
     assert len({s["id"] for s in detail["sections"]}) == published + draft
-    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert detail["published_reviews"] == []
+    assert all(a["moderation_status"] == "pending" and
+               a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+               for a in detail["experience_links"])
     active = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
     hidden = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
     assert len(active) == published
@@ -450,7 +466,10 @@ def test_zagros_meraj_independent_source_and_publication_gates(
     assert detail["airline_id"] == airline_id
     assert len(detail["sections"]) == 20
     assert len({s["id"] for s in detail["sections"]}) == 20
-    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert detail["published_reviews"] == []
+    assert all(a["moderation_status"] == "pending" and
+               a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+               for a in detail["experience_links"])
     assert row["detail_path"] == f"details/{airline_id}.v1.json"
     assert {(c["system"], c["value"]) for c in row["identity"]["codes"]} == {
         ("iata", iata), ("icao", icao),
@@ -523,7 +542,10 @@ def test_ata_varesh_independent_source_scoped_guides(
     assert detail["airline_id"] == airline_id
     assert len(detail["sections"]) == 20
     assert len({s["id"] for s in detail["sections"]}) == 20
-    assert detail["published_reviews"] == detail["experience_links"] == []
+    assert detail["published_reviews"] == []
+    assert all(a["moderation_status"] == "pending" and
+               a["consent_status"] == "unknown" and not a["privacy_reviewed"]
+               for a in detail["experience_links"])
     released = [s for s in detail["sections"] if s["metadata"]["status"] == "published"]
     hidden = [s for s in detail["sections"] if s["metadata"]["status"] == "draft"]
     assert len(released) == published
@@ -585,7 +607,10 @@ def test_caspian_sepehran_independent_source_and_publishing_gates(
     assert data["airline_id"] == airline_id
     assert len(data["sections"]) == published + drafts
     assert len({s["id"] for s in data["sections"]}) == published + drafts
-    assert data["published_reviews"] == data["experience_links"] == []
+    assert data["published_reviews"] == []
+    assert all(link["consent_status"] == "unknown" and
+               link["moderation_status"] == "pending"
+               for link in data["experience_links"])
     assert row["detail_path"] == f"details/{airline_id}.v1.json"
     active = [s for s in data["sections"] if s["metadata"]["status"] == "published"]
     hidden = [s for s in data["sections"] if s["metadata"]["status"] == "draft"]
@@ -661,7 +686,10 @@ def test_taban_karun_source_scoped_publication_and_null_fleet(
     assert dataset["airline_id"] == airline_id
     assert len(dataset["sections"]) == published + draft
     assert len({s["id"] for s in dataset["sections"]}) == published + draft
-    assert dataset["published_reviews"] == dataset["experience_links"] == []
+    assert dataset["published_reviews"] == []
+    assert all(link["consent_status"] == "unknown" and
+               link["moderation_status"] == "pending"
+               for link in dataset["experience_links"])
     visible = [s for s in dataset["sections"] if s["metadata"]["status"] == "published"]
     hidden = [s for s in dataset["sections"] if s["metadata"]["status"] == "draft"]
     assert len(visible) == published and len(hidden) == draft
@@ -733,7 +761,10 @@ def test_pars_chabahar_publication_scope_and_unknown_fleet(
     entry = entries[airline_id]
     data = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
     assert data["airline_id"] == airline_id
-    assert data["published_reviews"] == data["experience_links"] == []
+    assert data["published_reviews"] == []
+    assert all(link["consent_status"] == "unknown" and
+               link["moderation_status"] == "pending"
+               for link in data["experience_links"])
     assert len(data["sections"]) == published + draft
     assert len({s["id"] for s in data["sections"]}) == published + draft
     visible = [s for s in data["sections"] if s["metadata"]["status"] == "published"]
@@ -786,3 +817,30 @@ def test_pars_chabahar_publication_scope_and_unknown_fleet(
         assert all("chabaharairlines.com" not in url for url in links)
         assert any("chabaharairlines.ir" in url for url in links)
 
+
+
+def test_archive_associations_are_lossless_exact_and_not_published():
+    archive = module.read_json(ROOT / "data/experiences/archive/github-168.v1.json")
+    mapping = module.read_json(ROOT / "data/experiences/archive/index.v1.json")
+    records = {r["archive_id"]: r for r in archive["records"]}
+    assert len(mapping["records"]) == len(records) == 51
+    assert len({r["archive_id"] for r in mapping["records"]}) == 51
+    assert sum(bool(row["airline_ids"]) for row in mapping["records"]) == 22
+    assert mapping["records"][0]["airline_ids"] == ["iran-airtour", "varesh-air"]
+    assert records[mapping["records"][0]["archive_id"]]["author_original"] == "Fatima Dorostkar"
+    backlinks = {}
+    for row in module.read_json(ROOT / "data/airlines/airline-index.v1.json")["airlines"]:
+        detail = module.read_json(ROOT / "data/airlines" / row["detail_path"])
+        assert detail["published_reviews"] == []
+        for link in detail["experience_links"]:
+            source = records[link["experience_id"]]
+            assert row["airline_id"] in link["airline_ids"]
+            assert link["source_url"].endswith(f"issuecomment-{source['source_comment_id']}")
+            assert link["consent_status"] == "unknown"
+            assert link["moderation_status"] == "pending"
+            assert link["privacy_reviewed"] is False
+            backlinks.setdefault(source["archive_id"], set()).add(row["airline_id"])
+    assert sum(map(len, backlinks.values())) == 24
+    for record in mapping["records"]:
+        assert set(record["airline_ids"]) == backlinks.get(record["archive_id"], set())
+        assert record["publication"] == "withheld" and record["consent_evidence"] is None
