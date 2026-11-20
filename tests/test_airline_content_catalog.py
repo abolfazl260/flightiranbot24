@@ -64,13 +64,13 @@ def test_actual_catalog_and_independent_snapshots():
                         "fly-persia": {"published": 14, "draft": 8},
                         "ava-airlines": {"published": 20, "draft": 2},
                         "yazd-airways": {"published": 14, "draft": 8},
-                        "turkish-airlines": {"published": 13, "draft": 9},
-                        "lufthansa": {"published": 13, "draft": 9},
-                        "qatar-airways": {"published": 13, "draft": 9},
-                        "air-canada": {"published": 13, "draft": 9},
-                        "austrian-airlines": {"published": 13, "draft": 9},
-                        "pegasus-airlines": {"published": 13, "draft": 9},
-                        "lot-polish-airlines": {"published": 13, "draft": 9}}
+                        "turkish-airlines": {"published": 21, "draft": 1},
+                        "lufthansa": {"published": 21, "draft": 1},
+                        "qatar-airways": {"published": 21, "draft": 1},
+                        "air-canada": {"published": 21, "draft": 1},
+                        "austrian-airlines": {"published": 21, "draft": 1},
+                        "pegasus-airlines": {"published": 19, "draft": 3},
+                        "lot-polish-airlines": {"published": 21, "draft": 1}}
     for carrier in ("fly-persia", "ava-airlines", "yazd-airways"):
         item = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
         assert item["published_reviews"] == []
@@ -888,7 +888,8 @@ def test_seven_international_airline_guides_and_archive_guardrails():
         assert detail["airline_id"] == identifier
         assert detail["published_reviews"] == []
         assert len(detail["sections"]) == 22
-        assert sum(s["metadata"]["status"] == "published" for s in detail["sections"]) == 13
+        published_count = 19 if identifier == "pegasus-airlines" else 21
+        assert sum(s["metadata"]["status"] == "published" for s in detail["sections"]) == published_count
         assert all(s["blocks"] and s["metadata"]["source_urls"]
                    for s in detail["sections"] if s["metadata"]["status"] == "published")
         assert all(not s["blocks"] and s["metadata"]["verified_at"] is None
@@ -906,3 +907,52 @@ def test_seven_international_airline_guides_and_archive_guardrails():
     for row in mapping["records"]:
         assert row["archive_id"] in archive
         assert row["publication"] == "withheld" and row["consent_evidence"] is None
+
+def test_foreign_airline_official_draft_completion_preserves_no_fabricated_fleet_data():
+    carriers = (
+        "turkish-airlines", "lufthansa", "qatar-airways", "air-canada",
+        "austrian-airlines", "pegasus-airlines", "lot-polish-airlines",
+    )
+    upgraded_total = 0
+    for carrier in carriers:
+        detail = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
+        sections = {section["id"]: section for section in detail["sections"]}
+        expected_drafts = {"network"} | (
+            {"cabin", "lounges"} if carrier == "pegasus-airlines" else set()
+        )
+        assert {s["id"] for s in detail["sections"] if s["metadata"]["status"] == "draft"} == expected_drafts
+        assert all(sections[name]["blocks"] == [] for name in expected_drafts)
+        completed = (
+            "pets", "batteries", "loyalty", "catering", "onboard-connectivity", "fleet"
+        )
+        for name in completed:
+            section = sections[name]
+            assert section["metadata"]["status"] == "published"
+            assert section["metadata"]["confidence"] == "official"
+            assert section["metadata"]["verified_at"] == "2026-11-20T00:00:00Z"
+            assert section["metadata"]["source_urls"]
+            assert all(url.startswith("https://") for url in section["metadata"]["source_urls"])
+            assert any(block["type"] == "link" for block in section["blocks"])
+            upgraded_total += 1
+        if carrier != "pegasus-airlines":
+            for name in ("cabin", "lounges"):
+                assert sections[name]["metadata"]["status"] == "published"
+                assert sections[name]["blocks"]
+                upgraded_total += 1
+        fleet = sections["fleet"]
+        snapshots = [b for b in fleet["blocks"] if b["type"] == "fleet_snapshot"]
+        assert len(snapshots) == 2
+        assert all(
+            s["count"] is None and s["configuration_fa"] is None
+            and s["relationship"] == "unknown" and s["status"] == "unknown"
+            and s["metadata"]["source_urls"]
+            for s in snapshots
+        )
+        assert detail["published_reviews"] == []
+        assert all(
+            link["consent_status"] == "unknown"
+            and link["moderation_status"] == "pending"
+            and link["privacy_reviewed"] is False
+            for link in detail["experience_links"]
+        )
+    assert upgraded_total == 54

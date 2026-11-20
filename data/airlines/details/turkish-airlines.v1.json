@@ -326,16 +326,35 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-az/flights/fly-different/business-class/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ترکیش خدمات کابین اکونومی و بیزنس را معرفی می‌کند، اما نوع صندلی، امکانات و جزئیات بیزنس با هواپیما و مسیر یکسان نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "قبل از خرید، کلاس نرخی و نقشهٔ صندلی همان پرواز را بررسی کنید.",
+            "تصویر تبلیغاتی یک مدل هواپیما نشان‌دهندهٔ پیکربندی همهٔ پروازها نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-az/flights/fly-different/business-class/"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -344,16 +363,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-int/flight-experience/in-flight-services/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "خدمات غذا و نوشیدنی ترکیش به کلاس و مدت پرواز بستگی دارد؛ منوی قابل ارائه و گزینه‌های ویژه را باید برای همان پرواز بررسی کرد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "درخواست غذای ویژه را در زمان مقرر و از مسیر رسمی ثبت کنید.",
+            "گرم‌کردن غذای شخصی در هواپیما تضمین‌شده نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-int/flight-experience/in-flight-services/"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -362,16 +400,35 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-az/flights/fly-different/business-class/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ترکیش برای مسافران واجد شرایط خدمات لانژ معرفی می‌کند. ورود به لانژ به کلاس بلیت، وضعیت Miles&Smiles، فرودگاه و شرایط همان روز وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "فقط از روی نام ایرلاین، حق ورود رایگان به لانژ را نتیجه نگیرید.",
+            "در پروازهای مشترک، شرکت اجراکننده و شرایط عضویت را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-az/flights/fly-different/business-class/"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -380,13 +437,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-tr/any-questions/traveling-with-pets/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +456,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "حمل حیوان خانگی در کابین یا محفظهٔ بار تنها پس از بررسی ظرفیت، نوع حیوان، وزن با باکس و مقررات کشورهای مسیر ممکن است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از خرید یا حرکت، پذیرش حیوان را با اطلاعات رزرو استعلام کنید.",
+            "مدارک دامپزشکی، واکسیناسیون و شرایط باکس و کشور مقصد را مستقل از بلیت تهیه کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-tr/any-questions/traveling-with-pets/"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +482,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-us/any-questions/restrictions/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در پروازهای ترکیش، پاوربانک و باتری‌های لیتیومی یدکی مشمول محدودیت حمل در کابین، تعداد و ظرفیت هستند؛ قرار دادن آن‌ها در بار تحویلی مجاز فرض نمی‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از سفر ظرفیت Wh هر باتری را روی برچسب دستگاه کنترل کنید.",
+            "در صورت تحویل ناگهانی چمدان کابین در گیت، پاوربانک و باتری یدکی را خارج کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-us/any-questions/restrictions/"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +605,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-de/flights/fly-different/inflight-connectivity/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "خدمات اتصال در پرواز ترکیش روی برخی هواپیماها ارائه می‌شود؛ دسترسی، بستهٔ اینترنت و مزایای پیام‌رسانی بسته به پرواز، کلاس و عضویت تفاوت دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در دسترس بودن اینترنت و نوع بسته را روی پرواز مشخص بررسی کنید.",
+            "قواعد استفاده از تجهیزات الکترونیکی و دستور خدمه را رعایت کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-de/flights/fly-different/inflight-connectivity/"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +642,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-az/flights/fly-different/fleet/aircraft-type/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست رسمی ناوگان ترکیش، مدل‌هایی از خانوادهٔ ایرباس A350 و بوئینگ 787 معرفی شده‌اند. شمار هواپیماهای فعال و مدل پرواز مشخص در این راهنما تأیید نشده است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A350-900",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.turkishairlines.com/en-az/flights/fly-different/fleet/aircraft-type/"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "787-9",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.turkishairlines.com/en-az/flights/fly-different/fleet/aircraft-type/"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع هواپیما روی یک پرواز ممکن است تغییر کند.",
+            "ذکر یک مدل، مالکیت هواپیما یا فعال بودن تمام فروندها را اثبات نمی‌کند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-az/flights/fly-different/fleet/aircraft-type/"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +721,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en-ir/miles-and-smiles/miles-features/benefits-and-privileges/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Miles&Smiles برنامهٔ مسافران پرتکرار ترکیش است و مزایای عضویت، امتیازها و دسترسی به خدمات با سطح عضویت و نوع پرواز تغییر می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد عضویت را پیش از پرواز به رزرو اضافه کنید.",
+            "امکان جمع‌آوری یا مصرف امتیاز در هر نرخ و شریک را از قوانین روز برنامه بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.turkishairlines.com/en-ir/miles-and-smiles/miles-features/benefits-and-privileges/"
+        }
+      ]
     },
     {
       "id": "complaints",

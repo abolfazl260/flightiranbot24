@@ -326,16 +326,35 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/us/en/aco/home/fly/onboard/cabin-features/signature-service.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ایرکانادا خدمات کابین ممتاز Signature Class را برای برخی پروازهای واجد شرایط ارائه می‌کند. چیدمان صندلی و امکانات در پروازهای منطقه‌ای و بین‌المللی متفاوت است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "خدمات Signature و دسترسی لانژ را فقط برای مسیر و نرخ واجد شرایط در نظر بگیرید.",
+            "برای پروازهای مشترک و Air Canada Rouge، نام اپراتور و محصول واقعی را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/us/en/aco/home/fly/onboard/cabin-features/signature-service.html"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -344,16 +363,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/us/en/aco/home/fly/onboard/cabin-features/signature-service.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در خدمات Signature Class ایرکانادا پذیرایی چندمرحله‌ای معرفی شده است؛ وعده‌های غذایی دیگر کابین‌ها با مسیر و مدت پرواز تفاوت دارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "این شرح مخصوص کابین ممتاز است و برای تمام صندلی‌های اکونومی تعمیم داده نمی‌شود.",
+            "منوی مشخص یا غذای ویژه را پیش از سفر استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/us/en/aco/home/fly/onboard/cabin-features/signature-service.html"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -362,16 +400,35 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/content/aircanada/ca/en/aco/home/fly/premium-services/maple-leaf-lounges.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "لانژهای Maple Leaf ایرکانادا برای مسافران واجد شرایط فعالیت می‌کنند؛ سطح Aeroplan، کلاس بلیت، فرودگاه و شرکت اجراکننده بر دسترسی اثر دارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "از روی داشتن کارت Aeroplan، دسترسی رایگان را بدون بررسی وضعیت فرض نکنید.",
+            "ساعت و شرایط پذیرش لانژ را برای فرودگاه مربوط بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/content/aircanada/ca/en/aco/home/fly/premium-services/maple-leaf-lounges.html"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -380,13 +437,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/us/en/aco/home/plan/special-assistance/pets.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +456,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ایرکانادا سفر برخی سگ‌ها و گربه‌ها در کابین یا بار را با محدودیت ظرفیت، اندازه، نوع هواپیما و مسیر می‌پذیرد؛ برخی مسیرها و فصل‌ها شرایط متفاوتی دارند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "حمل حیوان را برای تمام قطعات سفر جدا رزرو و تأیید کنید.",
+            "شرایط ورود به کانادا و سایر کشورها از اجازهٔ ایرلاین جداست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/us/en/aco/home/plan/special-assistance/pets.html"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +482,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/ca/en/aco/home/plan/baggage/restricted-and-prohibited-items.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در مقررات ایرکانادا، پاوربانک و باتری لیتیومی یدکی جزو اقلام دارای محدودیت هستند و ظرفیت یا تعداد بیشتر ممکن است نیازمند تأیید شرکت باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری جداشدهٔ چمدان هوشمند یا وسایل الکترونیکی را مطابق جدول رسمی در کابین حمل کنید.",
+            "باتری‌های آسیب‌دیده و مدل‌های فراخوان‌شده می‌توانند کاملاً ممنوع باشند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/ca/en/aco/home/plan/baggage/restricted-and-prohibited-items.html"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +605,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/us/en/aco/home/fly/onboard/in-flight-entertainment-and-connectivity.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "ایرکانادا Wi-Fi و سرگرمی در پرواز را روی بخش‌هایی از ناوگان ارائه می‌کند؛ امکان استفادهٔ رایگان یا پولی به هواپیما، مسیر و واجد شرایط بودن عضویت بستگی دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شبکه ACWiFi.com در راهنمای رسمی معرفی شده، اما وجود آن در هر پرواز تضمین نیست.",
+            "پوشش اینترنت و امکان استریم را روی هواپیمای مشخص بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/us/en/aco/home/fly/onboard/in-flight-entertainment-and-connectivity.html"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +642,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/ca/en/aco/home/fly/onboard/fleet.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست رسمی ناوگان ایرکانادا، بوئینگ 787-9 و ایرباس A220-300 از جمله مدل‌های معرفی‌شده هستند. تعداد فعال فعلی یا مالکیت هر فروند در این راهنما ثبت نشده است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "787-9",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.aircanada.com/ca/en/aco/home/fly/onboard/fleet.html"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A220-300",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.aircanada.com/ca/en/aco/home/fly/onboard/fleet.html"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "ناوگان Air Canada Rouge و هواپیماهای شرکت‌های منطقه‌ای ممکن است مستقل باشد.",
+            "مدل دقیق یک پرواز قابل تغییر است."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/ca/en/aco/home/fly/onboard/fleet.html"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +721,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/us/en/aco/home/aeroplan/status/tiers.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Aeroplan برنامهٔ وفاداری ایرکانادا است؛ مزایای سطح Elite، چک‌این اولویت‌دار و امکان دسترسی به خدمات ویژه به وضعیت عضویت، پرواز و نرخ بستگی دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره Aeroplan را به رزرو اضافه کنید.",
+            "شرایط کسب و استفاده از امتیازها و مزایای شرکت‌های شریک را جدا بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.aircanada.com/us/en/aco/home/aeroplan/status/tiers.html"
+        }
+      ]
     },
     {
       "id": "complaints",

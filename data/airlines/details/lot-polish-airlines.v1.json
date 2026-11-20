@@ -326,16 +326,35 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/us/en/journey/on-board"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT کلاس‌های Economy، Premium Economy و Business را در راهنمای خدمات کابین معرفی می‌کند؛ امکانات و دسترسی به کلاس‌ها با نوع هواپیما و مسیر تفاوت دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیکربندی کابین پرواز مشخص را بررسی کنید.",
+            "پریمیوم اکونومی روی همهٔ مسیرهای کوتاه‌برد الزامی نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/us/en/journey/on-board"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -344,16 +363,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/az/en/help-center/meals-and-drinks/finding-entitled-meal"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT خدمات خوراکی را بر اساس کلاس، طول پرواز و بستهٔ بلیت توضیح می‌دهد؛ برخی وعده‌ها رایگان و برخی خدمات در مسیرهای واجد شرایط قابل سفارش‌اند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "منوی پرواز مشخص را از راهنمای رسمی کنترل کنید.",
+            "خدمات اکونومی کوتاه‌برد و بلندبرد را یکسان فرض نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/az/en/help-center/meals-and-drinks/finding-entitled-meal"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -362,16 +400,35 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/pl/en/journey/additional-services/executive-lounges"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT لانژهای Polonez و Mazurek در ورشو و گزینه‌های دیگر را معرفی می‌کند؛ دسترسی به کلاس بلیت، وضعیت عضویت یا خرید خدمات وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "حق ورود و شرایط پذیرش مهمان برای پرواز مشخص بررسی شود.",
+            "داشتن بلیت LOT به‌تنهایی تضمین استفاده رایگان از لانژ نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/pl/en/journey/additional-services/executive-lounges"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -380,13 +437,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/is/en/journey/special-services/traveling-with-pets"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +456,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT حمل برخی سگ‌ها، گربه‌ها و فرت‌ها را با شرایط باکس، ظرفیت، مسیر و نوع سفر در کابین یا بخش بار معرفی می‌کند؛ رزرو و تأیید قبلی ضروری است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پذیرش حیوان در تمام پروازها تضمین نشده است.",
+            "مقررات سلامت و ورود حیوان به کشور مقصد را مستقل بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/is/en/journey/special-services/traveling-with-pets"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +482,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/al/en/help-center/electric-devices/can-i-take-powerbank-on-board"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT حمل پاوربانک را فقط در بار کابین مجاز می‌داند؛ محدودیت توان و تعداد را با قواعد به‌روز حمل باتری شرکت تطبیق دهید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اگر چمدان کابین در گیت به بار تحویلی منتقل شد، پاوربانک را خارج کنید.",
+            "ترمینال باتری‌های یدکی را از اتصال کوتاه محافظت کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/al/en/help-center/electric-devices/can-i-take-powerbank-on-board"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +605,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/gb/en/explore/about-lot/lot-initiatives/wifi-on-board"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT راه‌اندازی اینترنت Wi-Fi روی بخشی از ناوگان Dreamliner را اعلام کرده است؛ اجرای تدریجی این طرح به معنای دسترسی قطعی روی همهٔ پروازها نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "هواپیمای مشخص، پوشش شبکه و شرایط بستهٔ اینترنت را بررسی کنید.",
+            "خدمات سرگرمی داخل هواپیما را با اینترنت عمومی یکسان ندانید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/gb/en/explore/about-lot/lot-initiatives/wifi-on-board"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +642,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/eg/en/explore/about-lot/fleet/aircraft-operating-for-lot-polish-airlines"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در راهنمای رسمی ناوگان LOT خانواده‌های بوئینگ 787 و 737 معرفی شده‌اند؛ امکان بهره‌برداری توسط شرکت همکار وجود دارد و مدل اجراکنندهٔ پرواز باید جدا بررسی شود."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "787",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.lot.com/eg/en/explore/about-lot/fleet/aircraft-operating-for-lot-polish-airlines"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "737",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.lot.com/eg/en/explore/about-lot/fleet/aircraft-operating-for-lot-polish-airlines"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدل هواپیما و اپراتور را از کارت پرواز یا رزرو نهایی بررسی کنید.",
+            "تعداد فروندهای فعال و وضعیت مالکیت گزارش نمی‌شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/eg/en/explore/about-lot/fleet/aircraft-operating-for-lot-polish-airlines"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +721,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/us/en/explore/miles-and-more"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT از برنامهٔ Miles & More پشتیبانی می‌کند؛ کسب و مصرف مایل و Points به نوع نرخ و شرایط سفر بستگی دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد عضویت را در زمان خرید یا پیش از پرواز ثبت کنید.",
+            "شرایط دریافت مزایا و امتیاز برای شرکت‌های شریک یکسان نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lot.com/us/en/explore/miles-and-more"
+        }
+      ]
     },
     {
       "id": "complaints",

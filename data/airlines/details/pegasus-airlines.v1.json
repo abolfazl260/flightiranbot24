@@ -344,16 +344,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/travel-services/flight-services/pegasus-cafe"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Pegasus Cafe غذا و نوشیدنی قابل خرید یا سفارش پیش از پرواز را معرفی می‌کند؛ وجود خوراکی رایگان در همهٔ بسته‌های بلیت تضمین‌شده نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "امکان پیش‌سفارش و نوع منو را روی همان پرواز بررسی کنید.",
+            "در پروازهای کوتاه ممکن است تنوع اقلام محدود باشد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.flypgs.com/en/travel-services/flight-services/pegasus-cafe"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -380,13 +399,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/travelling-with-pets"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +418,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پگاسوس برای سفر با حیوان خانگی خدماتی با رزرو و هزینهٔ جداگانه معرفی می‌کند؛ نوع حیوان، وزن، مسیر و شرایط باکس تعیین‌کننده‌اند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شرایط حمل در کابین و قسمت بار یکسان نیست.",
+            "مقررات مقصد، ترانزیت و پذیرش نوع حیوان را پیش از خرید تأیید کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.flypgs.com/en/travelling-with-pets"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +444,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/useful-info/info-about-flights/general-rules"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در مقررات عمومی پگاسوس محدودیت‌هایی برای باتری‌های لیتیومی، وسایل الکترونیکی و اقلام خطرناک آمده است؛ محل مجاز حمل به نوع و ظرفیت باتری وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پاوربانک و باتری یدکی را هنگام تحویل چمدان کابین از بار خارج کنید.",
+            "در مورد وسایل پزشکی یا باتری‌های پرظرفیت با شرکت هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.flypgs.com/en/useful-info/info-about-flights/general-rules"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +567,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/flywatch-on-boarddooooo"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پگاسوس خدمات سرگرمی Fly & Watch را با اتصال محلی Wi-Fi دستگاه شخصی معرفی می‌کند؛ اتصال به این شبکه لزوماً به معنای دسترسی به اینترنت عمومی نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای تماشای محتوا از دستگاه سازگار استفاده کنید.",
+            "دردسترس‌بودن این سرویس در همهٔ هواپیماها و بسته‌های نرخی را قطعی فرض نکنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.flypgs.com/en/flywatch-on-boarddooooo"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +604,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/sustainability"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پگاسوس در گزارش رسمی پایداری خود خانواده‌های ایرباس A320neo و A321neo را جزو ناوگان معرفی می‌کند؛ درصد ترکیب ناوگان در این صفحه به‌عنوان آمار لحظه‌ای استفاده نشده است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A320neo",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flypgs.com/en/sustainability"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A321neo",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flypgs.com/en/sustainability"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "سفارش هواپیما با تحویل و بهره‌برداری عملیاتی یکسان نیست.",
+            "تعداد فروندهای حاضر در خدمت در این راهنما نامشخص باقی می‌ماند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.flypgs.com/en/sustainability"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +683,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/bolbol/what-is-bolbol"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Pegasus BolBol برنامهٔ وفاداری پگاسوس است و کسب و استفاده از BolPoints را طبق قوانین برنامه فراهم می‌کند؛ مزایا با شرایط عضویت و نوع خرید تغییر می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد عضویت را به رزرو مرتبط کنید.",
+            "امتیاز و مزایای هر بسته یا کمپین را مستقل بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.flypgs.com/en/bolbol/what-is-bolbol"
+        }
+      ]
     },
     {
       "id": "complaints",

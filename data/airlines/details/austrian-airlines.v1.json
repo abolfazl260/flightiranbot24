@@ -326,16 +326,35 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/us/en/fly/travel-classes"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین در راهنمای رسمی، کلاس‌های Economy، Premium Economy و Business را توضیح می‌دهد؛ وجود Premium Economy روی همهٔ مسیرهای کوتاه‌برد تضمین نشده است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "تفاوت نرخ بلیت با کلاس کابین را هنگام خرید بررسی کنید.",
+            "امکانات واقعی به نوع هواپیما و پرواز بستگی دارد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/us/en/fly/travel-classes"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -344,16 +363,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/cz/en/fly/on-board/culinary-services"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین روی مسیرهای کوتاه و میان‌برد از خدمات Austrian Melangerie و روی پروازهای بلندمدت از خدمات پذیرایی متناسب با کلاس سفر استفاده می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بخشی از اقلام Melangerie برای خرید ارائه می‌شود؛ رایگان بودن تمام اقلام فرض نشود.",
+            "غذای ویژه و حساسیت غذایی را پیش از پرواز با شرکت هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/cz/en/fly/on-board/culinary-services"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -362,16 +400,35 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/us/en/lounges-vienna-airport"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین برای فرودگاه وین لانژهای اختصاصی و برای برخی فرودگاه‌ها لانژ شریک معرفی می‌کند؛ کلاس پرواز و وضعیت عضویت در دسترسی اثر دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کارت پرواز، شرایط عضویت و دسترسی مهمان را برای همان روز کنترل کنید.",
+            "وجود لانژ در وین به معنای دسترسی رایگان همهٔ مسافران نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/us/en/lounges-vienna-airport"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -380,13 +437,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/al/en/plan/special-requirements/travelling-with-animals"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +456,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین امکان جابه‌جایی برخی حیوانات خانگی در کابین یا بار را با شرایط نوع حیوان، وزن همراه با باکس و قوانین کشور مقصد ارائه می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پذیرش را برای تک‌تک پروازها، به‌ویژه در سفر چندایرلاینی، از قبل تأیید کنید.",
+            "مدارک بهداشتی، محدودیت نژاد و مقررات ترانزیت جداگانه بررسی شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/al/en/plan/special-requirements/travelling-with-animals"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +482,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/gb/en/electronic-devices-and-batteries"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین پاوربانک و باتری‌های جداگانه را در طبقهٔ اقلام خطرناک با محدودیت مشخص قرار می‌دهد؛ از قرار دادن آن‌ها در بار تحویلی خودداری و قوانین دقیق را بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "ظرفیت بر حسب Wh و تعداد مجاز از منبع رسمی کنترل شود.",
+            "دربارهٔ باتری‌های بزرگ یا پزشکی پیش از سفر تأیید شرکت را بگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/gb/en/electronic-devices-and-batteries"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +605,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/at/en/internet-on-board"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین خدمات FlyNet را برای بخشی از ناوگان A320 و بوئینگ 787 اعلام کرده است؛ دسترسی و پیام‌رسانی ممکن است به نوع هواپیما و عضویت وابسته باشد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وجود Wi-Fi را برای پرواز مشخص بررسی کنید.",
+            "خدمات رایگان یا پولی بدون تطبیق با نوع هواپیما تضمین نمی‌شوند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/at/en/internet-on-board"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +642,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/us/en/aircraft-fleet"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در فهرست رسمی آسترین، مدل‌های بوئینگ 787-9 و ایرباس A320 معرفی شده‌اند؛ تعداد و وضعیت فعال فروندها برای روز سفر وارد نشده است."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "787-9",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.austrian.com/us/en/aircraft-fleet"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A320",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.austrian.com/us/en/aircraft-fleet"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیکربندی کابین با نوع هواپیما تفاوت دارد.",
+            "تغییر مدل هواپیما پس از رزرو ممکن است رخ دهد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/us/en/aircraft-fleet"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +721,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.austrian.com/de/en/miles-and-more"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "آسترین از برنامهٔ Miles & More برای کسب مایل و امتیازهای وضعیت مسافر پشتیبانی می‌کند؛ مزایای دقیق با سطح عضویت و بلیت تغییر می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "ثبت شماره عضویت پیش از سفر را بررسی کنید.",
+            "واجد شرایط بودن پروازهای شرکت همکار را جدا کنترل کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.austrian.com/de/en/miles-and-more"
+        }
+      ]
     },
     {
       "id": "complaints",
