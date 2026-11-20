@@ -840,7 +840,9 @@
     {
       "experience_id": "gh168-6629075104-3",
       "airline_ids": [
-        "kish-air"
+        "air-canada",
+        "kish-air",
+        "lufthansa"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629075104",

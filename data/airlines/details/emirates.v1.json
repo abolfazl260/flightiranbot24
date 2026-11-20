@@ -1137,7 +1137,9 @@
     {
       "experience_id": "gh168-6629266764-4",
       "airline_ids": [
-        "emirates"
+        "emirates",
+        "lufthansa",
+        "turkish-airlines"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629266764",
@@ -1159,7 +1161,8 @@
     {
       "experience_id": "gh168-6629272217-2",
       "airline_ids": [
-        "emirates"
+        "emirates",
+        "lufthansa"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629272217",

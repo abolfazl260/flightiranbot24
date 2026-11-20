@@ -1,0 +1,647 @@
+{
+  "schema_version": 1,
+  "airline_id": "lot-polish-airlines",
+  "metadata": {
+    "status": "published",
+    "source_urls": [
+      "https://www.iata.org/en/about/members/airline-list/lot-polish-airlines/116/"
+    ],
+    "verified_at": "2026-11-20T00:00:00Z",
+    "effective_from": null,
+    "effective_to": null,
+    "stale": false,
+    "confidence": "official"
+  },
+  "sections": [
+    {
+      "id": "official-access",
+      "title_fa": "وب‌سایت رسمی و هویت شرکت",
+      "icon": "services",
+      "order": 5,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/lot-polish-airlines/116/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "هویت و کدهای لات پولیش ایرلاینز در فهرست IATA ثبت شده است. برای خرید و مدیریت بلیت به نشانی رسمی شرکت یا فروشندهٔ معتبر مراجعه کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "وب‌سایت رسمی",
+          "url": "https://www.lot.com/"
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت هویت در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/lot-polish-airlines/116/"
+        }
+      ]
+    },
+    {
+      "id": "baggage",
+      "title_fa": "بار مجاز، کابین و اضافه‌بار",
+      "icon": "ticket-rules",
+      "order": 10,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/pl/en/help-center/baggage/baggage-allowance-according-to-travel-class"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "lot-polish-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط دقیق همان مسیر، نرخ بلیت و شرکت اجراکننده بر راهنمای عمومی مقدم است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "سهمیهٔ بار برای لات پولیش ایرلاینز ممکن است به نرخ، کلاس، مسیر، زمان صدور و شرکت اجراکننده وابسته باشد. عدد یا هزینهٔ ثابت برای تمام پروازها معتبر نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بار تحویلی، کیف کابین و وسایل شخصی قواعد مستقل دارند؛ قبل از حرکت اطلاعات بلیت را بررسی کنید.",
+            "در رزروهای دارای چند ایرلاین، قوانین بار ممکن است با سفرهای مستقیم تفاوت داشته باشد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "قوانین بار شرکت",
+          "url": "https://www.lot.com/pl/en/help-center/baggage/baggage-allowance-according-to-travel-class"
+        }
+      ]
+    },
+    {
+      "id": "ticket-rules",
+      "title_fa": "کنسلی، تغییر و استرداد بلیت",
+      "icon": "ticket-rules",
+      "order": 20,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/pl/en/my-reservation"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "lot-polish-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط دقیق همان مسیر، نرخ بلیت و شرکت اجراکننده بر راهنمای عمومی مقدم است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "شرایط تغییر یا استرداد بلیت لات پولیش ایرلاینز به نوع نرخ، صادرکننده، زمان درخواست و استفاده از قطعات سفر وابسته است. پیش از اقدام، جریمه و تفاوت نرخ را در سیستم رسمی بررسی کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "شرایط و مدیریت بلیت",
+          "url": "https://www.lot.com/pl/en/my-reservation"
+        }
+      ]
+    },
+    {
+      "id": "checkin",
+      "title_fa": "چک‌این و کارت پرواز",
+      "icon": "ticket-rules",
+      "order": 30,
+      "kind": "policy",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/ua/en/check-in"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "lot-polish-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "شرایط دقیق همان مسیر، نرخ بلیت و شرکت اجراکننده بر راهنمای عمومی مقدم است."
+      },
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "چک‌این آنلاین و تحویل بار در هر فرودگاه محدودیت زمانی مخصوص خود را دارند. حتی با کارت پرواز آنلاین ممکن است کنترل حضوری گذرنامه و مجوزهای سفر ضروری باشد."
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی چک‌این",
+          "url": "https://www.lot.com/ua/en/check-in"
+        }
+      ]
+    },
+    {
+      "id": "flight-status",
+      "title_fa": "وضعیت پرواز و تأخیر",
+      "icon": "services",
+      "order": 35,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/pl/en/flight-status"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "وضعیت روز پرواز لات پولیش ایرلاینز را با شمارهٔ پرواز و تاریخ از منابع رسمی و نمایشگر فرودگاه بررسی کنید. این راهنما دادهٔ لحظه‌ای یا تضمین ساعت حرکت ارائه نمی‌کند."
+        },
+        {
+          "type": "link",
+          "title_fa": "مرجع رسمی وضعیت پرواز",
+          "url": "https://www.lot.com/pl/en/flight-status"
+        }
+      ]
+    },
+    {
+      "id": "contact",
+      "title_fa": "پشتیبانی و ارتباط رسمی",
+      "icon": "services",
+      "order": 40,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/am/en/help-center"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای مشکلات رزرو، تغییر بلیت و خدمات ویژه از سامانهٔ پشتیبانی لات پولیش ایرلاینز یا صادرکنندهٔ بلیت اقدام کنید. به شماره‌تلفن‌ها و حساب‌های غیررسمی اعتماد نکنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "پشتیبانی رسمی",
+          "url": "https://www.lot.com/am/en/help-center"
+        }
+      ]
+    },
+    {
+      "id": "lost-baggage",
+      "title_fa": "گم‌شدن، تأخیر یا آسیب بار",
+      "icon": "services",
+      "order": 42,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/gb/en/journey/baggage/problems-with-baggage"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "اگر بار تحویلی در مقصد نرسید یا آسیب دید، پیش از ترک سالن بار گزارش مربوط را ثبت کنید و شناسهٔ پرونده را نگه دارید. مهلت شکایت و جبران خسارت به مسیر و مقررات بستگی دارد."
+        },
+        {
+          "type": "link",
+          "title_fa": "پیگیری بار از مرجع رسمی",
+          "url": "https://www.lot.com/gb/en/journey/baggage/problems-with-baggage"
+        }
+      ]
+    },
+    {
+      "id": "special-assistance",
+      "title_fa": "خدمات ویژه و پشتیبانی حرکتی",
+      "icon": "services",
+      "order": 45,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/az/en/journey/special-services/accessible-lot/special-assistance"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای ویلچر، همراهی کودک یا نیاز پزشکی با لات پولیش ایرلاینز پیش از سفر هماهنگ کنید. ثبت درخواست به معنای تأیید قطعی یا تضمین ارائهٔ خدمت در همهٔ پروازها نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "درخواست و راهنمای خدمات",
+          "url": "https://www.lot.com/az/en/journey/special-services/accessible-lot/special-assistance"
+        }
+      ]
+    },
+    {
+      "id": "seat-selection",
+      "title_fa": "انتخاب صندلی و خدمات اضافه",
+      "icon": "services",
+      "order": 50,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/pl/en/my-reservation"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "امکان انتخاب صندلی، هزینهٔ آن و شرایط تخصیص صندلی کودک به کلاس نرخی و موجودی همان پرواز بستگی دارد. خدماتی مانند بسینت را پیشاپیش با ایرلاین تأیید کنید."
+        },
+        {
+          "type": "link",
+          "title_fa": "مدیریت رزرو",
+          "url": "https://www.lot.com/pl/en/my-reservation"
+        }
+      ]
+    },
+    {
+      "id": "cabin",
+      "title_fa": "کلاس کابین و امکانات",
+      "icon": "services",
+      "order": 55,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "catering",
+      "title_fa": "پذیرایی و غذای ویژه",
+      "icon": "services",
+      "order": 57,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "lounges",
+      "title_fa": "لانژ و خدمات ویژه فرودگاهی",
+      "icon": "services",
+      "order": 59,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "pets",
+      "title_fa": "حمل حیوان خانگی",
+      "icon": "services",
+      "order": 60,
+      "kind": "policy",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": {
+        "route": null,
+        "fare_brand": null,
+        "cabin_class": null,
+        "operating_carrier": "lot-polish-airlines",
+        "seller": "unknown",
+        "journey_type": "unknown",
+        "note_fa": "منبع کافی برای انتشار تأیید نشده است."
+      },
+      "blocks": []
+    },
+    {
+      "id": "batteries",
+      "title_fa": "باتری، پاوربانک و اقلام محدود",
+      "icon": "services",
+      "order": 65,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "travel-documents",
+      "title_fa": "مدارک سفر و ترانزیت",
+      "icon": "services",
+      "order": 70,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/ua/en/check-in"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای پرواز با لات پولیش ایرلاینز مدارک سفر و ترانزیت هر کشور را از مراجع رسمی بررسی کنید. پرواز چندمرحله‌ای ممکن است به بررسی مجوزهای مستقل نیاز داشته باشد؛ ثبت چک‌این تضمین ورود مرزی نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای چک‌این و مدارک",
+          "url": "https://www.lot.com/ua/en/check-in"
+        }
+      ]
+    },
+    {
+      "id": "practical-faq",
+      "title_fa": "پرسش‌های کاربردی مسافر",
+      "icon": "services",
+      "order": 75,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/pl/en/help-center/baggage/baggage-allowance-according-to-travel-class"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قبل از سفر با لات پولیش ایرلاینز نام شرکت اجراکنندهٔ هر قطعه، فرودگاه تغییر پرواز و وضعیت بار را کنترل کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در بلیت‌های جداگانه، انتقال بار به مقصد نهایی را از قبل قطعی فرض نکنید.",
+            "در مسیرهای کانکشن، اختلاف ساعت محلی، ترمینال و زمان خروج/ورود را بررسی کنید.",
+            "گزارش‌های شخصی مسافران جایگزین شرایط رسمی همان بلیت نیستند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "بررسی شرایط بار",
+          "url": "https://www.lot.com/pl/en/help-center/baggage/baggage-allowance-according-to-travel-class"
+        }
+      ]
+    },
+    {
+      "id": "network",
+      "title_fa": "شبکه مسیرها و برنامه فعال",
+      "icon": "services",
+      "order": 80,
+      "kind": "network",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "onboard-connectivity",
+      "title_fa": "وای‌فای و سرگرمی در پرواز",
+      "icon": "services",
+      "order": 85,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "fleet",
+      "title_fa": "ناوگان و مدل هواپیما",
+      "icon": "services",
+      "order": 90,
+      "kind": "fleet",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "loyalty",
+      "title_fa": "باشگاه مشتریان و امتیاز",
+      "icon": "services",
+      "order": 95,
+      "kind": "information",
+      "metadata": {
+        "status": "draft",
+        "source_urls": [],
+        "verified_at": null,
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "unverified"
+      },
+      "scope": null,
+      "blocks": []
+    },
+    {
+      "id": "complaints",
+      "title_fa": "شکایت و حقوق مسافر",
+      "icon": "services",
+      "order": 96,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.lot.com/am/en/help-center"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "برای شکایت از تاخیر، کنسلی، بار یا خدمات، مستندات سفر را از مسیر رسمی لات پولیش ایرلاینز ارسال کنید. حقوق مسافر به قوانین محل پرواز، مقصد و شرایط حمل بستگی دارد و نتیجهٔ درخواست از پیش مشخص نیست."
+        },
+        {
+          "type": "link",
+          "title_fa": "سامانه پیگیری و پشتیبانی",
+          "url": "https://www.lot.com/am/en/help-center"
+        }
+      ]
+    },
+    {
+      "id": "introduction",
+      "title_fa": "معرفی ایرلاین",
+      "icon": "services",
+      "order": 100,
+      "kind": "information",
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/lot-polish-airlines/116/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      },
+      "scope": null,
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "LOT Polish Airlines با کد یاتای LO و ایکائوی LOT در کشور لهستان ثبت شده است. این صفحه راهنمای مسافر است و ادعایی دربارهٔ رتبه ایمنی، ناوگان فعال یا برنامهٔ امروز پروازها ندارد."
+        },
+        {
+          "type": "link",
+          "title_fa": "ثبت شرکت در IATA",
+          "url": "https://www.iata.org/en/about/members/airline-list/lot-polish-airlines/116/"
+        }
+      ]
+    }
+  ],
+  "published_reviews": [],
+  "experience_links": [
+    {
+      "experience_id": "gh168-6629078682-3",
+      "airline_ids": [
+        "lot-polish-airlines"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629078682",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    },
+    {
+      "experience_id": "gh168-6629082132-2",
+      "airline_ids": [
+        "lot-polish-airlines",
+        "taban-air"
+      ],
+      "relationship": "operating",
+      "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629082132",
+      "consent_status": "unknown",
+      "moderation_status": "pending",
+      "privacy_reviewed": false
+    }
+  ]
+}

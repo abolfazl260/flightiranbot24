@@ -944,7 +944,8 @@
     {
       "experience_id": "gh168-6629082132-5",
       "airline_ids": [
-        "iran-airtour"
+        "iran-airtour",
+        "turkish-airlines"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629082132",

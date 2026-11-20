@@ -16,7 +16,7 @@ spec = importlib.util.spec_from_file_location(
 )
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
-NOW = datetime(2026, 11, 15, tzinfo=timezone.utc)
+NOW = datetime(2026, 11, 20, tzinfo=timezone.utc)
 
 
 def test_actual_catalog_and_independent_snapshots():
@@ -29,6 +29,8 @@ def test_actual_catalog_and_independent_snapshots():
         "ata-air", "varesh-air", "caspian-air", "sepehran-air",
         "taban-air", "karun-air", "pars-air", "chabahar-air",
         "fly-persia", "ava-airlines", "yazd-airways",
+        "turkish-airlines", "lufthansa", "qatar-airways", "air-canada",
+        "austrian-airlines", "pegasus-airlines", "lot-polish-airlines",
     ]
     coverage = {}
     for entry in index["airlines"]:
@@ -61,7 +63,14 @@ def test_actual_catalog_and_independent_snapshots():
                         "chabahar-air": {"published": 13, "draft": 7},
                         "fly-persia": {"published": 14, "draft": 8},
                         "ava-airlines": {"published": 20, "draft": 2},
-                        "yazd-airways": {"published": 14, "draft": 8}}
+                        "yazd-airways": {"published": 14, "draft": 8},
+                        "turkish-airlines": {"published": 13, "draft": 9},
+                        "lufthansa": {"published": 13, "draft": 9},
+                        "qatar-airways": {"published": 13, "draft": 9},
+                        "air-canada": {"published": 13, "draft": 9},
+                        "austrian-airlines": {"published": 13, "draft": 9},
+                        "pegasus-airlines": {"published": 13, "draft": 9},
+                        "lot-polish-airlines": {"published": 13, "draft": 9}}
     for carrier in ("fly-persia", "ava-airlines", "yazd-airways"):
         item = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
         assert item["published_reviews"] == []
@@ -825,7 +834,7 @@ def test_archive_associations_are_lossless_exact_and_not_published():
     records = {r["archive_id"]: r for r in archive["records"]}
     assert len(mapping["records"]) == len(records) == 51
     assert len({r["archive_id"] for r in mapping["records"]}) == 51
-    assert sum(bool(row["airline_ids"]) for row in mapping["records"]) == 22
+    assert sum(bool(row["airline_ids"]) for row in mapping["records"]) == 47
     assert mapping["records"][0]["airline_ids"] == ["iran-airtour", "varesh-air"]
     assert records[mapping["records"][0]["archive_id"]]["author_original"] == "Fatima Dorostkar"
     backlinks = {}
@@ -840,7 +849,60 @@ def test_archive_associations_are_lossless_exact_and_not_published():
             assert link["moderation_status"] == "pending"
             assert link["privacy_reviewed"] is False
             backlinks.setdefault(source["archive_id"], set()).add(row["airline_id"])
-    assert sum(map(len, backlinks.values())) == 24
+    assert sum(map(len, backlinks.values())) == 75
     for record in mapping["records"]:
         assert set(record["airline_ids"]) == backlinks.get(record["archive_id"], set())
         assert record["publication"] == "withheld" and record["consent_evidence"] is None
+
+def test_seven_international_airline_guides_and_archive_guardrails():
+    expected = {
+        "turkish-airlines": ("TK", "THY"),
+        "lufthansa": ("LH", "DLH"),
+        "qatar-airways": ("QR", "QTR"),
+        "air-canada": ("AC", "ACA"),
+        "austrian-airlines": ("OS", "AUA"),
+        "pegasus-airlines": ("PC", "PGT"),
+        "lot-polish-airlines": ("LO", "LOT"),
+    }
+    index = module.read_json(ROOT / "data/airlines/airline-index.v1.json")
+    entries = {r["airline_id"]: r for r in index["airlines"]}
+    assert len(entries) == 27
+    assert not set(expected).difference(entries)
+    originals = module.read_json(ROOT / "data/experiences/archive/github-168.v1.json")
+    mapping = module.read_json(ROOT / "data/experiences/archive/index.v1.json")
+    assert len(originals["records"]) == len(mapping["records"]) == 51
+    archive = {record["archive_id"]: record for record in originals["records"]}
+    assert sum(bool(set(record["airline_ids"]) & expected.keys())
+               for record in mapping["records"]) == 36
+    assert sum(len(record["airline_ids"]) for record in mapping["records"]) == 75
+    for identifier, (iata, icao) in expected.items():
+        entry = entries[identifier]
+        assert {c["system"]: c["value"] for c in entry["identity"]["codes"]} == {
+            "iata": iata, "icao": icao,
+        }
+        assert entry["metadata"]["status"] == "published"
+        assert entry["metadata"]["source_urls"][0].startswith(
+            "https://www.iata.org/en/about/members/airline-list/"
+        )
+        detail = module.read_json(ROOT / "data/airlines" / entry["detail_path"])
+        assert detail["airline_id"] == identifier
+        assert detail["published_reviews"] == []
+        assert len(detail["sections"]) == 22
+        assert sum(s["metadata"]["status"] == "published" for s in detail["sections"]) == 13
+        assert all(s["blocks"] and s["metadata"]["source_urls"]
+                   for s in detail["sections"] if s["metadata"]["status"] == "published")
+        assert all(not s["blocks"] and s["metadata"]["verified_at"] is None
+                   for s in detail["sections"] if s["metadata"]["status"] == "draft")
+        for link in detail["experience_links"]:
+            assert link["experience_id"] in archive
+            assert link["consent_status"] == "unknown"
+            assert link["moderation_status"] == "pending"
+            assert link["privacy_reviewed"] is False
+    assert sum(
+        len(module.read_json(ROOT / "data/airlines" / entries[airline]["detail_path"])[
+            "experience_links"
+        ]) for airline in expected
+    ) == 51
+    for row in mapping["records"]:
+        assert row["archive_id"] in archive
+        assert row["publication"] == "withheld" and row["consent_evidence"] is None

@@ -892,6 +892,315 @@
         "stale": false,
         "confidence": "secondary"
       }
+    },
+    {
+      "airline_id": "turkish-airlines",
+      "detail_path": "details/turkish-airlines.v1.json",
+      "identity": {
+        "name_fa": "ترکیش ایرلاینز",
+        "name_en": "Turkish Airlines",
+        "legal_name": "Turkish Airlines Inc. (Turk Hava Yollari A.O.)",
+        "country": "TR",
+        "country_fa": "ترکیه",
+        "aliases": [
+          "ترکیش",
+          "Turkish"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "TK",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "THY",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.turkishairlines.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/turkish-airlines/196/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "lufthansa",
+      "detail_path": "details/lufthansa.v1.json",
+      "identity": {
+        "name_fa": "لوفت‌هانزا",
+        "name_en": "Lufthansa",
+        "legal_name": "Deutsche Lufthansa Aktiengesellschaft",
+        "country": "DE",
+        "country_fa": "آلمان",
+        "aliases": [
+          "لوفتانزا",
+          "لوفتهانزا"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "LH",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "DLH",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.lufthansa.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/lufthansa/115/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "qatar-airways",
+      "detail_path": "details/qatar-airways.v1.json",
+      "identity": {
+        "name_fa": "قطر ایرویز",
+        "name_en": "Qatar Airways",
+        "legal_name": "Qatar Airways Company (W.L.L.)",
+        "country": "QA",
+        "country_fa": "قطر",
+        "aliases": [
+          "قطری",
+          "هواپیمایی قطر"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "QR",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "QTR",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.qatarairways.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/qatar-airways/277/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "air-canada",
+      "detail_path": "details/air-canada.v1.json",
+      "identity": {
+        "name_fa": "ایرکانادا",
+        "name_en": "Air Canada",
+        "legal_name": "Air Canada",
+        "country": "CA",
+        "country_fa": "کانادا",
+        "aliases": [
+          "ایر کانادا",
+          "AirCanada"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "AC",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "ACA",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.aircanada.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/air-canada/21/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "austrian-airlines",
+      "detail_path": "details/austrian-airlines.v1.json",
+      "identity": {
+        "name_fa": "آسترین ایرلاینز",
+        "name_en": "Austrian Airlines",
+        "legal_name": "Austrian Airlines AG",
+        "country": "AT",
+        "country_fa": "اتریش",
+        "aliases": [
+          "آسترین",
+          "آستریان"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "OS",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "AUA",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.austrian.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/austrian/60/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "pegasus-airlines",
+      "detail_path": "details/pegasus-airlines.v1.json",
+      "identity": {
+        "name_fa": "پگاسوس",
+        "name_en": "Pegasus Airlines",
+        "legal_name": "Pegasus Hava Tasimaciligi AS",
+        "country": "TR",
+        "country_fa": "ترکیه",
+        "aliases": [
+          "پگاسوس ایرلاینز"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "PC",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "PGT",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.flypgs.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/pegasus-airlines/378/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
+    },
+    {
+      "airline_id": "lot-polish-airlines",
+      "detail_path": "details/lot-polish-airlines.v1.json",
+      "identity": {
+        "name_fa": "لات پولیش ایرلاینز",
+        "name_en": "LOT Polish Airlines",
+        "legal_name": "Polskie Linie Lotnicze \"LOT\" Spolka Akcyjna",
+        "country": "PL",
+        "country_fa": "لهستان",
+        "aliases": [
+          "لات پولیش",
+          "لات",
+          "لوت",
+          "LOT"
+        ],
+        "former_names": [],
+        "codes": [
+          {
+            "system": "iata",
+            "value": "LO",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          },
+          {
+            "system": "icao",
+            "value": "LOT",
+            "valid_from": null,
+            "valid_to": null,
+            "shared": false
+          }
+        ],
+        "website": "https://www.lot.com/"
+      },
+      "metadata": {
+        "status": "published",
+        "source_urls": [
+          "https://www.iata.org/en/about/members/airline-list/lot-polish-airlines/116/"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
+        "effective_from": null,
+        "effective_to": null,
+        "stale": false,
+        "confidence": "official"
+      }
     }
   ]
 }

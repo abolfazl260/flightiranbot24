@@ -4,10 +4,11 @@ import fs from 'node:fs';
 import {parseGuideIndex,parseGuideDetail,filterGuides,fetchGuideJson} from '../../src/flightiran/webapp/static/guide-catalog.mjs';
 const read=p=>JSON.parse(fs.readFileSync(new URL('../../'+p,import.meta.url),'utf8'));
 const now=Date.parse('2026-11-15T12:00:00Z');
+const internationalNow=Date.parse('2026-11-20T12:00:00Z');
 const detail=()=>read('data/airlines/details/emirates.v1.json');
 test('shared Android airline data preserves identity, draft gates, fleet unknowns and no synthetic scores',()=>{
- const rows=parseGuideIndex(read('data/airlines/airline-index.v1.json'),'airlines',[],now);
- assert.equal(rows.length,20);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
+ const rows=parseGuideIndex(read('data/airlines/airline-index.v1.json'),'airlines',[],internationalNow);
+ assert.equal(rows.length,27);assert.equal(filterGuides(rows,'ايران اير','iran')[0].id,'iran-air');
  assert.equal(filterGuides(rows,'ماهان','iran')[0].id,'mahan-air');
  assert.equal(filterGuides(rows,'آسمان','iran')[0].id,'iran-aseman');
  assert.equal(filterGuides(rows,'ایران ایرتور','iran')[0].id,'iran-airtour');
@@ -27,6 +28,19 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
  assert.equal(filterGuides(rows,'آوا','iran')[0].id,'ava-airlines');
  assert.equal(filterGuides(rows,'یزد ایر','iran')[0].id,'yazd-airways');
  assert.equal(filterGuides(rows,'uae','foreign')[0].id,'emirates');
+ for(const [id,code] of [
+  ['turkish-airlines','TK'],['lufthansa','LH'],['qatar-airways','QR'],
+  ['air-canada','AC'],['austrian-airlines','OS'],['pegasus-airlines','PC'],
+  ['lot-polish-airlines','LO']
+ ]) {
+  const match=rows.find(r=>r.id===id);
+  assert(match && match.codes.includes(code) && match.country!=='IR');
+  const guide=parseGuideDetail(read('data/airlines/details/'+id+'.v1.json'),'airlines',id,internationalNow);
+  assert.equal(guide.sections.length,13);
+  assert.equal(guide.reviewCount,0);
+  assert.equal(guide.average,null);
+ }
+
  for (const [id,available,drafted,fleetCount] of [['mahan-air',19,1,6],['iran-aseman',14,4,5],['iran-airtour',15,4,6],['qeshm-air',17,2,4],['kish-air',15,5,4],['zagros-air',14,6,4],['meraj-air',14,6,4],['ata-air',16,4,7],['varesh-air',18,2,3],['caspian-air',14,6,7],['sepehran-air',19,2,5],['taban-air',15,6,5],['karun-air',14,6,4],['pars-air',14,6,3],['chabahar-air',13,7,4],['fly-persia',14,8,2],['ava-airlines',20,2,4],['yazd-airways',14,8,3]]) {
   const d=read('data/airlines/details/'+id+'.v1.json');
   assert.equal(d.sections.filter(s=>s.metadata.status==='draft').length,drafted);
