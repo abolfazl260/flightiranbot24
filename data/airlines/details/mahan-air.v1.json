@@ -1018,6 +1018,7 @@
     {
       "experience_id": "gh168-6629078682-2",
       "airline_ids": [
+        "lufthansa",
         "mahan-air"
       ],
       "relationship": "operating",
@@ -1029,7 +1030,9 @@
     {
       "experience_id": "gh168-6629078682-6",
       "airline_ids": [
-        "mahan-air"
+        "mahan-air",
+        "qatar-airways",
+        "turkish-airlines"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629078682",
@@ -1040,7 +1043,8 @@
     {
       "experience_id": "gh168-6629078682-7",
       "airline_ids": [
-        "mahan-air"
+        "mahan-air",
+        "qatar-airways"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629078682",

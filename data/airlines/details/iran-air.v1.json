@@ -1028,7 +1028,9 @@
     {
       "experience_id": "gh168-6629075104-2",
       "airline_ids": [
-        "iran-air"
+        "air-canada",
+        "iran-air",
+        "turkish-airlines"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629075104",
@@ -1039,7 +1041,8 @@
     {
       "experience_id": "gh168-6629075104-5",
       "airline_ids": [
-        "iran-air"
+        "iran-air",
+        "lufthansa"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629075104",
@@ -1050,7 +1053,8 @@
     {
       "experience_id": "gh168-6629082132-1",
       "airline_ids": [
-        "iran-air"
+        "iran-air",
+        "turkish-airlines"
       ],
       "relationship": "operating",
       "source_url": "https://github.com/abolfazl260/flightiranbot24/issues/168#issuecomment-6629082132",

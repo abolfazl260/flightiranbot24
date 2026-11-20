@@ -920,6 +920,7 @@
     {
       "experience_id": "gh168-6629082132-2",
       "airline_ids": [
+        "lot-polish-airlines",
         "taban-air"
       ],
       "relationship": "operating",

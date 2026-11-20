@@ -19,7 +19,9 @@
       "archive_id": "gh168-6629075104-2",
       "airport_ids": [],
       "airline_ids": [
-        "iran-air"
+        "air-canada",
+        "iran-air",
+        "turkish-airlines"
       ],
       "country_codes": [],
       "routes": [],
@@ -32,7 +34,9 @@
       "archive_id": "gh168-6629075104-3",
       "airport_ids": [],
       "airline_ids": [
-        "kish-air"
+        "air-canada",
+        "kish-air",
+        "lufthansa"
       ],
       "country_codes": [],
       "routes": [],
@@ -44,7 +48,10 @@
     {
       "archive_id": "gh168-6629075104-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa",
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -56,7 +63,8 @@
       "archive_id": "gh168-6629075104-5",
       "airport_ids": [],
       "airline_ids": [
-        "iran-air"
+        "iran-air",
+        "lufthansa"
       ],
       "country_codes": [],
       "routes": [],
@@ -68,7 +76,9 @@
     {
       "archive_id": "gh168-6629075104-6",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -79,7 +89,9 @@
     {
       "archive_id": "gh168-6629075104-7",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -115,6 +127,7 @@
       "archive_id": "gh168-6629078682-2",
       "airport_ids": [],
       "airline_ids": [
+        "lufthansa",
         "mahan-air"
       ],
       "country_codes": [],
@@ -127,7 +140,9 @@
     {
       "archive_id": "gh168-6629078682-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lot-polish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -163,7 +178,9 @@
       "archive_id": "gh168-6629078682-6",
       "airport_ids": [],
       "airline_ids": [
-        "mahan-air"
+        "mahan-air",
+        "qatar-airways",
+        "turkish-airlines"
       ],
       "country_codes": [],
       "routes": [],
@@ -176,7 +193,8 @@
       "archive_id": "gh168-6629078682-7",
       "airport_ids": [],
       "airline_ids": [
-        "mahan-air"
+        "mahan-air",
+        "qatar-airways"
       ],
       "country_codes": [],
       "routes": [],
@@ -203,7 +221,8 @@
       "archive_id": "gh168-6629082132-1",
       "airport_ids": [],
       "airline_ids": [
-        "iran-air"
+        "iran-air",
+        "turkish-airlines"
       ],
       "country_codes": [],
       "routes": [],
@@ -216,6 +235,7 @@
       "archive_id": "gh168-6629082132-2",
       "airport_ids": [],
       "airline_ids": [
+        "lot-polish-airlines",
         "taban-air"
       ],
       "country_codes": [],
@@ -253,7 +273,8 @@
       "archive_id": "gh168-6629082132-5",
       "airport_ids": [],
       "airline_ids": [
-        "iran-airtour"
+        "iran-airtour",
+        "turkish-airlines"
       ],
       "country_codes": [],
       "routes": [],
@@ -304,7 +325,10 @@
     {
       "archive_id": "gh168-6629256473-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "qatar-airways",
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -315,7 +339,10 @@
     {
       "archive_id": "gh168-6629256473-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "air-canada",
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -326,7 +353,9 @@
     {
       "archive_id": "gh168-6629256473-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -337,7 +366,10 @@
     {
       "archive_id": "gh168-6629260731-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "air-canada",
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -361,7 +393,10 @@
     {
       "archive_id": "gh168-6629260731-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa",
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -385,7 +420,10 @@
     {
       "archive_id": "gh168-6629263711-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "air-canada",
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -396,7 +434,9 @@
     {
       "archive_id": "gh168-6629263711-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "qatar-airways"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -407,7 +447,9 @@
     {
       "archive_id": "gh168-6629263711-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "qatar-airways"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -418,7 +460,9 @@
     {
       "archive_id": "gh168-6629263711-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -429,7 +473,9 @@
     {
       "archive_id": "gh168-6629263711-5",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "pegasus-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -440,7 +486,9 @@
     {
       "archive_id": "gh168-6629266764-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -451,7 +499,10 @@
     {
       "archive_id": "gh168-6629266764-2",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "air-canada",
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -462,7 +513,9 @@
     {
       "archive_id": "gh168-6629266764-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -474,7 +527,9 @@
       "archive_id": "gh168-6629266764-4",
       "airport_ids": [],
       "airline_ids": [
-        "emirates"
+        "emirates",
+        "lufthansa",
+        "turkish-airlines"
       ],
       "country_codes": [],
       "routes": [],
@@ -486,7 +541,9 @@
     {
       "archive_id": "gh168-6629269375-1",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "austrian-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -508,7 +565,10 @@
     {
       "archive_id": "gh168-6629269375-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa",
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -519,7 +579,9 @@
     {
       "archive_id": "gh168-6629269375-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "austrian-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -530,7 +592,10 @@
     {
       "archive_id": "gh168-6629269375-5",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "air-canada",
+        "austrian-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -541,7 +606,9 @@
     {
       "archive_id": "gh168-6629269375-6",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "lufthansa"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -566,7 +633,8 @@
       "archive_id": "gh168-6629272217-2",
       "airport_ids": [],
       "airline_ids": [
-        "emirates"
+        "emirates",
+        "lufthansa"
       ],
       "country_codes": [],
       "routes": [],
@@ -578,7 +646,11 @@
     {
       "archive_id": "gh168-6629272217-3",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "austrian-airlines",
+        "lufthansa",
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -589,7 +661,9 @@
     {
       "archive_id": "gh168-6629272217-4",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "qatar-airways"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
@@ -600,7 +674,9 @@
     {
       "archive_id": "gh168-6629272217-5",
       "airport_ids": [],
-      "airline_ids": [],
+      "airline_ids": [
+        "turkish-airlines"
+      ],
       "country_codes": [],
       "routes": [],
       "flight_context": null,
