@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "verified_at": "2026-11-20T00:00:00Z",
+  "airports": [
+    {
+      "iata": "ADB",
+      "name_en": "Izmir Adnan Menderes Airport",
+      "country": "TR",
+      "source_urls": [
+        "https://www.dhmi.gov.tr/Sayfalar/Havalimani/AdnanMenderes/GenelBilgiler.aspx"
+      ]
+    },
+    {
+      "iata": "AYT",
+      "name_en": "Antalya Airport",
+      "country": "TR",
+      "source_urls": [
+        "https://www.antalya-airport.aero/homepage/"
+      ]
+    },
+    {
+      "iata": "SAW",
+      "name_en": "Istanbul Sabiha Gokcen International Airport",
+      "country": "TR",
+      "source_urls": [
+        "https://www.sabihagokcen.aero/"
+      ]
+    },
+    {
+      "iata": "VIE",
+      "name_en": "Vienna International Airport",
+      "country": "AT",
+      "source_urls": [
+        "https://viennaairport.com/en/passengers"
+      ]
+    },
+    {
+      "iata": "WAW",
+      "name_en": "Warsaw Chopin Airport",
+      "country": "PL",
+      "source_urls": [
+        "https://www.lotnisko-chopina.pl/en/index.html",
+        "https://www.lot.com/be/en/explore/about-lot/transit/warsaw/warsaw-chopin-airport"
+      ]
+    },
+    {
+      "iata": "YUL",
+      "name_en": "Montreal Trudeau International Airport",
+      "country": "CA",
+      "source_urls": [
+        "https://www.admtl.com/corporate/about-us"
+      ]
+    },
+    {
+      "iata": "YVR",
+      "name_en": "Vancouver International Airport",
+      "country": "CA",
+      "source_urls": [
+        "https://www.yvr.ca/en/passengers"
+      ]
+    },
+    {
+      "iata": "YYZ",
+      "name_en": "Toronto Pearson International Airport",
+      "country": "CA",
+      "source_urls": [
+        "https://www.torontopearson.com/en/"
+      ]
+    }
+  ]
+}

@@ -582,21 +582,96 @@
     },
     {
       "id": "network",
-      "title_fa": "شبکه مسیرها و برنامه فعال",
-      "icon": "services",
+      "title_fa": "مسیرهای ثبت‌شده در منابع رسمی",
+      "icon": "network",
       "order": 80,
       "kind": "network",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.turkishairlines.com/en/book-flights-from-istanbul-to-united-kingdom",
+          "https://www.turkishairlines.com/en/flights-from-istanbul-to-paris"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این فهرست فقط نمونه‌ای از مسیرهایی است که در ۲۰ نوامبر ۲۰۲۶ در منابع رسمی شرکت مشاهده شده‌اند؛ برنامهٔ زنده، تضمین فعالیت امروز، قیمت یا ظرفیت نیست. «ثبت‌شده» به معنی انجام قطعی پرواز در تاریخ آینده نیست. مسیرهای دارای بلیت مشترک ممکن است توسط شرکت دیگری انجام شوند؛ نام اجراکننده و نوع توقف را در جزئیات بلیت تأیید کنید. کد فرودگاه مقصد را با نام شهر اشتباه نگیرید."
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "IST",
+          "destination": "LHR",
+          "service_type": "unknown",
+          "operating_carrier": null,
+          "status": "listed",
+          "observed_at": "2026-11-20T00:00:00Z",
+          "note_fa": "صفحه فروش رسمی ترکیش گزینهٔ استانبول IST به لندن هیترو LHR را نمایش می‌دهد. وجود پیشنهاد به‌معنای تضمین صندلی، برنامهٔ هر روز یا شرکت اجراکننده نیست.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.turkishairlines.com/en/book-flights-from-istanbul-to-united-kingdom"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی مسیر IST – LHR",
+          "url": "https://www.turkishairlines.com/en/book-flights-from-istanbul-to-united-kingdom"
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "IST",
+          "destination": "CDG",
+          "service_type": "unknown",
+          "operating_carrier": null,
+          "status": "listed",
+          "observed_at": "2026-11-20T00:00:00Z",
+          "note_fa": "فهرست رسمی ترکیش مسیر IST به پاریس شارل دوگل CDG را در پیشنهادهای فروش نشان می‌دهد؛ جزئیات پرواز و اجراکننده برای تاریخ سفر باید دوباره تأیید شود.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.turkishairlines.com/en/flights-from-istanbul-to-paris"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی مسیر IST – CDG",
+          "url": "https://www.turkishairlines.com/en/flights-from-istanbul-to-paris"
+        },
+        {
+          "type": "airport_link",
+          "iata": "IST",
+          "title_fa": "راهنمای فرودگاه IST"
+        },
+        {
+          "type": "airport_link",
+          "iata": "LHR",
+          "title_fa": "راهنمای فرودگاه LHR"
+        },
+        {
+          "type": "airport_link",
+          "iata": "CDG",
+          "title_fa": "راهنمای فرودگاه CDG"
+        }
+      ]
     },
     {
       "id": "onboard-connectivity",
