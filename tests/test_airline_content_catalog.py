@@ -889,7 +889,10 @@ def test_seven_international_airline_guides_and_archive_guardrails():
         assert detail["published_reviews"] == []
         assert len(detail["sections"]) == 22
         published_count = 19 if identifier == "pegasus-airlines" else 21
-        assert sum(s["metadata"]["status"] == "published" for s in detail["sections"]) == published_count
+        actual_published = sum(
+            s["metadata"]["status"] == "published" for s in detail["sections"]
+        )
+        assert actual_published == published_count
         assert all(s["blocks"] and s["metadata"]["source_urls"]
                    for s in detail["sections"] if s["metadata"]["status"] == "published")
         assert all(not s["blocks"] and s["metadata"]["verified_at"] is None
@@ -920,7 +923,10 @@ def test_foreign_airline_official_draft_completion_preserves_no_fabricated_fleet
         expected_drafts = {"network"} | (
             {"cabin", "lounges"} if carrier == "pegasus-airlines" else set()
         )
-        assert {s["id"] for s in detail["sections"] if s["metadata"]["status"] == "draft"} == expected_drafts
+        actual_drafts = {
+            s["id"] for s in detail["sections"] if s["metadata"]["status"] == "draft"
+        }
+        assert actual_drafts == expected_drafts
         assert all(sections[name]["blocks"] == [] for name in expected_drafts)
         completed = (
             "pets", "batteries", "loyalty", "catering", "onboard-connectivity", "fleet"
