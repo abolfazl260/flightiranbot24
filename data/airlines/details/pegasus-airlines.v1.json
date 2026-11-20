@@ -326,16 +326,42 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/travel-services/flight-services/flight-packages",
+          "https://www.flypgs.com/en/travel-services/flight-services/seat-selection"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پگاسوس بسته‌های نرخی Light، Saver، Saver Plus و Comfort Flex را برای انتخاب خدمات همراه بلیت معرفی می‌کند. این بسته‌ها نام کلاس کابین جداگانه یا تضمین نوع صندلی ویژه نیستند. انتخاب صندلی و خدمات جانبی با بستهٔ خریداری‌شده و پرواز مشخص تغییر می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "بستهٔ Light در پروازهای واجد شرایط ممکن است تنها اجازهٔ کیف زیرصندلی داشته باشد؛ بار کابین و بار تحویلی را مستقل از نام بسته کنترل کنید.",
+            "در Saver Plus و Comfort Flex امکان انتخاب برخی صندلی‌ها طبق شرایط جدول رسمی بسته وجود دارد؛ همهٔ صندلی‌ها و خدمات برای تمام پروازها یکسان نیست.",
+            "اگر به فضای پای بیشتر، صندلی خاص یا خدمات غذایی نیاز دارید، شرایط و هزینهٔ نهایی را قبل از پرداخت در رزرو ببینید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "مقایسه بسته‌های نرخی رسمی",
+          "url": "https://www.flypgs.com/en/travel-services/flight-services/flight-packages"
+        },
+        {
+          "type": "link",
+          "title_fa": "قواعد انتخاب صندلی",
+          "url": "https://www.flypgs.com/en/travel-services/flight-services/seat-selection"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -381,16 +407,36 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/travel-services/other-travel-services/isg-lounge"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "پگاسوس دسترسی تخفیف‌دار مسافران واجد شرایط به Plaza Premium Lounge در فرودگاه استانبول صبیحه گوکچن را معرفی کرده است. ورود به لانژ برای همهٔ دارندگان بلیت پگاسوس رایگان نیست و طبق راهنمای رسمی با ارائهٔ کارت پرواز و پرداخت هزینه انجام می‌شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مقررات دسترسی برای پرواز داخلی و بین‌المللی و مدت استفاده ممکن است تفاوت داشته باشد؛ قیمت و ظرفیت روز مراجعه را از شرکت بررسی کنید.",
+            "وجود نام Plaza Premium یا Kepler Club در راهنما به معنی دسترسی خودکار، ظرفیت تضمین‌شده یا همراه رایگان نیست.",
+            "شرایط خدمات و موقعیت لانژ و زمان آخرین پذیرش را پیش از سفر از منبع رسمی بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی لانژ و نحوهٔ پرداخت",
+          "url": "https://www.flypgs.com/en/travel-services/other-travel-services/isg-lounge"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -544,21 +590,81 @@
     },
     {
       "id": "network",
-      "title_fa": "شبکه مسیرها و برنامه فعال",
-      "icon": "services",
+      "title_fa": "مسیرهای ثبت‌شده در منابع رسمی",
+      "icon": "network",
       "order": 80,
       "kind": "network",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.flypgs.com/en/cities/flights-from-istanbul-to-antalya",
+          "https://www.flypgs.com/sehirler/istanbul-izmir-ucak-bileti"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این فهرست فقط نمونه‌ای از مسیرهایی است که در ۲۰ نوامبر ۲۰۲۶ در منابع رسمی شرکت مشاهده شده‌اند؛ برنامهٔ زنده، تضمین فعالیت امروز، قیمت یا ظرفیت نیست. «ثبت‌شده» به معنی انجام قطعی پرواز در تاریخ آینده نیست. مسیرهای دارای بلیت مشترک ممکن است توسط شرکت دیگری انجام شوند؛ نام اجراکننده و نوع توقف را در جزئیات بلیت تأیید کنید. کد فرودگاه مقصد را با نام شهر اشتباه نگیرید."
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "SAW",
+          "destination": "AYT",
+          "service_type": "non_stop",
+          "operating_carrier": "pegasus-airlines",
+          "status": "listed",
+          "observed_at": "2026-11-20T00:00:00Z",
+          "note_fa": "پگاسوس صریحاً مبدأ صبیحه گوکچن SAW و مقصد آنتالیا AYT را در صفحهٔ رسمی مسیر معرفی می‌کند؛ جزئیات تاریخ، ظرفیت و برنامه باید در سایت رسمی کنترل شود.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flypgs.com/en/cities/flights-from-istanbul-to-antalya"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی مسیر SAW – AYT",
+          "url": "https://www.flypgs.com/en/cities/flights-from-istanbul-to-antalya"
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "SAW",
+          "destination": "ADB",
+          "service_type": "non_stop",
+          "operating_carrier": "pegasus-airlines",
+          "status": "listed",
+          "observed_at": "2026-11-20T00:00:00Z",
+          "note_fa": "در صفحهٔ رسمی پگاسوس مسیر مستقیم SAW–ADB بین استانبول صبیحه و ازمیر عدنان مندرس معرفی شده است؛ تعداد پروازها و هزینه برای تاریخ آینده تضمین نمی‌شود.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.flypgs.com/sehirler/istanbul-izmir-ucak-bileti"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی مسیر SAW – ADB",
+          "url": "https://www.flypgs.com/sehirler/istanbul-izmir-ucak-bileti"
+        }
+      ]
     },
     {
       "id": "onboard-connectivity",

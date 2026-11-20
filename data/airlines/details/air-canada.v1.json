@@ -582,21 +582,81 @@
     },
     {
       "id": "network",
-      "title_fa": "شبکه مسیرها و برنامه فعال",
-      "icon": "services",
+      "title_fa": "مسیرهای ثبت‌شده در منابع رسمی",
+      "icon": "network",
       "order": 80,
       "kind": "network",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.aircanada.com/en-ca/flights-from-toronto-to-vancouver",
+          "https://www.aircanada.com/en-ca/flights-from-toronto-to-montreal"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "این فهرست فقط نمونه‌ای از مسیرهایی است که در ۲۰ نوامبر ۲۰۲۶ در منابع رسمی شرکت مشاهده شده‌اند؛ برنامهٔ زنده، تضمین فعالیت امروز، قیمت یا ظرفیت نیست. «ثبت‌شده» به معنی انجام قطعی پرواز در تاریخ آینده نیست. مسیرهای دارای بلیت مشترک ممکن است توسط شرکت دیگری انجام شوند؛ نام اجراکننده و نوع توقف را در جزئیات بلیت تأیید کنید. کد فرودگاه مقصد را با نام شهر اشتباه نگیرید."
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "YYZ",
+          "destination": "YVR",
+          "service_type": "unknown",
+          "operating_carrier": null,
+          "status": "listed",
+          "observed_at": "2026-11-20T00:00:00Z",
+          "note_fa": "در صفحهٔ رسمی فروش ایرکانادا، پیشنهادهایی با فرودگاه‌های دقیق تورنتو پیرسون YYZ و ونکوور YVR دیده می‌شود. تعداد توقف و اجراکننده ممکن است با گزینهٔ رزرو تغییر کند.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.aircanada.com/en-ca/flights-from-toronto-to-vancouver"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی مسیر YYZ – YVR",
+          "url": "https://www.aircanada.com/en-ca/flights-from-toronto-to-vancouver"
+        },
+        {
+          "type": "route_snapshot",
+          "origin": "YYZ",
+          "destination": "YUL",
+          "service_type": "unknown",
+          "operating_carrier": null,
+          "status": "listed",
+          "observed_at": "2026-11-20T00:00:00Z",
+          "note_fa": "صفحهٔ رسمی ایرکانادا پیشنهادهایی برای تورنتو پیرسون YYZ به مونترال ترودو YUL فهرست می‌کند. این دادهٔ نمونه جایگزین بررسی شمارهٔ پرواز و اپراتور بلیت نیست.",
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.aircanada.com/en-ca/flights-from-toronto-to-montreal"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "link",
+          "title_fa": "منبع رسمی مسیر YYZ – YUL",
+          "url": "https://www.aircanada.com/en-ca/flights-from-toronto-to-montreal"
+        }
+      ]
     },
     {
       "id": "onboard-connectivity",

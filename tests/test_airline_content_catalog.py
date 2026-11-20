@@ -64,13 +64,13 @@ def test_actual_catalog_and_independent_snapshots():
                         "fly-persia": {"published": 14, "draft": 8},
                         "ava-airlines": {"published": 20, "draft": 2},
                         "yazd-airways": {"published": 14, "draft": 8},
-                        "turkish-airlines": {"published": 21, "draft": 1},
-                        "lufthansa": {"published": 21, "draft": 1},
-                        "qatar-airways": {"published": 21, "draft": 1},
-                        "air-canada": {"published": 21, "draft": 1},
-                        "austrian-airlines": {"published": 21, "draft": 1},
-                        "pegasus-airlines": {"published": 19, "draft": 3},
-                        "lot-polish-airlines": {"published": 21, "draft": 1}}
+                        "turkish-airlines": {"published": 22, "draft": 0},
+                        "lufthansa": {"published": 22, "draft": 0},
+                        "qatar-airways": {"published": 22, "draft": 0},
+                        "air-canada": {"published": 22, "draft": 0},
+                        "austrian-airlines": {"published": 22, "draft": 0},
+                        "pegasus-airlines": {"published": 22, "draft": 0},
+                        "lot-polish-airlines": {"published": 22, "draft": 0}}
     for carrier in ("fly-persia", "ava-airlines", "yazd-airways"):
         item = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
         assert item["published_reviews"] == []
@@ -888,7 +888,7 @@ def test_seven_international_airline_guides_and_archive_guardrails():
         assert detail["airline_id"] == identifier
         assert detail["published_reviews"] == []
         assert len(detail["sections"]) == 22
-        published_count = 19 if identifier == "pegasus-airlines" else 21
+        published_count = 22
         actual_published = sum(
             s["metadata"]["status"] == "published" for s in detail["sections"]
         )
@@ -920,9 +920,7 @@ def test_foreign_airline_official_draft_completion_preserves_no_fabricated_fleet
     for carrier in carriers:
         detail = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
         sections = {section["id"]: section for section in detail["sections"]}
-        expected_drafts = {"network"} | (
-            {"cabin", "lounges"} if carrier == "pegasus-airlines" else set()
-        )
+        expected_drafts = set()
         actual_drafts = {
             s["id"] for s in detail["sections"] if s["metadata"]["status"] == "draft"
         }
@@ -962,3 +960,78 @@ def test_foreign_airline_official_draft_completion_preserves_no_fabricated_fleet
             for link in detail["experience_links"]
         )
     assert upgraded_total == 54
+
+
+def test_foreign_airline_routes_sourced_dated_and_conservatively_listed():
+    carriers = (
+        "turkish-airlines", "lufthansa", "qatar-airways", "air-canada",
+        "austrian-airlines", "pegasus-airlines", "lot-polish-airlines",
+    )
+    registry = module.read_json(ROOT / "data/airlines/route-airports.v1.json")
+    extras = {r["iata"] for r in registry["airports"]}
+    assert extras == {"ADB", "AYT", "SAW", "VIE", "WAW", "YUL", "YVR", "YYZ"}
+    assert len(extras) == len(registry["airports"])
+    guided = {
+        x["iata"] for x in module.read_json(
+            ROOT / "data/airports/airport-index.v1.json"
+        )["airports"]
+    }
+    assert not extras.intersection(guided)
+    assert registry["verified_at"] == "2026-11-20T00:00:00Z"
+    actual = set()
+    for carrier in carriers:
+        page = module.read_json(ROOT / f"data/airlines/details/{carrier}.v1.json")
+        network = next(s for s in page["sections"] if s["id"] == "network")
+        assert network["metadata"]["status"] == "published"
+        assert network["metadata"]["verified_at"] == "2026-11-20T00:00:00Z"
+        routes = [b for b in network["blocks"] if b["type"] == "route_snapshot"]
+        assert len(routes) == 2
+        for route in routes:
+            actual.add((carrier, route["origin"], route["destination"]))
+            assert route["status"] == "listed"
+            assert route["observed_at"] == "2026-11-20T00:00:00Z"
+            assert route["metadata"]["status"] == "published"
+            assert route["metadata"]["confidence"] == "official"
+            assert route["metadata"]["source_urls"]
+            assert {route["origin"], route["destination"]}.issubset(
+                guided | extras
+            )
+            assert route["origin"] != route["destination"]
+            assert route["note_fa"]
+        assert page["published_reviews"] == []
+        assert all(
+            link["moderation_status"] == "pending"
+            for link in page["experience_links"]
+        )
+    assert len(actual) == 14
+    pegasus = module.read_json(
+        ROOT / "data/airlines/details/pegasus-airlines.v1.json"
+    )
+    sections = {s["id"]: s for s in pegasus["sections"]}
+    for key in ("cabin", "lounges"):
+        assert sections[key]["metadata"]["status"] == "published"
+        assert sections[key]["metadata"]["source_urls"]
+        assert sections[key]["blocks"]
+    assert "رایگان نیست" in sections["lounges"]["blocks"][0]["text_fa"]
+
+
+def test_unregistered_route_endpoint_and_registry_duplicate_fail_closed(dataset):
+    airline = dataset / "data/airlines/details/air-canada.v1.json"
+    page = module.read_json(airline)
+    network = next(s for s in page["sections"] if s["id"] == "network")
+    routes = [block for block in network["blocks"] if block["type"] == "route_snapshot"]
+    routes[0]["destination"] = "ZZZ"
+    airline.write_text(json.dumps(page, ensure_ascii=False), encoding="utf-8")
+    with pytest.raises(ValueError, match="Unknown route airport"):
+        module.validate_dataset(dataset, NOW)
+
+    routes[0]["destination"] = "YVR"
+    airline.write_text(json.dumps(page, ensure_ascii=False), encoding="utf-8")
+    registry_path = dataset / "data/airlines/route-airports.v1.json"
+    registry = module.read_json(registry_path)
+    registry["airports"].append(copy.deepcopy(registry["airports"][0]))
+    registry_path.write_text(
+        json.dumps(registry, ensure_ascii=False), encoding="utf-8"
+    )
+    with pytest.raises(ValueError, match="Duplicate or already guided"):
+        module.validate_dataset(dataset, NOW)
