@@ -178,7 +178,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.aircanada.com/"
+          "https://www.aircanada.com/home/ca/en/aco/flight-status"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -195,7 +195,7 @@
         {
           "type": "link",
           "title_fa": "مرجع رسمی وضعیت پرواز",
-          "url": "https://www.aircanada.com/"
+          "url": "https://www.aircanada.com/home/ca/en/aco/flight-status"
         }
       ]
     },
@@ -208,7 +208,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.aircanada.com/ca/en/aco/home/plan/check-in-information.html"
+          "https://www.aircanada.com/ca/en/ado/home/fly/customer-support/contact-us.html"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -225,7 +225,7 @@
         {
           "type": "link",
           "title_fa": "پشتیبانی رسمی",
-          "url": "https://www.aircanada.com/ca/en/aco/home/plan/check-in-information.html"
+          "url": "https://www.aircanada.com/ca/en/ado/home/fly/customer-support/contact-us.html"
         }
       ]
     },
@@ -238,7 +238,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.aircanada.com/ca/en/aco/home/plan/baggage/checked.html"
+          "https://www.aircanada.com/ca/en/aco/home/plan/baggage/delayed-damaged-baggage.html"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -255,7 +255,7 @@
         {
           "type": "link",
           "title_fa": "پیگیری بار از مرجع رسمی",
-          "url": "https://www.aircanada.com/ca/en/aco/home/plan/baggage/checked.html"
+          "url": "https://www.aircanada.com/ca/en/aco/home/plan/baggage/delayed-damaged-baggage.html"
         }
       ]
     },

@@ -178,7 +178,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.lufthansa.com/az/en/digital-self-services"
+          "https://www.lufthansa.com/de/en/timetable-and-flight-status"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -195,7 +195,7 @@
         {
           "type": "link",
           "title_fa": "مرجع رسمی وضعیت پرواز",
-          "url": "https://www.lufthansa.com/az/en/digital-self-services"
+          "url": "https://www.lufthansa.com/de/en/timetable-and-flight-status"
         }
       ]
     },

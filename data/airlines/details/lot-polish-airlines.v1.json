@@ -178,7 +178,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.lot.com/ge/en/help-center/information-about-a-flight"
+          "https://www.lot.com/pl/en/flight-status"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -195,7 +195,7 @@
         {
           "type": "link",
           "title_fa": "مرجع رسمی وضعیت پرواز",
-          "url": "https://www.lot.com/ge/en/help-center/information-about-a-flight"
+          "url": "https://www.lot.com/pl/en/flight-status"
         }
       ]
     },
@@ -268,7 +268,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.lot.com/am/en/help-center"
+          "https://www.lot.com/az/en/journey/special-services/accessible-lot/special-assistance"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -285,7 +285,7 @@
         {
           "type": "link",
           "title_fa": "درخواست و راهنمای خدمات",
-          "url": "https://www.lot.com/am/en/help-center"
+          "url": "https://www.lot.com/az/en/journey/special-services/accessible-lot/special-assistance"
         }
       ]
     },

@@ -178,7 +178,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.austrian.com/at/en/book/overview-manage"
+          "https://www.austrian.com/at/en/flight-status-and-timetable"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -195,7 +195,7 @@
         {
           "type": "link",
           "title_fa": "مرجع رسمی وضعیت پرواز",
-          "url": "https://www.austrian.com/at/en/book/overview-manage"
+          "url": "https://www.austrian.com/at/en/flight-status-and-timetable"
         }
       ]
     },
@@ -238,7 +238,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.austrian.com/al/en/faq-baggage"
+          "https://www.austrian.com/cz/en/missing-baggage"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -255,7 +255,7 @@
         {
           "type": "link",
           "title_fa": "پیگیری بار از مرجع رسمی",
-          "url": "https://www.austrian.com/al/en/faq-baggage"
+          "url": "https://www.austrian.com/cz/en/missing-baggage"
         }
       ]
     },

@@ -178,7 +178,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.qatarairways.com/en-ie/help.html"
+          "https://fs.qatarairways.com/flightstatus/search"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -195,7 +195,7 @@
         {
           "type": "link",
           "title_fa": "مرجع رسمی وضعیت پرواز",
-          "url": "https://www.qatarairways.com/en-ie/help.html"
+          "url": "https://fs.qatarairways.com/flightstatus/search"
         }
       ]
     },

@@ -178,7 +178,7 @@
       "metadata": {
         "status": "published",
         "source_urls": [
-          "https://www.flypgs.com/en/help-center"
+          "https://www.flypgs.com/en/international-flight-status"
         ],
         "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
@@ -195,7 +195,7 @@
         {
           "type": "link",
           "title_fa": "مرجع رسمی وضعیت پرواز",
-          "url": "https://www.flypgs.com/en/help-center"
+          "url": "https://www.flypgs.com/en/international-flight-status"
         }
       ]
     },
