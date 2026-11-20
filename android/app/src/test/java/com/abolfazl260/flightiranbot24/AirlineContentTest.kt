@@ -19,6 +19,7 @@ import org.robolectric.annotation.Config
 class AirlineContentTest {
     private val context: Context get() = ApplicationProvider.getApplicationContext()
     private val now = Instant.parse("2026-11-15T12:00:00Z")
+    private val internationalNow = Instant.parse("2026-11-20T12:00:00Z")
     private fun bundled(path: String) = context.assets.open(path).bufferedReader().use { it.readText() }
     private fun page() = JsonParser.parseString(bundled("details/emirates.v1.json")).asJsonObject
     private fun parse(root: JsonObject) = AirlineContentParser.detail(root.toString(), "emirates", now)!!
@@ -27,13 +28,15 @@ class AirlineContentTest {
     }
 
     @Test fun bundledCatalogHasIndependentPagesAndNoSyntheticRatings() {
-        val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
+        val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), internationalNow)
         assertEquals(setOf("iran-air", "emirates", "mahan-air", "iran-aseman",
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
             "caspian-air", "sepehran-air", "taban-air", "karun-air",
             "pars-air", "chabahar-air",
-            "fly-persia", "ava-airlines", "yazd-airways"), rows.map { it.id }.toSet())
+            "fly-persia", "ava-airlines", "yazd-airways",
+            "turkish-airlines", "lufthansa", "qatar-airways", "air-canada",
+            "austrian-airlines", "pegasus-airlines", "lot-polish-airlines"), rows.map { it.id }.toSet())
         val iranAir = AirlineContentParser.detail(bundled("details/iran-air.v1.json"), "iran-air", now)!!
         assertEquals(17, iranAir.sections.size)
         assertFalse(iranAir.sections.any { it.id == "onboard-connectivity" })
@@ -279,8 +282,31 @@ class AirlineContentTest {
         assertTrue(later.sections.single { it.id == "network" }.reviewOverdue)
     }
 
+    @Test fun internationalCarriersPreserveOfficialIdentityAndUnpublishedReviews() {
+        val names = listOf(
+            "turkish-airlines" to "TK", "lufthansa" to "LH",
+            "qatar-airways" to "QR", "air-canada" to "AC",
+            "austrian-airlines" to "OS", "pegasus-airlines" to "PC",
+            "lot-polish-airlines" to "LO"
+        )
+        val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), internationalNow)
+        assertEquals(27, rows.size)
+        for ((id, code) in names) {
+            val ref = rows.single { it.id == id }
+            assertTrue(ref.codes.contains(code))
+            assertFalse(ref.country == "IR")
+            val page = AirlineContentParser.detail(bundled(ref.path), id, internationalNow)!!
+            assertEquals(13, page.sections.size)
+            assertEquals(0, page.ratingCount)
+            assertNull(page.average)
+            assertFalse(page.sections.any { it.id in listOf(
+                "network", "fleet", "pets", "onboard-connectivity"
+            ) })
+        }
+    }
+
     @Test fun arabicPersianLatinCodesAndAliasesAreSearchable() {
-        val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), now)
+        val rows = AirlineContentParser.index(bundled("airline-index.v1.json"), internationalNow)
         assertTrue(filterAirlines(rows, "ايران اير", "iran").any { it.id == "iran-air" })
         assertEquals("iran-airtour", filterAirlines(rows, "ایرتور", "iran").single().id)
         assertEquals("iran-air", filterAirlines(rows, "هما", "all").single().id)
@@ -316,8 +342,10 @@ class AirlineContentTest {
             "iran-airtour", "qeshm-air", "kish-air",
             "zagros-air", "meraj-air", "ata-air", "varesh-air",
             "caspian-air", "sepehran-air", "taban-air", "karun-air",
-            "pars-air", "chabahar-air", "fly-persia", "ava-airlines", "yazd-airways"),
-            AirlineContentParser.index(directory.toString(), now).map { it.id })
+            "pars-air", "chabahar-air", "fly-persia", "ava-airlines", "yazd-airways",
+            "turkish-airlines", "lufthansa", "qatar-airways", "air-canada",
+            "austrian-airlines", "pegasus-airlines", "lot-polish-airlines"),
+            AirlineContentParser.index(directory.toString(), internationalNow).map { it.id })
     }
 
     @Test fun unknownBlocksAreSkippedWithoutCrashingOrBlankCards() {
