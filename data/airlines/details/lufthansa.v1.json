@@ -326,16 +326,35 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/de/en/business-class"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "کابین بیزنس لوفت‌هانزا و خدمات مرتبط در منبع رسمی توضیح داده شده است؛ امکانات صندلی و سرگرمی به هواپیما، مسیر و نسخهٔ کابین وابسته‌اند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "وجود مدل‌های جدید کابین روی همهٔ پروازهای شرکت تضمین نشده است.",
+            "نقشه صندلی و مشخصات کلاس پرواز رزرو‌شده را بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/de/en/business-class"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -344,16 +363,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/nl/en/services-on-board"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "لوفت‌هانزا برای کلاس‌های مختلف خدمات خوراک و نوشیدنی معرفی می‌کند؛ اقلام رایگان یا قابل خرید تابع مسیر، کلاس و مدت پرواز هستند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "درخواست غذاهای ویژه را از مدیریت رزرو و مطابق شرایط همان پرواز پیگیری کنید.",
+            "منوی یک مسیر را برای سفر دیگر قطعی در نظر نگیرید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/nl/en/services-on-board"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -362,16 +400,35 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/de/en/during-your-trip/lounges"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "لوفت‌هانزا لانژهای اختصاصی و شریک دارد. دسترسی معمولاً به وضعیت عضویت، کلاس سفر، فرودگاه و کارت پرواز معتبر وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "نوع لانژ و شرایط همراه را در فرودگاه مبدأ یا ترانزیت بررسی کنید.",
+            "وجود بلیت یک ایرلاین عضو Star Alliance همیشه به معنای دسترسی رایگان نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/de/en/during-your-trip/lounges"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -380,13 +437,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/gb/en/travelling-with-animals"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +456,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "لوفت‌هانزا برای جابه‌جایی بعضی سگ‌ها و گربه‌ها در کابین یا قسمت بار، با توجه به اندازه، مسیر و مقررات مقصد خدمات دارد؛ پذیرش نیازمند هماهنگی قبلی است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای سفر با چند ایرلاین باید اجازهٔ تک‌تک شرکت‌های اجراکننده را بررسی کنید.",
+            "محدودیت‌های ویژهٔ ورود حیوان به برخی کشورها و مسیرها ممکن است اعمال شود."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/gb/en/travelling-with-animals"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +482,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/in/en/prepare-for-your-trip/baggage/electronic-devices-and-batteries"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "لوفت‌هانزا پاوربانک را باتری یدکی محسوب می‌کند و حمل آن در بار تحویلی مجاز نیست؛ محدودیت ظرفیت، تعداد و استفاده در کابین را از راهنمای رسمی بررسی کنید."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری آسیب‌دیده یا فراخوان‌شده را حمل نکنید.",
+            "اگر حمل یک باتری به تأیید ایرلاین نیاز دارد، آن را پیش از سفر هماهنگ کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/in/en/prepare-for-your-trip/baggage/electronic-devices-and-batteries"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +605,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/de/en/during-your-trip/internet-overview"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "لوفت‌هانزا خدمات اتصال FlyNet و گزینه‌های Wi-Fi جدید گروه را معرفی می‌کند؛ پوشش و شرایط استفاده به هواپیما و مسیر بستگی دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "امکان پیام‌رسانی رایگان برای اعضای واجد شرایط را با شرایط فعلی بررسی کنید.",
+            "اینترنت پرسرعت یا تماس آنلاین در تمام ناوگان تضمین‌شده نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/de/en/during-your-trip/internet-overview"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +642,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/xx/en/100-years/fleet"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در راهنمای تاریخی و تحولات ناوگان لوفت‌هانزا، خانواده‌های A350 و بوئینگ 787 به‌عنوان هواپیماهای مورد استفاده معرفی شده‌اند؛ این صفحه شمار فعال فعلی را تأیید نمی‌کند."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A350-900",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.lufthansa.com/xx/en/100-years/fleet"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "787-9",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.lufthansa.com/xx/en/100-years/fleet"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "اطلاعات تعداد و وضعیت فعال/ذخیرهٔ هواپیماها وارد نشده است.",
+            "مدل اختصاصی یک مسیر را از جزئیات همان رزرو بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/xx/en/100-years/fleet"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +721,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.lufthansa.com/it/en/miles-and-more.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Miles & More برنامهٔ وفاداری لوفت‌هانزا است؛ کسب مایل، Points و مزایای وضعیت مسافر به مسیر، نرخ و شرایط شرکت‌های همکار وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "شماره عضویت را روی رزرو ثبت کنید.",
+            "در سفر با کدشیر، واجد شرایط بودن نرخ و شرکت اجراکننده را جدا بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.lufthansa.com/it/en/miles-and-more.html"
+        }
+      ]
     },
     {
       "id": "complaints",

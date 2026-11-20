@@ -326,16 +326,35 @@
       "order": 55,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en-hk/onboard/business-class.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قطر ایرویز کابین بیزنس و محصول Qsuite را برای برخی هواپیماها و مسیرها ارائه می‌کند؛ صندلی Qsuite روی همهٔ پروازهای بیزنس تضمین‌شده نیست."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "پیش از خرید، نوع هواپیما و نقشهٔ صندلی همان پرواز را بررسی کنید.",
+            "تغییر هواپیما ممکن است امکانات اعلام‌شده را تغییر دهد."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en-hk/onboard/business-class.html"
+        }
+      ]
     },
     {
       "id": "catering",
@@ -344,16 +363,35 @@
       "order": 57,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en-az/onboard/cuisine.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قطر ایرویز خدمات غذای کابین اکونومی و کلاس‌های ممتاز را جدا معرفی می‌کند. منوی واقعی بر حسب مسیر، کلاس و درخواست ویژه تغییر می‌کند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "غذای ویژه را از کانال رسمی و با مهلت لازم ثبت کنید.",
+            "عکس و منوی تبلیغاتی، تعهد سرو همان غذا در همهٔ پروازها نیست."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en-az/onboard/cuisine.html"
+        }
+      ]
     },
     {
       "id": "lounges",
@@ -362,16 +400,35 @@
       "order": 59,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en-us/lounges.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قطر ایرویز لانژهایی در دوحه و فرودگاه‌های منتخب معرفی می‌کند؛ شرایط ورود به کلاس سفر، عضویت Privilege Club یا oneworld و قوانین لانژ وابسته است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "حق ورود یا مهمان را برای فرودگاه و کارت پرواز مشخص بررسی کنید.",
+            "لانژهای قابل خرید و دسترسی با امتیاز شرایط متفاوتی دارند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en-us/lounges.html"
+        }
+      ]
     },
     {
       "id": "pets",
@@ -380,13 +437,15 @@
       "order": 60,
       "kind": "policy",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en/baggage/animals.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": {
         "route": null,
@@ -397,7 +456,24 @@
         "journey_type": "unknown",
         "note_fa": "منبع کافی برای انتشار تأیید نشده است."
       },
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قطر ایرویز بیشتر حیوانات خانگی مجاز را طبق شرایط مشخص در محفظهٔ بار یا به‌صورت بار هوایی جابه‌جا می‌کند؛ حمل در کابین به موارد خاص مانند شاهین و سگ خدمت‌رسان طبق قواعد مربوط محدود است."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "برای سگ و گربهٔ خانگی، پذیرش در کابین را خودکار فرض نکنید.",
+            "ظرفیت، مدارک پزشکی، محدودیت نژاد و مقررات کشورهای توقف و مقصد را پیشاپیش استعلام کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en/baggage/animals.html"
+        }
+      ]
     },
     {
       "id": "batteries",
@@ -406,16 +482,35 @@
       "order": 65,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en/baggage/restricted.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قطر ایرویز برای پاوربانک و باتری لیتیومی یدکی محدودیت تعداد، توان و محل نگهداری اعلام می‌کند؛ باتری‌های آسیب‌دیده یا فراخوان‌شده پذیرفته نمی‌شوند."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "باتری یدکی را با رعایت محافظت از اتصال کوتاه در کابین حمل کنید.",
+            "محدودیت‌های مبدأ و مقصد ممکن است از قواعد عمومی سخت‌گیرانه‌تر باشند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en/baggage/restricted.html"
+        }
+      ]
     },
     {
       "id": "travel-documents",
@@ -510,16 +605,35 @@
       "order": 85,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en/Privilege-Club.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "قطر ایرویز اتصال Wi-Fi از جمله خدمات Starlink را در بخشی از پروازها معرفی می‌کند؛ موجود بودن روی هواپیمای مشخص و شرایط رایگان یا پولی باید بررسی شود."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "در دسترس بودن سرویس را از جزئیات همان پرواز بررسی کنید.",
+            "وضعیت اتصال، پوشش و محدودیت استفاده ممکن است حین پرواز تغییر کند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en/Privilege-Club.html"
+        }
+      ]
     },
     {
       "id": "fleet",
@@ -528,16 +642,77 @@
       "order": 90,
       "kind": "fleet",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en/fleet.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "در معرفی رسمی ناوگان قطر ایرویز، خانواده‌های ایرباس A350 و بوئینگ 787 ذکر شده‌اند؛ تعداد و نوع فعال در تاریخ پرواز مشخص از این معرفی نتیجه‌گیری نمی‌شود."
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "A350",
+          "manufacturer": "Airbus",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.qatarairways.com/en/fleet.html"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "fleet_snapshot",
+          "model": "787",
+          "manufacturer": "Boeing",
+          "count": null,
+          "observed_at": "2026-11-20T00:00:00Z",
+          "status": "unknown",
+          "relationship": "unknown",
+          "configuration_fa": null,
+          "metadata": {
+            "status": "published",
+            "source_urls": [
+              "https://www.qatarairways.com/en/fleet.html"
+            ],
+            "verified_at": "2026-11-20T00:00:00Z",
+            "effective_from": null,
+            "effective_to": null,
+            "stale": false,
+            "confidence": "official"
+          }
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "مدل کابین بیزنس و وجود Qsuite با نوع و پیکربندی هواپیما فرق دارد.",
+            "تعدادهای منتشرشده در سال‌های گذشته به‌عنوان آمار امروز نمایش داده نمی‌شوند."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en/fleet.html"
+        }
+      ]
     },
     {
       "id": "loyalty",
@@ -546,16 +721,35 @@
       "order": 95,
       "kind": "information",
       "metadata": {
-        "status": "draft",
-        "source_urls": [],
-        "verified_at": null,
+        "status": "published",
+        "source_urls": [
+          "https://www.qatarairways.com/en/Privilege-Club.html"
+        ],
+        "verified_at": "2026-11-20T00:00:00Z",
         "effective_from": null,
         "effective_to": null,
         "stale": false,
-        "confidence": "unverified"
+        "confidence": "official"
       },
       "scope": null,
-      "blocks": []
+      "blocks": [
+        {
+          "type": "text",
+          "text_fa": "Privilege Club برنامهٔ وفاداری قطر ایرویز است و از Avios برای امتیازها و مزایا استفاده می‌کند؛ دسترسی به خدمات با سطح عضویت و شرایط رزرو تفاوت دارد."
+        },
+        {
+          "type": "bullets",
+          "items_fa": [
+            "کد عضویت را به رزرو اضافه کنید.",
+            "مزایای شریک oneworld، امتیاز و مصرف آن را برای نرخ خریداری‌شده بررسی کنید."
+          ]
+        },
+        {
+          "type": "link",
+          "title_fa": "راهنمای رسمی شرکت",
+          "url": "https://www.qatarairways.com/en/Privilege-Club.html"
+        }
+      ]
     },
     {
       "id": "complaints",

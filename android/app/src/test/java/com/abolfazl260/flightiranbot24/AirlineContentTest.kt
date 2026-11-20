@@ -296,12 +296,21 @@ class AirlineContentTest {
             assertTrue(ref.codes.contains(code))
             assertFalse(ref.country == "IR")
             val page = AirlineContentParser.detail(bundled(ref.path), id, internationalNow)!!
-            assertEquals(13, page.sections.size)
+            assertEquals(if (id == "pegasus-airlines") 19 else 21, page.sections.size)
+            val fleet = page.sections.single { it.id == "fleet" }.blocks
+                .filterIsInstance<AirlineBlock.Fleet>()
+            assertEquals(2, fleet.size)
+            assertTrue(fleet.all { it.count == null && it.status == "unknown" &&
+                it.relationship == "unknown" })
+            assertTrue(page.sections.any { it.id == "pets" && it.blocks.isNotEmpty() })
+            assertTrue(page.sections.any { it.id == "batteries" && it.blocks.isNotEmpty() })
+            assertFalse(page.sections.any { it.id == "network" })
             assertEquals(0, page.ratingCount)
             assertNull(page.average)
-            assertFalse(page.sections.any { it.id in listOf(
-                "network", "fleet", "pets", "onboard-connectivity"
-            ) })
+            assertFalse(page.sections.any { it.id == "network" })
+            if (id == "pegasus-airlines") {
+                assertFalse(page.sections.any { it.id in listOf("cabin", "lounges") })
+            }
         }
     }
 

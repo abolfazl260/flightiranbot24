@@ -36,7 +36,14 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
   const match=rows.find(r=>r.id===id);
   assert(match && match.codes.includes(code) && match.country!=='IR');
   const guide=parseGuideDetail(read('data/airlines/details/'+id+'.v1.json'),'airlines',id,internationalNow);
-  assert.equal(guide.sections.length,13);
+  assert.equal(guide.sections.length,id==='pegasus-airlines'?19:21);
+  const fleet=guide.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet');
+  assert.equal(fleet.length,2);
+  assert(fleet.every(b=>b.count===null&&b.status==='unknown'&&b.relationship==='unknown'));
+  assert(!guide.sections.some(s=>s.id==='network'));
+  assert(guide.sections.some(s=>s.id==='pets'));
+  assert(guide.sections.some(s=>s.id==='batteries'));
+  if(id==='pegasus-airlines')assert(!guide.sections.some(s=>['cabin','lounges'].includes(s.id)));
   assert.equal(guide.reviewCount,0);
   assert.equal(guide.average,null);
  }
