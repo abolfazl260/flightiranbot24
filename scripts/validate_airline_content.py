@@ -68,6 +68,25 @@ def validate_dataset(root: Path = ROOT, now: datetime | None = None) -> None:
         raise ValueError("Airline index exceeds Android transport bound")
     airport_index = read_json(root / "data/airports/airport-index.v1.json")
     airports = {row["iata"] for row in airport_index["airports"]}
+
+    # Network routes may reference airport codes not yet covered by full airport
+    # guides. They must be explicitly recorded in the reviewed route registry;
+    # never loosen this to arbitrary three-letter IATA-like strings.
+    route_schema = read_json(base / "route-airports.schema.json")
+    Draft202012Validator.check_schema(route_schema)
+    route_registry = read_json(base / "route-airports.v1.json")
+    Draft202012Validator(route_schema, format_checker=FormatChecker()).validate(route_registry)
+    if timestamp(route_registry["verified_at"]) > now:
+        raise ValueError("Future route-airport registry review")
+    extra_airports = set()
+    for reference in route_registry["airports"]:
+        code = reference["iata"]
+        if code in airports or code in extra_airports:
+            raise ValueError("Duplicate or already guided route airport: " + code)
+        extra_airports.add(code)
+        for source in reference["source_urls"]:
+            check_url(source)
+    route_airports = airports | extra_airports
     ids, paths, code_claims, review_ids, experience_ids = set(), set(), {}, set(), set()
     for entry in index["airlines"]:
         aid = entry["airline_id"]
@@ -139,7 +158,7 @@ def validate_dataset(root: Path = ROOT, now: datetime | None = None) -> None:
                         raise ValueError("Route block outside network section")
                     if block["origin"] == block["destination"]:
                         raise ValueError("Route endpoints must differ")
-                    if not {block["origin"], block["destination"]}.issubset(airports):
+                    if not {block["origin"], block["destination"]}.issubset(route_airports):
                         raise ValueError("Unknown route airport")
                     if block["operating_carrier"] not in (None, *[
                         e["airline_id"] for e in index["airlines"]
