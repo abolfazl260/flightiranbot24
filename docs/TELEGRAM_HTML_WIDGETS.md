@@ -94,3 +94,46 @@ Official references:
 - https://core.telegram.org/bots/api-changelog#november-9-2026
 - https://core.telegram.org/bots/widgets
 - https://core.telegram.org/bots/api#sendwidget
+
+## Historical route charts inside the existing /fares widget (2026-11-20)
+
+The bot's private Telegram fare widget now includes an optional in-widget route
+picker and SVG visualization of **actual recorded 21-day daily minima**.
+
+- The price ranking tabs and refresh remain unchanged.
+- The UI has only in-widget buttons, for Telegram QuickJS compatibility; the
+  frontend makes no network calls and creates no extra messages.
+- Queries use hashed, bounded origin/destination IDs, and both selections are
+  checked against the existing SQLite `list_chart_routes(days=21)` result on
+  **every request**. Forged/stale selections cannot fetch arbitrary data.
+- The plot comes solely from `get_route_daily_minimums(..., days=21)`.
+  Missing days remain blank; lines only connect consecutive real days.
+  The last shown price is explicitly a **recorded daily minimum**, not a live
+  fare or a guaranteed bookable offer.
+- No redundant database schema or provider fetch is needed; if recorded
+  history is unavailable, the widget displays an empty/error state.
+- Telegram's HTML (32 KiB), compressed HTML (4 KiB), and per-state (1 KiB)
+  caps are tested. Queries are accepted only from the author in a private
+  chat using the original widget message ID. No public widget sharing.
+- The old closed PR #194 was consulted but **not merged**: it used a legacy
+  history API (`get_route_history`) and bundled a booking-request action.
+  This version uses the modern daily-minimum repository and does **not**
+  send a booking message or place an order.
+
+### Manual verification
+
+Send `/fares` in a private Telegram chat, select `مبدأ`, then `مقصد`,
+and inspect a route with at least two actual days of price observations.
+Verify that dates with no data are not connected and that refresh preserves
+the existing two price tabs. Repeat with an empty history and with an older
+Telegram client: the regular text fallback must still work. This change
+does not affect Bale or Android. Deploy only after automated CI passes.
+
+### Obsolete branches
+
+The stale screenshot branches `fix/android-screenshot-adb-recovery-20261116`
+and `fix/android-screenshot-capture-override-20261116` are superseded by
+the already-merged PR #241 and later main changes. Do not merge these legacy
+branches. The GitHub connector available here cannot delete refs, so actual
+branch removal requires the repository's Branches UI or a GitHub-authorized
+`git push origin --delete <branch>` command; no deletion has been claimed.
