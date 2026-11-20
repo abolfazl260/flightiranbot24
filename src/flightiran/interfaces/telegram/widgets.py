@@ -18,6 +18,9 @@ from flightiran.modules.tickets.domain import CheapTicketDestination, CheapTicke
 from flightiran.modules.tickets.ranking import valid_drop_percent, valid_price
 from flightiran.modules.tickets.service import CheapTicketService, parse_toman_price
 
+from .fare_chart_frontend import enhance_fare_html
+from .fare_route_widget import handle_route_widget_query
+
 LOGGER = logging.getLogger(__name__)
 
 # Self-contained QuickJS widget. No network, external images, or unsupported form controls.
@@ -141,6 +144,9 @@ aria-pressed="false">بیشترین کاهش قیمت</button>
   W.ready();
 })();
 </script></body></html>"""
+
+# Only published route observations may appear in the embedded chart.
+FARE_WIDGET_HTML = enhance_fare_html(FARE_WIDGET_HTML)
 
 assert len(FARE_WIDGET_HTML.encode("utf-8")) <= 32768
 assert len(zlib.compress(FARE_WIDGET_HTML.encode("utf-8"), level=9)) <= 4096
@@ -310,6 +316,7 @@ async def widget_query_handler(
     chat = raw.get("chat") or {}
     sender = raw.get("from") or {}
     message_id = raw.get("message_id")
+    action = raw.get("data")
     # Production widgets are private and non-shared. Do not allow foreign chat
     # IDs, unexpected query types, or unsupported actions to trigger a fetch.
     if not (
@@ -319,12 +326,16 @@ async def widget_query_handler(
         and type(sender.get("id")) is int
         and sender["id"] == chat.get("id")
         and type(message_id) is int and message_id > 0
-        and raw.get("data") == "fare:refresh"
+        and isinstance(action, str) and action.startswith("fare:")
+        and len(action.encode("utf-8")) <= 64
         and (raw.get("type") is None
              or (isinstance(raw["type"], dict)
                  and raw["type"].get("type") == "data"))
     ):
         await answer("invalid")
+        return
+    if action != "fare:refresh":
+        await handle_route_widget_query(raw, context.bot, service, answer)
         return
     if service is None:
         await answer("unavailable")
