@@ -36,14 +36,17 @@ test('shared Android airline data preserves identity, draft gates, fleet unknown
   const match=rows.find(r=>r.id===id);
   assert(match && match.codes.includes(code) && match.country!=='IR');
   const guide=parseGuideDetail(read('data/airlines/details/'+id+'.v1.json'),'airlines',id,internationalNow);
-  assert.equal(guide.sections.length,id==='pegasus-airlines'?19:21);
+  assert.equal(guide.sections.length,22);
   const fleet=guide.sections.find(s=>s.id==='fleet').blocks.filter(b=>b.type==='fleet');
   assert.equal(fleet.length,2);
   assert(fleet.every(b=>b.count===null&&b.status==='unknown'&&b.relationship==='unknown'));
-  assert(!guide.sections.some(s=>s.id==='network'));
+  const network=guide.sections.find(s=>s.id==='network');
+  assert.equal(network.blocks.filter(b=>b.type==='route').length,2);
+  assert(network.blocks.filter(b=>b.type==='route').every(b=>b.status==='listed'));
   assert(guide.sections.some(s=>s.id==='pets'));
   assert(guide.sections.some(s=>s.id==='batteries'));
-  if(id==='pegasus-airlines')assert(!guide.sections.some(s=>['cabin','lounges'].includes(s.id)));
+  if(id==='pegasus-airlines')assert(['cabin','lounges'].every(
+    name=>guide.sections.some(s=>s.id===name&&s.blocks.length>0)));
   assert.equal(guide.reviewCount,0);
   assert.equal(guide.average,null);
  }
